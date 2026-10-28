@@ -1,0 +1,59 @@
+{
+  "$defs": {
+    "TrustedProfileBinding": {
+      "additionalProperties": false,
+      "properties": {
+        "profile_id": {
+          "minLength": 1,
+          "title": "Profile Id",
+          "type": "string"
+        },
+        "protocol_version": {
+          "minLength": 1,
+          "title": "Protocol Version",
+          "type": "string"
+        },
+        "path": {
+          "minLength": 1,
+          "title": "Path",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "profile_id",
+        "protocol_version",
+        "path",
+        "sha256"
+      ],
+      "title": "TrustedProfileBinding",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "profiles": {
+      "items": {
+        "$ref": "#/$defs/TrustedProfileBinding"
+      },
+      "minItems": 1,
+      "title": "Profiles",
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema_version",
+    "profiles"
+  ],
+  "title": "ProfileTrustStore",
+  "type": "object"
+}

@@ -1,0 +1,81 @@
+{
+  "schema_version": "1.0",
+  "metadata": {
+    "suite_id": "mini_agent_query_user_intent_v1",
+    "suite_kind": "module_intent",
+    "dataset_version": "2.0",
+    "target_agent": "mini_agent",
+    "test_scope": "module",
+    "target": "intent_router",
+    "prompt_version": "query-user-intent-v7"
+  },
+  "paths": {
+    "source_files": [
+      {
+        "base": "suite_dir",
+        "path": "policies/generation.json"
+      },
+      {
+        "base": "suite_dir",
+        "path": "coverage_plan.json"
+      }
+    ],
+    "coverage_plan": {
+      "base": "suite_dir",
+      "path": "coverage_plan.json"
+    },
+    "seed_catalog": {
+      "base": "suite_dir",
+      "path": "seed_catalog.json"
+    },
+    "freeze_output": {
+      "base": "projects_root",
+      "path": "agent_evaluator/datasets/mini_agent/module_query_user_intent_v2_0.jsonl"
+    },
+    "eval_case_schema": {
+      "base": "projects_root",
+      "path": "agent_evaluator/schemas/eval_case.schema.json"
+    }
+  },
+  "capability_input": {
+    "bundle": {
+      "base": "projects_root",
+      "path": "mini_agent/capabilities"
+    },
+    "bundle_hash": "99baea74b9a4fbd6c493fb5a3159a8f019769804d94232f0d89aa072ea9af3d8",
+    "scope_or_chain_id": "scope.understanding",
+    "intent_id": "intent.query_user",
+    "tool_id": null
+  },
+  "execution_profiles": {
+    "shadow_read": {
+      "allowed_tools": []
+    }
+  },
+  "policies": {
+    "source": {
+      "base": "builder_root",
+      "path": "policies/common/source_v1.json"
+    },
+    "coverage": {
+      "base": "suite_dir",
+      "path": "policies/coverage.json"
+    },
+    "generation": {
+      "base": "suite_dir",
+      "path": "policies/generation.json"
+    },
+    "validation": {
+      "base": "suite_dir",
+      "path": "policies/validation.json"
+    },
+    "review": {
+      "base": "builder_root",
+      "path": "policies/common/review_v1.json"
+    },
+    "freeze": {
+      "base": "builder_root",
+      "path": "policies/common/freeze_v1.json"
+    }
+  }
+}

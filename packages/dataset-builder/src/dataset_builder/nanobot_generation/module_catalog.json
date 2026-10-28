@@ -1,0 +1,1279 @@
+[
+  {
+    "key": "dialogue.sdk_argument_forwarding",
+    "target_id": "module.dialogue",
+    "layer": "modules",
+    "category": "normal",
+    "title": "SDK 将消息和会话参数传递给对话循环",
+    "preconditions": [
+      {
+        "fixture": "nanobot_sdk_instance",
+        "config": {},
+        "mcp_provider": null,
+        "runtime_resolver": {
+          "resolve_override_returns": null
+        }
+      },
+      {
+        "fixture": "async_stub",
+        "target": "Nanobot._loop.process_direct",
+        "returns": {
+          "content": "fixture reply",
+          "metadata": {
+            "source": "fixture"
+          }
+        },
+        "record_calls": true
+      }
+    ],
+    "input": {
+      "operation": "invoke_sdk",
+      "entrypoint": "Nanobot.run",
+      "arguments": {
+        "message": "fixture input",
+        "session_key": "sdk:catalog-dialogue",
+        "ephemeral": true
+      }
+    },
+    "checks": [
+      {
+        "subject": "process_direct.call_count",
+        "operator": "equals",
+        "expected": 1
+      },
+      {
+        "subject": "process_direct.calls[0].positional_args",
+        "operator": "equals",
+        "expected": [
+          "fixture input"
+        ]
+      },
+      {
+        "subject": "process_direct.calls[0].kwargs.session_key",
+        "operator": "equals",
+        "expected": "sdk:catalog-dialogue"
+      },
+      {
+        "subject": "process_direct.calls[0].kwargs.ephemeral",
+        "operator": "equals",
+        "expected": true
+      },
+      {
+        "subject": "result.content",
+        "operator": "equals",
+        "expected": "fixture reply"
+      }
+    ],
+    "sources": [
+      {
+        "path": "bundle/modules/dialogue.json",
+        "anchor": "\"module_id\": \"dialogue\""
+      },
+      {
+        "path": "sources/nanobot/nanobot.py",
+        "anchor": "response = await self._loop.process_direct("
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖与模块调用适配器；交付包仅含证据源码子集",
+      "隔离临时目录及指定测试替身；不得连接真实模型、渠道、MCP 服务或用户数据"
+    ]
+  },
+  {
+    "key": "dialogue.reserved_system_channel",
+    "target_id": "module.dialogue",
+    "layer": "modules",
+    "category": "error",
+    "title": "外部直接调用拒绝 system 渠道",
+    "preconditions": [
+      {
+        "fixture": "agent_loop_with_spies",
+        "process_message_calls": [],
+        "runtime_event_calls": []
+      }
+    ],
+    "input": {
+      "operation": "invoke_module",
+      "entrypoint": "AgentLoop.process_direct",
+      "arguments": {
+        "content": "fixture input",
+        "channel": "system"
+      }
+    },
+    "checks": [
+      {
+        "subject": "exception.type",
+        "operator": "equals",
+        "expected": "ValueError"
+      },
+      {
+        "subject": "exception.message",
+        "operator": "equals",
+        "expected": "channel 'system' is reserved for internal messages"
+      },
+      {
+        "subject": "_process_message.call_count",
+        "operator": "equals",
+        "expected": 0
+      }
+    ],
+    "sources": [
+      {
+        "path": "bundle/modules/dialogue.json",
+        "anchor": "\"module_id\": \"dialogue\""
+      },
+      {
+        "path": "sources/nanobot/agent/loop.py",
+        "anchor": "raise ValueError(\"channel 'system' is reserved for internal messages\")"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖与模块调用适配器；交付包仅含证据源码子集",
+      "隔离临时目录及指定测试替身；不得连接真实模型、渠道、MCP 服务或用户数据"
+    ]
+  },
+  {
+    "key": "dialogue.process_failure_propagates",
+    "target_id": "module.dialogue",
+    "layer": "modules",
+    "category": "error",
+    "title": "SDK 保留对话循环抛出的异常",
+    "preconditions": [
+      {
+        "fixture": "nanobot_sdk_instance",
+        "config": {},
+        "mcp_provider": null,
+        "runtime_resolver": {
+          "resolve_override_returns": null
+        }
+      },
+      {
+        "fixture": "async_stub",
+        "target": "Nanobot._loop.process_direct",
+        "raises": {
+          "type": "RuntimeError",
+          "message": "fixture processing failure"
+        }
+      }
+    ],
+    "input": {
+      "operation": "invoke_sdk",
+      "entrypoint": "Nanobot.run",
+      "arguments": {
+        "message": "fixture input",
+        "ephemeral": true
+      }
+    },
+    "checks": [
+      {
+        "subject": "exception.type",
+        "operator": "equals",
+        "expected": "RuntimeError"
+      },
+      {
+        "subject": "exception.message",
+        "operator": "equals",
+        "expected": "fixture processing failure"
+      }
+    ],
+    "sources": [
+      {
+        "path": "bundle/modules/dialogue.json",
+        "anchor": "\"module_id\": \"dialogue\""
+      },
+      {
+        "path": "sources/nanobot/nanobot.py",
+        "anchor": "return result_from_response(response, capture)"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖与模块调用适配器；交付包仅含证据源码子集",
+      "隔离临时目录及指定测试替身；不得连接真实模型、渠道、MCP 服务或用户数据"
+    ]
+  },
+  {
+    "key": "observability.run_result_defaults",
+    "target_id": "module.observability",
+    "layer": "modules",
+    "category": "normal",
+    "title": "RunResult 最小对象保留公开字段默认值",
+    "preconditions": [
+      {
+        "fixture": "sdk_value_object_only",
+        "network_enabled": false
+      }
+    ],
+    "input": {
+      "operation": "construct_and_serialize",
+      "class_name": "RunResult",
+      "arguments": {
+        "content": "fixture result"
+      },
+      "serializer": "dataclasses.asdict"
+    },
+    "checks": [
+      {
+        "subject": "result",
+        "operator": "equals",
+        "expected": {
+          "content": "fixture result",
+          "tools_used": [],
+          "messages": [],
+          "usage": {},
+          "stop_reason": null,
+          "error": null,
+          "metadata": {}
+        }
+      }
+    ],
+    "sources": [
+      {
+        "path": "bundle/modules/observability.json",
+        "anchor": "\"module_id\": \"observability\""
+      },
+      {
+        "path": "sources/nanobot/sdk/types.py",
+        "anchor": "class RunResult:"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖与模块调用适配器；交付包仅含证据源码子集",
+      "隔离临时目录及指定测试替身；不得连接真实模型、渠道、MCP 服务或用户数据"
+    ]
+  },
+  {
+    "key": "observability.response_capture_merge",
+    "target_id": "module.observability",
+    "layer": "modules",
+    "category": "normal",
+    "title": "公开返回对象合并响应与捕获信息",
+    "preconditions": [
+      {
+        "fixture": "response",
+        "content": "fixture result",
+        "metadata": {
+          "request_id": "fixture-01"
+        }
+      },
+      {
+        "fixture": "capture",
+        "tools_used": [
+          "fixture_tool"
+        ],
+        "messages": [
+          {
+            "role": "assistant",
+            "content": "fixture result"
+          }
+        ],
+        "usage": {
+          "input_tokens": 3,
+          "output_tokens": 2
+        },
+        "stop_reason": "fixture_terminal",
+        "error": null
+      }
+    ],
+    "input": {
+      "operation": "invoke_module",
+      "entrypoint": "result_from_response",
+      "arguments": {
+        "response": {
+          "fixture_ref": "response"
+        },
+        "capture": {
+          "fixture_ref": "capture"
+        }
+      }
+    },
+    "checks": [
+      {
+        "subject": "result.content",
+        "operator": "equals",
+        "expected": "fixture result"
+      },
+      {
+        "subject": "result.tools_used",
+        "operator": "equals",
+        "expected": [
+          "fixture_tool"
+        ]
+      },
+      {
+        "subject": "result.usage",
+        "operator": "equals",
+        "expected": {
+          "input_tokens": 3,
+          "output_tokens": 2
+        }
+      },
+      {
+        "subject": "result.stop_reason",
+        "operator": "equals",
+        "expected": "fixture_terminal"
+      },
+      {
+        "subject": "result.metadata",
+        "operator": "equals",
+        "expected": {
+          "request_id": "fixture-01"
+        }
+      }
+    ],
+    "sources": [
+      {
+        "path": "bundle/modules/observability.json",
+        "anchor": "\"module_id\": \"observability\""
+      },
+      {
+        "path": "sources/nanobot/sdk/types.py",
+        "anchor": "def result_from_response(response: Any, capture: Any) -> RunResult:"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖与模块调用适配器；交付包仅含证据源码子集",
+      "隔离临时目录及指定测试替身；不得连接真实模型、渠道、MCP 服务或用户数据"
+    ]
+  },
+  {
+    "key": "observability.empty_response",
+    "target_id": "module.observability",
+    "layer": "modules",
+    "category": "boundary",
+    "title": "无响应对象时返回空正文且保留捕获错误",
+    "preconditions": [
+      {
+        "fixture": "capture",
+        "tools_used": [],
+        "messages": [],
+        "usage": {},
+        "stop_reason": null,
+        "error": "fixture error"
+      }
+    ],
+    "input": {
+      "operation": "invoke_module",
+      "entrypoint": "result_from_response",
+      "arguments": {
+        "response": null,
+        "capture": {
+          "fixture_ref": "capture"
+        }
+      }
+    },
+    "checks": [
+      {
+        "subject": "result.content",
+        "operator": "equals",
+        "expected": ""
+      },
+      {
+        "subject": "result.metadata",
+        "operator": "equals",
+        "expected": {}
+      },
+      {
+        "subject": "result.error",
+        "operator": "equals",
+        "expected": "fixture error"
+      }
+    ],
+    "sources": [
+      {
+        "path": "bundle/modules/observability.json",
+        "anchor": "\"module_id\": \"observability\""
+      },
+      {
+        "path": "sources/nanobot/sdk/types.py",
+        "anchor": "content = (response.content if response else None) or \"\""
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖与模块调用适配器；交付包仅含证据源码子集",
+      "隔离临时目录及指定测试替身；不得连接真实模型、渠道、MCP 服务或用户数据"
+    ]
+  },
+  {
+    "key": "tools.definition_order_and_cache_refresh",
+    "target_id": "module.tools",
+    "layer": "modules",
+    "category": "sequence",
+    "title": "注册变化后刷新定义并保持内置工具优先排序",
+    "preconditions": [
+      {
+        "fixture": "empty_tool_registry"
+      },
+      {
+        "fixture": "stub_tools",
+        "names": [
+          "mcp_b",
+          "zeta",
+          "alpha",
+          "mcp_a",
+          "beta"
+        ],
+        "to_schema_template": {
+          "type": "function",
+          "function": {
+            "name": "{tool_name}",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        },
+        "execute_forbidden": true
+      }
+    ],
+    "input": {
+      "operation": "invoke_sequence",
+      "steps": [
+        {
+          "call": "ToolRegistry.register",
+          "tools": [
+            "mcp_b",
+            "zeta",
+            "alpha",
+            "mcp_a"
+          ]
+        },
+        {
+          "call": "ToolRegistry.get_definitions"
+        },
+        {
+          "call": "ToolRegistry.register",
+          "tools": [
+            "beta"
+          ]
+        },
+        {
+          "call": "ToolRegistry.get_definitions"
+        },
+        {
+          "call": "ToolRegistry.unregister",
+          "arguments": {
+            "name": "alpha"
+          }
+        },
+        {
+          "call": "ToolRegistry.get_definitions"
+        }
+      ]
+    },
+    "checks": [
+      {
+        "subject": "steps[1].result.function_names",
+        "operator": "equals",
+        "expected": [
+          "alpha",
+          "zeta",
+          "mcp_a",
+          "mcp_b"
+        ]
+      },
+      {
+        "subject": "steps[3].result.function_names",
+        "operator": "equals",
+        "expected": [
+          "alpha",
+          "beta",
+          "zeta",
+          "mcp_a",
+          "mcp_b"
+        ]
+      },
+      {
+        "subject": "steps[5].result.function_names",
+        "operator": "equals",
+        "expected": [
+          "beta",
+          "zeta",
+          "mcp_a",
+          "mcp_b"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "path": "bundle/modules/tools.json",
+        "anchor": "\"module_id\": \"tools\""
+      },
+      {
+        "path": "sources/nanobot/agent/tools/registry.py",
+        "anchor": "self._cached_definitions = builtins + mcp_tools"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖与模块调用适配器；交付包仅含证据源码子集",
+      "隔离临时目录及指定测试替身；不得连接真实模型、渠道、MCP 服务或用户数据"
+    ]
+  },
+  {
+    "key": "tools.unknown_name_no_execution",
+    "target_id": "module.tools",
+    "layer": "modules",
+    "category": "error",
+    "title": "工具名不匹配时返回错误并且不执行相似工具",
+    "preconditions": [
+      {
+        "fixture": "tool_registry",
+        "tools": [
+          {
+            "name": "read_file",
+            "execute_spy": true,
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        ]
+      }
+    ],
+    "input": {
+      "operation": "invoke_module",
+      "entrypoint": "ToolRegistry.execute",
+      "arguments": {
+        "name": "read-file",
+        "params": {}
+      }
+    },
+    "checks": [
+      {
+        "subject": "result.is_error",
+        "operator": "equals",
+        "expected": true
+      },
+      {
+        "subject": "result.text",
+        "operator": "contains",
+        "expected": "Tool 'read-file' not found."
+      },
+      {
+        "subject": "result.text",
+        "operator": "contains",
+        "expected": "Did you mean 'read_file'?"
+      },
+      {
+        "subject": "read_file.execute.call_count",
+        "operator": "equals",
+        "expected": 0
+      }
+    ],
+    "sources": [
+      {
+        "path": "bundle/modules/tools.json",
+        "anchor": "\"module_id\": \"tools\""
+      },
+      {
+        "path": "sources/nanobot/agent/tools/registry.py",
+        "anchor": "Normalize names for suggestions only; never for execution."
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖与模块调用适配器；交付包仅含证据源码子集",
+      "隔离临时目录及指定测试替身；不得连接真实模型、渠道、MCP 服务或用户数据"
+    ]
+  },
+  {
+    "key": "tools.execution_exception_marker",
+    "target_id": "module.tools",
+    "layer": "modules",
+    "category": "error",
+    "title": "注册器将工具异常包装为 ToolResult 错误",
+    "preconditions": [
+      {
+        "fixture": "tool_registry",
+        "tools": [
+          {
+            "name": "fixture_failure",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            },
+            "execute_raises": {
+              "type": "RuntimeError",
+              "message": "fixture boom"
+            }
+          }
+        ]
+      }
+    ],
+    "input": {
+      "operation": "invoke_module",
+      "entrypoint": "ToolRegistry.execute",
+      "arguments": {
+        "name": "fixture_failure",
+        "params": {}
+      }
+    },
+    "checks": [
+      {
+        "subject": "result.is_error",
+        "operator": "equals",
+        "expected": true
+      },
+      {
+        "subject": "result.text",
+        "operator": "contains",
+        "expected": "Error executing fixture_failure: fixture boom"
+      }
+    ],
+    "sources": [
+      {
+        "path": "bundle/modules/tools.json",
+        "anchor": "\"module_id\": \"tools\""
+      },
+      {
+        "path": "sources/nanobot/agent/tools/registry.py",
+        "anchor": "return ToolResult.error(f\"Error executing {name}: {str(e)}\" + hint)"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖与模块调用适配器；交付包仅含证据源码子集",
+      "隔离临时目录及指定测试替身；不得连接真实模型、渠道、MCP 服务或用户数据"
+    ]
+  },
+  {
+    "key": "memory.missing_file_empty",
+    "target_id": "module.memory",
+    "layer": "modules",
+    "category": "boundary",
+    "title": "缺失记忆文件返回空文本",
+    "preconditions": [
+      {
+        "fixture": "isolated_directory",
+        "files": {},
+        "absent_paths": [
+          "memory/MEMORY.md"
+        ]
+      }
+    ],
+    "input": {
+      "operation": "invoke_module",
+      "entrypoint": "MemoryStore.read_file",
+      "arguments": {
+        "path": "{fixture_root}/memory/MEMORY.md"
+      }
+    },
+    "checks": [
+      {
+        "subject": "result",
+        "operator": "equals",
+        "expected": ""
+      }
+    ],
+    "sources": [
+      {
+        "path": "bundle/modules/memory.json",
+        "anchor": "\"module_id\": \"memory\""
+      },
+      {
+        "path": "sources/nanobot/agent/memory.py",
+        "anchor": "except FileNotFoundError:"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖与模块调用适配器；交付包仅含证据源码子集",
+      "隔离临时目录及指定测试替身；不得连接真实模型、渠道、MCP 服务或用户数据"
+    ]
+  },
+  {
+    "key": "memory.write_read_roundtrip",
+    "target_id": "module.memory",
+    "layer": "modules",
+    "category": "sequence",
+    "title": "隔离工作区的记忆文本写入后原样读取",
+    "preconditions": [
+      {
+        "fixture": "memory_store",
+        "workspace": "{fixture_root}",
+        "files": {},
+        "external_git_commands_stubbed": true
+      }
+    ],
+    "input": {
+      "operation": "invoke_sequence",
+      "steps": [
+        {
+          "call": "MemoryStore.write_memory",
+          "arguments": {
+            "content": "fixture 记忆\nline two\n"
+          }
+        },
+        {
+          "call": "MemoryStore.read_memory"
+        },
+        {
+          "call": "MemoryStore.get_memory_context"
+        }
+      ]
+    },
+    "checks": [
+      {
+        "subject": "steps[1].result",
+        "operator": "equals",
+        "expected": "fixture 记忆\nline two\n"
+      },
+      {
+        "subject": "files.memory/MEMORY.md",
+        "operator": "equals",
+        "expected": "fixture 记忆\nline two\n"
+      },
+      {
+        "subject": "steps[2].result",
+        "operator": "equals",
+        "expected": "## Long-term Memory\nfixture 记忆\nline two\n"
+      }
+    ],
+    "sources": [
+      {
+        "path": "bundle/modules/memory.json",
+        "anchor": "\"module_id\": \"memory\""
+      },
+      {
+        "path": "sources/nanobot/agent/memory.py",
+        "anchor": "self.memory_file.write_text(content, encoding=\"utf-8\")"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖与模块调用适配器；交付包仅含证据源码子集",
+      "隔离临时目录及指定测试替身；不得连接真实模型、渠道、MCP 服务或用户数据"
+    ]
+  },
+  {
+    "key": "skills.workspace_precedence",
+    "target_id": "module.skills",
+    "layer": "modules",
+    "category": "normal",
+    "title": "同名 Skill 优先加载工作区文件",
+    "preconditions": [
+      {
+        "fixture": "skills_directories",
+        "workspace": "{fixture_root}/workspace",
+        "builtin_dir": "{fixture_root}/builtin",
+        "files": {
+          "workspace/skills/demo/SKILL.md": "workspace fixture",
+          "builtin/demo/SKILL.md": "builtin fixture"
+        }
+      },
+      {
+        "fixture": "stub",
+        "target": "enabled_agent_plugin_skills",
+        "returns": []
+      },
+      {
+        "fixture": "stub",
+        "target": "SkillsLoader._skill_aliases",
+        "returns": {}
+      }
+    ],
+    "input": {
+      "operation": "invoke_module",
+      "entrypoint": "SkillsLoader.load_skill",
+      "constructor": {
+        "workspace": "{fixture_root}/workspace",
+        "builtin_skills_dir": "{fixture_root}/builtin"
+      },
+      "arguments": {
+        "name": "demo"
+      }
+    },
+    "checks": [
+      {
+        "subject": "result",
+        "operator": "equals",
+        "expected": "workspace fixture"
+      }
+    ],
+    "sources": [
+      {
+        "path": "bundle/modules/skills.json",
+        "anchor": "\"module_id\": \"skills\""
+      },
+      {
+        "path": "sources/nanobot/agent/skills.py",
+        "anchor": "self._skill_entries_from_dir(self.builtin_skills, \"builtin\", skip_names=seen_names)"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖与模块调用适配器；交付包仅含证据源码子集",
+      "隔离临时目录及指定测试替身；不得连接真实模型、渠道、MCP 服务或用户数据"
+    ]
+  },
+  {
+    "key": "skills.disabled_excluded",
+    "target_id": "module.skills",
+    "layer": "modules",
+    "category": "boundary",
+    "title": "显式禁用的 Skill 不出现在可加载集合",
+    "preconditions": [
+      {
+        "fixture": "skills_directories",
+        "workspace": "{fixture_root}/workspace",
+        "builtin_dir": "{fixture_root}/builtin",
+        "files": {
+          "workspace/skills/demo/SKILL.md": "demo fixture",
+          "builtin/other/SKILL.md": "other fixture"
+        }
+      },
+      {
+        "fixture": "stub",
+        "target": "enabled_agent_plugin_skills",
+        "returns": []
+      },
+      {
+        "fixture": "stub",
+        "target": "SkillsLoader._skill_aliases",
+        "returns": {}
+      }
+    ],
+    "input": {
+      "operation": "invoke_sequence",
+      "constructor": {
+        "workspace": "{fixture_root}/workspace",
+        "builtin_skills_dir": "{fixture_root}/builtin",
+        "disabled_skills": [
+          "demo"
+        ]
+      },
+      "steps": [
+        {
+          "call": "SkillsLoader.list_skills",
+          "arguments": {
+            "filter_unavailable": false
+          }
+        },
+        {
+          "call": "SkillsLoader.load_skill",
+          "arguments": {
+            "name": "demo"
+          }
+        }
+      ]
+    },
+    "checks": [
+      {
+        "subject": "steps[0].result.names",
+        "operator": "equals",
+        "expected": [
+          "other"
+        ]
+      },
+      {
+        "subject": "steps[1].result",
+        "operator": "equals",
+        "expected": null
+      }
+    ],
+    "sources": [
+      {
+        "path": "bundle/modules/skills.json",
+        "anchor": "\"module_id\": \"skills\""
+      },
+      {
+        "path": "sources/nanobot/agent/skills.py",
+        "anchor": "skills = [s for s in skills if s[\"name\"] not in disabled]"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖与模块调用适配器；交付包仅含证据源码子集",
+      "隔离临时目录及指定测试替身；不得连接真实模型、渠道、MCP 服务或用户数据"
+    ]
+  },
+  {
+    "key": "providers.header_override",
+    "target_id": "module.providers",
+    "layer": "modules",
+    "category": "normal",
+    "title": "提供商配置覆盖默认请求头且保留其他默认值",
+    "preconditions": [
+      {
+        "fixture": "provider_spec_stub",
+        "default_extra_headers": {
+          "X-Fixture": "default",
+          "X-Retain": "yes"
+        }
+      },
+      {
+        "fixture": "provider_config_stub",
+        "extra_headers": {
+          "X-Fixture": "override",
+          "X-New": "added"
+        }
+      }
+    ],
+    "input": {
+      "operation": "invoke_module",
+      "entrypoint": "_provider_extra_headers",
+      "arguments": {
+        "spec": {
+          "fixture_ref": "provider_spec_stub"
+        },
+        "provider_config": {
+          "fixture_ref": "provider_config_stub"
+        }
+      }
+    },
+    "checks": [
+      {
+        "subject": "result",
+        "operator": "equals",
+        "expected": {
+          "X-Fixture": "override",
+          "X-Retain": "yes",
+          "X-New": "added"
+        }
+      },
+      {
+        "subject": "provider_spec_stub.default_extra_headers",
+        "operator": "equals",
+        "expected": {
+          "X-Fixture": "default",
+          "X-Retain": "yes"
+        }
+      }
+    ],
+    "sources": [
+      {
+        "path": "bundle/modules/providers.json",
+        "anchor": "\"module_id\": \"providers\""
+      },
+      {
+        "path": "sources/nanobot/providers/factory.py",
+        "anchor": "headers.update(provider_config.extra_headers)"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖与模块调用适配器；交付包仅含证据源码子集",
+      "隔离临时目录及指定测试替身；不得连接真实模型、渠道、MCP 服务或用户数据"
+    ]
+  },
+  {
+    "key": "providers.missing_provider_error",
+    "target_id": "module.providers",
+    "layer": "modules",
+    "category": "error",
+    "title": "模型没有提供商配置时在创建客户端前拒绝",
+    "preconditions": [
+      {
+        "fixture": "config_stub",
+        "get_provider_name_returns": null,
+        "get_provider_returns": null
+      },
+      {
+        "fixture": "preset_stub",
+        "model": "fixture-model"
+      }
+    ],
+    "input": {
+      "operation": "invoke_module",
+      "entrypoint": "_resolve_provider_setup",
+      "arguments": {
+        "config": {
+          "fixture_ref": "config_stub"
+        },
+        "preset": {
+          "fixture_ref": "preset_stub"
+        }
+      }
+    },
+    "checks": [
+      {
+        "subject": "exception.type",
+        "operator": "equals",
+        "expected": "ValueError"
+      },
+      {
+        "subject": "exception.message",
+        "operator": "equals",
+        "expected": "No provider is configured for model 'fixture-model'."
+      }
+    ],
+    "sources": [
+      {
+        "path": "bundle/modules/providers.json",
+        "anchor": "\"module_id\": \"providers\""
+      },
+      {
+        "path": "sources/nanobot/providers/factory.py",
+        "anchor": "raise ValueError(f\"No provider is configured for model '{model}'.\")"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖与模块调用适配器；交付包仅含证据源码子集",
+      "隔离临时目录及指定测试替身；不得连接真实模型、渠道、MCP 服务或用户数据"
+    ]
+  },
+  {
+    "key": "channels.enabled_descriptor_filter",
+    "target_id": "module.channels",
+    "layer": "modules",
+    "category": "normal",
+    "title": "只加载显式启用渠道的运行类",
+    "preconditions": [
+      {
+        "fixture": "channel_plugin_stubs",
+        "plugins": {
+          "enabled_demo": {
+            "load_channel_class_returns": "FixtureEnabledChannel"
+          },
+          "disabled_demo": {
+            "load_channel_class_returns": "FixtureDisabledChannel"
+          }
+        },
+        "record_load_calls": true
+      }
+    ],
+    "input": {
+      "operation": "invoke_module",
+      "entrypoint": "discover_enabled",
+      "arguments": {
+        "enabled_names": [
+          "enabled_demo"
+        ],
+        "_plugins": {
+          "fixture_ref": "channel_plugin_stubs.plugins"
+        }
+      }
+    },
+    "checks": [
+      {
+        "subject": "result.class_names",
+        "operator": "equals",
+        "expected": {
+          "enabled_demo": "FixtureEnabledChannel"
+        }
+      },
+      {
+        "subject": "enabled_demo.load_channel_class.call_count",
+        "operator": "equals",
+        "expected": 1
+      },
+      {
+        "subject": "disabled_demo.load_channel_class.call_count",
+        "operator": "equals",
+        "expected": 0
+      }
+    ],
+    "sources": [
+      {
+        "path": "bundle/modules/channels.json",
+        "anchor": "\"module_id\": \"channels\""
+      },
+      {
+        "path": "sources/nanobot/channels/registry.py",
+        "anchor": "if name not in enabled_names:"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖与模块调用适配器；交付包仅含证据源码子集",
+      "隔离临时目录及指定测试替身；不得连接真实模型、渠道、MCP 服务或用户数据"
+    ]
+  },
+  {
+    "key": "channels.runtime_import_failure",
+    "target_id": "module.channels",
+    "layer": "modules",
+    "category": "error",
+    "title": "渠道运行类加载失败时跳过并继续返回其他渠道",
+    "preconditions": [
+      {
+        "fixture": "channel_plugin_stubs",
+        "plugins": {
+          "broken_demo": {
+            "load_channel_class_raises": {
+              "type": "ImportError",
+              "message": "fixture missing dependency"
+            }
+          },
+          "good_demo": {
+            "load_channel_class_returns": "FixtureGoodChannel"
+          }
+        }
+      }
+    ],
+    "input": {
+      "operation": "invoke_module",
+      "entrypoint": "discover_enabled",
+      "arguments": {
+        "enabled_names": [
+          "broken_demo",
+          "good_demo"
+        ],
+        "_plugins": {
+          "fixture_ref": "channel_plugin_stubs.plugins"
+        },
+        "warn_import_errors": false
+      }
+    },
+    "checks": [
+      {
+        "subject": "result.class_names",
+        "operator": "equals",
+        "expected": {
+          "good_demo": "FixtureGoodChannel"
+        }
+      },
+      {
+        "subject": "exception",
+        "operator": "equals",
+        "expected": null
+      }
+    ],
+    "sources": [
+      {
+        "path": "bundle/modules/channels.json",
+        "anchor": "\"module_id\": \"channels\""
+      },
+      {
+        "path": "sources/nanobot/channels/registry.py",
+        "anchor": "Enabled channel '{}' runtime is not available: {}"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖与模块调用适配器；交付包仅含证据源码子集",
+      "隔离临时目录及指定测试替身；不得连接真实模型、渠道、MCP 服务或用户数据"
+    ]
+  },
+  {
+    "key": "mcp.configured_is_not_connected",
+    "target_id": "module.mcp",
+    "layer": "modules",
+    "category": "normal",
+    "title": "MCP 已配置服务器在连接前不标为已连接",
+    "preconditions": [
+      {
+        "fixture": "mcp_provider",
+        "servers": {
+          "demo": {
+            "command": "fixture-mcp-server",
+            "args": []
+          }
+        },
+        "registry": "empty_tool_registry",
+        "server_loader_returns": {},
+        "connect_forbidden": true
+      }
+    ],
+    "input": {
+      "operation": "inspect_module",
+      "entrypoint": "MCPProvider",
+      "observations": [
+        "configured_server_names",
+        "connected_server_names",
+        "runtime_status()"
+      ]
+    },
+    "checks": [
+      {
+        "subject": "configured_server_names",
+        "operator": "equals",
+        "expected": [
+          "demo"
+        ]
+      },
+      {
+        "subject": "connected_server_names",
+        "operator": "equals",
+        "expected": []
+      },
+      {
+        "subject": "runtime_status",
+        "operator": "equals",
+        "expected": {}
+      }
+    ],
+    "sources": [
+      {
+        "path": "bundle/modules/mcp.json",
+        "anchor": "\"module_id\": \"mcp\""
+      },
+      {
+        "path": "sources/nanobot/agent/tools/mcp.py",
+        "anchor": "self._connections: dict[str, MCPConnection] = {}"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖与模块调用适配器；交付包仅含证据源码子集",
+      "隔离临时目录及指定测试替身；不得连接真实模型、渠道、MCP 服务或用户数据"
+    ]
+  },
+  {
+    "key": "mcp.partial_connection_status",
+    "target_id": "module.mcp",
+    "layer": "modules",
+    "category": "boundary",
+    "title": "连接结果只将成功项标为 connected 并隐藏未配置项",
+    "preconditions": [
+      {
+        "fixture": "mcp_provider",
+        "servers": {
+          "alpha": {
+            "command": "fixture-alpha",
+            "args": []
+          },
+          "beta": {
+            "command": "fixture-beta",
+            "args": []
+          }
+        },
+        "registry": "empty_tool_registry",
+        "server_loader_returns": {},
+        "connect_forbidden": true
+      }
+    ],
+    "input": {
+      "operation": "invoke_sequence",
+      "steps": [
+        {
+          "call": "MCPProvider._record_connection_result",
+          "arguments": {
+            "attempted": [
+              "alpha",
+              "beta"
+            ],
+            "connected": [
+              "alpha"
+            ]
+          }
+        },
+        {
+          "call": "MCPProvider._set_runtime_status",
+          "arguments": {
+            "server_names": [
+              "removed"
+            ],
+            "status": "failed"
+          }
+        },
+        {
+          "call": "MCPProvider.runtime_status"
+        }
+      ]
+    },
+    "checks": [
+      {
+        "subject": "steps[2].result",
+        "operator": "equals",
+        "expected": {
+          "alpha": "connected",
+          "beta": "failed"
+        }
+      }
+    ],
+    "sources": [
+      {
+        "path": "bundle/modules/mcp.json",
+        "anchor": "\"module_id\": \"mcp\""
+      },
+      {
+        "path": "sources/nanobot/agent/tools/mcp.py",
+        "anchor": "self._set_runtime_status(attempted_names - connected_names, \"failed\")"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖与模块调用适配器；交付包仅含证据源码子集",
+      "隔离临时目录及指定测试替身；不得连接真实模型、渠道、MCP 服务或用户数据"
+    ]
+  }
+]

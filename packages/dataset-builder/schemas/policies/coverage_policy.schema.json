@@ -1,0 +1,95 @@
+{
+  "$defs": {
+    "CoverageConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "distribution_fields": {
+          "items": {
+            "$ref": "#/$defs/DistributionField"
+          },
+          "title": "Distribution Fields",
+          "type": "array"
+        }
+      },
+      "required": [
+        "distribution_fields"
+      ],
+      "title": "CoverageConfig",
+      "type": "object"
+    },
+    "DistributionField": {
+      "additionalProperties": false,
+      "properties": {
+        "report_name": {
+          "minLength": 1,
+          "title": "Report Name",
+          "type": "string"
+        },
+        "case_pointers": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Case Pointers",
+          "type": "array"
+        },
+        "plan_field": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Plan Field"
+        },
+        "slot_fields": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Slot Fields",
+          "type": "array"
+        }
+      },
+      "required": [
+        "report_name",
+        "case_pointers",
+        "plan_field",
+        "slot_fields"
+      ],
+      "title": "DistributionField",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "policy_kind": {
+      "const": "coverage",
+      "title": "Policy Kind",
+      "type": "string"
+    },
+    "policy_version": {
+      "const": "1.0",
+      "title": "Policy Version",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "config": {
+      "$ref": "#/$defs/CoverageConfig"
+    }
+  },
+  "required": [
+    "policy_kind",
+    "policy_version",
+    "schema_version",
+    "config"
+  ],
+  "title": "CoveragePolicy",
+  "type": "object"
+}

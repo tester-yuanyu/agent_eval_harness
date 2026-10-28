@@ -1,0 +1,43 @@
+{
+  "capabilities": [
+    {
+      "capability_key": "execution.registered_tool_invocation",
+      "evidence_ids": [
+        "evidence.tool_trace"
+      ],
+      "reason": null,
+      "support_status": "supported"
+    }
+  ],
+  "component_versions": {
+    "tool_registry": "v3"
+  },
+  "contract_version": "tool-registry-module-v3",
+  "execution_boundary_ids": [
+    "boundary.planning_execution"
+  ],
+  "input_schema": {
+    "type": "object"
+  },
+  "intent_refs": [],
+  "module_id": "tool_registry",
+  "module_refs": [],
+  "output_schema": {
+    "type": "object"
+  },
+  "responsibility": "Validate and invoke explicitly registered Tools.",
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "module.tool_registry",
+  "snapshot_sha256": "750583a3a0636478c336b375dc4d68672ea817c00588ff6ed26b86f5f5e347cf",
+  "snapshot_type": "module",
+  "source_hashes": {
+    "capabilities_sha256": "a472452c799bf668d50272b55953756247bae875d0ed232e0e447ab708f7407e",
+    "children_sha256": "b78ee59b8a819b12aaee9953ee472c98c34893d48db562e951cb5033d096ae54"
+  },
+  "tool_refs": [],
+  "trace_event_types": [
+    "tool_started",
+    "tool_succeeded",
+    "tool_failed"
+  ]
+}

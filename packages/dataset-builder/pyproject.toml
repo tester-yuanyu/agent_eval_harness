@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agent-dataset-builder"
+version = "0.1.0"
+description = "Reusable, review-gated dataset authoring for agent_evaluator"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "agent-evaluator>=0.1.0",
+  "jsonschema>=4.21,<5",
+  "openai>=1.0,<3",
+  "pydantic>=2.6,<3",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.4,<9", "ruff>=0.6,<1"]
+deepeval = ["deepeval==4.3.2"]
+
+[project.scripts]
+dataset-builder = "dataset_builder.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+testpaths = ["tests"]
+markers = ["dataset_generation_smoke: opt-in paid OpenAI generation smoke test"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]

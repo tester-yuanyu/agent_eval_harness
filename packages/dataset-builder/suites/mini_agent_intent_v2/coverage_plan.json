@@ -1,0 +1,27 @@
+{
+  "suite_id": "mini_agent_intent_v2",
+  "case_count": 15,
+  "status_distribution": {
+    "READY": 6,
+    "NEED_CLARIFICATION": 6,
+    "NEED_CONFIRMATION": 2,
+    "REJECTED": 1
+  },
+  "slots": [
+    {"slot_id":"query_user_ready_user_id","intent":"query_user","status":"READY"},
+    {"slot_id":"query_user_ready_email_phone","intent":"query_user","status":"READY"},
+    {"slot_id":"query_user_missing_condition","intent":"query_user","status":"NEED_CLARIFICATION"},
+    {"slot_id":"query_gift_ready_id","intent":"query_gift","status":"READY"},
+    {"slot_id":"query_gift_ready_name","intent":"query_gift","status":"READY"},
+    {"slot_id":"query_gift_missing_mode","intent":"query_gift","status":"NEED_CLARIFICATION"},
+    {"slot_id":"custom_record_ready","intent":"query_custom_gift_record","status":"READY"},
+    {"slot_id":"custom_record_missing_element","intent":"query_custom_gift_record","status":"NEED_CLARIFICATION"},
+    {"slot_id":"query_pool_ready_pool_id","intent":"query_pool","status":"READY"},
+    {"slot_id":"query_pool_missing_mode","intent":"query_pool","status":"NEED_CLARIFICATION"},
+    {"slot_id":"add_backpack_complete","intent":"add_backpack_gift","status":"NEED_CONFIRMATION"},
+    {"slot_id":"add_backpack_missing_environment","intent":"add_backpack_gift","status":"NEED_CLARIFICATION"},
+    {"slot_id":"update_pool_complete","intent":"update_pool_weight","status":"NEED_CONFIRMATION"},
+    {"slot_id":"update_pool_missing_gift","intent":"update_pool_weight","status":"NEED_CLARIFICATION"},
+    {"slot_id":"unsupported_translation","intent":"unsupported","status":"REJECTED"}
+  ]
+}

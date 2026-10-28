@@ -1,0 +1,37 @@
+{
+  "capability_id": "unsupported",
+  "contract_version": "intent-contract-v1",
+  "decision_rules": {
+    "complete": {
+      "next_action": "REJECT",
+      "status": "REJECTED"
+    },
+    "incomplete": {
+      "next_action": "REJECT",
+      "status": "REJECTED"
+    }
+  },
+  "missing_parameters": [],
+  "module_id": "module.intent_router",
+  "parameters_schema": {
+    "additionalProperties": false,
+    "properties": {},
+    "title": "_UnsupportedParameters",
+    "type": "object"
+  },
+  "semantic_rules": {
+    "scope": "REQUEST_OUTSIDE_DECLARED_CURRENT_CAPABILITIES",
+    "tools_executed": false
+  },
+  "snapshot_format_version": "2.0",
+  "snapshot_id": "intent.unsupported",
+  "snapshot_sha256": "fa4e367e850e674fba87fedf08dc01df72674d4d31b432bb551f736d5f81627d",
+  "snapshot_type": "intent",
+  "source_hashes": {
+    "decision_rules_sha256": "565891c881cb43228bff6a36aa878ae1b00f4f7689cc6ca9f703b99c9f5681de",
+    "parameters_schema_sha256": "ab40af43b424b333f8496750d4e81a1826c926ef1e45ea0f5a2b35cb3c68319e",
+    "semantic_rules_sha256": "2fb32d09deba5665f35892bb33616621435b5d051f8ad9fc185995f5bfd3d7e8",
+    "tool_refs_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "tool_refs": []
+}

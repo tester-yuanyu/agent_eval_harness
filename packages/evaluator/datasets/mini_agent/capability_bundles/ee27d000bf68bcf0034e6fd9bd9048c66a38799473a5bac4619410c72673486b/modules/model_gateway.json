@@ -1,0 +1,485 @@
+{
+  "component_versions": {
+    "intent_prompt_version": "intent-router-v5",
+    "provider_protocol": "responses-api-function-calling-v1",
+    "tool_prompt_version": "tool-loop-v2"
+  },
+  "context_rules": [
+    "STATELESS_MODEL_REQUESTS",
+    "NO_MODEL_COT_CAPTURE"
+  ],
+  "contract_version": "model-gateway-module-v2",
+  "execution_boundary": "Accept validated public requests and return public model candidates; provider-internal reasoning is never captured.",
+  "execution_boundary_ids": [
+    "end_to_end",
+    "guarded_write",
+    "intent_router_only",
+    "tool_chain"
+  ],
+  "input_schema": {
+    "oneOf": [
+      {
+        "additionalProperties": false,
+        "properties": {
+          "session_id": {
+            "anyOf": [
+              {
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "user_input": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_input",
+          "session_id"
+        ],
+        "type": "object"
+      },
+      {
+        "$defs": {
+          "FunctionCallOutput": {
+            "additionalProperties": false,
+            "description": "Observable tool output passed into the next model step.",
+            "properties": {
+              "call_id": {
+                "minLength": 1,
+                "title": "Call Id",
+                "type": "string"
+              },
+              "name": {
+                "minLength": 1,
+                "title": "Name",
+                "type": "string"
+              },
+              "output": {
+                "additionalProperties": true,
+                "title": "Output",
+                "type": "object"
+              }
+            },
+            "required": [
+              "call_id",
+              "name",
+              "output"
+            ],
+            "title": "FunctionCallOutput",
+            "type": "object"
+          },
+          "IntentResult": {
+            "additionalProperties": false,
+            "description": "Observable result produced by the future intent router.",
+            "properties": {
+              "intent": {
+                "enum": [
+                  "query_information",
+                  "prepare_resource",
+                  "query_user",
+                  "query_gift",
+                  "add_backpack_gift",
+                  "query_pool",
+                  "unsupported"
+                ],
+                "title": "Intent",
+                "type": "string"
+              },
+              "missing_parameters": {
+                "items": {
+                  "type": "string"
+                },
+                "title": "Missing Parameters",
+                "type": "array"
+              },
+              "next_action": {
+                "enum": [
+                  "CALL_TOOL",
+                  "ASK_USER",
+                  "ASK_CONFIRMATION",
+                  "REJECT"
+                ],
+                "title": "Next Action",
+                "type": "string"
+              },
+              "parameters": {
+                "additionalProperties": true,
+                "title": "Parameters",
+                "type": "object"
+              },
+              "reason": {
+                "title": "Reason",
+                "type": "string"
+              },
+              "status": {
+                "enum": [
+                  "READY",
+                  "NEED_CLARIFICATION",
+                  "NEED_CONFIRMATION",
+                  "REJECTED"
+                ],
+                "title": "Status",
+                "type": "string"
+              }
+            },
+            "required": [
+              "intent",
+              "status",
+              "next_action",
+              "reason"
+            ],
+            "title": "IntentResult",
+            "type": "object"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Complete observable input for one scripted tool-loop model request.",
+        "properties": {
+          "intent_result": {
+            "$ref": "#/$defs/IntentResult"
+          },
+          "step": {
+            "minimum": 1,
+            "title": "Step",
+            "type": "integer"
+          },
+          "tool_outputs": {
+            "items": {
+              "$ref": "#/$defs/FunctionCallOutput"
+            },
+            "title": "Tool Outputs",
+            "type": "array"
+          },
+          "tool_schemas": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Tool Schemas",
+            "type": "array"
+          },
+          "user_input": {
+            "title": "User Input",
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_input",
+          "intent_result",
+          "tool_schemas",
+          "tool_outputs",
+          "step"
+        ],
+        "title": "ToolLoopRequest",
+        "type": "object"
+      }
+    ]
+  },
+  "intent_refs": [],
+  "layers": {
+    "context": {
+      "downstream_dependencies": [],
+      "entrypoints": [],
+      "evidence": [],
+      "failure_modes": [],
+      "formal_rules": [
+        "NO_LONG_TERM_MEMORY",
+        "NO_RAG",
+        "NO_USER_PROFILE_MEMORY",
+        "NO_CROSS_SESSION_SEMANTIC_MEMORY"
+      ],
+      "inputs": [],
+      "outputs": [],
+      "reason": "Model gateway does not own conversation or durable context.",
+      "related_tools": [],
+      "state_reads": [],
+      "state_writes": [],
+      "stop_nodes": [],
+      "support_status": "unsupported",
+      "upstream_dependencies": []
+    },
+    "planning_execution": {
+      "downstream_dependencies": [],
+      "entrypoints": [
+        "ModelClient.next_tool_step"
+      ],
+      "evidence": [
+        "tool_trace"
+      ],
+      "failure_modes": [
+        "MODEL_TIMEOUT",
+        "SCRIPT_EXHAUSTED"
+      ],
+      "formal_rules": [
+        "ONE_MODEL_STEP_PER_CALL"
+      ],
+      "inputs": [
+        "tool_loop_request"
+      ],
+      "outputs": [
+        "function_call_or_message"
+      ],
+      "reason": null,
+      "related_tools": [],
+      "state_reads": [],
+      "state_writes": [],
+      "stop_nodes": [
+        "model_step_returned"
+      ],
+      "support_status": "supported",
+      "upstream_dependencies": [
+        "module.tool_loop"
+      ]
+    },
+    "result": {
+      "downstream_dependencies": [],
+      "entrypoints": [
+        "ModelClient.classify_intent",
+        "ModelClient.next_tool_step"
+      ],
+      "evidence": [
+        "final_response",
+        "intent_router_output"
+      ],
+      "failure_modes": [],
+      "formal_rules": [
+        "NO_INTERNAL_REASONING_IN_OUTPUT"
+      ],
+      "inputs": [
+        "validated_public_candidate"
+      ],
+      "outputs": [
+        "intent_candidate_or_tool_step"
+      ],
+      "reason": null,
+      "related_tools": [],
+      "state_reads": [],
+      "state_writes": [],
+      "stop_nodes": [
+        "candidate_returned_to_caller"
+      ],
+      "support_status": "supported",
+      "upstream_dependencies": []
+    },
+    "safety_recovery": {
+      "downstream_dependencies": [],
+      "entrypoints": [
+        "ModelClient.classify_intent",
+        "ModelClient.next_tool_step"
+      ],
+      "evidence": [
+        "intent_router_output",
+        "tool_trace"
+      ],
+      "failure_modes": [
+        "INVALID_MODEL_OUTPUT",
+        "MODEL_INVOCATION_FAILED"
+      ],
+      "formal_rules": [
+        "NO_SILENT_PROVIDER_FAILURE"
+      ],
+      "inputs": [
+        "provider_response"
+      ],
+      "outputs": [
+        "validated_public_candidate"
+      ],
+      "reason": null,
+      "related_tools": [],
+      "state_reads": [],
+      "state_writes": [],
+      "stop_nodes": [
+        "validated_candidate_or_explicit_failure"
+      ],
+      "support_status": "supported",
+      "upstream_dependencies": []
+    },
+    "understanding": {
+      "downstream_dependencies": [],
+      "entrypoints": [
+        "ModelClient.classify_intent"
+      ],
+      "evidence": [
+        "intent_router_output"
+      ],
+      "failure_modes": [
+        "MODEL_CONFIGURATION_ERROR",
+        "MODEL_INVOCATION_FAILED",
+        "INVALID_MODEL_OUTPUT"
+      ],
+      "formal_rules": [
+        "RESPONSES_API",
+        "API_KEY_FROM_ENVIRONMENT"
+      ],
+      "inputs": [
+        "user_input",
+        "intent_contract"
+      ],
+      "outputs": [
+        "intent_candidate"
+      ],
+      "reason": null,
+      "related_tools": [],
+      "state_reads": [],
+      "state_writes": [],
+      "stop_nodes": [
+        "intent_candidate_returned"
+      ],
+      "support_status": "supported",
+      "upstream_dependencies": [
+        "module.intent_router"
+      ]
+    }
+  },
+  "mockable_dependencies": [
+    "model_provider"
+  ],
+  "module_id": "model_gateway",
+  "module_refs": [],
+  "output_schema": {
+    "oneOf": [
+      {
+        "additionalProperties": false,
+        "description": "Observable result produced by the future intent router.",
+        "properties": {
+          "intent": {
+            "enum": [
+              "query_information",
+              "prepare_resource",
+              "query_user",
+              "query_gift",
+              "add_backpack_gift",
+              "query_pool",
+              "unsupported"
+            ],
+            "title": "Intent",
+            "type": "string"
+          },
+          "missing_parameters": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Missing Parameters",
+            "type": "array"
+          },
+          "next_action": {
+            "enum": [
+              "CALL_TOOL",
+              "ASK_USER",
+              "ASK_CONFIRMATION",
+              "REJECT"
+            ],
+            "title": "Next Action",
+            "type": "string"
+          },
+          "parameters": {
+            "additionalProperties": true,
+            "title": "Parameters",
+            "type": "object"
+          },
+          "reason": {
+            "title": "Reason",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "READY",
+              "NEED_CLARIFICATION",
+              "NEED_CONFIRMATION",
+              "REJECTED"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "intent",
+          "status",
+          "next_action",
+          "reason"
+        ],
+        "title": "IntentResult",
+        "type": "object"
+      },
+      {
+        "additionalProperties": false,
+        "description": "One function call requested by a scripted model step.",
+        "properties": {
+          "arguments": {
+            "additionalProperties": true,
+            "title": "Arguments",
+            "type": "object"
+          },
+          "call_id": {
+            "minLength": 1,
+            "title": "Call Id",
+            "type": "string"
+          },
+          "name": {
+            "minLength": 1,
+            "title": "Name",
+            "type": "string"
+          },
+          "type": {
+            "const": "function_call",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "call_id",
+          "name",
+          "arguments"
+        ],
+        "title": "FunctionCallItem",
+        "type": "object"
+      },
+      {
+        "additionalProperties": false,
+        "properties": {
+          "content": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": {
+            "const": "message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "content"
+        ],
+        "type": "object"
+      }
+    ]
+  },
+  "responsibility": "Provide the model-client boundary for intent classification and bounded tool-loop decisions.",
+  "snapshot_format_version": "2.0",
+  "snapshot_id": "module.model_gateway",
+  "snapshot_sha256": "d52251c2d134cfcb45b5125b53c4e5dbcd9bbfda53ca5f70c0986600849bfa06",
+  "snapshot_type": "module",
+  "source_hashes": {
+    "component_versions_sha256": "be4e1286dc629861ae2154abfede994d9d2e87f7587b7c6f020a99d8dae7046c",
+    "execution_boundary_ids_sha256": "d91de6d633965d502269788656c4daa28b1a0aa24191c304b880903d4c282135",
+    "input_schema_sha256": "45c8923f033a29139348d8ab85e5e7966eb2fa7998609240523ee21a50bba7c8",
+    "layers_sha256": "22b86e11091496ce8cbcf5d6420a385fdd5c17ea89bb0ba1f77fa12ea905a861",
+    "output_schema_sha256": "8d8e8f2427a922730488682376cd5b52b2a730736ead19ff32e487ef88b32be0",
+    "references_sha256": "abca75ce114ad4f5f48cc86b155d85cb9035479199e99afb440a265877ef8466"
+  },
+  "supported_operations": [
+    "classify_intent",
+    "next_tool_step"
+  ],
+  "tool_refs": [],
+  "trace_event_types": [
+    "intent_requested",
+    "intent_candidate_received"
+  ]
+}

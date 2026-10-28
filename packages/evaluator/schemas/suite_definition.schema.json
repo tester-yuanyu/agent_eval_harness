@@ -1,0 +1,401 @@
+{
+  "$defs": {
+    "ContractReference": {
+      "additionalProperties": false,
+      "properties": {
+        "contract_id": {
+          "minLength": 1,
+          "title": "Contract Id",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        },
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "contract_id",
+        "version",
+        "path",
+        "sha256"
+      ],
+      "title": "ContractReference",
+      "type": "object"
+    },
+    "ConversationMetricConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "timeout_seconds": {
+          "default": 90,
+          "exclusiveMinimum": 0,
+          "maximum": 600,
+          "title": "Timeout Seconds",
+          "type": "number"
+        }
+      },
+      "title": "ConversationMetricConfig",
+      "type": "object"
+    },
+    "DatasetFilters": {
+      "additionalProperties": false,
+      "properties": {
+        "scopes": {
+          "anyOf": [
+            {
+              "items": {
+                "enum": [
+                  "module",
+                  "link",
+                  "end_to_end"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Scopes"
+        },
+        "task_ids": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Task Ids"
+        },
+        "labels": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Labels"
+        },
+        "case_ids": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Case Ids"
+        }
+      },
+      "title": "DatasetFilters",
+      "type": "object"
+    },
+    "DatasetSource": {
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "title": "DatasetSource",
+      "type": "object"
+    },
+    "JudgeRunConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "default": true,
+          "title": "Enabled",
+          "type": "boolean"
+        },
+        "rubric_path": {
+          "minLength": 1,
+          "title": "Rubric Path",
+          "type": "string"
+        },
+        "timeout_seconds": {
+          "default": 30.0,
+          "exclusiveMinimum": 0,
+          "title": "Timeout Seconds",
+          "type": "number"
+        },
+        "max_retries": {
+          "default": 1,
+          "minimum": 0,
+          "title": "Max Retries",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "rubric_path"
+      ],
+      "title": "JudgeRunConfig",
+      "type": "object"
+    },
+    "PluginReference": {
+      "additionalProperties": false,
+      "properties": {
+        "plugin_id": {
+          "minLength": 1,
+          "title": "Plugin Id",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        },
+        "config": {
+          "additionalProperties": true,
+          "title": "Config",
+          "type": "object"
+        }
+      },
+      "required": [
+        "plugin_id",
+        "version"
+      ],
+      "title": "PluginReference",
+      "type": "object"
+    },
+    "RunConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "conversation_completeness": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ConversationMetricConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "run_mode": {
+          "default": "agent_benchmark",
+          "enum": [
+            "framework_self_test",
+            "agent_benchmark"
+          ],
+          "title": "Run Mode",
+          "type": "string"
+        },
+        "pass_threshold": {
+          "default": 100.0,
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Pass Threshold",
+          "type": "number"
+        },
+        "execution_type": {
+          "default": "auto",
+          "enum": [
+            "auto",
+            "full",
+            "targeted_smoke",
+            "filtered_subset"
+          ],
+          "title": "Execution Type",
+          "type": "string"
+        },
+        "filters": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/DatasetFilters"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "allow_non_frozen_dataset": {
+          "default": false,
+          "title": "Allow Non Frozen Dataset",
+          "type": "boolean"
+        },
+        "trials_per_case": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Trials Per Case",
+          "type": "integer"
+        },
+        "judge": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/JudgeRunConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "RunConfig",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "suite_id": {
+      "minLength": 1,
+      "title": "Suite Id",
+      "type": "string"
+    },
+    "suite_version": {
+      "minLength": 1,
+      "title": "Suite Version",
+      "type": "string"
+    },
+    "lifecycle_state": {
+      "default": "UNKNOWN",
+      "enum": [
+        "DRAFT",
+        "VALIDATED",
+        "APPROVED",
+        "FROZEN",
+        "UNKNOWN"
+      ],
+      "title": "Lifecycle State",
+      "type": "string"
+    },
+    "dataset_loader": {
+      "$ref": "#/$defs/PluginReference"
+    },
+    "dataset_sources": {
+      "items": {
+        "$ref": "#/$defs/DatasetSource"
+      },
+      "minItems": 1,
+      "title": "Dataset Sources",
+      "type": "array"
+    },
+    "provider": {
+      "$ref": "#/$defs/PluginReference"
+    },
+    "capability_bundle": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ContractReference"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "assertion_profile": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ContractReference"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "trace_profile": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ContractReference"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "judge_profile": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ContractReference"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "report_profile": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ContractReference"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "gate_policy": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ContractReference"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "run_config": {
+      "$ref": "#/$defs/RunConfig"
+    }
+  },
+  "required": [
+    "suite_id",
+    "suite_version",
+    "dataset_loader",
+    "dataset_sources",
+    "provider"
+  ],
+  "title": "SuiteDefinition",
+  "type": "object"
+}

@@ -1,0 +1,435 @@
+{
+  "component_versions": {
+    "execution_guard_contract": "shadow-execution-v1"
+  },
+  "context_rules": [
+    "SESSION_SCOPED_CONFIRMATION",
+    "FROZEN_ARGUMENTS",
+    "REQUEST_ID_AFTER_ACCEPTANCE"
+  ],
+  "contract_version": "execution-guard-module-v2",
+  "execution_boundary": "Begins before guarded write dispatch and stops only after policy, confirmation, and idempotency checks succeed or fail explicitly.",
+  "execution_boundary_ids": [
+    "end_to_end",
+    "guarded_write"
+  ],
+  "input_schema": {
+    "oneOf": [
+      {
+        "additionalProperties": false,
+        "description": "Run-owned authorization policy that is never exposed to the model.",
+        "properties": {
+          "allowed_tools": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array",
+                "uniqueItems": true
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Allowed Tools"
+          },
+          "confirmation_ttl_seconds": {
+            "default": 300,
+            "exclusiveMinimum": 0,
+            "title": "Confirmation Ttl Seconds",
+            "type": "integer"
+          },
+          "production_environments": {
+            "default": [
+              "prod",
+              "production"
+            ],
+            "items": {
+              "type": "string"
+            },
+            "title": "Production Environments",
+            "type": "array",
+            "uniqueItems": true
+          }
+        },
+        "title": "ExecutionPolicy",
+        "type": "object"
+      },
+      {
+        "additionalProperties": false,
+        "description": "Immutable execution authority created only after valid confirmation.",
+        "properties": {
+          "arguments_hash": {
+            "maxLength": 64,
+            "minLength": 64,
+            "title": "Arguments Hash",
+            "type": "string"
+          },
+          "confirmation_id": {
+            "minLength": 1,
+            "title": "Confirmation Id",
+            "type": "string"
+          },
+          "environment": {
+            "minLength": 1,
+            "title": "Environment",
+            "type": "string"
+          },
+          "frozen_arguments_json": {
+            "minLength": 2,
+            "title": "Frozen Arguments Json",
+            "type": "string"
+          },
+          "internal_version": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Internal Version"
+          },
+          "issued_at": {
+            "format": "date-time",
+            "title": "Issued At",
+            "type": "string"
+          },
+          "request_id": {
+            "minLength": 1,
+            "title": "Request Id",
+            "type": "string"
+          },
+          "session_id": {
+            "minLength": 1,
+            "title": "Session Id",
+            "type": "string"
+          },
+          "tool_name": {
+            "minLength": 1,
+            "title": "Tool Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "session_id",
+          "confirmation_id",
+          "request_id",
+          "tool_name",
+          "frozen_arguments_json",
+          "arguments_hash",
+          "environment",
+          "issued_at",
+          "internal_version"
+        ],
+        "title": "ExecutionContext",
+        "type": "object"
+      }
+    ]
+  },
+  "intent_refs": [],
+  "layers": {
+    "context": {
+      "downstream_dependencies": [
+        "module.state_store"
+      ],
+      "entrypoints": [
+        "ShadowExecutionController.handle_confirmation_reply"
+      ],
+      "evidence": [
+        "conversation_state"
+      ],
+      "failure_modes": [
+        "CONFIRMATION_EXPIRED",
+        "CONFIRMATION_REJECTED"
+      ],
+      "formal_rules": [
+        "CONFIRMATION_IS_SESSION_SCOPED"
+      ],
+      "inputs": [
+        "session_id",
+        "pending_confirmation"
+      ],
+      "outputs": [
+        "accepted_or_rejected_confirmation_context"
+      ],
+      "reason": null,
+      "related_tools": [],
+      "state_reads": [
+        "pending_confirmation",
+        "session_id"
+      ],
+      "state_writes": [
+        "pending_confirmation"
+      ],
+      "stop_nodes": [
+        "confirmation_terminal_state"
+      ],
+      "support_status": "supported",
+      "upstream_dependencies": []
+    },
+    "planning_execution": {
+      "downstream_dependencies": [
+        "module.state_store"
+      ],
+      "entrypoints": [
+        "ShadowExecutionController.request_confirmation"
+      ],
+      "evidence": [
+        "permission_event"
+      ],
+      "failure_modes": [
+        "CONFIRMATION_REQUIRED",
+        "TOOL_NOT_ALLOWED"
+      ],
+      "formal_rules": [
+        "WRITE_REQUIRES_CONFIRMATION"
+      ],
+      "inputs": [
+        "validated_write_intent"
+      ],
+      "outputs": [
+        "guarded_execution_context"
+      ],
+      "reason": null,
+      "related_tools": [
+        "tool.add_gift_to_backpack"
+      ],
+      "state_reads": [],
+      "state_writes": [],
+      "stop_nodes": [
+        "confirmation_requested_or_execution_authorized"
+      ],
+      "support_status": "supported",
+      "upstream_dependencies": []
+    },
+    "result": {
+      "downstream_dependencies": [],
+      "entrypoints": [
+        "ShadowExecutionController.handle_confirmation_reply"
+      ],
+      "evidence": [
+        "permission_event"
+      ],
+      "failure_modes": [
+        "CONFIRMATION_REJECTED",
+        "PERMISSION_DENIED"
+      ],
+      "formal_rules": [
+        "DENIAL_IS_EXPLICIT"
+      ],
+      "inputs": [
+        "guard_decision"
+      ],
+      "outputs": [
+        "execution_context_or_user_facing_status"
+      ],
+      "reason": null,
+      "related_tools": [
+        "tool.add_gift_to_backpack"
+      ],
+      "state_reads": [],
+      "state_writes": [],
+      "stop_nodes": [
+        "guard_result_returned"
+      ],
+      "support_status": "supported",
+      "upstream_dependencies": []
+    },
+    "safety_recovery": {
+      "downstream_dependencies": [],
+      "entrypoints": [
+        "ShadowExecutionController.validate_execution_context"
+      ],
+      "evidence": [
+        "permission_event",
+        "system_state"
+      ],
+      "failure_modes": [
+        "PRODUCTION_WRITE_BLOCKED",
+        "CONFIRMATION_ARGUMENTS_CHANGED",
+        "IDEMPOTENCY_CONFLICT"
+      ],
+      "formal_rules": [
+        "PRODUCTION_WRITES_BLOCKED",
+        "REQUEST_ID_IDEMPOTENCY"
+      ],
+      "inputs": [
+        "execution_policy",
+        "frozen_arguments",
+        "request_id"
+      ],
+      "outputs": [
+        "authorized_write_or_explicit_denial"
+      ],
+      "reason": null,
+      "related_tools": [
+        "tool.add_gift_to_backpack"
+      ],
+      "state_reads": [
+        "idempotency_records",
+        "pending_confirmation"
+      ],
+      "state_writes": [
+        "idempotency_records"
+      ],
+      "stop_nodes": [
+        "policy_terminal_decision"
+      ],
+      "support_status": "supported",
+      "upstream_dependencies": []
+    },
+    "understanding": {
+      "downstream_dependencies": [],
+      "entrypoints": [],
+      "evidence": [],
+      "failure_modes": [],
+      "formal_rules": [],
+      "inputs": [],
+      "outputs": [],
+      "reason": "Execution guard consumes structured policy and confirmation data.",
+      "related_tools": [],
+      "state_reads": [],
+      "state_writes": [],
+      "stop_nodes": [],
+      "support_status": "unsupported",
+      "upstream_dependencies": []
+    }
+  },
+  "mockable_dependencies": [
+    "state_store",
+    "clock",
+    "trace_collector"
+  ],
+  "module_id": "execution_guard",
+  "module_refs": [
+    {
+      "contract_version": "state-store-module-v2",
+      "path": "modules/state_store.json",
+      "snapshot_format_version": "2.0",
+      "snapshot_id": "module.state_store",
+      "snapshot_sha256": "ec16d6b11303ec9f108fa30b0503acc9a15efb0c3dff0872cbca56c22df8d9b9",
+      "snapshot_type": "module"
+    },
+    {
+      "contract_version": "observability-module-v2",
+      "path": "modules/observability.json",
+      "snapshot_format_version": "2.0",
+      "snapshot_id": "module.observability",
+      "snapshot_sha256": "31a9dda41dd9ea42f930a3a429330a6218ac5b1dc6dc556c72f31896cda71c56",
+      "snapshot_type": "module"
+    }
+  ],
+  "output_schema": {
+    "additionalProperties": false,
+    "description": "Immutable execution authority created only after valid confirmation.",
+    "properties": {
+      "arguments_hash": {
+        "maxLength": 64,
+        "minLength": 64,
+        "title": "Arguments Hash",
+        "type": "string"
+      },
+      "confirmation_id": {
+        "minLength": 1,
+        "title": "Confirmation Id",
+        "type": "string"
+      },
+      "environment": {
+        "minLength": 1,
+        "title": "Environment",
+        "type": "string"
+      },
+      "frozen_arguments_json": {
+        "minLength": 2,
+        "title": "Frozen Arguments Json",
+        "type": "string"
+      },
+      "internal_version": {
+        "anyOf": [
+          {
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Internal Version"
+      },
+      "issued_at": {
+        "format": "date-time",
+        "title": "Issued At",
+        "type": "string"
+      },
+      "request_id": {
+        "minLength": 1,
+        "title": "Request Id",
+        "type": "string"
+      },
+      "session_id": {
+        "minLength": 1,
+        "title": "Session Id",
+        "type": "string"
+      },
+      "tool_name": {
+        "minLength": 1,
+        "title": "Tool Name",
+        "type": "string"
+      }
+    },
+    "required": [
+      "session_id",
+      "confirmation_id",
+      "request_id",
+      "tool_name",
+      "frozen_arguments_json",
+      "arguments_hash",
+      "environment",
+      "issued_at",
+      "internal_version"
+    ],
+    "title": "ExecutionContext",
+    "type": "object"
+  },
+  "responsibility": "Guard sensitive writes with confirmation, policy enforcement, frozen arguments, and request_id idempotency.",
+  "snapshot_format_version": "2.0",
+  "snapshot_id": "module.execution_guard",
+  "snapshot_sha256": "0ae55c34e9afbef14430404ea81395ae229645ad058d5e64562cc1ae37287a54",
+  "snapshot_type": "module",
+  "source_hashes": {
+    "component_versions_sha256": "2d9a280ce43f7ab1b2ad586994551b82359095f06d28901e33c75c04c59151cf",
+    "execution_boundary_ids_sha256": "b26b58dd5309baa785bf966ca95ec44521a3f5d3938876894bebdff8ab835f84",
+    "input_schema_sha256": "7275cc1f2f409ec46ddea9630ec9a2360f4890577eb90182b1517a429c751922",
+    "layers_sha256": "3773c63d2a1a8835b699306d1cf357cfc98f0e7f92fc3cc4f8f114ed8024ae48",
+    "output_schema_sha256": "f68719e1e61261b295b5b614a92661067fdbdfe63e1b027b876acb1ce1b6bdf1",
+    "references_sha256": "00ab7b42f35b7c44b873ee39ad42dd55f3637651427f4e8828c2ca4f867a51c9"
+  },
+  "supported_operations": [
+    "request_confirmation",
+    "handle_confirmation_reply",
+    "validate_execution_context"
+  ],
+  "tool_refs": [
+    {
+      "contract_version": "tool-add_gift_to_backpack-contract-v2",
+      "path": "tools/add_gift_to_backpack.json",
+      "snapshot_format_version": "2.0",
+      "snapshot_id": "tool.add_gift_to_backpack",
+      "snapshot_sha256": "e9b0136e3b80eb3946acfdb4891882c52ee5d485c81f1c98650d18d913eef3b7",
+      "snapshot_type": "tool"
+    }
+  ],
+  "trace_event_types": [
+    "confirmation_requested",
+    "confirmation_accepted",
+    "confirmation_rejected",
+    "confirmation_expired",
+    "permission_denied",
+    "production_write_blocked",
+    "idempotent_replay",
+    "idempotency_conflict"
+  ]
+}

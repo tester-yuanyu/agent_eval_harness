@@ -1,0 +1,189 @@
+{
+  "snapshot_format_version": "2.0",
+  "snapshot_id": "query_user",
+  "snapshot_type": "intent_capability",
+  "capability_id": "query_user",
+  "module_id": "intent_router",
+  "scope": "intent_module",
+  "contract_version": "query-user-intent-contract-v3",
+  "parameters_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "user_id": {
+        "anyOf": [
+          {
+            "exclusiveMinimum": 0,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "User Id"
+      },
+      "room_id": {
+        "anyOf": [
+          {
+            "exclusiveMinimum": 0,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Room Id"
+      },
+      "email": {
+        "anyOf": [
+          {
+            "minLength": 3,
+            "pattern": "^[^@]+@[^@]+$",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Email"
+      },
+      "phone": {
+        "anyOf": [
+          {
+            "pattern": "^[0-9]{11}$",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Phone"
+      }
+    },
+    "title": "_QueryUserParameters",
+    "type": "object"
+  },
+  "missing_parameters": [
+    "email",
+    "phone",
+    "room_id",
+    "single_email",
+    "single_phone",
+    "single_room_id",
+    "single_user_id",
+    "single_user_query_condition",
+    "user_id",
+    "user_id_or_room_id",
+    "user_id_or_room_id_or_email_or_phone"
+  ],
+  "display": {
+    "name": "查询用户",
+    "field_labels": {
+      "user_id": "用户 ID",
+      "room_id": "房间 ID",
+      "email": "邮箱",
+      "phone": "手机号"
+    },
+    "missing_parameter_labels": {
+      "user_id": "用户 ID",
+      "room_id": "房间 ID",
+      "email": "邮箱",
+      "phone": "手机号",
+      "user_id_or_room_id": "用户 ID 或房间 ID",
+      "user_id_or_room_id_or_email_or_phone": "用户 ID、房间 ID、邮箱或手机号",
+      "single_user_id": "一个用户 ID",
+      "single_room_id": "一个房间 ID",
+      "single_email": "一个邮箱",
+      "single_phone": "一个手机号",
+      "single_user_query_condition": "一种用户查询条件"
+    }
+  },
+  "field_rules": {
+    "user_id": {
+      "aliases": [
+        "user_id",
+        "user id",
+        "user-id",
+        "userid",
+        "用户 ID",
+        "用户ID",
+        "用户编号",
+        "用户"
+      ],
+      "format_rule": "POSITIVE_INTEGER"
+    },
+    "room_id": {
+      "aliases": [
+        "room_id",
+        "room id",
+        "room-id",
+        "roomid",
+        "直播间 ID",
+        "直播间ID",
+        "房间 ID",
+        "房间ID",
+        "直播间编号",
+        "房间编号",
+        "直播间号",
+        "房间号",
+        "直播间",
+        "房间"
+      ],
+      "format_rule": "POSITIVE_INTEGER"
+    },
+    "email": {
+      "aliases": [
+        "email",
+        "e-mail",
+        "电子邮箱",
+        "电子邮件地址",
+        "邮箱"
+      ],
+      "format_rule": "EXACTLY_ONE_AT_WITH_NONEMPTY_SIDES"
+    },
+    "phone": {
+      "aliases": [
+        "phone",
+        "手机号码",
+        "手机号",
+        "电话号码",
+        "手机"
+      ],
+      "format_rule": "ASCII_DIGITS_EXACTLY_11"
+    }
+  },
+  "inference_rules": {
+    "explicit_field_overrides_value_shape": true,
+    "email_shape_maps_to": "email",
+    "eleven_ascii_digits_map_to": "phone",
+    "shorter_bare_positive_integer": "CLARIFY_USER_ID_OR_ROOM_ID",
+    "repeated_bare_integer": "CLARIFY_USER_ID_OR_ROOM_ID"
+  },
+  "missing_parameter_rules": {
+    "missing_all_conditions": "user_id_or_room_id_or_email_or_phone",
+    "ambiguous_bare_integer": "user_id_or_room_id",
+    "invalid_named_field": "USE_FIELD_NAME",
+    "same_field_multiple_values": "USE_SINGLE_FIELD_NAME",
+    "or_or_batch_query": "single_user_query_condition"
+  },
+  "semantic_rules": {
+    "multiple_fields": "AND",
+    "or_query": "NEED_CLARIFICATION_CLEAR_PARAMETERS",
+    "batch_query": "NEED_CLARIFICATION_CLEAR_PARAMETERS",
+    "same_field_multiple_values": "NEED_CLARIFICATION_CLEAR_PARAMETERS",
+    "explicit_correction": "USE_FINAL_UNIQUE_VALUE",
+    "negation_then_restatement": "USE_FINAL_UNIQUE_VALUE",
+    "unresolved_pronoun": "NEED_CLARIFICATION_MISSING_ALL_CONDITIONS"
+  },
+  "source_hashes": {
+    "parameters_schema_sha256": "b0711222d4dc2ca276e3ced2e1243499940037c2cacb18756b033868206f2cba",
+    "field_rules_sha256": "b594d29605cd33ea58e4e165bb2d9f4a03e01616ce54a9cf840443ac072831ec",
+    "inference_rules_sha256": "8d8d6f06054ddb0a8339df949f61343915f20182654c6148d4d050c97d35ad00",
+    "missing_parameter_rules_sha256": "6c96d7012aff6369fbdcaf458f8b9522948d902223d7b28220e06314c37f241e",
+    "semantic_rules_sha256": "2170962c9401d67ce3236e4a0956684ea96c4e7dbeed40b8a897411f4de24055"
+  },
+  "snapshot_sha256": "99250d54652c99cdea914a83db3ed1d9737b60c5e7cd3dfdd183473bdb066085"
+}

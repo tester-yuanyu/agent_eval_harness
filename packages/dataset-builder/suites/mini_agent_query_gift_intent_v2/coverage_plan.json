@@ -1,0 +1,42 @@
+{
+  "suite_id": "mini_agent_query_gift_intent_v2",
+  "module_contract_version": "intent-router-module-v3",
+  "capability_contract_version": "intent-contract-v1",
+  "expectation_source": "capability_ir",
+  "rule_catalog": {
+    "query_mode": {"source": "intent.query_gift", "capability_version": "intent-contract-v1"},
+    "optional_limit": {"source": "intent.query_gift", "capability_version": "intent-contract-v1"},
+    "valid_boundary": {"source": "intent.query_gift", "capability_version": "intent-contract-v1"},
+    "invalid_parameter": {"source": "intent.query_gift", "capability_version": "intent-contract-v1"},
+    "missing_mode": {"source": "intent.query_gift", "capability_version": "intent-contract-v1"},
+    "mode_conflict": {"source": "intent.query_gift", "capability_version": "intent-contract-v1"}
+  },
+  "case_count": 23,
+  "status_distribution": {"READY": 13, "NEED_CLARIFICATION": 10},
+  "scenario_type_distribution": {"normal": 6, "expression_variant": 3, "valid_boundary": 4, "invalid_parameter": 5, "missing_parameter": 2, "multi_condition": 3},
+  "slots": [
+    {"slot_id":"explicit_gift_id","intent":"query_gift","status":"READY","category":"query_mode","rule_refs":["query_gift.parameters_schema.properties.gift_id","query_gift.semantic_rules.query_modes"],"scenario_type":"normal"},
+    {"slot_id":"explicit_gift_ids","intent":"query_gift","status":"READY","category":"query_mode","rule_refs":["query_gift.parameters_schema.properties.gift_ids","query_gift.semantic_rules.query_modes"],"scenario_type":"normal"},
+    {"slot_id":"explicit_gift_name","intent":"query_gift","status":"READY","category":"query_mode","rule_refs":["query_gift.parameters_schema.properties.gift_name","query_gift.semantic_rules.query_modes"],"scenario_type":"normal"},
+    {"slot_id":"gift_id_with_limit","intent":"query_gift","status":"READY","category":"optional_limit","rule_refs":["query_gift.parameters_schema.properties.gift_id","query_gift.semantic_rules.limit"],"scenario_type":"normal"},
+    {"slot_id":"gift_ids_with_limit","intent":"query_gift","status":"READY","category":"optional_limit","rule_refs":["query_gift.parameters_schema.properties.gift_ids","query_gift.semantic_rules.limit"],"scenario_type":"normal"},
+    {"slot_id":"gift_name_with_limit","intent":"query_gift","status":"READY","category":"optional_limit","rule_refs":["query_gift.parameters_schema.properties.gift_name","query_gift.semantic_rules.limit"],"scenario_type":"normal"},
+    {"slot_id":"reordered_gift_id","intent":"query_gift","status":"READY","category":"query_mode","rule_refs":["query_gift.parameters_schema.properties.gift_id"],"scenario_type":"expression_variant"},
+    {"slot_id":"reordered_gift_ids","intent":"query_gift","status":"READY","category":"query_mode","rule_refs":["query_gift.parameters_schema.properties.gift_ids"],"scenario_type":"expression_variant"},
+    {"slot_id":"reordered_gift_name","intent":"query_gift","status":"READY","category":"query_mode","rule_refs":["query_gift.parameters_schema.properties.gift_name"],"scenario_type":"expression_variant"},
+    {"slot_id":"minimum_gift_id","intent":"query_gift","status":"READY","category":"valid_boundary","rule_refs":["query_gift.parameters_schema.properties.gift_id"],"scenario_type":"valid_boundary"},
+    {"slot_id":"single_item_gift_ids","intent":"query_gift","status":"READY","category":"valid_boundary","rule_refs":["query_gift.parameters_schema.properties.gift_ids"],"scenario_type":"valid_boundary"},
+    {"slot_id":"single_character_gift_name","intent":"query_gift","status":"READY","category":"valid_boundary","rule_refs":["query_gift.parameters_schema.properties.gift_name"],"scenario_type":"valid_boundary"},
+    {"slot_id":"minimum_limit","intent":"query_gift","status":"READY","category":"valid_boundary","rule_refs":["query_gift.parameters_schema.properties.limit"],"scenario_type":"valid_boundary"},
+    {"slot_id":"invalid_gift_id_zero","intent":"query_gift","status":"NEED_CLARIFICATION","category":"invalid_parameter","rule_refs":["query_gift.parameters_schema.properties.gift_id","query_gift.missing_parameters"],"scenario_type":"invalid_parameter"},
+    {"slot_id":"invalid_gift_id_negative","intent":"query_gift","status":"NEED_CLARIFICATION","category":"invalid_parameter","rule_refs":["query_gift.parameters_schema.properties.gift_id","query_gift.missing_parameters"],"scenario_type":"invalid_parameter"},
+    {"slot_id":"invalid_gift_ids_empty","intent":"query_gift","status":"NEED_CLARIFICATION","category":"invalid_parameter","rule_refs":["query_gift.parameters_schema.properties.gift_ids","query_gift.missing_parameters"],"scenario_type":"invalid_parameter"},
+    {"slot_id":"invalid_gift_ids_member","intent":"query_gift","status":"NEED_CLARIFICATION","category":"invalid_parameter","rule_refs":["query_gift.parameters_schema.properties.gift_ids","query_gift.missing_parameters"],"scenario_type":"invalid_parameter"},
+    {"slot_id":"invalid_gift_name_empty","intent":"query_gift","status":"NEED_CLARIFICATION","category":"invalid_parameter","rule_refs":["query_gift.parameters_schema.properties.gift_name","query_gift.missing_parameters"],"scenario_type":"invalid_parameter"},
+    {"slot_id":"missing_query_mode","intent":"query_gift","status":"NEED_CLARIFICATION","category":"missing_mode","rule_refs":["query_gift.semantic_rules.query_mode_cardinality","query_gift.missing_parameters"],"scenario_type":"missing_parameter"},
+    {"slot_id":"limit_without_query_mode","intent":"query_gift","status":"NEED_CLARIFICATION","category":"missing_mode","rule_refs":["query_gift.semantic_rules.query_mode_cardinality","query_gift.semantic_rules.limit"],"scenario_type":"missing_parameter"},
+    {"slot_id":"conflict_gift_id_and_name","intent":"query_gift","status":"NEED_CLARIFICATION","category":"mode_conflict","rule_refs":["query_gift.semantic_rules.query_mode_cardinality"],"scenario_type":"multi_condition"},
+    {"slot_id":"conflict_gift_id_and_ids","intent":"query_gift","status":"NEED_CLARIFICATION","category":"mode_conflict","rule_refs":["query_gift.semantic_rules.query_mode_cardinality"],"scenario_type":"multi_condition"},
+    {"slot_id":"conflict_gift_ids_and_name","intent":"query_gift","status":"NEED_CLARIFICATION","category":"mode_conflict","rule_refs":["query_gift.semantic_rules.query_mode_cardinality"],"scenario_type":"multi_condition"}
+  ]
+}

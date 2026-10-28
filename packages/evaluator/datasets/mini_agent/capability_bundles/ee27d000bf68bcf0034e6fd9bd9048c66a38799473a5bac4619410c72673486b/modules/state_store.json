@@ -1,0 +1,843 @@
+{
+  "component_versions": {
+    "sqlite_state_contract": "sqlite-store-v1"
+  },
+  "context_rules": [
+    "SQLITE_DURABLE_STATE",
+    "SESSION_SCOPED_PENDING_CONFIRMATION",
+    "ONE_DATABASE_PER_TEST"
+  ],
+  "contract_version": "state-store-module-v2",
+  "execution_boundary": "Own local SQLite state only; store.snapshot(run_id) exposes an independent observable terminal view.",
+  "execution_boundary_ids": [
+    "end_to_end",
+    "guarded_write",
+    "state_snapshot"
+  ],
+  "input_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "run_id": {
+        "minLength": 1,
+        "type": "string"
+      }
+    },
+    "required": [
+      "run_id"
+    ],
+    "type": "object"
+  },
+  "intent_refs": [],
+  "layers": {
+    "context": {
+      "downstream_dependencies": [],
+      "entrypoints": [
+        "SQLiteStore"
+      ],
+      "evidence": [
+        "conversation_state"
+      ],
+      "failure_modes": [
+        "STORE_ERROR"
+      ],
+      "formal_rules": [
+        "NO_SEMANTIC_MEMORY",
+        "NO_LONG_TERM_MEMORY",
+        "NO_RAG",
+        "NO_USER_PROFILE_MEMORY",
+        "NO_CROSS_SESSION_SEMANTIC_MEMORY"
+      ],
+      "inputs": [
+        "session_id",
+        "run_id"
+      ],
+      "outputs": [
+        "pending_confirmation_and_run_state"
+      ],
+      "reason": null,
+      "related_tools": [],
+      "state_reads": [
+        "pending_confirmation",
+        "idempotency_records"
+      ],
+      "state_writes": [
+        "pending_confirmation",
+        "idempotency_records"
+      ],
+      "stop_nodes": [
+        "state_loaded_or_not_found"
+      ],
+      "support_status": "supported",
+      "upstream_dependencies": []
+    },
+    "planning_execution": {
+      "downstream_dependencies": [],
+      "entrypoints": [
+        "SQLiteStore"
+      ],
+      "evidence": [
+        "system_state"
+      ],
+      "failure_modes": [
+        "STORE_ERROR",
+        "IDEMPOTENCY_CONFLICT"
+      ],
+      "formal_rules": [
+        "ATOMIC_WRITE_TRANSACTION"
+      ],
+      "inputs": [
+        "validated_store_operation"
+      ],
+      "outputs": [
+        "durable_mock_state"
+      ],
+      "reason": null,
+      "related_tools": [],
+      "state_reads": [
+        "mock_tables"
+      ],
+      "state_writes": [
+        "mock_tables"
+      ],
+      "stop_nodes": [
+        "transaction_committed_or_rolled_back"
+      ],
+      "support_status": "supported",
+      "upstream_dependencies": []
+    },
+    "result": {
+      "downstream_dependencies": [],
+      "entrypoints": [
+        "SQLiteStore.snapshot"
+      ],
+      "evidence": [
+        "system_state"
+      ],
+      "failure_modes": [
+        "STORE_ERROR"
+      ],
+      "formal_rules": [
+        "SNAPSHOT_IS_READ_ONLY_OBSERVATION"
+      ],
+      "inputs": [
+        "run_id"
+      ],
+      "outputs": [
+        "store_snapshot"
+      ],
+      "reason": null,
+      "related_tools": [],
+      "state_reads": [
+        "all_mock_state_counts_and_rows"
+      ],
+      "state_writes": [],
+      "stop_nodes": [
+        "snapshot_returned"
+      ],
+      "support_status": "supported",
+      "upstream_dependencies": []
+    },
+    "safety_recovery": {
+      "downstream_dependencies": [],
+      "entrypoints": [
+        "SQLiteStore"
+      ],
+      "evidence": [
+        "system_state"
+      ],
+      "failure_modes": [
+        "STORE_ERROR",
+        "IDEMPOTENCY_CONFLICT"
+      ],
+      "formal_rules": [
+        "NO_PARTIAL_COMMIT_ON_ERROR"
+      ],
+      "inputs": [
+        "write_transaction"
+      ],
+      "outputs": [
+        "committed_or_rolled_back_state"
+      ],
+      "reason": null,
+      "related_tools": [],
+      "state_reads": [
+        "idempotency_records"
+      ],
+      "state_writes": [
+        "idempotency_records"
+      ],
+      "stop_nodes": [
+        "transaction_terminal_state"
+      ],
+      "support_status": "supported",
+      "upstream_dependencies": []
+    },
+    "understanding": {
+      "downstream_dependencies": [],
+      "entrypoints": [],
+      "evidence": [],
+      "failure_modes": [],
+      "formal_rules": [],
+      "inputs": [],
+      "outputs": [],
+      "reason": "State storage does not interpret natural-language input.",
+      "related_tools": [],
+      "state_reads": [],
+      "state_writes": [],
+      "stop_nodes": [],
+      "support_status": "unsupported",
+      "upstream_dependencies": []
+    }
+  },
+  "mockable_dependencies": [
+    "sqlite_database"
+  ],
+  "module_id": "state_store",
+  "module_refs": [],
+  "output_schema": {
+    "$defs": {
+      "MockBackpackGrantRecord": {
+        "additionalProperties": false,
+        "description": "One locally simulated backpack grant.",
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "duration_days": {
+            "title": "Duration Days",
+            "type": "integer"
+          },
+          "expires_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expires At"
+          },
+          "gift_id": {
+            "title": "Gift Id",
+            "type": "integer"
+          },
+          "grant_id": {
+            "title": "Grant Id",
+            "type": "integer"
+          },
+          "num": {
+            "title": "Num",
+            "type": "integer"
+          },
+          "request_id": {
+            "title": "Request Id",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "user_id": {
+            "title": "User Id",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "grant_id",
+          "user_id",
+          "gift_id",
+          "num",
+          "duration_days",
+          "expires_at",
+          "request_id",
+          "status",
+          "created_at"
+        ],
+        "title": "MockBackpackGrantRecord",
+        "type": "object"
+      },
+      "MockCustomGiftRecord": {
+        "additionalProperties": false,
+        "description": "One fictional user- or room-specific gift record.",
+        "properties": {
+          "custom_type": {
+            "title": "Custom Type",
+            "type": "integer"
+          },
+          "element_id": {
+            "title": "Element Id",
+            "type": "integer"
+          },
+          "gift_id": {
+            "title": "Gift Id",
+            "type": "integer"
+          },
+          "record_id": {
+            "title": "Record Id",
+            "type": "integer"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "record_id",
+          "element_id",
+          "custom_type",
+          "gift_id",
+          "status"
+        ],
+        "title": "MockCustomGiftRecord",
+        "type": "object"
+      },
+      "MockGiftRecord": {
+        "additionalProperties": false,
+        "description": "One fictional gift in the shadow-assistant data set.",
+        "properties": {
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
+          "gift_id": {
+            "title": "Gift Id",
+            "type": "integer"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "price": {
+            "title": "Price",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "gift_id",
+          "name",
+          "price",
+          "description"
+        ],
+        "title": "MockGiftRecord",
+        "type": "object"
+      },
+      "MockGuaranteeInfo": {
+        "additionalProperties": false,
+        "description": "Normalized shadow representation of a pool guarantee.",
+        "properties": {
+          "enabled": {
+            "title": "Enabled",
+            "type": "boolean"
+          },
+          "threshold": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Threshold"
+          }
+        },
+        "required": [
+          "enabled",
+          "threshold"
+        ],
+        "title": "MockGuaranteeInfo",
+        "type": "object"
+      },
+      "MockPoolRateRecord": {
+        "additionalProperties": false,
+        "description": "One pool weight with a probability derived at read time.",
+        "properties": {
+          "gift_id": {
+            "title": "Gift Id",
+            "type": "integer"
+          },
+          "probability": {
+            "title": "Probability",
+            "type": "number"
+          },
+          "weight": {
+            "title": "Weight",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "gift_id",
+          "weight",
+          "probability"
+        ],
+        "title": "MockPoolRateRecord",
+        "type": "object"
+      },
+      "MockPoolRecord": {
+        "additionalProperties": false,
+        "description": "One fictional pool and its derived rate information.",
+        "properties": {
+          "environment": {
+            "title": "Environment",
+            "type": "string"
+          },
+          "guarantee_info": {
+            "$ref": "#/$defs/MockGuaranteeInfo"
+          },
+          "internal_version": {
+            "title": "Internal Version",
+            "type": "integer"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "pool_id": {
+            "title": "Pool Id",
+            "type": "integer"
+          },
+          "rates": {
+            "items": {
+              "$ref": "#/$defs/MockPoolRateRecord"
+            },
+            "title": "Rates",
+            "type": "array"
+          }
+        },
+        "required": [
+          "pool_id",
+          "name",
+          "environment",
+          "rates",
+          "guarantee_info",
+          "internal_version"
+        ],
+        "title": "MockPoolRecord",
+        "type": "object"
+      },
+      "MockUserRecord": {
+        "additionalProperties": false,
+        "description": "One fictional user in the shadow-assistant data set.",
+        "properties": {
+          "email": {
+            "title": "Email",
+            "type": "string"
+          },
+          "environment": {
+            "title": "Environment",
+            "type": "string"
+          },
+          "nickname": {
+            "title": "Nickname",
+            "type": "string"
+          },
+          "phone": {
+            "title": "Phone",
+            "type": "string"
+          },
+          "room_id": {
+            "title": "Room Id",
+            "type": "integer"
+          },
+          "room_name": {
+            "title": "Room Name",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "user_id": {
+            "title": "User Id",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "user_id",
+          "room_id",
+          "nickname",
+          "room_name",
+          "phone",
+          "email",
+          "status",
+          "environment"
+        ],
+        "title": "MockUserRecord",
+        "type": "object"
+      },
+      "PendingConfirmationRecord": {
+        "additionalProperties": false,
+        "description": "One durable, execution-layer confirmation state.",
+        "properties": {
+          "accepted_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Accepted At"
+          },
+          "arguments": {
+            "additionalProperties": true,
+            "title": "Arguments",
+            "type": "object"
+          },
+          "arguments_hash": {
+            "title": "Arguments Hash",
+            "type": "string"
+          },
+          "confirmation_id": {
+            "title": "Confirmation Id",
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "environment": {
+            "title": "Environment",
+            "type": "string"
+          },
+          "expires_at": {
+            "format": "date-time",
+            "title": "Expires At",
+            "type": "string"
+          },
+          "internal_version": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Internal Version"
+          },
+          "request_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Request Id"
+          },
+          "session_id": {
+            "title": "Session Id",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "PENDING",
+              "ACCEPTED",
+              "CANCELLED",
+              "EXPIRED",
+              "INVALIDATED",
+              "SUPERSEDED"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "summary": {
+            "title": "Summary",
+            "type": "string"
+          },
+          "tool_name": {
+            "title": "Tool Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "confirmation_id",
+          "session_id",
+          "tool_name",
+          "arguments",
+          "arguments_hash",
+          "environment",
+          "summary",
+          "status",
+          "internal_version",
+          "created_at",
+          "expires_at",
+          "accepted_at",
+          "request_id"
+        ],
+        "title": "PendingConfirmationRecord",
+        "type": "object"
+      },
+      "ResourceRecord": {
+        "additionalProperties": false,
+        "description": "One materialized mock resource.",
+        "properties": {
+          "environment": {
+            "title": "Environment",
+            "type": "string"
+          },
+          "request_id": {
+            "title": "Request Id",
+            "type": "string"
+          },
+          "resource_id": {
+            "title": "Resource Id",
+            "type": "integer"
+          },
+          "resource_type": {
+            "title": "Resource Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "resource_id",
+          "resource_type",
+          "environment",
+          "request_id"
+        ],
+        "title": "ResourceRecord",
+        "type": "object"
+      },
+      "ShadowIdempotencyRecord": {
+        "additionalProperties": false,
+        "description": "One durable request-id result for a future shadow write tool.",
+        "properties": {
+          "arguments_hash": {
+            "title": "Arguments Hash",
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "request_id": {
+            "title": "Request Id",
+            "type": "string"
+          },
+          "result": {
+            "additionalProperties": true,
+            "title": "Result",
+            "type": "object"
+          },
+          "tool_name": {
+            "title": "Tool Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "request_id",
+          "tool_name",
+          "arguments_hash",
+          "result",
+          "created_at"
+        ],
+        "title": "ShadowIdempotencyRecord",
+        "type": "object"
+      },
+      "WriteRequestRecord": {
+        "additionalProperties": false,
+        "description": "One committed idempotent write request.",
+        "properties": {
+          "created_count": {
+            "title": "Created Count",
+            "type": "integer"
+          },
+          "environment": {
+            "title": "Environment",
+            "type": "string"
+          },
+          "request_id": {
+            "title": "Request Id",
+            "type": "string"
+          },
+          "requested_count": {
+            "title": "Requested Count",
+            "type": "integer"
+          },
+          "resource_type": {
+            "title": "Resource Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "request_id",
+          "resource_type",
+          "environment",
+          "requested_count",
+          "created_count"
+        ],
+        "title": "WriteRequestRecord",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "Read-only database state associated with an external run ID.",
+    "properties": {
+      "mock_backpack_grant_count": {
+        "minimum": 0,
+        "title": "Mock Backpack Grant Count",
+        "type": "integer"
+      },
+      "mock_backpack_grants": {
+        "items": {
+          "$ref": "#/$defs/MockBackpackGrantRecord"
+        },
+        "title": "Mock Backpack Grants",
+        "type": "array"
+      },
+      "mock_custom_gift_record_count": {
+        "minimum": 0,
+        "title": "Mock Custom Gift Record Count",
+        "type": "integer"
+      },
+      "mock_custom_gift_records": {
+        "items": {
+          "$ref": "#/$defs/MockCustomGiftRecord"
+        },
+        "title": "Mock Custom Gift Records",
+        "type": "array"
+      },
+      "mock_gift_count": {
+        "minimum": 0,
+        "title": "Mock Gift Count",
+        "type": "integer"
+      },
+      "mock_gifts": {
+        "items": {
+          "$ref": "#/$defs/MockGiftRecord"
+        },
+        "title": "Mock Gifts",
+        "type": "array"
+      },
+      "mock_pool_count": {
+        "minimum": 0,
+        "title": "Mock Pool Count",
+        "type": "integer"
+      },
+      "mock_pools": {
+        "items": {
+          "$ref": "#/$defs/MockPoolRecord"
+        },
+        "title": "Mock Pools",
+        "type": "array"
+      },
+      "mock_user_count": {
+        "minimum": 0,
+        "title": "Mock User Count",
+        "type": "integer"
+      },
+      "mock_users": {
+        "items": {
+          "$ref": "#/$defs/MockUserRecord"
+        },
+        "title": "Mock Users",
+        "type": "array"
+      },
+      "pending_confirmation_count": {
+        "minimum": 0,
+        "title": "Pending Confirmation Count",
+        "type": "integer"
+      },
+      "pending_confirmations": {
+        "items": {
+          "$ref": "#/$defs/PendingConfirmationRecord"
+        },
+        "title": "Pending Confirmations",
+        "type": "array"
+      },
+      "resource_count": {
+        "minimum": 0,
+        "title": "Resource Count",
+        "type": "integer"
+      },
+      "resources": {
+        "items": {
+          "$ref": "#/$defs/ResourceRecord"
+        },
+        "title": "Resources",
+        "type": "array"
+      },
+      "run_id": {
+        "minLength": 1,
+        "title": "Run Id",
+        "type": "string"
+      },
+      "shadow_idempotency_record_count": {
+        "minimum": 0,
+        "title": "Shadow Idempotency Record Count",
+        "type": "integer"
+      },
+      "shadow_idempotency_records": {
+        "items": {
+          "$ref": "#/$defs/ShadowIdempotencyRecord"
+        },
+        "title": "Shadow Idempotency Records",
+        "type": "array"
+      },
+      "write_request_count": {
+        "minimum": 0,
+        "title": "Write Request Count",
+        "type": "integer"
+      },
+      "write_requests": {
+        "items": {
+          "$ref": "#/$defs/WriteRequestRecord"
+        },
+        "title": "Write Requests",
+        "type": "array"
+      }
+    },
+    "required": [
+      "run_id",
+      "resource_count",
+      "write_request_count",
+      "resources",
+      "write_requests",
+      "mock_user_count",
+      "mock_gift_count",
+      "mock_custom_gift_record_count",
+      "mock_pool_count",
+      "pending_confirmation_count",
+      "shadow_idempotency_record_count",
+      "mock_backpack_grant_count",
+      "mock_users",
+      "mock_gifts",
+      "mock_custom_gift_records",
+      "mock_pools",
+      "pending_confirmations",
+      "shadow_idempotency_records",
+      "mock_backpack_grants"
+    ],
+    "title": "StoreSnapshot",
+    "type": "object"
+  },
+  "responsibility": "Persist isolated Mock state, pending confirmations, idempotency records, and independent state snapshots in SQLite.",
+  "snapshot_format_version": "2.0",
+  "snapshot_id": "module.state_store",
+  "snapshot_sha256": "ec16d6b11303ec9f108fa30b0503acc9a15efb0c3dff0872cbca56c22df8d9b9",
+  "snapshot_type": "module",
+  "source_hashes": {
+    "component_versions_sha256": "cf270221edd6a5ee40308afc49709bb96ccdae3a74047fbdbd80823842d16702",
+    "execution_boundary_ids_sha256": "b0f37e575cabf7b2eb3156fd52e339df1d0bf6c4c2fedbf5b595d1a8dc785535",
+    "input_schema_sha256": "a5df57661a26013595bfea9b0abe541f87a841caac071ffc947afa058dc0fc31",
+    "layers_sha256": "305c6f34778f6eee1bbfc4cb03c2fcddfb0ddb4bf918244103679a67611c771d",
+    "output_schema_sha256": "7a7c9b066e5d7cc97970029da43816d8c65db66b8d614cccfb1ec2bffef053e2",
+    "references_sha256": "abca75ce114ad4f5f48cc86b155d85cb9035479199e99afb440a265877ef8466"
+  },
+  "supported_operations": [
+    "persist_mock_state",
+    "snapshot"
+  ],
+  "tool_refs": [],
+  "trace_event_types": []
+}

@@ -1,0 +1,567 @@
+{
+  "agent_id": "mini_agent",
+  "agent_version": "0.1.0",
+  "boundary_refs": [
+    {
+      "contract_version": "mini-agent-capability-contract-v3",
+      "path": "boundaries/context.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "boundary.context",
+      "snapshot_sha256": "7c036abeafe0f8f046f09d43505cb8e1d3fac6264237aed006e969550a44e1e5",
+      "snapshot_type": "boundary"
+    },
+    {
+      "contract_version": "mini-agent-capability-contract-v3",
+      "path": "boundaries/critical_chain.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "boundary.critical_chain",
+      "snapshot_sha256": "ea1d16df80371d085d0b5863dbaabc78955798d3cfb86c54daa5e89346a3cce4",
+      "snapshot_type": "boundary"
+    },
+    {
+      "contract_version": "mini-agent-capability-contract-v3",
+      "path": "boundaries/end_to_end.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "boundary.end_to_end",
+      "snapshot_sha256": "9689b790829942df4e51bb37eebe656450fc153bc899becd53093f158d3b5cce",
+      "snapshot_type": "boundary"
+    },
+    {
+      "contract_version": "mini-agent-capability-contract-v3",
+      "path": "boundaries/planning_execution.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "boundary.planning_execution",
+      "snapshot_sha256": "67d6a1fa1b505ac613f5d33addcdc95b7117e8f5b60886a1053632324edc2352",
+      "snapshot_type": "boundary"
+    },
+    {
+      "contract_version": "mini-agent-capability-contract-v3",
+      "path": "boundaries/result.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "boundary.result",
+      "snapshot_sha256": "62e6963bea18c1cb4396b08887a1a4e902f823733766101e0b1dd93a0aa474ab",
+      "snapshot_type": "boundary"
+    },
+    {
+      "contract_version": "mini-agent-capability-contract-v3",
+      "path": "boundaries/safety_recovery.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "boundary.safety_recovery",
+      "snapshot_sha256": "09ff07e25a317b1ccf156ec7738974549e0353ede723611b6bc74b9032c6dfd4",
+      "snapshot_type": "boundary"
+    },
+    {
+      "contract_version": "mini-agent-capability-contract-v3",
+      "path": "boundaries/understanding.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "boundary.understanding",
+      "snapshot_sha256": "05c8b2c2fa209a1bbbda48bf3e10010868b4ee9aa5f3d2985e7134ecdc476f3e",
+      "snapshot_type": "boundary"
+    }
+  ],
+  "capabilities": [
+    {
+      "capability_key": "agent.understanding",
+      "evidence_ids": [
+        "evidence.intent_result"
+      ],
+      "reason": null,
+      "support_status": "supported"
+    },
+    {
+      "capability_key": "agent.context",
+      "evidence_ids": [],
+      "reason": "Mandatory capability is unsupported: context.cancellation, context.cleanup, context.inheritance, context.override, context.residual_state_handling, context.session_isolation",
+      "support_status": "unsupported"
+    },
+    {
+      "capability_key": "agent.planning_execution",
+      "evidence_ids": [
+        "evidence.safety_recovery_event",
+        "evidence.tool_trace"
+      ],
+      "reason": null,
+      "support_status": "supported"
+    },
+    {
+      "capability_key": "agent.safety_recovery",
+      "evidence_ids": [
+        "evidence.safety_recovery_event"
+      ],
+      "reason": null,
+      "support_status": "supported"
+    },
+    {
+      "capability_key": "agent.result",
+      "evidence_ids": [
+        "evidence.final_response"
+      ],
+      "reason": null,
+      "support_status": "supported"
+    }
+  ],
+  "capability_bundle_sha256": "61ff546b81d3969f24cde3d216f17e37b13cb87663bdcc7a6b7b80183a776544",
+  "chain_refs": [
+    {
+      "contract_version": "mini-agent-capability-contract-v3",
+      "path": "chains/end_to_end/end_to_end.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "chain.end_to_end",
+      "snapshot_sha256": "0af27e58a03a53db0c31b0fa2ec4c237aa45bebf0bca17965b6641f6708d89f7",
+      "snapshot_type": "chain"
+    },
+    {
+      "contract_version": "mini-agent-capability-contract-v3",
+      "path": "chains/critical/planning_to_result.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "chain.planning_to_result",
+      "snapshot_sha256": "e8c644719f13968f3f3c14a7383ad654ac474e8c5c2324ebb291d5419da0788f",
+      "snapshot_type": "chain"
+    },
+    {
+      "contract_version": "mini-agent-capability-contract-v3",
+      "path": "chains/critical/understanding_to_planning.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "chain.understanding_to_planning",
+      "snapshot_sha256": "b4bcdac950cb2986dbae7044333f75085312012a7e6eb2e240f19ae2ccb8b0cd",
+      "snapshot_type": "chain"
+    }
+  ],
+  "contract_version": "mini-agent-capability-contract-v3",
+  "entrypoints": [
+    "MinimalAgent.run_intent_only",
+    "MinimalAgent.run"
+  ],
+  "evidence_refs": [
+    {
+      "contract_version": "mini-agent-capability-contract-v3",
+      "path": "evidence/context_state.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "evidence.context_state",
+      "snapshot_sha256": "5e2f7d98d5e26fc7c559b9687da0c95be84ee459ad2bd105c6abe63e9f8537f1",
+      "snapshot_type": "evidence"
+    },
+    {
+      "contract_version": "mini-agent-capability-contract-v3",
+      "path": "evidence/final_response.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "evidence.final_response",
+      "snapshot_sha256": "c57f1de42cd98df70904ee0da3229c42c7a85430191d52c649fa519c1463e7af",
+      "snapshot_type": "evidence"
+    },
+    {
+      "contract_version": "mini-agent-capability-contract-v3",
+      "path": "evidence/intent_result.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "evidence.intent_result",
+      "snapshot_sha256": "3f4fd12d035f48aaddad7bd7bfc922a8e8d312ea91c9ba2760818fca1775bef5",
+      "snapshot_type": "evidence"
+    },
+    {
+      "contract_version": "mini-agent-capability-contract-v3",
+      "path": "evidence/safety_recovery_event.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "evidence.safety_recovery_event",
+      "snapshot_sha256": "5a5802f798a16ba038c274c6e486117c4e3e2d91bb83e837a14ae1079dbd4e6b",
+      "snapshot_type": "evidence"
+    },
+    {
+      "contract_version": "mini-agent-capability-contract-v3",
+      "path": "evidence/tool_trace.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "evidence.tool_trace",
+      "snapshot_sha256": "285f5a8619994f631a4b6063dbc5cdb3d0ea45c5e9ba08b7729395b4c31040c3",
+      "snapshot_type": "evidence"
+    }
+  ],
+  "input_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "session_id": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "user_input": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "user_input",
+      "session_id"
+    ],
+    "type": "object"
+  },
+  "intent_refs": [
+    {
+      "contract_version": "intent-contract-v1",
+      "path": "intents/add_backpack_gift.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "intent.add_backpack_gift",
+      "snapshot_sha256": "6e5e88f4c6374335d0f4330672a8a252671fd0e395ec0fe606ef41fa0deacab3",
+      "snapshot_type": "intent"
+    },
+    {
+      "contract_version": "intent-contract-v1",
+      "path": "intents/prepare_resource.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "intent.prepare_resource",
+      "snapshot_sha256": "eba63163aff699f6ec24a0551c460a7055b88eee9534bda2138414a9ec896cbd",
+      "snapshot_type": "intent"
+    },
+    {
+      "contract_version": "intent-contract-v1",
+      "path": "intents/query_gift.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "intent.query_gift",
+      "snapshot_sha256": "e8fcd31b6c1ab3204dee6bcb616b80d559ea74a641b65dad0e2affb1e1476bbf",
+      "snapshot_type": "intent"
+    },
+    {
+      "contract_version": "intent-contract-v1",
+      "path": "intents/query_information.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "intent.query_information",
+      "snapshot_sha256": "0024a6a215330331a9beef34a26f5d6c970585ebe659f9e97a95594487c8234c",
+      "snapshot_type": "intent"
+    },
+    {
+      "contract_version": "intent-contract-v1",
+      "path": "intents/query_pool.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "intent.query_pool",
+      "snapshot_sha256": "5d5676a3cf1d21e2c2100c3e0a73b81d648f65c2e614c2c6ca1ef1337cc19ee3",
+      "snapshot_type": "intent"
+    },
+    {
+      "contract_version": "query-user-intent-contract-v3",
+      "path": "intents/query_user.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "intent.query_user",
+      "snapshot_sha256": "0d0ec3e6db7ca76eede7ce99926014123c5e9081c1eb66ff8888bd74e509a9c3",
+      "snapshot_type": "intent"
+    },
+    {
+      "contract_version": "intent-contract-v1",
+      "path": "intents/unsupported.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "intent.unsupported",
+      "snapshot_sha256": "dcba02d21dfab07e0418d302195aaf04989a010cd2f2e8927475c941810e00b4",
+      "snapshot_type": "intent"
+    }
+  ],
+  "module_refs": [
+    {
+      "contract_version": "agent-orchestrator-module-v3",
+      "path": "modules/agent_orchestrator.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "module.agent_orchestrator",
+      "snapshot_sha256": "9144e0227f084b538e9c9d375d73c094b8bb947fd87b43e69f2d3d2946cdcd6d",
+      "snapshot_type": "module"
+    },
+    {
+      "contract_version": "execution-guard-module-v3",
+      "path": "modules/execution_guard.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "module.execution_guard",
+      "snapshot_sha256": "aff59eb854c23b783ad62aae4f49900de8c644e0b39215b8b375e1b902b9b37a",
+      "snapshot_type": "module"
+    },
+    {
+      "contract_version": "intent-router-module-v3",
+      "path": "modules/intent_router.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "module.intent_router",
+      "snapshot_sha256": "94afdcac558a433a7b9b19c3e2584637b81009035672426c1d90d44e72d9d605",
+      "snapshot_type": "module"
+    },
+    {
+      "contract_version": "model-gateway-module-v3",
+      "path": "modules/model_gateway.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "module.model_gateway",
+      "snapshot_sha256": "78f74ab0def8cb0e96c99463b4aa3060b77dd5ce0a9e4cf3818df83c2cca7852",
+      "snapshot_type": "module"
+    },
+    {
+      "contract_version": "observability-module-v3",
+      "path": "modules/observability.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "module.observability",
+      "snapshot_sha256": "009b8b17a113ce14cc28eeaf8ebd1b8c18790eb5da85b7e5816abf3a65ffaa51",
+      "snapshot_type": "module"
+    },
+    {
+      "contract_version": "tool-loop-module-v3",
+      "path": "modules/tool_loop.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "module.tool_loop",
+      "snapshot_sha256": "7a5d59bd6db681ac79234591eb51255f964a03616fd7f4c97dd4d754191d89e3",
+      "snapshot_type": "module"
+    },
+    {
+      "contract_version": "tool-registry-module-v3",
+      "path": "modules/tool_registry.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "module.tool_registry",
+      "snapshot_sha256": "750583a3a0636478c336b375dc4d68672ea817c00588ff6ed26b86f5f5e347cf",
+      "snapshot_type": "module"
+    }
+  ],
+  "output_schema": {
+    "$defs": {
+      "IntentResult": {
+        "additionalProperties": false,
+        "description": "Observable result produced by the future intent router.",
+        "properties": {
+          "intent": {
+            "enum": [
+              "query_information",
+              "prepare_resource",
+              "query_user",
+              "query_gift",
+              "add_backpack_gift",
+              "query_pool",
+              "unsupported"
+            ],
+            "title": "Intent",
+            "type": "string"
+          },
+          "missing_parameters": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Missing Parameters",
+            "type": "array"
+          },
+          "next_action": {
+            "enum": [
+              "CALL_TOOL",
+              "ASK_USER",
+              "ASK_CONFIRMATION",
+              "REJECT"
+            ],
+            "title": "Next Action",
+            "type": "string"
+          },
+          "parameters": {
+            "additionalProperties": true,
+            "title": "Parameters",
+            "type": "object"
+          },
+          "reason": {
+            "title": "Reason",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "READY",
+              "NEED_CLARIFICATION",
+              "NEED_CONFIRMATION",
+              "REJECTED"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "intent",
+          "status",
+          "next_action",
+          "reason"
+        ],
+        "title": "IntentResult",
+        "type": "object"
+      },
+      "ToolCallRecord": {
+        "additionalProperties": false,
+        "description": "Observable terminal record for one tool call.",
+        "properties": {
+          "arguments": {
+            "additionalProperties": true,
+            "title": "Arguments",
+            "type": "object"
+          },
+          "call_id": {
+            "title": "Call Id",
+            "type": "string"
+          },
+          "duration_ms": {
+            "minimum": 0,
+            "title": "Duration Ms",
+            "type": "integer"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "output": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Output"
+          },
+          "status": {
+            "enum": [
+              "SUCCESS",
+              "FAILED",
+              "TIMEOUT"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "call_id",
+          "name",
+          "arguments",
+          "status",
+          "output",
+          "error",
+          "duration_ms"
+        ],
+        "title": "ToolCallRecord",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "Stable result boundary exposed to the future evaluation framework.",
+    "properties": {
+      "events": {
+        "items": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "title": "Events",
+        "type": "array"
+      },
+      "final_response": {
+        "title": "Final Response",
+        "type": "string"
+      },
+      "intent_result": {
+        "$ref": "#/$defs/IntentResult"
+      },
+      "run_id": {
+        "title": "Run Id",
+        "type": "string"
+      },
+      "status": {
+        "enum": [
+          "SUCCESS",
+          "NEED_CLARIFICATION",
+          "NEED_CONFIRMATION",
+          "REJECTED",
+          "FAILED",
+          "MAX_STEPS_EXCEEDED"
+        ],
+        "title": "Status",
+        "type": "string"
+      },
+      "tool_calls": {
+        "items": {
+          "$ref": "#/$defs/ToolCallRecord"
+        },
+        "title": "Tool Calls",
+        "type": "array"
+      },
+      "trace_id": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Trace Id"
+      }
+    },
+    "required": [
+      "run_id",
+      "status",
+      "intent_result",
+      "tool_calls",
+      "final_response",
+      "events"
+    ],
+    "title": "AgentResult",
+    "type": "object"
+  },
+  "runtime_versions": {
+    "intent_prompt": "intent-router-v5",
+    "model_client": "environment-configured-responses-api-v1",
+    "tool_prompt": "tool-loop-v2",
+    "tool_registry": "tool-registry-v2"
+  },
+  "scope_refs": [
+    {
+      "contract_version": "mini-agent-capability-contract-v3",
+      "path": "scopes/context.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "scope.context",
+      "snapshot_sha256": "b7fbf308da35e70e667fee0a78f1bbdfe63ff234353ed2870ee60ae0f3bbc7ae",
+      "snapshot_type": "scope"
+    },
+    {
+      "contract_version": "mini-agent-capability-contract-v3",
+      "path": "scopes/planning_execution.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "scope.planning_execution",
+      "snapshot_sha256": "fbd6ae1a3e91b2bcf11fe54fb41eef753fab5ef81b4e6783465505833d96b2c6",
+      "snapshot_type": "scope"
+    },
+    {
+      "contract_version": "mini-agent-capability-contract-v3",
+      "path": "scopes/result.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "scope.result",
+      "snapshot_sha256": "28c4cd35ae84ff7f57bdf6ae2133e7aa59f9346b4b05bf6c969da27cb2a10068",
+      "snapshot_type": "scope"
+    },
+    {
+      "contract_version": "mini-agent-capability-contract-v3",
+      "path": "scopes/safety_recovery.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "scope.safety_recovery",
+      "snapshot_sha256": "95b827221c73fe60fa1a4a2ec9e3b3675215565744dbbd2a37600cbebd267d91",
+      "snapshot_type": "scope"
+    },
+    {
+      "contract_version": "mini-agent-capability-contract-v3",
+      "path": "scopes/understanding.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "scope.understanding",
+      "snapshot_sha256": "5f427f552767c8590edbcf7cac213a7638c06e87e46c59b014428dca64dedd83",
+      "snapshot_type": "scope"
+    }
+  ],
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "agent.mini_agent",
+  "snapshot_sha256": "ab84c71fcaab248aca7bd08d66ac47a5fc82cf59868c794f420cb098a794ac34",
+  "snapshot_type": "agent",
+  "source_hashes": {
+    "capabilities_sha256": "671859495f1fa36e8a25fae2986a21fd92a72a9dad983fbfdd42ee0dd550d730",
+    "children_sha256": "61ff546b81d3969f24cde3d216f17e37b13cb87663bdcc7a6b7b80183a776544"
+  },
+  "tool_refs": []
+}

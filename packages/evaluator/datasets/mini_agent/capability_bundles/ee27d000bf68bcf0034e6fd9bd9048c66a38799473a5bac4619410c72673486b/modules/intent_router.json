@@ -1,0 +1,362 @@
+{
+  "component_versions": {
+    "intent_contract_registry": "intent-registry-v1",
+    "intent_prompt_version": "intent-router-v5"
+  },
+  "context_rules": [
+    "SINGLE_INPUT_CLASSIFICATION",
+    "NO_DURABLE_CONTEXT"
+  ],
+  "contract_version": "intent-router-module-v2",
+  "execution_boundary": "Starts at run_intent_only and stops at a validated IntentResult; no Tool is invoked.",
+  "execution_boundary_ids": [
+    "end_to_end",
+    "intent_router_only",
+    "tool_chain"
+  ],
+  "input_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "session_id": {
+        "anyOf": [
+          {
+            "minLength": 1,
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "user_input": {
+        "minLength": 1,
+        "type": "string"
+      }
+    },
+    "required": [
+      "user_input",
+      "session_id"
+    ],
+    "type": "object"
+  },
+  "intent_refs": [
+    {
+      "contract_version": "intent-contract-v1",
+      "path": "intents/add_backpack_gift.json",
+      "snapshot_format_version": "2.0",
+      "snapshot_id": "intent.add_backpack_gift",
+      "snapshot_sha256": "8873f234cfccdfba87bc2829fa70a1d62c61af7f357fc4e2400e3d753ee03b53",
+      "snapshot_type": "intent"
+    },
+    {
+      "contract_version": "intent-contract-v1",
+      "path": "intents/prepare_resource.json",
+      "snapshot_format_version": "2.0",
+      "snapshot_id": "intent.prepare_resource",
+      "snapshot_sha256": "d96d00544aae6f36291fcdc1ddb2bbba0396d12fc02dcffc438079fa078c84eb",
+      "snapshot_type": "intent"
+    },
+    {
+      "contract_version": "intent-contract-v1",
+      "path": "intents/query_gift.json",
+      "snapshot_format_version": "2.0",
+      "snapshot_id": "intent.query_gift",
+      "snapshot_sha256": "2b9d5a364e7543ecb0512d855120e2e9691eaa1b8aa5a785b3d95bbc70e4aada",
+      "snapshot_type": "intent"
+    },
+    {
+      "contract_version": "intent-contract-v1",
+      "path": "intents/query_information.json",
+      "snapshot_format_version": "2.0",
+      "snapshot_id": "intent.query_information",
+      "snapshot_sha256": "4388cea963bb3624b138a8d9f491b8f2f2212e00a64ff94e5f8bffc13fcc6f85",
+      "snapshot_type": "intent"
+    },
+    {
+      "contract_version": "intent-contract-v1",
+      "path": "intents/query_pool.json",
+      "snapshot_format_version": "2.0",
+      "snapshot_id": "intent.query_pool",
+      "snapshot_sha256": "c81cd3913483890eb3ed76ad7d2d4a416ade92080fdfb6badfcea39a65f3aa85",
+      "snapshot_type": "intent"
+    },
+    {
+      "contract_version": "query-user-intent-contract-v3",
+      "path": "intents/query_user.json",
+      "snapshot_format_version": "2.0",
+      "snapshot_id": "intent.query_user",
+      "snapshot_sha256": "0119829b318adc01d869ae020475820966227ea5f7352a6392400e04f9c8b46f",
+      "snapshot_type": "intent"
+    },
+    {
+      "contract_version": "intent-contract-v1",
+      "path": "intents/unsupported.json",
+      "snapshot_format_version": "2.0",
+      "snapshot_id": "intent.unsupported",
+      "snapshot_sha256": "fa4e367e850e674fba87fedf08dc01df72674d4d31b432bb551f736d5f81627d",
+      "snapshot_type": "intent"
+    }
+  ],
+  "layers": {
+    "context": {
+      "downstream_dependencies": [],
+      "entrypoints": [],
+      "evidence": [],
+      "failure_modes": [],
+      "formal_rules": [
+        "NO_LONG_TERM_MEMORY",
+        "NO_RAG",
+        "NO_USER_PROFILE_MEMORY",
+        "NO_CROSS_SESSION_SEMANTIC_MEMORY"
+      ],
+      "inputs": [],
+      "outputs": [],
+      "reason": "Intent routing is stateless across calls.",
+      "related_tools": [],
+      "state_reads": [],
+      "state_writes": [],
+      "stop_nodes": [],
+      "support_status": "unsupported",
+      "upstream_dependencies": []
+    },
+    "planning_execution": {
+      "downstream_dependencies": [],
+      "entrypoints": [
+        "IntentRouter.run_intent_only"
+      ],
+      "evidence": [
+        "intent_router_output"
+      ],
+      "failure_modes": [
+        "INTENT_CONTRACT_ERROR"
+      ],
+      "formal_rules": [
+        "DOES_NOT_EXECUTE_TOOLS"
+      ],
+      "inputs": [
+        "normalized_intent_and_parameters"
+      ],
+      "outputs": [
+        "next_action"
+      ],
+      "reason": null,
+      "related_tools": [],
+      "state_reads": [],
+      "state_writes": [],
+      "stop_nodes": [
+        "CALL_TOOL_ASK_USER_ASK_CONFIRMATION_OR_REJECT"
+      ],
+      "support_status": "supported",
+      "upstream_dependencies": []
+    },
+    "result": {
+      "downstream_dependencies": [],
+      "entrypoints": [
+        "run_intent_only"
+      ],
+      "evidence": [
+        "intent_router_output"
+      ],
+      "failure_modes": [
+        "INTENT_CONTRACT_ERROR"
+      ],
+      "formal_rules": [
+        "NO_EXPECTED_OR_SCORING_DATA_VISIBLE"
+      ],
+      "inputs": [
+        "validated_decision"
+      ],
+      "outputs": [
+        "intent_result"
+      ],
+      "reason": null,
+      "related_tools": [],
+      "state_reads": [],
+      "state_writes": [],
+      "stop_nodes": [
+        "IntentResult returned"
+      ],
+      "support_status": "supported",
+      "upstream_dependencies": []
+    },
+    "safety_recovery": {
+      "downstream_dependencies": [],
+      "entrypoints": [
+        "IntentRouter.run_intent_only"
+      ],
+      "evidence": [
+        "intent_router_output"
+      ],
+      "failure_modes": [
+        "INVALID_MODEL_OUTPUT",
+        "INTENT_PARAMETER_VALIDATION_FAILED",
+        "INTENT_SEMANTIC_CONSTRAINT_FAILED"
+      ],
+      "formal_rules": [
+        "NO_SILENT_INVALID_PARAMETERS"
+      ],
+      "inputs": [
+        "model_candidate"
+      ],
+      "outputs": [
+        "validated_or_clarifying_intent_result"
+      ],
+      "reason": null,
+      "related_tools": [],
+      "state_reads": [],
+      "state_writes": [],
+      "stop_nodes": [
+        "validated_result_or_explicit_failure"
+      ],
+      "support_status": "supported",
+      "upstream_dependencies": []
+    },
+    "understanding": {
+      "downstream_dependencies": [
+        "module.model_gateway"
+      ],
+      "entrypoints": [
+        "run_intent_only",
+        "IntentRouter.run_intent_only"
+      ],
+      "evidence": [
+        "intent_router_output"
+      ],
+      "failure_modes": [
+        "MODEL_INVOCATION_FAILED",
+        "INVALID_MODEL_OUTPUT"
+      ],
+      "formal_rules": [
+        "CONTRACT_RECOMPUTES_MODEL_DECISION"
+      ],
+      "inputs": [
+        "user_input",
+        "intent_contracts"
+      ],
+      "outputs": [
+        "normalized_intent_and_parameters"
+      ],
+      "reason": null,
+      "related_tools": [],
+      "state_reads": [],
+      "state_writes": [],
+      "stop_nodes": [
+        "intent_contract_decision"
+      ],
+      "support_status": "supported",
+      "upstream_dependencies": []
+    }
+  },
+  "mockable_dependencies": [
+    "model_client",
+    "trace_collector"
+  ],
+  "module_id": "intent_router",
+  "module_refs": [
+    {
+      "contract_version": "model-gateway-module-v2",
+      "path": "modules/model_gateway.json",
+      "snapshot_format_version": "2.0",
+      "snapshot_id": "module.model_gateway",
+      "snapshot_sha256": "d52251c2d134cfcb45b5125b53c4e5dbcd9bbfda53ca5f70c0986600849bfa06",
+      "snapshot_type": "module"
+    },
+    {
+      "contract_version": "observability-module-v2",
+      "path": "modules/observability.json",
+      "snapshot_format_version": "2.0",
+      "snapshot_id": "module.observability",
+      "snapshot_sha256": "31a9dda41dd9ea42f930a3a429330a6218ac5b1dc6dc556c72f31896cda71c56",
+      "snapshot_type": "module"
+    }
+  ],
+  "output_schema": {
+    "additionalProperties": false,
+    "description": "Observable result produced by the future intent router.",
+    "properties": {
+      "intent": {
+        "enum": [
+          "query_information",
+          "prepare_resource",
+          "query_user",
+          "query_gift",
+          "add_backpack_gift",
+          "query_pool",
+          "unsupported"
+        ],
+        "title": "Intent",
+        "type": "string"
+      },
+      "missing_parameters": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Missing Parameters",
+        "type": "array"
+      },
+      "next_action": {
+        "enum": [
+          "CALL_TOOL",
+          "ASK_USER",
+          "ASK_CONFIRMATION",
+          "REJECT"
+        ],
+        "title": "Next Action",
+        "type": "string"
+      },
+      "parameters": {
+        "additionalProperties": true,
+        "title": "Parameters",
+        "type": "object"
+      },
+      "reason": {
+        "title": "Reason",
+        "type": "string"
+      },
+      "status": {
+        "enum": [
+          "READY",
+          "NEED_CLARIFICATION",
+          "NEED_CONFIRMATION",
+          "REJECTED"
+        ],
+        "title": "Status",
+        "type": "string"
+      }
+    },
+    "required": [
+      "intent",
+      "status",
+      "next_action",
+      "reason"
+    ],
+    "title": "IntentResult",
+    "type": "object"
+  },
+  "responsibility": "Classify intent, normalize parameters, validate semantic rules, and decide the next action without executing tools.",
+  "snapshot_format_version": "2.0",
+  "snapshot_id": "module.intent_router",
+  "snapshot_sha256": "ebd262ec9739ceaaf90845f1540df3a7a966ea97ed395d252092452306614988",
+  "snapshot_type": "module",
+  "source_hashes": {
+    "component_versions_sha256": "fae03bfd7577ce88c2ce819f57dc63735d3bf5a687848d23fb2e46f3a52ab47a",
+    "execution_boundary_ids_sha256": "0122928fa6d7938916dd99f6b8627c25d6d4d92e9a8743299707ccafff9a5d70",
+    "input_schema_sha256": "ce41b0545a3ebcc5368c1fb08ac724d79dea2c3b2647497f8327a679fe141397",
+    "layers_sha256": "ef28cc13ea04aad08ebbb502cbaf168e46264ad9cdf57e2252d31c068f3a1112",
+    "output_schema_sha256": "1cc52b2ab1b9a3619fb61a887a67c53db411a7e2deb38b46e5eb6b9d72ca2b44",
+    "references_sha256": "8798224fff1f5d4a7505c888a6fe53f3b819f10fffa0bc2250016cb09be926ef"
+  },
+  "supported_operations": [
+    "classify",
+    "extract_parameters",
+    "decide"
+  ],
+  "tool_refs": [],
+  "trace_event_types": [
+    "intent_requested",
+    "intent_candidate_received",
+    "intent_parameter_validation_failed",
+    "intent_semantic_constraint_failed",
+    "intent_decided"
+  ]
+}

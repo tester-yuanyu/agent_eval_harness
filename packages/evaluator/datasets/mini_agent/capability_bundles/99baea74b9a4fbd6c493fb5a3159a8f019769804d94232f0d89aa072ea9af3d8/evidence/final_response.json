@@ -1,0 +1,57 @@
+{
+  "applicable_result_paths": [
+    "success",
+    "need_clarification",
+    "need_confirmation",
+    "rejected",
+    "failure"
+  ],
+  "availability": {
+    "capability_key": "evidence.final_response_available",
+    "evidence_ids": [
+      "evidence.final_response"
+    ],
+    "reason": null,
+    "support_status": "supported"
+  },
+  "consumer_roles": [
+    "builder",
+    "evaluator"
+  ],
+  "contract_version": "mini-agent-capability-contract-v3",
+  "description": "Terminal status and user-facing response.",
+  "event_types": [
+    "final_response_generated",
+    "run_finished"
+  ],
+  "evidence_id": "final_response",
+  "observation_interface": "agent_result",
+  "payload_schema": {
+    "properties": {
+      "final_response": {
+        "type": "string"
+      },
+      "status": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "status",
+      "final_response"
+    ],
+    "type": "object"
+  },
+  "producer_module_ids": [
+    "module.agent_orchestrator",
+    "module.observability"
+  ],
+  "production_timing": "at terminal run completion",
+  "required": true,
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "evidence.final_response",
+  "snapshot_sha256": "e98c3b73c8740d6196a2bdb803a325deff087fc329a6ef5037acd10326d344e3",
+  "snapshot_type": "evidence",
+  "source_hashes": {
+    "catalog_definition_sha256": "e652c209f848f200a7a2129c3986ecda2992eb53f04ba6e1a90abecf211db30c"
+  }
+}

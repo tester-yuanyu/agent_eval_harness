@@ -1,0 +1,10 @@
+{
+  "policy_kind": "freeze",
+  "policy_version": "1.0",
+  "schema_version": "1.0",
+  "config": {
+    "non_overwrite": true,
+    "require_frozen_bundle": true,
+    "versioning": "explicit_new_version"
+  }
+}

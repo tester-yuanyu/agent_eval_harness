@@ -1,0 +1,110 @@
+{
+  "capability_id": "prepare_resource",
+  "contract_version": "intent-contract-v1",
+  "decision_rules": {
+    "complete": {
+      "next_action": "CALL_TOOL",
+      "status": "READY"
+    },
+    "incomplete": {
+      "next_action": "ASK_USER",
+      "status": "NEED_CLARIFICATION"
+    }
+  },
+  "missing_parameters": [
+    "count",
+    "environment",
+    "request_id",
+    "resource_type"
+  ],
+  "module_id": "module.intent_router",
+  "parameters_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "count": {
+        "anyOf": [
+          {
+            "exclusiveMinimum": 0,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Count"
+      },
+      "environment": {
+        "anyOf": [
+          {
+            "minLength": 1,
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Environment"
+      },
+      "request_id": {
+        "anyOf": [
+          {
+            "minLength": 1,
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Request Id"
+      },
+      "resource_type": {
+        "anyOf": [
+          {
+            "minLength": 1,
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Resource Type"
+      }
+    },
+    "title": "_PrepareResourceParameters",
+    "type": "object"
+  },
+  "semantic_rules": {
+    "count": "POSITIVE_INTEGER",
+    "request_id": "NONEMPTY_MODEL_ARGUMENT",
+    "required_fields": [
+      "resource_type",
+      "environment",
+      "count",
+      "request_id"
+    ]
+  },
+  "snapshot_format_version": "2.0",
+  "snapshot_id": "intent.prepare_resource",
+  "snapshot_sha256": "d96d00544aae6f36291fcdc1ddb2bbba0396d12fc02dcffc438079fa078c84eb",
+  "snapshot_type": "intent",
+  "source_hashes": {
+    "decision_rules_sha256": "f88868121634126a29ab91a52a1666c3bb0db4273ed03ae1630ccf927dd2af19",
+    "parameters_schema_sha256": "774a0785e334ee87901b3610bdc9ce4fe5d8852ab07e7fa050b78ffa41cffbb3",
+    "semantic_rules_sha256": "bcb926ec284157bdef54789a7e9b12fe560b7a5720605dd37a1eb07fb7c249f9",
+    "tool_refs_sha256": "12b5b7031f9045005b924a3620eaa75d15eb17023518d58d686743bb68a8da4b"
+  },
+  "tool_refs": [
+    {
+      "contract_version": "tool-prepare_resource-contract-v2",
+      "path": "tools/prepare_resource.json",
+      "snapshot_format_version": "2.0",
+      "snapshot_id": "tool.prepare_resource",
+      "snapshot_sha256": "c0b144de3eb78236f197b08c5265e0a094277556373115155ac335ab8dba7a38",
+      "snapshot_type": "tool"
+    }
+  ]
+}

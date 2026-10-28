@@ -1,0 +1,31 @@
+{
+  "policy_kind": "validation",
+  "policy_version": "1.0",
+  "schema_version": "1.0",
+  "config": {
+    "validation": {
+      "decision_protocol": {"snapshot_id": "intent.add_backpack_gift", "pointer": "/decision_rules"},
+      "capability_by_intent": {"add_backpack_gift": "intent.add_backpack_gift"},
+      "parameters_schema_pointer": "/parameters_schema",
+      "missing_parameters_pointer": "/missing_parameters",
+      "allowed_parameters_by_intent": {},
+      "omit_null_parameters": true,
+      "status_rules": {
+        "NEED_CONFIRMATION": {"minimum_parameter_count": 3, "missing_parameters": "empty"},
+        "NEED_CLARIFICATION": {"minimum_parameter_count": 0, "missing_parameters": "non_empty"}
+      },
+      "forbidden_intents": [],
+      "execution_parameter_names": [],
+      "require_slot_scenario_match": true,
+      "require_rule_refs_match": true
+    },
+    "quality": {
+      "minimum_input_length": 4,
+      "forbidden_phrases": ["prompt injection", "忽略以上", "已执行", "已经写入", "数据库终态"],
+      "sensitive_phrases": ["身份证", "银行卡", "api key", "sk-"],
+      "compound_markers": ["且"],
+      "compound_forbidden_intents": ["unsupported"]
+    },
+    "enabled_gates": ["evaluator", "capability_snapshot", "contract", "coverage", "duplicate", "leakage", "quality"]
+  }
+}

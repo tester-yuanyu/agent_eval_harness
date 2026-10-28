@@ -1,0 +1,559 @@
+{
+  "component_versions": {
+    "tool_loop_contract": "bounded-tool-loop-v1",
+    "tool_prompt_version": "tool-loop-v2"
+  },
+  "context_rules": [
+    "BOUNDED_STEP_CONTEXT",
+    "TOOL_OUTPUTS_ARE_APPEND_ONLY"
+  ],
+  "contract_version": "tool-loop-module-v2",
+  "execution_boundary": "Starts after a READY intent and stops at a final message, explicit failure, timeout, or MAX_STEPS_EXCEEDED.",
+  "execution_boundary_ids": [
+    "end_to_end",
+    "guarded_write",
+    "tool_chain"
+  ],
+  "input_schema": {
+    "$defs": {
+      "FunctionCallOutput": {
+        "additionalProperties": false,
+        "description": "Observable tool output passed into the next model step.",
+        "properties": {
+          "call_id": {
+            "minLength": 1,
+            "title": "Call Id",
+            "type": "string"
+          },
+          "name": {
+            "minLength": 1,
+            "title": "Name",
+            "type": "string"
+          },
+          "output": {
+            "additionalProperties": true,
+            "title": "Output",
+            "type": "object"
+          }
+        },
+        "required": [
+          "call_id",
+          "name",
+          "output"
+        ],
+        "title": "FunctionCallOutput",
+        "type": "object"
+      },
+      "IntentResult": {
+        "additionalProperties": false,
+        "description": "Observable result produced by the future intent router.",
+        "properties": {
+          "intent": {
+            "enum": [
+              "query_information",
+              "prepare_resource",
+              "query_user",
+              "query_gift",
+              "add_backpack_gift",
+              "query_pool",
+              "unsupported"
+            ],
+            "title": "Intent",
+            "type": "string"
+          },
+          "missing_parameters": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Missing Parameters",
+            "type": "array"
+          },
+          "next_action": {
+            "enum": [
+              "CALL_TOOL",
+              "ASK_USER",
+              "ASK_CONFIRMATION",
+              "REJECT"
+            ],
+            "title": "Next Action",
+            "type": "string"
+          },
+          "parameters": {
+            "additionalProperties": true,
+            "title": "Parameters",
+            "type": "object"
+          },
+          "reason": {
+            "title": "Reason",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "READY",
+              "NEED_CLARIFICATION",
+              "NEED_CONFIRMATION",
+              "REJECTED"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "intent",
+          "status",
+          "next_action",
+          "reason"
+        ],
+        "title": "IntentResult",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "Complete observable input for one scripted tool-loop model request.",
+    "properties": {
+      "intent_result": {
+        "$ref": "#/$defs/IntentResult"
+      },
+      "step": {
+        "minimum": 1,
+        "title": "Step",
+        "type": "integer"
+      },
+      "tool_outputs": {
+        "items": {
+          "$ref": "#/$defs/FunctionCallOutput"
+        },
+        "title": "Tool Outputs",
+        "type": "array"
+      },
+      "tool_schemas": {
+        "items": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "title": "Tool Schemas",
+        "type": "array"
+      },
+      "user_input": {
+        "title": "User Input",
+        "type": "string"
+      }
+    },
+    "required": [
+      "user_input",
+      "intent_result",
+      "tool_schemas",
+      "tool_outputs",
+      "step"
+    ],
+    "title": "ToolLoopRequest",
+    "type": "object"
+  },
+  "intent_refs": [],
+  "layers": {
+    "context": {
+      "downstream_dependencies": [],
+      "entrypoints": [
+        "MinimalAgent._run_tool_loop"
+      ],
+      "evidence": [
+        "tool_trace"
+      ],
+      "failure_modes": [
+        "MAX_STEPS_EXCEEDED"
+      ],
+      "formal_rules": [
+        "CONTEXT_IS_CURRENT_RUN_ONLY"
+      ],
+      "inputs": [
+        "intent_result",
+        "tool_outputs",
+        "step"
+      ],
+      "outputs": [
+        "current_tool_loop_request"
+      ],
+      "reason": null,
+      "related_tools": [],
+      "state_reads": [
+        "current_run_tool_context"
+      ],
+      "state_writes": [
+        "current_run_tool_context"
+      ],
+      "stop_nodes": [
+        "tool_loop_terminal_state"
+      ],
+      "support_status": "supported",
+      "upstream_dependencies": [
+        "module.agent_orchestrator"
+      ]
+    },
+    "planning_execution": {
+      "downstream_dependencies": [
+        "module.model_gateway",
+        "module.tool_registry"
+      ],
+      "entrypoints": [
+        "MinimalAgent._run_tool_loop"
+      ],
+      "evidence": [
+        "tool_trace"
+      ],
+      "failure_modes": [
+        "UNKNOWN_TOOL",
+        "INVALID_TOOL_ARGUMENTS",
+        "TOOL_TIMEOUT",
+        "MAX_STEPS_EXCEEDED"
+      ],
+      "formal_rules": [
+        "ONE_TOOL_CALL_PER_MODEL_STEP",
+        "MAXIMUM_STEPS_ENFORCED"
+      ],
+      "inputs": [
+        "tool_loop_request"
+      ],
+      "outputs": [
+        "function_call_or_final_message"
+      ],
+      "reason": null,
+      "related_tools": [],
+      "state_reads": [],
+      "state_writes": [],
+      "stop_nodes": [
+        "final_message_or_explicit_terminal_error"
+      ],
+      "support_status": "supported",
+      "upstream_dependencies": []
+    },
+    "result": {
+      "downstream_dependencies": [],
+      "entrypoints": [
+        "MinimalAgent._run_tool_loop"
+      ],
+      "evidence": [
+        "final_response",
+        "tool_trace"
+      ],
+      "failure_modes": [
+        "INVALID_FINAL_RESPONSE"
+      ],
+      "formal_rules": [
+        "FINAL_RESPONSE_IS_TOOL_GROUNDED"
+      ],
+      "inputs": [
+        "final_model_message",
+        "tool_call_records"
+      ],
+      "outputs": [
+        "agent_result"
+      ],
+      "reason": null,
+      "related_tools": [],
+      "state_reads": [],
+      "state_writes": [],
+      "stop_nodes": [
+        "AgentResult returned"
+      ],
+      "support_status": "supported",
+      "upstream_dependencies": []
+    },
+    "safety_recovery": {
+      "downstream_dependencies": [
+        "module.observability"
+      ],
+      "entrypoints": [
+        "MinimalAgent._run_tool_loop"
+      ],
+      "evidence": [
+        "tool_trace"
+      ],
+      "failure_modes": [
+        "INVALID_MODEL_OUTPUT",
+        "TOOL_FAILED",
+        "TOOL_TIMEOUT",
+        "MAX_STEPS_EXCEEDED"
+      ],
+      "formal_rules": [
+        "NO_SILENT_IGNORE",
+        "NO_AUTOMATIC_RETRY"
+      ],
+      "inputs": [
+        "tool_call_outcome",
+        "step_count"
+      ],
+      "outputs": [
+        "continued_loop_or_terminal_failure"
+      ],
+      "reason": null,
+      "related_tools": [],
+      "state_reads": [],
+      "state_writes": [],
+      "stop_nodes": [
+        "failure_timeout_or_step_limit"
+      ],
+      "support_status": "supported",
+      "upstream_dependencies": []
+    },
+    "understanding": {
+      "downstream_dependencies": [],
+      "entrypoints": [],
+      "evidence": [],
+      "failure_modes": [],
+      "formal_rules": [],
+      "inputs": [],
+      "outputs": [],
+      "reason": "Tool loop receives an already validated IntentResult.",
+      "related_tools": [],
+      "state_reads": [],
+      "state_writes": [],
+      "stop_nodes": [],
+      "support_status": "unsupported",
+      "upstream_dependencies": []
+    }
+  },
+  "mockable_dependencies": [
+    "model_client",
+    "tool_registry",
+    "trace_collector"
+  ],
+  "module_id": "tool_loop",
+  "module_refs": [
+    {
+      "contract_version": "model-gateway-module-v2",
+      "path": "modules/model_gateway.json",
+      "snapshot_format_version": "2.0",
+      "snapshot_id": "module.model_gateway",
+      "snapshot_sha256": "d52251c2d134cfcb45b5125b53c4e5dbcd9bbfda53ca5f70c0986600849bfa06",
+      "snapshot_type": "module"
+    },
+    {
+      "contract_version": "tool-registry-module-v2",
+      "path": "modules/tool_registry.json",
+      "snapshot_format_version": "2.0",
+      "snapshot_id": "module.tool_registry",
+      "snapshot_sha256": "5eadcb7a1adf22af6b2179c8ac46d454aecdb709f1923158188a6d1adeed6bfa",
+      "snapshot_type": "module"
+    },
+    {
+      "contract_version": "observability-module-v2",
+      "path": "modules/observability.json",
+      "snapshot_format_version": "2.0",
+      "snapshot_id": "module.observability",
+      "snapshot_sha256": "31a9dda41dd9ea42f930a3a429330a6218ac5b1dc6dc556c72f31896cda71c56",
+      "snapshot_type": "module"
+    }
+  ],
+  "output_schema": {
+    "$defs": {
+      "IntentResult": {
+        "additionalProperties": false,
+        "description": "Observable result produced by the future intent router.",
+        "properties": {
+          "intent": {
+            "enum": [
+              "query_information",
+              "prepare_resource",
+              "query_user",
+              "query_gift",
+              "add_backpack_gift",
+              "query_pool",
+              "unsupported"
+            ],
+            "title": "Intent",
+            "type": "string"
+          },
+          "missing_parameters": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Missing Parameters",
+            "type": "array"
+          },
+          "next_action": {
+            "enum": [
+              "CALL_TOOL",
+              "ASK_USER",
+              "ASK_CONFIRMATION",
+              "REJECT"
+            ],
+            "title": "Next Action",
+            "type": "string"
+          },
+          "parameters": {
+            "additionalProperties": true,
+            "title": "Parameters",
+            "type": "object"
+          },
+          "reason": {
+            "title": "Reason",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "READY",
+              "NEED_CLARIFICATION",
+              "NEED_CONFIRMATION",
+              "REJECTED"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "intent",
+          "status",
+          "next_action",
+          "reason"
+        ],
+        "title": "IntentResult",
+        "type": "object"
+      },
+      "ToolCallRecord": {
+        "additionalProperties": false,
+        "description": "Observable terminal record for one tool call.",
+        "properties": {
+          "arguments": {
+            "additionalProperties": true,
+            "title": "Arguments",
+            "type": "object"
+          },
+          "call_id": {
+            "title": "Call Id",
+            "type": "string"
+          },
+          "duration_ms": {
+            "minimum": 0,
+            "title": "Duration Ms",
+            "type": "integer"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "output": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Output"
+          },
+          "status": {
+            "enum": [
+              "SUCCESS",
+              "FAILED",
+              "TIMEOUT"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "call_id",
+          "name",
+          "arguments",
+          "status",
+          "output",
+          "error",
+          "duration_ms"
+        ],
+        "title": "ToolCallRecord",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "Stable result boundary exposed to the future evaluation framework.",
+    "properties": {
+      "events": {
+        "items": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "title": "Events",
+        "type": "array"
+      },
+      "final_response": {
+        "title": "Final Response",
+        "type": "string"
+      },
+      "intent_result": {
+        "$ref": "#/$defs/IntentResult"
+      },
+      "run_id": {
+        "title": "Run Id",
+        "type": "string"
+      },
+      "status": {
+        "enum": [
+          "SUCCESS",
+          "NEED_CLARIFICATION",
+          "NEED_CONFIRMATION",
+          "REJECTED",
+          "FAILED",
+          "MAX_STEPS_EXCEEDED"
+        ],
+        "title": "Status",
+        "type": "string"
+      },
+      "tool_calls": {
+        "items": {
+          "$ref": "#/$defs/ToolCallRecord"
+        },
+        "title": "Tool Calls",
+        "type": "array"
+      }
+    },
+    "required": [
+      "run_id",
+      "status",
+      "intent_result",
+      "tool_calls",
+      "final_response",
+      "events"
+    ],
+    "title": "AgentResult",
+    "type": "object"
+  },
+  "responsibility": "Drive bounded Function Calling, pass observable Tool results back to the model, and return a tool-grounded terminal response.",
+  "snapshot_format_version": "2.0",
+  "snapshot_id": "module.tool_loop",
+  "snapshot_sha256": "e3a1f4cd8eb722d371cb06b018d0b9f7dd0c4e873b4d18a07509bf85627ca31d",
+  "snapshot_type": "module",
+  "source_hashes": {
+    "component_versions_sha256": "958b9a260fcb89dbd3c9fccea0eb0d34cfc641c2a662580b8b225a06a25a3a8b",
+    "execution_boundary_ids_sha256": "eb739223ec5716eb9d04e2326204fd24935b12022f81f97041b5e7371f579943",
+    "input_schema_sha256": "c0868a9c00fe8f79701c32674c9e486acc7633f0ceeabc993413100d42edbaaa",
+    "layers_sha256": "28214a9d6cb0114fe1075bfaa0b617e4402a6e4a079db1a83bf9d632685ea5a2",
+    "output_schema_sha256": "2332414fc1dbc20f6e8c87e396e8747ba863e89c5c50b773c6ca48e6bbbff5e7",
+    "references_sha256": "87d398811d67d3771542d83107d67d831a1a32d000ff6af29fe1752391a3a634"
+  },
+  "supported_operations": [
+    "next_step",
+    "invoke_tool",
+    "finish_response"
+  ],
+  "tool_refs": [],
+  "trace_event_types": [
+    "tool_requested",
+    "tool_started",
+    "tool_succeeded",
+    "tool_failed",
+    "tool_timeout"
+  ]
+}

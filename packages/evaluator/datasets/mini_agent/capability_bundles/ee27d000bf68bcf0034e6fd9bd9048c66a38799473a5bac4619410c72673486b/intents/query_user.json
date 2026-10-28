@@ -1,0 +1,164 @@
+{
+  "capability_id": "query_user",
+  "contract_version": "query-user-intent-contract-v3",
+  "decision_rules": {
+    "complete": {
+      "next_action": "CALL_TOOL",
+      "status": "READY"
+    },
+    "incomplete": {
+      "next_action": "ASK_USER",
+      "status": "NEED_CLARIFICATION"
+    }
+  },
+  "missing_parameters": [
+    "email",
+    "phone",
+    "room_id",
+    "single_email",
+    "single_phone",
+    "single_room_id",
+    "single_user_id",
+    "single_user_query_condition",
+    "user_id",
+    "user_id_or_room_id",
+    "user_id_or_room_id_or_email_or_phone"
+  ],
+  "module_id": "module.intent_router",
+  "parameters_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "email": {
+        "anyOf": [
+          {
+            "minLength": 3,
+            "pattern": "^[^@]+@[^@]+$",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Email"
+      },
+      "phone": {
+        "anyOf": [
+          {
+            "pattern": "^[0-9]{11}$",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Phone"
+      },
+      "room_id": {
+        "anyOf": [
+          {
+            "exclusiveMinimum": 0,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Room Id"
+      },
+      "user_id": {
+        "anyOf": [
+          {
+            "exclusiveMinimum": 0,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "User Id"
+      }
+    },
+    "title": "_QueryUserParameters",
+    "type": "object"
+  },
+  "semantic_rules": {
+    "bare_integer": "CLARIFY_USER_ID_OR_ROOM_ID",
+    "batch_query": "NEED_CLARIFICATION_CLEAR_PARAMETERS",
+    "email_format": "EXACTLY_ONE_AT_WITH_NONEMPTY_SIDES",
+    "explicit_correction": "USE_FINAL_UNIQUE_VALUE",
+    "explicit_field_overrides_value_shape": true,
+    "field_aliases": {
+      "email": [
+        "email",
+        "e-mail",
+        "电子邮箱",
+        "电子邮件地址",
+        "邮箱"
+      ],
+      "phone": [
+        "phone",
+        "手机号码",
+        "手机号",
+        "电话号码",
+        "手机"
+      ],
+      "room_id": [
+        "room_id",
+        "room id",
+        "room-id",
+        "roomid",
+        "直播间 ID",
+        "直播间ID",
+        "房间 ID",
+        "房间ID",
+        "直播间编号",
+        "房间编号",
+        "直播间号",
+        "房间号",
+        "直播间",
+        "房间"
+      ],
+      "user_id": [
+        "user_id",
+        "user id",
+        "user-id",
+        "userid",
+        "用户 ID",
+        "用户ID",
+        "用户编号",
+        "用户"
+      ]
+    },
+    "multiple_fields": "AND",
+    "negation_then_restatement": "USE_FINAL_UNIQUE_VALUE",
+    "or_query": "NEED_CLARIFICATION_CLEAR_PARAMETERS",
+    "phone_format": "ASCII_DIGITS_EXACTLY_11",
+    "repeated_bare_integer": "CLARIFY_USER_ID_OR_ROOM_ID",
+    "same_field_multiple_values": "NEED_CLARIFICATION_CLEAR_PARAMETERS",
+    "unresolved_pronoun": "NEED_CLARIFICATION_MISSING_ALL_CONDITIONS"
+  },
+  "snapshot_format_version": "2.0",
+  "snapshot_id": "intent.query_user",
+  "snapshot_sha256": "0119829b318adc01d869ae020475820966227ea5f7352a6392400e04f9c8b46f",
+  "snapshot_type": "intent",
+  "source_hashes": {
+    "decision_rules_sha256": "f88868121634126a29ab91a52a1666c3bb0db4273ed03ae1630ccf927dd2af19",
+    "parameters_schema_sha256": "b0711222d4dc2ca276e3ced2e1243499940037c2cacb18756b033868206f2cba",
+    "semantic_rules_sha256": "1f9d35ae6081d5b2ba1e64f33af2e5151a9c67c04e0d9359b22c8f2de1d3ecfb",
+    "tool_refs_sha256": "3f981313309b6c754fab831a07e9b8e0c6b4a2f47500bfe656c82e8d4c690139"
+  },
+  "tool_refs": [
+    {
+      "contract_version": "tool-query_user_info-contract-v2",
+      "path": "tools/query_user_info.json",
+      "snapshot_format_version": "2.0",
+      "snapshot_id": "tool.query_user_info",
+      "snapshot_sha256": "b23cf89f78b91c734b6f5c48111046171f51fe2d0562a469de1e1d0f39c0181c",
+      "snapshot_type": "tool"
+    }
+  ]
+}

@@ -1,0 +1,117 @@
+{
+  "provider_id": "mini_agent",
+  "bundle_format_version": "2.0",
+  "agent_snapshot_sha256": "d8ec7d0747610399466360e9392108aa27e278414983bcf54c60bb17c456ddfc",
+  "source_capability_bundle_sha256": "ee27d000bf68bcf0034e6fd9bd9048c66a38799473a5bac4619410c72673486b",
+  "files": [
+    {
+      "path": "agent.json",
+      "sha256": "5dc8ef56a664cb48b75b12d8c4294cc676515d4327f50fab5086d9b4861fb4d5"
+    },
+    {
+      "path": "intents/add_backpack_gift.json",
+      "sha256": "b73a5327392cb8221c3b6f5703fea35aea430a55e72e95fac020a3c2350d3953"
+    },
+    {
+      "path": "intents/prepare_resource.json",
+      "sha256": "86fa1cb163530d0ab46f6ea71109f500f90894617a5db847f06ce91667f46a54"
+    },
+    {
+      "path": "intents/query_gift.json",
+      "sha256": "5e0c7ab85283fdc95faf2707ccc8a7099591c280daf25606ccc28efa0cebb5b7"
+    },
+    {
+      "path": "intents/query_information.json",
+      "sha256": "4fcbc11c23b83e8bc140a9ffe141f5350b08d079a1b15556e9631e37448e14bd"
+    },
+    {
+      "path": "intents/query_pool.json",
+      "sha256": "058ef0d66069533da11f5093d6563f995853ffdd718554b9e82288f5988b0f57"
+    },
+    {
+      "path": "intents/query_user.json",
+      "sha256": "762d3e27e569b92137ea63cba48e2a7c20af33b261f274bceeb7be00b5213450"
+    },
+    {
+      "path": "intents/unsupported.json",
+      "sha256": "7922ee3f566cd20b5c8868bb52b97754fa30744249136873f237841c8f05b2af"
+    },
+    {
+      "path": "modules/agent_orchestrator.json",
+      "sha256": "d8251da0ce9824a1fe724f63a2dd58941f4bcea2c97afacf5b636be4ac7fc709"
+    },
+    {
+      "path": "modules/execution_guard.json",
+      "sha256": "024eeccd9b9d2235a69774969a42bc39b6e197ad9e823fc2621774ea8f608ed9"
+    },
+    {
+      "path": "modules/intent_router.json",
+      "sha256": "1ee59965f1dff88eae8e9c2f4ad47e93fdce39dae0a9c73d62730eef93b3e968"
+    },
+    {
+      "path": "modules/model_gateway.json",
+      "sha256": "b646f25f608a1587b5be5fd565448f22ca367aaf7574d60522185273cf17c99d"
+    },
+    {
+      "path": "modules/observability.json",
+      "sha256": "4a7db1449cc962538da10dcc8fe95960dcb80446ab218d7dae1f7ad335d474fa"
+    },
+    {
+      "path": "modules/state_store.json",
+      "sha256": "c8c7041cd31ae3e424dddd15745f28be09932c0d06b0ca82806b39dd08f78183"
+    },
+    {
+      "path": "modules/tool_loop.json",
+      "sha256": "8508555c5089202beff22ac656a75c7b39d767f249e9500edde7666989ee4851"
+    },
+    {
+      "path": "modules/tool_registry.json",
+      "sha256": "eede87fda0fef6325183d74c551d6ba51bd05cf30b11dcc959aa6cc77692620a"
+    },
+    {
+      "path": "schemas/agent.schema.json",
+      "sha256": "0a808a198f87ca52c939b69b1503a0f52411c5ff9beaff8d7c7bd1e8b02e1a40"
+    },
+    {
+      "path": "schemas/intent.schema.json",
+      "sha256": "668b6623195bfaacd3545eca7fab602dab9538fa0be0fbecee59494227a53988"
+    },
+    {
+      "path": "schemas/module.schema.json",
+      "sha256": "0ddc7cccc991744d451248563d1b6924a30f94ba720c6a1813b15bde79c74ac8"
+    },
+    {
+      "path": "schemas/snapshot-reference.schema.json",
+      "sha256": "e72ef16dc2ee9b62ae721863172f047967f4cc821b8702e43ec6c251742dd6cc"
+    },
+    {
+      "path": "schemas/tool.schema.json",
+      "sha256": "9eef23f2a809689ca5d25c7bd873c0fb7e1c4fb09b2b5a23f3466bb45a7405f8"
+    },
+    {
+      "path": "tools/add_gift_to_backpack.json",
+      "sha256": "7f2c5b6f486c978eafdd43cf25bcef20a5ba8ead0b393ca30ed95ae0030a1a7a"
+    },
+    {
+      "path": "tools/prepare_resource.json",
+      "sha256": "0dc65e88ea83432952010c235d0cbefad00101587bef38a7d2cd323dd6bc0c8a"
+    },
+    {
+      "path": "tools/query_gift_info.json",
+      "sha256": "4beb2dbb5f9d5a8d3ed25881479e29c7d66f894c6e74dab95f7b423706b39a90"
+    },
+    {
+      "path": "tools/query_information.json",
+      "sha256": "e47470f0d3f3d08906d639a4f67579ed78eb7781a98da2076587dbce2ea0d425"
+    },
+    {
+      "path": "tools/query_pool_config.json",
+      "sha256": "a1834bb2806d0fd7b0c55eb73b9446a9095f5b5aed9f0603774a827a94e9f5b7"
+    },
+    {
+      "path": "tools/query_user_info.json",
+      "sha256": "50d93fb528ed1b671f991dbeea07d9ad254bce65045088a6d52538886f54e17d"
+    }
+  ],
+  "capability_bundle_sha256": "ee27d000bf68bcf0034e6fd9bd9048c66a38799473a5bac4619410c72673486b"
+}

@@ -1,0 +1,247 @@
+{
+  "$defs": {
+    "QualityPolicy": {
+      "additionalProperties": false,
+      "properties": {
+        "minimum_input_length": {
+          "minimum": 0,
+          "title": "Minimum Input Length",
+          "type": "integer"
+        },
+        "forbidden_phrases": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Forbidden Phrases",
+          "type": "array"
+        },
+        "sensitive_phrases": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Sensitive Phrases",
+          "type": "array"
+        },
+        "compound_markers": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Compound Markers",
+          "type": "array"
+        },
+        "compound_forbidden_intents": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Compound Forbidden Intents",
+          "type": "array"
+        }
+      },
+      "required": [
+        "minimum_input_length"
+      ],
+      "title": "QualityPolicy",
+      "type": "object"
+    },
+    "SnapshotValueReference": {
+      "additionalProperties": false,
+      "properties": {
+        "snapshot_id": {
+          "minLength": 1,
+          "title": "Snapshot Id",
+          "type": "string"
+        },
+        "pointer": {
+          "pattern": "^/",
+          "title": "Pointer",
+          "type": "string"
+        }
+      },
+      "required": [
+        "snapshot_id",
+        "pointer"
+      ],
+      "title": "SnapshotValueReference",
+      "type": "object"
+    },
+    "StatusRule": {
+      "additionalProperties": false,
+      "properties": {
+        "minimum_parameter_count": {
+          "minimum": 0,
+          "title": "Minimum Parameter Count",
+          "type": "integer"
+        },
+        "missing_parameters": {
+          "enum": [
+            "empty",
+            "non_empty",
+            "any"
+          ],
+          "title": "Missing Parameters",
+          "type": "string"
+        }
+      },
+      "required": [
+        "minimum_parameter_count",
+        "missing_parameters"
+      ],
+      "title": "StatusRule",
+      "type": "object"
+    },
+    "ValidationConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "decision_protocol": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SnapshotValueReference"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "capability_by_intent": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Capability By Intent",
+          "type": "object"
+        },
+        "parameters_schema_pointer": {
+          "pattern": "^/",
+          "title": "Parameters Schema Pointer",
+          "type": "string"
+        },
+        "missing_parameters_pointer": {
+          "pattern": "^/",
+          "title": "Missing Parameters Pointer",
+          "type": "string"
+        },
+        "allowed_parameters_by_intent": {
+          "additionalProperties": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "title": "Allowed Parameters By Intent",
+          "type": "object"
+        },
+        "omit_null_parameters": {
+          "title": "Omit Null Parameters",
+          "type": "boolean"
+        },
+        "status_rules": {
+          "additionalProperties": {
+            "$ref": "#/$defs/StatusRule"
+          },
+          "title": "Status Rules",
+          "type": "object"
+        },
+        "forbidden_intents": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Forbidden Intents",
+          "type": "array"
+        },
+        "execution_parameter_names": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Execution Parameter Names",
+          "type": "array"
+        },
+        "require_slot_scenario_match": {
+          "title": "Require Slot Scenario Match",
+          "type": "boolean"
+        },
+        "require_rule_refs_match": {
+          "title": "Require Rule Refs Match",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "decision_protocol",
+        "capability_by_intent",
+        "parameters_schema_pointer",
+        "missing_parameters_pointer",
+        "allowed_parameters_by_intent",
+        "omit_null_parameters",
+        "status_rules",
+        "forbidden_intents",
+        "execution_parameter_names",
+        "require_slot_scenario_match",
+        "require_rule_refs_match"
+      ],
+      "title": "ValidationConfig",
+      "type": "object"
+    },
+    "ValidationPolicyConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "validation": {
+          "$ref": "#/$defs/ValidationConfig"
+        },
+        "quality": {
+          "$ref": "#/$defs/QualityPolicy"
+        },
+        "enabled_gates": {
+          "items": {
+            "enum": [
+              "evaluator",
+              "capability_snapshot",
+              "contract",
+              "coverage",
+              "duplicate",
+              "leakage",
+              "quality"
+            ],
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Enabled Gates",
+          "type": "array"
+        }
+      },
+      "required": [
+        "validation",
+        "quality",
+        "enabled_gates"
+      ],
+      "title": "ValidationPolicyConfig",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "policy_kind": {
+      "const": "validation",
+      "title": "Policy Kind",
+      "type": "string"
+    },
+    "policy_version": {
+      "const": "1.0",
+      "title": "Policy Version",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "config": {
+      "$ref": "#/$defs/ValidationPolicyConfig"
+    }
+  },
+  "required": [
+    "policy_kind",
+    "policy_version",
+    "schema_version",
+    "config"
+  ],
+  "title": "ValidationPolicy",
+  "type": "object"
+}

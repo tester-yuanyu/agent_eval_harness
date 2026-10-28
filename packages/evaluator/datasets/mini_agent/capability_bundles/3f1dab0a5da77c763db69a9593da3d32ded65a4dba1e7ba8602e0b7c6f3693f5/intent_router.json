@@ -1,0 +1,124 @@
+{
+  "snapshot_format_version": "1.0",
+  "snapshot_id": "intent_router",
+  "snapshot_type": "module",
+  "module_id": "intent_router",
+  "scope": "intent_module",
+  "module_contract_version": "intent-router-contract-v2",
+  "entrypoint": "run_intent_only",
+  "intent_prompt_version": "intent-router-v5",
+  "input_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "user_input": {
+        "minLength": 1,
+        "type": "string"
+      }
+    },
+    "required": [
+      "user_input"
+    ],
+    "type": "object"
+  },
+  "output_schema": {
+    "additionalProperties": false,
+    "description": "Observable result produced by the future intent router.",
+    "properties": {
+      "intent": {
+        "enum": [
+          "query_information",
+          "prepare_resource",
+          "query_user",
+          "query_gift",
+          "add_backpack_gift",
+          "query_pool",
+          "unsupported"
+        ],
+        "title": "Intent",
+        "type": "string"
+      },
+      "status": {
+        "enum": [
+          "READY",
+          "NEED_CLARIFICATION",
+          "NEED_CONFIRMATION",
+          "REJECTED"
+        ],
+        "title": "Status",
+        "type": "string"
+      },
+      "next_action": {
+        "enum": [
+          "CALL_TOOL",
+          "ASK_USER",
+          "ASK_CONFIRMATION",
+          "REJECT"
+        ],
+        "title": "Next Action",
+        "type": "string"
+      },
+      "parameters": {
+        "additionalProperties": true,
+        "title": "Parameters",
+        "type": "object"
+      },
+      "missing_parameters": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Missing Parameters",
+        "type": "array"
+      },
+      "reason": {
+        "title": "Reason",
+        "type": "string"
+      }
+    },
+    "required": [
+      "intent",
+      "status",
+      "next_action",
+      "reason"
+    ],
+    "title": "IntentResult",
+    "type": "object"
+  },
+  "supported_intents": [
+    "add_backpack_gift",
+    "prepare_resource",
+    "query_gift",
+    "query_information",
+    "query_pool",
+    "query_user",
+    "unsupported"
+  ],
+  "decision_protocol": {
+    "READY": "CALL_TOOL",
+    "NEED_CLARIFICATION": "ASK_USER",
+    "NEED_CONFIRMATION": "ASK_CONFIRMATION",
+    "REJECTED": "REJECT"
+  },
+  "execution_contract": {
+    "executes_tools": false,
+    "candidate_authority": "CONTRACT_RECOMPUTES_DECISION",
+    "malformed_output": "RAISE_INVALID_MODEL_OUTPUT_ERROR",
+    "model_failure": "RAISE_EXPLICIT_INTENT_MODULE_ERROR"
+  },
+  "observable_trace_events": [
+    "intent_requested",
+    "intent_candidate_received",
+    "intent_definition_resolved",
+    "intent_parameter_normalized",
+    "intent_parameter_validation_failed",
+    "intent_semantic_constraint_failed",
+    "intent_contract_validated",
+    "intent_decided"
+  ],
+  "source_hashes": {
+    "input_schema_sha256": "6eefcb2b2779cf37f5732406adce6bbc3d12903cafff30ea071c430267044de4",
+    "output_schema_sha256": "1cc52b2ab1b9a3619fb61a887a67c53db411a7e2deb38b46e5eb6b9d72ca2b44",
+    "decision_protocol_sha256": "63509d50e12d834af7e81970ba06c99dca88fc368e4065749334ba81097ed972",
+    "intent_prompt_sha256": "117dd560566e1764507d95700a087681b04ab98ddbd68cfead9550cc56d0390c"
+  },
+  "snapshot_sha256": "58e567b21271125e0881e54f4a98e2bf7896f61006d265e89aa0f9a8a75550ef"
+}

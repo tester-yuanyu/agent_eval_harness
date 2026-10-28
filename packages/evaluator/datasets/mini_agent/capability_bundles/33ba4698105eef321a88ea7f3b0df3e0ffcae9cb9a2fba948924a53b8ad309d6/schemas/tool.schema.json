@@ -1,0 +1,223 @@
+{
+  "$defs": {
+    "RiskLevel": {
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "title": "RiskLevel",
+      "type": "string"
+    },
+    "ToolResultContract": {
+      "additionalProperties": false,
+      "properties": {
+        "data_schema": {
+          "additionalProperties": true,
+          "title": "Data Schema",
+          "type": "object"
+        },
+        "terminal_status": {
+          "enum": [
+            "success",
+            "business_failure"
+          ],
+          "title": "Terminal Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "terminal_status",
+        "data_schema"
+      ],
+      "title": "ToolResultContract",
+      "type": "object"
+    },
+    "ToolType": {
+      "enum": [
+        "read",
+        "write"
+      ],
+      "title": "ToolType",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "contract_version": {
+      "minLength": 1,
+      "title": "Contract Version",
+      "type": "string"
+    },
+    "description": {
+      "minLength": 1,
+      "title": "Description",
+      "type": "string"
+    },
+    "empty_result_behavior": {
+      "minLength": 1,
+      "title": "Empty Result Behavior",
+      "type": "string"
+    },
+    "fault_modes": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Fault Modes",
+      "type": "array"
+    },
+    "function_schema": {
+      "additionalProperties": true,
+      "title": "Function Schema",
+      "type": "object"
+    },
+    "idempotency_rules": {
+      "additionalProperties": true,
+      "title": "Idempotency Rules",
+      "type": "object"
+    },
+    "parameter_rules": {
+      "additionalProperties": true,
+      "title": "Parameter Rules",
+      "type": "object"
+    },
+    "partial_success_behavior": {
+      "minLength": 1,
+      "title": "Partial Success Behavior",
+      "type": "string"
+    },
+    "permission_requirements": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Permission Requirements",
+      "type": "array"
+    },
+    "rate_limit_behavior": {
+      "minLength": 1,
+      "title": "Rate Limit Behavior",
+      "type": "string"
+    },
+    "requires_confirmation": {
+      "title": "Requires Confirmation",
+      "type": "boolean"
+    },
+    "result_codes": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Result Codes",
+      "type": "array"
+    },
+    "result_contracts": {
+      "additionalProperties": {
+        "$ref": "#/$defs/ToolResultContract"
+      },
+      "title": "Result Contracts",
+      "type": "object"
+    },
+    "result_schema": {
+      "additionalProperties": true,
+      "title": "Result Schema",
+      "type": "object"
+    },
+    "risk_level": {
+      "$ref": "#/$defs/RiskLevel"
+    },
+    "side_effects": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Side Effects",
+      "type": "array"
+    },
+    "snapshot_format_version": {
+      "const": "2.0",
+      "title": "Snapshot Format Version",
+      "type": "string"
+    },
+    "snapshot_id": {
+      "pattern": "^(agent|module|intent|tool)\\.[a-z][a-z0-9_]*$",
+      "title": "Snapshot Id",
+      "type": "string"
+    },
+    "snapshot_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Snapshot Sha256",
+      "type": "string"
+    },
+    "snapshot_type": {
+      "const": "tool",
+      "title": "Snapshot Type",
+      "type": "string"
+    },
+    "source_hashes": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Source Hashes",
+      "type": "object"
+    },
+    "terminal_behaviors": {
+      "additionalProperties": true,
+      "title": "Terminal Behaviors",
+      "type": "object"
+    },
+    "timeout_behavior": {
+      "minLength": 1,
+      "title": "Timeout Behavior",
+      "type": "string"
+    },
+    "tool_name": {
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "title": "Tool Name",
+      "type": "string"
+    },
+    "tool_type": {
+      "$ref": "#/$defs/ToolType"
+    },
+    "tool_version": {
+      "minLength": 1,
+      "title": "Tool Version",
+      "type": "string"
+    },
+    "trace_event_types": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Trace Event Types",
+      "type": "array"
+    }
+  },
+  "required": [
+    "snapshot_id",
+    "snapshot_type",
+    "snapshot_format_version",
+    "contract_version",
+    "source_hashes",
+    "snapshot_sha256",
+    "tool_name",
+    "tool_version",
+    "description",
+    "function_schema",
+    "result_schema",
+    "tool_type",
+    "parameter_rules",
+    "permission_requirements",
+    "requires_confirmation",
+    "risk_level",
+    "idempotency_rules",
+    "side_effects",
+    "fault_modes",
+    "result_codes",
+    "result_contracts",
+    "terminal_behaviors",
+    "trace_event_types",
+    "timeout_behavior",
+    "rate_limit_behavior",
+    "empty_result_behavior",
+    "partial_success_behavior"
+  ],
+  "title": "ToolSnapshotV2",
+  "type": "object"
+}

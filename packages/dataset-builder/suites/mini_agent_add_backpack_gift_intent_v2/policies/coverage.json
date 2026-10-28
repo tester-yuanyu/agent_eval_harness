@@ -1,0 +1,27 @@
+{
+  "policy_kind": "coverage",
+  "policy_version": "1.0",
+  "schema_version": "1.0",
+  "config": {
+    "distribution_fields": [
+      {
+        "report_name": "intent_status_distribution",
+        "case_pointers": ["/oracle/expected_module_output/intent", "/oracle/expected_module_output/status"],
+        "plan_field": null,
+        "slot_fields": ["intent", "status"]
+      },
+      {
+        "report_name": "status_distribution",
+        "case_pointers": ["/oracle/expected_module_output/status"],
+        "plan_field": "status_distribution",
+        "slot_fields": ["status"]
+      },
+      {
+        "report_name": "scenario_type_distribution",
+        "case_pointers": ["/scenario_type"],
+        "plan_field": "scenario_type_distribution",
+        "slot_fields": ["scenario_type"]
+      }
+    ]
+  }
+}

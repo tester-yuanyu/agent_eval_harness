@@ -1,0 +1,5053 @@
+{
+  "evaluator_run_id": "eval_run_575d79a98ea34bb1b31aa3e298c562db",
+  "started_at": "2026-10-08T09:41:29.044251Z",
+  "finished_at": "2026-10-08T09:43:02.640244Z",
+  "dataset_path": "/Users/yuanyu/Documents/ChatGPT/agent_evaluator/datasets/mini_agent/module_query_gift_intent_v1_0.jsonl",
+  "dataset_version": "1.0",
+  "dataset_hash": "685b958ed9dcdbabc94c29e9872a8b4629a01276a6b10819f9816b6390efefb8",
+  "dataset_total_cases": 23,
+  "dataset_lifecycle_state": "FROZEN",
+  "dataset_manifest_path": "/Users/yuanyu/Documents/ChatGPT/agent_evaluator/datasets/mini_agent/module_query_gift_intent_v1_0.manifest.json",
+  "mini_agent_version": "0.1.0",
+  "provider_id": "mini_agent",
+  "provider_version": "0.1.0",
+  "capability_bundle_sha256": "33ba4698105eef321a88ea7f3b0df3e0ffcae9cb9a2fba948924a53b8ad309d6",
+  "model_metadata": {
+    "client_type": "DeepSeekModelClient",
+    "model_client": "deepseek_responses",
+    "model": "deepseek-flash",
+    "intent_prompt_version": "intent-router-v5",
+    "tool_prompt_version": "tool-loop-v2",
+    "structured_output_mode": "json_object+pydantic"
+  },
+  "assertion_registry_version": "phase1-v2",
+  "run_config": {
+    "run_mode": "agent_benchmark",
+    "pass_threshold": 100.0,
+    "execution_type": "full",
+    "filters": {
+      "scopes": null,
+      "task_ids": null,
+      "labels": null,
+      "case_ids": null
+    },
+    "allow_non_frozen_dataset": false
+  },
+  "cases": [
+    {
+      "evaluator_run_id": "eval_run_575d79a98ea34bb1b31aa3e298c562db",
+      "case_id": "MINI-QGIFT-001",
+      "task_id": "intent-query-gift",
+      "scenario_type": "normal",
+      "test_scope": "module",
+      "user_input": "查询 gift_id 为 7302 的礼物信息。",
+      "trial_id": "trial_001",
+      "run_mode": "agent_benchmark",
+      "tool_profile": "shadow_read",
+      "tool_version": "33ba4698105eef321a88ea7f3b0df3e0ffcae9cb9a2fba948924a53b8ad309d6",
+      "max_steps": 4,
+      "timeout_seconds": 30.0,
+      "session_id": null,
+      "agent_run_ids": [],
+      "execution_status": "COMPLETED",
+      "quality_conclusion": "PASS",
+      "score": 100.0,
+      "module_output": {
+        "intent": "query_gift",
+        "status": "READY",
+        "next_action": "CALL_TOOL",
+        "parameters": {
+          "gift_id": 7302
+        },
+        "missing_parameters": [],
+        "reason": "用户请求按 gift_id 查询礼物信息，且 gift_id 已提供为有效正整数。"
+      },
+      "turn_results": [],
+      "tool_calls": [],
+      "trace_events": [
+        {
+          "event_id": "event_b06d3512540a472abecd583d99677235",
+          "run_id": "run_4bc17291abba4f7b940054a326e9cc21",
+          "session_id": null,
+          "event_type": "intent_requested",
+          "timestamp": "2026-10-08T09:41:29.107902Z",
+          "payload": {}
+        },
+        {
+          "event_id": "event_a497ea65c3eb49ccbe72820daabb874a",
+          "run_id": "run_4bc17291abba4f7b940054a326e9cc21",
+          "session_id": null,
+          "event_type": "intent_candidate_received",
+          "timestamp": "2026-10-08T09:41:30.714173Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "READY",
+            "next_action": "CALL_TOOL"
+          }
+        },
+        {
+          "event_id": "event_6cf4cfea19834f838b68175124274c95",
+          "run_id": "run_4bc17291abba4f7b940054a326e9cc21",
+          "session_id": null,
+          "event_type": "intent_definition_resolved",
+          "timestamp": "2026-10-08T09:41:30.714245Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1"
+          }
+        },
+        {
+          "event_id": "event_07dec1591c434942b87ab6834b53f30d",
+          "run_id": "run_4bc17291abba4f7b940054a326e9cc21",
+          "session_id": null,
+          "event_type": "intent_contract_validated",
+          "timestamp": "2026-10-08T09:41:30.715072Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1",
+            "valid": true,
+            "invalid_fields": []
+          }
+        },
+        {
+          "event_id": "event_66719430b856424680e13de7e83f7bf9",
+          "run_id": "run_4bc17291abba4f7b940054a326e9cc21",
+          "session_id": null,
+          "event_type": "intent_decided",
+          "timestamp": "2026-10-08T09:41:30.715098Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "READY",
+            "next_action": "CALL_TOOL",
+            "missing_parameters": []
+          }
+        }
+      ],
+      "turn_snapshots": [],
+      "system_snapshot": null,
+      "assertion_results": [
+        {
+          "name": "output_schema_valid",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": {
+            "module_id": "intent_router",
+            "schema": "output_schema"
+          },
+          "actual": "valid",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/"
+          ]
+        },
+        {
+          "name": "intent_match",
+          "weight": 30.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "query_gift",
+          "actual": "query_gift",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/intent"
+          ]
+        },
+        {
+          "name": "status_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "READY",
+          "actual": "READY",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/status"
+          ]
+        },
+        {
+          "name": "next_action_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "CALL_TOOL",
+          "actual": "CALL_TOOL",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/next_action"
+          ]
+        },
+        {
+          "name": "params_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": {
+            "gift_id": 7302
+          },
+          "actual": {
+            "gift_id": 7302
+          },
+          "message": "",
+          "evidence_refs": [
+            "module_output:/parameters"
+          ]
+        },
+        {
+          "name": "missing_params_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": [],
+          "actual": [],
+          "message": "",
+          "evidence_refs": [
+            "module_output:/missing_parameters"
+          ]
+        }
+      ],
+      "first_failed_assertion": null,
+      "diagnoses": [],
+      "latency_ms": 1672,
+      "evidence_refs": [
+        "module_output:/",
+        "module_output:/intent",
+        "module_output:/status",
+        "module_output:/next_action",
+        "module_output:/parameters",
+        "module_output:/missing_parameters"
+      ],
+      "cleanup_status": "CLEANED",
+      "exception": null
+    },
+    {
+      "evaluator_run_id": "eval_run_575d79a98ea34bb1b31aa3e298c562db",
+      "case_id": "MINI-QGIFT-002",
+      "task_id": "intent-query-gift",
+      "scenario_type": "normal",
+      "test_scope": "module",
+      "user_input": "查询 gift_ids 为 [7302, 7303] 的礼物信息。",
+      "trial_id": "trial_001",
+      "run_mode": "agent_benchmark",
+      "tool_profile": "shadow_read",
+      "tool_version": "33ba4698105eef321a88ea7f3b0df3e0ffcae9cb9a2fba948924a53b8ad309d6",
+      "max_steps": 4,
+      "timeout_seconds": 30.0,
+      "session_id": null,
+      "agent_run_ids": [],
+      "execution_status": "COMPLETED",
+      "quality_conclusion": "PASS",
+      "score": 100.0,
+      "module_output": {
+        "intent": "query_gift",
+        "status": "READY",
+        "next_action": "CALL_TOOL",
+        "parameters": {
+          "gift_ids": [
+            7302,
+            7303
+          ]
+        },
+        "missing_parameters": [],
+        "reason": "Requested gift information by gift_ids."
+      },
+      "turn_results": [],
+      "tool_calls": [],
+      "trace_events": [
+        {
+          "event_id": "event_4b8347f7234548edb402f1e6c8f2a61a",
+          "run_id": "run_bac55b150ca449d2a06f804cf41b8da3",
+          "session_id": null,
+          "event_type": "intent_requested",
+          "timestamp": "2026-10-08T09:41:30.739102Z",
+          "payload": {}
+        },
+        {
+          "event_id": "event_caf057a6906249fabf4792eacab14622",
+          "run_id": "run_bac55b150ca449d2a06f804cf41b8da3",
+          "session_id": null,
+          "event_type": "intent_candidate_received",
+          "timestamp": "2026-10-08T09:41:31.879552Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "READY",
+            "next_action": "CALL_TOOL"
+          }
+        },
+        {
+          "event_id": "event_c6d4971a02e34113ade9a2fe9df51c07",
+          "run_id": "run_bac55b150ca449d2a06f804cf41b8da3",
+          "session_id": null,
+          "event_type": "intent_definition_resolved",
+          "timestamp": "2026-10-08T09:41:31.879647Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1"
+          }
+        },
+        {
+          "event_id": "event_a2af88ddd0e24c30b2044897c3fed5da",
+          "run_id": "run_bac55b150ca449d2a06f804cf41b8da3",
+          "session_id": null,
+          "event_type": "intent_contract_validated",
+          "timestamp": "2026-10-08T09:41:31.881079Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1",
+            "valid": true,
+            "invalid_fields": []
+          }
+        },
+        {
+          "event_id": "event_8b1ebb01f61a4ee38b44e2ddc557f56e",
+          "run_id": "run_bac55b150ca449d2a06f804cf41b8da3",
+          "session_id": null,
+          "event_type": "intent_decided",
+          "timestamp": "2026-10-08T09:41:31.881156Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "READY",
+            "next_action": "CALL_TOOL",
+            "missing_parameters": []
+          }
+        }
+      ],
+      "turn_snapshots": [],
+      "system_snapshot": null,
+      "assertion_results": [
+        {
+          "name": "output_schema_valid",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": {
+            "module_id": "intent_router",
+            "schema": "output_schema"
+          },
+          "actual": "valid",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/"
+          ]
+        },
+        {
+          "name": "intent_match",
+          "weight": 30.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "query_gift",
+          "actual": "query_gift",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/intent"
+          ]
+        },
+        {
+          "name": "status_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "READY",
+          "actual": "READY",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/status"
+          ]
+        },
+        {
+          "name": "next_action_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "CALL_TOOL",
+          "actual": "CALL_TOOL",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/next_action"
+          ]
+        },
+        {
+          "name": "params_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": {
+            "gift_ids": [
+              7302,
+              7303
+            ]
+          },
+          "actual": {
+            "gift_ids": [
+              7302,
+              7303
+            ]
+          },
+          "message": "",
+          "evidence_refs": [
+            "module_output:/parameters"
+          ]
+        },
+        {
+          "name": "missing_params_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": [],
+          "actual": [],
+          "message": "",
+          "evidence_refs": [
+            "module_output:/missing_parameters"
+          ]
+        }
+      ],
+      "first_failed_assertion": null,
+      "diagnoses": [],
+      "latency_ms": 1165,
+      "evidence_refs": [
+        "module_output:/",
+        "module_output:/intent",
+        "module_output:/status",
+        "module_output:/next_action",
+        "module_output:/parameters",
+        "module_output:/missing_parameters"
+      ],
+      "cleanup_status": "CLEANED",
+      "exception": null
+    },
+    {
+      "evaluator_run_id": "eval_run_575d79a98ea34bb1b31aa3e298c562db",
+      "case_id": "MINI-QGIFT-003",
+      "task_id": "intent-query-gift",
+      "scenario_type": "normal",
+      "test_scope": "module",
+      "user_input": "查询 gift_name 为“星河”的礼物信息。",
+      "trial_id": "trial_001",
+      "run_mode": "agent_benchmark",
+      "tool_profile": "shadow_read",
+      "tool_version": "33ba4698105eef321a88ea7f3b0df3e0ffcae9cb9a2fba948924a53b8ad309d6",
+      "max_steps": 4,
+      "timeout_seconds": 30.0,
+      "session_id": null,
+      "agent_run_ids": [],
+      "execution_status": "COMPLETED",
+      "quality_conclusion": "PASS",
+      "score": 100.0,
+      "module_output": {
+        "intent": "query_gift",
+        "status": "READY",
+        "next_action": "CALL_TOOL",
+        "parameters": {
+          "gift_name": "星河"
+        },
+        "missing_parameters": [],
+        "reason": "查询 gift_name 为“星河”的礼物信息"
+      },
+      "turn_results": [],
+      "tool_calls": [],
+      "trace_events": [
+        {
+          "event_id": "event_4e903166bec846caaf3fd79f29f69d9d",
+          "run_id": "run_1e09c835cbc24ee7bffcbc796afde6a9",
+          "session_id": null,
+          "event_type": "intent_requested",
+          "timestamp": "2026-10-08T09:41:31.904929Z",
+          "payload": {}
+        },
+        {
+          "event_id": "event_f69ddc7c7bc949dbb85a73b3da3dc8a1",
+          "run_id": "run_1e09c835cbc24ee7bffcbc796afde6a9",
+          "session_id": null,
+          "event_type": "intent_candidate_received",
+          "timestamp": "2026-10-08T09:41:33.211983Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "READY",
+            "next_action": "CALL_TOOL"
+          }
+        },
+        {
+          "event_id": "event_fc88e38e9e6948f2a36ad079e23a4dca",
+          "run_id": "run_1e09c835cbc24ee7bffcbc796afde6a9",
+          "session_id": null,
+          "event_type": "intent_definition_resolved",
+          "timestamp": "2026-10-08T09:41:33.212060Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1"
+          }
+        },
+        {
+          "event_id": "event_2dd77a0230ef4720bb54a554052d14bd",
+          "run_id": "run_1e09c835cbc24ee7bffcbc796afde6a9",
+          "session_id": null,
+          "event_type": "intent_contract_validated",
+          "timestamp": "2026-10-08T09:41:33.212648Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1",
+            "valid": true,
+            "invalid_fields": []
+          }
+        },
+        {
+          "event_id": "event_33664b03e0584baebee9018bba34bbc0",
+          "run_id": "run_1e09c835cbc24ee7bffcbc796afde6a9",
+          "session_id": null,
+          "event_type": "intent_decided",
+          "timestamp": "2026-10-08T09:41:33.212705Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "READY",
+            "next_action": "CALL_TOOL",
+            "missing_parameters": []
+          }
+        }
+      ],
+      "turn_snapshots": [],
+      "system_snapshot": null,
+      "assertion_results": [
+        {
+          "name": "output_schema_valid",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": {
+            "module_id": "intent_router",
+            "schema": "output_schema"
+          },
+          "actual": "valid",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/"
+          ]
+        },
+        {
+          "name": "intent_match",
+          "weight": 30.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "query_gift",
+          "actual": "query_gift",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/intent"
+          ]
+        },
+        {
+          "name": "status_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "READY",
+          "actual": "READY",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/status"
+          ]
+        },
+        {
+          "name": "next_action_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "CALL_TOOL",
+          "actual": "CALL_TOOL",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/next_action"
+          ]
+        },
+        {
+          "name": "params_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": {
+            "gift_name": "星河"
+          },
+          "actual": {
+            "gift_name": "星河"
+          },
+          "message": "",
+          "evidence_refs": [
+            "module_output:/parameters"
+          ]
+        },
+        {
+          "name": "missing_params_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": [],
+          "actual": [],
+          "message": "",
+          "evidence_refs": [
+            "module_output:/missing_parameters"
+          ]
+        }
+      ],
+      "first_failed_assertion": null,
+      "diagnoses": [],
+      "latency_ms": 1331,
+      "evidence_refs": [
+        "module_output:/",
+        "module_output:/intent",
+        "module_output:/status",
+        "module_output:/next_action",
+        "module_output:/parameters",
+        "module_output:/missing_parameters"
+      ],
+      "cleanup_status": "CLEANED",
+      "exception": null
+    },
+    {
+      "evaluator_run_id": "eval_run_575d79a98ea34bb1b31aa3e298c562db",
+      "case_id": "MINI-QGIFT-004",
+      "task_id": "intent-query-gift",
+      "scenario_type": "normal",
+      "test_scope": "module",
+      "user_input": "查询 gift_id 7304，limit 为 5。",
+      "trial_id": "trial_001",
+      "run_mode": "agent_benchmark",
+      "tool_profile": "shadow_read",
+      "tool_version": "33ba4698105eef321a88ea7f3b0df3e0ffcae9cb9a2fba948924a53b8ad309d6",
+      "max_steps": 4,
+      "timeout_seconds": 30.0,
+      "session_id": null,
+      "agent_run_ids": [],
+      "execution_status": "COMPLETED",
+      "quality_conclusion": "PASS",
+      "score": 100.0,
+      "module_output": {
+        "intent": "query_gift",
+        "status": "READY",
+        "next_action": "CALL_TOOL",
+        "parameters": {
+          "gift_id": 7304,
+          "limit": 5
+        },
+        "missing_parameters": [],
+        "reason": "Query gift by gift_id 7304 with limit 5."
+      },
+      "turn_results": [],
+      "tool_calls": [],
+      "trace_events": [
+        {
+          "event_id": "event_001286a96ced4b7caf1d6d79c9592350",
+          "run_id": "run_4cdb26567c1f4b1bab028e629ac244ba",
+          "session_id": null,
+          "event_type": "intent_requested",
+          "timestamp": "2026-10-08T09:41:33.234735Z",
+          "payload": {}
+        },
+        {
+          "event_id": "event_ad500c5963904368a00927d3f24c246d",
+          "run_id": "run_4cdb26567c1f4b1bab028e629ac244ba",
+          "session_id": null,
+          "event_type": "intent_candidate_received",
+          "timestamp": "2026-10-08T09:41:39.548633Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "READY",
+            "next_action": "CALL_TOOL"
+          }
+        },
+        {
+          "event_id": "event_9ed573403708413b8450b6d031c9611a",
+          "run_id": "run_4cdb26567c1f4b1bab028e629ac244ba",
+          "session_id": null,
+          "event_type": "intent_definition_resolved",
+          "timestamp": "2026-10-08T09:41:39.548711Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1"
+          }
+        },
+        {
+          "event_id": "event_e2b91941c09d49a1a5e3818f6e347010",
+          "run_id": "run_4cdb26567c1f4b1bab028e629ac244ba",
+          "session_id": null,
+          "event_type": "intent_contract_validated",
+          "timestamp": "2026-10-08T09:41:39.550022Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1",
+            "valid": true,
+            "invalid_fields": []
+          }
+        },
+        {
+          "event_id": "event_d902322378024b9c9126209b70deef70",
+          "run_id": "run_4cdb26567c1f4b1bab028e629ac244ba",
+          "session_id": null,
+          "event_type": "intent_decided",
+          "timestamp": "2026-10-08T09:41:39.550068Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "READY",
+            "next_action": "CALL_TOOL",
+            "missing_parameters": []
+          }
+        }
+      ],
+      "turn_snapshots": [],
+      "system_snapshot": null,
+      "assertion_results": [
+        {
+          "name": "output_schema_valid",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": {
+            "module_id": "intent_router",
+            "schema": "output_schema"
+          },
+          "actual": "valid",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/"
+          ]
+        },
+        {
+          "name": "intent_match",
+          "weight": 30.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "query_gift",
+          "actual": "query_gift",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/intent"
+          ]
+        },
+        {
+          "name": "status_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "READY",
+          "actual": "READY",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/status"
+          ]
+        },
+        {
+          "name": "next_action_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "CALL_TOOL",
+          "actual": "CALL_TOOL",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/next_action"
+          ]
+        },
+        {
+          "name": "params_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": {
+            "gift_id": 7304,
+            "limit": 5
+          },
+          "actual": {
+            "gift_id": 7304,
+            "limit": 5
+          },
+          "message": "",
+          "evidence_refs": [
+            "module_output:/parameters"
+          ]
+        },
+        {
+          "name": "missing_params_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": [],
+          "actual": [],
+          "message": "",
+          "evidence_refs": [
+            "module_output:/missing_parameters"
+          ]
+        }
+      ],
+      "first_failed_assertion": null,
+      "diagnoses": [],
+      "latency_ms": 6337,
+      "evidence_refs": [
+        "module_output:/",
+        "module_output:/intent",
+        "module_output:/status",
+        "module_output:/next_action",
+        "module_output:/parameters",
+        "module_output:/missing_parameters"
+      ],
+      "cleanup_status": "CLEANED",
+      "exception": null
+    },
+    {
+      "evaluator_run_id": "eval_run_575d79a98ea34bb1b31aa3e298c562db",
+      "case_id": "MINI-QGIFT-005",
+      "task_id": "intent-query-gift",
+      "scenario_type": "normal",
+      "test_scope": "module",
+      "user_input": "按 gift_ids [7305, 7306] 查询，limit 为 2。",
+      "trial_id": "trial_001",
+      "run_mode": "agent_benchmark",
+      "tool_profile": "shadow_read",
+      "tool_version": "33ba4698105eef321a88ea7f3b0df3e0ffcae9cb9a2fba948924a53b8ad309d6",
+      "max_steps": 4,
+      "timeout_seconds": 30.0,
+      "session_id": null,
+      "agent_run_ids": [],
+      "execution_status": "COMPLETED",
+      "quality_conclusion": "PASS",
+      "score": 100.0,
+      "module_output": {
+        "intent": "query_gift",
+        "status": "READY",
+        "next_action": "CALL_TOOL",
+        "parameters": {
+          "gift_ids": [
+            7305,
+            7306
+          ],
+          "limit": 2
+        },
+        "missing_parameters": [],
+        "reason": "Explicit gift_ids list with a limit is provided for the supported gift query."
+      },
+      "turn_results": [],
+      "tool_calls": [],
+      "trace_events": [
+        {
+          "event_id": "event_042c2999f1544ac886ba20c7ded73c96",
+          "run_id": "run_ae90dc682609471fad622040a3324dfe",
+          "session_id": null,
+          "event_type": "intent_requested",
+          "timestamp": "2026-10-08T09:41:39.571623Z",
+          "payload": {}
+        },
+        {
+          "event_id": "event_5d3e89e7f1dc41dd8bf95eeebdde1d32",
+          "run_id": "run_ae90dc682609471fad622040a3324dfe",
+          "session_id": null,
+          "event_type": "intent_candidate_received",
+          "timestamp": "2026-10-08T09:41:41.477041Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "READY",
+            "next_action": "CALL_TOOL"
+          }
+        },
+        {
+          "event_id": "event_3f7b69c08eab4e8e942fa6fe0642561f",
+          "run_id": "run_ae90dc682609471fad622040a3324dfe",
+          "session_id": null,
+          "event_type": "intent_definition_resolved",
+          "timestamp": "2026-10-08T09:41:41.477117Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1"
+          }
+        },
+        {
+          "event_id": "event_f88999aa90d9404184b45a387a48d383",
+          "run_id": "run_ae90dc682609471fad622040a3324dfe",
+          "session_id": null,
+          "event_type": "intent_contract_validated",
+          "timestamp": "2026-10-08T09:41:41.478635Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1",
+            "valid": true,
+            "invalid_fields": []
+          }
+        },
+        {
+          "event_id": "event_0bb455d134ba45568f537ea740215605",
+          "run_id": "run_ae90dc682609471fad622040a3324dfe",
+          "session_id": null,
+          "event_type": "intent_decided",
+          "timestamp": "2026-10-08T09:41:41.478684Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "READY",
+            "next_action": "CALL_TOOL",
+            "missing_parameters": []
+          }
+        }
+      ],
+      "turn_snapshots": [],
+      "system_snapshot": null,
+      "assertion_results": [
+        {
+          "name": "output_schema_valid",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": {
+            "module_id": "intent_router",
+            "schema": "output_schema"
+          },
+          "actual": "valid",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/"
+          ]
+        },
+        {
+          "name": "intent_match",
+          "weight": 30.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "query_gift",
+          "actual": "query_gift",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/intent"
+          ]
+        },
+        {
+          "name": "status_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "READY",
+          "actual": "READY",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/status"
+          ]
+        },
+        {
+          "name": "next_action_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "CALL_TOOL",
+          "actual": "CALL_TOOL",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/next_action"
+          ]
+        },
+        {
+          "name": "params_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": {
+            "gift_ids": [
+              7305,
+              7306
+            ],
+            "limit": 2
+          },
+          "actual": {
+            "gift_ids": [
+              7305,
+              7306
+            ],
+            "limit": 2
+          },
+          "message": "",
+          "evidence_refs": [
+            "module_output:/parameters"
+          ]
+        },
+        {
+          "name": "missing_params_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": [],
+          "actual": [],
+          "message": "",
+          "evidence_refs": [
+            "module_output:/missing_parameters"
+          ]
+        }
+      ],
+      "first_failed_assertion": null,
+      "diagnoses": [],
+      "latency_ms": 1929,
+      "evidence_refs": [
+        "module_output:/",
+        "module_output:/intent",
+        "module_output:/status",
+        "module_output:/next_action",
+        "module_output:/parameters",
+        "module_output:/missing_parameters"
+      ],
+      "cleanup_status": "CLEANED",
+      "exception": null
+    },
+    {
+      "evaluator_run_id": "eval_run_575d79a98ea34bb1b31aa3e298c562db",
+      "case_id": "MINI-QGIFT-006",
+      "task_id": "intent-query-gift",
+      "scenario_type": "normal",
+      "test_scope": "module",
+      "user_input": "查询 gift_name 为“月光”的礼物，limit 为 10。",
+      "trial_id": "trial_001",
+      "run_mode": "agent_benchmark",
+      "tool_profile": "shadow_read",
+      "tool_version": "33ba4698105eef321a88ea7f3b0df3e0ffcae9cb9a2fba948924a53b8ad309d6",
+      "max_steps": 4,
+      "timeout_seconds": 30.0,
+      "session_id": null,
+      "agent_run_ids": [],
+      "execution_status": "COMPLETED",
+      "quality_conclusion": "PASS",
+      "score": 100.0,
+      "module_output": {
+        "intent": "query_gift",
+        "status": "READY",
+        "next_action": "CALL_TOOL",
+        "parameters": {
+          "gift_name": "月光",
+          "limit": 10
+        },
+        "missing_parameters": [],
+        "reason": "Query gift by gift_name 月光 with limit 10."
+      },
+      "turn_results": [],
+      "tool_calls": [],
+      "trace_events": [
+        {
+          "event_id": "event_27ea4dfd291348b08c62fd3778f6e675",
+          "run_id": "run_5141b1b164824385ae029c7737b312a1",
+          "session_id": null,
+          "event_type": "intent_requested",
+          "timestamp": "2026-10-08T09:41:41.500773Z",
+          "payload": {}
+        },
+        {
+          "event_id": "event_cb9bf5f646d24ff595c17d58eef5f2f5",
+          "run_id": "run_5141b1b164824385ae029c7737b312a1",
+          "session_id": null,
+          "event_type": "intent_candidate_received",
+          "timestamp": "2026-10-08T09:41:43.985632Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "READY",
+            "next_action": "CALL_TOOL"
+          }
+        },
+        {
+          "event_id": "event_3bb0dd0e918648ca8e740b035d62bc7c",
+          "run_id": "run_5141b1b164824385ae029c7737b312a1",
+          "session_id": null,
+          "event_type": "intent_definition_resolved",
+          "timestamp": "2026-10-08T09:41:43.985715Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1"
+          }
+        },
+        {
+          "event_id": "event_6404a9b3ecb14dd48b4d05ee05c34dc7",
+          "run_id": "run_5141b1b164824385ae029c7737b312a1",
+          "session_id": null,
+          "event_type": "intent_contract_validated",
+          "timestamp": "2026-10-08T09:41:43.987163Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1",
+            "valid": true,
+            "invalid_fields": []
+          }
+        },
+        {
+          "event_id": "event_6ce85a93bad0489aa159a03c77358873",
+          "run_id": "run_5141b1b164824385ae029c7737b312a1",
+          "session_id": null,
+          "event_type": "intent_decided",
+          "timestamp": "2026-10-08T09:41:43.987224Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "READY",
+            "next_action": "CALL_TOOL",
+            "missing_parameters": []
+          }
+        }
+      ],
+      "turn_snapshots": [],
+      "system_snapshot": null,
+      "assertion_results": [
+        {
+          "name": "output_schema_valid",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": {
+            "module_id": "intent_router",
+            "schema": "output_schema"
+          },
+          "actual": "valid",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/"
+          ]
+        },
+        {
+          "name": "intent_match",
+          "weight": 30.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "query_gift",
+          "actual": "query_gift",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/intent"
+          ]
+        },
+        {
+          "name": "status_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "READY",
+          "actual": "READY",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/status"
+          ]
+        },
+        {
+          "name": "next_action_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "CALL_TOOL",
+          "actual": "CALL_TOOL",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/next_action"
+          ]
+        },
+        {
+          "name": "params_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": {
+            "gift_name": "月光",
+            "limit": 10
+          },
+          "actual": {
+            "gift_name": "月光",
+            "limit": 10
+          },
+          "message": "",
+          "evidence_refs": [
+            "module_output:/parameters"
+          ]
+        },
+        {
+          "name": "missing_params_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": [],
+          "actual": [],
+          "message": "",
+          "evidence_refs": [
+            "module_output:/missing_parameters"
+          ]
+        }
+      ],
+      "first_failed_assertion": null,
+      "diagnoses": [],
+      "latency_ms": 2508,
+      "evidence_refs": [
+        "module_output:/",
+        "module_output:/intent",
+        "module_output:/status",
+        "module_output:/next_action",
+        "module_output:/parameters",
+        "module_output:/missing_parameters"
+      ],
+      "cleanup_status": "CLEANED",
+      "exception": null
+    },
+    {
+      "evaluator_run_id": "eval_run_575d79a98ea34bb1b31aa3e298c562db",
+      "case_id": "MINI-QGIFT-007",
+      "task_id": "intent-query-gift",
+      "scenario_type": "expression_variant",
+      "test_scope": "module",
+      "user_input": "礼物信息帮我查一下，gift_id 是 7307。",
+      "trial_id": "trial_001",
+      "run_mode": "agent_benchmark",
+      "tool_profile": "shadow_read",
+      "tool_version": "33ba4698105eef321a88ea7f3b0df3e0ffcae9cb9a2fba948924a53b8ad309d6",
+      "max_steps": 4,
+      "timeout_seconds": 30.0,
+      "session_id": null,
+      "agent_run_ids": [],
+      "execution_status": "COMPLETED",
+      "quality_conclusion": "PASS",
+      "score": 100.0,
+      "module_output": {
+        "intent": "query_gift",
+        "status": "READY",
+        "next_action": "CALL_TOOL",
+        "parameters": {
+          "gift_id": 7307
+        },
+        "missing_parameters": [],
+        "reason": "Queries gift information with gift_id 7307."
+      },
+      "turn_results": [],
+      "tool_calls": [],
+      "trace_events": [
+        {
+          "event_id": "event_a5b17c19654d4943ada8f1bf813dd0d7",
+          "run_id": "run_e634cbea3e524cadbe846f9065ae471f",
+          "session_id": null,
+          "event_type": "intent_requested",
+          "timestamp": "2026-10-08T09:41:44.009158Z",
+          "payload": {}
+        },
+        {
+          "event_id": "event_e2a1537b94ec4ab9bafa5ac75b10e316",
+          "run_id": "run_e634cbea3e524cadbe846f9065ae471f",
+          "session_id": null,
+          "event_type": "intent_candidate_received",
+          "timestamp": "2026-10-08T09:41:45.167494Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "READY",
+            "next_action": "CALL_TOOL"
+          }
+        },
+        {
+          "event_id": "event_a1519f3465f84c65b2850bc184042bfc",
+          "run_id": "run_e634cbea3e524cadbe846f9065ae471f",
+          "session_id": null,
+          "event_type": "intent_definition_resolved",
+          "timestamp": "2026-10-08T09:41:45.167580Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1"
+          }
+        },
+        {
+          "event_id": "event_87dd4887f5194ae39ca5beb54880ffb4",
+          "run_id": "run_e634cbea3e524cadbe846f9065ae471f",
+          "session_id": null,
+          "event_type": "intent_contract_validated",
+          "timestamp": "2026-10-08T09:41:45.168544Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1",
+            "valid": true,
+            "invalid_fields": []
+          }
+        },
+        {
+          "event_id": "event_e8196b5d858a46ee9fc8c7a5fcc83a0a",
+          "run_id": "run_e634cbea3e524cadbe846f9065ae471f",
+          "session_id": null,
+          "event_type": "intent_decided",
+          "timestamp": "2026-10-08T09:41:45.168611Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "READY",
+            "next_action": "CALL_TOOL",
+            "missing_parameters": []
+          }
+        }
+      ],
+      "turn_snapshots": [],
+      "system_snapshot": null,
+      "assertion_results": [
+        {
+          "name": "output_schema_valid",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": {
+            "module_id": "intent_router",
+            "schema": "output_schema"
+          },
+          "actual": "valid",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/"
+          ]
+        },
+        {
+          "name": "intent_match",
+          "weight": 30.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "query_gift",
+          "actual": "query_gift",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/intent"
+          ]
+        },
+        {
+          "name": "status_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "READY",
+          "actual": "READY",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/status"
+          ]
+        },
+        {
+          "name": "next_action_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "CALL_TOOL",
+          "actual": "CALL_TOOL",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/next_action"
+          ]
+        },
+        {
+          "name": "params_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": {
+            "gift_id": 7307
+          },
+          "actual": {
+            "gift_id": 7307
+          },
+          "message": "",
+          "evidence_refs": [
+            "module_output:/parameters"
+          ]
+        },
+        {
+          "name": "missing_params_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": [],
+          "actual": [],
+          "message": "",
+          "evidence_refs": [
+            "module_output:/missing_parameters"
+          ]
+        }
+      ],
+      "first_failed_assertion": null,
+      "diagnoses": [],
+      "latency_ms": 1182,
+      "evidence_refs": [
+        "module_output:/",
+        "module_output:/intent",
+        "module_output:/status",
+        "module_output:/next_action",
+        "module_output:/parameters",
+        "module_output:/missing_parameters"
+      ],
+      "cleanup_status": "CLEANED",
+      "exception": null
+    },
+    {
+      "evaluator_run_id": "eval_run_575d79a98ea34bb1b31aa3e298c562db",
+      "case_id": "MINI-QGIFT-008",
+      "task_id": "intent-query-gift",
+      "scenario_type": "expression_variant",
+      "test_scope": "module",
+      "user_input": "礼物详情需要查询，使用 gift_ids [7308, 7309]。",
+      "trial_id": "trial_001",
+      "run_mode": "agent_benchmark",
+      "tool_profile": "shadow_read",
+      "tool_version": "33ba4698105eef321a88ea7f3b0df3e0ffcae9cb9a2fba948924a53b8ad309d6",
+      "max_steps": 4,
+      "timeout_seconds": 30.0,
+      "session_id": null,
+      "agent_run_ids": [],
+      "execution_status": "COMPLETED",
+      "quality_conclusion": "PASS",
+      "score": 100.0,
+      "module_output": {
+        "intent": "query_gift",
+        "status": "READY",
+        "next_action": "CALL_TOOL",
+        "parameters": {
+          "gift_ids": [
+            7308,
+            7309
+          ]
+        },
+        "missing_parameters": [],
+        "reason": "Query gift details for the provided gift_ids."
+      },
+      "turn_results": [],
+      "tool_calls": [],
+      "trace_events": [
+        {
+          "event_id": "event_8cee2ffe719949babc37a47c38a349cb",
+          "run_id": "run_efa0646f729b42cd8ba38a23f5ddc658",
+          "session_id": null,
+          "event_type": "intent_requested",
+          "timestamp": "2026-10-08T09:41:45.190852Z",
+          "payload": {}
+        },
+        {
+          "event_id": "event_3323a668006f4fd19ac7ce2878ae4e9e",
+          "run_id": "run_efa0646f729b42cd8ba38a23f5ddc658",
+          "session_id": null,
+          "event_type": "intent_candidate_received",
+          "timestamp": "2026-10-08T09:41:46.448063Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "READY",
+            "next_action": "CALL_TOOL"
+          }
+        },
+        {
+          "event_id": "event_d5d9fffe3bb24e40bc3999dfe15b6968",
+          "run_id": "run_efa0646f729b42cd8ba38a23f5ddc658",
+          "session_id": null,
+          "event_type": "intent_definition_resolved",
+          "timestamp": "2026-10-08T09:41:46.448150Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1"
+          }
+        },
+        {
+          "event_id": "event_744789423881451297987858130a5e5f",
+          "run_id": "run_efa0646f729b42cd8ba38a23f5ddc658",
+          "session_id": null,
+          "event_type": "intent_contract_validated",
+          "timestamp": "2026-10-08T09:41:46.449947Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1",
+            "valid": true,
+            "invalid_fields": []
+          }
+        },
+        {
+          "event_id": "event_1c5a2e658dc445b9853b3328268f338e",
+          "run_id": "run_efa0646f729b42cd8ba38a23f5ddc658",
+          "session_id": null,
+          "event_type": "intent_decided",
+          "timestamp": "2026-10-08T09:41:46.450006Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "READY",
+            "next_action": "CALL_TOOL",
+            "missing_parameters": []
+          }
+        }
+      ],
+      "turn_snapshots": [],
+      "system_snapshot": null,
+      "assertion_results": [
+        {
+          "name": "output_schema_valid",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": {
+            "module_id": "intent_router",
+            "schema": "output_schema"
+          },
+          "actual": "valid",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/"
+          ]
+        },
+        {
+          "name": "intent_match",
+          "weight": 30.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "query_gift",
+          "actual": "query_gift",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/intent"
+          ]
+        },
+        {
+          "name": "status_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "READY",
+          "actual": "READY",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/status"
+          ]
+        },
+        {
+          "name": "next_action_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "CALL_TOOL",
+          "actual": "CALL_TOOL",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/next_action"
+          ]
+        },
+        {
+          "name": "params_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": {
+            "gift_ids": [
+              7308,
+              7309
+            ]
+          },
+          "actual": {
+            "gift_ids": [
+              7308,
+              7309
+            ]
+          },
+          "message": "",
+          "evidence_refs": [
+            "module_output:/parameters"
+          ]
+        },
+        {
+          "name": "missing_params_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": [],
+          "actual": [],
+          "message": "",
+          "evidence_refs": [
+            "module_output:/missing_parameters"
+          ]
+        }
+      ],
+      "first_failed_assertion": null,
+      "diagnoses": [],
+      "latency_ms": 1280,
+      "evidence_refs": [
+        "module_output:/",
+        "module_output:/intent",
+        "module_output:/status",
+        "module_output:/next_action",
+        "module_output:/parameters",
+        "module_output:/missing_parameters"
+      ],
+      "cleanup_status": "CLEANED",
+      "exception": null
+    },
+    {
+      "evaluator_run_id": "eval_run_575d79a98ea34bb1b31aa3e298c562db",
+      "case_id": "MINI-QGIFT-009",
+      "task_id": "intent-query-gift",
+      "scenario_type": "expression_variant",
+      "test_scope": "module",
+      "user_input": "礼物资料查一下，gift_name 用“流星”。",
+      "trial_id": "trial_001",
+      "run_mode": "agent_benchmark",
+      "tool_profile": "shadow_read",
+      "tool_version": "33ba4698105eef321a88ea7f3b0df3e0ffcae9cb9a2fba948924a53b8ad309d6",
+      "max_steps": 4,
+      "timeout_seconds": 30.0,
+      "session_id": null,
+      "agent_run_ids": [],
+      "execution_status": "COMPLETED",
+      "quality_conclusion": "PASS",
+      "score": 100.0,
+      "module_output": {
+        "intent": "query_gift",
+        "status": "READY",
+        "next_action": "CALL_TOOL",
+        "parameters": {
+          "gift_name": "流星"
+        },
+        "missing_parameters": [],
+        "reason": "User requested gift information with gift_name \"流星\"."
+      },
+      "turn_results": [],
+      "tool_calls": [],
+      "trace_events": [
+        {
+          "event_id": "event_e9426204f5954bbfa8078621270c2ba7",
+          "run_id": "run_18a00d02f5bd4aea84e4d068abee73fd",
+          "session_id": null,
+          "event_type": "intent_requested",
+          "timestamp": "2026-10-08T09:41:46.471996Z",
+          "payload": {}
+        },
+        {
+          "event_id": "event_6695fdcbba784805a2ca5c1a4c192368",
+          "run_id": "run_18a00d02f5bd4aea84e4d068abee73fd",
+          "session_id": null,
+          "event_type": "intent_candidate_received",
+          "timestamp": "2026-10-08T09:41:47.683635Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "READY",
+            "next_action": "CALL_TOOL"
+          }
+        },
+        {
+          "event_id": "event_a22ab178f9954022ac8e5dffcffecc33",
+          "run_id": "run_18a00d02f5bd4aea84e4d068abee73fd",
+          "session_id": null,
+          "event_type": "intent_definition_resolved",
+          "timestamp": "2026-10-08T09:41:47.683724Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1"
+          }
+        },
+        {
+          "event_id": "event_68ff57ef072a422ca3b6be01b181ec33",
+          "run_id": "run_18a00d02f5bd4aea84e4d068abee73fd",
+          "session_id": null,
+          "event_type": "intent_contract_validated",
+          "timestamp": "2026-10-08T09:41:47.684660Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1",
+            "valid": true,
+            "invalid_fields": []
+          }
+        },
+        {
+          "event_id": "event_f3d948e98de14a2381bd6a7fe60544a5",
+          "run_id": "run_18a00d02f5bd4aea84e4d068abee73fd",
+          "session_id": null,
+          "event_type": "intent_decided",
+          "timestamp": "2026-10-08T09:41:47.684720Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "READY",
+            "next_action": "CALL_TOOL",
+            "missing_parameters": []
+          }
+        }
+      ],
+      "turn_snapshots": [],
+      "system_snapshot": null,
+      "assertion_results": [
+        {
+          "name": "output_schema_valid",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": {
+            "module_id": "intent_router",
+            "schema": "output_schema"
+          },
+          "actual": "valid",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/"
+          ]
+        },
+        {
+          "name": "intent_match",
+          "weight": 30.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "query_gift",
+          "actual": "query_gift",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/intent"
+          ]
+        },
+        {
+          "name": "status_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "READY",
+          "actual": "READY",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/status"
+          ]
+        },
+        {
+          "name": "next_action_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "CALL_TOOL",
+          "actual": "CALL_TOOL",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/next_action"
+          ]
+        },
+        {
+          "name": "params_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": {
+            "gift_name": "流星"
+          },
+          "actual": {
+            "gift_name": "流星"
+          },
+          "message": "",
+          "evidence_refs": [
+            "module_output:/parameters"
+          ]
+        },
+        {
+          "name": "missing_params_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": [],
+          "actual": [],
+          "message": "",
+          "evidence_refs": [
+            "module_output:/missing_parameters"
+          ]
+        }
+      ],
+      "first_failed_assertion": null,
+      "diagnoses": [],
+      "latency_ms": 1235,
+      "evidence_refs": [
+        "module_output:/",
+        "module_output:/intent",
+        "module_output:/status",
+        "module_output:/next_action",
+        "module_output:/parameters",
+        "module_output:/missing_parameters"
+      ],
+      "cleanup_status": "CLEANED",
+      "exception": null
+    },
+    {
+      "evaluator_run_id": "eval_run_575d79a98ea34bb1b31aa3e298c562db",
+      "case_id": "MINI-QGIFT-010",
+      "task_id": "intent-query-gift",
+      "scenario_type": "valid_boundary",
+      "test_scope": "module",
+      "user_input": "查询 gift_id 为 1 的礼物信息。",
+      "trial_id": "trial_001",
+      "run_mode": "agent_benchmark",
+      "tool_profile": "shadow_read",
+      "tool_version": "33ba4698105eef321a88ea7f3b0df3e0ffcae9cb9a2fba948924a53b8ad309d6",
+      "max_steps": 4,
+      "timeout_seconds": 30.0,
+      "session_id": null,
+      "agent_run_ids": [],
+      "execution_status": "COMPLETED",
+      "quality_conclusion": "PASS",
+      "score": 100.0,
+      "module_output": {
+        "intent": "query_gift",
+        "status": "READY",
+        "next_action": "CALL_TOOL",
+        "parameters": {
+          "gift_id": 1
+        },
+        "missing_parameters": [],
+        "reason": "用户明确要求按 gift_id 1 查询礼物信息。"
+      },
+      "turn_results": [],
+      "tool_calls": [],
+      "trace_events": [
+        {
+          "event_id": "event_a15ed82213e14292964b817630f6349a",
+          "run_id": "run_82619126aa2045d6898274e0701e36a1",
+          "session_id": null,
+          "event_type": "intent_requested",
+          "timestamp": "2026-10-08T09:41:47.706355Z",
+          "payload": {}
+        },
+        {
+          "event_id": "event_49d326cc410d418c810b8e2cb85755dc",
+          "run_id": "run_82619126aa2045d6898274e0701e36a1",
+          "session_id": null,
+          "event_type": "intent_candidate_received",
+          "timestamp": "2026-10-08T09:41:48.708775Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "READY",
+            "next_action": "CALL_TOOL"
+          }
+        },
+        {
+          "event_id": "event_d2db2812b3604744adb348f4a8666b63",
+          "run_id": "run_82619126aa2045d6898274e0701e36a1",
+          "session_id": null,
+          "event_type": "intent_definition_resolved",
+          "timestamp": "2026-10-08T09:41:48.708853Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1"
+          }
+        },
+        {
+          "event_id": "event_1f5eccd0c3764ceb8786b034e4d0e36a",
+          "run_id": "run_82619126aa2045d6898274e0701e36a1",
+          "session_id": null,
+          "event_type": "intent_contract_validated",
+          "timestamp": "2026-10-08T09:41:48.709662Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1",
+            "valid": true,
+            "invalid_fields": []
+          }
+        },
+        {
+          "event_id": "event_4f74c9cee5e5445b8a4e1809ce06b7e9",
+          "run_id": "run_82619126aa2045d6898274e0701e36a1",
+          "session_id": null,
+          "event_type": "intent_decided",
+          "timestamp": "2026-10-08T09:41:48.709715Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "READY",
+            "next_action": "CALL_TOOL",
+            "missing_parameters": []
+          }
+        }
+      ],
+      "turn_snapshots": [],
+      "system_snapshot": null,
+      "assertion_results": [
+        {
+          "name": "output_schema_valid",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": {
+            "module_id": "intent_router",
+            "schema": "output_schema"
+          },
+          "actual": "valid",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/"
+          ]
+        },
+        {
+          "name": "intent_match",
+          "weight": 30.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "query_gift",
+          "actual": "query_gift",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/intent"
+          ]
+        },
+        {
+          "name": "status_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "READY",
+          "actual": "READY",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/status"
+          ]
+        },
+        {
+          "name": "next_action_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "CALL_TOOL",
+          "actual": "CALL_TOOL",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/next_action"
+          ]
+        },
+        {
+          "name": "params_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": {
+            "gift_id": 1
+          },
+          "actual": {
+            "gift_id": 1
+          },
+          "message": "",
+          "evidence_refs": [
+            "module_output:/parameters"
+          ]
+        },
+        {
+          "name": "missing_params_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": [],
+          "actual": [],
+          "message": "",
+          "evidence_refs": [
+            "module_output:/missing_parameters"
+          ]
+        }
+      ],
+      "first_failed_assertion": null,
+      "diagnoses": [],
+      "latency_ms": 1025,
+      "evidence_refs": [
+        "module_output:/",
+        "module_output:/intent",
+        "module_output:/status",
+        "module_output:/next_action",
+        "module_output:/parameters",
+        "module_output:/missing_parameters"
+      ],
+      "cleanup_status": "CLEANED",
+      "exception": null
+    },
+    {
+      "evaluator_run_id": "eval_run_575d79a98ea34bb1b31aa3e298c562db",
+      "case_id": "MINI-QGIFT-011",
+      "task_id": "intent-query-gift",
+      "scenario_type": "valid_boundary",
+      "test_scope": "module",
+      "user_input": "查询 gift_ids 为 [1] 的礼物信息。",
+      "trial_id": "trial_001",
+      "run_mode": "agent_benchmark",
+      "tool_profile": "shadow_read",
+      "tool_version": "33ba4698105eef321a88ea7f3b0df3e0ffcae9cb9a2fba948924a53b8ad309d6",
+      "max_steps": 4,
+      "timeout_seconds": 30.0,
+      "session_id": null,
+      "agent_run_ids": [],
+      "execution_status": "COMPLETED",
+      "quality_conclusion": "PASS",
+      "score": 100.0,
+      "module_output": {
+        "intent": "query_gift",
+        "status": "READY",
+        "next_action": "CALL_TOOL",
+        "parameters": {
+          "gift_ids": [
+            1
+          ]
+        },
+        "missing_parameters": [],
+        "reason": "查询指定 gift_ids 的礼物信息。"
+      },
+      "turn_results": [],
+      "tool_calls": [],
+      "trace_events": [
+        {
+          "event_id": "event_2ba75fbbcfe143a7abb530a6996aac8f",
+          "run_id": "run_918ec41064264235900e762a3b0ba5a6",
+          "session_id": null,
+          "event_type": "intent_requested",
+          "timestamp": "2026-10-08T09:41:48.731779Z",
+          "payload": {}
+        },
+        {
+          "event_id": "event_e76dfd67abf243cb90d69ad91b98f330",
+          "run_id": "run_918ec41064264235900e762a3b0ba5a6",
+          "session_id": null,
+          "event_type": "intent_candidate_received",
+          "timestamp": "2026-10-08T09:41:49.855651Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "READY",
+            "next_action": "CALL_TOOL"
+          }
+        },
+        {
+          "event_id": "event_94e44f2f2cf243fe9cbdc6d4b1bf92ad",
+          "run_id": "run_918ec41064264235900e762a3b0ba5a6",
+          "session_id": null,
+          "event_type": "intent_definition_resolved",
+          "timestamp": "2026-10-08T09:41:49.855756Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1"
+          }
+        },
+        {
+          "event_id": "event_130c403baa7141fcadfdc387c3798518",
+          "run_id": "run_918ec41064264235900e762a3b0ba5a6",
+          "session_id": null,
+          "event_type": "intent_contract_validated",
+          "timestamp": "2026-10-08T09:41:49.857125Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1",
+            "valid": true,
+            "invalid_fields": []
+          }
+        },
+        {
+          "event_id": "event_52ea23b5706441fa8c382ec9f809d712",
+          "run_id": "run_918ec41064264235900e762a3b0ba5a6",
+          "session_id": null,
+          "event_type": "intent_decided",
+          "timestamp": "2026-10-08T09:41:49.857206Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "READY",
+            "next_action": "CALL_TOOL",
+            "missing_parameters": []
+          }
+        }
+      ],
+      "turn_snapshots": [],
+      "system_snapshot": null,
+      "assertion_results": [
+        {
+          "name": "output_schema_valid",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": {
+            "module_id": "intent_router",
+            "schema": "output_schema"
+          },
+          "actual": "valid",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/"
+          ]
+        },
+        {
+          "name": "intent_match",
+          "weight": 30.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "query_gift",
+          "actual": "query_gift",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/intent"
+          ]
+        },
+        {
+          "name": "status_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "READY",
+          "actual": "READY",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/status"
+          ]
+        },
+        {
+          "name": "next_action_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "CALL_TOOL",
+          "actual": "CALL_TOOL",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/next_action"
+          ]
+        },
+        {
+          "name": "params_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": {
+            "gift_ids": [
+              1
+            ]
+          },
+          "actual": {
+            "gift_ids": [
+              1
+            ]
+          },
+          "message": "",
+          "evidence_refs": [
+            "module_output:/parameters"
+          ]
+        },
+        {
+          "name": "missing_params_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": [],
+          "actual": [],
+          "message": "",
+          "evidence_refs": [
+            "module_output:/missing_parameters"
+          ]
+        }
+      ],
+      "first_failed_assertion": null,
+      "diagnoses": [],
+      "latency_ms": 1147,
+      "evidence_refs": [
+        "module_output:/",
+        "module_output:/intent",
+        "module_output:/status",
+        "module_output:/next_action",
+        "module_output:/parameters",
+        "module_output:/missing_parameters"
+      ],
+      "cleanup_status": "CLEANED",
+      "exception": null
+    },
+    {
+      "evaluator_run_id": "eval_run_575d79a98ea34bb1b31aa3e298c562db",
+      "case_id": "MINI-QGIFT-012",
+      "task_id": "intent-query-gift",
+      "scenario_type": "valid_boundary",
+      "test_scope": "module",
+      "user_input": "查询 gift_name 为“星”的礼物。",
+      "trial_id": "trial_001",
+      "run_mode": "agent_benchmark",
+      "tool_profile": "shadow_read",
+      "tool_version": "33ba4698105eef321a88ea7f3b0df3e0ffcae9cb9a2fba948924a53b8ad309d6",
+      "max_steps": 4,
+      "timeout_seconds": 30.0,
+      "session_id": null,
+      "agent_run_ids": [],
+      "execution_status": "COMPLETED",
+      "quality_conclusion": "PASS",
+      "score": 100.0,
+      "module_output": {
+        "intent": "query_gift",
+        "status": "READY",
+        "next_action": "CALL_TOOL",
+        "parameters": {
+          "gift_name": "星"
+        },
+        "missing_parameters": [],
+        "reason": "按礼物名称查询，参数完整。"
+      },
+      "turn_results": [],
+      "tool_calls": [],
+      "trace_events": [
+        {
+          "event_id": "event_b8be1b5210d14c7c9705ae24db7e38f3",
+          "run_id": "run_963ba07f7a464002b18954ed47d61fb1",
+          "session_id": null,
+          "event_type": "intent_requested",
+          "timestamp": "2026-10-08T09:41:49.880130Z",
+          "payload": {}
+        },
+        {
+          "event_id": "event_5111991bc284430594c6ce891a4c0f5e",
+          "run_id": "run_963ba07f7a464002b18954ed47d61fb1",
+          "session_id": null,
+          "event_type": "intent_candidate_received",
+          "timestamp": "2026-10-08T09:41:51.000809Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "READY",
+            "next_action": "CALL_TOOL"
+          }
+        },
+        {
+          "event_id": "event_9b017b81695b4b1882973cdba9a8071b",
+          "run_id": "run_963ba07f7a464002b18954ed47d61fb1",
+          "session_id": null,
+          "event_type": "intent_definition_resolved",
+          "timestamp": "2026-10-08T09:41:51.000942Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1"
+          }
+        },
+        {
+          "event_id": "event_d00cf4ed31eb45d4b16803a040b55fc0",
+          "run_id": "run_963ba07f7a464002b18954ed47d61fb1",
+          "session_id": null,
+          "event_type": "intent_contract_validated",
+          "timestamp": "2026-10-08T09:41:51.001755Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1",
+            "valid": true,
+            "invalid_fields": []
+          }
+        },
+        {
+          "event_id": "event_a2ae424213094d4abbf1896308a93cab",
+          "run_id": "run_963ba07f7a464002b18954ed47d61fb1",
+          "session_id": null,
+          "event_type": "intent_decided",
+          "timestamp": "2026-10-08T09:41:51.001808Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "READY",
+            "next_action": "CALL_TOOL",
+            "missing_parameters": []
+          }
+        }
+      ],
+      "turn_snapshots": [],
+      "system_snapshot": null,
+      "assertion_results": [
+        {
+          "name": "output_schema_valid",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": {
+            "module_id": "intent_router",
+            "schema": "output_schema"
+          },
+          "actual": "valid",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/"
+          ]
+        },
+        {
+          "name": "intent_match",
+          "weight": 30.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "query_gift",
+          "actual": "query_gift",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/intent"
+          ]
+        },
+        {
+          "name": "status_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "READY",
+          "actual": "READY",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/status"
+          ]
+        },
+        {
+          "name": "next_action_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "CALL_TOOL",
+          "actual": "CALL_TOOL",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/next_action"
+          ]
+        },
+        {
+          "name": "params_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": {
+            "gift_name": "星"
+          },
+          "actual": {
+            "gift_name": "星"
+          },
+          "message": "",
+          "evidence_refs": [
+            "module_output:/parameters"
+          ]
+        },
+        {
+          "name": "missing_params_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": [],
+          "actual": [],
+          "message": "",
+          "evidence_refs": [
+            "module_output:/missing_parameters"
+          ]
+        }
+      ],
+      "first_failed_assertion": null,
+      "diagnoses": [],
+      "latency_ms": 1144,
+      "evidence_refs": [
+        "module_output:/",
+        "module_output:/intent",
+        "module_output:/status",
+        "module_output:/next_action",
+        "module_output:/parameters",
+        "module_output:/missing_parameters"
+      ],
+      "cleanup_status": "CLEANED",
+      "exception": null
+    },
+    {
+      "evaluator_run_id": "eval_run_575d79a98ea34bb1b31aa3e298c562db",
+      "case_id": "MINI-QGIFT-013",
+      "task_id": "intent-query-gift",
+      "scenario_type": "valid_boundary",
+      "test_scope": "module",
+      "user_input": "查询 gift_name 为“银河”的礼物，limit 为 1。",
+      "trial_id": "trial_001",
+      "run_mode": "agent_benchmark",
+      "tool_profile": "shadow_read",
+      "tool_version": "33ba4698105eef321a88ea7f3b0df3e0ffcae9cb9a2fba948924a53b8ad309d6",
+      "max_steps": 4,
+      "timeout_seconds": 30.0,
+      "session_id": null,
+      "agent_run_ids": [],
+      "execution_status": "COMPLETED",
+      "quality_conclusion": "PASS",
+      "score": 100.0,
+      "module_output": {
+        "intent": "query_gift",
+        "status": "READY",
+        "next_action": "CALL_TOOL",
+        "parameters": {
+          "gift_name": "银河",
+          "limit": 1
+        },
+        "missing_parameters": [],
+        "reason": "按 gift_name 查询礼物，参数完整。"
+      },
+      "turn_results": [],
+      "tool_calls": [],
+      "trace_events": [
+        {
+          "event_id": "event_13e68e1e010f4425a247c7d1bd392918",
+          "run_id": "run_e2550381226144309b5b42001db42373",
+          "session_id": null,
+          "event_type": "intent_requested",
+          "timestamp": "2026-10-08T09:41:51.024711Z",
+          "payload": {}
+        },
+        {
+          "event_id": "event_4a9ef52b41c34673b7abd15963787098",
+          "run_id": "run_e2550381226144309b5b42001db42373",
+          "session_id": null,
+          "event_type": "intent_candidate_received",
+          "timestamp": "2026-10-08T09:41:52.331735Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "READY",
+            "next_action": "CALL_TOOL"
+          }
+        },
+        {
+          "event_id": "event_57d7379577df422184b20762ecd4dded",
+          "run_id": "run_e2550381226144309b5b42001db42373",
+          "session_id": null,
+          "event_type": "intent_definition_resolved",
+          "timestamp": "2026-10-08T09:41:52.331819Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1"
+          }
+        },
+        {
+          "event_id": "event_8718894ca73d44d4998856300daf7ae1",
+          "run_id": "run_e2550381226144309b5b42001db42373",
+          "session_id": null,
+          "event_type": "intent_contract_validated",
+          "timestamp": "2026-10-08T09:41:52.333360Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1",
+            "valid": true,
+            "invalid_fields": []
+          }
+        },
+        {
+          "event_id": "event_d8f0f15421864709a629b777bd9b5d4a",
+          "run_id": "run_e2550381226144309b5b42001db42373",
+          "session_id": null,
+          "event_type": "intent_decided",
+          "timestamp": "2026-10-08T09:41:52.333401Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "READY",
+            "next_action": "CALL_TOOL",
+            "missing_parameters": []
+          }
+        }
+      ],
+      "turn_snapshots": [],
+      "system_snapshot": null,
+      "assertion_results": [
+        {
+          "name": "output_schema_valid",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": {
+            "module_id": "intent_router",
+            "schema": "output_schema"
+          },
+          "actual": "valid",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/"
+          ]
+        },
+        {
+          "name": "intent_match",
+          "weight": 30.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "query_gift",
+          "actual": "query_gift",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/intent"
+          ]
+        },
+        {
+          "name": "status_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "READY",
+          "actual": "READY",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/status"
+          ]
+        },
+        {
+          "name": "next_action_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "CALL_TOOL",
+          "actual": "CALL_TOOL",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/next_action"
+          ]
+        },
+        {
+          "name": "params_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": {
+            "gift_name": "银河",
+            "limit": 1
+          },
+          "actual": {
+            "gift_name": "银河",
+            "limit": 1
+          },
+          "message": "",
+          "evidence_refs": [
+            "module_output:/parameters"
+          ]
+        },
+        {
+          "name": "missing_params_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": [],
+          "actual": [],
+          "message": "",
+          "evidence_refs": [
+            "module_output:/missing_parameters"
+          ]
+        }
+      ],
+      "first_failed_assertion": null,
+      "diagnoses": [],
+      "latency_ms": 1331,
+      "evidence_refs": [
+        "module_output:/",
+        "module_output:/intent",
+        "module_output:/status",
+        "module_output:/next_action",
+        "module_output:/parameters",
+        "module_output:/missing_parameters"
+      ],
+      "cleanup_status": "CLEANED",
+      "exception": null
+    },
+    {
+      "evaluator_run_id": "eval_run_575d79a98ea34bb1b31aa3e298c562db",
+      "case_id": "MINI-QGIFT-014",
+      "task_id": "intent-query-gift",
+      "scenario_type": "invalid_parameter",
+      "test_scope": "module",
+      "user_input": "查询 gift_id 为 0 的礼物信息。",
+      "trial_id": "trial_001",
+      "run_mode": "agent_benchmark",
+      "tool_profile": "shadow_read",
+      "tool_version": "33ba4698105eef321a88ea7f3b0df3e0ffcae9cb9a2fba948924a53b8ad309d6",
+      "max_steps": 4,
+      "timeout_seconds": 30.0,
+      "session_id": null,
+      "agent_run_ids": [],
+      "execution_status": "COMPLETED",
+      "quality_conclusion": "FAIL",
+      "score": 90.0,
+      "module_output": {
+        "intent": "query_gift",
+        "status": "NEED_CLARIFICATION",
+        "next_action": "ASK_USER",
+        "parameters": {},
+        "missing_parameters": [
+          "single_gift_query_mode"
+        ],
+        "reason": "Please provide valid values for: single_gift_query_mode."
+      },
+      "turn_results": [],
+      "tool_calls": [],
+      "trace_events": [
+        {
+          "event_id": "event_4c3e3f76e32c424683f3b6d4e24fdf28",
+          "run_id": "run_8e3884f79d06441e8e4f07bc3f514edd",
+          "session_id": null,
+          "event_type": "intent_requested",
+          "timestamp": "2026-10-08T09:41:52.354769Z",
+          "payload": {}
+        },
+        {
+          "event_id": "event_18ed2efce3a048e78ba4701812448b5b",
+          "run_id": "run_8e3884f79d06441e8e4f07bc3f514edd",
+          "session_id": null,
+          "event_type": "intent_candidate_received",
+          "timestamp": "2026-10-08T09:41:53.688822Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "NEED_CLARIFICATION",
+            "next_action": "ASK_USER"
+          }
+        },
+        {
+          "event_id": "event_851853978d2146c5800c39bcf1d646fb",
+          "run_id": "run_8e3884f79d06441e8e4f07bc3f514edd",
+          "session_id": null,
+          "event_type": "intent_definition_resolved",
+          "timestamp": "2026-10-08T09:41:53.688867Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1"
+          }
+        },
+        {
+          "event_id": "event_5b46a4ad37364a048131a42c891dd629",
+          "run_id": "run_8e3884f79d06441e8e4f07bc3f514edd",
+          "session_id": null,
+          "event_type": "intent_semantic_constraint_failed",
+          "timestamp": "2026-10-08T09:41:53.688916Z",
+          "payload": {
+            "intent": "query_gift",
+            "constraint": "ExactlyOneFieldGroup",
+            "missing_parameters": [
+              "single_gift_query_mode"
+            ],
+            "reason": null
+          }
+        },
+        {
+          "event_id": "event_b85b7510771249b4a0745eaa8df0cd4e",
+          "run_id": "run_8e3884f79d06441e8e4f07bc3f514edd",
+          "session_id": null,
+          "event_type": "intent_contract_validated",
+          "timestamp": "2026-10-08T09:41:53.688949Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1",
+            "valid": false,
+            "invalid_fields": []
+          }
+        },
+        {
+          "event_id": "event_692594f0acfc4347b1e0107af3fb0b42",
+          "run_id": "run_8e3884f79d06441e8e4f07bc3f514edd",
+          "session_id": null,
+          "event_type": "intent_decided",
+          "timestamp": "2026-10-08T09:41:53.688967Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "NEED_CLARIFICATION",
+            "next_action": "ASK_USER",
+            "missing_parameters": [
+              "single_gift_query_mode"
+            ]
+          }
+        }
+      ],
+      "turn_snapshots": [],
+      "system_snapshot": null,
+      "assertion_results": [
+        {
+          "name": "output_schema_valid",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": {
+            "module_id": "intent_router",
+            "schema": "output_schema"
+          },
+          "actual": "valid",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/"
+          ]
+        },
+        {
+          "name": "intent_match",
+          "weight": 30.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "query_gift",
+          "actual": "query_gift",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/intent"
+          ]
+        },
+        {
+          "name": "status_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "NEED_CLARIFICATION",
+          "actual": "NEED_CLARIFICATION",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/status"
+          ]
+        },
+        {
+          "name": "next_action_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "ASK_USER",
+          "actual": "ASK_USER",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/next_action"
+          ]
+        },
+        {
+          "name": "params_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": {},
+          "actual": {},
+          "message": "",
+          "evidence_refs": [
+            "module_output:/parameters"
+          ]
+        },
+        {
+          "name": "missing_params_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": false,
+          "expected": [
+            "gift_id"
+          ],
+          "actual": [
+            "single_gift_query_mode"
+          ],
+          "message": "",
+          "evidence_refs": [
+            "module_output:/missing_parameters"
+          ]
+        }
+      ],
+      "first_failed_assertion": {
+        "name": "missing_params_match",
+        "weight": 10.0,
+        "critical": true,
+        "applicable": true,
+        "passed": false,
+        "expected": [
+          "gift_id"
+        ],
+        "actual": [
+          "single_gift_query_mode"
+        ],
+        "message": "",
+        "evidence_refs": [
+          "module_output:/missing_parameters"
+        ]
+      },
+      "diagnoses": [
+        {
+          "code": "PROTOCOL_NAMING_MISMATCH",
+          "title": "协议命名不一致",
+          "category": "protocol",
+          "source_assertions": [
+            "missing_params_match"
+          ],
+          "evidence_refs": [
+            "module_output:/missing_parameters"
+          ]
+        }
+      ],
+      "latency_ms": 1356,
+      "evidence_refs": [
+        "module_output:/",
+        "module_output:/intent",
+        "module_output:/status",
+        "module_output:/next_action",
+        "module_output:/parameters",
+        "module_output:/missing_parameters"
+      ],
+      "cleanup_status": "CLEANED",
+      "exception": null
+    },
+    {
+      "evaluator_run_id": "eval_run_575d79a98ea34bb1b31aa3e298c562db",
+      "case_id": "MINI-QGIFT-015",
+      "task_id": "intent-query-gift",
+      "scenario_type": "invalid_parameter",
+      "test_scope": "module",
+      "user_input": "查询 gift_id 为 -7 的礼物信息。",
+      "trial_id": "trial_001",
+      "run_mode": "agent_benchmark",
+      "tool_profile": "shadow_read",
+      "tool_version": "33ba4698105eef321a88ea7f3b0df3e0ffcae9cb9a2fba948924a53b8ad309d6",
+      "max_steps": 4,
+      "timeout_seconds": 30.0,
+      "session_id": null,
+      "agent_run_ids": [],
+      "execution_status": "COMPLETED",
+      "quality_conclusion": "FAIL",
+      "score": 90.0,
+      "module_output": {
+        "intent": "query_gift",
+        "status": "NEED_CLARIFICATION",
+        "next_action": "ASK_USER",
+        "parameters": {},
+        "missing_parameters": [
+          "single_gift_query_mode"
+        ],
+        "reason": "Please provide valid values for: single_gift_query_mode."
+      },
+      "turn_results": [],
+      "tool_calls": [],
+      "trace_events": [
+        {
+          "event_id": "event_59407ea46a7643559b75ae92cd9b43f6",
+          "run_id": "run_3ad94634ffcd4454a9daee53e270e9e9",
+          "session_id": null,
+          "event_type": "intent_requested",
+          "timestamp": "2026-10-08T09:41:53.710782Z",
+          "payload": {}
+        },
+        {
+          "event_id": "event_2a6d3d05931c4ffcb4ed6a417fd63ea6",
+          "run_id": "run_3ad94634ffcd4454a9daee53e270e9e9",
+          "session_id": null,
+          "event_type": "intent_candidate_received",
+          "timestamp": "2026-10-08T09:41:54.860402Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "NEED_CLARIFICATION",
+            "next_action": "ASK_USER"
+          }
+        },
+        {
+          "event_id": "event_0d7c7c0b951d42ae9826d50cd0f248a0",
+          "run_id": "run_3ad94634ffcd4454a9daee53e270e9e9",
+          "session_id": null,
+          "event_type": "intent_definition_resolved",
+          "timestamp": "2026-10-08T09:41:54.860491Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1"
+          }
+        },
+        {
+          "event_id": "event_e2f6184fb9034d05ac414dfaea9e1457",
+          "run_id": "run_3ad94634ffcd4454a9daee53e270e9e9",
+          "session_id": null,
+          "event_type": "intent_semantic_constraint_failed",
+          "timestamp": "2026-10-08T09:41:54.860598Z",
+          "payload": {
+            "intent": "query_gift",
+            "constraint": "ExactlyOneFieldGroup",
+            "missing_parameters": [
+              "single_gift_query_mode"
+            ],
+            "reason": null
+          }
+        },
+        {
+          "event_id": "event_096d3284d89142549ecac10a89cfcd43",
+          "run_id": "run_3ad94634ffcd4454a9daee53e270e9e9",
+          "session_id": null,
+          "event_type": "intent_contract_validated",
+          "timestamp": "2026-10-08T09:41:54.860649Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1",
+            "valid": false,
+            "invalid_fields": []
+          }
+        },
+        {
+          "event_id": "event_a09b32037d904009b8612dd04029d61c",
+          "run_id": "run_3ad94634ffcd4454a9daee53e270e9e9",
+          "session_id": null,
+          "event_type": "intent_decided",
+          "timestamp": "2026-10-08T09:41:54.860693Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "NEED_CLARIFICATION",
+            "next_action": "ASK_USER",
+            "missing_parameters": [
+              "single_gift_query_mode"
+            ]
+          }
+        }
+      ],
+      "turn_snapshots": [],
+      "system_snapshot": null,
+      "assertion_results": [
+        {
+          "name": "output_schema_valid",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": {
+            "module_id": "intent_router",
+            "schema": "output_schema"
+          },
+          "actual": "valid",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/"
+          ]
+        },
+        {
+          "name": "intent_match",
+          "weight": 30.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "query_gift",
+          "actual": "query_gift",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/intent"
+          ]
+        },
+        {
+          "name": "status_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "NEED_CLARIFICATION",
+          "actual": "NEED_CLARIFICATION",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/status"
+          ]
+        },
+        {
+          "name": "next_action_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "ASK_USER",
+          "actual": "ASK_USER",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/next_action"
+          ]
+        },
+        {
+          "name": "params_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": {},
+          "actual": {},
+          "message": "",
+          "evidence_refs": [
+            "module_output:/parameters"
+          ]
+        },
+        {
+          "name": "missing_params_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": false,
+          "expected": [
+            "gift_id"
+          ],
+          "actual": [
+            "single_gift_query_mode"
+          ],
+          "message": "",
+          "evidence_refs": [
+            "module_output:/missing_parameters"
+          ]
+        }
+      ],
+      "first_failed_assertion": {
+        "name": "missing_params_match",
+        "weight": 10.0,
+        "critical": true,
+        "applicable": true,
+        "passed": false,
+        "expected": [
+          "gift_id"
+        ],
+        "actual": [
+          "single_gift_query_mode"
+        ],
+        "message": "",
+        "evidence_refs": [
+          "module_output:/missing_parameters"
+        ]
+      },
+      "diagnoses": [
+        {
+          "code": "PROTOCOL_NAMING_MISMATCH",
+          "title": "协议命名不一致",
+          "category": "protocol",
+          "source_assertions": [
+            "missing_params_match"
+          ],
+          "evidence_refs": [
+            "module_output:/missing_parameters"
+          ]
+        }
+      ],
+      "latency_ms": 1172,
+      "evidence_refs": [
+        "module_output:/",
+        "module_output:/intent",
+        "module_output:/status",
+        "module_output:/next_action",
+        "module_output:/parameters",
+        "module_output:/missing_parameters"
+      ],
+      "cleanup_status": "CLEANED",
+      "exception": null
+    },
+    {
+      "evaluator_run_id": "eval_run_575d79a98ea34bb1b31aa3e298c562db",
+      "case_id": "MINI-QGIFT-016",
+      "task_id": "intent-query-gift",
+      "scenario_type": "invalid_parameter",
+      "test_scope": "module",
+      "user_input": "查询 gift_ids 为空列表 [] 的礼物信息。",
+      "trial_id": "trial_001",
+      "run_mode": "agent_benchmark",
+      "tool_profile": "shadow_read",
+      "tool_version": "33ba4698105eef321a88ea7f3b0df3e0ffcae9cb9a2fba948924a53b8ad309d6",
+      "max_steps": 4,
+      "timeout_seconds": 30.0,
+      "session_id": null,
+      "agent_run_ids": [],
+      "execution_status": "COMPLETED",
+      "quality_conclusion": "FAIL",
+      "score": 90.0,
+      "module_output": {
+        "intent": "query_gift",
+        "status": "NEED_CLARIFICATION",
+        "next_action": "ASK_USER",
+        "parameters": {},
+        "missing_parameters": [
+          "gift_ids",
+          "single_gift_query_mode"
+        ],
+        "reason": "Please provide valid values for: gift_ids, single_gift_query_mode."
+      },
+      "turn_results": [],
+      "tool_calls": [],
+      "trace_events": [
+        {
+          "event_id": "event_df55c979ea494a01bfad3b2308dd9771",
+          "run_id": "run_4842b07fc4364689a7211b248e46fe40",
+          "session_id": null,
+          "event_type": "intent_requested",
+          "timestamp": "2026-10-08T09:41:54.883260Z",
+          "payload": {}
+        },
+        {
+          "event_id": "event_89eddff46d11409bb6d1cc0bf1b55d5d",
+          "run_id": "run_4842b07fc4364689a7211b248e46fe40",
+          "session_id": null,
+          "event_type": "intent_candidate_received",
+          "timestamp": "2026-10-08T09:41:56.787723Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "NEED_CLARIFICATION",
+            "next_action": "ASK_USER"
+          }
+        },
+        {
+          "event_id": "event_7d8f01cd040e4ee9a1468efeed2a7cd0",
+          "run_id": "run_4842b07fc4364689a7211b248e46fe40",
+          "session_id": null,
+          "event_type": "intent_definition_resolved",
+          "timestamp": "2026-10-08T09:41:56.787762Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1"
+          }
+        },
+        {
+          "event_id": "event_3670935a18e141a984975c6fa32802bf",
+          "run_id": "run_4842b07fc4364689a7211b248e46fe40",
+          "session_id": null,
+          "event_type": "intent_parameter_validation_failed",
+          "timestamp": "2026-10-08T09:41:56.788200Z",
+          "payload": {
+            "intent": "query_gift",
+            "fields": [
+              "gift_ids"
+            ],
+            "error_type": "invalid_parameter"
+          }
+        },
+        {
+          "event_id": "event_7dd3a5ed36d44093b59ad66d72410bb7",
+          "run_id": "run_4842b07fc4364689a7211b248e46fe40",
+          "session_id": null,
+          "event_type": "intent_semantic_constraint_failed",
+          "timestamp": "2026-10-08T09:41:56.788221Z",
+          "payload": {
+            "intent": "query_gift",
+            "constraint": "ExactlyOneFieldGroup",
+            "missing_parameters": [
+              "single_gift_query_mode"
+            ],
+            "reason": null
+          }
+        },
+        {
+          "event_id": "event_f581e5a72d9846c8af70b3e4fd4ad2d5",
+          "run_id": "run_4842b07fc4364689a7211b248e46fe40",
+          "session_id": null,
+          "event_type": "intent_contract_validated",
+          "timestamp": "2026-10-08T09:41:56.788242Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1",
+            "valid": false,
+            "invalid_fields": [
+              "gift_ids"
+            ]
+          }
+        },
+        {
+          "event_id": "event_1aec64256c8d4e90ac8e3401840ca850",
+          "run_id": "run_4842b07fc4364689a7211b248e46fe40",
+          "session_id": null,
+          "event_type": "intent_decided",
+          "timestamp": "2026-10-08T09:41:56.788259Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "NEED_CLARIFICATION",
+            "next_action": "ASK_USER",
+            "missing_parameters": [
+              "gift_ids",
+              "single_gift_query_mode"
+            ]
+          }
+        }
+      ],
+      "turn_snapshots": [],
+      "system_snapshot": null,
+      "assertion_results": [
+        {
+          "name": "output_schema_valid",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": {
+            "module_id": "intent_router",
+            "schema": "output_schema"
+          },
+          "actual": "valid",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/"
+          ]
+        },
+        {
+          "name": "intent_match",
+          "weight": 30.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "query_gift",
+          "actual": "query_gift",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/intent"
+          ]
+        },
+        {
+          "name": "status_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "NEED_CLARIFICATION",
+          "actual": "NEED_CLARIFICATION",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/status"
+          ]
+        },
+        {
+          "name": "next_action_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "ASK_USER",
+          "actual": "ASK_USER",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/next_action"
+          ]
+        },
+        {
+          "name": "params_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": {},
+          "actual": {},
+          "message": "",
+          "evidence_refs": [
+            "module_output:/parameters"
+          ]
+        },
+        {
+          "name": "missing_params_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": false,
+          "expected": [
+            "gift_ids"
+          ],
+          "actual": [
+            "gift_ids",
+            "single_gift_query_mode"
+          ],
+          "message": "",
+          "evidence_refs": [
+            "module_output:/missing_parameters"
+          ]
+        }
+      ],
+      "first_failed_assertion": {
+        "name": "missing_params_match",
+        "weight": 10.0,
+        "critical": true,
+        "applicable": true,
+        "passed": false,
+        "expected": [
+          "gift_ids"
+        ],
+        "actual": [
+          "gift_ids",
+          "single_gift_query_mode"
+        ],
+        "message": "",
+        "evidence_refs": [
+          "module_output:/missing_parameters"
+        ]
+      },
+      "diagnoses": [
+        {
+          "code": "PROTOCOL_NAMING_MISMATCH",
+          "title": "协议命名不一致",
+          "category": "protocol",
+          "source_assertions": [
+            "missing_params_match"
+          ],
+          "evidence_refs": [
+            "module_output:/missing_parameters"
+          ]
+        }
+      ],
+      "latency_ms": 1927,
+      "evidence_refs": [
+        "module_output:/",
+        "module_output:/intent",
+        "module_output:/status",
+        "module_output:/next_action",
+        "module_output:/parameters",
+        "module_output:/missing_parameters"
+      ],
+      "cleanup_status": "CLEANED",
+      "exception": null
+    },
+    {
+      "evaluator_run_id": "eval_run_575d79a98ea34bb1b31aa3e298c562db",
+      "case_id": "MINI-QGIFT-017",
+      "task_id": "intent-query-gift",
+      "scenario_type": "invalid_parameter",
+      "test_scope": "module",
+      "user_input": "查询 gift_ids 为 [7302, 0] 的礼物信息。",
+      "trial_id": "trial_001",
+      "run_mode": "agent_benchmark",
+      "tool_profile": "shadow_read",
+      "tool_version": "33ba4698105eef321a88ea7f3b0df3e0ffcae9cb9a2fba948924a53b8ad309d6",
+      "max_steps": 4,
+      "timeout_seconds": 30.0,
+      "session_id": null,
+      "agent_run_ids": [],
+      "execution_status": "COMPLETED",
+      "quality_conclusion": "FAIL",
+      "score": 90.0,
+      "module_output": {
+        "intent": "query_gift",
+        "status": "NEED_CLARIFICATION",
+        "next_action": "ASK_USER",
+        "parameters": {},
+        "missing_parameters": [
+          "gift_ids",
+          "single_gift_query_mode"
+        ],
+        "reason": "Please provide valid values for: gift_ids, single_gift_query_mode."
+      },
+      "turn_results": [],
+      "tool_calls": [],
+      "trace_events": [
+        {
+          "event_id": "event_1920289a946840f9ab5f435b7f283b3e",
+          "run_id": "run_657e37ad02ff492bb37331c83a9f8a3d",
+          "session_id": null,
+          "event_type": "intent_requested",
+          "timestamp": "2026-10-08T09:41:56.809849Z",
+          "payload": {}
+        },
+        {
+          "event_id": "event_e96ef8bb6c514d92a5df3414f175c92f",
+          "run_id": "run_657e37ad02ff492bb37331c83a9f8a3d",
+          "session_id": null,
+          "event_type": "intent_candidate_received",
+          "timestamp": "2026-10-08T09:41:59.527983Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "NEED_CLARIFICATION",
+            "next_action": "ASK_USER"
+          }
+        },
+        {
+          "event_id": "event_dbbba9490ac2489499597536fab1a401",
+          "run_id": "run_657e37ad02ff492bb37331c83a9f8a3d",
+          "session_id": null,
+          "event_type": "intent_definition_resolved",
+          "timestamp": "2026-10-08T09:41:59.528022Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1"
+          }
+        },
+        {
+          "event_id": "event_751e28031b404b83b0287d1beb08d197",
+          "run_id": "run_657e37ad02ff492bb37331c83a9f8a3d",
+          "session_id": null,
+          "event_type": "intent_parameter_validation_failed",
+          "timestamp": "2026-10-08T09:41:59.528480Z",
+          "payload": {
+            "intent": "query_gift",
+            "fields": [
+              "gift_ids"
+            ],
+            "error_type": "invalid_parameter"
+          }
+        },
+        {
+          "event_id": "event_25325be96eac43fe8c3bc602632a8b97",
+          "run_id": "run_657e37ad02ff492bb37331c83a9f8a3d",
+          "session_id": null,
+          "event_type": "intent_semantic_constraint_failed",
+          "timestamp": "2026-10-08T09:41:59.528504Z",
+          "payload": {
+            "intent": "query_gift",
+            "constraint": "ExactlyOneFieldGroup",
+            "missing_parameters": [
+              "single_gift_query_mode"
+            ],
+            "reason": null
+          }
+        },
+        {
+          "event_id": "event_93ece960b26d4248be9c8606d2f45ec8",
+          "run_id": "run_657e37ad02ff492bb37331c83a9f8a3d",
+          "session_id": null,
+          "event_type": "intent_contract_validated",
+          "timestamp": "2026-10-08T09:41:59.528523Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1",
+            "valid": false,
+            "invalid_fields": [
+              "gift_ids"
+            ]
+          }
+        },
+        {
+          "event_id": "event_46c779e8de3042bdaa4ecf69f25cef34",
+          "run_id": "run_657e37ad02ff492bb37331c83a9f8a3d",
+          "session_id": null,
+          "event_type": "intent_decided",
+          "timestamp": "2026-10-08T09:41:59.528540Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "NEED_CLARIFICATION",
+            "next_action": "ASK_USER",
+            "missing_parameters": [
+              "gift_ids",
+              "single_gift_query_mode"
+            ]
+          }
+        }
+      ],
+      "turn_snapshots": [],
+      "system_snapshot": null,
+      "assertion_results": [
+        {
+          "name": "output_schema_valid",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": {
+            "module_id": "intent_router",
+            "schema": "output_schema"
+          },
+          "actual": "valid",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/"
+          ]
+        },
+        {
+          "name": "intent_match",
+          "weight": 30.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "query_gift",
+          "actual": "query_gift",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/intent"
+          ]
+        },
+        {
+          "name": "status_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "NEED_CLARIFICATION",
+          "actual": "NEED_CLARIFICATION",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/status"
+          ]
+        },
+        {
+          "name": "next_action_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "ASK_USER",
+          "actual": "ASK_USER",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/next_action"
+          ]
+        },
+        {
+          "name": "params_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": {},
+          "actual": {},
+          "message": "",
+          "evidence_refs": [
+            "module_output:/parameters"
+          ]
+        },
+        {
+          "name": "missing_params_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": false,
+          "expected": [
+            "gift_ids"
+          ],
+          "actual": [
+            "gift_ids",
+            "single_gift_query_mode"
+          ],
+          "message": "",
+          "evidence_refs": [
+            "module_output:/missing_parameters"
+          ]
+        }
+      ],
+      "first_failed_assertion": {
+        "name": "missing_params_match",
+        "weight": 10.0,
+        "critical": true,
+        "applicable": true,
+        "passed": false,
+        "expected": [
+          "gift_ids"
+        ],
+        "actual": [
+          "gift_ids",
+          "single_gift_query_mode"
+        ],
+        "message": "",
+        "evidence_refs": [
+          "module_output:/missing_parameters"
+        ]
+      },
+      "diagnoses": [
+        {
+          "code": "PROTOCOL_NAMING_MISMATCH",
+          "title": "协议命名不一致",
+          "category": "protocol",
+          "source_assertions": [
+            "missing_params_match"
+          ],
+          "evidence_refs": [
+            "module_output:/missing_parameters"
+          ]
+        }
+      ],
+      "latency_ms": 2740,
+      "evidence_refs": [
+        "module_output:/",
+        "module_output:/intent",
+        "module_output:/status",
+        "module_output:/next_action",
+        "module_output:/parameters",
+        "module_output:/missing_parameters"
+      ],
+      "cleanup_status": "CLEANED",
+      "exception": null
+    },
+    {
+      "evaluator_run_id": "eval_run_575d79a98ea34bb1b31aa3e298c562db",
+      "case_id": "MINI-QGIFT-018",
+      "task_id": "intent-query-gift",
+      "scenario_type": "invalid_parameter",
+      "test_scope": "module",
+      "user_input": "查询 gift_name 为空字符串的礼物信息。",
+      "trial_id": "trial_001",
+      "run_mode": "agent_benchmark",
+      "tool_profile": "shadow_read",
+      "tool_version": "33ba4698105eef321a88ea7f3b0df3e0ffcae9cb9a2fba948924a53b8ad309d6",
+      "max_steps": 4,
+      "timeout_seconds": 30.0,
+      "session_id": null,
+      "agent_run_ids": [],
+      "execution_status": "COMPLETED",
+      "quality_conclusion": "FAIL",
+      "score": 90.0,
+      "module_output": {
+        "intent": "query_gift",
+        "status": "NEED_CLARIFICATION",
+        "next_action": "ASK_USER",
+        "parameters": {},
+        "missing_parameters": [
+          "single_gift_query_mode"
+        ],
+        "reason": "Please provide valid values for: single_gift_query_mode."
+      },
+      "turn_results": [],
+      "tool_calls": [],
+      "trace_events": [
+        {
+          "event_id": "event_6d714b7b4d40463dbc630b148174e9e4",
+          "run_id": "run_4439b1ed68b3440a8188f58e3f0d42a5",
+          "session_id": null,
+          "event_type": "intent_requested",
+          "timestamp": "2026-10-08T09:41:59.550716Z",
+          "payload": {}
+        },
+        {
+          "event_id": "event_f094cd8a0c084cf8b16a0889d710016c",
+          "run_id": "run_4439b1ed68b3440a8188f58e3f0d42a5",
+          "session_id": null,
+          "event_type": "intent_candidate_received",
+          "timestamp": "2026-10-08T09:42:01.903300Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "NEED_CLARIFICATION",
+            "next_action": "ASK_USER"
+          }
+        },
+        {
+          "event_id": "event_7cfcff5a10dc49d4814cb2bdb2c4962c",
+          "run_id": "run_4439b1ed68b3440a8188f58e3f0d42a5",
+          "session_id": null,
+          "event_type": "intent_definition_resolved",
+          "timestamp": "2026-10-08T09:42:01.903335Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1"
+          }
+        },
+        {
+          "event_id": "event_f84a039a4d814bbd9c3c7829aebe73ad",
+          "run_id": "run_4439b1ed68b3440a8188f58e3f0d42a5",
+          "session_id": null,
+          "event_type": "intent_semantic_constraint_failed",
+          "timestamp": "2026-10-08T09:42:01.903380Z",
+          "payload": {
+            "intent": "query_gift",
+            "constraint": "ExactlyOneFieldGroup",
+            "missing_parameters": [
+              "single_gift_query_mode"
+            ],
+            "reason": null
+          }
+        },
+        {
+          "event_id": "event_455daf2a72eb4ca6bf83a547a18b335f",
+          "run_id": "run_4439b1ed68b3440a8188f58e3f0d42a5",
+          "session_id": null,
+          "event_type": "intent_contract_validated",
+          "timestamp": "2026-10-08T09:42:01.903401Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1",
+            "valid": false,
+            "invalid_fields": []
+          }
+        },
+        {
+          "event_id": "event_7856267a97d04854ab153000a2326788",
+          "run_id": "run_4439b1ed68b3440a8188f58e3f0d42a5",
+          "session_id": null,
+          "event_type": "intent_decided",
+          "timestamp": "2026-10-08T09:42:01.903420Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "NEED_CLARIFICATION",
+            "next_action": "ASK_USER",
+            "missing_parameters": [
+              "single_gift_query_mode"
+            ]
+          }
+        }
+      ],
+      "turn_snapshots": [],
+      "system_snapshot": null,
+      "assertion_results": [
+        {
+          "name": "output_schema_valid",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": {
+            "module_id": "intent_router",
+            "schema": "output_schema"
+          },
+          "actual": "valid",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/"
+          ]
+        },
+        {
+          "name": "intent_match",
+          "weight": 30.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "query_gift",
+          "actual": "query_gift",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/intent"
+          ]
+        },
+        {
+          "name": "status_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "NEED_CLARIFICATION",
+          "actual": "NEED_CLARIFICATION",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/status"
+          ]
+        },
+        {
+          "name": "next_action_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "ASK_USER",
+          "actual": "ASK_USER",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/next_action"
+          ]
+        },
+        {
+          "name": "params_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": {},
+          "actual": {},
+          "message": "",
+          "evidence_refs": [
+            "module_output:/parameters"
+          ]
+        },
+        {
+          "name": "missing_params_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": false,
+          "expected": [
+            "gift_name"
+          ],
+          "actual": [
+            "single_gift_query_mode"
+          ],
+          "message": "",
+          "evidence_refs": [
+            "module_output:/missing_parameters"
+          ]
+        }
+      ],
+      "first_failed_assertion": {
+        "name": "missing_params_match",
+        "weight": 10.0,
+        "critical": true,
+        "applicable": true,
+        "passed": false,
+        "expected": [
+          "gift_name"
+        ],
+        "actual": [
+          "single_gift_query_mode"
+        ],
+        "message": "",
+        "evidence_refs": [
+          "module_output:/missing_parameters"
+        ]
+      },
+      "diagnoses": [
+        {
+          "code": "PROTOCOL_NAMING_MISMATCH",
+          "title": "协议命名不一致",
+          "category": "protocol",
+          "source_assertions": [
+            "missing_params_match"
+          ],
+          "evidence_refs": [
+            "module_output:/missing_parameters"
+          ]
+        }
+      ],
+      "latency_ms": 2375,
+      "evidence_refs": [
+        "module_output:/",
+        "module_output:/intent",
+        "module_output:/status",
+        "module_output:/next_action",
+        "module_output:/parameters",
+        "module_output:/missing_parameters"
+      ],
+      "cleanup_status": "CLEANED",
+      "exception": null
+    },
+    {
+      "evaluator_run_id": "eval_run_575d79a98ea34bb1b31aa3e298c562db",
+      "case_id": "MINI-QGIFT-019",
+      "task_id": "intent-query-gift",
+      "scenario_type": "missing_parameter",
+      "test_scope": "module",
+      "user_input": "查询礼物信息，但没有提供查询条件。",
+      "trial_id": "trial_001",
+      "run_mode": "agent_benchmark",
+      "tool_profile": "shadow_read",
+      "tool_version": "33ba4698105eef321a88ea7f3b0df3e0ffcae9cb9a2fba948924a53b8ad309d6",
+      "max_steps": 4,
+      "timeout_seconds": 30.0,
+      "session_id": null,
+      "agent_run_ids": [],
+      "execution_status": "COMPLETED",
+      "quality_conclusion": "PASS",
+      "score": 100.0,
+      "module_output": {
+        "intent": "query_gift",
+        "status": "NEED_CLARIFICATION",
+        "next_action": "ASK_USER",
+        "parameters": {},
+        "missing_parameters": [
+          "single_gift_query_mode"
+        ],
+        "reason": "Please provide valid values for: single_gift_query_mode."
+      },
+      "turn_results": [],
+      "tool_calls": [],
+      "trace_events": [
+        {
+          "event_id": "event_ec97545d4e3847c182fc9c2ff9e4c49b",
+          "run_id": "run_a32d2ac1bec4451c8bc63057e0ef363c",
+          "session_id": null,
+          "event_type": "intent_requested",
+          "timestamp": "2026-10-08T09:42:01.926066Z",
+          "payload": {}
+        },
+        {
+          "event_id": "event_dd3c71fb14104b85bd669e19b19b1ccd",
+          "run_id": "run_a32d2ac1bec4451c8bc63057e0ef363c",
+          "session_id": null,
+          "event_type": "intent_candidate_received",
+          "timestamp": "2026-10-08T09:42:04.680083Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "NEED_CLARIFICATION",
+            "next_action": "ASK_USER"
+          }
+        },
+        {
+          "event_id": "event_910497044d6f41e7a30522c2d5b87c22",
+          "run_id": "run_a32d2ac1bec4451c8bc63057e0ef363c",
+          "session_id": null,
+          "event_type": "intent_definition_resolved",
+          "timestamp": "2026-10-08T09:42:04.680129Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1"
+          }
+        },
+        {
+          "event_id": "event_6f26222580ec434c86d72f05879340d8",
+          "run_id": "run_a32d2ac1bec4451c8bc63057e0ef363c",
+          "session_id": null,
+          "event_type": "intent_semantic_constraint_failed",
+          "timestamp": "2026-10-08T09:42:04.680185Z",
+          "payload": {
+            "intent": "query_gift",
+            "constraint": "ExactlyOneFieldGroup",
+            "missing_parameters": [
+              "single_gift_query_mode"
+            ],
+            "reason": null
+          }
+        },
+        {
+          "event_id": "event_5bc73968a356454bbc07a556d6315051",
+          "run_id": "run_a32d2ac1bec4451c8bc63057e0ef363c",
+          "session_id": null,
+          "event_type": "intent_contract_validated",
+          "timestamp": "2026-10-08T09:42:04.680207Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1",
+            "valid": false,
+            "invalid_fields": []
+          }
+        },
+        {
+          "event_id": "event_3eb620fc8c03404db88c0ec3b046f55c",
+          "run_id": "run_a32d2ac1bec4451c8bc63057e0ef363c",
+          "session_id": null,
+          "event_type": "intent_decided",
+          "timestamp": "2026-10-08T09:42:04.680227Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "NEED_CLARIFICATION",
+            "next_action": "ASK_USER",
+            "missing_parameters": [
+              "single_gift_query_mode"
+            ]
+          }
+        }
+      ],
+      "turn_snapshots": [],
+      "system_snapshot": null,
+      "assertion_results": [
+        {
+          "name": "output_schema_valid",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": {
+            "module_id": "intent_router",
+            "schema": "output_schema"
+          },
+          "actual": "valid",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/"
+          ]
+        },
+        {
+          "name": "intent_match",
+          "weight": 30.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "query_gift",
+          "actual": "query_gift",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/intent"
+          ]
+        },
+        {
+          "name": "status_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "NEED_CLARIFICATION",
+          "actual": "NEED_CLARIFICATION",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/status"
+          ]
+        },
+        {
+          "name": "next_action_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "ASK_USER",
+          "actual": "ASK_USER",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/next_action"
+          ]
+        },
+        {
+          "name": "params_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": {},
+          "actual": {},
+          "message": "",
+          "evidence_refs": [
+            "module_output:/parameters"
+          ]
+        },
+        {
+          "name": "missing_params_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": [
+            "single_gift_query_mode"
+          ],
+          "actual": [
+            "single_gift_query_mode"
+          ],
+          "message": "",
+          "evidence_refs": [
+            "module_output:/missing_parameters"
+          ]
+        }
+      ],
+      "first_failed_assertion": null,
+      "diagnoses": [],
+      "latency_ms": 2777,
+      "evidence_refs": [
+        "module_output:/",
+        "module_output:/intent",
+        "module_output:/status",
+        "module_output:/next_action",
+        "module_output:/parameters",
+        "module_output:/missing_parameters"
+      ],
+      "cleanup_status": "CLEANED",
+      "exception": null
+    },
+    {
+      "evaluator_run_id": "eval_run_575d79a98ea34bb1b31aa3e298c562db",
+      "case_id": "MINI-QGIFT-020",
+      "task_id": "intent-query-gift",
+      "scenario_type": "missing_parameter",
+      "test_scope": "module",
+      "user_input": "查询礼物信息，只设置 limit 为 5。",
+      "trial_id": "trial_001",
+      "run_mode": "agent_benchmark",
+      "tool_profile": "shadow_read",
+      "tool_version": "33ba4698105eef321a88ea7f3b0df3e0ffcae9cb9a2fba948924a53b8ad309d6",
+      "max_steps": 4,
+      "timeout_seconds": 30.0,
+      "session_id": null,
+      "agent_run_ids": [],
+      "execution_status": "COMPLETED",
+      "quality_conclusion": "FAIL",
+      "score": 80.0,
+      "module_output": {
+        "intent": "query_gift",
+        "status": "NEED_CLARIFICATION",
+        "next_action": "ASK_USER",
+        "parameters": {},
+        "missing_parameters": [
+          "single_gift_query_mode"
+        ],
+        "reason": "Please provide valid values for: single_gift_query_mode."
+      },
+      "turn_results": [],
+      "tool_calls": [],
+      "trace_events": [
+        {
+          "event_id": "event_9b6aaec413304a8bb47056f1a6dc3e13",
+          "run_id": "run_281d707bcda1497e95b7de37c0df250b",
+          "session_id": null,
+          "event_type": "intent_requested",
+          "timestamp": "2026-10-08T09:42:04.703432Z",
+          "payload": {}
+        },
+        {
+          "event_id": "event_2700dbd773c442fcae481a4b773d2898",
+          "run_id": "run_281d707bcda1497e95b7de37c0df250b",
+          "session_id": null,
+          "event_type": "intent_candidate_received",
+          "timestamp": "2026-10-08T09:42:28.130153Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "NEED_CLARIFICATION",
+            "next_action": "ASK_USER"
+          }
+        },
+        {
+          "event_id": "event_49990775e2854911b6f252620c8ed84c",
+          "run_id": "run_281d707bcda1497e95b7de37c0df250b",
+          "session_id": null,
+          "event_type": "intent_definition_resolved",
+          "timestamp": "2026-10-08T09:42:28.130192Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1"
+          }
+        },
+        {
+          "event_id": "event_25e53a14f81e477190283560766af407",
+          "run_id": "run_281d707bcda1497e95b7de37c0df250b",
+          "session_id": null,
+          "event_type": "intent_semantic_constraint_failed",
+          "timestamp": "2026-10-08T09:42:28.130236Z",
+          "payload": {
+            "intent": "query_gift",
+            "constraint": "ExactlyOneFieldGroup",
+            "missing_parameters": [
+              "single_gift_query_mode"
+            ],
+            "reason": null
+          }
+        },
+        {
+          "event_id": "event_823365e0c02443479f2573eafde08e99",
+          "run_id": "run_281d707bcda1497e95b7de37c0df250b",
+          "session_id": null,
+          "event_type": "intent_contract_validated",
+          "timestamp": "2026-10-08T09:42:28.130256Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1",
+            "valid": false,
+            "invalid_fields": []
+          }
+        },
+        {
+          "event_id": "event_e365fb45571f436dbcc5bd81874a8404",
+          "run_id": "run_281d707bcda1497e95b7de37c0df250b",
+          "session_id": null,
+          "event_type": "intent_decided",
+          "timestamp": "2026-10-08T09:42:28.130273Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "NEED_CLARIFICATION",
+            "next_action": "ASK_USER",
+            "missing_parameters": [
+              "single_gift_query_mode"
+            ]
+          }
+        }
+      ],
+      "turn_snapshots": [],
+      "system_snapshot": null,
+      "assertion_results": [
+        {
+          "name": "output_schema_valid",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": {
+            "module_id": "intent_router",
+            "schema": "output_schema"
+          },
+          "actual": "valid",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/"
+          ]
+        },
+        {
+          "name": "intent_match",
+          "weight": 30.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "query_gift",
+          "actual": "query_gift",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/intent"
+          ]
+        },
+        {
+          "name": "status_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "NEED_CLARIFICATION",
+          "actual": "NEED_CLARIFICATION",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/status"
+          ]
+        },
+        {
+          "name": "next_action_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "ASK_USER",
+          "actual": "ASK_USER",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/next_action"
+          ]
+        },
+        {
+          "name": "params_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": false,
+          "expected": {
+            "limit": 5
+          },
+          "actual": {},
+          "message": "",
+          "evidence_refs": [
+            "module_output:/parameters"
+          ]
+        },
+        {
+          "name": "missing_params_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": [
+            "single_gift_query_mode"
+          ],
+          "actual": [
+            "single_gift_query_mode"
+          ],
+          "message": "",
+          "evidence_refs": [
+            "module_output:/missing_parameters"
+          ]
+        }
+      ],
+      "first_failed_assertion": {
+        "name": "params_match",
+        "weight": 20.0,
+        "critical": true,
+        "applicable": true,
+        "passed": false,
+        "expected": {
+          "limit": 5
+        },
+        "actual": {},
+        "message": "",
+        "evidence_refs": [
+          "module_output:/parameters"
+        ]
+      },
+      "diagnoses": [
+        {
+          "code": "MISSING_REQUIRED_PARAM",
+          "title": "参数缺失",
+          "category": "parameters",
+          "source_assertions": [
+            "params_match"
+          ],
+          "evidence_refs": [
+            "module_output:/parameters"
+          ]
+        }
+      ],
+      "latency_ms": 23452,
+      "evidence_refs": [
+        "module_output:/",
+        "module_output:/intent",
+        "module_output:/status",
+        "module_output:/next_action",
+        "module_output:/parameters",
+        "module_output:/missing_parameters"
+      ],
+      "cleanup_status": "CLEANED",
+      "exception": null
+    },
+    {
+      "evaluator_run_id": "eval_run_575d79a98ea34bb1b31aa3e298c562db",
+      "case_id": "MINI-QGIFT-021",
+      "task_id": "intent-query-gift",
+      "scenario_type": "multi_condition",
+      "test_scope": "module",
+      "user_input": "查询 gift_id 7310 且 gift_name 为“星河”的礼物。",
+      "trial_id": "trial_001",
+      "run_mode": "agent_benchmark",
+      "tool_profile": "shadow_read",
+      "tool_version": "33ba4698105eef321a88ea7f3b0df3e0ffcae9cb9a2fba948924a53b8ad309d6",
+      "max_steps": 4,
+      "timeout_seconds": 30.0,
+      "session_id": null,
+      "agent_run_ids": [],
+      "execution_status": "COMPLETED",
+      "quality_conclusion": "FAIL",
+      "score": 80.0,
+      "module_output": {
+        "intent": "query_gift",
+        "status": "NEED_CLARIFICATION",
+        "next_action": "ASK_USER",
+        "parameters": {
+          "gift_id": 7310,
+          "gift_name": "星河"
+        },
+        "missing_parameters": [
+          "single_gift_query_mode"
+        ],
+        "reason": "Please provide valid values for: single_gift_query_mode."
+      },
+      "turn_results": [],
+      "tool_calls": [],
+      "trace_events": [
+        {
+          "event_id": "event_0a0ee731c86347c084db046148d787f3",
+          "run_id": "run_47a3ad919d4d41efbc6238dd092b5813",
+          "session_id": null,
+          "event_type": "intent_requested",
+          "timestamp": "2026-10-08T09:42:28.155584Z",
+          "payload": {}
+        },
+        {
+          "event_id": "event_97e3fdb63c314883ab465b34e3a83779",
+          "run_id": "run_47a3ad919d4d41efbc6238dd092b5813",
+          "session_id": null,
+          "event_type": "intent_candidate_received",
+          "timestamp": "2026-10-08T09:42:36.178736Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "READY",
+            "next_action": "CALL_TOOL"
+          }
+        },
+        {
+          "event_id": "event_006b78d2928945d1b05344413be7a475",
+          "run_id": "run_47a3ad919d4d41efbc6238dd092b5813",
+          "session_id": null,
+          "event_type": "intent_definition_resolved",
+          "timestamp": "2026-10-08T09:42:36.178773Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1"
+          }
+        },
+        {
+          "event_id": "event_344a09c8dac2483c99c3141dadcfeb0d",
+          "run_id": "run_47a3ad919d4d41efbc6238dd092b5813",
+          "session_id": null,
+          "event_type": "intent_semantic_constraint_failed",
+          "timestamp": "2026-10-08T09:42:36.179440Z",
+          "payload": {
+            "intent": "query_gift",
+            "constraint": "ExactlyOneFieldGroup",
+            "missing_parameters": [
+              "single_gift_query_mode"
+            ],
+            "reason": null
+          }
+        },
+        {
+          "event_id": "event_6f6c2dd260b24d129a02ce6b03cb17ed",
+          "run_id": "run_47a3ad919d4d41efbc6238dd092b5813",
+          "session_id": null,
+          "event_type": "intent_contract_validated",
+          "timestamp": "2026-10-08T09:42:36.179482Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1",
+            "valid": false,
+            "invalid_fields": []
+          }
+        },
+        {
+          "event_id": "event_1b4e5559da764e89924ad2bbc6062d72",
+          "run_id": "run_47a3ad919d4d41efbc6238dd092b5813",
+          "session_id": null,
+          "event_type": "intent_decided",
+          "timestamp": "2026-10-08T09:42:36.179505Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "NEED_CLARIFICATION",
+            "next_action": "ASK_USER",
+            "missing_parameters": [
+              "single_gift_query_mode"
+            ]
+          }
+        }
+      ],
+      "turn_snapshots": [],
+      "system_snapshot": null,
+      "assertion_results": [
+        {
+          "name": "output_schema_valid",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": {
+            "module_id": "intent_router",
+            "schema": "output_schema"
+          },
+          "actual": "valid",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/"
+          ]
+        },
+        {
+          "name": "intent_match",
+          "weight": 30.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "query_gift",
+          "actual": "query_gift",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/intent"
+          ]
+        },
+        {
+          "name": "status_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "NEED_CLARIFICATION",
+          "actual": "NEED_CLARIFICATION",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/status"
+          ]
+        },
+        {
+          "name": "next_action_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "ASK_USER",
+          "actual": "ASK_USER",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/next_action"
+          ]
+        },
+        {
+          "name": "params_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": false,
+          "expected": {},
+          "actual": {
+            "gift_id": 7310,
+            "gift_name": "星河"
+          },
+          "message": "",
+          "evidence_refs": [
+            "module_output:/parameters"
+          ]
+        },
+        {
+          "name": "missing_params_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": [
+            "single_gift_query_mode"
+          ],
+          "actual": [
+            "single_gift_query_mode"
+          ],
+          "message": "",
+          "evidence_refs": [
+            "module_output:/missing_parameters"
+          ]
+        }
+      ],
+      "first_failed_assertion": {
+        "name": "params_match",
+        "weight": 20.0,
+        "critical": true,
+        "applicable": true,
+        "passed": false,
+        "expected": {},
+        "actual": {
+          "gift_id": 7310,
+          "gift_name": "星河"
+        },
+        "message": "",
+        "evidence_refs": [
+          "module_output:/parameters"
+        ]
+      },
+      "diagnoses": [
+        {
+          "code": "UNEXPECTED_PARAM",
+          "title": "出现多余参数",
+          "category": "parameters",
+          "source_assertions": [
+            "params_match"
+          ],
+          "evidence_refs": [
+            "module_output:/parameters"
+          ]
+        }
+      ],
+      "latency_ms": 8047,
+      "evidence_refs": [
+        "module_output:/",
+        "module_output:/intent",
+        "module_output:/status",
+        "module_output:/next_action",
+        "module_output:/parameters",
+        "module_output:/missing_parameters"
+      ],
+      "cleanup_status": "CLEANED",
+      "exception": null
+    },
+    {
+      "evaluator_run_id": "eval_run_575d79a98ea34bb1b31aa3e298c562db",
+      "case_id": "MINI-QGIFT-022",
+      "task_id": "intent-query-gift",
+      "scenario_type": "multi_condition",
+      "test_scope": "module",
+      "user_input": "查询 gift_id 7311 且 gift_ids 为 [7312, 7313] 的礼物。",
+      "trial_id": "trial_001",
+      "run_mode": "agent_benchmark",
+      "tool_profile": "shadow_read",
+      "tool_version": "33ba4698105eef321a88ea7f3b0df3e0ffcae9cb9a2fba948924a53b8ad309d6",
+      "max_steps": 4,
+      "timeout_seconds": 30.0,
+      "session_id": null,
+      "agent_run_ids": [],
+      "execution_status": "COMPLETED",
+      "quality_conclusion": "FAIL",
+      "score": 80.0,
+      "module_output": {
+        "intent": "query_gift",
+        "status": "NEED_CLARIFICATION",
+        "next_action": "ASK_USER",
+        "parameters": {
+          "gift_id": 7311,
+          "gift_ids": [
+            7312,
+            7313
+          ]
+        },
+        "missing_parameters": [
+          "single_gift_query_mode"
+        ],
+        "reason": "Please provide valid values for: single_gift_query_mode."
+      },
+      "turn_results": [],
+      "tool_calls": [],
+      "trace_events": [
+        {
+          "event_id": "event_f9e3c1af62f846aaa2b2c603ec718786",
+          "run_id": "run_0e0d526d2d474c7fb32fe7e730729b8d",
+          "session_id": null,
+          "event_type": "intent_requested",
+          "timestamp": "2026-10-08T09:42:36.201397Z",
+          "payload": {}
+        },
+        {
+          "event_id": "event_c577b1eec39f4641939cc5f12cb990ee",
+          "run_id": "run_0e0d526d2d474c7fb32fe7e730729b8d",
+          "session_id": null,
+          "event_type": "intent_candidate_received",
+          "timestamp": "2026-10-08T09:42:55.388150Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "READY",
+            "next_action": "CALL_TOOL"
+          }
+        },
+        {
+          "event_id": "event_6dab4d8c11c04d0eb4ea8e1e5766d502",
+          "run_id": "run_0e0d526d2d474c7fb32fe7e730729b8d",
+          "session_id": null,
+          "event_type": "intent_definition_resolved",
+          "timestamp": "2026-10-08T09:42:55.388264Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1"
+          }
+        },
+        {
+          "event_id": "event_c459588b31b44b5f9190b1f99b95ecea",
+          "run_id": "run_0e0d526d2d474c7fb32fe7e730729b8d",
+          "session_id": null,
+          "event_type": "intent_semantic_constraint_failed",
+          "timestamp": "2026-10-08T09:42:55.390035Z",
+          "payload": {
+            "intent": "query_gift",
+            "constraint": "ExactlyOneFieldGroup",
+            "missing_parameters": [
+              "single_gift_query_mode"
+            ],
+            "reason": null
+          }
+        },
+        {
+          "event_id": "event_f9428b0fceb34a3a9e90c106d67ed23e",
+          "run_id": "run_0e0d526d2d474c7fb32fe7e730729b8d",
+          "session_id": null,
+          "event_type": "intent_contract_validated",
+          "timestamp": "2026-10-08T09:42:55.390113Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1",
+            "valid": false,
+            "invalid_fields": []
+          }
+        },
+        {
+          "event_id": "event_940ebc41442b4734ac14230d624a85b6",
+          "run_id": "run_0e0d526d2d474c7fb32fe7e730729b8d",
+          "session_id": null,
+          "event_type": "intent_decided",
+          "timestamp": "2026-10-08T09:42:55.390167Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "NEED_CLARIFICATION",
+            "next_action": "ASK_USER",
+            "missing_parameters": [
+              "single_gift_query_mode"
+            ]
+          }
+        }
+      ],
+      "turn_snapshots": [],
+      "system_snapshot": null,
+      "assertion_results": [
+        {
+          "name": "output_schema_valid",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": {
+            "module_id": "intent_router",
+            "schema": "output_schema"
+          },
+          "actual": "valid",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/"
+          ]
+        },
+        {
+          "name": "intent_match",
+          "weight": 30.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "query_gift",
+          "actual": "query_gift",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/intent"
+          ]
+        },
+        {
+          "name": "status_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "NEED_CLARIFICATION",
+          "actual": "NEED_CLARIFICATION",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/status"
+          ]
+        },
+        {
+          "name": "next_action_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "ASK_USER",
+          "actual": "ASK_USER",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/next_action"
+          ]
+        },
+        {
+          "name": "params_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": false,
+          "expected": {},
+          "actual": {
+            "gift_id": 7311,
+            "gift_ids": [
+              7312,
+              7313
+            ]
+          },
+          "message": "",
+          "evidence_refs": [
+            "module_output:/parameters"
+          ]
+        },
+        {
+          "name": "missing_params_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": [
+            "single_gift_query_mode"
+          ],
+          "actual": [
+            "single_gift_query_mode"
+          ],
+          "message": "",
+          "evidence_refs": [
+            "module_output:/missing_parameters"
+          ]
+        }
+      ],
+      "first_failed_assertion": {
+        "name": "params_match",
+        "weight": 20.0,
+        "critical": true,
+        "applicable": true,
+        "passed": false,
+        "expected": {},
+        "actual": {
+          "gift_id": 7311,
+          "gift_ids": [
+            7312,
+            7313
+          ]
+        },
+        "message": "",
+        "evidence_refs": [
+          "module_output:/parameters"
+        ]
+      },
+      "diagnoses": [
+        {
+          "code": "UNEXPECTED_PARAM",
+          "title": "出现多余参数",
+          "category": "parameters",
+          "source_assertions": [
+            "params_match"
+          ],
+          "evidence_refs": [
+            "module_output:/parameters"
+          ]
+        }
+      ],
+      "latency_ms": 19211,
+      "evidence_refs": [
+        "module_output:/",
+        "module_output:/intent",
+        "module_output:/status",
+        "module_output:/next_action",
+        "module_output:/parameters",
+        "module_output:/missing_parameters"
+      ],
+      "cleanup_status": "CLEANED",
+      "exception": null
+    },
+    {
+      "evaluator_run_id": "eval_run_575d79a98ea34bb1b31aa3e298c562db",
+      "case_id": "MINI-QGIFT-023",
+      "task_id": "intent-query-gift",
+      "scenario_type": "multi_condition",
+      "test_scope": "module",
+      "user_input": "查询 gift_ids 为 [7314, 7315] 且 gift_name 为“月光”的礼物。",
+      "trial_id": "trial_001",
+      "run_mode": "agent_benchmark",
+      "tool_profile": "shadow_read",
+      "tool_version": "33ba4698105eef321a88ea7f3b0df3e0ffcae9cb9a2fba948924a53b8ad309d6",
+      "max_steps": 4,
+      "timeout_seconds": 30.0,
+      "session_id": null,
+      "agent_run_ids": [],
+      "execution_status": "COMPLETED",
+      "quality_conclusion": "FAIL",
+      "score": 80.0,
+      "module_output": {
+        "intent": "query_gift",
+        "status": "NEED_CLARIFICATION",
+        "next_action": "ASK_USER",
+        "parameters": {
+          "gift_ids": [
+            7314,
+            7315
+          ],
+          "gift_name": "月光"
+        },
+        "missing_parameters": [
+          "single_gift_query_mode"
+        ],
+        "reason": "Please provide valid values for: single_gift_query_mode."
+      },
+      "turn_results": [],
+      "tool_calls": [],
+      "trace_events": [
+        {
+          "event_id": "event_dbfed243722044f0a15806804b48fd76",
+          "run_id": "run_70479823e64248bf95e777e624c932a5",
+          "session_id": null,
+          "event_type": "intent_requested",
+          "timestamp": "2026-10-08T09:42:55.414478Z",
+          "payload": {}
+        },
+        {
+          "event_id": "event_ae5a50912e264b8f8906ca40415a9bd0",
+          "run_id": "run_70479823e64248bf95e777e624c932a5",
+          "session_id": null,
+          "event_type": "intent_candidate_received",
+          "timestamp": "2026-10-08T09:43:02.638978Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "READY",
+            "next_action": "CALL_TOOL"
+          }
+        },
+        {
+          "event_id": "event_0bfa755e438141b08a2638325b1cde81",
+          "run_id": "run_70479823e64248bf95e777e624c932a5",
+          "session_id": null,
+          "event_type": "intent_definition_resolved",
+          "timestamp": "2026-10-08T09:43:02.639015Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1"
+          }
+        },
+        {
+          "event_id": "event_9c77b06229d1442aa22a46e3652f315b",
+          "run_id": "run_70479823e64248bf95e777e624c932a5",
+          "session_id": null,
+          "event_type": "intent_semantic_constraint_failed",
+          "timestamp": "2026-10-08T09:43:02.639637Z",
+          "payload": {
+            "intent": "query_gift",
+            "constraint": "ExactlyOneFieldGroup",
+            "missing_parameters": [
+              "single_gift_query_mode"
+            ],
+            "reason": null
+          }
+        },
+        {
+          "event_id": "event_6f84e112d0c146469c4b58f88f090a5f",
+          "run_id": "run_70479823e64248bf95e777e624c932a5",
+          "session_id": null,
+          "event_type": "intent_contract_validated",
+          "timestamp": "2026-10-08T09:43:02.639662Z",
+          "payload": {
+            "intent": "query_gift",
+            "contract_version": "intent-contract-v1",
+            "valid": false,
+            "invalid_fields": []
+          }
+        },
+        {
+          "event_id": "event_0a56072e33714890acf4661e8c9b4497",
+          "run_id": "run_70479823e64248bf95e777e624c932a5",
+          "session_id": null,
+          "event_type": "intent_decided",
+          "timestamp": "2026-10-08T09:43:02.639680Z",
+          "payload": {
+            "intent": "query_gift",
+            "status": "NEED_CLARIFICATION",
+            "next_action": "ASK_USER",
+            "missing_parameters": [
+              "single_gift_query_mode"
+            ]
+          }
+        }
+      ],
+      "turn_snapshots": [],
+      "system_snapshot": null,
+      "assertion_results": [
+        {
+          "name": "output_schema_valid",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": {
+            "module_id": "intent_router",
+            "schema": "output_schema"
+          },
+          "actual": "valid",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/"
+          ]
+        },
+        {
+          "name": "intent_match",
+          "weight": 30.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "query_gift",
+          "actual": "query_gift",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/intent"
+          ]
+        },
+        {
+          "name": "status_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "NEED_CLARIFICATION",
+          "actual": "NEED_CLARIFICATION",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/status"
+          ]
+        },
+        {
+          "name": "next_action_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": "ASK_USER",
+          "actual": "ASK_USER",
+          "message": "",
+          "evidence_refs": [
+            "module_output:/next_action"
+          ]
+        },
+        {
+          "name": "params_match",
+          "weight": 20.0,
+          "critical": true,
+          "applicable": true,
+          "passed": false,
+          "expected": {},
+          "actual": {
+            "gift_ids": [
+              7314,
+              7315
+            ],
+            "gift_name": "月光"
+          },
+          "message": "",
+          "evidence_refs": [
+            "module_output:/parameters"
+          ]
+        },
+        {
+          "name": "missing_params_match",
+          "weight": 10.0,
+          "critical": true,
+          "applicable": true,
+          "passed": true,
+          "expected": [
+            "single_gift_query_mode"
+          ],
+          "actual": [
+            "single_gift_query_mode"
+          ],
+          "message": "",
+          "evidence_refs": [
+            "module_output:/missing_parameters"
+          ]
+        }
+      ],
+      "first_failed_assertion": {
+        "name": "params_match",
+        "weight": 20.0,
+        "critical": true,
+        "applicable": true,
+        "passed": false,
+        "expected": {},
+        "actual": {
+          "gift_ids": [
+            7314,
+            7315
+          ],
+          "gift_name": "月光"
+        },
+        "message": "",
+        "evidence_refs": [
+          "module_output:/parameters"
+        ]
+      },
+      "diagnoses": [
+        {
+          "code": "UNEXPECTED_PARAM",
+          "title": "出现多余参数",
+          "category": "parameters",
+          "source_assertions": [
+            "params_match"
+          ],
+          "evidence_refs": [
+            "module_output:/parameters"
+          ]
+        }
+      ],
+      "latency_ms": 7249,
+      "evidence_refs": [
+        "module_output:/",
+        "module_output:/intent",
+        "module_output:/status",
+        "module_output:/next_action",
+        "module_output:/parameters",
+        "module_output:/missing_parameters"
+      ],
+      "cleanup_status": "CLEANED",
+      "exception": null
+    }
+  ],
+  "summary": {
+    "total_cases": 23,
+    "execution_status_counts": {
+      "COMPLETED": 23
+    },
+    "quality_counts": {
+      "PASS": 14,
+      "FAIL": 9
+    },
+    "framework_completion_rate": 100.0,
+    "agent_case_pass_rate": 60.87,
+    "strict_assertion_pass_rate": 60.87,
+    "core_behavior_match_rate": 82.61,
+    "average_score": 94.35,
+    "average_latency_ms": 4069.22,
+    "median_latency_ms": 1672.0,
+    "max_latency_ms": 23452,
+    "by_scope": {
+      "module": {
+        "count": 23,
+        "pass_count": 14,
+        "pass_rate": 60.87
+      }
+    },
+    "by_intent": {
+      "query_gift": {
+        "count": 23,
+        "pass_count": 14,
+        "pass_rate": 60.87
+      }
+    },
+    "by_expected_intent": {
+      "query_gift": {
+        "count": 23,
+        "pass_count": 14,
+        "pass_rate": 60.87
+      }
+    },
+    "by_actual_intent": {
+      "query_gift": {
+        "count": 23,
+        "pass_count": 14,
+        "pass_rate": 60.87
+      }
+    },
+    "by_task_id": {
+      "intent-query-gift": {
+        "count": 23,
+        "pass_count": 14,
+        "pass_rate": 60.87
+      }
+    },
+    "failed_assertions": {
+      "missing_params_match": 5,
+      "params_match": 4
+    }
+  },
+  "trials_per_case": 1,
+  "total_duration_ms": 93595
+}

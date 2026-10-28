@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agent-trace-sdk"
+version = "0.1.0"
+description = "Business evidence protocol adapters backed by Inspect native logs"
+requires-python = ">=3.11"
+dependencies = ["inspect_ai==0.3.280"]
+
+[tool.setuptools.packages.find]
+where = ["src"]

@@ -1,0 +1,206 @@
+{
+  "capability_id": "add_backpack_gift",
+  "contract_version": "intent-contract-v1",
+  "decision_rules": {
+    "complete": {
+      "next_action": "ASK_CONFIRMATION",
+      "status": "NEED_CONFIRMATION"
+    },
+    "incomplete": {
+      "next_action": "ASK_USER",
+      "status": "NEED_CLARIFICATION"
+    },
+    "required_tool_name": "add_gift_to_backpack"
+  },
+  "missing_parameters": [
+    "duration_days",
+    "environment",
+    "gift_id",
+    "gift_ids",
+    "gift_nums",
+    "num",
+    "single_gift_selection_mode",
+    "single_user_selection_mode",
+    "user_id",
+    "user_ids"
+  ],
+  "module_id": "module.intent_router",
+  "parameters_schema": {
+    "$defs": {
+      "GiftQuantity": {
+        "additionalProperties": false,
+        "description": "One gift and its quantity in a strict batch payload.",
+        "properties": {
+          "gift_id": {
+            "exclusiveMinimum": 0,
+            "title": "Gift Id",
+            "type": "integer"
+          },
+          "num": {
+            "maximum": 1000,
+            "minimum": 1,
+            "title": "Num",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "gift_id",
+          "num"
+        ],
+        "title": "GiftQuantity",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "duration_days": {
+        "anyOf": [
+          {
+            "maximum": 1000,
+            "minimum": 1,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Duration Days"
+      },
+      "environment": {
+        "anyOf": [
+          {
+            "minLength": 1,
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Environment"
+      },
+      "gift_id": {
+        "anyOf": [
+          {
+            "exclusiveMinimum": 0,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Gift Id"
+      },
+      "gift_ids": {
+        "anyOf": [
+          {
+            "items": {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Gift Ids"
+      },
+      "gift_nums": {
+        "anyOf": [
+          {
+            "items": {
+              "$ref": "#/$defs/GiftQuantity"
+            },
+            "type": "array"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Gift Nums"
+      },
+      "num": {
+        "anyOf": [
+          {
+            "maximum": 1000,
+            "minimum": 1,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Num"
+      },
+      "user_id": {
+        "anyOf": [
+          {
+            "exclusiveMinimum": 0,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "User Id"
+      },
+      "user_ids": {
+        "anyOf": [
+          {
+            "items": {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "User Ids"
+      }
+    },
+    "title": "_AddBackpackGiftParameters",
+    "type": "object"
+  },
+  "semantic_rules": {
+    "default_duration_days": 7,
+    "default_num": 1,
+    "gift_selection_cardinality": "EXACTLY_ONE",
+    "gift_selection_modes": [
+      "gift_id",
+      "gift_ids",
+      "gift_nums"
+    ],
+    "permanent_duration_days": 1000,
+    "required_fields": [
+      "environment"
+    ],
+    "user_selection_cardinality": "EXACTLY_ONE",
+    "user_selection_modes": [
+      "user_id",
+      "user_ids"
+    ]
+  },
+  "snapshot_format_version": "2.0",
+  "snapshot_id": "intent.add_backpack_gift",
+  "snapshot_sha256": "37ac9f26e7325d5c39859392e896b11b6b1d780df23c9ea4fc68532fb46c3189",
+  "snapshot_type": "intent",
+  "source_hashes": {
+    "decision_rules_sha256": "d1555bf8abcdc28d1145acc89cb4114bd8221a42a8158079def06ef02d064c80",
+    "parameters_schema_sha256": "a1e13b5a62e151757cdf7041d629c8842e1b96319e4afee2661e5780a3dbcce1",
+    "semantic_rules_sha256": "c2da0773849fd8d2873984be908e75f3238c2fc0e808680b7d47483d24cdda55",
+    "tool_refs_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "tool_refs": []
+}

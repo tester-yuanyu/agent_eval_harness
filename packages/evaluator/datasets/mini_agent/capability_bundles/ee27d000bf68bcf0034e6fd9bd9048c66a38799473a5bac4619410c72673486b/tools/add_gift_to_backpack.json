@@ -1,0 +1,421 @@
+{
+  "contract_version": "tool-add_gift_to_backpack-contract-v2",
+  "description": "Add confirmed mock gifts to mock user backpacks.",
+  "empty_result_behavior": "UNSUPPORTED",
+  "fault_modes": [
+    "normal",
+    "error",
+    "timeout",
+    "commit_then_timeout"
+  ],
+  "function_schema": {
+    "description": "Add confirmed mock gifts to mock user backpacks.",
+    "name": "add_gift_to_backpack",
+    "parameters": {
+      "$defs": {
+        "GiftQuantity": {
+          "additionalProperties": false,
+          "description": "One gift and its quantity in a strict batch payload.",
+          "properties": {
+            "gift_id": {
+              "exclusiveMinimum": 0,
+              "title": "Gift Id",
+              "type": "integer"
+            },
+            "num": {
+              "maximum": 1000,
+              "minimum": 1,
+              "title": "Num",
+              "type": "integer"
+            }
+          },
+          "required": [
+            "gift_id",
+            "num"
+          ],
+          "title": "GiftQuantity",
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Business parameters for a confirmed mock backpack grant.",
+      "properties": {
+        "duration_days": {
+          "anyOf": [
+            {
+              "maximum": 1000,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Duration Days"
+        },
+        "gift_id": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Gift Id"
+        },
+        "gift_ids": {
+          "anyOf": [
+            {
+              "items": {
+                "exclusiveMinimum": 0,
+                "type": "integer"
+              },
+              "minItems": 1,
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Gift Ids"
+        },
+        "gift_nums": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/GiftQuantity"
+              },
+              "minItems": 1,
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Gift Nums"
+        },
+        "num": {
+          "anyOf": [
+            {
+              "maximum": 1000,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Num"
+        },
+        "user_id": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "User Id"
+        },
+        "user_ids": {
+          "anyOf": [
+            {
+              "items": {
+                "exclusiveMinimum": 0,
+                "type": "integer"
+              },
+              "minItems": 1,
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "User Ids"
+        }
+      },
+      "required": [
+        "gift_id",
+        "gift_ids",
+        "gift_nums",
+        "user_id",
+        "user_ids",
+        "num",
+        "duration_days"
+      ],
+      "title": "AddGiftToBackpackArguments",
+      "type": "object"
+    },
+    "strict": true,
+    "type": "function"
+  },
+  "idempotency_rules": {
+    "mode": "REQUEST_ID",
+    "replay": "RETURN_FIRST_DURABLE_RESULT",
+    "source": "EXECUTION_CONTEXT"
+  },
+  "parameter_rules": {
+    "default_duration_days": 7,
+    "default_num": 1,
+    "gift_selection_cardinality": "EXACTLY_ONE",
+    "gift_selection_modes": [
+      "gift_id",
+      "gift_ids",
+      "gift_nums"
+    ],
+    "permanent_duration_days": 1000,
+    "supported_gift_id_prefixes": [
+      "3",
+      "4"
+    ],
+    "user_selection_cardinality": "EXACTLY_ONE",
+    "user_selection_modes": [
+      "user_id",
+      "user_ids"
+    ]
+  },
+  "partial_success_behavior": "ATOMIC_WRITE_NO_PARTIAL_COMMIT",
+  "permission_requirements": [
+    "REGISTERED_TOOL_AND_RUN_ALLOW_LIST",
+    "NON_PRODUCTION_ENVIRONMENT",
+    "ACCEPTED_EXECUTION_CONTEXT"
+  ],
+  "rate_limit_behavior": "UNSUPPORTED_NO_SILENT_RETRY",
+  "requires_confirmation": true,
+  "result_codes": [
+    "OK",
+    "IDEMPOTENCY_CONFLICT",
+    "DUPLICATE_USER",
+    "DUPLICATE_GIFT",
+    "USER_NOT_FOUND",
+    "USER_LOCKED",
+    "ENVIRONMENT_MISMATCH",
+    "GIFT_NOT_FOUND",
+    "UNSUPPORTED_GIFT_TYPE",
+    "STATE_VERIFICATION_FAILED"
+  ],
+  "result_contracts": {
+    "DUPLICATE_GIFT": {
+      "data_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "required": [],
+        "type": "object"
+      },
+      "terminal_status": "business_failure"
+    },
+    "DUPLICATE_USER": {
+      "data_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "required": [],
+        "type": "object"
+      },
+      "terminal_status": "business_failure"
+    },
+    "ENVIRONMENT_MISMATCH": {
+      "data_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "required": [],
+        "type": "object"
+      },
+      "terminal_status": "business_failure"
+    },
+    "GIFT_NOT_FOUND": {
+      "data_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "required": [],
+        "type": "object"
+      },
+      "terminal_status": "business_failure"
+    },
+    "IDEMPOTENCY_CONFLICT": {
+      "data_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "required": [],
+        "type": "object"
+      },
+      "terminal_status": "business_failure"
+    },
+    "OK": {
+      "data_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "affected_gift_count": {
+            "minimum": 1,
+            "type": "integer"
+          },
+          "affected_user_count": {
+            "minimum": 1,
+            "type": "integer"
+          },
+          "duration_days": {
+            "maximum": 1000,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "gift_quantities": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "grant_ids": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "grant_record_count": {
+            "minimum": 1,
+            "type": "integer"
+          },
+          "idempotent_replay": {
+            "type": "boolean"
+          },
+          "num": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "grant_ids",
+          "affected_user_count",
+          "affected_gift_count",
+          "grant_record_count",
+          "duration_days",
+          "idempotent_replay",
+          "gift_quantities",
+          "num"
+        ],
+        "type": "object"
+      },
+      "terminal_status": "success"
+    },
+    "STATE_VERIFICATION_FAILED": {
+      "data_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "request_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "request_id"
+        ],
+        "type": "object"
+      },
+      "terminal_status": "business_failure"
+    },
+    "UNSUPPORTED_GIFT_TYPE": {
+      "data_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "required": [],
+        "type": "object"
+      },
+      "terminal_status": "business_failure"
+    },
+    "USER_LOCKED": {
+      "data_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "required": [],
+        "type": "object"
+      },
+      "terminal_status": "business_failure"
+    },
+    "USER_NOT_FOUND": {
+      "data_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "required": [],
+        "type": "object"
+      },
+      "terminal_status": "business_failure"
+    }
+  },
+  "result_schema": {
+    "additionalProperties": false,
+    "description": "Uniform return protocol shared by all mock tools.",
+    "properties": {
+      "code": {
+        "title": "Code",
+        "type": "string"
+      },
+      "data": {
+        "additionalProperties": true,
+        "title": "Data",
+        "type": "object"
+      },
+      "message": {
+        "title": "Message",
+        "type": "string"
+      },
+      "success": {
+        "title": "Success",
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "success",
+      "code",
+      "message",
+      "data"
+    ],
+    "title": "ToolResult",
+    "type": "object"
+  },
+  "risk_level": "high",
+  "side_effects": [
+    "WRITE_LOCAL_SQLITE_BACKPACK_GRANTS"
+  ],
+  "snapshot_format_version": "2.0",
+  "snapshot_id": "tool.add_gift_to_backpack",
+  "snapshot_sha256": "e9b0136e3b80eb3946acfdb4891882c52ee5d485c81f1c98650d18d913eef3b7",
+  "snapshot_type": "tool",
+  "source_hashes": {
+    "function_schema_sha256": "c7f4388c4a6ca97abd64bd15f2cfee38d544d7700ac0c539f82a9892a13aa86e",
+    "parameter_rules_sha256": "bde4282dc7057b123bb89009bb7341bf2f3cbe5eb8dda95d8fae56667fc3d27f",
+    "result_contracts_sha256": "73dcf7d9bbb96d8005884f4d7f5e66d7e591662fa44358a83edc1f974d0b8264",
+    "result_schema_sha256": "b04c3137b6db836a69fffa0ca2a646e2e5c4149d41bbacab77477767e18a865b"
+  },
+  "terminal_behaviors": {
+    "business_failure": "RETURN_TOOL_RESULT_WITH_SUCCESS_FALSE",
+    "error": "RAISE_EXPLICIT_ERROR",
+    "success": "RETURN_TOOL_RESULT",
+    "timeout": "RAISE_EXPLICIT_TIMEOUT"
+  },
+  "timeout_behavior": "EXPLICIT_TIMEOUT_NO_AUTOMATIC_RETRY",
+  "tool_name": "add_gift_to_backpack",
+  "tool_type": "write",
+  "tool_version": "shadow-tools-v2",
+  "trace_event_types": [
+    "tool_requested",
+    "tool_started",
+    "tool_succeeded",
+    "tool_failed",
+    "tool_timeout",
+    "permission_denied",
+    "confirmation_requested",
+    "confirmation_accepted",
+    "confirmation_rejected",
+    "confirmation_expired",
+    "production_write_blocked",
+    "idempotent_replay",
+    "idempotency_conflict",
+    "state_verification_started",
+    "state_verification_succeeded",
+    "state_verification_failed"
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "diagnostics": [],
+  "requirements": [
+    {
+      "capability_key": "intent.formal_validation",
+      "diagnostics": [],
+      "evidence_ids": [
+        "evidence.intent_result"
+      ],
+      "provider_snapshot_ids": [
+        "evidence.intent_result",
+        "module.intent_router"
+      ],
+      "requirement_id": "formal_intent_validation",
+      "support_status": "supported"
+    },
+    {
+      "capability_key": "intent.contract_validation",
+      "diagnostics": [],
+      "evidence_ids": [
+        "evidence.intent_result"
+      ],
+      "provider_snapshot_ids": [
+        "evidence.intent_result",
+        "intent.query_user"
+      ],
+      "requirement_id": "selected_intent_contract",
+      "support_status": "supported"
+    }
+  ],
+  "selection": {
+    "intent_id": "intent.query_user",
+    "scope_or_chain_id": "scope.understanding",
+    "tool_id": null
+  },
+  "snapshot_ids": [
+    "evidence.intent_result",
+    "intent.query_user",
+    "module.intent_router",
+    "scope.understanding"
+  ],
+  "support_status": "supported"
+}

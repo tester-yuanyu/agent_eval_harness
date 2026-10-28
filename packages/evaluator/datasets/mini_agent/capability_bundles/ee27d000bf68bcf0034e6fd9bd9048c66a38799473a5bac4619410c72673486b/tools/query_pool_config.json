@@ -1,0 +1,181 @@
+{
+  "contract_version": "tool-query_pool_config-contract-v2",
+  "description": "Query fictional pool configuration by pool or gift ID.",
+  "empty_result_behavior": "SUPPORTED_BY_FAULT_MODE",
+  "fault_modes": [
+    "normal",
+    "empty_result",
+    "error",
+    "timeout"
+  ],
+  "function_schema": {
+    "description": "Query fictional pool configuration by pool or gift ID.",
+    "name": "query_pool_config",
+    "parameters": {
+      "additionalProperties": false,
+      "description": "Query mock pools using exactly one lookup mode.",
+      "properties": {
+        "gift_id": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Gift Id"
+        },
+        "pool_id": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Pool Id"
+        }
+      },
+      "required": [
+        "gift_id",
+        "pool_id"
+      ],
+      "title": "QueryPoolConfigArguments",
+      "type": "object"
+    },
+    "strict": true,
+    "type": "function"
+  },
+  "idempotency_rules": {
+    "mode": "NOT_APPLICABLE"
+  },
+  "parameter_rules": {
+    "internal_version_output": "OMITTED",
+    "lookup_mode_cardinality": "EXACTLY_ONE",
+    "lookup_modes": [
+      "pool_id",
+      "gift_id"
+    ],
+    "probability": "WEIGHT_DIVIDED_BY_POOL_WEIGHT_SUM"
+  },
+  "partial_success_behavior": "UNSUPPORTED",
+  "permission_requirements": [
+    "REGISTERED_TOOL_AND_RUN_ALLOW_LIST"
+  ],
+  "rate_limit_behavior": "UNSUPPORTED_NO_SILENT_RETRY",
+  "requires_confirmation": false,
+  "result_codes": [
+    "OK",
+    "POOL_NOT_FOUND",
+    "EMPTY_RESULT"
+  ],
+  "result_contracts": {
+    "EMPTY_RESULT": {
+      "data_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "count": {
+            "const": 0,
+            "type": "integer"
+          },
+          "fault_mode": {
+            "const": "empty_result",
+            "type": "string"
+          },
+          "items": {
+            "maxItems": 0,
+            "type": "array"
+          }
+        },
+        "required": [
+          "count",
+          "items",
+          "fault_mode"
+        ],
+        "type": "object"
+      },
+      "terminal_status": "success"
+    },
+    "OK": {
+      "data_schema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "terminal_status": "success"
+    },
+    "POOL_NOT_FOUND": {
+      "data_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "required": [],
+        "type": "object"
+      },
+      "terminal_status": "business_failure"
+    }
+  },
+  "result_schema": {
+    "additionalProperties": false,
+    "description": "Uniform return protocol shared by all mock tools.",
+    "properties": {
+      "code": {
+        "title": "Code",
+        "type": "string"
+      },
+      "data": {
+        "additionalProperties": true,
+        "title": "Data",
+        "type": "object"
+      },
+      "message": {
+        "title": "Message",
+        "type": "string"
+      },
+      "success": {
+        "title": "Success",
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "success",
+      "code",
+      "message",
+      "data"
+    ],
+    "title": "ToolResult",
+    "type": "object"
+  },
+  "risk_level": "low",
+  "side_effects": [],
+  "snapshot_format_version": "2.0",
+  "snapshot_id": "tool.query_pool_config",
+  "snapshot_sha256": "48b7c7ca3cf20a5bbba7c44d8dc99953dc716e36b2e5bb4db8794127f406c1c9",
+  "snapshot_type": "tool",
+  "source_hashes": {
+    "function_schema_sha256": "437684c992b4255af93db56f466d7929a75e87cf682766648e9d109a90a5eaa8",
+    "parameter_rules_sha256": "2e9beb6e1a543fbd24e89ab82032c5eb4e147d69577134ac2c37777adf396d46",
+    "result_contracts_sha256": "7024a989673b6fa565f6a22c34684a3fa5d7b519121c8e615a561dc226740afc",
+    "result_schema_sha256": "b04c3137b6db836a69fffa0ca2a646e2e5c4149d41bbacab77477767e18a865b"
+  },
+  "terminal_behaviors": {
+    "business_failure": "RETURN_TOOL_RESULT_WITH_SUCCESS_FALSE",
+    "error": "RAISE_EXPLICIT_ERROR",
+    "success": "RETURN_TOOL_RESULT",
+    "timeout": "RAISE_EXPLICIT_TIMEOUT"
+  },
+  "timeout_behavior": "EXPLICIT_TIMEOUT_NO_AUTOMATIC_RETRY",
+  "tool_name": "query_pool_config",
+  "tool_type": "read",
+  "tool_version": "shadow-read-tools-v2",
+  "trace_event_types": [
+    "tool_requested",
+    "tool_started",
+    "tool_succeeded",
+    "tool_failed",
+    "tool_timeout",
+    "permission_denied"
+  ]
+}

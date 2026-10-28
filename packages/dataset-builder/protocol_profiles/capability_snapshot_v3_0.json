@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0",
+  "profile_id": "capability-snapshot",
+  "protocol_id": "capability-snapshot",
+  "protocol_version": "3.0",
+  "root_filename": "agent.json",
+  "root_snapshot_type": "agent",
+  "snapshot_types": {
+    "agent": {
+      "schema_path": "schemas/agent.schema.json",
+      "schema_sha256": "a293a4d4ebcaedef6aebc100cbc9c324710d8befd1983cbc6ab2660c371708d5",
+      "reference_fields": [
+        "module_refs",
+        "intent_refs",
+        "tool_refs",
+        "scope_refs",
+        "chain_refs",
+        "evidence_refs",
+        "boundary_refs"
+      ]
+    },
+    "boundary": {
+      "schema_path": "schemas/boundary.schema.json",
+      "schema_sha256": "e2b00f5dd2dbf03613c8c63f2c922d4df4b2104d3d851b3e26299641ec4a25c4",
+      "reference_fields": []
+    },
+    "chain": {
+      "schema_path": "schemas/chain.schema.json",
+      "schema_sha256": "62ce5cbed86a616a4638beb125dec6f8c3548f033015cc5f8e3374c8b6f1b1b6",
+      "reference_fields": ["module_refs", "evidence_refs", "boundary_refs"]
+    },
+    "evidence": {
+      "schema_path": "schemas/evidence.schema.json",
+      "schema_sha256": "f2ee42f197b1f2141544c562c80d81d53234d8eaae299962f5842ffe81505bef",
+      "reference_fields": []
+    },
+    "intent": {
+      "schema_path": "schemas/intent.schema.json",
+      "schema_sha256": "2c69fd8d6aebad5bd455d53b060b695adafc369a6e16585b6cfbf296f539392c",
+      "reference_fields": ["tool_refs"]
+    },
+    "module": {
+      "schema_path": "schemas/module.schema.json",
+      "schema_sha256": "6470388fc35d72b5c491b75724ac912d01dd4f89e7615c746bed7722009d520c",
+      "reference_fields": ["module_refs", "intent_refs", "tool_refs"]
+    },
+    "scope": {
+      "schema_path": "schemas/scope.schema.json",
+      "schema_sha256": "88e92a2cc2a5f116a0f26b041261d0ef770f16c86c6d621d0e527d9c35ff1e99",
+      "reference_fields": ["module_refs", "evidence_refs", "boundary_refs"]
+    },
+    "tool": {
+      "schema_path": "schemas/tool.schema.json",
+      "schema_sha256": "fb0b5070a40a612f0568b37300737202caf6dea5c7aa50944eab8eb327507c9f",
+      "reference_fields": []
+    }
+  },
+  "supporting_schemas": {
+    "snapshot_reference": {
+      "schema_path": "schemas/snapshot-reference.schema.json",
+      "schema_sha256": "66817d867269704db6b0d31602a905e3bf114a03c86d0bd108a4707bc05a60fb"
+    }
+  },
+  "canonical_json_algorithm": "sorted-json-v1",
+  "bundle_hash_algorithm": "sorted-reference-projection-v1",
+  "extension_policy": "reject",
+  "adapter": {
+    "protocol": "capability-snapshot",
+    "version": "1.0"
+  }
+}

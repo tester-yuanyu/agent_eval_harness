@@ -1,0 +1,51 @@
+{
+  "capabilities": [
+    {
+      "capability_key": "intent.contract_validation",
+      "evidence_ids": [
+        "evidence.intent_result"
+      ],
+      "reason": null,
+      "support_status": "supported"
+    }
+  ],
+  "capability_id": "unsupported",
+  "contract_version": "intent-contract-v1",
+  "decision_rules": {
+    "complete": {
+      "next_action": "REJECT",
+      "status": "REJECTED"
+    },
+    "execution_mode": "unsupported",
+    "incomplete": {
+      "next_action": "REJECT",
+      "status": "REJECTED"
+    }
+  },
+  "module_id": "module.intent_router",
+  "parameter_semantics": {
+    "missing_parameters": [],
+    "normalizers": []
+  },
+  "parameters_schema": {
+    "additionalProperties": false,
+    "properties": {},
+    "title": "_UnsupportedParameters",
+    "type": "object"
+  },
+  "required_tool_name": null,
+  "semantic_rules": {
+    "scope": "REQUEST_OUTSIDE_DECLARED_CURRENT_CAPABILITIES",
+    "tools_executed": false
+  },
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "intent.unsupported",
+  "snapshot_sha256": "dcba02d21dfab07e0418d302195aaf04989a010cd2f2e8927475c941810e00b4",
+  "snapshot_type": "intent",
+  "source_hashes": {
+    "intent_rules_sha256": "8caabb9543f194347942e55e75feeb88f19cba570b52e4734703431760b6226d",
+    "parameters_schema_sha256": "ab40af43b424b333f8496750d4e81a1826c926ef1e45ea0f5a2b35cb3c68319e",
+    "tool_refs_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "tool_refs": []
+}

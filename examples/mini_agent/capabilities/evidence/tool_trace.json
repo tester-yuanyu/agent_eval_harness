@@ -1,0 +1,110 @@
+{
+  "applicable_result_paths": [
+    "success",
+    "failure",
+    "timeout"
+  ],
+  "availability": {
+    "capability_key": "evidence.tool_trace_available",
+    "evidence_ids": [
+      "evidence.tool_trace"
+    ],
+    "reason": null,
+    "support_status": "supported"
+  },
+  "consumer_roles": [
+    "builder",
+    "evaluator"
+  ],
+  "contract_version": "mini-agent-capability-contract-v3",
+  "description": "Tool request and terminal ToolCallRecord observations.",
+  "event_types": [
+    "tool_requested",
+    "tool_started",
+    "tool_succeeded",
+    "tool_failed",
+    "tool_timeout"
+  ],
+  "evidence_id": "tool_trace",
+  "observation_interface": "agent_result.tool_calls_and_events",
+  "payload_schema": {
+    "additionalProperties": false,
+    "description": "Observable terminal record for one tool call.",
+    "properties": {
+      "arguments": {
+        "additionalProperties": true,
+        "title": "Arguments",
+        "type": "object"
+      },
+      "call_id": {
+        "title": "Call Id",
+        "type": "string"
+      },
+      "duration_ms": {
+        "minimum": 0,
+        "title": "Duration Ms",
+        "type": "integer"
+      },
+      "error": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Error"
+      },
+      "name": {
+        "title": "Name",
+        "type": "string"
+      },
+      "output": {
+        "anyOf": [
+          {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Output"
+      },
+      "status": {
+        "enum": [
+          "SUCCESS",
+          "FAILED",
+          "TIMEOUT"
+        ],
+        "title": "Status",
+        "type": "string"
+      }
+    },
+    "required": [
+      "call_id",
+      "name",
+      "arguments",
+      "status",
+      "output",
+      "error",
+      "duration_ms"
+    ],
+    "title": "ToolCallRecord",
+    "type": "object"
+  },
+  "producer_module_ids": [
+    "module.tool_loop",
+    "module.tool_registry"
+  ],
+  "production_timing": "before, during, and after a Tool invocation",
+  "required": true,
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "evidence.tool_trace",
+  "snapshot_sha256": "9cb25c0db0fd5165eaebddaf196278294da00d8b467d18a5dd7bf80ab03b80b6",
+  "snapshot_type": "evidence",
+  "source_hashes": {
+    "catalog_definition_sha256": "05685ab6e119847520aa864ac0fe4a07d65e26fc4de0224ce1c4ac0a3f5c3c48"
+  }
+}

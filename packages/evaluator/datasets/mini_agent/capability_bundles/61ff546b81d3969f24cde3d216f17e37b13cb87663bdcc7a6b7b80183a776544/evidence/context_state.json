@@ -1,0 +1,54 @@
+{
+  "applicable_result_paths": [],
+  "availability": {
+    "capability_key": "evidence.context_state_available",
+    "evidence_ids": [],
+    "reason": "The runtime has no cross-turn state input or state snapshot output.",
+    "support_status": "unsupported"
+  },
+  "consumer_roles": [
+    "builder",
+    "evaluator"
+  ],
+  "contract_version": "mini-agent-capability-contract-v3",
+  "description": "Cross-turn conversation state observation interface.",
+  "event_types": [],
+  "evidence_id": "context_state",
+  "observation_interface": "unavailable",
+  "payload_schema": {
+    "type": "object",
+    "x-evidence-delivery": {
+      "correlation": [
+        "trace_id",
+        "run_id",
+        "turn_index"
+      ],
+      "coverage": "declared events only; not a full copy of AgentResult",
+      "enabled_when": "LocalEvidenceSink is injected by the caller",
+      "event_rules_version": "mini-agent-events-v1",
+      "events": {},
+      "independent_interface": "agent_trace_sdk.EvidenceReader.read",
+      "legacy_interface": "unavailable",
+      "protocol_version": "1.0",
+      "unavailable_when": [
+        "sink not configured",
+        "execution interrupted before emission",
+        "export failed",
+        "required fields redacted or truncated"
+      ],
+      "version": "1.0"
+    }
+  },
+  "producer_module_ids": [
+    "module.agent_orchestrator"
+  ],
+  "production_timing": "not emitted by the current runtime",
+  "required": false,
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "evidence.context_state",
+  "snapshot_sha256": "5e2f7d98d5e26fc7c559b9687da0c95be84ee459ad2bd105c6abe63e9f8537f1",
+  "snapshot_type": "evidence",
+  "source_hashes": {
+    "catalog_definition_sha256": "6ad86201331690906af81b10b598537a487a030b522a598c2e2fde16a385c5b6"
+  }
+}

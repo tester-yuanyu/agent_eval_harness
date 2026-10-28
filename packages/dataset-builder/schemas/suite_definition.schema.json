@@ -1,0 +1,247 @@
+{
+  "$defs": {
+    "CapabilityInputConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "bundle": {
+          "$ref": "#/$defs/PathReference"
+        },
+        "bundle_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Bundle Hash",
+          "type": "string"
+        },
+        "scope_or_chain_id": {
+          "minLength": 1,
+          "title": "Scope Or Chain Id",
+          "type": "string"
+        },
+        "intent_id": {
+          "minLength": 1,
+          "title": "Intent Id",
+          "type": "string"
+        },
+        "tool_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tool Id"
+        }
+      },
+      "required": [
+        "bundle",
+        "bundle_hash",
+        "scope_or_chain_id",
+        "intent_id"
+      ],
+      "title": "CapabilityInputConfig",
+      "type": "object"
+    },
+    "ExecutionProfileConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "allowed_tools": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Allowed Tools",
+          "type": "array"
+        }
+      },
+      "required": [
+        "allowed_tools"
+      ],
+      "title": "ExecutionProfileConfig",
+      "type": "object"
+    },
+    "PathReference": {
+      "additionalProperties": false,
+      "properties": {
+        "base": {
+          "enum": [
+            "builder_root",
+            "projects_root",
+            "suite_dir"
+          ],
+          "title": "Base",
+          "type": "string"
+        },
+        "path": {
+          "minLength": 1,
+          "title": "Path",
+          "type": "string"
+        }
+      },
+      "required": [
+        "base",
+        "path"
+      ],
+      "title": "PathReference",
+      "type": "object"
+    },
+    "PolicyReferences": {
+      "additionalProperties": false,
+      "properties": {
+        "source": {
+          "$ref": "#/$defs/PathReference"
+        },
+        "coverage": {
+          "$ref": "#/$defs/PathReference"
+        },
+        "generation": {
+          "$ref": "#/$defs/PathReference"
+        },
+        "validation": {
+          "$ref": "#/$defs/PathReference"
+        },
+        "review": {
+          "$ref": "#/$defs/PathReference"
+        },
+        "freeze": {
+          "$ref": "#/$defs/PathReference"
+        }
+      },
+      "required": [
+        "source",
+        "coverage",
+        "generation",
+        "validation",
+        "review",
+        "freeze"
+      ],
+      "title": "PolicyReferences",
+      "type": "object"
+    },
+    "SuiteMetadata": {
+      "additionalProperties": false,
+      "properties": {
+        "suite_id": {
+          "minLength": 1,
+          "title": "Suite Id",
+          "type": "string"
+        },
+        "suite_kind": {
+          "const": "module_intent",
+          "title": "Suite Kind",
+          "type": "string"
+        },
+        "dataset_version": {
+          "minLength": 1,
+          "title": "Dataset Version",
+          "type": "string"
+        },
+        "target_agent": {
+          "minLength": 1,
+          "title": "Target Agent",
+          "type": "string"
+        },
+        "test_scope": {
+          "enum": [
+            "module",
+            "critical_path",
+            "end_to_end"
+          ],
+          "title": "Test Scope",
+          "type": "string"
+        },
+        "target": {
+          "minLength": 1,
+          "title": "Target",
+          "type": "string"
+        },
+        "prompt_version": {
+          "minLength": 1,
+          "title": "Prompt Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "suite_id",
+        "suite_kind",
+        "dataset_version",
+        "target_agent",
+        "test_scope",
+        "target",
+        "prompt_version"
+      ],
+      "title": "SuiteMetadata",
+      "type": "object"
+    },
+    "SuitePaths": {
+      "additionalProperties": false,
+      "properties": {
+        "source_files": {
+          "items": {
+            "$ref": "#/$defs/PathReference"
+          },
+          "title": "Source Files",
+          "type": "array"
+        },
+        "coverage_plan": {
+          "$ref": "#/$defs/PathReference"
+        },
+        "seed_catalog": {
+          "$ref": "#/$defs/PathReference"
+        },
+        "freeze_output": {
+          "$ref": "#/$defs/PathReference"
+        },
+        "eval_case_schema": {
+          "$ref": "#/$defs/PathReference"
+        }
+      },
+      "required": [
+        "source_files",
+        "coverage_plan",
+        "seed_catalog",
+        "freeze_output",
+        "eval_case_schema"
+      ],
+      "title": "SuitePaths",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "metadata": {
+      "$ref": "#/$defs/SuiteMetadata"
+    },
+    "paths": {
+      "$ref": "#/$defs/SuitePaths"
+    },
+    "capability_input": {
+      "$ref": "#/$defs/CapabilityInputConfig"
+    },
+    "execution_profiles": {
+      "additionalProperties": {
+        "$ref": "#/$defs/ExecutionProfileConfig"
+      },
+      "title": "Execution Profiles",
+      "type": "object"
+    },
+    "policies": {
+      "$ref": "#/$defs/PolicyReferences"
+    }
+  },
+  "required": [
+    "schema_version",
+    "metadata",
+    "paths",
+    "capability_input",
+    "execution_profiles",
+    "policies"
+  ],
+  "title": "SuiteConfig",
+  "type": "object"
+}

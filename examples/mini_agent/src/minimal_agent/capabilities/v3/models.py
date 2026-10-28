@@ -1,0 +1,41 @@
+"""Compatibility re-exports for portable Capability Protocol v3 models."""
+
+from capability_snapshot_kit.models import (
+    AgentSnapshotV3,
+    BoundarySnapshotV3,
+    CapabilityClaimV3,
+    CapabilityProviderV3,
+    CapabilityRequirementV3,
+    ChainNodeV3,
+    ChainSnapshotV3,
+    EvidenceSnapshotV3,
+    IntentSnapshotV3,
+    ModuleSnapshotV3,
+    ScopeSnapshotV3,
+    SnapshotReferenceV3,
+    SnapshotTypeV3,
+    SnapshotV3,
+    SupportStatusV3,
+    ToolSnapshotV3,
+    snapshot_schema_v3,
+)
+
+__all__ = [
+    "AgentSnapshotV3",
+    "BoundarySnapshotV3",
+    "CapabilityClaimV3",
+    "CapabilityProviderV3",
+    "CapabilityRequirementV3",
+    "ChainNodeV3",
+    "ChainSnapshotV3",
+    "EvidenceSnapshotV3",
+    "IntentSnapshotV3",
+    "ModuleSnapshotV3",
+    "ScopeSnapshotV3",
+    "SnapshotReferenceV3",
+    "SnapshotTypeV3",
+    "SnapshotV3",
+    "SupportStatusV3",
+    "ToolSnapshotV3",
+    "snapshot_schema_v3",
+]

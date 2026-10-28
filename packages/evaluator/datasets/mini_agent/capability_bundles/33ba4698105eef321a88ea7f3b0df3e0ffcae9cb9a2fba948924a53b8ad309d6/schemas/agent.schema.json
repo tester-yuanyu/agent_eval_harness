@@ -1,0 +1,481 @@
+{
+  "$defs": {
+    "AgentLayerSummaries": {
+      "additionalProperties": false,
+      "properties": {
+        "context": {
+          "$ref": "#/$defs/AgentLayerSummary"
+        },
+        "planning_execution": {
+          "$ref": "#/$defs/AgentLayerSummary"
+        },
+        "result": {
+          "$ref": "#/$defs/AgentLayerSummary"
+        },
+        "safety_recovery": {
+          "$ref": "#/$defs/AgentLayerSummary"
+        },
+        "understanding": {
+          "$ref": "#/$defs/AgentLayerSummary"
+        }
+      },
+      "required": [
+        "understanding",
+        "context",
+        "planning_execution",
+        "safety_recovery",
+        "result"
+      ],
+      "title": "AgentLayerSummaries",
+      "type": "object"
+    },
+    "AgentLayerSummary": {
+      "additionalProperties": false,
+      "properties": {
+        "downstream_dependencies": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Downstream Dependencies",
+          "type": "array"
+        },
+        "entrypoints": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Entrypoints",
+          "type": "array"
+        },
+        "evidence": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "failure_modes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Failure Modes",
+          "type": "array"
+        },
+        "formal_rules": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Formal Rules",
+          "type": "array"
+        },
+        "inputs": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Inputs",
+          "type": "array"
+        },
+        "outputs": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Outputs",
+          "type": "array"
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Reason"
+        },
+        "related_tools": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Related Tools",
+          "type": "array"
+        },
+        "state_reads": {
+          "items": {
+            "type": "string"
+          },
+          "title": "State Reads",
+          "type": "array"
+        },
+        "state_writes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "State Writes",
+          "type": "array"
+        },
+        "stop_nodes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Stop Nodes",
+          "type": "array"
+        },
+        "support_status": {
+          "$ref": "#/$defs/SupportStatus"
+        },
+        "supporting_module_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Supporting Module Ids",
+          "type": "array"
+        },
+        "upstream_dependencies": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Upstream Dependencies",
+          "type": "array"
+        }
+      },
+      "required": [
+        "support_status",
+        "inputs",
+        "outputs",
+        "entrypoints",
+        "stop_nodes",
+        "upstream_dependencies",
+        "downstream_dependencies",
+        "evidence",
+        "state_reads",
+        "state_writes",
+        "failure_modes",
+        "related_tools",
+        "formal_rules",
+        "reason",
+        "supporting_module_ids"
+      ],
+      "title": "AgentLayerSummary",
+      "type": "object"
+    },
+    "EvidenceDefinition": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "minLength": 1,
+          "title": "Description",
+          "type": "string"
+        },
+        "event_types": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Event Types",
+          "type": "array"
+        },
+        "observation_interface": {
+          "minLength": 1,
+          "title": "Observation Interface",
+          "type": "string"
+        },
+        "payload_schema": {
+          "additionalProperties": true,
+          "title": "Payload Schema",
+          "type": "object"
+        },
+        "producer_module_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Producer Module Ids",
+          "type": "array"
+        },
+        "source_kind": {
+          "enum": [
+            "intent_result",
+            "conversation_state",
+            "trace_event",
+            "store_snapshot",
+            "final_response"
+          ],
+          "title": "Source Kind",
+          "type": "string"
+        }
+      },
+      "required": [
+        "description",
+        "producer_module_ids",
+        "source_kind",
+        "payload_schema",
+        "observation_interface",
+        "event_types"
+      ],
+      "title": "EvidenceDefinition",
+      "type": "object"
+    },
+    "ExecutionBoundaryDefinition": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "minLength": 1,
+          "title": "Description",
+          "type": "string"
+        },
+        "entry": {
+          "pattern": "^[a-z][a-z0-9_]*$",
+          "title": "Entry",
+          "type": "string"
+        },
+        "evidence_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Evidence Ids",
+          "type": "array"
+        },
+        "module_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Module Ids",
+          "type": "array"
+        },
+        "stop_after": {
+          "pattern": "^[a-z][a-z0-9_]*$",
+          "title": "Stop After",
+          "type": "string"
+        }
+      },
+      "required": [
+        "description",
+        "entry",
+        "stop_after",
+        "module_ids",
+        "evidence_ids"
+      ],
+      "title": "ExecutionBoundaryDefinition",
+      "type": "object"
+    },
+    "ModuleTopologyEdge": {
+      "additionalProperties": false,
+      "properties": {
+        "downstream_module_id": {
+          "pattern": "^module\\.[a-z][a-z0-9_]*$",
+          "title": "Downstream Module Id",
+          "type": "string"
+        },
+        "upstream_module_id": {
+          "pattern": "^module\\.[a-z][a-z0-9_]*$",
+          "title": "Upstream Module Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "upstream_module_id",
+        "downstream_module_id"
+      ],
+      "title": "ModuleTopologyEdge",
+      "type": "object"
+    },
+    "SnapshotReference": {
+      "additionalProperties": false,
+      "properties": {
+        "contract_version": {
+          "minLength": 1,
+          "title": "Contract Version",
+          "type": "string"
+        },
+        "path": {
+          "minLength": 1,
+          "title": "Path",
+          "type": "string"
+        },
+        "snapshot_format_version": {
+          "const": "2.0",
+          "title": "Snapshot Format Version",
+          "type": "string"
+        },
+        "snapshot_id": {
+          "pattern": "^(agent|module|intent|tool)\\.[a-z][a-z0-9_]*$",
+          "title": "Snapshot Id",
+          "type": "string"
+        },
+        "snapshot_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Snapshot Sha256",
+          "type": "string"
+        },
+        "snapshot_type": {
+          "$ref": "#/$defs/SnapshotType"
+        }
+      },
+      "required": [
+        "snapshot_id",
+        "snapshot_type",
+        "snapshot_format_version",
+        "contract_version",
+        "snapshot_sha256",
+        "path"
+      ],
+      "title": "SnapshotReference",
+      "type": "object"
+    },
+    "SnapshotType": {
+      "enum": [
+        "agent",
+        "module",
+        "intent",
+        "tool"
+      ],
+      "title": "SnapshotType",
+      "type": "string"
+    },
+    "SupportStatus": {
+      "enum": [
+        "supported",
+        "unsupported",
+        "unknown"
+      ],
+      "title": "SupportStatus",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "agent_id": {
+      "const": "mini_agent",
+      "title": "Agent Id",
+      "type": "string"
+    },
+    "agent_version": {
+      "minLength": 1,
+      "title": "Agent Version",
+      "type": "string"
+    },
+    "capability_bundle_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Capability Bundle Sha256",
+      "type": "string"
+    },
+    "contract_version": {
+      "minLength": 1,
+      "title": "Contract Version",
+      "type": "string"
+    },
+    "current_task_types": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Current Task Types",
+      "type": "array"
+    },
+    "entrypoints": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Entrypoints",
+      "type": "array"
+    },
+    "evidence_catalog": {
+      "additionalProperties": {
+        "$ref": "#/$defs/EvidenceDefinition"
+      },
+      "title": "Evidence Catalog",
+      "type": "object"
+    },
+    "execution_boundaries": {
+      "additionalProperties": {
+        "$ref": "#/$defs/ExecutionBoundaryDefinition"
+      },
+      "title": "Execution Boundaries",
+      "type": "object"
+    },
+    "input_schema": {
+      "additionalProperties": true,
+      "title": "Input Schema",
+      "type": "object"
+    },
+    "layers": {
+      "$ref": "#/$defs/AgentLayerSummaries"
+    },
+    "module_refs": {
+      "items": {
+        "$ref": "#/$defs/SnapshotReference"
+      },
+      "title": "Module Refs",
+      "type": "array"
+    },
+    "module_topology": {
+      "items": {
+        "$ref": "#/$defs/ModuleTopologyEdge"
+      },
+      "title": "Module Topology",
+      "type": "array"
+    },
+    "output_schema": {
+      "additionalProperties": true,
+      "title": "Output Schema",
+      "type": "object"
+    },
+    "runtime_versions": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Runtime Versions",
+      "type": "object"
+    },
+    "snapshot_format_version": {
+      "const": "2.0",
+      "title": "Snapshot Format Version",
+      "type": "string"
+    },
+    "snapshot_id": {
+      "const": "agent.mini_agent",
+      "title": "Snapshot Id",
+      "type": "string"
+    },
+    "snapshot_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Snapshot Sha256",
+      "type": "string"
+    },
+    "snapshot_type": {
+      "const": "agent",
+      "title": "Snapshot Type",
+      "type": "string"
+    },
+    "source_hashes": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Source Hashes",
+      "type": "object"
+    }
+  },
+  "required": [
+    "snapshot_id",
+    "snapshot_type",
+    "snapshot_format_version",
+    "contract_version",
+    "source_hashes",
+    "snapshot_sha256",
+    "agent_id",
+    "agent_version",
+    "entrypoints",
+    "module_refs",
+    "module_topology",
+    "input_schema",
+    "output_schema",
+    "layers",
+    "current_task_types",
+    "evidence_catalog",
+    "execution_boundaries",
+    "runtime_versions",
+    "capability_bundle_sha256"
+  ],
+  "title": "AgentSnapshotV2",
+  "type": "object"
+}

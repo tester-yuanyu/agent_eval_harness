@@ -1,0 +1,24 @@
+{
+  "name": "coverage",
+  "passed": true,
+  "issues": [],
+  "details": {
+    "case_count": 28,
+    "intent_status_distribution": {
+      "add_backpack_gift/NEED_CLARIFICATION": 16,
+      "add_backpack_gift/NEED_CONFIRMATION": 12
+    },
+    "status_distribution": {
+      "NEED_CLARIFICATION": 16,
+      "NEED_CONFIRMATION": 12
+    },
+    "scenario_type_distribution": {
+      "expression_variant": 2,
+      "invalid_parameter": 8,
+      "missing_parameter": 4,
+      "multi_condition": 4,
+      "normal": 6,
+      "valid_boundary": 4
+    }
+  }
+}

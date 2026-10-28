@@ -1,0 +1,42 @@
+{
+  "capabilities": [
+    {
+      "capability_key": "model.structured_output",
+      "evidence_ids": [
+        "evidence.intent_result"
+      ],
+      "reason": null,
+      "support_status": "supported"
+    }
+  ],
+  "component_versions": {
+    "model_gateway": "v3"
+  },
+  "contract_version": "model-gateway-module-v3",
+  "execution_boundary_ids": [
+    "boundary.understanding"
+  ],
+  "input_schema": {
+    "type": "object"
+  },
+  "intent_refs": [],
+  "module_id": "model_gateway",
+  "module_refs": [],
+  "output_schema": {
+    "type": "object"
+  },
+  "responsibility": "Request structured model output.",
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "module.model_gateway",
+  "snapshot_sha256": "78f74ab0def8cb0e96c99463b4aa3060b77dd5ce0a9e4cf3818df83c2cca7852",
+  "snapshot_type": "module",
+  "source_hashes": {
+    "capabilities_sha256": "6ec16fca0b68608cbed0c88cd208ff5e0930f8f8b097ed62adbb7e0f07326af9",
+    "children_sha256": "b78ee59b8a819b12aaee9953ee472c98c34893d48db562e951cb5033d096ae54"
+  },
+  "tool_refs": [],
+  "trace_event_types": [
+    "intent_candidate_received",
+    "model_failed"
+  ]
+}

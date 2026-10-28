@@ -1,0 +1,51 @@
+{
+  "applicable_result_paths": [
+    "need_clarification",
+    "need_confirmation",
+    "rejected",
+    "failure",
+    "timeout"
+  ],
+  "availability": {
+    "capability_key": "evidence.safety_recovery_event_available",
+    "evidence_ids": [
+      "evidence.safety_recovery_event"
+    ],
+    "reason": null,
+    "support_status": "supported"
+  },
+  "consumer_roles": [
+    "builder",
+    "evaluator"
+  ],
+  "contract_version": "mini-agent-capability-contract-v3",
+  "description": "Observable stop, rejection, and failure events.",
+  "event_types": [
+    "clarification_returned",
+    "confirmation_required",
+    "request_rejected",
+    "model_failed",
+    "tool_failed",
+    "tool_timeout",
+    "max_steps_exceeded"
+  ],
+  "evidence_id": "safety_recovery_event",
+  "observation_interface": "agent_result.events",
+  "payload_schema": {
+    "type": "object"
+  },
+  "producer_module_ids": [
+    "module.agent_orchestrator",
+    "module.tool_loop",
+    "module.execution_guard"
+  ],
+  "production_timing": "when execution stops before normal completion",
+  "required": true,
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "evidence.safety_recovery_event",
+  "snapshot_sha256": "8068e14668f7deeec2d8b3d5013d16b52fde64fa2362cbe232866717d8786164",
+  "snapshot_type": "evidence",
+  "source_hashes": {
+    "catalog_definition_sha256": "f3b908e12937a19b7a0b74eddfe18980afcbba2579c75162e1fe9f076336de1e"
+  }
+}

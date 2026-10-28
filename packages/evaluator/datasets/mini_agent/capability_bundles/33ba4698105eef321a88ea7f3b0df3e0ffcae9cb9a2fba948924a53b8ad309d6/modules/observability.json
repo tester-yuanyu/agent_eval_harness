@@ -1,0 +1,165 @@
+{
+  "component_versions": {
+    "observability": "v2"
+  },
+  "context_rules": [],
+  "contract_version": "observability-module-v2",
+  "execution_boundary": "end_to_end",
+  "execution_boundary_ids": [
+    "end_to_end"
+  ],
+  "input_schema": {
+    "type": "object"
+  },
+  "intent_refs": [],
+  "layers": {
+    "context": {
+      "downstream_dependencies": [],
+      "entrypoints": [
+        "MinimalAgent.run"
+      ],
+      "evidence": [
+        "tool_trace"
+      ],
+      "failure_modes": [],
+      "formal_rules": [],
+      "inputs": [
+        "request"
+      ],
+      "outputs": [
+        "observable_result"
+      ],
+      "reason": null,
+      "related_tools": [],
+      "state_reads": [],
+      "state_writes": [],
+      "stop_nodes": [
+        "observable_result"
+      ],
+      "support_status": "supported",
+      "upstream_dependencies": []
+    },
+    "planning_execution": {
+      "downstream_dependencies": [],
+      "entrypoints": [
+        "MinimalAgent.run"
+      ],
+      "evidence": [
+        "final_response"
+      ],
+      "failure_modes": [],
+      "formal_rules": [],
+      "inputs": [
+        "request"
+      ],
+      "outputs": [
+        "observable_result"
+      ],
+      "reason": null,
+      "related_tools": [],
+      "state_reads": [],
+      "state_writes": [],
+      "stop_nodes": [
+        "observable_result"
+      ],
+      "support_status": "supported",
+      "upstream_dependencies": []
+    },
+    "result": {
+      "downstream_dependencies": [],
+      "entrypoints": [
+        "MinimalAgent.run"
+      ],
+      "evidence": [
+        "final_response"
+      ],
+      "failure_modes": [],
+      "formal_rules": [],
+      "inputs": [
+        "request"
+      ],
+      "outputs": [
+        "observable_result"
+      ],
+      "reason": null,
+      "related_tools": [],
+      "state_reads": [],
+      "state_writes": [],
+      "stop_nodes": [
+        "observable_result"
+      ],
+      "support_status": "supported",
+      "upstream_dependencies": []
+    },
+    "safety_recovery": {
+      "downstream_dependencies": [],
+      "entrypoints": [
+        "ToolRegistry.invoke"
+      ],
+      "evidence": [
+        "permission_event"
+      ],
+      "failure_modes": [],
+      "formal_rules": [],
+      "inputs": [
+        "request"
+      ],
+      "outputs": [
+        "observable_result"
+      ],
+      "reason": null,
+      "related_tools": [],
+      "state_reads": [],
+      "state_writes": [],
+      "stop_nodes": [
+        "observable_result"
+      ],
+      "support_status": "supported",
+      "upstream_dependencies": []
+    },
+    "understanding": {
+      "downstream_dependencies": [],
+      "entrypoints": [
+        "MinimalAgent.run_intent_only"
+      ],
+      "evidence": [
+        "intent_router_output"
+      ],
+      "failure_modes": [],
+      "formal_rules": [],
+      "inputs": [
+        "request"
+      ],
+      "outputs": [
+        "observable_result"
+      ],
+      "reason": null,
+      "related_tools": [],
+      "state_reads": [],
+      "state_writes": [],
+      "stop_nodes": [
+        "observable_result"
+      ],
+      "support_status": "supported",
+      "upstream_dependencies": []
+    }
+  },
+  "mockable_dependencies": [],
+  "module_id": "observability",
+  "module_refs": [],
+  "output_schema": {
+    "type": "object"
+  },
+  "responsibility": "Emit observable Trace and result evidence.",
+  "snapshot_format_version": "2.0",
+  "snapshot_id": "module.observability",
+  "snapshot_sha256": "cda765f8a88b5a4abc2382faebfa97a6a1d92ebbde09aa62ec51ac1c3644d057",
+  "snapshot_type": "module",
+  "source_hashes": {
+    "children_sha256": "b78ee59b8a819b12aaee9953ee472c98c34893d48db562e951cb5033d096ae54",
+    "layers_sha256": "b7e0feb6b755fc0a7f0e8cde07bc9aa821cbf5479c40b465aa146c73145f810e"
+  },
+  "supported_operations": [],
+  "tool_refs": [],
+  "trace_event_types": []
+}

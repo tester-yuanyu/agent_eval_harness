@@ -1,0 +1,71 @@
+{
+  "capability_id": "query_information",
+  "contract_version": "intent-contract-v1",
+  "decision_rules": {
+    "complete": {
+      "next_action": "CALL_TOOL",
+      "status": "READY"
+    },
+    "incomplete": {
+      "next_action": "ASK_USER",
+      "status": "NEED_CLARIFICATION"
+    },
+    "required_tool_name": "query_information"
+  },
+  "missing_parameters": [
+    "environment",
+    "resource_type"
+  ],
+  "module_id": "module.intent_router",
+  "parameters_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "environment": {
+        "anyOf": [
+          {
+            "minLength": 1,
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Environment"
+      },
+      "resource_type": {
+        "anyOf": [
+          {
+            "minLength": 1,
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Resource Type"
+      }
+    },
+    "title": "_QueryInformationParameters",
+    "type": "object"
+  },
+  "semantic_rules": {
+    "required_fields": [
+      "resource_type",
+      "environment"
+    ],
+    "string_normalization": "TRIM_SURROUNDING_WHITESPACE"
+  },
+  "snapshot_format_version": "2.0",
+  "snapshot_id": "intent.query_information",
+  "snapshot_sha256": "2c2d107e6d02a41ae382657b40bf4364931c65a2adb262350c4e96f25fb91373",
+  "snapshot_type": "intent",
+  "source_hashes": {
+    "decision_rules_sha256": "9c3bce3d310e8666fb6aedc86888b178744d8ce533d5bbe40b299e7a243233a4",
+    "parameters_schema_sha256": "912718a302884802123177f6f2d6d953cbecf66fb4952118bb2ad3230cdc8773",
+    "semantic_rules_sha256": "5496f4fabe979405206e100b43367f95493b427b663925428c2a46c80de09b6b",
+    "tool_refs_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "tool_refs": []
+}

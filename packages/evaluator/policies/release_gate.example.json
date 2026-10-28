@@ -1,0 +1,22 @@
+{
+  "policy_id": "release-gate-example",
+  "version": "1.0",
+  "require_comparison": true,
+  "minimum_execution_rate": 100,
+  "minimum_strict_pass_rate": 95,
+  "minimum_pass_power_k_rate": 90,
+  "maximum_regressions": 0,
+  "maximum_unstable_cases": 0,
+  "core_labels": [],
+  "zero_tolerance_labels": [],
+  "zero_tolerance_assertions": [],
+  "required_judge_dimensions": {},
+  "maximum_latency_p50_ms": null,
+  "maximum_latency_p95_ms": null,
+  "maximum_token_usage": null,
+  "maximum_latency_p50_increase_percent": null,
+  "maximum_latency_p95_increase_percent": null,
+  "maximum_token_increase_percent": null,
+  "minimum_percentile_samples": 20,
+  "require_trace_evidence": true
+}

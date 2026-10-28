@@ -1,0 +1,10 @@
+[
+  {
+    "intent": "query_information",
+    "status": "READY",
+    "next_action": "CALL_TOOL",
+    "parameters": {"resource_type": "fixture", "environment": "test"},
+    "missing_parameters": [],
+    "reason": "Independent scripted response fixture."
+  }
+]

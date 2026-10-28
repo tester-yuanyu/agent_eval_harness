@@ -1,0 +1,1538 @@
+{
+  "suite_id": "mini_agent_query_user_intent_v1",
+  "dataset_version": "1.5",
+  "state": "FROZEN",
+  "generation_mode": "scripted",
+  "model": "scripted-generation-client",
+  "prompt_version": "query-user-intent-v5",
+  "prompt_sha256": "3f3c162dc8a441f5abedf8befe20996fac8bee402ad3ff485e27c83a6ea40140",
+  "suite_definition_version": "1.0",
+  "suite_config_sha256": "e874eb3fb2c7c004e94fea89c8a4f99ae0301b8a18ac5ef8994736bc14126bae",
+  "source_manifest": [
+    {
+      "path": "/Users/yuanyu/Documents/ChatGPT/agent_dataset_builder/workspaces/generation_run_query_user_v1_5/capability_bundle/agent.json",
+      "sha256": "5dc8ef56a664cb48b75b12d8c4294cc676515d4327f50fab5086d9b4861fb4d5"
+    },
+    {
+      "path": "/Users/yuanyu/Documents/ChatGPT/agent_dataset_builder/workspaces/generation_run_query_user_v1_5/capability_bundle/intents/query_user.json",
+      "sha256": "762d3e27e569b92137ea63cba48e2a7c20af33b261f274bceeb7be00b5213450"
+    },
+    {
+      "path": "/Users/yuanyu/Documents/ChatGPT/agent_dataset_builder/workspaces/generation_run_query_user_v1_5/capability_bundle/modules/intent_router.json",
+      "sha256": "1ee59965f1dff88eae8e9c2f4ad47e93fdce39dae0a9c73d62730eef93b3e968"
+    },
+    {
+      "path": "/Users/yuanyu/Documents/ChatGPT/agent_dataset_builder/suites/mini_agent_query_user_intent_v1/generation_policy.md",
+      "sha256": "015b3fd5305788761da84bcb2e6acf0d62fedfb6615b3befe13809c07ffc9b4b"
+    },
+    {
+      "path": "/Users/yuanyu/Documents/ChatGPT/agent_dataset_builder/suites/mini_agent_query_user_intent_v1/coverage_plan.json",
+      "sha256": "6e70691b765486f0d5c2ed76b280fbb76ae1fb82f3aafee01389f57bae3010f0"
+    }
+  ],
+  "capability_snapshots": [
+    {
+      "snapshot_id": "agent.mini_agent",
+      "snapshot_type": "agent",
+      "snapshot_format_version": "2.0",
+      "module_id": null,
+      "contract_version": "mini-agent-capability-contract-v2",
+      "relative_path": "agent.json",
+      "snapshot_sha256": "d8ec7d0747610399466360e9392108aa27e278414983bcf54c60bb17c456ddfc",
+      "source_hashes": {
+        "evidence_catalog_sha256": "a09f480434a5f921922ab532fee3428deb7d4cbe4dd8795fc94755bd7cb4b121",
+        "execution_boundaries_sha256": "6c6407875f17b34f01392ab197e2de6119ee222de5c76f800d8f0f3ca4a0c258",
+        "input_schema_sha256": "ce41b0545a3ebcc5368c1fb08ac724d79dea2c3b2647497f8327a679fe141397",
+        "layers_sha256": "35ab703f8058105afa67c8c3501a078cb44f3e91c4fc650e5da073f05af032e4",
+        "module_refs_sha256": "56f4e2d482a469e3a15914ff0e7c3bf2a81ef83f7caabc81086196cacd921f4a",
+        "module_topology_sha256": "e1155a41b4de9402f9ae1dc21dd5a6abfd13f4aa3d0c0cf89bbdee893f5faf16",
+        "output_schema_sha256": "12b9e3fa5cec61fa0f90bd5bae16ac0cd88a34d7dc1721b3539474709e1a5bd0"
+      }
+    },
+    {
+      "snapshot_id": "intent.query_user",
+      "snapshot_type": "intent",
+      "snapshot_format_version": "2.0",
+      "module_id": "module.intent_router",
+      "contract_version": "query-user-intent-contract-v3",
+      "relative_path": "intents/query_user.json",
+      "snapshot_sha256": "0119829b318adc01d869ae020475820966227ea5f7352a6392400e04f9c8b46f",
+      "source_hashes": {
+        "decision_rules_sha256": "f88868121634126a29ab91a52a1666c3bb0db4273ed03ae1630ccf927dd2af19",
+        "parameters_schema_sha256": "b0711222d4dc2ca276e3ced2e1243499940037c2cacb18756b033868206f2cba",
+        "semantic_rules_sha256": "1f9d35ae6081d5b2ba1e64f33af2e5151a9c67c04e0d9359b22c8f2de1d3ecfb",
+        "tool_refs_sha256": "3f981313309b6c754fab831a07e9b8e0c6b4a2f47500bfe656c82e8d4c690139"
+      }
+    },
+    {
+      "snapshot_id": "module.intent_router",
+      "snapshot_type": "module",
+      "snapshot_format_version": "2.0",
+      "module_id": "intent_router",
+      "contract_version": "intent-router-module-v2",
+      "relative_path": "modules/intent_router.json",
+      "snapshot_sha256": "ebd262ec9739ceaaf90845f1540df3a7a966ea97ed395d252092452306614988",
+      "source_hashes": {
+        "component_versions_sha256": "fae03bfd7577ce88c2ce819f57dc63735d3bf5a687848d23fb2e46f3a52ab47a",
+        "execution_boundary_ids_sha256": "0122928fa6d7938916dd99f6b8627c25d6d4d92e9a8743299707ccafff9a5d70",
+        "input_schema_sha256": "ce41b0545a3ebcc5368c1fb08ac724d79dea2c3b2647497f8327a679fe141397",
+        "layers_sha256": "ef28cc13ea04aad08ebbb502cbaf168e46264ad9cdf57e2252d31c068f3a1112",
+        "output_schema_sha256": "1cc52b2ab1b9a3619fb61a887a67c53db411a7e2deb38b46e5eb6b9d72ca2b44",
+        "references_sha256": "8798224fff1f5d4a7505c888a6fe53f3b819f10fffa0bc2250016cb09be926ef"
+      }
+    },
+    {
+      "snapshot_id": "tool.query_user_info",
+      "snapshot_type": "tool",
+      "snapshot_format_version": "2.0",
+      "module_id": null,
+      "contract_version": "tool-query_user_info-contract-v2",
+      "relative_path": "tools/query_user_info.json",
+      "snapshot_sha256": "b23cf89f78b91c734b6f5c48111046171f51fe2d0562a469de1e1d0f39c0181c",
+      "source_hashes": {
+        "function_schema_sha256": "9a3574bea1af7e875adc439a6c4980d2a99fbbb983791cc30afe8b8bfc9cd2f8",
+        "parameter_rules_sha256": "c03bf46bab6692521ee6a7b16f6785c08c81e09419ffce21a22a088c7b4edf82",
+        "result_contracts_sha256": "dec6d2189a901716944b52daec8492d3dc1f28c167798ef5219fcdaaf4a0d33b",
+        "result_schema_sha256": "b04c3137b6db836a69fffa0ca2a646e2e5c4149d41bbacab77477767e18a865b"
+      }
+    }
+  ],
+  "validated_capability_snapshots": [
+    {
+      "snapshot_id": "agent.mini_agent",
+      "snapshot_type": "agent",
+      "snapshot_format_version": "2.0",
+      "module_id": null,
+      "contract_version": "mini-agent-capability-contract-v2",
+      "relative_path": "agent.json",
+      "snapshot_sha256": "d8ec7d0747610399466360e9392108aa27e278414983bcf54c60bb17c456ddfc",
+      "source_hashes": {
+        "evidence_catalog_sha256": "a09f480434a5f921922ab532fee3428deb7d4cbe4dd8795fc94755bd7cb4b121",
+        "execution_boundaries_sha256": "6c6407875f17b34f01392ab197e2de6119ee222de5c76f800d8f0f3ca4a0c258",
+        "input_schema_sha256": "ce41b0545a3ebcc5368c1fb08ac724d79dea2c3b2647497f8327a679fe141397",
+        "layers_sha256": "35ab703f8058105afa67c8c3501a078cb44f3e91c4fc650e5da073f05af032e4",
+        "module_refs_sha256": "56f4e2d482a469e3a15914ff0e7c3bf2a81ef83f7caabc81086196cacd921f4a",
+        "module_topology_sha256": "e1155a41b4de9402f9ae1dc21dd5a6abfd13f4aa3d0c0cf89bbdee893f5faf16",
+        "output_schema_sha256": "12b9e3fa5cec61fa0f90bd5bae16ac0cd88a34d7dc1721b3539474709e1a5bd0"
+      }
+    },
+    {
+      "snapshot_id": "intent.add_backpack_gift",
+      "snapshot_type": "intent",
+      "snapshot_format_version": "2.0",
+      "module_id": "module.intent_router",
+      "contract_version": "intent-contract-v1",
+      "relative_path": "intents/add_backpack_gift.json",
+      "snapshot_sha256": "8873f234cfccdfba87bc2829fa70a1d62c61af7f357fc4e2400e3d753ee03b53",
+      "source_hashes": {
+        "decision_rules_sha256": "0904be12a2b1b516e527f77cb831352c7f138d3b1b921d1770ab41f2b9aa30fa",
+        "parameters_schema_sha256": "a1e13b5a62e151757cdf7041d629c8842e1b96319e4afee2661e5780a3dbcce1",
+        "semantic_rules_sha256": "c2da0773849fd8d2873984be908e75f3238c2fc0e808680b7d47483d24cdda55",
+        "tool_refs_sha256": "ba68344f24b23810d259d890c06071342d2dcea0a8f77a3c4c95d64f886770dc"
+      }
+    },
+    {
+      "snapshot_id": "intent.prepare_resource",
+      "snapshot_type": "intent",
+      "snapshot_format_version": "2.0",
+      "module_id": "module.intent_router",
+      "contract_version": "intent-contract-v1",
+      "relative_path": "intents/prepare_resource.json",
+      "snapshot_sha256": "d96d00544aae6f36291fcdc1ddb2bbba0396d12fc02dcffc438079fa078c84eb",
+      "source_hashes": {
+        "decision_rules_sha256": "f88868121634126a29ab91a52a1666c3bb0db4273ed03ae1630ccf927dd2af19",
+        "parameters_schema_sha256": "774a0785e334ee87901b3610bdc9ce4fe5d8852ab07e7fa050b78ffa41cffbb3",
+        "semantic_rules_sha256": "bcb926ec284157bdef54789a7e9b12fe560b7a5720605dd37a1eb07fb7c249f9",
+        "tool_refs_sha256": "12b5b7031f9045005b924a3620eaa75d15eb17023518d58d686743bb68a8da4b"
+      }
+    },
+    {
+      "snapshot_id": "intent.query_gift",
+      "snapshot_type": "intent",
+      "snapshot_format_version": "2.0",
+      "module_id": "module.intent_router",
+      "contract_version": "intent-contract-v1",
+      "relative_path": "intents/query_gift.json",
+      "snapshot_sha256": "2b9d5a364e7543ecb0512d855120e2e9691eaa1b8aa5a785b3d95bbc70e4aada",
+      "source_hashes": {
+        "decision_rules_sha256": "f88868121634126a29ab91a52a1666c3bb0db4273ed03ae1630ccf927dd2af19",
+        "parameters_schema_sha256": "5b1bc4c54fade97abdbd672d19cd2a3d6cac20949663647731962ac854fef894",
+        "semantic_rules_sha256": "f0bd8cfc8138da6c9c0e7f4ce129ac58df93aac39fab8fa2551758e1a211a420",
+        "tool_refs_sha256": "49fff366d8a244b8a64c526d52cb117a1eb580780b807248d14a7fb1b947c9d6"
+      }
+    },
+    {
+      "snapshot_id": "intent.query_information",
+      "snapshot_type": "intent",
+      "snapshot_format_version": "2.0",
+      "module_id": "module.intent_router",
+      "contract_version": "intent-contract-v1",
+      "relative_path": "intents/query_information.json",
+      "snapshot_sha256": "4388cea963bb3624b138a8d9f491b8f2f2212e00a64ff94e5f8bffc13fcc6f85",
+      "source_hashes": {
+        "decision_rules_sha256": "f88868121634126a29ab91a52a1666c3bb0db4273ed03ae1630ccf927dd2af19",
+        "parameters_schema_sha256": "912718a302884802123177f6f2d6d953cbecf66fb4952118bb2ad3230cdc8773",
+        "semantic_rules_sha256": "5496f4fabe979405206e100b43367f95493b427b663925428c2a46c80de09b6b",
+        "tool_refs_sha256": "d13a1f863050892a3a080b2f825e60205c45b68d9084c41d3a0f590ae9349c77"
+      }
+    },
+    {
+      "snapshot_id": "intent.query_pool",
+      "snapshot_type": "intent",
+      "snapshot_format_version": "2.0",
+      "module_id": "module.intent_router",
+      "contract_version": "intent-contract-v1",
+      "relative_path": "intents/query_pool.json",
+      "snapshot_sha256": "c81cd3913483890eb3ed76ad7d2d4a416ade92080fdfb6badfcea39a65f3aa85",
+      "source_hashes": {
+        "decision_rules_sha256": "f88868121634126a29ab91a52a1666c3bb0db4273ed03ae1630ccf927dd2af19",
+        "parameters_schema_sha256": "4c2209afcc1f464524719ad0da3db5c2e8d6f679218aba08fe9924e2552903d3",
+        "semantic_rules_sha256": "13a0736d35339acfa5485018f7573e6adcb3912460353fa6a33635d52fb1544b",
+        "tool_refs_sha256": "f1d7687aa8df513d79420eafcfd6ea93094ffa24ca7adc81c5237ac0bad93b6d"
+      }
+    },
+    {
+      "snapshot_id": "intent.query_user",
+      "snapshot_type": "intent",
+      "snapshot_format_version": "2.0",
+      "module_id": "module.intent_router",
+      "contract_version": "query-user-intent-contract-v3",
+      "relative_path": "intents/query_user.json",
+      "snapshot_sha256": "0119829b318adc01d869ae020475820966227ea5f7352a6392400e04f9c8b46f",
+      "source_hashes": {
+        "decision_rules_sha256": "f88868121634126a29ab91a52a1666c3bb0db4273ed03ae1630ccf927dd2af19",
+        "parameters_schema_sha256": "b0711222d4dc2ca276e3ced2e1243499940037c2cacb18756b033868206f2cba",
+        "semantic_rules_sha256": "1f9d35ae6081d5b2ba1e64f33af2e5151a9c67c04e0d9359b22c8f2de1d3ecfb",
+        "tool_refs_sha256": "3f981313309b6c754fab831a07e9b8e0c6b4a2f47500bfe656c82e8d4c690139"
+      }
+    },
+    {
+      "snapshot_id": "intent.unsupported",
+      "snapshot_type": "intent",
+      "snapshot_format_version": "2.0",
+      "module_id": "module.intent_router",
+      "contract_version": "intent-contract-v1",
+      "relative_path": "intents/unsupported.json",
+      "snapshot_sha256": "fa4e367e850e674fba87fedf08dc01df72674d4d31b432bb551f736d5f81627d",
+      "source_hashes": {
+        "decision_rules_sha256": "565891c881cb43228bff6a36aa878ae1b00f4f7689cc6ca9f703b99c9f5681de",
+        "parameters_schema_sha256": "ab40af43b424b333f8496750d4e81a1826c926ef1e45ea0f5a2b35cb3c68319e",
+        "semantic_rules_sha256": "2fb32d09deba5665f35892bb33616621435b5d051f8ad9fc185995f5bfd3d7e8",
+        "tool_refs_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    },
+    {
+      "snapshot_id": "module.agent_orchestrator",
+      "snapshot_type": "module",
+      "snapshot_format_version": "2.0",
+      "module_id": "agent_orchestrator",
+      "contract_version": "agent-orchestrator-module-v2",
+      "relative_path": "modules/agent_orchestrator.json",
+      "snapshot_sha256": "b3bded88a30b2f57283d48d00b453e41da526a7a67cc1313ab3faed17b83adb4",
+      "source_hashes": {
+        "component_versions_sha256": "f81a1e2e8483f4d4a9311652f494d7ef8586900babee6dedc8fe0488b47bca41",
+        "execution_boundary_ids_sha256": "d91de6d633965d502269788656c4daa28b1a0aa24191c304b880903d4c282135",
+        "input_schema_sha256": "ce41b0545a3ebcc5368c1fb08ac724d79dea2c3b2647497f8327a679fe141397",
+        "layers_sha256": "7d79ac60c3be1ccb54ece14eb4c0ef26355d1908d8a89a0922479c2819cbfe6e",
+        "output_schema_sha256": "12b9e3fa5cec61fa0f90bd5bae16ac0cd88a34d7dc1721b3539474709e1a5bd0",
+        "references_sha256": "b3ca11ab86016136332c48f6ea134130104b2b382f852fad244312a1f424c203"
+      }
+    },
+    {
+      "snapshot_id": "module.execution_guard",
+      "snapshot_type": "module",
+      "snapshot_format_version": "2.0",
+      "module_id": "execution_guard",
+      "contract_version": "execution-guard-module-v2",
+      "relative_path": "modules/execution_guard.json",
+      "snapshot_sha256": "0ae55c34e9afbef14430404ea81395ae229645ad058d5e64562cc1ae37287a54",
+      "source_hashes": {
+        "component_versions_sha256": "2d9a280ce43f7ab1b2ad586994551b82359095f06d28901e33c75c04c59151cf",
+        "execution_boundary_ids_sha256": "b26b58dd5309baa785bf966ca95ec44521a3f5d3938876894bebdff8ab835f84",
+        "input_schema_sha256": "7275cc1f2f409ec46ddea9630ec9a2360f4890577eb90182b1517a429c751922",
+        "layers_sha256": "3773c63d2a1a8835b699306d1cf357cfc98f0e7f92fc3cc4f8f114ed8024ae48",
+        "output_schema_sha256": "f68719e1e61261b295b5b614a92661067fdbdfe63e1b027b876acb1ce1b6bdf1",
+        "references_sha256": "00ab7b42f35b7c44b873ee39ad42dd55f3637651427f4e8828c2ca4f867a51c9"
+      }
+    },
+    {
+      "snapshot_id": "module.intent_router",
+      "snapshot_type": "module",
+      "snapshot_format_version": "2.0",
+      "module_id": "intent_router",
+      "contract_version": "intent-router-module-v2",
+      "relative_path": "modules/intent_router.json",
+      "snapshot_sha256": "ebd262ec9739ceaaf90845f1540df3a7a966ea97ed395d252092452306614988",
+      "source_hashes": {
+        "component_versions_sha256": "fae03bfd7577ce88c2ce819f57dc63735d3bf5a687848d23fb2e46f3a52ab47a",
+        "execution_boundary_ids_sha256": "0122928fa6d7938916dd99f6b8627c25d6d4d92e9a8743299707ccafff9a5d70",
+        "input_schema_sha256": "ce41b0545a3ebcc5368c1fb08ac724d79dea2c3b2647497f8327a679fe141397",
+        "layers_sha256": "ef28cc13ea04aad08ebbb502cbaf168e46264ad9cdf57e2252d31c068f3a1112",
+        "output_schema_sha256": "1cc52b2ab1b9a3619fb61a887a67c53db411a7e2deb38b46e5eb6b9d72ca2b44",
+        "references_sha256": "8798224fff1f5d4a7505c888a6fe53f3b819f10fffa0bc2250016cb09be926ef"
+      }
+    },
+    {
+      "snapshot_id": "module.model_gateway",
+      "snapshot_type": "module",
+      "snapshot_format_version": "2.0",
+      "module_id": "model_gateway",
+      "contract_version": "model-gateway-module-v2",
+      "relative_path": "modules/model_gateway.json",
+      "snapshot_sha256": "d52251c2d134cfcb45b5125b53c4e5dbcd9bbfda53ca5f70c0986600849bfa06",
+      "source_hashes": {
+        "component_versions_sha256": "be4e1286dc629861ae2154abfede994d9d2e87f7587b7c6f020a99d8dae7046c",
+        "execution_boundary_ids_sha256": "d91de6d633965d502269788656c4daa28b1a0aa24191c304b880903d4c282135",
+        "input_schema_sha256": "45c8923f033a29139348d8ab85e5e7966eb2fa7998609240523ee21a50bba7c8",
+        "layers_sha256": "22b86e11091496ce8cbcf5d6420a385fdd5c17ea89bb0ba1f77fa12ea905a861",
+        "output_schema_sha256": "8d8e8f2427a922730488682376cd5b52b2a730736ead19ff32e487ef88b32be0",
+        "references_sha256": "abca75ce114ad4f5f48cc86b155d85cb9035479199e99afb440a265877ef8466"
+      }
+    },
+    {
+      "snapshot_id": "module.observability",
+      "snapshot_type": "module",
+      "snapshot_format_version": "2.0",
+      "module_id": "observability",
+      "contract_version": "observability-module-v2",
+      "relative_path": "modules/observability.json",
+      "snapshot_sha256": "31a9dda41dd9ea42f930a3a429330a6218ac5b1dc6dc556c72f31896cda71c56",
+      "source_hashes": {
+        "component_versions_sha256": "b972dd1938cbdba7c6c3116756ca37a401ceb49bf424e8cfaf8172878a88d01f",
+        "execution_boundary_ids_sha256": "d91de6d633965d502269788656c4daa28b1a0aa24191c304b880903d4c282135",
+        "input_schema_sha256": "e789b47ea328f644885a4c0f519abb07f5014c11fe50ca2e7ee3daba5dedef6f",
+        "layers_sha256": "fd11fe397c015a1a0ca91aa0196a8c48d8e38b99b4f8a13a3b1c56bbe9e2da63",
+        "output_schema_sha256": "c6e299b6e47259dc97d13f1f25eb34f6f0f29c652dad34ff626f7e4a03f1186f",
+        "references_sha256": "abca75ce114ad4f5f48cc86b155d85cb9035479199e99afb440a265877ef8466"
+      }
+    },
+    {
+      "snapshot_id": "module.state_store",
+      "snapshot_type": "module",
+      "snapshot_format_version": "2.0",
+      "module_id": "state_store",
+      "contract_version": "state-store-module-v2",
+      "relative_path": "modules/state_store.json",
+      "snapshot_sha256": "ec16d6b11303ec9f108fa30b0503acc9a15efb0c3dff0872cbca56c22df8d9b9",
+      "source_hashes": {
+        "component_versions_sha256": "cf270221edd6a5ee40308afc49709bb96ccdae3a74047fbdbd80823842d16702",
+        "execution_boundary_ids_sha256": "b0f37e575cabf7b2eb3156fd52e339df1d0bf6c4c2fedbf5b595d1a8dc785535",
+        "input_schema_sha256": "a5df57661a26013595bfea9b0abe541f87a841caac071ffc947afa058dc0fc31",
+        "layers_sha256": "305c6f34778f6eee1bbfc4cb03c2fcddfb0ddb4bf918244103679a67611c771d",
+        "output_schema_sha256": "7a7c9b066e5d7cc97970029da43816d8c65db66b8d614cccfb1ec2bffef053e2",
+        "references_sha256": "abca75ce114ad4f5f48cc86b155d85cb9035479199e99afb440a265877ef8466"
+      }
+    },
+    {
+      "snapshot_id": "module.tool_loop",
+      "snapshot_type": "module",
+      "snapshot_format_version": "2.0",
+      "module_id": "tool_loop",
+      "contract_version": "tool-loop-module-v2",
+      "relative_path": "modules/tool_loop.json",
+      "snapshot_sha256": "e3a1f4cd8eb722d371cb06b018d0b9f7dd0c4e873b4d18a07509bf85627ca31d",
+      "source_hashes": {
+        "component_versions_sha256": "958b9a260fcb89dbd3c9fccea0eb0d34cfc641c2a662580b8b225a06a25a3a8b",
+        "execution_boundary_ids_sha256": "eb739223ec5716eb9d04e2326204fd24935b12022f81f97041b5e7371f579943",
+        "input_schema_sha256": "c0868a9c00fe8f79701c32674c9e486acc7633f0ceeabc993413100d42edbaaa",
+        "layers_sha256": "28214a9d6cb0114fe1075bfaa0b617e4402a6e4a079db1a83bf9d632685ea5a2",
+        "output_schema_sha256": "2332414fc1dbc20f6e8c87e396e8747ba863e89c5c50b773c6ca48e6bbbff5e7",
+        "references_sha256": "87d398811d67d3771542d83107d67d831a1a32d000ff6af29fe1752391a3a634"
+      }
+    },
+    {
+      "snapshot_id": "module.tool_registry",
+      "snapshot_type": "module",
+      "snapshot_format_version": "2.0",
+      "module_id": "tool_registry",
+      "contract_version": "tool-registry-module-v2",
+      "relative_path": "modules/tool_registry.json",
+      "snapshot_sha256": "5eadcb7a1adf22af6b2179c8ac46d454aecdb709f1923158188a6d1adeed6bfa",
+      "source_hashes": {
+        "component_versions_sha256": "592a5a594271ffc08ae7417d3754de177a3576d06ae7a9250023011898b7e446",
+        "execution_boundary_ids_sha256": "eb739223ec5716eb9d04e2326204fd24935b12022f81f97041b5e7371f579943",
+        "input_schema_sha256": "cb84054af4ba08bba3f463ae0087735068a84fc636a19977f7ecd4c8acec6c03",
+        "layers_sha256": "c8a0cf3c53cd473eb06c53fa8d0b02ed77048c836c823ef97bb67d2b89f76f98",
+        "output_schema_sha256": "b04c3137b6db836a69fffa0ca2a646e2e5c4149d41bbacab77477767e18a865b",
+        "references_sha256": "138683b6f716b8b008e83e75e13dd14e9bfa86f7bd0fb753e6f54726a12a358e"
+      }
+    },
+    {
+      "snapshot_id": "tool.add_gift_to_backpack",
+      "snapshot_type": "tool",
+      "snapshot_format_version": "2.0",
+      "module_id": null,
+      "contract_version": "tool-add_gift_to_backpack-contract-v2",
+      "relative_path": "tools/add_gift_to_backpack.json",
+      "snapshot_sha256": "e9b0136e3b80eb3946acfdb4891882c52ee5d485c81f1c98650d18d913eef3b7",
+      "source_hashes": {
+        "function_schema_sha256": "c7f4388c4a6ca97abd64bd15f2cfee38d544d7700ac0c539f82a9892a13aa86e",
+        "parameter_rules_sha256": "bde4282dc7057b123bb89009bb7341bf2f3cbe5eb8dda95d8fae56667fc3d27f",
+        "result_contracts_sha256": "73dcf7d9bbb96d8005884f4d7f5e66d7e591662fa44358a83edc1f974d0b8264",
+        "result_schema_sha256": "b04c3137b6db836a69fffa0ca2a646e2e5c4149d41bbacab77477767e18a865b"
+      }
+    },
+    {
+      "snapshot_id": "tool.prepare_resource",
+      "snapshot_type": "tool",
+      "snapshot_format_version": "2.0",
+      "module_id": null,
+      "contract_version": "tool-prepare_resource-contract-v2",
+      "relative_path": "tools/prepare_resource.json",
+      "snapshot_sha256": "c0b144de3eb78236f197b08c5265e0a094277556373115155ac335ab8dba7a38",
+      "source_hashes": {
+        "function_schema_sha256": "4c940a5e6825baf034964170ee49e98657f2fb1139fff11d6590a1db9e252064",
+        "parameter_rules_sha256": "8dbe90023006c8c4cad19b34108f4c05895da68f70d8859094d9fe2c8d15c6f8",
+        "result_contracts_sha256": "06e5e942e7c285bef44451f2c445d5ec1441a619fb0f3a9fbb1e3869674ac793",
+        "result_schema_sha256": "b04c3137b6db836a69fffa0ca2a646e2e5c4149d41bbacab77477767e18a865b"
+      }
+    },
+    {
+      "snapshot_id": "tool.query_gift_info",
+      "snapshot_type": "tool",
+      "snapshot_format_version": "2.0",
+      "module_id": null,
+      "contract_version": "tool-query_gift_info-contract-v2",
+      "relative_path": "tools/query_gift_info.json",
+      "snapshot_sha256": "c6219cb9396ec8e520e0c5a4b8da85db5afecd3fa18e0fcd25d40349c82ec38e",
+      "source_hashes": {
+        "function_schema_sha256": "5457af8330adaeeb7bb04c3a60ce1fa659f1393be28ee3a372dbc8c1c75fd58c",
+        "parameter_rules_sha256": "6dd425503a0c24d663cff05e525f927987bcd1c1fe5eb03ae32020100ff08cf1",
+        "result_contracts_sha256": "0de1c9e0c431049867f74dea266261aec894810a2f20e7e08570e1ae9858687c",
+        "result_schema_sha256": "b04c3137b6db836a69fffa0ca2a646e2e5c4149d41bbacab77477767e18a865b"
+      }
+    },
+    {
+      "snapshot_id": "tool.query_information",
+      "snapshot_type": "tool",
+      "snapshot_format_version": "2.0",
+      "module_id": null,
+      "contract_version": "tool-query_information-contract-v2",
+      "relative_path": "tools/query_information.json",
+      "snapshot_sha256": "842e332e6b0fb287cc02e19a766992982ec5f5de2a069dd28dd94154632fbccc",
+      "source_hashes": {
+        "function_schema_sha256": "4b4e9976008f117c46503ab0809f1e732af4acc8762ba33f0b5f1f0e54cd1624",
+        "parameter_rules_sha256": "36e58ef5f4623559d3ead7a5d8667f245c94df155cabf6e67a63843f2ac9cde2",
+        "result_contracts_sha256": "1547bbd00b0c5473f0ef694e7beb4a439a29e4f36ffe60f7929e19f21c32aa96",
+        "result_schema_sha256": "b04c3137b6db836a69fffa0ca2a646e2e5c4149d41bbacab77477767e18a865b"
+      }
+    },
+    {
+      "snapshot_id": "tool.query_pool_config",
+      "snapshot_type": "tool",
+      "snapshot_format_version": "2.0",
+      "module_id": null,
+      "contract_version": "tool-query_pool_config-contract-v2",
+      "relative_path": "tools/query_pool_config.json",
+      "snapshot_sha256": "48b7c7ca3cf20a5bbba7c44d8dc99953dc716e36b2e5bb4db8794127f406c1c9",
+      "source_hashes": {
+        "function_schema_sha256": "437684c992b4255af93db56f466d7929a75e87cf682766648e9d109a90a5eaa8",
+        "parameter_rules_sha256": "2e9beb6e1a543fbd24e89ab82032c5eb4e147d69577134ac2c37777adf396d46",
+        "result_contracts_sha256": "7024a989673b6fa565f6a22c34684a3fa5d7b519121c8e615a561dc226740afc",
+        "result_schema_sha256": "b04c3137b6db836a69fffa0ca2a646e2e5c4149d41bbacab77477767e18a865b"
+      }
+    },
+    {
+      "snapshot_id": "tool.query_user_info",
+      "snapshot_type": "tool",
+      "snapshot_format_version": "2.0",
+      "module_id": null,
+      "contract_version": "tool-query_user_info-contract-v2",
+      "relative_path": "tools/query_user_info.json",
+      "snapshot_sha256": "b23cf89f78b91c734b6f5c48111046171f51fe2d0562a469de1e1d0f39c0181c",
+      "source_hashes": {
+        "function_schema_sha256": "9a3574bea1af7e875adc439a6c4980d2a99fbbb983791cc30afe8b8bfc9cd2f8",
+        "parameter_rules_sha256": "c03bf46bab6692521ee6a7b16f6785c08c81e09419ffce21a22a088c7b4edf82",
+        "result_contracts_sha256": "dec6d2189a901716944b52daec8492d3dc1f28c167798ef5219fcdaaf4a0d33b",
+        "result_schema_sha256": "b04c3137b6db836a69fffa0ca2a646e2e5c4149d41bbacab77477767e18a865b"
+      }
+    }
+  ],
+  "capability_bundle_files": [
+    {
+      "relative_path": "agent.json",
+      "sha256": "5dc8ef56a664cb48b75b12d8c4294cc676515d4327f50fab5086d9b4861fb4d5"
+    },
+    {
+      "relative_path": "intents/add_backpack_gift.json",
+      "sha256": "b73a5327392cb8221c3b6f5703fea35aea430a55e72e95fac020a3c2350d3953"
+    },
+    {
+      "relative_path": "intents/prepare_resource.json",
+      "sha256": "86fa1cb163530d0ab46f6ea71109f500f90894617a5db847f06ce91667f46a54"
+    },
+    {
+      "relative_path": "intents/query_gift.json",
+      "sha256": "5e0c7ab85283fdc95faf2707ccc8a7099591c280daf25606ccc28efa0cebb5b7"
+    },
+    {
+      "relative_path": "intents/query_information.json",
+      "sha256": "4fcbc11c23b83e8bc140a9ffe141f5350b08d079a1b15556e9631e37448e14bd"
+    },
+    {
+      "relative_path": "intents/query_pool.json",
+      "sha256": "058ef0d66069533da11f5093d6563f995853ffdd718554b9e82288f5988b0f57"
+    },
+    {
+      "relative_path": "intents/query_user.json",
+      "sha256": "762d3e27e569b92137ea63cba48e2a7c20af33b261f274bceeb7be00b5213450"
+    },
+    {
+      "relative_path": "intents/unsupported.json",
+      "sha256": "7922ee3f566cd20b5c8868bb52b97754fa30744249136873f237841c8f05b2af"
+    },
+    {
+      "relative_path": "modules/agent_orchestrator.json",
+      "sha256": "d8251da0ce9824a1fe724f63a2dd58941f4bcea2c97afacf5b636be4ac7fc709"
+    },
+    {
+      "relative_path": "modules/execution_guard.json",
+      "sha256": "024eeccd9b9d2235a69774969a42bc39b6e197ad9e823fc2621774ea8f608ed9"
+    },
+    {
+      "relative_path": "modules/intent_router.json",
+      "sha256": "1ee59965f1dff88eae8e9c2f4ad47e93fdce39dae0a9c73d62730eef93b3e968"
+    },
+    {
+      "relative_path": "modules/model_gateway.json",
+      "sha256": "b646f25f608a1587b5be5fd565448f22ca367aaf7574d60522185273cf17c99d"
+    },
+    {
+      "relative_path": "modules/observability.json",
+      "sha256": "4a7db1449cc962538da10dcc8fe95960dcb80446ab218d7dae1f7ad335d474fa"
+    },
+    {
+      "relative_path": "modules/state_store.json",
+      "sha256": "c8c7041cd31ae3e424dddd15745f28be09932c0d06b0ca82806b39dd08f78183"
+    },
+    {
+      "relative_path": "modules/tool_loop.json",
+      "sha256": "8508555c5089202beff22ac656a75c7b39d767f249e9500edde7666989ee4851"
+    },
+    {
+      "relative_path": "modules/tool_registry.json",
+      "sha256": "eede87fda0fef6325183d74c551d6ba51bd05cf30b11dcc959aa6cc77692620a"
+    },
+    {
+      "relative_path": "schemas/agent.schema.json",
+      "sha256": "0a808a198f87ca52c939b69b1503a0f52411c5ff9beaff8d7c7bd1e8b02e1a40"
+    },
+    {
+      "relative_path": "schemas/intent.schema.json",
+      "sha256": "668b6623195bfaacd3545eca7fab602dab9538fa0be0fbecee59494227a53988"
+    },
+    {
+      "relative_path": "schemas/module.schema.json",
+      "sha256": "0ddc7cccc991744d451248563d1b6924a30f94ba720c6a1813b15bde79c74ac8"
+    },
+    {
+      "relative_path": "schemas/snapshot-reference.schema.json",
+      "sha256": "e72ef16dc2ee9b62ae721863172f047967f4cc821b8702e43ec6c251742dd6cc"
+    },
+    {
+      "relative_path": "schemas/tool.schema.json",
+      "sha256": "9eef23f2a809689ca5d25c7bd873c0fb7e1c4fb09b2b5a23f3466bb45a7405f8"
+    },
+    {
+      "relative_path": "tools/add_gift_to_backpack.json",
+      "sha256": "7f2c5b6f486c978eafdd43cf25bcef20a5ba8ead0b393ca30ed95ae0030a1a7a"
+    },
+    {
+      "relative_path": "tools/prepare_resource.json",
+      "sha256": "0dc65e88ea83432952010c235d0cbefad00101587bef38a7d2cd323dd6bc0c8a"
+    },
+    {
+      "relative_path": "tools/query_gift_info.json",
+      "sha256": "4beb2dbb5f9d5a8d3ed25881479e29c7d66f894c6e74dab95f7b423706b39a90"
+    },
+    {
+      "relative_path": "tools/query_information.json",
+      "sha256": "e47470f0d3f3d08906d639a4f67579ed78eb7781a98da2076587dbce2ea0d425"
+    },
+    {
+      "relative_path": "tools/query_pool_config.json",
+      "sha256": "a1834bb2806d0fd7b0c55eb73b9446a9095f5b5aed9f0603774a827a94e9f5b7"
+    },
+    {
+      "relative_path": "tools/query_user_info.json",
+      "sha256": "50d93fb528ed1b671f991dbeea07d9ad254bce65045088a6d52538886f54e17d"
+    }
+  ],
+  "agent_snapshot_sha256": "d8ec7d0747610399466360e9392108aa27e278414983bcf54c60bb17c456ddfc",
+  "capability_bundle_sha256": "ee27d000bf68bcf0034e6fd9bd9048c66a38799473a5bac4619410c72673486b",
+  "capability_boundary_id": "intent_router_only",
+  "capability_evidence_ids": [
+    "intent_router_output"
+  ],
+  "capability_oracle_source_ids": [
+    "module.intent_router",
+    "intent.query_user"
+  ],
+  "coverage_plan_sha256": "6e70691b765486f0d5c2ed76b280fbb76ae1fb82f3aafee01389f57bae3010f0",
+  "created_at": "2026-10-08T08:41:24.621460+00:00",
+  "attempts": 1,
+  "draft_sha256": "151588403f57769553820bb679baba17238e7ac96f80c262b955fe6e789de5f3",
+  "validation_valid": true,
+  "case_count": 42,
+  "dataset_path": "/Users/yuanyu/Documents/ChatGPT/agent_evaluator/datasets/mini_agent/module_query_user_intent_v1_5.jsonl",
+  "dataset_sha256": "151588403f57769553820bb679baba17238e7ac96f80c262b955fe6e789de5f3",
+  "source_pack_sha256": "b37e8e71d393707c98c7dce2cc55e08d31080d1f4374219e863abbfe657c2551",
+  "capability_bundle": {
+    "provider_id": "mini_agent",
+    "bundle_format_version": "2.0",
+    "sha256": "ee27d000bf68bcf0034e6fd9bd9048c66a38799473a5bac4619410c72673486b",
+    "path": "capability_bundles/ee27d000bf68bcf0034e6fd9bd9048c66a38799473a5bac4619410c72673486b",
+    "files": [
+      {
+        "path": "agent.json",
+        "sha256": "5dc8ef56a664cb48b75b12d8c4294cc676515d4327f50fab5086d9b4861fb4d5"
+      },
+      {
+        "path": "intents/add_backpack_gift.json",
+        "sha256": "b73a5327392cb8221c3b6f5703fea35aea430a55e72e95fac020a3c2350d3953"
+      },
+      {
+        "path": "intents/prepare_resource.json",
+        "sha256": "86fa1cb163530d0ab46f6ea71109f500f90894617a5db847f06ce91667f46a54"
+      },
+      {
+        "path": "intents/query_gift.json",
+        "sha256": "5e0c7ab85283fdc95faf2707ccc8a7099591c280daf25606ccc28efa0cebb5b7"
+      },
+      {
+        "path": "intents/query_information.json",
+        "sha256": "4fcbc11c23b83e8bc140a9ffe141f5350b08d079a1b15556e9631e37448e14bd"
+      },
+      {
+        "path": "intents/query_pool.json",
+        "sha256": "058ef0d66069533da11f5093d6563f995853ffdd718554b9e82288f5988b0f57"
+      },
+      {
+        "path": "intents/query_user.json",
+        "sha256": "762d3e27e569b92137ea63cba48e2a7c20af33b261f274bceeb7be00b5213450"
+      },
+      {
+        "path": "intents/unsupported.json",
+        "sha256": "7922ee3f566cd20b5c8868bb52b97754fa30744249136873f237841c8f05b2af"
+      },
+      {
+        "path": "modules/agent_orchestrator.json",
+        "sha256": "d8251da0ce9824a1fe724f63a2dd58941f4bcea2c97afacf5b636be4ac7fc709"
+      },
+      {
+        "path": "modules/execution_guard.json",
+        "sha256": "024eeccd9b9d2235a69774969a42bc39b6e197ad9e823fc2621774ea8f608ed9"
+      },
+      {
+        "path": "modules/intent_router.json",
+        "sha256": "1ee59965f1dff88eae8e9c2f4ad47e93fdce39dae0a9c73d62730eef93b3e968"
+      },
+      {
+        "path": "modules/model_gateway.json",
+        "sha256": "b646f25f608a1587b5be5fd565448f22ca367aaf7574d60522185273cf17c99d"
+      },
+      {
+        "path": "modules/observability.json",
+        "sha256": "4a7db1449cc962538da10dcc8fe95960dcb80446ab218d7dae1f7ad335d474fa"
+      },
+      {
+        "path": "modules/state_store.json",
+        "sha256": "c8c7041cd31ae3e424dddd15745f28be09932c0d06b0ca82806b39dd08f78183"
+      },
+      {
+        "path": "modules/tool_loop.json",
+        "sha256": "8508555c5089202beff22ac656a75c7b39d767f249e9500edde7666989ee4851"
+      },
+      {
+        "path": "modules/tool_registry.json",
+        "sha256": "eede87fda0fef6325183d74c551d6ba51bd05cf30b11dcc959aa6cc77692620a"
+      },
+      {
+        "path": "schemas/agent.schema.json",
+        "sha256": "0a808a198f87ca52c939b69b1503a0f52411c5ff9beaff8d7c7bd1e8b02e1a40"
+      },
+      {
+        "path": "schemas/intent.schema.json",
+        "sha256": "668b6623195bfaacd3545eca7fab602dab9538fa0be0fbecee59494227a53988"
+      },
+      {
+        "path": "schemas/module.schema.json",
+        "sha256": "0ddc7cccc991744d451248563d1b6924a30f94ba720c6a1813b15bde79c74ac8"
+      },
+      {
+        "path": "schemas/snapshot-reference.schema.json",
+        "sha256": "e72ef16dc2ee9b62ae721863172f047967f4cc821b8702e43ec6c251742dd6cc"
+      },
+      {
+        "path": "schemas/tool.schema.json",
+        "sha256": "9eef23f2a809689ca5d25c7bd873c0fb7e1c4fb09b2b5a23f3466bb45a7405f8"
+      },
+      {
+        "path": "tools/add_gift_to_backpack.json",
+        "sha256": "7f2c5b6f486c978eafdd43cf25bcef20a5ba8ead0b393ca30ed95ae0030a1a7a"
+      },
+      {
+        "path": "tools/prepare_resource.json",
+        "sha256": "0dc65e88ea83432952010c235d0cbefad00101587bef38a7d2cd323dd6bc0c8a"
+      },
+      {
+        "path": "tools/query_gift_info.json",
+        "sha256": "4beb2dbb5f9d5a8d3ed25881479e29c7d66f894c6e74dab95f7b423706b39a90"
+      },
+      {
+        "path": "tools/query_information.json",
+        "sha256": "e47470f0d3f3d08906d639a4f67579ed78eb7781a98da2076587dbce2ea0d425"
+      },
+      {
+        "path": "tools/query_pool_config.json",
+        "sha256": "a1834bb2806d0fd7b0c55eb73b9446a9095f5b5aed9f0603774a827a94e9f5b7"
+      },
+      {
+        "path": "tools/query_user_info.json",
+        "sha256": "50d93fb528ed1b671f991dbeea07d9ad254bce65045088a6d52538886f54e17d"
+      }
+    ]
+  },
+  "eval_case_schema_sha256": "a9c8e331fa9e4b210ebd10e89da570674a27a42aadbd916f906b944fde7eca2f",
+  "evaluator_version": "0.1.0",
+  "validation": {
+    "state": "VALIDATED",
+    "valid": true,
+    "draft_sha256": "151588403f57769553820bb679baba17238e7ac96f80c262b955fe6e789de5f3",
+    "case_count": 42,
+    "gates": [
+      {
+        "name": "evaluator",
+        "passed": true,
+        "issues": [],
+        "details": {
+          "dataset_sha256": "151588403f57769553820bb679baba17238e7ac96f80c262b955fe6e789de5f3",
+          "total_count": 42,
+          "schema_versions": [
+            "1.0"
+          ],
+          "validator_valid": true
+        }
+      },
+      {
+        "name": "capability_snapshot",
+        "passed": true,
+        "issues": [],
+        "details": {
+          "generated_bundle_sha256": "ee27d000bf68bcf0034e6fd9bd9048c66a38799473a5bac4619410c72673486b",
+          "current_bundle_sha256": "ee27d000bf68bcf0034e6fd9bd9048c66a38799473a5bac4619410c72673486b",
+          "changes": [],
+          "impacted_slots": [],
+          "impacted_seeds": [],
+          "generated_snapshots": [
+            {
+              "snapshot_id": "agent.mini_agent",
+              "snapshot_type": "agent",
+              "snapshot_format_version": "2.0",
+              "module_id": null,
+              "contract_version": "mini-agent-capability-contract-v2",
+              "relative_path": "agent.json",
+              "snapshot_sha256": "d8ec7d0747610399466360e9392108aa27e278414983bcf54c60bb17c456ddfc",
+              "source_hashes": {
+                "evidence_catalog_sha256": "a09f480434a5f921922ab532fee3428deb7d4cbe4dd8795fc94755bd7cb4b121",
+                "execution_boundaries_sha256": "6c6407875f17b34f01392ab197e2de6119ee222de5c76f800d8f0f3ca4a0c258",
+                "input_schema_sha256": "ce41b0545a3ebcc5368c1fb08ac724d79dea2c3b2647497f8327a679fe141397",
+                "layers_sha256": "35ab703f8058105afa67c8c3501a078cb44f3e91c4fc650e5da073f05af032e4",
+                "module_refs_sha256": "56f4e2d482a469e3a15914ff0e7c3bf2a81ef83f7caabc81086196cacd921f4a",
+                "module_topology_sha256": "e1155a41b4de9402f9ae1dc21dd5a6abfd13f4aa3d0c0cf89bbdee893f5faf16",
+                "output_schema_sha256": "12b9e3fa5cec61fa0f90bd5bae16ac0cd88a34d7dc1721b3539474709e1a5bd0"
+              }
+            },
+            {
+              "snapshot_id": "intent.add_backpack_gift",
+              "snapshot_type": "intent",
+              "snapshot_format_version": "2.0",
+              "module_id": "module.intent_router",
+              "contract_version": "intent-contract-v1",
+              "relative_path": "intents/add_backpack_gift.json",
+              "snapshot_sha256": "8873f234cfccdfba87bc2829fa70a1d62c61af7f357fc4e2400e3d753ee03b53",
+              "source_hashes": {
+                "decision_rules_sha256": "0904be12a2b1b516e527f77cb831352c7f138d3b1b921d1770ab41f2b9aa30fa",
+                "parameters_schema_sha256": "a1e13b5a62e151757cdf7041d629c8842e1b96319e4afee2661e5780a3dbcce1",
+                "semantic_rules_sha256": "c2da0773849fd8d2873984be908e75f3238c2fc0e808680b7d47483d24cdda55",
+                "tool_refs_sha256": "ba68344f24b23810d259d890c06071342d2dcea0a8f77a3c4c95d64f886770dc"
+              }
+            },
+            {
+              "snapshot_id": "intent.prepare_resource",
+              "snapshot_type": "intent",
+              "snapshot_format_version": "2.0",
+              "module_id": "module.intent_router",
+              "contract_version": "intent-contract-v1",
+              "relative_path": "intents/prepare_resource.json",
+              "snapshot_sha256": "d96d00544aae6f36291fcdc1ddb2bbba0396d12fc02dcffc438079fa078c84eb",
+              "source_hashes": {
+                "decision_rules_sha256": "f88868121634126a29ab91a52a1666c3bb0db4273ed03ae1630ccf927dd2af19",
+                "parameters_schema_sha256": "774a0785e334ee87901b3610bdc9ce4fe5d8852ab07e7fa050b78ffa41cffbb3",
+                "semantic_rules_sha256": "bcb926ec284157bdef54789a7e9b12fe560b7a5720605dd37a1eb07fb7c249f9",
+                "tool_refs_sha256": "12b5b7031f9045005b924a3620eaa75d15eb17023518d58d686743bb68a8da4b"
+              }
+            },
+            {
+              "snapshot_id": "intent.query_gift",
+              "snapshot_type": "intent",
+              "snapshot_format_version": "2.0",
+              "module_id": "module.intent_router",
+              "contract_version": "intent-contract-v1",
+              "relative_path": "intents/query_gift.json",
+              "snapshot_sha256": "2b9d5a364e7543ecb0512d855120e2e9691eaa1b8aa5a785b3d95bbc70e4aada",
+              "source_hashes": {
+                "decision_rules_sha256": "f88868121634126a29ab91a52a1666c3bb0db4273ed03ae1630ccf927dd2af19",
+                "parameters_schema_sha256": "5b1bc4c54fade97abdbd672d19cd2a3d6cac20949663647731962ac854fef894",
+                "semantic_rules_sha256": "f0bd8cfc8138da6c9c0e7f4ce129ac58df93aac39fab8fa2551758e1a211a420",
+                "tool_refs_sha256": "49fff366d8a244b8a64c526d52cb117a1eb580780b807248d14a7fb1b947c9d6"
+              }
+            },
+            {
+              "snapshot_id": "intent.query_information",
+              "snapshot_type": "intent",
+              "snapshot_format_version": "2.0",
+              "module_id": "module.intent_router",
+              "contract_version": "intent-contract-v1",
+              "relative_path": "intents/query_information.json",
+              "snapshot_sha256": "4388cea963bb3624b138a8d9f491b8f2f2212e00a64ff94e5f8bffc13fcc6f85",
+              "source_hashes": {
+                "decision_rules_sha256": "f88868121634126a29ab91a52a1666c3bb0db4273ed03ae1630ccf927dd2af19",
+                "parameters_schema_sha256": "912718a302884802123177f6f2d6d953cbecf66fb4952118bb2ad3230cdc8773",
+                "semantic_rules_sha256": "5496f4fabe979405206e100b43367f95493b427b663925428c2a46c80de09b6b",
+                "tool_refs_sha256": "d13a1f863050892a3a080b2f825e60205c45b68d9084c41d3a0f590ae9349c77"
+              }
+            },
+            {
+              "snapshot_id": "intent.query_pool",
+              "snapshot_type": "intent",
+              "snapshot_format_version": "2.0",
+              "module_id": "module.intent_router",
+              "contract_version": "intent-contract-v1",
+              "relative_path": "intents/query_pool.json",
+              "snapshot_sha256": "c81cd3913483890eb3ed76ad7d2d4a416ade92080fdfb6badfcea39a65f3aa85",
+              "source_hashes": {
+                "decision_rules_sha256": "f88868121634126a29ab91a52a1666c3bb0db4273ed03ae1630ccf927dd2af19",
+                "parameters_schema_sha256": "4c2209afcc1f464524719ad0da3db5c2e8d6f679218aba08fe9924e2552903d3",
+                "semantic_rules_sha256": "13a0736d35339acfa5485018f7573e6adcb3912460353fa6a33635d52fb1544b",
+                "tool_refs_sha256": "f1d7687aa8df513d79420eafcfd6ea93094ffa24ca7adc81c5237ac0bad93b6d"
+              }
+            },
+            {
+              "snapshot_id": "intent.query_user",
+              "snapshot_type": "intent",
+              "snapshot_format_version": "2.0",
+              "module_id": "module.intent_router",
+              "contract_version": "query-user-intent-contract-v3",
+              "relative_path": "intents/query_user.json",
+              "snapshot_sha256": "0119829b318adc01d869ae020475820966227ea5f7352a6392400e04f9c8b46f",
+              "source_hashes": {
+                "decision_rules_sha256": "f88868121634126a29ab91a52a1666c3bb0db4273ed03ae1630ccf927dd2af19",
+                "parameters_schema_sha256": "b0711222d4dc2ca276e3ced2e1243499940037c2cacb18756b033868206f2cba",
+                "semantic_rules_sha256": "1f9d35ae6081d5b2ba1e64f33af2e5151a9c67c04e0d9359b22c8f2de1d3ecfb",
+                "tool_refs_sha256": "3f981313309b6c754fab831a07e9b8e0c6b4a2f47500bfe656c82e8d4c690139"
+              }
+            },
+            {
+              "snapshot_id": "intent.unsupported",
+              "snapshot_type": "intent",
+              "snapshot_format_version": "2.0",
+              "module_id": "module.intent_router",
+              "contract_version": "intent-contract-v1",
+              "relative_path": "intents/unsupported.json",
+              "snapshot_sha256": "fa4e367e850e674fba87fedf08dc01df72674d4d31b432bb551f736d5f81627d",
+              "source_hashes": {
+                "decision_rules_sha256": "565891c881cb43228bff6a36aa878ae1b00f4f7689cc6ca9f703b99c9f5681de",
+                "parameters_schema_sha256": "ab40af43b424b333f8496750d4e81a1826c926ef1e45ea0f5a2b35cb3c68319e",
+                "semantic_rules_sha256": "2fb32d09deba5665f35892bb33616621435b5d051f8ad9fc185995f5bfd3d7e8",
+                "tool_refs_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+              }
+            },
+            {
+              "snapshot_id": "module.agent_orchestrator",
+              "snapshot_type": "module",
+              "snapshot_format_version": "2.0",
+              "module_id": "agent_orchestrator",
+              "contract_version": "agent-orchestrator-module-v2",
+              "relative_path": "modules/agent_orchestrator.json",
+              "snapshot_sha256": "b3bded88a30b2f57283d48d00b453e41da526a7a67cc1313ab3faed17b83adb4",
+              "source_hashes": {
+                "component_versions_sha256": "f81a1e2e8483f4d4a9311652f494d7ef8586900babee6dedc8fe0488b47bca41",
+                "execution_boundary_ids_sha256": "d91de6d633965d502269788656c4daa28b1a0aa24191c304b880903d4c282135",
+                "input_schema_sha256": "ce41b0545a3ebcc5368c1fb08ac724d79dea2c3b2647497f8327a679fe141397",
+                "layers_sha256": "7d79ac60c3be1ccb54ece14eb4c0ef26355d1908d8a89a0922479c2819cbfe6e",
+                "output_schema_sha256": "12b9e3fa5cec61fa0f90bd5bae16ac0cd88a34d7dc1721b3539474709e1a5bd0",
+                "references_sha256": "b3ca11ab86016136332c48f6ea134130104b2b382f852fad244312a1f424c203"
+              }
+            },
+            {
+              "snapshot_id": "module.execution_guard",
+              "snapshot_type": "module",
+              "snapshot_format_version": "2.0",
+              "module_id": "execution_guard",
+              "contract_version": "execution-guard-module-v2",
+              "relative_path": "modules/execution_guard.json",
+              "snapshot_sha256": "0ae55c34e9afbef14430404ea81395ae229645ad058d5e64562cc1ae37287a54",
+              "source_hashes": {
+                "component_versions_sha256": "2d9a280ce43f7ab1b2ad586994551b82359095f06d28901e33c75c04c59151cf",
+                "execution_boundary_ids_sha256": "b26b58dd5309baa785bf966ca95ec44521a3f5d3938876894bebdff8ab835f84",
+                "input_schema_sha256": "7275cc1f2f409ec46ddea9630ec9a2360f4890577eb90182b1517a429c751922",
+                "layers_sha256": "3773c63d2a1a8835b699306d1cf357cfc98f0e7f92fc3cc4f8f114ed8024ae48",
+                "output_schema_sha256": "f68719e1e61261b295b5b614a92661067fdbdfe63e1b027b876acb1ce1b6bdf1",
+                "references_sha256": "00ab7b42f35b7c44b873ee39ad42dd55f3637651427f4e8828c2ca4f867a51c9"
+              }
+            },
+            {
+              "snapshot_id": "module.intent_router",
+              "snapshot_type": "module",
+              "snapshot_format_version": "2.0",
+              "module_id": "intent_router",
+              "contract_version": "intent-router-module-v2",
+              "relative_path": "modules/intent_router.json",
+              "snapshot_sha256": "ebd262ec9739ceaaf90845f1540df3a7a966ea97ed395d252092452306614988",
+              "source_hashes": {
+                "component_versions_sha256": "fae03bfd7577ce88c2ce819f57dc63735d3bf5a687848d23fb2e46f3a52ab47a",
+                "execution_boundary_ids_sha256": "0122928fa6d7938916dd99f6b8627c25d6d4d92e9a8743299707ccafff9a5d70",
+                "input_schema_sha256": "ce41b0545a3ebcc5368c1fb08ac724d79dea2c3b2647497f8327a679fe141397",
+                "layers_sha256": "ef28cc13ea04aad08ebbb502cbaf168e46264ad9cdf57e2252d31c068f3a1112",
+                "output_schema_sha256": "1cc52b2ab1b9a3619fb61a887a67c53db411a7e2deb38b46e5eb6b9d72ca2b44",
+                "references_sha256": "8798224fff1f5d4a7505c888a6fe53f3b819f10fffa0bc2250016cb09be926ef"
+              }
+            },
+            {
+              "snapshot_id": "module.model_gateway",
+              "snapshot_type": "module",
+              "snapshot_format_version": "2.0",
+              "module_id": "model_gateway",
+              "contract_version": "model-gateway-module-v2",
+              "relative_path": "modules/model_gateway.json",
+              "snapshot_sha256": "d52251c2d134cfcb45b5125b53c4e5dbcd9bbfda53ca5f70c0986600849bfa06",
+              "source_hashes": {
+                "component_versions_sha256": "be4e1286dc629861ae2154abfede994d9d2e87f7587b7c6f020a99d8dae7046c",
+                "execution_boundary_ids_sha256": "d91de6d633965d502269788656c4daa28b1a0aa24191c304b880903d4c282135",
+                "input_schema_sha256": "45c8923f033a29139348d8ab85e5e7966eb2fa7998609240523ee21a50bba7c8",
+                "layers_sha256": "22b86e11091496ce8cbcf5d6420a385fdd5c17ea89bb0ba1f77fa12ea905a861",
+                "output_schema_sha256": "8d8e8f2427a922730488682376cd5b52b2a730736ead19ff32e487ef88b32be0",
+                "references_sha256": "abca75ce114ad4f5f48cc86b155d85cb9035479199e99afb440a265877ef8466"
+              }
+            },
+            {
+              "snapshot_id": "module.observability",
+              "snapshot_type": "module",
+              "snapshot_format_version": "2.0",
+              "module_id": "observability",
+              "contract_version": "observability-module-v2",
+              "relative_path": "modules/observability.json",
+              "snapshot_sha256": "31a9dda41dd9ea42f930a3a429330a6218ac5b1dc6dc556c72f31896cda71c56",
+              "source_hashes": {
+                "component_versions_sha256": "b972dd1938cbdba7c6c3116756ca37a401ceb49bf424e8cfaf8172878a88d01f",
+                "execution_boundary_ids_sha256": "d91de6d633965d502269788656c4daa28b1a0aa24191c304b880903d4c282135",
+                "input_schema_sha256": "e789b47ea328f644885a4c0f519abb07f5014c11fe50ca2e7ee3daba5dedef6f",
+                "layers_sha256": "fd11fe397c015a1a0ca91aa0196a8c48d8e38b99b4f8a13a3b1c56bbe9e2da63",
+                "output_schema_sha256": "c6e299b6e47259dc97d13f1f25eb34f6f0f29c652dad34ff626f7e4a03f1186f",
+                "references_sha256": "abca75ce114ad4f5f48cc86b155d85cb9035479199e99afb440a265877ef8466"
+              }
+            },
+            {
+              "snapshot_id": "module.state_store",
+              "snapshot_type": "module",
+              "snapshot_format_version": "2.0",
+              "module_id": "state_store",
+              "contract_version": "state-store-module-v2",
+              "relative_path": "modules/state_store.json",
+              "snapshot_sha256": "ec16d6b11303ec9f108fa30b0503acc9a15efb0c3dff0872cbca56c22df8d9b9",
+              "source_hashes": {
+                "component_versions_sha256": "cf270221edd6a5ee40308afc49709bb96ccdae3a74047fbdbd80823842d16702",
+                "execution_boundary_ids_sha256": "b0f37e575cabf7b2eb3156fd52e339df1d0bf6c4c2fedbf5b595d1a8dc785535",
+                "input_schema_sha256": "a5df57661a26013595bfea9b0abe541f87a841caac071ffc947afa058dc0fc31",
+                "layers_sha256": "305c6f34778f6eee1bbfc4cb03c2fcddfb0ddb4bf918244103679a67611c771d",
+                "output_schema_sha256": "7a7c9b066e5d7cc97970029da43816d8c65db66b8d614cccfb1ec2bffef053e2",
+                "references_sha256": "abca75ce114ad4f5f48cc86b155d85cb9035479199e99afb440a265877ef8466"
+              }
+            },
+            {
+              "snapshot_id": "module.tool_loop",
+              "snapshot_type": "module",
+              "snapshot_format_version": "2.0",
+              "module_id": "tool_loop",
+              "contract_version": "tool-loop-module-v2",
+              "relative_path": "modules/tool_loop.json",
+              "snapshot_sha256": "e3a1f4cd8eb722d371cb06b018d0b9f7dd0c4e873b4d18a07509bf85627ca31d",
+              "source_hashes": {
+                "component_versions_sha256": "958b9a260fcb89dbd3c9fccea0eb0d34cfc641c2a662580b8b225a06a25a3a8b",
+                "execution_boundary_ids_sha256": "eb739223ec5716eb9d04e2326204fd24935b12022f81f97041b5e7371f579943",
+                "input_schema_sha256": "c0868a9c00fe8f79701c32674c9e486acc7633f0ceeabc993413100d42edbaaa",
+                "layers_sha256": "28214a9d6cb0114fe1075bfaa0b617e4402a6e4a079db1a83bf9d632685ea5a2",
+                "output_schema_sha256": "2332414fc1dbc20f6e8c87e396e8747ba863e89c5c50b773c6ca48e6bbbff5e7",
+                "references_sha256": "87d398811d67d3771542d83107d67d831a1a32d000ff6af29fe1752391a3a634"
+              }
+            },
+            {
+              "snapshot_id": "module.tool_registry",
+              "snapshot_type": "module",
+              "snapshot_format_version": "2.0",
+              "module_id": "tool_registry",
+              "contract_version": "tool-registry-module-v2",
+              "relative_path": "modules/tool_registry.json",
+              "snapshot_sha256": "5eadcb7a1adf22af6b2179c8ac46d454aecdb709f1923158188a6d1adeed6bfa",
+              "source_hashes": {
+                "component_versions_sha256": "592a5a594271ffc08ae7417d3754de177a3576d06ae7a9250023011898b7e446",
+                "execution_boundary_ids_sha256": "eb739223ec5716eb9d04e2326204fd24935b12022f81f97041b5e7371f579943",
+                "input_schema_sha256": "cb84054af4ba08bba3f463ae0087735068a84fc636a19977f7ecd4c8acec6c03",
+                "layers_sha256": "c8a0cf3c53cd473eb06c53fa8d0b02ed77048c836c823ef97bb67d2b89f76f98",
+                "output_schema_sha256": "b04c3137b6db836a69fffa0ca2a646e2e5c4149d41bbacab77477767e18a865b",
+                "references_sha256": "138683b6f716b8b008e83e75e13dd14e9bfa86f7bd0fb753e6f54726a12a358e"
+              }
+            },
+            {
+              "snapshot_id": "tool.add_gift_to_backpack",
+              "snapshot_type": "tool",
+              "snapshot_format_version": "2.0",
+              "module_id": null,
+              "contract_version": "tool-add_gift_to_backpack-contract-v2",
+              "relative_path": "tools/add_gift_to_backpack.json",
+              "snapshot_sha256": "e9b0136e3b80eb3946acfdb4891882c52ee5d485c81f1c98650d18d913eef3b7",
+              "source_hashes": {
+                "function_schema_sha256": "c7f4388c4a6ca97abd64bd15f2cfee38d544d7700ac0c539f82a9892a13aa86e",
+                "parameter_rules_sha256": "bde4282dc7057b123bb89009bb7341bf2f3cbe5eb8dda95d8fae56667fc3d27f",
+                "result_contracts_sha256": "73dcf7d9bbb96d8005884f4d7f5e66d7e591662fa44358a83edc1f974d0b8264",
+                "result_schema_sha256": "b04c3137b6db836a69fffa0ca2a646e2e5c4149d41bbacab77477767e18a865b"
+              }
+            },
+            {
+              "snapshot_id": "tool.prepare_resource",
+              "snapshot_type": "tool",
+              "snapshot_format_version": "2.0",
+              "module_id": null,
+              "contract_version": "tool-prepare_resource-contract-v2",
+              "relative_path": "tools/prepare_resource.json",
+              "snapshot_sha256": "c0b144de3eb78236f197b08c5265e0a094277556373115155ac335ab8dba7a38",
+              "source_hashes": {
+                "function_schema_sha256": "4c940a5e6825baf034964170ee49e98657f2fb1139fff11d6590a1db9e252064",
+                "parameter_rules_sha256": "8dbe90023006c8c4cad19b34108f4c05895da68f70d8859094d9fe2c8d15c6f8",
+                "result_contracts_sha256": "06e5e942e7c285bef44451f2c445d5ec1441a619fb0f3a9fbb1e3869674ac793",
+                "result_schema_sha256": "b04c3137b6db836a69fffa0ca2a646e2e5c4149d41bbacab77477767e18a865b"
+              }
+            },
+            {
+              "snapshot_id": "tool.query_gift_info",
+              "snapshot_type": "tool",
+              "snapshot_format_version": "2.0",
+              "module_id": null,
+              "contract_version": "tool-query_gift_info-contract-v2",
+              "relative_path": "tools/query_gift_info.json",
+              "snapshot_sha256": "c6219cb9396ec8e520e0c5a4b8da85db5afecd3fa18e0fcd25d40349c82ec38e",
+              "source_hashes": {
+                "function_schema_sha256": "5457af8330adaeeb7bb04c3a60ce1fa659f1393be28ee3a372dbc8c1c75fd58c",
+                "parameter_rules_sha256": "6dd425503a0c24d663cff05e525f927987bcd1c1fe5eb03ae32020100ff08cf1",
+                "result_contracts_sha256": "0de1c9e0c431049867f74dea266261aec894810a2f20e7e08570e1ae9858687c",
+                "result_schema_sha256": "b04c3137b6db836a69fffa0ca2a646e2e5c4149d41bbacab77477767e18a865b"
+              }
+            },
+            {
+              "snapshot_id": "tool.query_information",
+              "snapshot_type": "tool",
+              "snapshot_format_version": "2.0",
+              "module_id": null,
+              "contract_version": "tool-query_information-contract-v2",
+              "relative_path": "tools/query_information.json",
+              "snapshot_sha256": "842e332e6b0fb287cc02e19a766992982ec5f5de2a069dd28dd94154632fbccc",
+              "source_hashes": {
+                "function_schema_sha256": "4b4e9976008f117c46503ab0809f1e732af4acc8762ba33f0b5f1f0e54cd1624",
+                "parameter_rules_sha256": "36e58ef5f4623559d3ead7a5d8667f245c94df155cabf6e67a63843f2ac9cde2",
+                "result_contracts_sha256": "1547bbd00b0c5473f0ef694e7beb4a439a29e4f36ffe60f7929e19f21c32aa96",
+                "result_schema_sha256": "b04c3137b6db836a69fffa0ca2a646e2e5c4149d41bbacab77477767e18a865b"
+              }
+            },
+            {
+              "snapshot_id": "tool.query_pool_config",
+              "snapshot_type": "tool",
+              "snapshot_format_version": "2.0",
+              "module_id": null,
+              "contract_version": "tool-query_pool_config-contract-v2",
+              "relative_path": "tools/query_pool_config.json",
+              "snapshot_sha256": "48b7c7ca3cf20a5bbba7c44d8dc99953dc716e36b2e5bb4db8794127f406c1c9",
+              "source_hashes": {
+                "function_schema_sha256": "437684c992b4255af93db56f466d7929a75e87cf682766648e9d109a90a5eaa8",
+                "parameter_rules_sha256": "2e9beb6e1a543fbd24e89ab82032c5eb4e147d69577134ac2c37777adf396d46",
+                "result_contracts_sha256": "7024a989673b6fa565f6a22c34684a3fa5d7b519121c8e615a561dc226740afc",
+                "result_schema_sha256": "b04c3137b6db836a69fffa0ca2a646e2e5c4149d41bbacab77477767e18a865b"
+              }
+            },
+            {
+              "snapshot_id": "tool.query_user_info",
+              "snapshot_type": "tool",
+              "snapshot_format_version": "2.0",
+              "module_id": null,
+              "contract_version": "tool-query_user_info-contract-v2",
+              "relative_path": "tools/query_user_info.json",
+              "snapshot_sha256": "b23cf89f78b91c734b6f5c48111046171f51fe2d0562a469de1e1d0f39c0181c",
+              "source_hashes": {
+                "function_schema_sha256": "9a3574bea1af7e875adc439a6c4980d2a99fbbb983791cc30afe8b8bfc9cd2f8",
+                "parameter_rules_sha256": "c03bf46bab6692521ee6a7b16f6785c08c81e09419ffce21a22a088c7b4edf82",
+                "result_contracts_sha256": "dec6d2189a901716944b52daec8492d3dc1f28c167798ef5219fcdaaf4a0d33b",
+                "result_schema_sha256": "b04c3137b6db836a69fffa0ca2a646e2e5c4149d41bbacab77477767e18a865b"
+              }
+            }
+          ],
+          "current_snapshots": [
+            {
+              "snapshot_id": "agent.mini_agent",
+              "snapshot_type": "agent",
+              "snapshot_format_version": "2.0",
+              "module_id": null,
+              "contract_version": "mini-agent-capability-contract-v2",
+              "relative_path": "agent.json",
+              "snapshot_sha256": "d8ec7d0747610399466360e9392108aa27e278414983bcf54c60bb17c456ddfc",
+              "source_hashes": {
+                "evidence_catalog_sha256": "a09f480434a5f921922ab532fee3428deb7d4cbe4dd8795fc94755bd7cb4b121",
+                "execution_boundaries_sha256": "6c6407875f17b34f01392ab197e2de6119ee222de5c76f800d8f0f3ca4a0c258",
+                "input_schema_sha256": "ce41b0545a3ebcc5368c1fb08ac724d79dea2c3b2647497f8327a679fe141397",
+                "layers_sha256": "35ab703f8058105afa67c8c3501a078cb44f3e91c4fc650e5da073f05af032e4",
+                "module_refs_sha256": "56f4e2d482a469e3a15914ff0e7c3bf2a81ef83f7caabc81086196cacd921f4a",
+                "module_topology_sha256": "e1155a41b4de9402f9ae1dc21dd5a6abfd13f4aa3d0c0cf89bbdee893f5faf16",
+                "output_schema_sha256": "12b9e3fa5cec61fa0f90bd5bae16ac0cd88a34d7dc1721b3539474709e1a5bd0"
+              }
+            },
+            {
+              "snapshot_id": "intent.add_backpack_gift",
+              "snapshot_type": "intent",
+              "snapshot_format_version": "2.0",
+              "module_id": "module.intent_router",
+              "contract_version": "intent-contract-v1",
+              "relative_path": "intents/add_backpack_gift.json",
+              "snapshot_sha256": "8873f234cfccdfba87bc2829fa70a1d62c61af7f357fc4e2400e3d753ee03b53",
+              "source_hashes": {
+                "decision_rules_sha256": "0904be12a2b1b516e527f77cb831352c7f138d3b1b921d1770ab41f2b9aa30fa",
+                "parameters_schema_sha256": "a1e13b5a62e151757cdf7041d629c8842e1b96319e4afee2661e5780a3dbcce1",
+                "semantic_rules_sha256": "c2da0773849fd8d2873984be908e75f3238c2fc0e808680b7d47483d24cdda55",
+                "tool_refs_sha256": "ba68344f24b23810d259d890c06071342d2dcea0a8f77a3c4c95d64f886770dc"
+              }
+            },
+            {
+              "snapshot_id": "intent.prepare_resource",
+              "snapshot_type": "intent",
+              "snapshot_format_version": "2.0",
+              "module_id": "module.intent_router",
+              "contract_version": "intent-contract-v1",
+              "relative_path": "intents/prepare_resource.json",
+              "snapshot_sha256": "d96d00544aae6f36291fcdc1ddb2bbba0396d12fc02dcffc438079fa078c84eb",
+              "source_hashes": {
+                "decision_rules_sha256": "f88868121634126a29ab91a52a1666c3bb0db4273ed03ae1630ccf927dd2af19",
+                "parameters_schema_sha256": "774a0785e334ee87901b3610bdc9ce4fe5d8852ab07e7fa050b78ffa41cffbb3",
+                "semantic_rules_sha256": "bcb926ec284157bdef54789a7e9b12fe560b7a5720605dd37a1eb07fb7c249f9",
+                "tool_refs_sha256": "12b5b7031f9045005b924a3620eaa75d15eb17023518d58d686743bb68a8da4b"
+              }
+            },
+            {
+              "snapshot_id": "intent.query_gift",
+              "snapshot_type": "intent",
+              "snapshot_format_version": "2.0",
+              "module_id": "module.intent_router",
+              "contract_version": "intent-contract-v1",
+              "relative_path": "intents/query_gift.json",
+              "snapshot_sha256": "2b9d5a364e7543ecb0512d855120e2e9691eaa1b8aa5a785b3d95bbc70e4aada",
+              "source_hashes": {
+                "decision_rules_sha256": "f88868121634126a29ab91a52a1666c3bb0db4273ed03ae1630ccf927dd2af19",
+                "parameters_schema_sha256": "5b1bc4c54fade97abdbd672d19cd2a3d6cac20949663647731962ac854fef894",
+                "semantic_rules_sha256": "f0bd8cfc8138da6c9c0e7f4ce129ac58df93aac39fab8fa2551758e1a211a420",
+                "tool_refs_sha256": "49fff366d8a244b8a64c526d52cb117a1eb580780b807248d14a7fb1b947c9d6"
+              }
+            },
+            {
+              "snapshot_id": "intent.query_information",
+              "snapshot_type": "intent",
+              "snapshot_format_version": "2.0",
+              "module_id": "module.intent_router",
+              "contract_version": "intent-contract-v1",
+              "relative_path": "intents/query_information.json",
+              "snapshot_sha256": "4388cea963bb3624b138a8d9f491b8f2f2212e00a64ff94e5f8bffc13fcc6f85",
+              "source_hashes": {
+                "decision_rules_sha256": "f88868121634126a29ab91a52a1666c3bb0db4273ed03ae1630ccf927dd2af19",
+                "parameters_schema_sha256": "912718a302884802123177f6f2d6d953cbecf66fb4952118bb2ad3230cdc8773",
+                "semantic_rules_sha256": "5496f4fabe979405206e100b43367f95493b427b663925428c2a46c80de09b6b",
+                "tool_refs_sha256": "d13a1f863050892a3a080b2f825e60205c45b68d9084c41d3a0f590ae9349c77"
+              }
+            },
+            {
+              "snapshot_id": "intent.query_pool",
+              "snapshot_type": "intent",
+              "snapshot_format_version": "2.0",
+              "module_id": "module.intent_router",
+              "contract_version": "intent-contract-v1",
+              "relative_path": "intents/query_pool.json",
+              "snapshot_sha256": "c81cd3913483890eb3ed76ad7d2d4a416ade92080fdfb6badfcea39a65f3aa85",
+              "source_hashes": {
+                "decision_rules_sha256": "f88868121634126a29ab91a52a1666c3bb0db4273ed03ae1630ccf927dd2af19",
+                "parameters_schema_sha256": "4c2209afcc1f464524719ad0da3db5c2e8d6f679218aba08fe9924e2552903d3",
+                "semantic_rules_sha256": "13a0736d35339acfa5485018f7573e6adcb3912460353fa6a33635d52fb1544b",
+                "tool_refs_sha256": "f1d7687aa8df513d79420eafcfd6ea93094ffa24ca7adc81c5237ac0bad93b6d"
+              }
+            },
+            {
+              "snapshot_id": "intent.query_user",
+              "snapshot_type": "intent",
+              "snapshot_format_version": "2.0",
+              "module_id": "module.intent_router",
+              "contract_version": "query-user-intent-contract-v3",
+              "relative_path": "intents/query_user.json",
+              "snapshot_sha256": "0119829b318adc01d869ae020475820966227ea5f7352a6392400e04f9c8b46f",
+              "source_hashes": {
+                "decision_rules_sha256": "f88868121634126a29ab91a52a1666c3bb0db4273ed03ae1630ccf927dd2af19",
+                "parameters_schema_sha256": "b0711222d4dc2ca276e3ced2e1243499940037c2cacb18756b033868206f2cba",
+                "semantic_rules_sha256": "1f9d35ae6081d5b2ba1e64f33af2e5151a9c67c04e0d9359b22c8f2de1d3ecfb",
+                "tool_refs_sha256": "3f981313309b6c754fab831a07e9b8e0c6b4a2f47500bfe656c82e8d4c690139"
+              }
+            },
+            {
+              "snapshot_id": "intent.unsupported",
+              "snapshot_type": "intent",
+              "snapshot_format_version": "2.0",
+              "module_id": "module.intent_router",
+              "contract_version": "intent-contract-v1",
+              "relative_path": "intents/unsupported.json",
+              "snapshot_sha256": "fa4e367e850e674fba87fedf08dc01df72674d4d31b432bb551f736d5f81627d",
+              "source_hashes": {
+                "decision_rules_sha256": "565891c881cb43228bff6a36aa878ae1b00f4f7689cc6ca9f703b99c9f5681de",
+                "parameters_schema_sha256": "ab40af43b424b333f8496750d4e81a1826c926ef1e45ea0f5a2b35cb3c68319e",
+                "semantic_rules_sha256": "2fb32d09deba5665f35892bb33616621435b5d051f8ad9fc185995f5bfd3d7e8",
+                "tool_refs_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+              }
+            },
+            {
+              "snapshot_id": "module.agent_orchestrator",
+              "snapshot_type": "module",
+              "snapshot_format_version": "2.0",
+              "module_id": "agent_orchestrator",
+              "contract_version": "agent-orchestrator-module-v2",
+              "relative_path": "modules/agent_orchestrator.json",
+              "snapshot_sha256": "b3bded88a30b2f57283d48d00b453e41da526a7a67cc1313ab3faed17b83adb4",
+              "source_hashes": {
+                "component_versions_sha256": "f81a1e2e8483f4d4a9311652f494d7ef8586900babee6dedc8fe0488b47bca41",
+                "execution_boundary_ids_sha256": "d91de6d633965d502269788656c4daa28b1a0aa24191c304b880903d4c282135",
+                "input_schema_sha256": "ce41b0545a3ebcc5368c1fb08ac724d79dea2c3b2647497f8327a679fe141397",
+                "layers_sha256": "7d79ac60c3be1ccb54ece14eb4c0ef26355d1908d8a89a0922479c2819cbfe6e",
+                "output_schema_sha256": "12b9e3fa5cec61fa0f90bd5bae16ac0cd88a34d7dc1721b3539474709e1a5bd0",
+                "references_sha256": "b3ca11ab86016136332c48f6ea134130104b2b382f852fad244312a1f424c203"
+              }
+            },
+            {
+              "snapshot_id": "module.execution_guard",
+              "snapshot_type": "module",
+              "snapshot_format_version": "2.0",
+              "module_id": "execution_guard",
+              "contract_version": "execution-guard-module-v2",
+              "relative_path": "modules/execution_guard.json",
+              "snapshot_sha256": "0ae55c34e9afbef14430404ea81395ae229645ad058d5e64562cc1ae37287a54",
+              "source_hashes": {
+                "component_versions_sha256": "2d9a280ce43f7ab1b2ad586994551b82359095f06d28901e33c75c04c59151cf",
+                "execution_boundary_ids_sha256": "b26b58dd5309baa785bf966ca95ec44521a3f5d3938876894bebdff8ab835f84",
+                "input_schema_sha256": "7275cc1f2f409ec46ddea9630ec9a2360f4890577eb90182b1517a429c751922",
+                "layers_sha256": "3773c63d2a1a8835b699306d1cf357cfc98f0e7f92fc3cc4f8f114ed8024ae48",
+                "output_schema_sha256": "f68719e1e61261b295b5b614a92661067fdbdfe63e1b027b876acb1ce1b6bdf1",
+                "references_sha256": "00ab7b42f35b7c44b873ee39ad42dd55f3637651427f4e8828c2ca4f867a51c9"
+              }
+            },
+            {
+              "snapshot_id": "module.intent_router",
+              "snapshot_type": "module",
+              "snapshot_format_version": "2.0",
+              "module_id": "intent_router",
+              "contract_version": "intent-router-module-v2",
+              "relative_path": "modules/intent_router.json",
+              "snapshot_sha256": "ebd262ec9739ceaaf90845f1540df3a7a966ea97ed395d252092452306614988",
+              "source_hashes": {
+                "component_versions_sha256": "fae03bfd7577ce88c2ce819f57dc63735d3bf5a687848d23fb2e46f3a52ab47a",
+                "execution_boundary_ids_sha256": "0122928fa6d7938916dd99f6b8627c25d6d4d92e9a8743299707ccafff9a5d70",
+                "input_schema_sha256": "ce41b0545a3ebcc5368c1fb08ac724d79dea2c3b2647497f8327a679fe141397",
+                "layers_sha256": "ef28cc13ea04aad08ebbb502cbaf168e46264ad9cdf57e2252d31c068f3a1112",
+                "output_schema_sha256": "1cc52b2ab1b9a3619fb61a887a67c53db411a7e2deb38b46e5eb6b9d72ca2b44",
+                "references_sha256": "8798224fff1f5d4a7505c888a6fe53f3b819f10fffa0bc2250016cb09be926ef"
+              }
+            },
+            {
+              "snapshot_id": "module.model_gateway",
+              "snapshot_type": "module",
+              "snapshot_format_version": "2.0",
+              "module_id": "model_gateway",
+              "contract_version": "model-gateway-module-v2",
+              "relative_path": "modules/model_gateway.json",
+              "snapshot_sha256": "d52251c2d134cfcb45b5125b53c4e5dbcd9bbfda53ca5f70c0986600849bfa06",
+              "source_hashes": {
+                "component_versions_sha256": "be4e1286dc629861ae2154abfede994d9d2e87f7587b7c6f020a99d8dae7046c",
+                "execution_boundary_ids_sha256": "d91de6d633965d502269788656c4daa28b1a0aa24191c304b880903d4c282135",
+                "input_schema_sha256": "45c8923f033a29139348d8ab85e5e7966eb2fa7998609240523ee21a50bba7c8",
+                "layers_sha256": "22b86e11091496ce8cbcf5d6420a385fdd5c17ea89bb0ba1f77fa12ea905a861",
+                "output_schema_sha256": "8d8e8f2427a922730488682376cd5b52b2a730736ead19ff32e487ef88b32be0",
+                "references_sha256": "abca75ce114ad4f5f48cc86b155d85cb9035479199e99afb440a265877ef8466"
+              }
+            },
+            {
+              "snapshot_id": "module.observability",
+              "snapshot_type": "module",
+              "snapshot_format_version": "2.0",
+              "module_id": "observability",
+              "contract_version": "observability-module-v2",
+              "relative_path": "modules/observability.json",
+              "snapshot_sha256": "31a9dda41dd9ea42f930a3a429330a6218ac5b1dc6dc556c72f31896cda71c56",
+              "source_hashes": {
+                "component_versions_sha256": "b972dd1938cbdba7c6c3116756ca37a401ceb49bf424e8cfaf8172878a88d01f",
+                "execution_boundary_ids_sha256": "d91de6d633965d502269788656c4daa28b1a0aa24191c304b880903d4c282135",
+                "input_schema_sha256": "e789b47ea328f644885a4c0f519abb07f5014c11fe50ca2e7ee3daba5dedef6f",
+                "layers_sha256": "fd11fe397c015a1a0ca91aa0196a8c48d8e38b99b4f8a13a3b1c56bbe9e2da63",
+                "output_schema_sha256": "c6e299b6e47259dc97d13f1f25eb34f6f0f29c652dad34ff626f7e4a03f1186f",
+                "references_sha256": "abca75ce114ad4f5f48cc86b155d85cb9035479199e99afb440a265877ef8466"
+              }
+            },
+            {
+              "snapshot_id": "module.state_store",
+              "snapshot_type": "module",
+              "snapshot_format_version": "2.0",
+              "module_id": "state_store",
+              "contract_version": "state-store-module-v2",
+              "relative_path": "modules/state_store.json",
+              "snapshot_sha256": "ec16d6b11303ec9f108fa30b0503acc9a15efb0c3dff0872cbca56c22df8d9b9",
+              "source_hashes": {
+                "component_versions_sha256": "cf270221edd6a5ee40308afc49709bb96ccdae3a74047fbdbd80823842d16702",
+                "execution_boundary_ids_sha256": "b0f37e575cabf7b2eb3156fd52e339df1d0bf6c4c2fedbf5b595d1a8dc785535",
+                "input_schema_sha256": "a5df57661a26013595bfea9b0abe541f87a841caac071ffc947afa058dc0fc31",
+                "layers_sha256": "305c6f34778f6eee1bbfc4cb03c2fcddfb0ddb4bf918244103679a67611c771d",
+                "output_schema_sha256": "7a7c9b066e5d7cc97970029da43816d8c65db66b8d614cccfb1ec2bffef053e2",
+                "references_sha256": "abca75ce114ad4f5f48cc86b155d85cb9035479199e99afb440a265877ef8466"
+              }
+            },
+            {
+              "snapshot_id": "module.tool_loop",
+              "snapshot_type": "module",
+              "snapshot_format_version": "2.0",
+              "module_id": "tool_loop",
+              "contract_version": "tool-loop-module-v2",
+              "relative_path": "modules/tool_loop.json",
+              "snapshot_sha256": "e3a1f4cd8eb722d371cb06b018d0b9f7dd0c4e873b4d18a07509bf85627ca31d",
+              "source_hashes": {
+                "component_versions_sha256": "958b9a260fcb89dbd3c9fccea0eb0d34cfc641c2a662580b8b225a06a25a3a8b",
+                "execution_boundary_ids_sha256": "eb739223ec5716eb9d04e2326204fd24935b12022f81f97041b5e7371f579943",
+                "input_schema_sha256": "c0868a9c00fe8f79701c32674c9e486acc7633f0ceeabc993413100d42edbaaa",
+                "layers_sha256": "28214a9d6cb0114fe1075bfaa0b617e4402a6e4a079db1a83bf9d632685ea5a2",
+                "output_schema_sha256": "2332414fc1dbc20f6e8c87e396e8747ba863e89c5c50b773c6ca48e6bbbff5e7",
+                "references_sha256": "87d398811d67d3771542d83107d67d831a1a32d000ff6af29fe1752391a3a634"
+              }
+            },
+            {
+              "snapshot_id": "module.tool_registry",
+              "snapshot_type": "module",
+              "snapshot_format_version": "2.0",
+              "module_id": "tool_registry",
+              "contract_version": "tool-registry-module-v2",
+              "relative_path": "modules/tool_registry.json",
+              "snapshot_sha256": "5eadcb7a1adf22af6b2179c8ac46d454aecdb709f1923158188a6d1adeed6bfa",
+              "source_hashes": {
+                "component_versions_sha256": "592a5a594271ffc08ae7417d3754de177a3576d06ae7a9250023011898b7e446",
+                "execution_boundary_ids_sha256": "eb739223ec5716eb9d04e2326204fd24935b12022f81f97041b5e7371f579943",
+                "input_schema_sha256": "cb84054af4ba08bba3f463ae0087735068a84fc636a19977f7ecd4c8acec6c03",
+                "layers_sha256": "c8a0cf3c53cd473eb06c53fa8d0b02ed77048c836c823ef97bb67d2b89f76f98",
+                "output_schema_sha256": "b04c3137b6db836a69fffa0ca2a646e2e5c4149d41bbacab77477767e18a865b",
+                "references_sha256": "138683b6f716b8b008e83e75e13dd14e9bfa86f7bd0fb753e6f54726a12a358e"
+              }
+            },
+            {
+              "snapshot_id": "tool.add_gift_to_backpack",
+              "snapshot_type": "tool",
+              "snapshot_format_version": "2.0",
+              "module_id": null,
+              "contract_version": "tool-add_gift_to_backpack-contract-v2",
+              "relative_path": "tools/add_gift_to_backpack.json",
+              "snapshot_sha256": "e9b0136e3b80eb3946acfdb4891882c52ee5d485c81f1c98650d18d913eef3b7",
+              "source_hashes": {
+                "function_schema_sha256": "c7f4388c4a6ca97abd64bd15f2cfee38d544d7700ac0c539f82a9892a13aa86e",
+                "parameter_rules_sha256": "bde4282dc7057b123bb89009bb7341bf2f3cbe5eb8dda95d8fae56667fc3d27f",
+                "result_contracts_sha256": "73dcf7d9bbb96d8005884f4d7f5e66d7e591662fa44358a83edc1f974d0b8264",
+                "result_schema_sha256": "b04c3137b6db836a69fffa0ca2a646e2e5c4149d41bbacab77477767e18a865b"
+              }
+            },
+            {
+              "snapshot_id": "tool.prepare_resource",
+              "snapshot_type": "tool",
+              "snapshot_format_version": "2.0",
+              "module_id": null,
+              "contract_version": "tool-prepare_resource-contract-v2",
+              "relative_path": "tools/prepare_resource.json",
+              "snapshot_sha256": "c0b144de3eb78236f197b08c5265e0a094277556373115155ac335ab8dba7a38",
+              "source_hashes": {
+                "function_schema_sha256": "4c940a5e6825baf034964170ee49e98657f2fb1139fff11d6590a1db9e252064",
+                "parameter_rules_sha256": "8dbe90023006c8c4cad19b34108f4c05895da68f70d8859094d9fe2c8d15c6f8",
+                "result_contracts_sha256": "06e5e942e7c285bef44451f2c445d5ec1441a619fb0f3a9fbb1e3869674ac793",
+                "result_schema_sha256": "b04c3137b6db836a69fffa0ca2a646e2e5c4149d41bbacab77477767e18a865b"
+              }
+            },
+            {
+              "snapshot_id": "tool.query_gift_info",
+              "snapshot_type": "tool",
+              "snapshot_format_version": "2.0",
+              "module_id": null,
+              "contract_version": "tool-query_gift_info-contract-v2",
+              "relative_path": "tools/query_gift_info.json",
+              "snapshot_sha256": "c6219cb9396ec8e520e0c5a4b8da85db5afecd3fa18e0fcd25d40349c82ec38e",
+              "source_hashes": {
+                "function_schema_sha256": "5457af8330adaeeb7bb04c3a60ce1fa659f1393be28ee3a372dbc8c1c75fd58c",
+                "parameter_rules_sha256": "6dd425503a0c24d663cff05e525f927987bcd1c1fe5eb03ae32020100ff08cf1",
+                "result_contracts_sha256": "0de1c9e0c431049867f74dea266261aec894810a2f20e7e08570e1ae9858687c",
+                "result_schema_sha256": "b04c3137b6db836a69fffa0ca2a646e2e5c4149d41bbacab77477767e18a865b"
+              }
+            },
+            {
+              "snapshot_id": "tool.query_information",
+              "snapshot_type": "tool",
+              "snapshot_format_version": "2.0",
+              "module_id": null,
+              "contract_version": "tool-query_information-contract-v2",
+              "relative_path": "tools/query_information.json",
+              "snapshot_sha256": "842e332e6b0fb287cc02e19a766992982ec5f5de2a069dd28dd94154632fbccc",
+              "source_hashes": {
+                "function_schema_sha256": "4b4e9976008f117c46503ab0809f1e732af4acc8762ba33f0b5f1f0e54cd1624",
+                "parameter_rules_sha256": "36e58ef5f4623559d3ead7a5d8667f245c94df155cabf6e67a63843f2ac9cde2",
+                "result_contracts_sha256": "1547bbd00b0c5473f0ef694e7beb4a439a29e4f36ffe60f7929e19f21c32aa96",
+                "result_schema_sha256": "b04c3137b6db836a69fffa0ca2a646e2e5c4149d41bbacab77477767e18a865b"
+              }
+            },
+            {
+              "snapshot_id": "tool.query_pool_config",
+              "snapshot_type": "tool",
+              "snapshot_format_version": "2.0",
+              "module_id": null,
+              "contract_version": "tool-query_pool_config-contract-v2",
+              "relative_path": "tools/query_pool_config.json",
+              "snapshot_sha256": "48b7c7ca3cf20a5bbba7c44d8dc99953dc716e36b2e5bb4db8794127f406c1c9",
+              "source_hashes": {
+                "function_schema_sha256": "437684c992b4255af93db56f466d7929a75e87cf682766648e9d109a90a5eaa8",
+                "parameter_rules_sha256": "2e9beb6e1a543fbd24e89ab82032c5eb4e147d69577134ac2c37777adf396d46",
+                "result_contracts_sha256": "7024a989673b6fa565f6a22c34684a3fa5d7b519121c8e615a561dc226740afc",
+                "result_schema_sha256": "b04c3137b6db836a69fffa0ca2a646e2e5c4149d41bbacab77477767e18a865b"
+              }
+            },
+            {
+              "snapshot_id": "tool.query_user_info",
+              "snapshot_type": "tool",
+              "snapshot_format_version": "2.0",
+              "module_id": null,
+              "contract_version": "tool-query_user_info-contract-v2",
+              "relative_path": "tools/query_user_info.json",
+              "snapshot_sha256": "b23cf89f78b91c734b6f5c48111046171f51fe2d0562a469de1e1d0f39c0181c",
+              "source_hashes": {
+                "function_schema_sha256": "9a3574bea1af7e875adc439a6c4980d2a99fbbb983791cc30afe8b8bfc9cd2f8",
+                "parameter_rules_sha256": "c03bf46bab6692521ee6a7b16f6785c08c81e09419ffce21a22a088c7b4edf82",
+                "result_contracts_sha256": "dec6d2189a901716944b52daec8492d3dc1f28c167798ef5219fcdaaf4a0d33b",
+                "result_schema_sha256": "b04c3137b6db836a69fffa0ca2a646e2e5c4149d41bbacab77477767e18a865b"
+              }
+            }
+          ],
+          "changed_bundle_files": []
+        }
+      },
+      {
+        "name": "contract",
+        "passed": true,
+        "issues": [],
+        "details": {}
+      },
+      {
+        "name": "coverage",
+        "passed": true,
+        "issues": [],
+        "details": {
+          "case_count": 42,
+          "intent_status_distribution": {
+            "query_user/NEED_CLARIFICATION": 17,
+            "query_user/READY": 25
+          },
+          "status_distribution": {
+            "NEED_CLARIFICATION": 17,
+            "READY": 25
+          },
+          "scenario_type_distribution": {
+            "ambiguous_expression": 3,
+            "correction_conflict": 3,
+            "expression_variant": 12,
+            "invalid_parameter": 6,
+            "missing_parameter": 2,
+            "multi_condition": 3,
+            "normal": 4,
+            "unsupported_batch": 5,
+            "valid_boundary": 4
+          }
+        }
+      },
+      {
+        "name": "duplicate",
+        "passed": true,
+        "issues": [],
+        "details": {
+          "normalized_near_duplicates": []
+        }
+      },
+      {
+        "name": "leakage",
+        "passed": true,
+        "issues": [],
+        "details": {}
+      },
+      {
+        "name": "quality",
+        "passed": true,
+        "issues": [],
+        "details": {}
+      }
+    ]
+  },
+  "reviewer": "YY",
+  "approved_at": "2026-10-08T08:45:58.969310+00:00",
+  "approval": {
+    "review_artifact_sha256": "9274b0a27a5829bd00ccef671490bb7149da611916c262d6a77222de39850823",
+    "reviewed_case_count": 42,
+    "reviewed_case_ids": [
+      "MINI-QUSER-001",
+      "MINI-QUSER-002",
+      "MINI-QUSER-003",
+      "MINI-QUSER-004",
+      "MINI-QUSER-005",
+      "MINI-QUSER-006",
+      "MINI-QUSER-007",
+      "MINI-QUSER-008",
+      "MINI-QUSER-009",
+      "MINI-QUSER-010",
+      "MINI-QUSER-011",
+      "MINI-QUSER-012",
+      "MINI-QUSER-013",
+      "MINI-QUSER-014",
+      "MINI-QUSER-015",
+      "MINI-QUSER-016",
+      "MINI-QUSER-017",
+      "MINI-QUSER-018",
+      "MINI-QUSER-019",
+      "MINI-QUSER-020",
+      "MINI-QUSER-021",
+      "MINI-QUSER-022",
+      "MINI-QUSER-023",
+      "MINI-QUSER-024",
+      "MINI-QUSER-025",
+      "MINI-QUSER-026",
+      "MINI-QUSER-027",
+      "MINI-QUSER-028",
+      "MINI-QUSER-029",
+      "MINI-QUSER-030",
+      "MINI-QUSER-031",
+      "MINI-QUSER-032",
+      "MINI-QUSER-033",
+      "MINI-QUSER-034",
+      "MINI-QUSER-035",
+      "MINI-QUSER-036",
+      "MINI-QUSER-037",
+      "MINI-QUSER-038",
+      "MINI-QUSER-039",
+      "MINI-QUSER-040",
+      "MINI-QUSER-041",
+      "MINI-QUSER-042"
+    ]
+  },
+  "frozen_at": "2026-10-08T08:45:59.627285+00:00"
+}

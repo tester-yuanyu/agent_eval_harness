@@ -1,0 +1,155 @@
+{
+  "component_versions": {
+    "agent_orchestrator": "v2"
+  },
+  "context_rules": [],
+  "contract_version": "agent-orchestrator-module-v2",
+  "execution_boundary": "end_to_end",
+  "execution_boundary_ids": [
+    "end_to_end"
+  ],
+  "input_schema": {
+    "type": "object"
+  },
+  "intent_refs": [],
+  "layers": {
+    "context": {
+      "downstream_dependencies": [],
+      "entrypoints": [
+        "MinimalAgent.run"
+      ],
+      "evidence": [
+        "tool_trace"
+      ],
+      "failure_modes": [],
+      "formal_rules": [],
+      "inputs": [
+        "request"
+      ],
+      "outputs": [
+        "observable_result"
+      ],
+      "reason": null,
+      "related_tools": [],
+      "state_reads": [],
+      "state_writes": [],
+      "stop_nodes": [
+        "observable_result"
+      ],
+      "support_status": "supported",
+      "upstream_dependencies": []
+    },
+    "planning_execution": {
+      "downstream_dependencies": [],
+      "entrypoints": [],
+      "evidence": [],
+      "failure_modes": [],
+      "formal_rules": [],
+      "inputs": [],
+      "outputs": [],
+      "reason": "No registered Tools are available for execution.",
+      "related_tools": [],
+      "state_reads": [],
+      "state_writes": [],
+      "stop_nodes": [],
+      "support_status": "unsupported",
+      "upstream_dependencies": []
+    },
+    "result": {
+      "downstream_dependencies": [],
+      "entrypoints": [
+        "MinimalAgent.run"
+      ],
+      "evidence": [
+        "final_response"
+      ],
+      "failure_modes": [],
+      "formal_rules": [],
+      "inputs": [
+        "request"
+      ],
+      "outputs": [
+        "observable_result"
+      ],
+      "reason": null,
+      "related_tools": [],
+      "state_reads": [],
+      "state_writes": [],
+      "stop_nodes": [
+        "observable_result"
+      ],
+      "support_status": "supported",
+      "upstream_dependencies": []
+    },
+    "safety_recovery": {
+      "downstream_dependencies": [],
+      "entrypoints": [
+        "ToolRegistry.invoke"
+      ],
+      "evidence": [
+        "permission_event"
+      ],
+      "failure_modes": [],
+      "formal_rules": [],
+      "inputs": [
+        "request"
+      ],
+      "outputs": [
+        "observable_result"
+      ],
+      "reason": null,
+      "related_tools": [],
+      "state_reads": [],
+      "state_writes": [],
+      "stop_nodes": [
+        "observable_result"
+      ],
+      "support_status": "supported",
+      "upstream_dependencies": []
+    },
+    "understanding": {
+      "downstream_dependencies": [],
+      "entrypoints": [
+        "MinimalAgent.run_intent_only"
+      ],
+      "evidence": [
+        "intent_router_output"
+      ],
+      "failure_modes": [],
+      "formal_rules": [],
+      "inputs": [
+        "request"
+      ],
+      "outputs": [
+        "observable_result"
+      ],
+      "reason": null,
+      "related_tools": [],
+      "state_reads": [],
+      "state_writes": [],
+      "stop_nodes": [
+        "observable_result"
+      ],
+      "support_status": "supported",
+      "upstream_dependencies": []
+    }
+  },
+  "mockable_dependencies": [],
+  "module_id": "agent_orchestrator",
+  "module_refs": [],
+  "output_schema": {
+    "type": "object"
+  },
+  "responsibility": "Coordinate intent and result flow.",
+  "snapshot_format_version": "2.0",
+  "snapshot_id": "module.agent_orchestrator",
+  "snapshot_sha256": "5102731945f9617a8d803c8a87d0ff2ff1ced74cc96fba1c03c8b5e2d9baec8a",
+  "snapshot_type": "module",
+  "source_hashes": {
+    "children_sha256": "b78ee59b8a819b12aaee9953ee472c98c34893d48db562e951cb5033d096ae54",
+    "layers_sha256": "4fb14ad6d9c35d6924db59cbefadd4aa0cc10f83b97d74592564d18604a7dde0"
+  },
+  "supported_operations": [],
+  "tool_refs": [],
+  "trace_event_types": []
+}

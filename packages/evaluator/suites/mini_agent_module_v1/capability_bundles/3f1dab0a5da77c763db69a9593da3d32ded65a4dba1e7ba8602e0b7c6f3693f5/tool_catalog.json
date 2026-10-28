@@ -1,0 +1,37 @@
+{
+  "snapshot_format_version": "1.0",
+  "snapshot_id": "tool_catalog",
+  "snapshot_type": "tool_catalog",
+  "scope": "tool_registry",
+  "catalog_version": "mini-agent-tool-catalog-v1",
+  "profiles": {
+    "legacy": [
+      "prepare_resource",
+      "query_information"
+    ],
+    "shadow_read": [
+      "query_gift_info",
+      "query_pool_config",
+      "query_user_info"
+    ],
+    "shadow_full": [
+      "add_gift_to_backpack",
+      "query_gift_info",
+      "query_pool_config",
+      "query_user_info"
+    ]
+  },
+  "tool_snapshot_ids": [
+    "add_gift_to_backpack",
+    "prepare_resource",
+    "query_gift_info",
+    "query_information",
+    "query_pool_config",
+    "query_user_info"
+  ],
+  "source_hashes": {
+    "profiles_sha256": "f8d60fc41123eea49083ef5bd19b83a9e3d6ff0937b229544e847570f283ac5c",
+    "tool_snapshot_ids_sha256": "738319a4f409bee288851ef06b1a91386e4816be4abf42d65fe9697b732af2e1"
+  },
+  "snapshot_sha256": "006bcbadbbc1db6f8e2c073873801b85ff9e1f06fbbfc76d3ec81bd352e818eb"
+}

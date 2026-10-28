@@ -1,0 +1,815 @@
+{
+  "candidates": [
+    {
+      "slot_id": "explicit_user_id",
+      "user_input": "查询 UserID 为 9075333 的用户信息。",
+      "expected_intent": "query_user",
+      "expected_status": "READY",
+      "expected_next_action": "CALL_TOOL",
+      "expected_parameters_json": "{\"user_id\":9075333}",
+      "missing_parameters": [],
+      "scenario_type": "normal",
+      "difficulty": "easy",
+      "coverage_tags": [
+        "explicit_field",
+        "user_id"
+      ],
+      "rule_refs": [
+        "query_user.field_rules.user_id.aliases"
+      ]
+    },
+    {
+      "slot_id": "explicit_room_id",
+      "user_input": "请查询 RoomID 为 8800123 的用户信息。",
+      "expected_intent": "query_user",
+      "expected_status": "READY",
+      "expected_next_action": "CALL_TOOL",
+      "expected_parameters_json": "{\"room_id\":8800123}",
+      "missing_parameters": [],
+      "scenario_type": "normal",
+      "difficulty": "easy",
+      "coverage_tags": [
+        "explicit_field",
+        "room_id"
+      ],
+      "rule_refs": [
+        "query_user.field_rules.room_id.aliases"
+      ]
+    },
+    {
+      "slot_id": "explicit_email",
+      "user_input": "查找 Email 为 reviewer@example.test 的用户。",
+      "expected_intent": "query_user",
+      "expected_status": "READY",
+      "expected_next_action": "CALL_TOOL",
+      "expected_parameters_json": "{\"email\":\"reviewer@example.test\"}",
+      "missing_parameters": [],
+      "scenario_type": "normal",
+      "difficulty": "easy",
+      "coverage_tags": [
+        "explicit_field",
+        "email"
+      ],
+      "rule_refs": [
+        "query_user.field_rules.email.aliases"
+      ]
+    },
+    {
+      "slot_id": "explicit_phone",
+      "user_input": "查询 Phone 为 15000000201 的用户资料。",
+      "expected_intent": "query_user",
+      "expected_status": "READY",
+      "expected_next_action": "CALL_TOOL",
+      "expected_parameters_json": "{\"phone\":\"15000000201\"}",
+      "missing_parameters": [],
+      "scenario_type": "normal",
+      "difficulty": "easy",
+      "coverage_tags": [
+        "explicit_field",
+        "phone"
+      ],
+      "rule_refs": [
+        "query_user.field_rules.phone.aliases"
+      ]
+    },
+    {
+      "slot_id": "translated_user_id",
+      "user_input": "帮我查用户 ID 为 9075334 的用户信息。",
+      "expected_intent": "query_user",
+      "expected_status": "READY",
+      "expected_next_action": "CALL_TOOL",
+      "expected_parameters_json": "{\"user_id\":9075334}",
+      "missing_parameters": [],
+      "scenario_type": "expression_variant",
+      "difficulty": "easy",
+      "coverage_tags": [
+        "field_translation",
+        "user_id"
+      ],
+      "rule_refs": [
+        "query_user.field_rules.user_id.aliases"
+      ]
+    },
+    {
+      "slot_id": "translated_room_id",
+      "user_input": "查一下直播间 ID 8800124 对应的用户。",
+      "expected_intent": "query_user",
+      "expected_status": "READY",
+      "expected_next_action": "CALL_TOOL",
+      "expected_parameters_json": "{\"room_id\":8800124}",
+      "missing_parameters": [],
+      "scenario_type": "expression_variant",
+      "difficulty": "easy",
+      "coverage_tags": [
+        "field_translation",
+        "room_id"
+      ],
+      "rule_refs": [
+        "query_user.field_rules.room_id.aliases"
+      ]
+    },
+    {
+      "slot_id": "translated_email",
+      "user_input": "请查询电子邮箱为 translator@example.test 的用户信息。",
+      "expected_intent": "query_user",
+      "expected_status": "READY",
+      "expected_next_action": "CALL_TOOL",
+      "expected_parameters_json": "{\"email\":\"translator@example.test\"}",
+      "missing_parameters": [],
+      "scenario_type": "expression_variant",
+      "difficulty": "easy",
+      "coverage_tags": [
+        "field_translation",
+        "email"
+      ],
+      "rule_refs": [
+        "query_user.field_rules.email.aliases"
+      ]
+    },
+    {
+      "slot_id": "translated_phone",
+      "user_input": "手机号码是 15000000202，请查询这位用户。",
+      "expected_intent": "query_user",
+      "expected_status": "READY",
+      "expected_next_action": "CALL_TOOL",
+      "expected_parameters_json": "{\"phone\":\"15000000202\"}",
+      "missing_parameters": [],
+      "scenario_type": "expression_variant",
+      "difficulty": "easy",
+      "coverage_tags": [
+        "field_translation",
+        "phone"
+      ],
+      "rule_refs": [
+        "query_user.field_rules.phone.aliases"
+      ]
+    },
+    {
+      "slot_id": "inferred_user_id_from_context",
+      "user_input": "查询用户 9075335 的信息。",
+      "expected_intent": "query_user",
+      "expected_status": "READY",
+      "expected_next_action": "CALL_TOOL",
+      "expected_parameters_json": "{\"user_id\":9075335}",
+      "missing_parameters": [],
+      "scenario_type": "expression_variant",
+      "difficulty": "medium",
+      "coverage_tags": [
+        "format_inference",
+        "user_context"
+      ],
+      "rule_refs": [
+        "query_user.field_rules.user_id.aliases"
+      ]
+    },
+    {
+      "slot_id": "inferred_room_id_from_context",
+      "user_input": "查直播间 8800125 对应的用户信息。",
+      "expected_intent": "query_user",
+      "expected_status": "READY",
+      "expected_next_action": "CALL_TOOL",
+      "expected_parameters_json": "{\"room_id\":8800125}",
+      "missing_parameters": [],
+      "scenario_type": "expression_variant",
+      "difficulty": "medium",
+      "coverage_tags": [
+        "format_inference",
+        "room_context"
+      ],
+      "rule_refs": [
+        "query_user.field_rules.room_id.aliases"
+      ]
+    },
+    {
+      "slot_id": "inferred_email_from_format",
+      "user_input": "帮我找一下 lookup@example.test 对应的用户。",
+      "expected_intent": "query_user",
+      "expected_status": "READY",
+      "expected_next_action": "CALL_TOOL",
+      "expected_parameters_json": "{\"email\":\"lookup@example.test\"}",
+      "missing_parameters": [],
+      "scenario_type": "expression_variant",
+      "difficulty": "medium",
+      "coverage_tags": [
+        "format_inference",
+        "email_shape"
+      ],
+      "rule_refs": [
+        "query_user.inference_rules.email_shape_maps_to"
+      ]
+    },
+    {
+      "slot_id": "inferred_phone_from_format",
+      "user_input": "查询 15000000200 的用户信息。",
+      "expected_intent": "query_user",
+      "expected_status": "READY",
+      "expected_next_action": "CALL_TOOL",
+      "expected_parameters_json": "{\"phone\":\"15000000200\"}",
+      "missing_parameters": [],
+      "scenario_type": "expression_variant",
+      "difficulty": "medium",
+      "coverage_tags": [
+        "format_inference",
+        "phone_shape"
+      ],
+      "rule_refs": [
+        "query_user.inference_rules.eleven_ascii_digits_map_to"
+      ]
+    },
+    {
+      "slot_id": "valid_user_id_minimum",
+      "user_input": "查询用户 ID 1 的资料。",
+      "expected_intent": "query_user",
+      "expected_status": "READY",
+      "expected_next_action": "CALL_TOOL",
+      "expected_parameters_json": "{\"user_id\":1}",
+      "missing_parameters": [],
+      "scenario_type": "valid_boundary",
+      "difficulty": "easy",
+      "coverage_tags": [
+        "valid_boundary",
+        "user_id_minimum"
+      ],
+      "rule_refs": [
+        "query_user.parameters_schema.properties.user_id"
+      ]
+    },
+    {
+      "slot_id": "valid_room_id_minimum",
+      "user_input": "请查房间 ID 1 关联的用户。",
+      "expected_intent": "query_user",
+      "expected_status": "READY",
+      "expected_next_action": "CALL_TOOL",
+      "expected_parameters_json": "{\"room_id\":1}",
+      "missing_parameters": [],
+      "scenario_type": "valid_boundary",
+      "difficulty": "easy",
+      "coverage_tags": [
+        "valid_boundary",
+        "room_id_minimum"
+      ],
+      "rule_refs": [
+        "query_user.parameters_schema.properties.room_id"
+      ]
+    },
+    {
+      "slot_id": "valid_email_minimal_shape",
+      "user_input": "查询邮箱 a@b 对应的用户信息。",
+      "expected_intent": "query_user",
+      "expected_status": "READY",
+      "expected_next_action": "CALL_TOOL",
+      "expected_parameters_json": "{\"email\":\"a@b\"}",
+      "missing_parameters": [],
+      "scenario_type": "valid_boundary",
+      "difficulty": "medium",
+      "coverage_tags": [
+        "valid_boundary",
+        "email_minimal_shape"
+      ],
+      "rule_refs": [
+        "query_user.parameters_schema.properties.email"
+      ]
+    },
+    {
+      "slot_id": "valid_phone_eleven_digits",
+      "user_input": "查询电话号码 00000000001 的用户。",
+      "expected_intent": "query_user",
+      "expected_status": "READY",
+      "expected_next_action": "CALL_TOOL",
+      "expected_parameters_json": "{\"phone\":\"00000000001\"}",
+      "missing_parameters": [],
+      "scenario_type": "valid_boundary",
+      "difficulty": "medium",
+      "coverage_tags": [
+        "valid_boundary",
+        "phone_leading_zero"
+      ],
+      "rule_refs": [
+        "query_user.parameters_schema.properties.phone"
+      ]
+    },
+    {
+      "slot_id": "invalid_user_id_zero",
+      "user_input": "查询用户 ID 为 0 的用户信息。",
+      "expected_intent": "query_user",
+      "expected_status": "NEED_CLARIFICATION",
+      "expected_next_action": "ASK_USER",
+      "expected_parameters_json": "{}",
+      "missing_parameters": [
+        "user_id"
+      ],
+      "scenario_type": "invalid_parameter",
+      "difficulty": "easy",
+      "coverage_tags": [
+        "invalid_format",
+        "user_id_zero"
+      ],
+      "rule_refs": [
+        "query_user.parameters_schema.properties.user_id",
+        "query_user.missing_parameter_rules.invalid_named_field"
+      ]
+    },
+    {
+      "slot_id": "invalid_user_id_negative",
+      "user_input": "用户编号是 -7，查一下他的资料。",
+      "expected_intent": "query_user",
+      "expected_status": "NEED_CLARIFICATION",
+      "expected_next_action": "ASK_USER",
+      "expected_parameters_json": "{}",
+      "missing_parameters": [
+        "user_id"
+      ],
+      "scenario_type": "invalid_parameter",
+      "difficulty": "easy",
+      "coverage_tags": [
+        "invalid_format",
+        "user_id_negative"
+      ],
+      "rule_refs": [
+        "query_user.parameters_schema.properties.user_id",
+        "query_user.missing_parameter_rules.invalid_named_field"
+      ]
+    },
+    {
+      "slot_id": "invalid_room_id_non_positive",
+      "user_input": "请查直播间号 0 对应的用户。",
+      "expected_intent": "query_user",
+      "expected_status": "NEED_CLARIFICATION",
+      "expected_next_action": "ASK_USER",
+      "expected_parameters_json": "{}",
+      "missing_parameters": [
+        "room_id"
+      ],
+      "scenario_type": "invalid_parameter",
+      "difficulty": "easy",
+      "coverage_tags": [
+        "invalid_format",
+        "room_id_non_positive"
+      ],
+      "rule_refs": [
+        "query_user.parameters_schema.properties.room_id",
+        "query_user.missing_parameter_rules.invalid_named_field"
+      ]
+    },
+    {
+      "slot_id": "invalid_email_shape",
+      "user_input": "查询邮箱 example.com 对应的用户信息。",
+      "expected_intent": "query_user",
+      "expected_status": "NEED_CLARIFICATION",
+      "expected_next_action": "ASK_USER",
+      "expected_parameters_json": "{}",
+      "missing_parameters": [
+        "email"
+      ],
+      "scenario_type": "invalid_parameter",
+      "difficulty": "easy",
+      "coverage_tags": [
+        "invalid_format",
+        "email_shape"
+      ],
+      "rule_refs": [
+        "query_user.parameters_schema.properties.email",
+        "query_user.missing_parameter_rules.invalid_named_field"
+      ]
+    },
+    {
+      "slot_id": "invalid_phone_length",
+      "user_input": "查询手机号 1500000020 的用户信息。",
+      "expected_intent": "query_user",
+      "expected_status": "NEED_CLARIFICATION",
+      "expected_next_action": "ASK_USER",
+      "expected_parameters_json": "{}",
+      "missing_parameters": [
+        "phone"
+      ],
+      "scenario_type": "invalid_parameter",
+      "difficulty": "easy",
+      "coverage_tags": [
+        "invalid_format",
+        "phone_length"
+      ],
+      "rule_refs": [
+        "query_user.parameters_schema.properties.phone",
+        "query_user.missing_parameter_rules.invalid_named_field"
+      ]
+    },
+    {
+      "slot_id": "invalid_phone_non_digit",
+      "user_input": "请查手机号 15000A00200 对应的用户。",
+      "expected_intent": "query_user",
+      "expected_status": "NEED_CLARIFICATION",
+      "expected_next_action": "ASK_USER",
+      "expected_parameters_json": "{}",
+      "missing_parameters": [
+        "phone"
+      ],
+      "scenario_type": "invalid_parameter",
+      "difficulty": "easy",
+      "coverage_tags": [
+        "invalid_format",
+        "phone_non_digit"
+      ],
+      "rule_refs": [
+        "query_user.parameters_schema.properties.phone",
+        "query_user.missing_parameter_rules.invalid_named_field"
+      ]
+    },
+    {
+      "slot_id": "and_user_id_phone",
+      "user_input": "查询用户 ID 为 9075333、手机号为 15000000200 的用户信息。",
+      "expected_intent": "query_user",
+      "expected_status": "READY",
+      "expected_next_action": "CALL_TOOL",
+      "expected_parameters_json": "{\"user_id\":9075333,\"phone\":\"15000000200\"}",
+      "missing_parameters": [],
+      "scenario_type": "multi_condition",
+      "difficulty": "medium",
+      "coverage_tags": [
+        "and_query",
+        "user_id_phone"
+      ],
+      "rule_refs": [
+        "query_user.semantic_rules.multiple_fields"
+      ]
+    },
+    {
+      "slot_id": "and_room_id_email",
+      "user_input": "查询房间 ID 8800126 且邮箱 roomowner@example.test 匹配的用户。",
+      "expected_intent": "query_user",
+      "expected_status": "READY",
+      "expected_next_action": "CALL_TOOL",
+      "expected_parameters_json": "{\"room_id\":8800126,\"email\":\"roomowner@example.test\"}",
+      "missing_parameters": [],
+      "scenario_type": "multi_condition",
+      "difficulty": "medium",
+      "coverage_tags": [
+        "and_query",
+        "room_id_email"
+      ],
+      "rule_refs": [
+        "query_user.semantic_rules.multiple_fields"
+      ]
+    },
+    {
+      "slot_id": "and_three_conditions",
+      "user_input": "请查用户 ID 9075336、直播间 ID 8800127、邮箱 triple@example.test 共同对应的用户。",
+      "expected_intent": "query_user",
+      "expected_status": "READY",
+      "expected_next_action": "CALL_TOOL",
+      "expected_parameters_json": "{\"user_id\":9075336,\"room_id\":8800127,\"email\":\"triple@example.test\"}",
+      "missing_parameters": [],
+      "scenario_type": "multi_condition",
+      "difficulty": "medium",
+      "coverage_tags": [
+        "and_query",
+        "three_conditions"
+      ],
+      "rule_refs": [
+        "query_user.semantic_rules.multiple_fields"
+      ]
+    },
+    {
+      "slot_id": "explicit_two_users_not_and",
+      "user_input": "分别查询用户 ID 9075333 和手机号 15000000200 对应的两个用户。",
+      "expected_intent": "query_user",
+      "expected_status": "NEED_CLARIFICATION",
+      "expected_next_action": "ASK_USER",
+      "expected_parameters_json": "{}",
+      "missing_parameters": [
+        "single_user_query_condition"
+      ],
+      "scenario_type": "unsupported_batch",
+      "difficulty": "medium",
+      "coverage_tags": [
+        "and_query",
+        "explicit_two_users"
+      ],
+      "rule_refs": [
+        "query_user.semantic_rules.batch_query",
+        "query_user.missing_parameter_rules.or_or_batch_query"
+      ]
+    },
+    {
+      "slot_id": "missing_all_conditions",
+      "user_input": "麻烦查一下用户资料。",
+      "expected_intent": "query_user",
+      "expected_status": "NEED_CLARIFICATION",
+      "expected_next_action": "ASK_USER",
+      "expected_parameters_json": "{}",
+      "missing_parameters": [
+        "user_id_or_room_id_or_email_or_phone"
+      ],
+      "scenario_type": "missing_parameter",
+      "difficulty": "easy",
+      "coverage_tags": [
+        "ambiguity",
+        "missing_all_conditions"
+      ],
+      "rule_refs": [
+        "query_user.missing_parameter_rules.missing_all_conditions"
+      ]
+    },
+    {
+      "slot_id": "ambiguous_bare_positive_integer",
+      "user_input": "查询 9075333 的用户信息。",
+      "expected_intent": "query_user",
+      "expected_status": "NEED_CLARIFICATION",
+      "expected_next_action": "ASK_USER",
+      "expected_parameters_json": "{}",
+      "missing_parameters": [
+        "user_id_or_room_id"
+      ],
+      "scenario_type": "ambiguous_expression",
+      "difficulty": "medium",
+      "coverage_tags": [
+        "ambiguity",
+        "bare_positive_integer"
+      ],
+      "rule_refs": [
+        "query_user.inference_rules.shorter_bare_positive_integer",
+        "query_user.missing_parameter_rules.ambiguous_bare_integer"
+      ]
+    },
+    {
+      "slot_id": "missing_value_after_field",
+      "user_input": "请按手机号查询用户，号码稍后再说。",
+      "expected_intent": "query_user",
+      "expected_status": "NEED_CLARIFICATION",
+      "expected_next_action": "ASK_USER",
+      "expected_parameters_json": "{}",
+      "missing_parameters": [
+        "phone"
+      ],
+      "scenario_type": "missing_parameter",
+      "difficulty": "easy",
+      "coverage_tags": [
+        "ambiguity",
+        "missing_field_value"
+      ],
+      "rule_refs": [
+        "query_user.field_rules.phone.aliases",
+        "query_user.missing_parameter_rules.invalid_named_field"
+      ]
+    },
+    {
+      "slot_id": "unresolved_pronoun",
+      "user_input": "帮我查一下他的用户信息。",
+      "expected_intent": "query_user",
+      "expected_status": "NEED_CLARIFICATION",
+      "expected_next_action": "ASK_USER",
+      "expected_parameters_json": "{}",
+      "missing_parameters": [
+        "user_id_or_room_id_or_email_or_phone"
+      ],
+      "scenario_type": "ambiguous_expression",
+      "difficulty": "medium",
+      "coverage_tags": [
+        "ambiguity",
+        "unresolved_pronoun"
+      ],
+      "rule_refs": [
+        "query_user.semantic_rules.unresolved_pronoun",
+        "query_user.missing_parameter_rules.missing_all_conditions"
+      ]
+    },
+    {
+      "slot_id": "variant_value_before_field",
+      "user_input": "15000000200 这个数是 UserID，请查它的用户资料。",
+      "expected_intent": "query_user",
+      "expected_status": "READY",
+      "expected_next_action": "CALL_TOOL",
+      "expected_parameters_json": "{\"user_id\":15000000200}",
+      "missing_parameters": [],
+      "scenario_type": "expression_variant",
+      "difficulty": "medium",
+      "coverage_tags": [
+        "expression_variant",
+        "value_before_field"
+      ],
+      "rule_refs": [
+        "query_user.inference_rules.explicit_field_overrides_value_shape",
+        "query_user.field_rules.user_id.aliases"
+      ]
+    },
+    {
+      "slot_id": "variant_colloquial",
+      "user_input": "帮我瞧瞧，手机 15000000203 是哪个用户的？",
+      "expected_intent": "query_user",
+      "expected_status": "READY",
+      "expected_next_action": "CALL_TOOL",
+      "expected_parameters_json": "{\"phone\":\"15000000203\"}",
+      "missing_parameters": [],
+      "scenario_type": "expression_variant",
+      "difficulty": "medium",
+      "coverage_tags": [
+        "expression_variant",
+        "colloquial"
+      ],
+      "rule_refs": [
+        "query_user.field_rules.phone.aliases"
+      ]
+    },
+    {
+      "slot_id": "variant_formal",
+      "user_input": "请检索电子邮件地址 formal@example.test 所属的用户档案。",
+      "expected_intent": "query_user",
+      "expected_status": "READY",
+      "expected_next_action": "CALL_TOOL",
+      "expected_parameters_json": "{\"email\":\"formal@example.test\"}",
+      "missing_parameters": [],
+      "scenario_type": "expression_variant",
+      "difficulty": "medium",
+      "coverage_tags": [
+        "expression_variant",
+        "formal"
+      ],
+      "rule_refs": [
+        "query_user.field_rules.email.aliases"
+      ]
+    },
+    {
+      "slot_id": "variant_word_order",
+      "user_input": "用户信息帮我查下，直播间号是 8800128。",
+      "expected_intent": "query_user",
+      "expected_status": "READY",
+      "expected_next_action": "CALL_TOOL",
+      "expected_parameters_json": "{\"room_id\":8800128}",
+      "missing_parameters": [],
+      "scenario_type": "expression_variant",
+      "difficulty": "medium",
+      "coverage_tags": [
+        "expression_variant",
+        "word_order"
+      ],
+      "rule_refs": [
+        "query_user.field_rules.room_id.aliases"
+      ]
+    },
+    {
+      "slot_id": "correction_latest_value",
+      "user_input": "查询用户 ID 9075333，不对，改成 9075334。",
+      "expected_intent": "query_user",
+      "expected_status": "READY",
+      "expected_next_action": "CALL_TOOL",
+      "expected_parameters_json": "{\"user_id\":9075334}",
+      "missing_parameters": [],
+      "scenario_type": "correction_conflict",
+      "difficulty": "medium",
+      "coverage_tags": [
+        "correction_conflict",
+        "latest_value"
+      ],
+      "rule_refs": [
+        "query_user.semantic_rules.explicit_correction"
+      ]
+    },
+    {
+      "slot_id": "negation_then_restatement",
+      "user_input": "不要查用户 ID 9075333，查 9075337。",
+      "expected_intent": "query_user",
+      "expected_status": "READY",
+      "expected_next_action": "CALL_TOOL",
+      "expected_parameters_json": "{\"user_id\":9075337}",
+      "missing_parameters": [],
+      "scenario_type": "correction_conflict",
+      "difficulty": "medium",
+      "coverage_tags": [
+        "correction_conflict",
+        "negation_restatement"
+      ],
+      "rule_refs": [
+        "query_user.semantic_rules.negation_then_restatement"
+      ]
+    },
+    {
+      "slot_id": "conflicting_same_field_values",
+      "user_input": "查询用户 ID 9075333，用户 ID 9075334。",
+      "expected_intent": "query_user",
+      "expected_status": "NEED_CLARIFICATION",
+      "expected_next_action": "ASK_USER",
+      "expected_parameters_json": "{}",
+      "missing_parameters": [
+        "single_user_id"
+      ],
+      "scenario_type": "correction_conflict",
+      "difficulty": "medium",
+      "coverage_tags": [
+        "correction_conflict",
+        "same_field_conflict"
+      ],
+      "rule_refs": [
+        "query_user.semantic_rules.same_field_multiple_values",
+        "query_user.missing_parameter_rules.same_field_multiple_values"
+      ]
+    },
+    {
+      "slot_id": "repeated_bare_positive_integer_ambiguous",
+      "user_input": "查询 9075338，我再说一遍，就是 9075338 的用户信息。",
+      "expected_intent": "query_user",
+      "expected_status": "NEED_CLARIFICATION",
+      "expected_next_action": "ASK_USER",
+      "expected_parameters_json": "{}",
+      "missing_parameters": [
+        "user_id_or_room_id"
+      ],
+      "scenario_type": "ambiguous_expression",
+      "difficulty": "medium",
+      "coverage_tags": [
+        "ambiguity",
+        "repeated_bare_value",
+        "user_id_or_room_id_ambiguity"
+      ],
+      "rule_refs": [
+        "query_user.inference_rules.repeated_bare_integer",
+        "query_user.missing_parameter_rules.ambiguous_bare_integer"
+      ]
+    },
+    {
+      "slot_id": "batch_user_ids",
+      "user_input": "查询用户 ID 9075340、9075341 和 9075342 的信息。",
+      "expected_intent": "query_user",
+      "expected_status": "NEED_CLARIFICATION",
+      "expected_next_action": "ASK_USER",
+      "expected_parameters_json": "{}",
+      "missing_parameters": [
+        "single_user_id"
+      ],
+      "scenario_type": "unsupported_batch",
+      "difficulty": "medium",
+      "coverage_tags": [
+        "batch_unsupported",
+        "multiple_user_ids"
+      ],
+      "rule_refs": [
+        "query_user.semantic_rules.batch_query",
+        "query_user.semantic_rules.same_field_multiple_values",
+        "query_user.missing_parameter_rules.same_field_multiple_values"
+      ]
+    },
+    {
+      "slot_id": "batch_room_ids",
+      "user_input": "把直播间 ID 8800130 和 8800131 对应的用户都查出来。",
+      "expected_intent": "query_user",
+      "expected_status": "NEED_CLARIFICATION",
+      "expected_next_action": "ASK_USER",
+      "expected_parameters_json": "{}",
+      "missing_parameters": [
+        "single_room_id"
+      ],
+      "scenario_type": "unsupported_batch",
+      "difficulty": "medium",
+      "coverage_tags": [
+        "batch_unsupported",
+        "multiple_room_ids"
+      ],
+      "rule_refs": [
+        "query_user.semantic_rules.batch_query",
+        "query_user.semantic_rules.same_field_multiple_values",
+        "query_user.missing_parameter_rules.same_field_multiple_values"
+      ]
+    },
+    {
+      "slot_id": "batch_phones",
+      "user_input": "批量查询手机号 15000000204、15000000205 对应的用户。",
+      "expected_intent": "query_user",
+      "expected_status": "NEED_CLARIFICATION",
+      "expected_next_action": "ASK_USER",
+      "expected_parameters_json": "{}",
+      "missing_parameters": [
+        "single_phone"
+      ],
+      "scenario_type": "unsupported_batch",
+      "difficulty": "medium",
+      "coverage_tags": [
+        "batch_unsupported",
+        "multiple_phones"
+      ],
+      "rule_refs": [
+        "query_user.semantic_rules.batch_query",
+        "query_user.semantic_rules.same_field_multiple_values",
+        "query_user.missing_parameter_rules.same_field_multiple_values"
+      ]
+    },
+    {
+      "slot_id": "batch_mixed_or_conditions",
+      "user_input": "查询用户 ID 9075343 或者邮箱 alternate@example.test 对应的用户。",
+      "expected_intent": "query_user",
+      "expected_status": "NEED_CLARIFICATION",
+      "expected_next_action": "ASK_USER",
+      "expected_parameters_json": "{}",
+      "missing_parameters": [
+        "single_user_query_condition"
+      ],
+      "scenario_type": "unsupported_batch",
+      "difficulty": "medium",
+      "coverage_tags": [
+        "batch_unsupported",
+        "mixed_or_conditions"
+      ],
+      "rule_refs": [
+        "query_user.semantic_rules.or_query",
+        "query_user.missing_parameter_rules.or_or_batch_query"
+      ]
+    }
+  ]
+}

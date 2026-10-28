@@ -1,0 +1,43 @@
+{
+  "provider_id": "mini_agent",
+  "bundle_format_version": "1.0",
+  "files": [
+    {
+      "path": "intent_router.json",
+      "sha256": "127a20d4aff219579ae62edc2f45ca892f26ebd9e6aebe1df5eb323f7420c28a"
+    },
+    {
+      "path": "query_user.json",
+      "sha256": "9332e1f19d06be5daa90b02991631d09d50fc5ef023a4646d759e536f8615d79"
+    },
+    {
+      "path": "tool_catalog.json",
+      "sha256": "70bb4a0b20297c258feaad28bb687b515a31a50e19434245192bf24da25cf7bd"
+    },
+    {
+      "path": "tools/add_gift_to_backpack.json",
+      "sha256": "fd9da1c92e0d1107b5a73a1abace05e3ab685221fd6718286e831acbad2617ab"
+    },
+    {
+      "path": "tools/prepare_resource.json",
+      "sha256": "99b34c5c2875c1a016e06a3324af1498ebb94d8fe20f2e1d38f7a5343cc724c6"
+    },
+    {
+      "path": "tools/query_gift_info.json",
+      "sha256": "d8d5107a6072cf9b3a29553104bbba9cf4b52d9635a0652335a29c8e3eedb878"
+    },
+    {
+      "path": "tools/query_information.json",
+      "sha256": "190e84aabc187d383cbb6ae22461da50efc087bc58316a9efa89efca6acfad0e"
+    },
+    {
+      "path": "tools/query_pool_config.json",
+      "sha256": "4d934cdd0aa507c45d241ce9e270a8b76ffd2fd73930d7daa1e7ca68e0a5319f"
+    },
+    {
+      "path": "tools/query_user_info.json",
+      "sha256": "2ce2a68725f1c2ad90d9d7429ea1e58d27fb5d7d3553c070142f321bf6c32032"
+    }
+  ],
+  "capability_bundle_sha256": "3f1dab0a5da77c763db69a9593da3d32ded65a4dba1e7ba8602e0b7c6f3693f5"
+}

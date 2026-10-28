@@ -1,0 +1,15 @@
+{
+  "policy_kind": "review",
+  "policy_version": "1.0",
+  "schema_version": "1.0",
+  "config": {
+    "locale": "zh-CN",
+    "require_all_cases": true,
+    "required_fields": [
+      "case_id",
+      "scenario_type",
+      "expected_module_output",
+      "user_input"
+    ]
+  }
+}

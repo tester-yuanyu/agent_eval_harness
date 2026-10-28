@@ -1,0 +1,70 @@
+{
+  "$defs": {
+    "SourcePolicyConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "allowed_source_bases": {
+          "items": {
+            "enum": [
+              "builder_root",
+              "projects_root",
+              "suite_dir"
+            ],
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Allowed Source Bases",
+          "type": "array"
+        },
+        "unknown_capability_behavior": {
+          "enum": [
+            "preserve",
+            "reject"
+          ],
+          "title": "Unknown Capability Behavior",
+          "type": "string"
+        },
+        "require_hash_binding": {
+          "title": "Require Hash Binding",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "allowed_source_bases",
+        "unknown_capability_behavior",
+        "require_hash_binding"
+      ],
+      "title": "SourcePolicyConfig",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "policy_kind": {
+      "const": "source",
+      "title": "Policy Kind",
+      "type": "string"
+    },
+    "policy_version": {
+      "const": "1.0",
+      "title": "Policy Version",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "config": {
+      "$ref": "#/$defs/SourcePolicyConfig"
+    }
+  },
+  "required": [
+    "policy_kind",
+    "policy_version",
+    "schema_version",
+    "config"
+  ],
+  "title": "SourcePolicy",
+  "type": "object"
+}

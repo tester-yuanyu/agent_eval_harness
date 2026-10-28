@@ -1,0 +1,4541 @@
+[
+  {
+    "key": "v3.sdk.normal_return",
+    "target_id": "chain.end_to_end",
+    "layer": "end_to_end",
+    "category": "normal",
+    "title": "普通前台返回按 RunResult 观察，不推导业务成功",
+    "preconditions": [
+      {
+        "fixture": "isolated_constructed_nanobot",
+        "boundary": "Nanobot.run on an already constructed instance",
+        "workspace": "new isolated temporary directory per case",
+        "session_store": "fresh isolated in-memory or temporary store",
+        "mcp_provider": null,
+        "runtime_selection": "valid local synthetic provider; no external calls",
+        "agent_loop_and_runner": "real implementations; stub only external/provider seams explicitly listed",
+        "model_provider": "deterministic scripted provider at all request/retry/finalization seams",
+        "streaming": false,
+        "hooks": "Python AgentHook recorder; finalize_content preserves supplied plain text",
+        "injection_callback": "always [] unless this case explicitly overrides it",
+        "goal_continuation": "disabled",
+        "tool_registry": "isolated registry with only declared synthetic tools",
+        "commands": "no handled command unless overridden by this case",
+        "policy_guards": "zero previous lookup/violation counts; synthetic tool names and diagnostics contain no policy marker",
+        "persistence_and_response": "local successful save and ordinary non-suppressed outbound unless this case overrides",
+        "reset_before_each_case": true
+      },
+      {
+        "fixture": "scripted_model_provider",
+        "responses": [
+          {
+            "content": "fixture answer",
+            "finish_reason": "stop",
+            "tool_calls": [],
+            "usage": {}
+          }
+        ],
+        "unexpected_request": "fixture failure"
+      }
+    ],
+    "input": {
+      "operation": "invoke_sdk",
+      "entrypoint": "Nanobot.run",
+      "arguments": {
+        "message": "fixture input",
+        "session_key": "sdk:v3-normal"
+      }
+    },
+    "checks": [
+      {
+        "subject": "result",
+        "operator": "schema_valid",
+        "expected": {
+          "description": "Native SDK returned value, including error-bearing or command returns. Not returned on raised/cancelled exits; presence does not imply business success.",
+          "properties": {
+            "content": {
+              "description": "Response text, or empty string when no outbound response/content is returned; no non-empty guarantee.",
+              "title": "Content",
+              "type": "string"
+            },
+            "error": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Nullable captured diagnostic text; inspect together with stop_reason and content/history. None does not prove task success or rule out earlier recoverable tool errors. Non-null error can retain an earlier failure after continuation produces a later answer; it is not an exact classification of that final answer.",
+              "title": "Error"
+            },
+            "messages": {
+              "description": "Captured runner message list; may be empty for command short-circuits. Not a guaranteed complete external event trace.",
+              "items": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "title": "Messages",
+              "type": "array"
+            },
+            "metadata": {
+              "additionalProperties": true,
+              "description": "Outbound metadata copied by SDK; arbitrary keys, not a stable business result schema.",
+              "title": "Metadata",
+              "type": "object"
+            },
+            "stop_reason": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Captured runner status, nullable when runner hooks did not execute (e.g. command shortcut). completed can include refusal/content-filter text. After injection-driven continuation, an earlier error status may remain alongside recovered final content.",
+              "title": "Stop Reason"
+            },
+            "tools_used": {
+              "description": "Authoritative after_run capture lists successful tool events; not a complete list of attempts or failures.",
+              "items": {
+                "type": "string"
+              },
+              "title": "Tools Used",
+              "type": "array"
+            },
+            "usage": {
+              "additionalProperties": {
+                "type": "integer"
+              },
+              "description": "Captured provider token/accounting values; may be empty.",
+              "title": "Usage",
+              "type": "object"
+            }
+          },
+          "required": [
+            "content"
+          ],
+          "title": "RunResult",
+          "type": "object"
+        }
+      },
+      {
+        "subject": "result.content",
+        "operator": "equals",
+        "expected": "fixture answer"
+      },
+      {
+        "subject": "result.stop_reason",
+        "operator": "equals",
+        "expected": "completed"
+      },
+      {
+        "subject": "result.tools_used",
+        "operator": "equals",
+        "expected": []
+      }
+    ],
+    "sources": [
+      {
+        "path": "delivery/bundle/chains/end_to_end/end_to_end.json",
+        "pointer": "/snapshot_id"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/boundary"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/output/branches/0"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/output/field_semantics/content"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/output/return_implies_business_success"
+      },
+      {
+        "path": "sources/nanobot/agent/runner.py",
+        "anchor": "stop_reason = \"completed\""
+      },
+      {
+        "path": "delivery/bundle/evidence/final_response.json",
+        "pointer": "/payload_schema"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖及隔离 Python runner 尚需绑定；本目录只声明候选，未运行 Agent，也不据此将执行支持状态改为 supported。",
+      "仅使用隔离临时工作区、内存会话和指定替身；不访问真实模型、网络、MCP、渠道、进程或用户数据。",
+      "将观察路径绑定到真实调用记录、dataclasses.asdict(RunResult) 与 Python hook 上下文；不得向 Agent 注入预期断言作为输入。"
+    ],
+    "contract_keys": [
+      "/boundary",
+      "/output/branches/0",
+      "/output/field_semantics/content",
+      "/output/return_implies_business_success"
+    ]
+  },
+  {
+    "key": "v3.sdk.refusal_return",
+    "target_id": "chain.end_to_end",
+    "layer": "end_to_end",
+    "category": "boundary",
+    "title": "拒绝文本仍可具有 completed 状态",
+    "preconditions": [
+      {
+        "fixture": "isolated_constructed_nanobot",
+        "boundary": "Nanobot.run on an already constructed instance",
+        "workspace": "new isolated temporary directory per case",
+        "session_store": "fresh isolated in-memory or temporary store",
+        "mcp_provider": null,
+        "runtime_selection": "valid local synthetic provider; no external calls",
+        "agent_loop_and_runner": "real implementations; stub only external/provider seams explicitly listed",
+        "model_provider": "deterministic scripted provider at all request/retry/finalization seams",
+        "streaming": false,
+        "hooks": "Python AgentHook recorder; finalize_content preserves supplied plain text",
+        "injection_callback": "always [] unless this case explicitly overrides it",
+        "goal_continuation": "disabled",
+        "tool_registry": "isolated registry with only declared synthetic tools",
+        "commands": "no handled command unless overridden by this case",
+        "policy_guards": "zero previous lookup/violation counts; synthetic tool names and diagnostics contain no policy marker",
+        "persistence_and_response": "local successful save and ordinary non-suppressed outbound unless this case overrides",
+        "reset_before_each_case": true
+      },
+      {
+        "fixture": "scripted_model_provider",
+        "responses": [
+          {
+            "content": "fixture refusal",
+            "finish_reason": "refusal",
+            "tool_calls": [],
+            "usage": {}
+          }
+        ],
+        "unexpected_request": "fixture failure"
+      }
+    ],
+    "input": {
+      "operation": "invoke_sdk",
+      "entrypoint": "Nanobot.run",
+      "arguments": {
+        "message": "fixture input",
+        "session_key": "sdk:v3-refusal"
+      }
+    },
+    "checks": [
+      {
+        "subject": "result",
+        "operator": "schema_valid",
+        "expected": {
+          "description": "Native SDK returned value, including error-bearing or command returns. Not returned on raised/cancelled exits; presence does not imply business success.",
+          "properties": {
+            "content": {
+              "description": "Response text, or empty string when no outbound response/content is returned; no non-empty guarantee.",
+              "title": "Content",
+              "type": "string"
+            },
+            "error": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Nullable captured diagnostic text; inspect together with stop_reason and content/history. None does not prove task success or rule out earlier recoverable tool errors. Non-null error can retain an earlier failure after continuation produces a later answer; it is not an exact classification of that final answer.",
+              "title": "Error"
+            },
+            "messages": {
+              "description": "Captured runner message list; may be empty for command short-circuits. Not a guaranteed complete external event trace.",
+              "items": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "title": "Messages",
+              "type": "array"
+            },
+            "metadata": {
+              "additionalProperties": true,
+              "description": "Outbound metadata copied by SDK; arbitrary keys, not a stable business result schema.",
+              "title": "Metadata",
+              "type": "object"
+            },
+            "stop_reason": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Captured runner status, nullable when runner hooks did not execute (e.g. command shortcut). completed can include refusal/content-filter text. After injection-driven continuation, an earlier error status may remain alongside recovered final content.",
+              "title": "Stop Reason"
+            },
+            "tools_used": {
+              "description": "Authoritative after_run capture lists successful tool events; not a complete list of attempts or failures.",
+              "items": {
+                "type": "string"
+              },
+              "title": "Tools Used",
+              "type": "array"
+            },
+            "usage": {
+              "additionalProperties": {
+                "type": "integer"
+              },
+              "description": "Captured provider token/accounting values; may be empty.",
+              "title": "Usage",
+              "type": "object"
+            }
+          },
+          "required": [
+            "content"
+          ],
+          "title": "RunResult",
+          "type": "object"
+        }
+      },
+      {
+        "subject": "result.content",
+        "operator": "equals",
+        "expected": "fixture refusal"
+      },
+      {
+        "subject": "result.stop_reason",
+        "operator": "equals",
+        "expected": "completed"
+      }
+    ],
+    "sources": [
+      {
+        "path": "delivery/bundle/chains/end_to_end/end_to_end.json",
+        "pointer": "/snapshot_id"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/output/field_semantics/stop_reason"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/output/return_implies_business_success"
+      },
+      {
+        "path": "sources/nanobot/agent/runner.py",
+        "anchor": "response.finish_reason not in {\"refusal\", \"content_filter\"}"
+      },
+      {
+        "path": "delivery/bundle/evidence/final_response.json",
+        "pointer": "/payload_schema"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖及隔离 Python runner 尚需绑定；本目录只声明候选，未运行 Agent，也不据此将执行支持状态改为 supported。",
+      "仅使用隔离临时工作区、内存会话和指定替身；不访问真实模型、网络、MCP、渠道、进程或用户数据。",
+      "将观察路径绑定到真实调用记录、dataclasses.asdict(RunResult) 与 Python hook 上下文；不得向 Agent 注入预期断言作为输入。"
+    ],
+    "contract_keys": [
+      "/output/field_semantics/stop_reason",
+      "/output/return_implies_business_success"
+    ]
+  },
+  {
+    "key": "v3.sdk.provider_returned_error",
+    "target_id": "chain.end_to_end",
+    "layer": "end_to_end",
+    "category": "error",
+    "title": "模型终止错误响应转换为带 error 的 RunResult",
+    "preconditions": [
+      {
+        "fixture": "isolated_constructed_nanobot",
+        "boundary": "Nanobot.run on an already constructed instance",
+        "workspace": "new isolated temporary directory per case",
+        "session_store": "fresh isolated in-memory or temporary store",
+        "mcp_provider": null,
+        "runtime_selection": "valid local synthetic provider; no external calls",
+        "agent_loop_and_runner": "real implementations; stub only external/provider seams explicitly listed",
+        "model_provider": "deterministic scripted provider at all request/retry/finalization seams",
+        "streaming": false,
+        "hooks": "Python AgentHook recorder; finalize_content preserves supplied plain text",
+        "injection_callback": "always [] unless this case explicitly overrides it",
+        "goal_continuation": "disabled",
+        "tool_registry": "isolated registry with only declared synthetic tools",
+        "commands": "no handled command unless overridden by this case",
+        "policy_guards": "zero previous lookup/violation counts; synthetic tool names and diagnostics contain no policy marker",
+        "persistence_and_response": "local successful save and ordinary non-suppressed outbound unless this case overrides",
+        "reset_before_each_case": true
+      },
+      {
+        "fixture": "scripted_model_provider",
+        "responses": [
+          {
+            "content": "fixture model diagnostic",
+            "finish_reason": "error",
+            "tool_calls": [],
+            "usage": {}
+          }
+        ],
+        "unexpected_request": "fixture failure"
+      }
+    ],
+    "input": {
+      "operation": "invoke_sdk",
+      "entrypoint": "Nanobot.run",
+      "arguments": {
+        "message": "fixture input",
+        "session_key": "sdk:v3-returned-error"
+      }
+    },
+    "checks": [
+      {
+        "subject": "result",
+        "operator": "schema_valid",
+        "expected": {
+          "description": "Native SDK returned value, including error-bearing or command returns. Not returned on raised/cancelled exits; presence does not imply business success.",
+          "properties": {
+            "content": {
+              "description": "Response text, or empty string when no outbound response/content is returned; no non-empty guarantee.",
+              "title": "Content",
+              "type": "string"
+            },
+            "error": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Nullable captured diagnostic text; inspect together with stop_reason and content/history. None does not prove task success or rule out earlier recoverable tool errors. Non-null error can retain an earlier failure after continuation produces a later answer; it is not an exact classification of that final answer.",
+              "title": "Error"
+            },
+            "messages": {
+              "description": "Captured runner message list; may be empty for command short-circuits. Not a guaranteed complete external event trace.",
+              "items": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "title": "Messages",
+              "type": "array"
+            },
+            "metadata": {
+              "additionalProperties": true,
+              "description": "Outbound metadata copied by SDK; arbitrary keys, not a stable business result schema.",
+              "title": "Metadata",
+              "type": "object"
+            },
+            "stop_reason": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Captured runner status, nullable when runner hooks did not execute (e.g. command shortcut). completed can include refusal/content-filter text. After injection-driven continuation, an earlier error status may remain alongside recovered final content.",
+              "title": "Stop Reason"
+            },
+            "tools_used": {
+              "description": "Authoritative after_run capture lists successful tool events; not a complete list of attempts or failures.",
+              "items": {
+                "type": "string"
+              },
+              "title": "Tools Used",
+              "type": "array"
+            },
+            "usage": {
+              "additionalProperties": {
+                "type": "integer"
+              },
+              "description": "Captured provider token/accounting values; may be empty.",
+              "title": "Usage",
+              "type": "object"
+            }
+          },
+          "required": [
+            "content"
+          ],
+          "title": "RunResult",
+          "type": "object"
+        }
+      },
+      {
+        "subject": "result.stop_reason",
+        "operator": "equals",
+        "expected": "error"
+      },
+      {
+        "subject": "result.error",
+        "operator": "schema_valid",
+        "expected": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    ],
+    "sources": [
+      {
+        "path": "delivery/bundle/chains/end_to_end/end_to_end.json",
+        "pointer": "/snapshot_id"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/output/branches/1"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/output/field_semantics/error"
+      },
+      {
+        "path": "sources/nanobot/agent/runner.py",
+        "anchor": "if response.finish_reason == \"error\":"
+      },
+      {
+        "path": "delivery/bundle/evidence/final_response.json",
+        "pointer": "/payload_schema"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖及隔离 Python runner 尚需绑定；本目录只声明候选，未运行 Agent，也不据此将执行支持状态改为 supported。",
+      "仅使用隔离临时工作区、内存会话和指定替身；不访问真实模型、网络、MCP、渠道、进程或用户数据。",
+      "将观察路径绑定到真实调用记录、dataclasses.asdict(RunResult) 与 Python hook 上下文；不得向 Agent 注入预期断言作为输入。"
+    ],
+    "contract_keys": [
+      "/output/branches/1",
+      "/output/field_semantics/error"
+    ]
+  },
+  {
+    "key": "v3.sdk.fatal_tool_error",
+    "target_id": "chain.end_to_end",
+    "layer": "end_to_end",
+    "category": "error",
+    "title": "无继续输入时致命工具错误终止为 tool_error",
+    "preconditions": [
+      {
+        "fixture": "isolated_constructed_nanobot",
+        "boundary": "Nanobot.run on an already constructed instance",
+        "workspace": "new isolated temporary directory per case",
+        "session_store": "fresh isolated in-memory or temporary store",
+        "mcp_provider": null,
+        "runtime_selection": "valid local synthetic provider; no external calls",
+        "agent_loop_and_runner": "real implementations; stub only external/provider seams explicitly listed",
+        "model_provider": "deterministic scripted provider at all request/retry/finalization seams",
+        "streaming": false,
+        "hooks": "Python AgentHook recorder; finalize_content preserves supplied plain text",
+        "injection_callback": "always [] unless this case explicitly overrides it",
+        "goal_continuation": "disabled",
+        "tool_registry": "isolated registry with only declared synthetic tools",
+        "commands": "no handled command unless overridden by this case",
+        "policy_guards": "zero previous lookup/violation counts; synthetic tool names and diagnostics contain no policy marker",
+        "persistence_and_response": "local successful save and ordinary non-suppressed outbound unless this case overrides",
+        "reset_before_each_case": true
+      },
+      {
+        "fixture": "runner_configuration",
+        "fail_on_tool_error": true
+      },
+      {
+        "fixture": "synthetic_tool",
+        "name": "fixture_tool",
+        "parameters": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "execute_returns": {
+          "python_factory": "ToolResult.error",
+          "text": "fixture explicit tool failure"
+        },
+        "record_implementation_calls": true
+      },
+      {
+        "fixture": "scripted_model_provider",
+        "responses": [
+          {
+            "content": "",
+            "finish_reason": "tool_calls",
+            "tool_calls": [
+              {
+                "id": "fixture-call-1",
+                "name": "fixture_tool",
+                "arguments": {}
+              }
+            ],
+            "usage": {}
+          }
+        ],
+        "unexpected_request": "fixture failure"
+      }
+    ],
+    "input": {
+      "operation": "invoke_sdk",
+      "entrypoint": "Nanobot.run",
+      "arguments": {
+        "message": "fixture input",
+        "session_key": "sdk:v3-fatal-tool"
+      }
+    },
+    "checks": [
+      {
+        "subject": "result",
+        "operator": "schema_valid",
+        "expected": {
+          "description": "Native SDK returned value, including error-bearing or command returns. Not returned on raised/cancelled exits; presence does not imply business success.",
+          "properties": {
+            "content": {
+              "description": "Response text, or empty string when no outbound response/content is returned; no non-empty guarantee.",
+              "title": "Content",
+              "type": "string"
+            },
+            "error": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Nullable captured diagnostic text; inspect together with stop_reason and content/history. None does not prove task success or rule out earlier recoverable tool errors. Non-null error can retain an earlier failure after continuation produces a later answer; it is not an exact classification of that final answer.",
+              "title": "Error"
+            },
+            "messages": {
+              "description": "Captured runner message list; may be empty for command short-circuits. Not a guaranteed complete external event trace.",
+              "items": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "title": "Messages",
+              "type": "array"
+            },
+            "metadata": {
+              "additionalProperties": true,
+              "description": "Outbound metadata copied by SDK; arbitrary keys, not a stable business result schema.",
+              "title": "Metadata",
+              "type": "object"
+            },
+            "stop_reason": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Captured runner status, nullable when runner hooks did not execute (e.g. command shortcut). completed can include refusal/content-filter text. After injection-driven continuation, an earlier error status may remain alongside recovered final content.",
+              "title": "Stop Reason"
+            },
+            "tools_used": {
+              "description": "Authoritative after_run capture lists successful tool events; not a complete list of attempts or failures.",
+              "items": {
+                "type": "string"
+              },
+              "title": "Tools Used",
+              "type": "array"
+            },
+            "usage": {
+              "additionalProperties": {
+                "type": "integer"
+              },
+              "description": "Captured provider token/accounting values; may be empty.",
+              "title": "Usage",
+              "type": "object"
+            }
+          },
+          "required": [
+            "content"
+          ],
+          "title": "RunResult",
+          "type": "object"
+        }
+      },
+      {
+        "subject": "result.stop_reason",
+        "operator": "equals",
+        "expected": "tool_error"
+      },
+      {
+        "subject": "hook.after_run.tool_events[0].status",
+        "operator": "equals",
+        "expected": "error"
+      },
+      {
+        "subject": "result.tools_used",
+        "operator": "equals",
+        "expected": []
+      }
+    ],
+    "sources": [
+      {
+        "path": "delivery/bundle/chains/end_to_end/end_to_end.json",
+        "pointer": "/snapshot_id"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/output/branches/2"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/tool_dispatch/error_marker"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/tool_dispatch/fail_on_tool_error"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/output/field_semantics/tools_used"
+      },
+      {
+        "path": "sources/nanobot/agent/runner.py",
+        "anchor": "stop_reason = \"tool_error\""
+      },
+      {
+        "path": "delivery/bundle/evidence/final_response.json",
+        "pointer": "/payload_schema"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖及隔离 Python runner 尚需绑定；本目录只声明候选，未运行 Agent，也不据此将执行支持状态改为 supported。",
+      "仅使用隔离临时工作区、内存会话和指定替身；不访问真实模型、网络、MCP、渠道、进程或用户数据。",
+      "将观察路径绑定到真实调用记录、dataclasses.asdict(RunResult) 与 Python hook 上下文；不得向 Agent 注入预期断言作为输入。"
+    ],
+    "contract_keys": [
+      "/output/branches/2",
+      "/tool_dispatch/error_marker",
+      "/tool_dispatch/fail_on_tool_error",
+      "/output/field_semantics/tools_used"
+    ]
+  },
+  {
+    "key": "v3.sdk.recoverable_tool_error",
+    "target_id": "chain.end_to_end",
+    "layer": "end_to_end",
+    "category": "sequence",
+    "title": "普通可恢复工具错误交给模型继续，并保留错误事件",
+    "preconditions": [
+      {
+        "fixture": "isolated_constructed_nanobot",
+        "boundary": "Nanobot.run on an already constructed instance",
+        "workspace": "new isolated temporary directory per case",
+        "session_store": "fresh isolated in-memory or temporary store",
+        "mcp_provider": null,
+        "runtime_selection": "valid local synthetic provider; no external calls",
+        "agent_loop_and_runner": "real implementations; stub only external/provider seams explicitly listed",
+        "model_provider": "deterministic scripted provider at all request/retry/finalization seams",
+        "streaming": false,
+        "hooks": "Python AgentHook recorder; finalize_content preserves supplied plain text",
+        "injection_callback": "always [] unless this case explicitly overrides it",
+        "goal_continuation": "disabled",
+        "tool_registry": "isolated registry with only declared synthetic tools",
+        "commands": "no handled command unless overridden by this case",
+        "policy_guards": "zero previous lookup/violation counts; synthetic tool names and diagnostics contain no policy marker",
+        "persistence_and_response": "local successful save and ordinary non-suppressed outbound unless this case overrides",
+        "reset_before_each_case": true
+      },
+      {
+        "fixture": "runner_configuration",
+        "fail_on_tool_error": false
+      },
+      {
+        "fixture": "synthetic_tool",
+        "name": "fixture_tool",
+        "parameters": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "execute_returns": {
+          "python_factory": "ToolResult.error",
+          "text": "fixture explicit tool failure"
+        },
+        "record_implementation_calls": true
+      },
+      {
+        "fixture": "scripted_model_provider",
+        "responses": [
+          {
+            "content": "",
+            "finish_reason": "tool_calls",
+            "tool_calls": [
+              {
+                "id": "fixture-call-1",
+                "name": "fixture_tool",
+                "arguments": {}
+              }
+            ],
+            "usage": {}
+          },
+          {
+            "content": "fixture recovery answer",
+            "finish_reason": "stop",
+            "tool_calls": [],
+            "usage": {}
+          }
+        ],
+        "unexpected_request": "fixture failure"
+      }
+    ],
+    "input": {
+      "operation": "invoke_sdk",
+      "entrypoint": "Nanobot.run",
+      "arguments": {
+        "message": "fixture input",
+        "session_key": "sdk:v3-recoverable-tool"
+      }
+    },
+    "checks": [
+      {
+        "subject": "result",
+        "operator": "schema_valid",
+        "expected": {
+          "description": "Native SDK returned value, including error-bearing or command returns. Not returned on raised/cancelled exits; presence does not imply business success.",
+          "properties": {
+            "content": {
+              "description": "Response text, or empty string when no outbound response/content is returned; no non-empty guarantee.",
+              "title": "Content",
+              "type": "string"
+            },
+            "error": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Nullable captured diagnostic text; inspect together with stop_reason and content/history. None does not prove task success or rule out earlier recoverable tool errors. Non-null error can retain an earlier failure after continuation produces a later answer; it is not an exact classification of that final answer.",
+              "title": "Error"
+            },
+            "messages": {
+              "description": "Captured runner message list; may be empty for command short-circuits. Not a guaranteed complete external event trace.",
+              "items": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "title": "Messages",
+              "type": "array"
+            },
+            "metadata": {
+              "additionalProperties": true,
+              "description": "Outbound metadata copied by SDK; arbitrary keys, not a stable business result schema.",
+              "title": "Metadata",
+              "type": "object"
+            },
+            "stop_reason": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Captured runner status, nullable when runner hooks did not execute (e.g. command shortcut). completed can include refusal/content-filter text. After injection-driven continuation, an earlier error status may remain alongside recovered final content.",
+              "title": "Stop Reason"
+            },
+            "tools_used": {
+              "description": "Authoritative after_run capture lists successful tool events; not a complete list of attempts or failures.",
+              "items": {
+                "type": "string"
+              },
+              "title": "Tools Used",
+              "type": "array"
+            },
+            "usage": {
+              "additionalProperties": {
+                "type": "integer"
+              },
+              "description": "Captured provider token/accounting values; may be empty.",
+              "title": "Usage",
+              "type": "object"
+            }
+          },
+          "required": [
+            "content"
+          ],
+          "title": "RunResult",
+          "type": "object"
+        }
+      },
+      {
+        "subject": "result.content",
+        "operator": "equals",
+        "expected": "fixture recovery answer"
+      },
+      {
+        "subject": "result.stop_reason",
+        "operator": "equals",
+        "expected": "completed"
+      },
+      {
+        "subject": "hook.after_run.tool_events[0].status",
+        "operator": "equals",
+        "expected": "error"
+      },
+      {
+        "subject": "result.tools_used",
+        "operator": "equals",
+        "expected": []
+      }
+    ],
+    "sources": [
+      {
+        "path": "delivery/bundle/chains/end_to_end/end_to_end.json",
+        "pointer": "/snapshot_id"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/tool_dispatch/error_marker"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/tool_dispatch/fail_on_tool_error"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/output/field_semantics/tools_used"
+      },
+      {
+        "path": "sources/nanobot/agent/runner.py",
+        "anchor": "if spec.fail_on_tool_error:"
+      },
+      {
+        "path": "delivery/bundle/evidence/final_response.json",
+        "pointer": "/payload_schema"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖及隔离 Python runner 尚需绑定；本目录只声明候选，未运行 Agent，也不据此将执行支持状态改为 supported。",
+      "仅使用隔离临时工作区、内存会话和指定替身；不访问真实模型、网络、MCP、渠道、进程或用户数据。",
+      "将观察路径绑定到真实调用记录、dataclasses.asdict(RunResult) 与 Python hook 上下文；不得向 Agent 注入预期断言作为输入。"
+    ],
+    "contract_keys": [
+      "/tool_dispatch/error_marker",
+      "/tool_dispatch/fail_on_tool_error",
+      "/output/field_semantics/tools_used"
+    ]
+  },
+  {
+    "key": "v3.sdk.iteration_limit_finalization",
+    "target_id": "chain.end_to_end",
+    "layer": "end_to_end",
+    "category": "boundary",
+    "title": "迭代耗尽后无工具收尾仍保留 max_iterations",
+    "preconditions": [
+      {
+        "fixture": "isolated_constructed_nanobot",
+        "boundary": "Nanobot.run on an already constructed instance",
+        "workspace": "new isolated temporary directory per case",
+        "session_store": "fresh isolated in-memory or temporary store",
+        "mcp_provider": null,
+        "runtime_selection": "valid local synthetic provider; no external calls",
+        "agent_loop_and_runner": "real implementations; stub only external/provider seams explicitly listed",
+        "model_provider": "deterministic scripted provider at all request/retry/finalization seams",
+        "streaming": false,
+        "hooks": "Python AgentHook recorder; finalize_content preserves supplied plain text",
+        "injection_callback": "always [] unless this case explicitly overrides it",
+        "goal_continuation": "disabled",
+        "tool_registry": "isolated registry with only declared synthetic tools",
+        "commands": "no handled command unless overridden by this case",
+        "policy_guards": "zero previous lookup/violation counts; synthetic tool names and diagnostics contain no policy marker",
+        "persistence_and_response": "local successful save and ordinary non-suppressed outbound unless this case overrides",
+        "reset_before_each_case": true
+      },
+      {
+        "fixture": "runner_configuration",
+        "max_iterations": 1,
+        "finalize_on_max_iterations": true
+      },
+      {
+        "fixture": "synthetic_tool",
+        "name": "fixture_tool",
+        "parameters": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "execute_returns": "fixture tool result",
+        "record_implementation_calls": true
+      },
+      {
+        "fixture": "scripted_model_provider",
+        "responses": [
+          {
+            "content": "",
+            "finish_reason": "tool_calls",
+            "tool_calls": [
+              {
+                "id": "fixture-call-1",
+                "name": "fixture_tool",
+                "arguments": {}
+              }
+            ],
+            "usage": {}
+          },
+          {
+            "content": "fixture budget finalization",
+            "finish_reason": "stop",
+            "tool_calls": [],
+            "usage": {}
+          }
+        ],
+        "unexpected_request": "fixture failure"
+      }
+    ],
+    "input": {
+      "operation": "invoke_sdk",
+      "entrypoint": "Nanobot.run",
+      "arguments": {
+        "message": "fixture input",
+        "session_key": "sdk:v3-iteration-final"
+      }
+    },
+    "checks": [
+      {
+        "subject": "result",
+        "operator": "schema_valid",
+        "expected": {
+          "description": "Native SDK returned value, including error-bearing or command returns. Not returned on raised/cancelled exits; presence does not imply business success.",
+          "properties": {
+            "content": {
+              "description": "Response text, or empty string when no outbound response/content is returned; no non-empty guarantee.",
+              "title": "Content",
+              "type": "string"
+            },
+            "error": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Nullable captured diagnostic text; inspect together with stop_reason and content/history. None does not prove task success or rule out earlier recoverable tool errors. Non-null error can retain an earlier failure after continuation produces a later answer; it is not an exact classification of that final answer.",
+              "title": "Error"
+            },
+            "messages": {
+              "description": "Captured runner message list; may be empty for command short-circuits. Not a guaranteed complete external event trace.",
+              "items": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "title": "Messages",
+              "type": "array"
+            },
+            "metadata": {
+              "additionalProperties": true,
+              "description": "Outbound metadata copied by SDK; arbitrary keys, not a stable business result schema.",
+              "title": "Metadata",
+              "type": "object"
+            },
+            "stop_reason": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Captured runner status, nullable when runner hooks did not execute (e.g. command shortcut). completed can include refusal/content-filter text. After injection-driven continuation, an earlier error status may remain alongside recovered final content.",
+              "title": "Stop Reason"
+            },
+            "tools_used": {
+              "description": "Authoritative after_run capture lists successful tool events; not a complete list of attempts or failures.",
+              "items": {
+                "type": "string"
+              },
+              "title": "Tools Used",
+              "type": "array"
+            },
+            "usage": {
+              "additionalProperties": {
+                "type": "integer"
+              },
+              "description": "Captured provider token/accounting values; may be empty.",
+              "title": "Usage",
+              "type": "object"
+            }
+          },
+          "required": [
+            "content"
+          ],
+          "title": "RunResult",
+          "type": "object"
+        }
+      },
+      {
+        "subject": "result.stop_reason",
+        "operator": "equals",
+        "expected": "max_iterations"
+      },
+      {
+        "subject": "result.content",
+        "operator": "equals",
+        "expected": "fixture budget finalization"
+      },
+      {
+        "subject": "provider.requests[-1].tools",
+        "operator": "equals",
+        "expected": null
+      },
+      {
+        "subject": "result.error",
+        "operator": "equals",
+        "expected": null
+      }
+    ],
+    "sources": [
+      {
+        "path": "delivery/bundle/chains/end_to_end/end_to_end.json",
+        "pointer": "/snapshot_id"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/output/branches/3"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/output/field_semantics/error"
+      },
+      {
+        "path": "sources/nanobot/agent/runner.py",
+        "anchor": "stop_reason = \"max_iterations\""
+      },
+      {
+        "path": "sources/nanobot/agent/runner.py",
+        "anchor": "tools=None,"
+      },
+      {
+        "path": "delivery/bundle/evidence/final_response.json",
+        "pointer": "/payload_schema"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖及隔离 Python runner 尚需绑定；本目录只声明候选，未运行 Agent，也不据此将执行支持状态改为 supported。",
+      "仅使用隔离临时工作区、内存会话和指定替身；不访问真实模型、网络、MCP、渠道、进程或用户数据。",
+      "将观察路径绑定到真实调用记录、dataclasses.asdict(RunResult) 与 Python hook 上下文；不得向 Agent 注入预期断言作为输入。"
+    ],
+    "contract_keys": [
+      "/output/branches/3",
+      "/output/field_semantics/error"
+    ]
+  },
+  {
+    "key": "v3.sdk.iteration_limit_fallback",
+    "target_id": "chain.end_to_end",
+    "layer": "end_to_end",
+    "category": "boundary",
+    "title": "迭代耗尽且禁用收尾时返回降级响应",
+    "preconditions": [
+      {
+        "fixture": "isolated_constructed_nanobot",
+        "boundary": "Nanobot.run on an already constructed instance",
+        "workspace": "new isolated temporary directory per case",
+        "session_store": "fresh isolated in-memory or temporary store",
+        "mcp_provider": null,
+        "runtime_selection": "valid local synthetic provider; no external calls",
+        "agent_loop_and_runner": "real implementations; stub only external/provider seams explicitly listed",
+        "model_provider": "deterministic scripted provider at all request/retry/finalization seams",
+        "streaming": false,
+        "hooks": "Python AgentHook recorder; finalize_content preserves supplied plain text",
+        "injection_callback": "always [] unless this case explicitly overrides it",
+        "goal_continuation": "disabled",
+        "tool_registry": "isolated registry with only declared synthetic tools",
+        "commands": "no handled command unless overridden by this case",
+        "policy_guards": "zero previous lookup/violation counts; synthetic tool names and diagnostics contain no policy marker",
+        "persistence_and_response": "local successful save and ordinary non-suppressed outbound unless this case overrides",
+        "reset_before_each_case": true
+      },
+      {
+        "fixture": "runner_configuration",
+        "max_iterations": 1,
+        "finalize_on_max_iterations": false
+      },
+      {
+        "fixture": "synthetic_tool",
+        "name": "fixture_tool",
+        "parameters": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "execute_returns": "fixture tool result",
+        "record_implementation_calls": true
+      },
+      {
+        "fixture": "scripted_model_provider",
+        "responses": [
+          {
+            "content": "",
+            "finish_reason": "tool_calls",
+            "tool_calls": [
+              {
+                "id": "fixture-call-1",
+                "name": "fixture_tool",
+                "arguments": {}
+              }
+            ],
+            "usage": {}
+          }
+        ],
+        "unexpected_request": "fixture failure"
+      }
+    ],
+    "input": {
+      "operation": "invoke_sdk",
+      "entrypoint": "Nanobot.run",
+      "arguments": {
+        "message": "fixture input",
+        "session_key": "sdk:v3-iteration-fallback"
+      }
+    },
+    "checks": [
+      {
+        "subject": "result",
+        "operator": "schema_valid",
+        "expected": {
+          "description": "Native SDK returned value, including error-bearing or command returns. Not returned on raised/cancelled exits; presence does not imply business success.",
+          "properties": {
+            "content": {
+              "description": "Response text, or empty string when no outbound response/content is returned; no non-empty guarantee.",
+              "title": "Content",
+              "type": "string"
+            },
+            "error": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Nullable captured diagnostic text; inspect together with stop_reason and content/history. None does not prove task success or rule out earlier recoverable tool errors. Non-null error can retain an earlier failure after continuation produces a later answer; it is not an exact classification of that final answer.",
+              "title": "Error"
+            },
+            "messages": {
+              "description": "Captured runner message list; may be empty for command short-circuits. Not a guaranteed complete external event trace.",
+              "items": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "title": "Messages",
+              "type": "array"
+            },
+            "metadata": {
+              "additionalProperties": true,
+              "description": "Outbound metadata copied by SDK; arbitrary keys, not a stable business result schema.",
+              "title": "Metadata",
+              "type": "object"
+            },
+            "stop_reason": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Captured runner status, nullable when runner hooks did not execute (e.g. command shortcut). completed can include refusal/content-filter text. After injection-driven continuation, an earlier error status may remain alongside recovered final content.",
+              "title": "Stop Reason"
+            },
+            "tools_used": {
+              "description": "Authoritative after_run capture lists successful tool events; not a complete list of attempts or failures.",
+              "items": {
+                "type": "string"
+              },
+              "title": "Tools Used",
+              "type": "array"
+            },
+            "usage": {
+              "additionalProperties": {
+                "type": "integer"
+              },
+              "description": "Captured provider token/accounting values; may be empty.",
+              "title": "Usage",
+              "type": "object"
+            }
+          },
+          "required": [
+            "content"
+          ],
+          "title": "RunResult",
+          "type": "object"
+        }
+      },
+      {
+        "subject": "result.stop_reason",
+        "operator": "equals",
+        "expected": "max_iterations"
+      },
+      {
+        "subject": "result.content",
+        "operator": "schema_valid",
+        "expected": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      {
+        "subject": "result.error",
+        "operator": "equals",
+        "expected": null
+      }
+    ],
+    "sources": [
+      {
+        "path": "delivery/bundle/chains/end_to_end/end_to_end.json",
+        "pointer": "/snapshot_id"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/output/branches/3"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/output/field_semantics/error"
+      },
+      {
+        "path": "sources/nanobot/agent/runner.py",
+        "anchor": "terminal_content = self._max_iterations_fallback(spec)"
+      },
+      {
+        "path": "delivery/bundle/evidence/final_response.json",
+        "pointer": "/payload_schema"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖及隔离 Python runner 尚需绑定；本目录只声明候选，未运行 Agent，也不据此将执行支持状态改为 supported。",
+      "仅使用隔离临时工作区、内存会话和指定替身；不访问真实模型、网络、MCP、渠道、进程或用户数据。",
+      "将观察路径绑定到真实调用记录、dataclasses.asdict(RunResult) 与 Python hook 上下文；不得向 Agent 注入预期断言作为输入。"
+    ],
+    "contract_keys": [
+      "/output/branches/3",
+      "/output/field_semantics/error"
+    ]
+  },
+  {
+    "key": "v3.sdk.terminal_empty_response",
+    "target_id": "chain.end_to_end",
+    "layer": "end_to_end",
+    "category": "boundary",
+    "title": "所有空响应恢复均耗尽后产生 empty_final_response",
+    "preconditions": [
+      {
+        "fixture": "isolated_constructed_nanobot",
+        "boundary": "Nanobot.run on an already constructed instance",
+        "workspace": "new isolated temporary directory per case",
+        "session_store": "fresh isolated in-memory or temporary store",
+        "mcp_provider": null,
+        "runtime_selection": "valid local synthetic provider; no external calls",
+        "agent_loop_and_runner": "real implementations; stub only external/provider seams explicitly listed",
+        "model_provider": "deterministic scripted provider at all request/retry/finalization seams",
+        "streaming": false,
+        "hooks": "Python AgentHook recorder; finalize_content preserves supplied plain text",
+        "injection_callback": "always [] unless this case explicitly overrides it",
+        "goal_continuation": "disabled",
+        "tool_registry": "isolated registry with only declared synthetic tools",
+        "commands": "no handled command unless overridden by this case",
+        "policy_guards": "zero previous lookup/violation counts; synthetic tool names and diagnostics contain no policy marker",
+        "persistence_and_response": "local successful save and ordinary non-suppressed outbound unless this case overrides",
+        "reset_before_each_case": true
+      },
+      {
+        "fixture": "runner_configuration",
+        "max_iterations": 100
+      },
+      {
+        "fixture": "scripted_model_provider",
+        "every_regular_and_finalization_response": {
+          "content": "",
+          "finish_reason": "stop",
+          "tool_calls": [],
+          "usage": {}
+        },
+        "max_iterations_exceeds_empty_retry_budget": true,
+        "record_requests": true
+      }
+    ],
+    "input": {
+      "operation": "invoke_sdk",
+      "entrypoint": "Nanobot.run",
+      "arguments": {
+        "message": "fixture input",
+        "session_key": "sdk:v3-empty"
+      }
+    },
+    "checks": [
+      {
+        "subject": "result",
+        "operator": "schema_valid",
+        "expected": {
+          "description": "Native SDK returned value, including error-bearing or command returns. Not returned on raised/cancelled exits; presence does not imply business success.",
+          "properties": {
+            "content": {
+              "description": "Response text, or empty string when no outbound response/content is returned; no non-empty guarantee.",
+              "title": "Content",
+              "type": "string"
+            },
+            "error": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Nullable captured diagnostic text; inspect together with stop_reason and content/history. None does not prove task success or rule out earlier recoverable tool errors. Non-null error can retain an earlier failure after continuation produces a later answer; it is not an exact classification of that final answer.",
+              "title": "Error"
+            },
+            "messages": {
+              "description": "Captured runner message list; may be empty for command short-circuits. Not a guaranteed complete external event trace.",
+              "items": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "title": "Messages",
+              "type": "array"
+            },
+            "metadata": {
+              "additionalProperties": true,
+              "description": "Outbound metadata copied by SDK; arbitrary keys, not a stable business result schema.",
+              "title": "Metadata",
+              "type": "object"
+            },
+            "stop_reason": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Captured runner status, nullable when runner hooks did not execute (e.g. command shortcut). completed can include refusal/content-filter text. After injection-driven continuation, an earlier error status may remain alongside recovered final content.",
+              "title": "Stop Reason"
+            },
+            "tools_used": {
+              "description": "Authoritative after_run capture lists successful tool events; not a complete list of attempts or failures.",
+              "items": {
+                "type": "string"
+              },
+              "title": "Tools Used",
+              "type": "array"
+            },
+            "usage": {
+              "additionalProperties": {
+                "type": "integer"
+              },
+              "description": "Captured provider token/accounting values; may be empty.",
+              "title": "Usage",
+              "type": "object"
+            }
+          },
+          "required": [
+            "content"
+          ],
+          "title": "RunResult",
+          "type": "object"
+        }
+      },
+      {
+        "subject": "result.stop_reason",
+        "operator": "equals",
+        "expected": "empty_final_response"
+      },
+      {
+        "subject": "result.content",
+        "operator": "schema_valid",
+        "expected": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    ],
+    "sources": [
+      {
+        "path": "delivery/bundle/chains/end_to_end/end_to_end.json",
+        "pointer": "/snapshot_id"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/output/branches/4"
+      },
+      {
+        "path": "sources/nanobot/agent/runner.py",
+        "anchor": "stop_reason = \"empty_final_response\""
+      },
+      {
+        "path": "delivery/bundle/evidence/final_response.json",
+        "pointer": "/payload_schema"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖及隔离 Python runner 尚需绑定；本目录只声明候选，未运行 Agent，也不据此将执行支持状态改为 supported。",
+      "仅使用隔离临时工作区、内存会话和指定替身；不访问真实模型、网络、MCP、渠道、进程或用户数据。",
+      "将观察路径绑定到真实调用记录、dataclasses.asdict(RunResult) 与 Python hook 上下文；不得向 Agent 注入预期断言作为输入。"
+    ],
+    "contract_keys": [
+      "/output/branches/4"
+    ]
+  },
+  {
+    "key": "v3.sdk.command_short_circuit",
+    "target_id": "chain.end_to_end",
+    "layer": "end_to_end",
+    "category": "boundary",
+    "title": "已处理命令跳过普通模型阶段并保留捕获默认值",
+    "preconditions": [
+      {
+        "fixture": "isolated_constructed_nanobot",
+        "boundary": "Nanobot.run on an already constructed instance",
+        "workspace": "new isolated temporary directory per case",
+        "session_store": "fresh isolated in-memory or temporary store",
+        "mcp_provider": null,
+        "runtime_selection": "valid local synthetic provider; no external calls",
+        "agent_loop_and_runner": "real implementations; stub only external/provider seams explicitly listed",
+        "model_provider": "deterministic scripted provider at all request/retry/finalization seams",
+        "streaming": false,
+        "hooks": "Python AgentHook recorder; finalize_content preserves supplied plain text",
+        "injection_callback": "always [] unless this case explicitly overrides it",
+        "goal_continuation": "disabled",
+        "tool_registry": "isolated registry with only declared synthetic tools",
+        "commands": "no handled command unless overridden by this case",
+        "policy_guards": "zero previous lookup/violation counts; synthetic tool names and diagnostics contain no policy marker",
+        "persistence_and_response": "local successful save and ordinary non-suppressed outbound unless this case overrides",
+        "reset_before_each_case": true
+      },
+      {
+        "fixture": "async_command_dispatch_stub",
+        "target": "AgentLoop.commands.dispatch",
+        "for_raw": "/fixture-command",
+        "returns_outbound": {
+          "content": "fixture command reply",
+          "metadata": {},
+          "python_type": "nanobot.bus.events.OutboundMessage",
+          "channel": "cli",
+          "chat_id": "direct"
+        },
+        "command_local_persistence": "isolated temporary session",
+        "record_runner_and_context_build_calls": true
+      },
+      {
+        "fixture": "scripted_model_provider",
+        "responses": [],
+        "unexpected_request": "fixture failure"
+      }
+    ],
+    "input": {
+      "operation": "invoke_sdk",
+      "entrypoint": "Nanobot.run",
+      "arguments": {
+        "message": "/fixture-command",
+        "session_key": "sdk:v3-command"
+      }
+    },
+    "checks": [
+      {
+        "subject": "result",
+        "operator": "schema_valid",
+        "expected": {
+          "description": "Native SDK returned value, including error-bearing or command returns. Not returned on raised/cancelled exits; presence does not imply business success.",
+          "properties": {
+            "content": {
+              "description": "Response text, or empty string when no outbound response/content is returned; no non-empty guarantee.",
+              "title": "Content",
+              "type": "string"
+            },
+            "error": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Nullable captured diagnostic text; inspect together with stop_reason and content/history. None does not prove task success or rule out earlier recoverable tool errors. Non-null error can retain an earlier failure after continuation produces a later answer; it is not an exact classification of that final answer.",
+              "title": "Error"
+            },
+            "messages": {
+              "description": "Captured runner message list; may be empty for command short-circuits. Not a guaranteed complete external event trace.",
+              "items": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "title": "Messages",
+              "type": "array"
+            },
+            "metadata": {
+              "additionalProperties": true,
+              "description": "Outbound metadata copied by SDK; arbitrary keys, not a stable business result schema.",
+              "title": "Metadata",
+              "type": "object"
+            },
+            "stop_reason": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Captured runner status, nullable when runner hooks did not execute (e.g. command shortcut). completed can include refusal/content-filter text. After injection-driven continuation, an earlier error status may remain alongside recovered final content.",
+              "title": "Stop Reason"
+            },
+            "tools_used": {
+              "description": "Authoritative after_run capture lists successful tool events; not a complete list of attempts or failures.",
+              "items": {
+                "type": "string"
+              },
+              "title": "Tools Used",
+              "type": "array"
+            },
+            "usage": {
+              "additionalProperties": {
+                "type": "integer"
+              },
+              "description": "Captured provider token/accounting values; may be empty.",
+              "title": "Usage",
+              "type": "object"
+            }
+          },
+          "required": [
+            "content"
+          ],
+          "title": "RunResult",
+          "type": "object"
+        }
+      },
+      {
+        "subject": "result.content",
+        "operator": "equals",
+        "expected": "fixture command reply"
+      },
+      {
+        "subject": "result.stop_reason",
+        "operator": "equals",
+        "expected": null
+      },
+      {
+        "subject": "result.messages",
+        "operator": "equals",
+        "expected": []
+      },
+      {
+        "subject": "result.usage",
+        "operator": "equals",
+        "expected": {}
+      },
+      {
+        "subject": "runner.run.call_count",
+        "operator": "equals",
+        "expected": 0
+      },
+      {
+        "subject": "AgentLoop._build_turn.call_count",
+        "operator": "equals",
+        "expected": 0
+      }
+    ],
+    "sources": [
+      {
+        "path": "delivery/bundle/chains/end_to_end/end_to_end.json",
+        "pointer": "/snapshot_id"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/boundary/command_short_circuit"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/output/branches/5"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/output/field_semantics/messages"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/output/field_semantics/usage"
+      },
+      {
+        "path": "sources/nanobot/agent/loop.py",
+        "anchor": "if await self._run_turn_stage(ctx, \"command\", self._dispatch_command):"
+      },
+      {
+        "path": "sources/nanobot/agent/hook.py",
+        "anchor": "self.stop_reason: str | None = None"
+      },
+      {
+        "path": "delivery/bundle/evidence/final_response.json",
+        "pointer": "/payload_schema"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖及隔离 Python runner 尚需绑定；本目录只声明候选，未运行 Agent，也不据此将执行支持状态改为 supported。",
+      "仅使用隔离临时工作区、内存会话和指定替身；不访问真实模型、网络、MCP、渠道、进程或用户数据。",
+      "将观察路径绑定到真实调用记录、dataclasses.asdict(RunResult) 与 Python hook 上下文；不得向 Agent 注入预期断言作为输入。"
+    ],
+    "contract_keys": [
+      "/boundary/command_short_circuit",
+      "/output/branches/5",
+      "/output/field_semantics/messages",
+      "/output/field_semantics/usage"
+    ]
+  },
+  {
+    "key": "v3.sdk.suppressed_response",
+    "target_id": "chain.end_to_end",
+    "layer": "end_to_end",
+    "category": "boundary",
+    "title": "响应组装返回 None 时 SDK 内容为空且保留 runner 捕获",
+    "preconditions": [
+      {
+        "fixture": "isolated_constructed_nanobot",
+        "boundary": "Nanobot.run on an already constructed instance",
+        "workspace": "new isolated temporary directory per case",
+        "session_store": "fresh isolated in-memory or temporary store",
+        "mcp_provider": null,
+        "runtime_selection": "valid local synthetic provider; no external calls",
+        "agent_loop_and_runner": "real implementations; stub only external/provider seams explicitly listed",
+        "model_provider": "deterministic scripted provider at all request/retry/finalization seams",
+        "streaming": false,
+        "hooks": "Python AgentHook recorder; finalize_content preserves supplied plain text",
+        "injection_callback": "always [] unless this case explicitly overrides it",
+        "goal_continuation": "disabled",
+        "tool_registry": "isolated registry with only declared synthetic tools",
+        "commands": "no handled command unless overridden by this case",
+        "policy_guards": "zero previous lookup/violation counts; synthetic tool names and diagnostics contain no policy marker",
+        "persistence_and_response": "local successful save and ordinary non-suppressed outbound unless this case overrides",
+        "reset_before_each_case": true
+      },
+      {
+        "fixture": "scripted_model_provider",
+        "responses": [
+          {
+            "content": "fixture internal final",
+            "finish_reason": "stop",
+            "tool_calls": [],
+            "usage": {}
+          }
+        ],
+        "unexpected_request": "fixture failure"
+      },
+      {
+        "fixture": "outbound_assembly_stub",
+        "target": "AgentLoop._assemble_outbound",
+        "returns": null,
+        "apply_only_after_real_runner_and_persistence": true,
+        "record_calls": true
+      }
+    ],
+    "input": {
+      "operation": "invoke_sdk",
+      "entrypoint": "Nanobot.run",
+      "arguments": {
+        "message": "fixture input",
+        "session_key": "sdk:v3-suppressed"
+      }
+    },
+    "checks": [
+      {
+        "subject": "result",
+        "operator": "schema_valid",
+        "expected": {
+          "description": "Native SDK returned value, including error-bearing or command returns. Not returned on raised/cancelled exits; presence does not imply business success.",
+          "properties": {
+            "content": {
+              "description": "Response text, or empty string when no outbound response/content is returned; no non-empty guarantee.",
+              "title": "Content",
+              "type": "string"
+            },
+            "error": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Nullable captured diagnostic text; inspect together with stop_reason and content/history. None does not prove task success or rule out earlier recoverable tool errors. Non-null error can retain an earlier failure after continuation produces a later answer; it is not an exact classification of that final answer.",
+              "title": "Error"
+            },
+            "messages": {
+              "description": "Captured runner message list; may be empty for command short-circuits. Not a guaranteed complete external event trace.",
+              "items": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "title": "Messages",
+              "type": "array"
+            },
+            "metadata": {
+              "additionalProperties": true,
+              "description": "Outbound metadata copied by SDK; arbitrary keys, not a stable business result schema.",
+              "title": "Metadata",
+              "type": "object"
+            },
+            "stop_reason": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Captured runner status, nullable when runner hooks did not execute (e.g. command shortcut). completed can include refusal/content-filter text. After injection-driven continuation, an earlier error status may remain alongside recovered final content.",
+              "title": "Stop Reason"
+            },
+            "tools_used": {
+              "description": "Authoritative after_run capture lists successful tool events; not a complete list of attempts or failures.",
+              "items": {
+                "type": "string"
+              },
+              "title": "Tools Used",
+              "type": "array"
+            },
+            "usage": {
+              "additionalProperties": {
+                "type": "integer"
+              },
+              "description": "Captured provider token/accounting values; may be empty.",
+              "title": "Usage",
+              "type": "object"
+            }
+          },
+          "required": [
+            "content"
+          ],
+          "title": "RunResult",
+          "type": "object"
+        }
+      },
+      {
+        "subject": "result.content",
+        "operator": "equals",
+        "expected": ""
+      },
+      {
+        "subject": "result.stop_reason",
+        "operator": "equals",
+        "expected": "completed"
+      },
+      {
+        "subject": "result.tools_used",
+        "operator": "equals",
+        "expected": []
+      }
+    ],
+    "sources": [
+      {
+        "path": "delivery/bundle/chains/end_to_end/end_to_end.json",
+        "pointer": "/snapshot_id"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/output/branches/6"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/output/field_semantics/content"
+      },
+      {
+        "path": "sources/nanobot/sdk/types.py",
+        "anchor": "content = (response.content if response else None) or \"\""
+      },
+      {
+        "path": "delivery/bundle/evidence/final_response.json",
+        "pointer": "/payload_schema"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖及隔离 Python runner 尚需绑定；本目录只声明候选，未运行 Agent，也不据此将执行支持状态改为 supported。",
+      "仅使用隔离临时工作区、内存会话和指定替身；不访问真实模型、网络、MCP、渠道、进程或用户数据。",
+      "将观察路径绑定到真实调用记录、dataclasses.asdict(RunResult) 与 Python hook 上下文；不得向 Agent 注入预期断言作为输入。"
+    ],
+    "contract_keys": [
+      "/output/branches/6",
+      "/output/field_semantics/content"
+    ]
+  },
+  {
+    "key": "v3.sdk.uncaught_runtime_exception",
+    "target_id": "chain.end_to_end",
+    "layer": "end_to_end",
+    "category": "error",
+    "title": "模型选择阶段的未捕获异常离开 SDK 边界",
+    "preconditions": [
+      {
+        "fixture": "isolated_constructed_nanobot",
+        "boundary": "Nanobot.run on an already constructed instance",
+        "workspace": "new isolated temporary directory per case",
+        "session_store": "fresh isolated in-memory or temporary store",
+        "mcp_provider": null,
+        "runtime_selection": "valid local synthetic provider; no external calls",
+        "agent_loop_and_runner": "real implementations; stub only external/provider seams explicitly listed",
+        "model_provider": "deterministic scripted provider at all request/retry/finalization seams",
+        "streaming": false,
+        "hooks": "Python AgentHook recorder; finalize_content preserves supplied plain text",
+        "injection_callback": "always [] unless this case explicitly overrides it",
+        "goal_continuation": "disabled",
+        "tool_registry": "isolated registry with only declared synthetic tools",
+        "commands": "no handled command unless overridden by this case",
+        "policy_guards": "zero previous lookup/violation counts; synthetic tool names and diagnostics contain no policy marker",
+        "persistence_and_response": "local successful save and ordinary non-suppressed outbound unless this case overrides",
+        "reset_before_each_case": true
+      },
+      {
+        "fixture": "runtime_resolver_stub",
+        "target": "AgentLoop.runtime_resolver.resolve_override",
+        "raises": {
+          "type": "RuntimeError",
+          "message": "fixture selection failure"
+        }
+      },
+      {
+        "fixture": "caller_exception_observer",
+        "availability": "required_not_implemented",
+        "capture_boundary": "await Nanobot.run"
+      }
+    ],
+    "input": {
+      "operation": "invoke_sdk",
+      "entrypoint": "Nanobot.run",
+      "arguments": {
+        "message": "fixture input",
+        "session_key": "sdk:v3-runtime-exception"
+      }
+    },
+    "checks": [
+      {
+        "subject": "observation.has_return_value",
+        "operator": "equals",
+        "expected": false
+      },
+      {
+        "subject": "exception_capture",
+        "operator": "schema_valid",
+        "expected": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Evaluator-owned observation envelope, not a native Nanobot response. Capture at the SDK call boundary; cancellation needs separate handling from Exception.",
+          "required": [
+            "outcome",
+            "exception_type",
+            "message"
+          ],
+          "properties": {
+            "outcome": {
+              "enum": [
+                "raised_exception",
+                "cancelled"
+              ]
+            },
+            "exception_type": {
+              "type": "string"
+            },
+            "message": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "subject": "exception_capture.outcome",
+        "operator": "equals",
+        "expected": "raised_exception"
+      },
+      {
+        "subject": "exception_capture.exception_type",
+        "operator": "equals",
+        "expected": "RuntimeError"
+      }
+    ],
+    "sources": [
+      {
+        "path": "delivery/bundle/chains/end_to_end/end_to_end.json",
+        "pointer": "/snapshot_id"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/boundary/start"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/exceptions/native_mechanism"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/exceptions/branches/1"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/exceptions/capture_schema"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/exceptions/capture_implemented_by_exporter"
+      },
+      {
+        "path": "sources/nanobot/nanobot.py",
+        "anchor": "runtime = self._loop.runtime_resolver.resolve_override("
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖及隔离 Python runner 尚需绑定；本目录只声明候选，未运行 Agent，也不据此将执行支持状态改为 supported。",
+      "仅使用隔离临时工作区、内存会话和指定替身；不访问真实模型、网络、MCP、渠道、进程或用户数据。",
+      "将观察路径绑定到真实调用记录、dataclasses.asdict(RunResult) 与 Python hook 上下文；不得向 Agent 注入预期断言作为输入。",
+      "异常观察器由评测方实现：在调用边界分别捕获 Exception 与 asyncio.CancelledError；capture envelope 不是 Nanobot 原生返回，导出方尚未实现，绑定完成前不可执行。"
+    ],
+    "contract_keys": [
+      "/boundary/start",
+      "/exceptions/native_mechanism",
+      "/exceptions/branches/1",
+      "/exceptions/capture_schema",
+      "/exceptions/capture_implemented_by_exporter"
+    ]
+  },
+  {
+    "key": "v3.sdk.cancelled_exit",
+    "target_id": "chain.end_to_end",
+    "layer": "end_to_end",
+    "category": "error",
+    "title": "等待模型期间取消传播，不要求返回 cancelled RunResult",
+    "preconditions": [
+      {
+        "fixture": "isolated_constructed_nanobot",
+        "boundary": "Nanobot.run on an already constructed instance",
+        "workspace": "new isolated temporary directory per case",
+        "session_store": "fresh isolated in-memory or temporary store",
+        "mcp_provider": null,
+        "runtime_selection": "valid local synthetic provider; no external calls",
+        "agent_loop_and_runner": "real implementations; stub only external/provider seams explicitly listed",
+        "model_provider": "deterministic scripted provider at all request/retry/finalization seams",
+        "streaming": false,
+        "hooks": "Python AgentHook recorder; finalize_content preserves supplied plain text",
+        "injection_callback": "always [] unless this case explicitly overrides it",
+        "goal_continuation": "disabled",
+        "tool_registry": "isolated registry with only declared synthetic tools",
+        "commands": "no handled command unless overridden by this case",
+        "policy_guards": "zero previous lookup/violation counts; synthetic tool names and diagnostics contain no policy marker",
+        "persistence_and_response": "local successful save and ordinary non-suppressed outbound unless this case overrides",
+        "reset_before_each_case": true
+      },
+      {
+        "fixture": "blocking_model_provider",
+        "on_request": "signal entered event, await cancellable event",
+        "cancel_at": "caller cancels run task after entered event",
+        "real_network": false
+      },
+      {
+        "fixture": "caller_exception_observer",
+        "availability": "required_not_implemented",
+        "cancellation_handling": "separate asyncio.CancelledError except block"
+      }
+    ],
+    "input": {
+      "operation": "invoke_sdk_then_cancel",
+      "entrypoint": "Nanobot.run",
+      "arguments": {
+        "message": "fixture input",
+        "session_key": "sdk:v3-cancel"
+      },
+      "cancel_when": "provider entered event is signalled"
+    },
+    "checks": [
+      {
+        "subject": "observation.has_return_value",
+        "operator": "equals",
+        "expected": false
+      },
+      {
+        "subject": "exception_capture",
+        "operator": "schema_valid",
+        "expected": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Evaluator-owned observation envelope, not a native Nanobot response. Capture at the SDK call boundary; cancellation needs separate handling from Exception.",
+          "required": [
+            "outcome",
+            "exception_type",
+            "message"
+          ],
+          "properties": {
+            "outcome": {
+              "enum": [
+                "raised_exception",
+                "cancelled"
+              ]
+            },
+            "exception_type": {
+              "type": "string"
+            },
+            "message": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "subject": "exception_capture.outcome",
+        "operator": "equals",
+        "expected": "cancelled"
+      },
+      {
+        "subject": "exception_capture.exception_type",
+        "operator": "equals",
+        "expected": "CancelledError"
+      }
+    ],
+    "sources": [
+      {
+        "path": "delivery/bundle/chains/end_to_end/end_to_end.json",
+        "pointer": "/snapshot_id"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/exceptions/branches/2"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/exceptions/result_on_raised_exit"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/exceptions/capture_schema"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/exceptions/capture_implemented_by_exporter"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/boundary/rollback_guaranteed"
+      },
+      {
+        "path": "sources/nanobot/agent/runner.py",
+        "anchor": "except asyncio.CancelledError as exc:"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖及隔离 Python runner 尚需绑定；本目录只声明候选，未运行 Agent，也不据此将执行支持状态改为 supported。",
+      "仅使用隔离临时工作区、内存会话和指定替身；不访问真实模型、网络、MCP、渠道、进程或用户数据。",
+      "将观察路径绑定到真实调用记录、dataclasses.asdict(RunResult) 与 Python hook 上下文；不得向 Agent 注入预期断言作为输入。",
+      "异常观察器由评测方实现：在调用边界分别捕获 Exception 与 asyncio.CancelledError；capture envelope 不是 Nanobot 原生返回，导出方尚未实现，绑定完成前不可执行。"
+    ],
+    "contract_keys": [
+      "/exceptions/branches/2",
+      "/exceptions/result_on_raised_exit",
+      "/exceptions/capture_schema",
+      "/exceptions/capture_implemented_by_exporter",
+      "/boundary/rollback_guaranteed"
+    ]
+  },
+  {
+    "key": "v3.sdk.recovered_content_retains_prior_error",
+    "target_id": "chain.end_to_end",
+    "layer": "end_to_end",
+    "category": "sequence",
+    "title": "错误后的注入恢复回答可与先前 error 状态并存",
+    "preconditions": [
+      {
+        "fixture": "isolated_constructed_nanobot",
+        "boundary": "Nanobot.run on an already constructed instance",
+        "workspace": "new isolated temporary directory per case",
+        "session_store": "fresh isolated in-memory or temporary store",
+        "mcp_provider": null,
+        "runtime_selection": "valid local synthetic provider; no external calls",
+        "agent_loop_and_runner": "real implementations; stub only external/provider seams explicitly listed",
+        "model_provider": "deterministic scripted provider at all request/retry/finalization seams",
+        "streaming": false,
+        "hooks": "Python AgentHook recorder; finalize_content preserves supplied plain text",
+        "injection_callback": "always [] unless this case explicitly overrides it",
+        "goal_continuation": "disabled",
+        "tool_registry": "isolated registry with only declared synthetic tools",
+        "commands": "no handled command unless overridden by this case",
+        "policy_guards": "zero previous lookup/violation counts; synthetic tool names and diagnostics contain no policy marker",
+        "persistence_and_response": "local successful save and ordinary non-suppressed outbound unless this case overrides",
+        "reset_before_each_case": true
+      },
+      {
+        "fixture": "scripted_model_provider",
+        "responses": [
+          {
+            "content": "fixture prior diagnostic",
+            "finish_reason": "error",
+            "tool_calls": [],
+            "usage": {}
+          },
+          {
+            "content": "fixture recovered final",
+            "finish_reason": "stop",
+            "tool_calls": [],
+            "usage": {}
+          }
+        ],
+        "unexpected_request": "fixture failure"
+      },
+      {
+        "fixture": "one_shot_error_recovery_injection",
+        "arm_from": "AgentHook.after_iteration only when context.stop_reason == error and context.error is non-null",
+        "injection_callback_before_armed": [],
+        "first_callback_after_armed": [
+          {
+            "role": "user",
+            "content": "fixture continue"
+          }
+        ],
+        "subsequent_callbacks": [],
+        "record_hook_contexts": true
+      }
+    ],
+    "input": {
+      "operation": "invoke_sdk",
+      "entrypoint": "Nanobot.run",
+      "arguments": {
+        "message": "fixture input",
+        "session_key": "sdk:v3-stale-error"
+      }
+    },
+    "checks": [
+      {
+        "subject": "result",
+        "operator": "schema_valid",
+        "expected": {
+          "description": "Native SDK returned value, including error-bearing or command returns. Not returned on raised/cancelled exits; presence does not imply business success.",
+          "properties": {
+            "content": {
+              "description": "Response text, or empty string when no outbound response/content is returned; no non-empty guarantee.",
+              "title": "Content",
+              "type": "string"
+            },
+            "error": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Nullable captured diagnostic text; inspect together with stop_reason and content/history. None does not prove task success or rule out earlier recoverable tool errors. Non-null error can retain an earlier failure after continuation produces a later answer; it is not an exact classification of that final answer.",
+              "title": "Error"
+            },
+            "messages": {
+              "description": "Captured runner message list; may be empty for command short-circuits. Not a guaranteed complete external event trace.",
+              "items": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "title": "Messages",
+              "type": "array"
+            },
+            "metadata": {
+              "additionalProperties": true,
+              "description": "Outbound metadata copied by SDK; arbitrary keys, not a stable business result schema.",
+              "title": "Metadata",
+              "type": "object"
+            },
+            "stop_reason": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Captured runner status, nullable when runner hooks did not execute (e.g. command shortcut). completed can include refusal/content-filter text. After injection-driven continuation, an earlier error status may remain alongside recovered final content.",
+              "title": "Stop Reason"
+            },
+            "tools_used": {
+              "description": "Authoritative after_run capture lists successful tool events; not a complete list of attempts or failures.",
+              "items": {
+                "type": "string"
+              },
+              "title": "Tools Used",
+              "type": "array"
+            },
+            "usage": {
+              "additionalProperties": {
+                "type": "integer"
+              },
+              "description": "Captured provider token/accounting values; may be empty.",
+              "title": "Usage",
+              "type": "object"
+            }
+          },
+          "required": [
+            "content"
+          ],
+          "title": "RunResult",
+          "type": "object"
+        }
+      },
+      {
+        "subject": "result.content",
+        "operator": "equals",
+        "expected": "fixture recovered final"
+      },
+      {
+        "subject": "result.stop_reason",
+        "operator": "equals",
+        "expected": "error"
+      },
+      {
+        "subject": "result.error",
+        "operator": "schema_valid",
+        "expected": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    ],
+    "sources": [
+      {
+        "path": "delivery/bundle/chains/end_to_end/end_to_end.json",
+        "pointer": "/snapshot_id"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/output/status_may_retain_prior_error_after_continuation"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/output/field_semantics/stop_reason"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/output/field_semantics/error"
+      },
+      {
+        "path": "sources/nanobot/agent/runner.py",
+        "anchor": "phase=\"after LLM error\","
+      },
+      {
+        "path": "sources/nanobot/agent/runner.py",
+        "anchor": "stop_reason = \"error\""
+      },
+      {
+        "path": "delivery/bundle/evidence/final_response.json",
+        "pointer": "/payload_schema"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖及隔离 Python runner 尚需绑定；本目录只声明候选，未运行 Agent，也不据此将执行支持状态改为 supported。",
+      "仅使用隔离临时工作区、内存会话和指定替身；不访问真实模型、网络、MCP、渠道、进程或用户数据。",
+      "将观察路径绑定到真实调用记录、dataclasses.asdict(RunResult) 与 Python hook 上下文；不得向 Agent 注入预期断言作为输入。"
+    ],
+    "contract_keys": [
+      "/output/status_may_retain_prior_error_after_continuation",
+      "/output/field_semantics/stop_reason",
+      "/output/field_semantics/error"
+    ]
+  },
+  {
+    "key": "v3.dialogue.mutually_exclusive_model_selectors",
+    "target_id": "module.dialogue",
+    "layer": "modules",
+    "category": "error",
+    "title": "两个非空模型选择器同时提供时抛出 ValueError",
+    "preconditions": [
+      {
+        "fixture": "isolated_constructed_nanobot",
+        "boundary": "Nanobot.run on an already constructed instance",
+        "workspace": "new isolated temporary directory per case",
+        "session_store": "fresh isolated in-memory or temporary store",
+        "mcp_provider": null,
+        "runtime_selection": "valid local synthetic provider; no external calls",
+        "agent_loop_and_runner": "real implementations; stub only external/provider seams explicitly listed",
+        "model_provider": "deterministic scripted provider at all request/retry/finalization seams",
+        "streaming": false,
+        "hooks": "Python AgentHook recorder; finalize_content preserves supplied plain text",
+        "injection_callback": "always [] unless this case explicitly overrides it",
+        "goal_continuation": "disabled",
+        "tool_registry": "isolated registry with only declared synthetic tools",
+        "commands": "no handled command unless overridden by this case",
+        "policy_guards": "zero previous lookup/violation counts; synthetic tool names and diagnostics contain no policy marker",
+        "persistence_and_response": "local successful save and ordinary non-suppressed outbound unless this case overrides",
+        "reset_before_each_case": true
+      },
+      {
+        "fixture": "valid_runtime_configuration",
+        "model_names": [
+          "fixture-model"
+        ],
+        "preset_names": [
+          "fixture-preset"
+        ],
+        "preserve_real_selector_and_channel_validation": true
+      },
+      {
+        "fixture": "caller_exception_observer",
+        "availability": "required_not_implemented"
+      }
+    ],
+    "input": {
+      "operation": "invoke_sdk",
+      "entrypoint": "Nanobot.run",
+      "arguments": {
+        "message": "fixture input",
+        "session_key": "sdk:v3-mutually_exclusive_model_selectors",
+        "model": "fixture-model",
+        "model_preset": "fixture-preset"
+      }
+    },
+    "checks": [
+      {
+        "subject": "observation.has_return_value",
+        "operator": "equals",
+        "expected": false
+      },
+      {
+        "subject": "exception_capture",
+        "operator": "schema_valid",
+        "expected": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Evaluator-owned observation envelope, not a native Nanobot response. Capture at the SDK call boundary; cancellation needs separate handling from Exception.",
+          "required": [
+            "outcome",
+            "exception_type",
+            "message"
+          ],
+          "properties": {
+            "outcome": {
+              "enum": [
+                "raised_exception",
+                "cancelled"
+              ]
+            },
+            "exception_type": {
+              "type": "string"
+            },
+            "message": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "subject": "exception_capture.outcome",
+        "operator": "equals",
+        "expected": "raised_exception"
+      },
+      {
+        "subject": "exception_capture.exception_type",
+        "operator": "equals",
+        "expected": "ValueError"
+      }
+    ],
+    "sources": [
+      {
+        "path": "delivery/bundle/modules/dialogue.json",
+        "pointer": "/snapshot_id"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/input_schema/not"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/exceptions/branches/0"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/exceptions/capture_schema"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/exceptions/capture_implemented_by_exporter"
+      },
+      {
+        "path": "sources/nanobot/sdk/runtime.py",
+        "anchor": "if model is not None and model_preset is not None:"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖及隔离 Python runner 尚需绑定；本目录只声明候选，未运行 Agent，也不据此将执行支持状态改为 supported。",
+      "仅使用隔离临时工作区、内存会话和指定替身；不访问真实模型、网络、MCP、渠道、进程或用户数据。",
+      "将观察路径绑定到真实调用记录、dataclasses.asdict(RunResult) 与 Python hook 上下文；不得向 Agent 注入预期断言作为输入。",
+      "异常观察器由评测方实现：在调用边界分别捕获 Exception 与 asyncio.CancelledError；capture envelope 不是 Nanobot 原生返回，导出方尚未实现，绑定完成前不可执行。"
+    ],
+    "contract_keys": [
+      "/input_schema/not",
+      "/exceptions/branches/0",
+      "/exceptions/capture_schema",
+      "/exceptions/capture_implemented_by_exporter"
+    ]
+  },
+  {
+    "key": "v3.dialogue.reserved_system_channel",
+    "target_id": "module.dialogue",
+    "layer": "modules",
+    "category": "error",
+    "title": "system 保留渠道在 SDK 调用中被拒绝",
+    "preconditions": [
+      {
+        "fixture": "isolated_constructed_nanobot",
+        "boundary": "Nanobot.run on an already constructed instance",
+        "workspace": "new isolated temporary directory per case",
+        "session_store": "fresh isolated in-memory or temporary store",
+        "mcp_provider": null,
+        "runtime_selection": "valid local synthetic provider; no external calls",
+        "agent_loop_and_runner": "real implementations; stub only external/provider seams explicitly listed",
+        "model_provider": "deterministic scripted provider at all request/retry/finalization seams",
+        "streaming": false,
+        "hooks": "Python AgentHook recorder; finalize_content preserves supplied plain text",
+        "injection_callback": "always [] unless this case explicitly overrides it",
+        "goal_continuation": "disabled",
+        "tool_registry": "isolated registry with only declared synthetic tools",
+        "commands": "no handled command unless overridden by this case",
+        "policy_guards": "zero previous lookup/violation counts; synthetic tool names and diagnostics contain no policy marker",
+        "persistence_and_response": "local successful save and ordinary non-suppressed outbound unless this case overrides",
+        "reset_before_each_case": true
+      },
+      {
+        "fixture": "valid_runtime_configuration",
+        "model_names": [
+          "fixture-model"
+        ],
+        "preset_names": [
+          "fixture-preset"
+        ],
+        "preserve_real_selector_and_channel_validation": true
+      },
+      {
+        "fixture": "caller_exception_observer",
+        "availability": "required_not_implemented"
+      }
+    ],
+    "input": {
+      "operation": "invoke_sdk",
+      "entrypoint": "Nanobot.run",
+      "arguments": {
+        "message": "fixture input",
+        "session_key": "sdk:v3-reserved_system_channel",
+        "channel": "system"
+      }
+    },
+    "checks": [
+      {
+        "subject": "observation.has_return_value",
+        "operator": "equals",
+        "expected": false
+      },
+      {
+        "subject": "exception_capture",
+        "operator": "schema_valid",
+        "expected": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Evaluator-owned observation envelope, not a native Nanobot response. Capture at the SDK call boundary; cancellation needs separate handling from Exception.",
+          "required": [
+            "outcome",
+            "exception_type",
+            "message"
+          ],
+          "properties": {
+            "outcome": {
+              "enum": [
+                "raised_exception",
+                "cancelled"
+              ]
+            },
+            "exception_type": {
+              "type": "string"
+            },
+            "message": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "subject": "exception_capture.outcome",
+        "operator": "equals",
+        "expected": "raised_exception"
+      },
+      {
+        "subject": "exception_capture.exception_type",
+        "operator": "equals",
+        "expected": "ValueError"
+      }
+    ],
+    "sources": [
+      {
+        "path": "delivery/bundle/modules/dialogue.json",
+        "pointer": "/snapshot_id"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/input_schema/properties/channel/not"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/exceptions/branches/0"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/exceptions/capture_schema"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/exceptions/capture_implemented_by_exporter"
+      },
+      {
+        "path": "sources/nanobot/agent/loop.py",
+        "anchor": "raise ValueError(\"channel 'system' is reserved for internal messages\")"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖及隔离 Python runner 尚需绑定；本目录只声明候选，未运行 Agent，也不据此将执行支持状态改为 supported。",
+      "仅使用隔离临时工作区、内存会话和指定替身；不访问真实模型、网络、MCP、渠道、进程或用户数据。",
+      "将观察路径绑定到真实调用记录、dataclasses.asdict(RunResult) 与 Python hook 上下文；不得向 Agent 注入预期断言作为输入。",
+      "异常观察器由评测方实现：在调用边界分别捕获 Exception 与 asyncio.CancelledError；capture envelope 不是 Nanobot 原生返回，导出方尚未实现，绑定完成前不可执行。"
+    ],
+    "contract_keys": [
+      "/input_schema/properties/channel/not",
+      "/exceptions/branches/0",
+      "/exceptions/capture_schema",
+      "/exceptions/capture_implemented_by_exporter"
+    ]
+  },
+  {
+    "key": "v3.registry.unknown_tool",
+    "target_id": "module.tools",
+    "layer": "modules",
+    "category": "error",
+    "title": "注册器未知工具返回错误且不调用任何实现",
+    "preconditions": [
+      {
+        "fixture": "isolated_tool_registry",
+        "registry": "real ToolRegistry",
+        "external_services": "disabled",
+        "record_registry_prepare_and_implementation_calls": true,
+        "tools": [],
+        "reset_before_each_case": true
+      }
+    ],
+    "input": {
+      "operation": "invoke_module",
+      "entrypoint": "ToolRegistry.execute",
+      "arguments": {
+        "name": "fixture_missing",
+        "params": {}
+      }
+    },
+    "checks": [
+      {
+        "subject": "result.is_error",
+        "operator": "equals",
+        "expected": true
+      },
+      {
+        "subject": "implementation.total_call_count",
+        "operator": "equals",
+        "expected": 0
+      }
+    ],
+    "sources": [
+      {
+        "path": "delivery/bundle/modules/tools.json",
+        "pointer": "/snapshot_id"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/tool_dispatch/dispatch_paths"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/tool_dispatch/error_categories/0"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/tool_dispatch/error_marker"
+      },
+      {
+        "path": "sources/nanobot/agent/tools/registry.py",
+        "anchor": "if not tool:"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖及隔离 Python runner 尚需绑定；本目录只声明候选，未运行 Agent，也不据此将执行支持状态改为 supported。",
+      "仅使用隔离临时工作区、内存会话和指定替身；不访问真实模型、网络、MCP、渠道、进程或用户数据。",
+      "将观察路径绑定到真实调用记录、dataclasses.asdict(RunResult) 与 Python hook 上下文；不得向 Agent 注入预期断言作为输入。"
+    ],
+    "contract_keys": [
+      "/tool_dispatch/dispatch_paths",
+      "/tool_dispatch/error_categories/0",
+      "/tool_dispatch/error_marker"
+    ]
+  },
+  {
+    "key": "v3.registry.invalid_arguments",
+    "target_id": "module.tools",
+    "layer": "modules",
+    "category": "error",
+    "title": "注册器参数拒绝不进入工具实现",
+    "preconditions": [
+      {
+        "fixture": "isolated_tool_registry",
+        "registry": "real ToolRegistry",
+        "external_services": "disabled",
+        "record_registry_prepare_and_implementation_calls": true,
+        "tools": [],
+        "reset_before_each_case": true
+      },
+      {
+        "fixture": "synthetic_tool",
+        "name": "fixture_tool",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "required_value": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "required_value"
+          ],
+          "additionalProperties": false
+        },
+        "execute_returns": "fixture tool result",
+        "record_implementation_calls": true
+      }
+    ],
+    "input": {
+      "operation": "invoke_module",
+      "entrypoint": "ToolRegistry.execute",
+      "arguments": {
+        "name": "fixture_tool",
+        "params": {}
+      }
+    },
+    "checks": [
+      {
+        "subject": "result.is_error",
+        "operator": "equals",
+        "expected": true
+      },
+      {
+        "subject": "fixture_tool.execute.call_count",
+        "operator": "equals",
+        "expected": 0
+      }
+    ],
+    "sources": [
+      {
+        "path": "delivery/bundle/modules/tools.json",
+        "pointer": "/snapshot_id"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/tool_dispatch/error_categories/1"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/tool_dispatch/error_marker"
+      },
+      {
+        "path": "sources/nanobot/agent/tools/registry.py",
+        "anchor": "errors = tool.validate_params(cast_params)"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖及隔离 Python runner 尚需绑定；本目录只声明候选，未运行 Agent，也不据此将执行支持状态改为 supported。",
+      "仅使用隔离临时工作区、内存会话和指定替身；不访问真实模型、网络、MCP、渠道、进程或用户数据。",
+      "将观察路径绑定到真实调用记录、dataclasses.asdict(RunResult) 与 Python hook 上下文；不得向 Agent 注入预期断言作为输入。"
+    ],
+    "contract_keys": [
+      "/tool_dispatch/error_categories/1",
+      "/tool_dispatch/error_marker"
+    ]
+  },
+  {
+    "key": "v3.registry.implementation_exception",
+    "target_id": "module.tools",
+    "layer": "modules",
+    "category": "error",
+    "title": "注册器把普通实现异常转换为 ToolResult.error",
+    "preconditions": [
+      {
+        "fixture": "isolated_tool_registry",
+        "registry": "real ToolRegistry",
+        "external_services": "disabled",
+        "record_registry_prepare_and_implementation_calls": true,
+        "tools": [],
+        "reset_before_each_case": true
+      },
+      {
+        "fixture": "synthetic_tool",
+        "name": "fixture_tool",
+        "parameters": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "record_implementation_calls": true,
+        "execute_raises": {
+          "type": "RuntimeError",
+          "message": "fixture implementation failure"
+        }
+      }
+    ],
+    "input": {
+      "operation": "invoke_module",
+      "entrypoint": "ToolRegistry.execute",
+      "arguments": {
+        "name": "fixture_tool",
+        "params": {}
+      }
+    },
+    "checks": [
+      {
+        "subject": "result.is_error",
+        "operator": "equals",
+        "expected": true
+      },
+      {
+        "subject": "fixture_tool.execute.call_count",
+        "operator": "equals",
+        "expected": 1
+      }
+    ],
+    "sources": [
+      {
+        "path": "delivery/bundle/modules/tools.json",
+        "pointer": "/snapshot_id"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/tool_dispatch/error_categories/3"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/tool_dispatch/error_marker"
+      },
+      {
+        "path": "sources/nanobot/agent/tools/registry.py",
+        "anchor": "except Exception as e:"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖及隔离 Python runner 尚需绑定；本目录只声明候选，未运行 Agent，也不据此将执行支持状态改为 supported。",
+      "仅使用隔离临时工作区、内存会话和指定替身；不访问真实模型、网络、MCP、渠道、进程或用户数据。",
+      "将观察路径绑定到真实调用记录、dataclasses.asdict(RunResult) 与 Python hook 上下文；不得向 Agent 注入预期断言作为输入。"
+    ],
+    "contract_keys": [
+      "/tool_dispatch/error_categories/3",
+      "/tool_dispatch/error_marker"
+    ]
+  },
+  {
+    "key": "v3.registry.marked_error",
+    "target_id": "module.tools",
+    "layer": "modules",
+    "category": "error",
+    "title": "注册器识别 ToolResult.is_error 标记",
+    "preconditions": [
+      {
+        "fixture": "isolated_tool_registry",
+        "registry": "real ToolRegistry",
+        "external_services": "disabled",
+        "record_registry_prepare_and_implementation_calls": true,
+        "tools": [],
+        "reset_before_each_case": true
+      },
+      {
+        "fixture": "synthetic_tool",
+        "name": "fixture_tool",
+        "parameters": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "execute_returns": {
+          "python_factory": "ToolResult.error",
+          "text": "fixture marked failure"
+        },
+        "record_implementation_calls": true
+      }
+    ],
+    "input": {
+      "operation": "invoke_module",
+      "entrypoint": "ToolRegistry.execute",
+      "arguments": {
+        "name": "fixture_tool",
+        "params": {}
+      }
+    },
+    "checks": [
+      {
+        "subject": "result.is_error",
+        "operator": "equals",
+        "expected": true
+      },
+      {
+        "subject": "fixture_tool.execute.call_count",
+        "operator": "equals",
+        "expected": 1
+      }
+    ],
+    "sources": [
+      {
+        "path": "delivery/bundle/modules/tools.json",
+        "pointer": "/snapshot_id"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/tool_dispatch/error_marker"
+      },
+      {
+        "path": "sources/nanobot/agent/tools/registry.py",
+        "anchor": "if is_tool_error_result(result):"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖及隔离 Python runner 尚需绑定；本目录只声明候选，未运行 Agent，也不据此将执行支持状态改为 supported。",
+      "仅使用隔离临时工作区、内存会话和指定替身；不访问真实模型、网络、MCP、渠道、进程或用户数据。",
+      "将观察路径绑定到真实调用记录、dataclasses.asdict(RunResult) 与 Python hook 上下文；不得向 Agent 注入预期断言作为输入。"
+    ],
+    "contract_keys": [
+      "/tool_dispatch/error_marker"
+    ]
+  },
+  {
+    "key": "v3.registry.plain_error_text",
+    "target_id": "module.tools",
+    "layer": "modules",
+    "category": "boundary",
+    "title": "普通 Error 前缀字符串保留原值而不成为标记错误",
+    "preconditions": [
+      {
+        "fixture": "isolated_tool_registry",
+        "registry": "real ToolRegistry",
+        "external_services": "disabled",
+        "record_registry_prepare_and_implementation_calls": true,
+        "tools": [],
+        "reset_before_each_case": true
+      },
+      {
+        "fixture": "synthetic_tool",
+        "name": "fixture_tool",
+        "parameters": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "execute_returns": "Error: fixture ordinary text",
+        "record_implementation_calls": true
+      }
+    ],
+    "input": {
+      "operation": "invoke_module",
+      "entrypoint": "ToolRegistry.execute",
+      "arguments": {
+        "name": "fixture_tool",
+        "params": {}
+      }
+    },
+    "checks": [
+      {
+        "subject": "result",
+        "operator": "equals",
+        "expected": "Error: fixture ordinary text"
+      },
+      {
+        "subject": "is_tool_error_result(result)",
+        "operator": "equals",
+        "expected": false
+      }
+    ],
+    "sources": [
+      {
+        "path": "delivery/bundle/modules/tools.json",
+        "pointer": "/snapshot_id"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/tool_dispatch/error_marker"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/tool_dispatch/registry_return_type"
+      },
+      {
+        "path": "sources/nanobot/agent/tools/registry.py",
+        "anchor": "return isinstance(result, ToolResult) and result.is_error"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖及隔离 Python runner 尚需绑定；本目录只声明候选，未运行 Agent，也不据此将执行支持状态改为 supported。",
+      "仅使用隔离临时工作区、内存会话和指定替身；不访问真实模型、网络、MCP、渠道、进程或用户数据。",
+      "将观察路径绑定到真实调用记录、dataclasses.asdict(RunResult) 与 Python hook 上下文；不得向 Agent 注入预期断言作为输入。"
+    ],
+    "contract_keys": [
+      "/tool_dispatch/error_marker",
+      "/tool_dispatch/registry_return_type"
+    ]
+  },
+  {
+    "key": "v3.registry.no_automatic_retry",
+    "target_id": "module.tools",
+    "layer": "modules",
+    "category": "sequence",
+    "title": "注册器单次请求不会因实现异常自动重试",
+    "preconditions": [
+      {
+        "fixture": "isolated_tool_registry",
+        "registry": "real ToolRegistry",
+        "external_services": "disabled",
+        "record_registry_prepare_and_implementation_calls": true,
+        "tools": [],
+        "reset_before_each_case": true
+      },
+      {
+        "fixture": "synthetic_tool",
+        "name": "fixture_tool",
+        "parameters": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "record_implementation_calls": true,
+        "execute_sequence": [
+          {
+            "raises": {
+              "type": "RuntimeError",
+              "message": "fixture first failure"
+            }
+          },
+          {
+            "returns": "fixture later success"
+          }
+        ]
+      }
+    ],
+    "input": {
+      "operation": "invoke_module",
+      "entrypoint": "ToolRegistry.execute",
+      "arguments": {
+        "name": "fixture_tool",
+        "params": {}
+      }
+    },
+    "checks": [
+      {
+        "subject": "fixture_tool.execute.call_count",
+        "operator": "equals",
+        "expected": 1
+      },
+      {
+        "subject": "result.is_error",
+        "operator": "equals",
+        "expected": true
+      }
+    ],
+    "sources": [
+      {
+        "path": "delivery/bundle/modules/tools.json",
+        "pointer": "/snapshot_id"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/tool_dispatch/retry"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/tool_dispatch/error_categories/3"
+      },
+      {
+        "path": "sources/nanobot/agent/tools/registry.py",
+        "anchor": "result = await tool.execute(**params)"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖及隔离 Python runner 尚需绑定；本目录只声明候选，未运行 Agent，也不据此将执行支持状态改为 supported。",
+      "仅使用隔离临时工作区、内存会话和指定替身；不访问真实模型、网络、MCP、渠道、进程或用户数据。",
+      "将观察路径绑定到真实调用记录、dataclasses.asdict(RunResult) 与 Python hook 上下文；不得向 Agent 注入预期断言作为输入。"
+    ],
+    "contract_keys": [
+      "/tool_dispatch/retry",
+      "/tool_dispatch/error_categories/3"
+    ]
+  },
+  {
+    "key": "v3.runner.unknown_tool",
+    "target_id": "module.tools",
+    "layer": "modules",
+    "category": "error",
+    "title": "runner 未知工具走 prepare_call 错误事件",
+    "preconditions": [
+      {
+        "fixture": "isolated_agent_runner_tool_step",
+        "boundary": "Nanobot.run on an already constructed instance",
+        "workspace": "new isolated temporary directory per case",
+        "session_store": "fresh isolated in-memory or temporary store",
+        "mcp_provider": null,
+        "runtime_selection": "valid local synthetic provider; no external calls",
+        "agent_loop_and_runner": "real implementations; stub only external/provider seams explicitly listed",
+        "model_provider": "deterministic scripted provider at all request/retry/finalization seams",
+        "streaming": false,
+        "hooks": "Python AgentHook recorder; finalize_content preserves supplied plain text",
+        "injection_callback": "always [] unless this case explicitly overrides it",
+        "goal_continuation": "disabled",
+        "tool_registry": "isolated registry with only declared synthetic tools",
+        "commands": "no handled command unless overridden by this case",
+        "policy_guards": "zero previous lookup/violation counts; synthetic tool names and diagnostics contain no policy marker",
+        "persistence_and_response": "local successful save and ordinary non-suppressed outbound unless this case overrides",
+        "reset_before_each_case": true,
+        "entrypoint": "AgentRunner._run_tool",
+        "fail_on_tool_error": false,
+        "context": "fresh AgentHookContext and non-throwing recording hook",
+        "external_lookup_counts": {},
+        "workspace_violation_counts": {}
+      }
+    ],
+    "input": {
+      "operation": "invoke_module",
+      "entrypoint": "AgentRunner._run_tool",
+      "tool_call": {
+        "id": "fixture-step-1",
+        "name": "fixture_missing",
+        "arguments": {}
+      },
+      "spec_fixture": "isolated_agent_runner_tool_step"
+    },
+    "checks": [
+      {
+        "subject": "step.event",
+        "operator": "schema_valid",
+        "expected": {
+          "type": "object",
+          "required": [
+            "name",
+            "status",
+            "detail"
+          ],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "status": {
+              "enum": [
+                "ok",
+                "error"
+              ]
+            },
+            "detail": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "subject": "step.event.name",
+        "operator": "equals",
+        "expected": "fixture_missing"
+      },
+      {
+        "subject": "step.event.status",
+        "operator": "equals",
+        "expected": "error"
+      },
+      {
+        "subject": "implementation.total_call_count",
+        "operator": "equals",
+        "expected": 0
+      }
+    ],
+    "sources": [
+      {
+        "path": "delivery/bundle/modules/tools.json",
+        "pointer": "/snapshot_id"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/tool_dispatch/dispatch_paths"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/tool_dispatch/error_categories/0"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/tool_dispatch/tool_event_schema"
+      },
+      {
+        "path": "sources/nanobot/agent/runner.py",
+        "anchor": "prepared = prepare_call(tool_call.name, tool_call.arguments)"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖及隔离 Python runner 尚需绑定；本目录只声明候选，未运行 Agent，也不据此将执行支持状态改为 supported。",
+      "仅使用隔离临时工作区、内存会话和指定替身；不访问真实模型、网络、MCP、渠道、进程或用户数据。",
+      "将观察路径绑定到真实调用记录、dataclasses.asdict(RunResult) 与 Python hook 上下文；不得向 Agent 注入预期断言作为输入。"
+    ],
+    "contract_keys": [
+      "/tool_dispatch/dispatch_paths",
+      "/tool_dispatch/error_categories/0",
+      "/tool_dispatch/tool_event_schema"
+    ]
+  },
+  {
+    "key": "v3.runner.invalid_arguments",
+    "target_id": "module.tools",
+    "layer": "modules",
+    "category": "error",
+    "title": "runner 参数拒绝产生错误事件且不调用实现",
+    "preconditions": [
+      {
+        "fixture": "isolated_agent_runner_tool_step",
+        "boundary": "Nanobot.run on an already constructed instance",
+        "workspace": "new isolated temporary directory per case",
+        "session_store": "fresh isolated in-memory or temporary store",
+        "mcp_provider": null,
+        "runtime_selection": "valid local synthetic provider; no external calls",
+        "agent_loop_and_runner": "real implementations; stub only external/provider seams explicitly listed",
+        "model_provider": "deterministic scripted provider at all request/retry/finalization seams",
+        "streaming": false,
+        "hooks": "Python AgentHook recorder; finalize_content preserves supplied plain text",
+        "injection_callback": "always [] unless this case explicitly overrides it",
+        "goal_continuation": "disabled",
+        "tool_registry": "isolated registry with only declared synthetic tools",
+        "commands": "no handled command unless overridden by this case",
+        "policy_guards": "zero previous lookup/violation counts; synthetic tool names and diagnostics contain no policy marker",
+        "persistence_and_response": "local successful save and ordinary non-suppressed outbound unless this case overrides",
+        "reset_before_each_case": true,
+        "entrypoint": "AgentRunner._run_tool",
+        "fail_on_tool_error": false,
+        "context": "fresh AgentHookContext and non-throwing recording hook",
+        "external_lookup_counts": {},
+        "workspace_violation_counts": {}
+      },
+      {
+        "fixture": "synthetic_tool",
+        "name": "fixture_tool",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "required_value": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "required_value"
+          ],
+          "additionalProperties": false
+        },
+        "execute_returns": "fixture tool result",
+        "record_implementation_calls": true
+      }
+    ],
+    "input": {
+      "operation": "invoke_module",
+      "entrypoint": "AgentRunner._run_tool",
+      "tool_call": {
+        "id": "fixture-step-1",
+        "name": "fixture_tool",
+        "arguments": {}
+      },
+      "spec_fixture": "isolated_agent_runner_tool_step"
+    },
+    "checks": [
+      {
+        "subject": "step.event",
+        "operator": "schema_valid",
+        "expected": {
+          "type": "object",
+          "required": [
+            "name",
+            "status",
+            "detail"
+          ],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "status": {
+              "enum": [
+                "ok",
+                "error"
+              ]
+            },
+            "detail": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "subject": "step.event.name",
+        "operator": "equals",
+        "expected": "fixture_tool"
+      },
+      {
+        "subject": "step.event.status",
+        "operator": "equals",
+        "expected": "error"
+      },
+      {
+        "subject": "fixture_tool.execute.call_count",
+        "operator": "equals",
+        "expected": 0
+      }
+    ],
+    "sources": [
+      {
+        "path": "delivery/bundle/modules/tools.json",
+        "pointer": "/snapshot_id"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/tool_dispatch/error_categories/1"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/tool_dispatch/tool_event_schema"
+      },
+      {
+        "path": "sources/nanobot/agent/runner.py",
+        "anchor": "if prep_error:"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖及隔离 Python runner 尚需绑定；本目录只声明候选，未运行 Agent，也不据此将执行支持状态改为 supported。",
+      "仅使用隔离临时工作区、内存会话和指定替身；不访问真实模型、网络、MCP、渠道、进程或用户数据。",
+      "将观察路径绑定到真实调用记录、dataclasses.asdict(RunResult) 与 Python hook 上下文；不得向 Agent 注入预期断言作为输入。"
+    ],
+    "contract_keys": [
+      "/tool_dispatch/error_categories/1",
+      "/tool_dispatch/tool_event_schema"
+    ]
+  },
+  {
+    "key": "v3.runner.implementation_exception",
+    "target_id": "module.tools",
+    "layer": "modules",
+    "category": "error",
+    "title": "runner 将普通实现异常记录为工具错误事件",
+    "preconditions": [
+      {
+        "fixture": "isolated_agent_runner_tool_step",
+        "boundary": "Nanobot.run on an already constructed instance",
+        "workspace": "new isolated temporary directory per case",
+        "session_store": "fresh isolated in-memory or temporary store",
+        "mcp_provider": null,
+        "runtime_selection": "valid local synthetic provider; no external calls",
+        "agent_loop_and_runner": "real implementations; stub only external/provider seams explicitly listed",
+        "model_provider": "deterministic scripted provider at all request/retry/finalization seams",
+        "streaming": false,
+        "hooks": "Python AgentHook recorder; finalize_content preserves supplied plain text",
+        "injection_callback": "always [] unless this case explicitly overrides it",
+        "goal_continuation": "disabled",
+        "tool_registry": "isolated registry with only declared synthetic tools",
+        "commands": "no handled command unless overridden by this case",
+        "policy_guards": "zero previous lookup/violation counts; synthetic tool names and diagnostics contain no policy marker",
+        "persistence_and_response": "local successful save and ordinary non-suppressed outbound unless this case overrides",
+        "reset_before_each_case": true,
+        "entrypoint": "AgentRunner._run_tool",
+        "fail_on_tool_error": false,
+        "context": "fresh AgentHookContext and non-throwing recording hook",
+        "external_lookup_counts": {},
+        "workspace_violation_counts": {}
+      },
+      {
+        "fixture": "synthetic_tool",
+        "name": "fixture_tool",
+        "parameters": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "record_implementation_calls": true,
+        "execute_raises": {
+          "type": "RuntimeError",
+          "message": "fixture implementation failure"
+        }
+      }
+    ],
+    "input": {
+      "operation": "invoke_module",
+      "entrypoint": "AgentRunner._run_tool",
+      "tool_call": {
+        "id": "fixture-step-1",
+        "name": "fixture_tool",
+        "arguments": {}
+      },
+      "spec_fixture": "isolated_agent_runner_tool_step"
+    },
+    "checks": [
+      {
+        "subject": "step.event",
+        "operator": "schema_valid",
+        "expected": {
+          "type": "object",
+          "required": [
+            "name",
+            "status",
+            "detail"
+          ],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "status": {
+              "enum": [
+                "ok",
+                "error"
+              ]
+            },
+            "detail": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "subject": "step.event.name",
+        "operator": "equals",
+        "expected": "fixture_tool"
+      },
+      {
+        "subject": "step.event.status",
+        "operator": "equals",
+        "expected": "error"
+      },
+      {
+        "subject": "fixture_tool.execute.call_count",
+        "operator": "equals",
+        "expected": 1
+      }
+    ],
+    "sources": [
+      {
+        "path": "delivery/bundle/modules/tools.json",
+        "pointer": "/snapshot_id"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/tool_dispatch/error_categories/3"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/tool_dispatch/tool_event_schema"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/tool_dispatch/dispatch_paths"
+      },
+      {
+        "path": "sources/nanobot/agent/runner.py",
+        "anchor": "except Exception as exc:"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖及隔离 Python runner 尚需绑定；本目录只声明候选，未运行 Agent，也不据此将执行支持状态改为 supported。",
+      "仅使用隔离临时工作区、内存会话和指定替身；不访问真实模型、网络、MCP、渠道、进程或用户数据。",
+      "将观察路径绑定到真实调用记录、dataclasses.asdict(RunResult) 与 Python hook 上下文；不得向 Agent 注入预期断言作为输入。"
+    ],
+    "contract_keys": [
+      "/tool_dispatch/error_categories/3",
+      "/tool_dispatch/tool_event_schema",
+      "/tool_dispatch/dispatch_paths"
+    ]
+  },
+  {
+    "key": "v3.runner.marked_error",
+    "target_id": "module.tools",
+    "layer": "modules",
+    "category": "error",
+    "title": "runner 的 ToolResult.is_error 产生 error 事件",
+    "preconditions": [
+      {
+        "fixture": "isolated_agent_runner_tool_step",
+        "boundary": "Nanobot.run on an already constructed instance",
+        "workspace": "new isolated temporary directory per case",
+        "session_store": "fresh isolated in-memory or temporary store",
+        "mcp_provider": null,
+        "runtime_selection": "valid local synthetic provider; no external calls",
+        "agent_loop_and_runner": "real implementations; stub only external/provider seams explicitly listed",
+        "model_provider": "deterministic scripted provider at all request/retry/finalization seams",
+        "streaming": false,
+        "hooks": "Python AgentHook recorder; finalize_content preserves supplied plain text",
+        "injection_callback": "always [] unless this case explicitly overrides it",
+        "goal_continuation": "disabled",
+        "tool_registry": "isolated registry with only declared synthetic tools",
+        "commands": "no handled command unless overridden by this case",
+        "policy_guards": "zero previous lookup/violation counts; synthetic tool names and diagnostics contain no policy marker",
+        "persistence_and_response": "local successful save and ordinary non-suppressed outbound unless this case overrides",
+        "reset_before_each_case": true,
+        "entrypoint": "AgentRunner._run_tool",
+        "fail_on_tool_error": false,
+        "context": "fresh AgentHookContext and non-throwing recording hook",
+        "external_lookup_counts": {},
+        "workspace_violation_counts": {}
+      },
+      {
+        "fixture": "synthetic_tool",
+        "name": "fixture_tool",
+        "parameters": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "execute_returns": {
+          "python_factory": "ToolResult.error",
+          "text": "fixture marked failure"
+        },
+        "record_implementation_calls": true
+      }
+    ],
+    "input": {
+      "operation": "invoke_module",
+      "entrypoint": "AgentRunner._run_tool",
+      "tool_call": {
+        "id": "fixture-step-1",
+        "name": "fixture_tool",
+        "arguments": {}
+      },
+      "spec_fixture": "isolated_agent_runner_tool_step"
+    },
+    "checks": [
+      {
+        "subject": "step.event",
+        "operator": "schema_valid",
+        "expected": {
+          "type": "object",
+          "required": [
+            "name",
+            "status",
+            "detail"
+          ],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "status": {
+              "enum": [
+                "ok",
+                "error"
+              ]
+            },
+            "detail": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "subject": "step.event.name",
+        "operator": "equals",
+        "expected": "fixture_tool"
+      },
+      {
+        "subject": "step.event.status",
+        "operator": "equals",
+        "expected": "error"
+      }
+    ],
+    "sources": [
+      {
+        "path": "delivery/bundle/modules/tools.json",
+        "pointer": "/snapshot_id"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/tool_dispatch/error_marker"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/tool_dispatch/error_categories/2"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/tool_dispatch/tool_event_schema"
+      },
+      {
+        "path": "sources/nanobot/agent/runner.py",
+        "anchor": "if is_tool_error_result(result):"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖及隔离 Python runner 尚需绑定；本目录只声明候选，未运行 Agent，也不据此将执行支持状态改为 supported。",
+      "仅使用隔离临时工作区、内存会话和指定替身；不访问真实模型、网络、MCP、渠道、进程或用户数据。",
+      "将观察路径绑定到真实调用记录、dataclasses.asdict(RunResult) 与 Python hook 上下文；不得向 Agent 注入预期断言作为输入。"
+    ],
+    "contract_keys": [
+      "/tool_dispatch/error_marker",
+      "/tool_dispatch/error_categories/2",
+      "/tool_dispatch/tool_event_schema"
+    ]
+  },
+  {
+    "key": "v3.runner.plain_error_text",
+    "target_id": "module.tools",
+    "layer": "modules",
+    "category": "boundary",
+    "title": "runner 将无标记的 Error 前缀字符串记录为 ok",
+    "preconditions": [
+      {
+        "fixture": "isolated_agent_runner_tool_step",
+        "boundary": "Nanobot.run on an already constructed instance",
+        "workspace": "new isolated temporary directory per case",
+        "session_store": "fresh isolated in-memory or temporary store",
+        "mcp_provider": null,
+        "runtime_selection": "valid local synthetic provider; no external calls",
+        "agent_loop_and_runner": "real implementations; stub only external/provider seams explicitly listed",
+        "model_provider": "deterministic scripted provider at all request/retry/finalization seams",
+        "streaming": false,
+        "hooks": "Python AgentHook recorder; finalize_content preserves supplied plain text",
+        "injection_callback": "always [] unless this case explicitly overrides it",
+        "goal_continuation": "disabled",
+        "tool_registry": "isolated registry with only declared synthetic tools",
+        "commands": "no handled command unless overridden by this case",
+        "policy_guards": "zero previous lookup/violation counts; synthetic tool names and diagnostics contain no policy marker",
+        "persistence_and_response": "local successful save and ordinary non-suppressed outbound unless this case overrides",
+        "reset_before_each_case": true,
+        "entrypoint": "AgentRunner._run_tool",
+        "fail_on_tool_error": false,
+        "context": "fresh AgentHookContext and non-throwing recording hook",
+        "external_lookup_counts": {},
+        "workspace_violation_counts": {}
+      },
+      {
+        "fixture": "synthetic_tool",
+        "name": "fixture_tool",
+        "parameters": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "execute_returns": "Error: fixture ordinary text",
+        "record_implementation_calls": true
+      }
+    ],
+    "input": {
+      "operation": "invoke_module",
+      "entrypoint": "AgentRunner._run_tool",
+      "tool_call": {
+        "id": "fixture-step-1",
+        "name": "fixture_tool",
+        "arguments": {}
+      },
+      "spec_fixture": "isolated_agent_runner_tool_step"
+    },
+    "checks": [
+      {
+        "subject": "step.event",
+        "operator": "schema_valid",
+        "expected": {
+          "type": "object",
+          "required": [
+            "name",
+            "status",
+            "detail"
+          ],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "status": {
+              "enum": [
+                "ok",
+                "error"
+              ]
+            },
+            "detail": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "subject": "step.event.name",
+        "operator": "equals",
+        "expected": "fixture_tool"
+      },
+      {
+        "subject": "step.event.status",
+        "operator": "equals",
+        "expected": "ok"
+      },
+      {
+        "subject": "step.payload",
+        "operator": "equals",
+        "expected": "Error: fixture ordinary text"
+      }
+    ],
+    "sources": [
+      {
+        "path": "delivery/bundle/modules/tools.json",
+        "pointer": "/snapshot_id"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/tool_dispatch/error_marker"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/tool_dispatch/tool_event_schema"
+      },
+      {
+        "path": "sources/nanobot/agent/runner.py",
+        "anchor": "return result, {\"name\": tool_call.name, \"status\": \"ok\", \"detail\": detail}, None"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖及隔离 Python runner 尚需绑定；本目录只声明候选，未运行 Agent，也不据此将执行支持状态改为 supported。",
+      "仅使用隔离临时工作区、内存会话和指定替身；不访问真实模型、网络、MCP、渠道、进程或用户数据。",
+      "将观察路径绑定到真实调用记录、dataclasses.asdict(RunResult) 与 Python hook 上下文；不得向 Agent 注入预期断言作为输入。"
+    ],
+    "contract_keys": [
+      "/tool_dispatch/error_marker",
+      "/tool_dispatch/tool_event_schema"
+    ]
+  },
+  {
+    "key": "v3.runner.tool_cancellation",
+    "target_id": "module.tools",
+    "layer": "modules",
+    "category": "error",
+    "title": "工具实现取消穿过 runner 调用边界",
+    "preconditions": [
+      {
+        "fixture": "isolated_agent_runner_tool_step",
+        "boundary": "Nanobot.run on an already constructed instance",
+        "workspace": "new isolated temporary directory per case",
+        "session_store": "fresh isolated in-memory or temporary store",
+        "mcp_provider": null,
+        "runtime_selection": "valid local synthetic provider; no external calls",
+        "agent_loop_and_runner": "real implementations; stub only external/provider seams explicitly listed",
+        "model_provider": "deterministic scripted provider at all request/retry/finalization seams",
+        "streaming": false,
+        "hooks": "Python AgentHook recorder; finalize_content preserves supplied plain text",
+        "injection_callback": "always [] unless this case explicitly overrides it",
+        "goal_continuation": "disabled",
+        "tool_registry": "isolated registry with only declared synthetic tools",
+        "commands": "no handled command unless overridden by this case",
+        "policy_guards": "zero previous lookup/violation counts; synthetic tool names and diagnostics contain no policy marker",
+        "persistence_and_response": "local successful save and ordinary non-suppressed outbound unless this case overrides",
+        "reset_before_each_case": true,
+        "entrypoint": "AgentRunner._run_tool",
+        "fail_on_tool_error": false,
+        "context": "fresh AgentHookContext and non-throwing recording hook",
+        "external_lookup_counts": {},
+        "workspace_violation_counts": {}
+      },
+      {
+        "fixture": "synthetic_tool",
+        "name": "fixture_tool",
+        "parameters": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "record_implementation_calls": true,
+        "execute_raises": {
+          "type": "asyncio.CancelledError",
+          "message": "fixture tool cancellation"
+        }
+      },
+      {
+        "fixture": "caller_exception_observer",
+        "availability": "required_not_implemented",
+        "capture_boundary": "await AgentRunner._run_tool"
+      }
+    ],
+    "input": {
+      "operation": "invoke_module",
+      "entrypoint": "AgentRunner._run_tool",
+      "tool_call": {
+        "id": "fixture-step-1",
+        "name": "fixture_tool",
+        "arguments": {}
+      },
+      "spec_fixture": "isolated_agent_runner_tool_step"
+    },
+    "checks": [
+      {
+        "subject": "observation.has_return_value",
+        "operator": "equals",
+        "expected": false
+      },
+      {
+        "subject": "exception.type",
+        "operator": "equals",
+        "expected": "CancelledError"
+      }
+    ],
+    "sources": [
+      {
+        "path": "delivery/bundle/modules/tools.json",
+        "pointer": "/snapshot_id"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/tool_dispatch/error_categories/5"
+      },
+      {
+        "path": "sources/nanobot/agent/runner.py",
+        "anchor": "except asyncio.CancelledError:"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖及隔离 Python runner 尚需绑定；本目录只声明候选，未运行 Agent，也不据此将执行支持状态改为 supported。",
+      "仅使用隔离临时工作区、内存会话和指定替身；不访问真实模型、网络、MCP、渠道、进程或用户数据。",
+      "将观察路径绑定到真实调用记录、dataclasses.asdict(RunResult) 与 Python hook 上下文；不得向 Agent 注入预期断言作为输入。",
+      "需为模块调用实现独立取消观察，并把 Python 类型名称映射到 exception.type；这里不是 SDK RunResult，也不把 SDK 异常包当作模块原生返回。"
+    ],
+    "contract_keys": [
+      "/tool_dispatch/error_categories/5"
+    ]
+  },
+  {
+    "key": "v3.observability.successful_tools_only",
+    "target_id": "module.observability",
+    "layer": "modules",
+    "category": "sequence",
+    "title": "最终 tools_used 仅包含成功事件而非全部尝试",
+    "preconditions": [
+      {
+        "fixture": "isolated_constructed_nanobot",
+        "boundary": "Nanobot.run on an already constructed instance",
+        "workspace": "new isolated temporary directory per case",
+        "session_store": "fresh isolated in-memory or temporary store",
+        "mcp_provider": null,
+        "runtime_selection": "valid local synthetic provider; no external calls",
+        "agent_loop_and_runner": "real implementations; stub only external/provider seams explicitly listed",
+        "model_provider": "deterministic scripted provider at all request/retry/finalization seams",
+        "streaming": false,
+        "hooks": "Python AgentHook recorder; finalize_content preserves supplied plain text",
+        "injection_callback": "always [] unless this case explicitly overrides it",
+        "goal_continuation": "disabled",
+        "tool_registry": "isolated registry with only declared synthetic tools",
+        "commands": "no handled command unless overridden by this case",
+        "policy_guards": "zero previous lookup/violation counts; synthetic tool names and diagnostics contain no policy marker",
+        "persistence_and_response": "local successful save and ordinary non-suppressed outbound unless this case overrides",
+        "reset_before_each_case": true
+      },
+      {
+        "fixture": "runner_configuration",
+        "fail_on_tool_error": false
+      },
+      {
+        "fixture": "synthetic_tool",
+        "name": "fixture_failed",
+        "parameters": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "execute_returns": {
+          "python_factory": "ToolResult.error",
+          "text": "fixture marked failure"
+        },
+        "record_implementation_calls": true
+      },
+      {
+        "fixture": "synthetic_tool",
+        "name": "fixture_succeeded",
+        "parameters": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "execute_returns": "fixture tool result",
+        "record_implementation_calls": true
+      },
+      {
+        "fixture": "scripted_model_provider",
+        "responses": [
+          {
+            "content": "",
+            "finish_reason": "tool_calls",
+            "tool_calls": [
+              {
+                "id": "fixture-call-1",
+                "name": "fixture_failed",
+                "arguments": {}
+              }
+            ],
+            "usage": {}
+          },
+          {
+            "content": "",
+            "finish_reason": "tool_calls",
+            "tool_calls": [
+              {
+                "id": "fixture-call-2",
+                "name": "fixture_succeeded",
+                "arguments": {}
+              }
+            ],
+            "usage": {}
+          },
+          {
+            "content": "fixture answer",
+            "finish_reason": "stop",
+            "tool_calls": [],
+            "usage": {}
+          }
+        ],
+        "unexpected_request": "fixture failure"
+      }
+    ],
+    "input": {
+      "operation": "invoke_sdk",
+      "entrypoint": "Nanobot.run",
+      "arguments": {
+        "message": "fixture input",
+        "session_key": "sdk:v3-tools-used"
+      }
+    },
+    "checks": [
+      {
+        "subject": "result",
+        "operator": "schema_valid",
+        "expected": {
+          "description": "Native SDK returned value, including error-bearing or command returns. Not returned on raised/cancelled exits; presence does not imply business success.",
+          "properties": {
+            "content": {
+              "description": "Response text, or empty string when no outbound response/content is returned; no non-empty guarantee.",
+              "title": "Content",
+              "type": "string"
+            },
+            "error": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Nullable captured diagnostic text; inspect together with stop_reason and content/history. None does not prove task success or rule out earlier recoverable tool errors. Non-null error can retain an earlier failure after continuation produces a later answer; it is not an exact classification of that final answer.",
+              "title": "Error"
+            },
+            "messages": {
+              "description": "Captured runner message list; may be empty for command short-circuits. Not a guaranteed complete external event trace.",
+              "items": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "title": "Messages",
+              "type": "array"
+            },
+            "metadata": {
+              "additionalProperties": true,
+              "description": "Outbound metadata copied by SDK; arbitrary keys, not a stable business result schema.",
+              "title": "Metadata",
+              "type": "object"
+            },
+            "stop_reason": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Captured runner status, nullable when runner hooks did not execute (e.g. command shortcut). completed can include refusal/content-filter text. After injection-driven continuation, an earlier error status may remain alongside recovered final content.",
+              "title": "Stop Reason"
+            },
+            "tools_used": {
+              "description": "Authoritative after_run capture lists successful tool events; not a complete list of attempts or failures.",
+              "items": {
+                "type": "string"
+              },
+              "title": "Tools Used",
+              "type": "array"
+            },
+            "usage": {
+              "additionalProperties": {
+                "type": "integer"
+              },
+              "description": "Captured provider token/accounting values; may be empty.",
+              "title": "Usage",
+              "type": "object"
+            }
+          },
+          "required": [
+            "content"
+          ],
+          "title": "RunResult",
+          "type": "object"
+        }
+      },
+      {
+        "subject": "result.tools_used",
+        "operator": "equals",
+        "expected": [
+          "fixture_succeeded"
+        ]
+      },
+      {
+        "subject": "hook.after_run.tool_events[0].status",
+        "operator": "equals",
+        "expected": "error"
+      },
+      {
+        "subject": "hook.after_run.tool_events[1].status",
+        "operator": "equals",
+        "expected": "ok"
+      },
+      {
+        "subject": "hook.after_run.tool_events",
+        "operator": "schema_valid",
+        "expected": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "name",
+              "status",
+              "detail"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "status": {
+                "enum": [
+                  "ok",
+                  "error"
+                ]
+              },
+              "detail": {
+                "type": "string"
+              }
+            }
+          },
+          "minItems": 2,
+          "maxItems": 2
+        }
+      }
+    ],
+    "sources": [
+      {
+        "path": "delivery/bundle/modules/observability.json",
+        "pointer": "/snapshot_id"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/output/field_semantics/tools_used"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/tool_dispatch/tool_event_schema"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/tool_dispatch/event_observation"
+      },
+      {
+        "path": "sources/nanobot/agent/hook.py",
+        "anchor": "self.tools_used = list(context.tools_used)"
+      },
+      {
+        "path": "sources/nanobot/agent/runner.py",
+        "anchor": "if event.get(\"status\") == \"ok\""
+      },
+      {
+        "path": "delivery/bundle/evidence/final_response.json",
+        "pointer": "/payload_schema"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖及隔离 Python runner 尚需绑定；本目录只声明候选，未运行 Agent，也不据此将执行支持状态改为 supported。",
+      "仅使用隔离临时工作区、内存会话和指定替身；不访问真实模型、网络、MCP、渠道、进程或用户数据。",
+      "将观察路径绑定到真实调用记录、dataclasses.asdict(RunResult) 与 Python hook 上下文；不得向 Agent 注入预期断言作为输入。"
+    ],
+    "contract_keys": [
+      "/output/field_semantics/tools_used",
+      "/tool_dispatch/tool_event_schema",
+      "/tool_dispatch/event_observation"
+    ]
+  },
+  {
+    "key": "v3.observability.model_reinvocation_is_new_call",
+    "target_id": "module.observability",
+    "layer": "modules",
+    "category": "sequence",
+    "title": "模型再次请求同一工具是新的调用而非注册器自动重试",
+    "preconditions": [
+      {
+        "fixture": "isolated_constructed_nanobot",
+        "boundary": "Nanobot.run on an already constructed instance",
+        "workspace": "new isolated temporary directory per case",
+        "session_store": "fresh isolated in-memory or temporary store",
+        "mcp_provider": null,
+        "runtime_selection": "valid local synthetic provider; no external calls",
+        "agent_loop_and_runner": "real implementations; stub only external/provider seams explicitly listed",
+        "model_provider": "deterministic scripted provider at all request/retry/finalization seams",
+        "streaming": false,
+        "hooks": "Python AgentHook recorder; finalize_content preserves supplied plain text",
+        "injection_callback": "always [] unless this case explicitly overrides it",
+        "goal_continuation": "disabled",
+        "tool_registry": "isolated registry with only declared synthetic tools",
+        "commands": "no handled command unless overridden by this case",
+        "policy_guards": "zero previous lookup/violation counts; synthetic tool names and diagnostics contain no policy marker",
+        "persistence_and_response": "local successful save and ordinary non-suppressed outbound unless this case overrides",
+        "reset_before_each_case": true
+      },
+      {
+        "fixture": "runner_configuration",
+        "fail_on_tool_error": false
+      },
+      {
+        "fixture": "synthetic_tool",
+        "name": "fixture_tool",
+        "parameters": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "record_implementation_calls": true,
+        "execute_sequence": [
+          {
+            "returns": {
+              "python_factory": "ToolResult.error",
+              "text": "fixture first failure"
+            }
+          },
+          {
+            "returns": "fixture second success"
+          }
+        ]
+      },
+      {
+        "fixture": "scripted_model_provider",
+        "responses": [
+          {
+            "content": "",
+            "finish_reason": "tool_calls",
+            "tool_calls": [
+              {
+                "id": "fixture-call-1",
+                "name": "fixture_tool",
+                "arguments": {}
+              }
+            ],
+            "usage": {}
+          },
+          {
+            "content": "",
+            "finish_reason": "tool_calls",
+            "tool_calls": [
+              {
+                "id": "fixture-call-2",
+                "name": "fixture_tool",
+                "arguments": {}
+              }
+            ],
+            "usage": {}
+          },
+          {
+            "content": "fixture answer",
+            "finish_reason": "stop",
+            "tool_calls": [],
+            "usage": {}
+          }
+        ],
+        "unexpected_request": "fixture failure"
+      }
+    ],
+    "input": {
+      "operation": "invoke_sdk",
+      "entrypoint": "Nanobot.run",
+      "arguments": {
+        "message": "fixture input",
+        "session_key": "sdk:v3-new-call"
+      }
+    },
+    "checks": [
+      {
+        "subject": "fixture_tool.execute.call_count",
+        "operator": "equals",
+        "expected": 2
+      },
+      {
+        "subject": "hook.after_run.tool_events[0].status",
+        "operator": "equals",
+        "expected": "error"
+      },
+      {
+        "subject": "hook.after_run.tool_events[1].status",
+        "operator": "equals",
+        "expected": "ok"
+      },
+      {
+        "subject": "result.tools_used",
+        "operator": "equals",
+        "expected": [
+          "fixture_tool"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "path": "delivery/bundle/modules/observability.json",
+        "pointer": "/snapshot_id"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/tool_dispatch/retry"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/output/field_semantics/tools_used"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/tool_dispatch/tool_event_schema"
+      },
+      {
+        "path": "sources/nanobot/agent/runner.py",
+        "anchor": "result = await tool.execute(**params)"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖及隔离 Python runner 尚需绑定；本目录只声明候选，未运行 Agent，也不据此将执行支持状态改为 supported。",
+      "仅使用隔离临时工作区、内存会话和指定替身；不访问真实模型、网络、MCP、渠道、进程或用户数据。",
+      "将观察路径绑定到真实调用记录、dataclasses.asdict(RunResult) 与 Python hook 上下文；不得向 Agent 注入预期断言作为输入。"
+    ],
+    "contract_keys": [
+      "/tool_dispatch/retry",
+      "/output/field_semantics/tools_used",
+      "/tool_dispatch/tool_event_schema"
+    ]
+  },
+  {
+    "key": "v3.observability.suppressed_capture_preserved",
+    "target_id": "module.observability",
+    "layer": "modules",
+    "category": "boundary",
+    "title": "SDK None 响应转换保留已有捕获字段",
+    "preconditions": [
+      {
+        "fixture": "sdk_capture_value",
+        "tools_used": [
+          "fixture_succeeded"
+        ],
+        "messages": [
+          {
+            "role": "assistant",
+            "content": "fixture captured text"
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 3
+        },
+        "stop_reason": "completed",
+        "error": null
+      },
+      {
+        "fixture": "response_value",
+        "value": null
+      }
+    ],
+    "input": {
+      "operation": "invoke_module",
+      "entrypoint": "result_from_response",
+      "arguments": {
+        "response": null,
+        "capture": {
+          "fixture_ref": "sdk_capture_value"
+        }
+      }
+    },
+    "checks": [
+      {
+        "subject": "result",
+        "operator": "schema_valid",
+        "expected": {
+          "description": "Native SDK returned value, including error-bearing or command returns. Not returned on raised/cancelled exits; presence does not imply business success.",
+          "properties": {
+            "content": {
+              "description": "Response text, or empty string when no outbound response/content is returned; no non-empty guarantee.",
+              "title": "Content",
+              "type": "string"
+            },
+            "error": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Nullable captured diagnostic text; inspect together with stop_reason and content/history. None does not prove task success or rule out earlier recoverable tool errors. Non-null error can retain an earlier failure after continuation produces a later answer; it is not an exact classification of that final answer.",
+              "title": "Error"
+            },
+            "messages": {
+              "description": "Captured runner message list; may be empty for command short-circuits. Not a guaranteed complete external event trace.",
+              "items": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "title": "Messages",
+              "type": "array"
+            },
+            "metadata": {
+              "additionalProperties": true,
+              "description": "Outbound metadata copied by SDK; arbitrary keys, not a stable business result schema.",
+              "title": "Metadata",
+              "type": "object"
+            },
+            "stop_reason": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Captured runner status, nullable when runner hooks did not execute (e.g. command shortcut). completed can include refusal/content-filter text. After injection-driven continuation, an earlier error status may remain alongside recovered final content.",
+              "title": "Stop Reason"
+            },
+            "tools_used": {
+              "description": "Authoritative after_run capture lists successful tool events; not a complete list of attempts or failures.",
+              "items": {
+                "type": "string"
+              },
+              "title": "Tools Used",
+              "type": "array"
+            },
+            "usage": {
+              "additionalProperties": {
+                "type": "integer"
+              },
+              "description": "Captured provider token/accounting values; may be empty.",
+              "title": "Usage",
+              "type": "object"
+            }
+          },
+          "required": [
+            "content"
+          ],
+          "title": "RunResult",
+          "type": "object"
+        }
+      },
+      {
+        "subject": "result.content",
+        "operator": "equals",
+        "expected": ""
+      },
+      {
+        "subject": "result.tools_used",
+        "operator": "equals",
+        "expected": [
+          "fixture_succeeded"
+        ]
+      },
+      {
+        "subject": "result.messages",
+        "operator": "equals",
+        "expected": [
+          {
+            "role": "assistant",
+            "content": "fixture captured text"
+          }
+        ]
+      },
+      {
+        "subject": "result.usage",
+        "operator": "equals",
+        "expected": {
+          "prompt_tokens": 3
+        }
+      },
+      {
+        "subject": "result.stop_reason",
+        "operator": "equals",
+        "expected": "completed"
+      }
+    ],
+    "sources": [
+      {
+        "path": "delivery/bundle/modules/observability.json",
+        "pointer": "/snapshot_id"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/output/branches/6"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/output/field_semantics/tools_used"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/output/field_semantics/messages"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/output/field_semantics/usage"
+      },
+      {
+        "path": "sources/nanobot/sdk/types.py",
+        "anchor": "tools_used=capture.tools_used,"
+      },
+      {
+        "path": "delivery/bundle/evidence/final_response.json",
+        "pointer": "/payload_schema"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖及隔离 Python runner 尚需绑定；本目录只声明候选，未运行 Agent，也不据此将执行支持状态改为 supported。",
+      "仅使用隔离临时工作区、内存会话和指定替身；不访问真实模型、网络、MCP、渠道、进程或用户数据。",
+      "将观察路径绑定到真实调用记录、dataclasses.asdict(RunResult) 与 Python hook 上下文；不得向 Agent 注入预期断言作为输入。"
+    ],
+    "contract_keys": [
+      "/output/branches/6",
+      "/output/field_semantics/tools_used",
+      "/output/field_semantics/messages",
+      "/output/field_semantics/usage"
+    ]
+  },
+  {
+    "key": "v3.observability.recovery_status_capture",
+    "target_id": "module.observability",
+    "layer": "modules",
+    "category": "sequence",
+    "title": "权威 after_run 捕获不覆盖恢复后遗留的错误状态",
+    "preconditions": [
+      {
+        "fixture": "fresh_SDKCaptureHook"
+      },
+      {
+        "fixture": "AgentRunHookContext",
+        "tools_used": [],
+        "messages": [
+          {
+            "role": "assistant",
+            "content": "fixture recovered final"
+          }
+        ],
+        "usage": {},
+        "stop_reason": "error",
+        "error": "fixture prior diagnostic",
+        "tool_events": [],
+        "had_injections": true,
+        "final_content": "fixture recovered final",
+        "exception": null
+      }
+    ],
+    "input": {
+      "operation": "invoke_module",
+      "entrypoint": "SDKCaptureHook.after_run",
+      "arguments": {
+        "context": {
+          "fixture_ref": "AgentRunHookContext"
+        }
+      }
+    },
+    "checks": [
+      {
+        "subject": "capture.stop_reason",
+        "operator": "equals",
+        "expected": "error"
+      },
+      {
+        "subject": "capture.error",
+        "operator": "equals",
+        "expected": "fixture prior diagnostic"
+      },
+      {
+        "subject": "capture.messages",
+        "operator": "equals",
+        "expected": [
+          {
+            "role": "assistant",
+            "content": "fixture recovered final"
+          }
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "path": "delivery/bundle/modules/observability.json",
+        "pointer": "/snapshot_id"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/output/status_may_retain_prior_error_after_continuation"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/output/field_semantics/error"
+      },
+      {
+        "path": "execution_contract.json",
+        "pointer": "/output/field_semantics/stop_reason"
+      },
+      {
+        "path": "sources/nanobot/agent/hook.py",
+        "anchor": "self.stop_reason = context.stop_reason"
+      }
+    ],
+    "requirements": [
+      "完整 nanobot 0.3.0 依赖及隔离 Python runner 尚需绑定；本目录只声明候选，未运行 Agent，也不据此将执行支持状态改为 supported。",
+      "仅使用隔离临时工作区、内存会话和指定替身；不访问真实模型、网络、MCP、渠道、进程或用户数据。",
+      "将观察路径绑定到真实调用记录、dataclasses.asdict(RunResult) 与 Python hook 上下文；不得向 Agent 注入预期断言作为输入。"
+    ],
+    "contract_keys": [
+      "/output/status_may_retain_prior_error_after_continuation",
+      "/output/field_semantics/error",
+      "/output/field_semantics/stop_reason"
+    ]
+  }
+]

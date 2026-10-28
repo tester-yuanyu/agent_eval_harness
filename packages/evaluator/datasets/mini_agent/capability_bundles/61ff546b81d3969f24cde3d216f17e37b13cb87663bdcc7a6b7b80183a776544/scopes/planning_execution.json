@@ -1,0 +1,114 @@
+{
+  "allowed_module_ids": [
+    "module.tool_loop",
+    "module.tool_registry",
+    "module.execution_guard"
+  ],
+  "boundary_refs": [
+    {
+      "contract_version": "mini-agent-capability-contract-v3",
+      "path": "boundaries/planning_execution.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "boundary.planning_execution",
+      "snapshot_sha256": "67d6a1fa1b505ac613f5d33addcdc95b7117e8f5b60886a1053632324edc2352",
+      "snapshot_type": "boundary"
+    }
+  ],
+  "completion_condition": "The entrypoint is reached, every mandatory requirement is resolved, the stop boundary is reached, and required Evidence is observable.",
+  "contract_version": "mini-agent-capability-contract-v3",
+  "description": "Reusable planning_execution evaluation range.",
+  "entrypoint": "tool_requested",
+  "evidence_refs": [
+    {
+      "contract_version": "mini-agent-capability-contract-v3",
+      "path": "evidence/tool_trace.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "evidence.tool_trace",
+      "snapshot_sha256": "285f5a8619994f631a4b6063dbc5cdb3d0ea45c5e9ba08b7729395b4c31040c3",
+      "snapshot_type": "evidence"
+    },
+    {
+      "contract_version": "mini-agent-capability-contract-v3",
+      "path": "evidence/safety_recovery_event.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "evidence.safety_recovery_event",
+      "snapshot_sha256": "5a5802f798a16ba038c274c6e486117c4e3e2d91bb83e837a14ae1079dbd4e6b",
+      "snapshot_type": "evidence"
+    }
+  ],
+  "inputs": [
+    "intent_result",
+    "selected_tool"
+  ],
+  "module_refs": [
+    {
+      "contract_version": "tool-loop-module-v3",
+      "path": "modules/tool_loop.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "module.tool_loop",
+      "snapshot_sha256": "7a5d59bd6db681ac79234591eb51255f964a03616fd7f4c97dd4d754191d89e3",
+      "snapshot_type": "module"
+    },
+    {
+      "contract_version": "tool-registry-module-v3",
+      "path": "modules/tool_registry.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "module.tool_registry",
+      "snapshot_sha256": "750583a3a0636478c336b375dc4d68672ea817c00588ff6ed26b86f5f5e347cf",
+      "snapshot_type": "module"
+    },
+    {
+      "contract_version": "execution-guard-module-v3",
+      "path": "modules/execution_guard.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "module.execution_guard",
+      "snapshot_sha256": "aff59eb854c23b783ad62aae4f49900de8c644e0b39215b8b375e1b902b9b37a",
+      "snapshot_type": "module"
+    }
+  ],
+  "outputs": [
+    "tool_terminal_result"
+  ],
+  "prohibited_module_ids": [
+    "module.agent_orchestrator",
+    "module.intent_router",
+    "module.model_gateway",
+    "module.observability"
+  ],
+  "requirements": [
+    {
+      "capability_key": "execution.bounded_tool_loop",
+      "evidence_ids": [
+        "evidence.tool_trace"
+      ],
+      "mandatory": true,
+      "provider": {
+        "role": "snapshot",
+        "snapshot_id": "module.tool_loop"
+      },
+      "requirement_id": "bounded_tool_loop"
+    },
+    {
+      "capability_key": "tool.registered_execution",
+      "evidence_ids": [
+        "evidence.tool_trace"
+      ],
+      "mandatory": true,
+      "provider": {
+        "role": "selected_tool",
+        "snapshot_id": null
+      },
+      "requirement_id": "selected_tool_execution"
+    }
+  ],
+  "scope_id": "planning_execution",
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "scope.planning_execution",
+  "snapshot_sha256": "fbd6ae1a3e91b2bcf11fe54fb41eef753fab5ef81b4e6783465505833d96b2c6",
+  "snapshot_type": "scope",
+  "source_hashes": {
+    "catalog_definition_sha256": "201d33bf8d57f154e6506a41e122392a52a495684592abd26b6a6167dc36656d"
+  },
+  "stop_boundary": "tool_terminal",
+  "unresolved_behavior": "A missing or undeclared capability remains unknown; the Scope does not infer support."
+}

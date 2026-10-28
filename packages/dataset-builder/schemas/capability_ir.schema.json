@@ -1,0 +1,527 @@
+{
+  "$defs": {
+    "CapabilityClaimIR": {
+      "additionalProperties": false,
+      "properties": {
+        "capability_key": {
+          "title": "Capability Key",
+          "type": "string"
+        },
+        "support_status": {
+          "$ref": "#/$defs/SupportStatus"
+        },
+        "evidence_ids": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Ids",
+          "type": "array"
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reason"
+        },
+        "source_snapshot_id": {
+          "title": "Source Snapshot Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "capability_key",
+        "support_status",
+        "source_snapshot_id"
+      ],
+      "title": "CapabilityClaimIR",
+      "type": "object"
+    },
+    "CapabilitySelection": {
+      "additionalProperties": false,
+      "properties": {
+        "scope_or_chain_id": {
+          "minLength": 1,
+          "title": "Scope Or Chain Id",
+          "type": "string"
+        },
+        "intent_id": {
+          "minLength": 1,
+          "title": "Intent Id",
+          "type": "string"
+        },
+        "tool_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tool Id"
+        }
+      },
+      "required": [
+        "scope_or_chain_id",
+        "intent_id"
+      ],
+      "title": "CapabilitySelection",
+      "type": "object"
+    },
+    "EvidenceIR": {
+      "additionalProperties": false,
+      "properties": {
+        "snapshot_id": {
+          "title": "Snapshot Id",
+          "type": "string"
+        },
+        "availability": {
+          "$ref": "#/$defs/SupportStatus"
+        },
+        "observation_interface": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Observation Interface"
+        },
+        "payload_schema": {
+          "additionalProperties": true,
+          "title": "Payload Schema",
+          "type": "object"
+        },
+        "producer_module_ids": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Producer Module Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "snapshot_id",
+        "availability"
+      ],
+      "title": "EvidenceIR",
+      "type": "object"
+    },
+    "RequirementResolutionIR": {
+      "additionalProperties": false,
+      "properties": {
+        "requirement_id": {
+          "title": "Requirement Id",
+          "type": "string"
+        },
+        "capability_key": {
+          "title": "Capability Key",
+          "type": "string"
+        },
+        "mandatory": {
+          "title": "Mandatory",
+          "type": "boolean"
+        },
+        "provider_role": {
+          "title": "Provider Role",
+          "type": "string"
+        },
+        "provider_snapshot_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Provider Snapshot Id"
+        },
+        "support_status": {
+          "$ref": "#/$defs/SupportStatus"
+        },
+        "evidence_ids": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Ids",
+          "type": "array"
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reason"
+        }
+      },
+      "required": [
+        "requirement_id",
+        "capability_key",
+        "mandatory",
+        "provider_role",
+        "provider_snapshot_id",
+        "support_status"
+      ],
+      "title": "RequirementResolutionIR",
+      "type": "object"
+    },
+    "SelectedIntentIR": {
+      "additionalProperties": false,
+      "properties": {
+        "snapshot_id": {
+          "title": "Snapshot Id",
+          "type": "string"
+        },
+        "capability_id": {
+          "title": "Capability Id",
+          "type": "string"
+        },
+        "module_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Module Id"
+        },
+        "required_tool_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Required Tool Name"
+        }
+      },
+      "required": [
+        "snapshot_id",
+        "capability_id"
+      ],
+      "title": "SelectedIntentIR",
+      "type": "object"
+    },
+    "SelectedNodeIR": {
+      "additionalProperties": false,
+      "properties": {
+        "snapshot_id": {
+          "title": "Snapshot Id",
+          "type": "string"
+        },
+        "snapshot_type": {
+          "enum": [
+            "scope",
+            "chain"
+          ],
+          "title": "Snapshot Type",
+          "type": "string"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Description"
+        },
+        "completion_condition": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Completion Condition"
+        },
+        "boundary_ids": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Boundary Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "snapshot_id",
+        "snapshot_type"
+      ],
+      "title": "SelectedNodeIR",
+      "type": "object"
+    },
+    "SelectedToolIR": {
+      "additionalProperties": false,
+      "properties": {
+        "snapshot_id": {
+          "title": "Snapshot Id",
+          "type": "string"
+        },
+        "tool_name": {
+          "title": "Tool Name",
+          "type": "string"
+        },
+        "registered": {
+          "title": "Registered",
+          "type": "boolean"
+        },
+        "function_schema": {
+          "additionalProperties": true,
+          "title": "Function Schema",
+          "type": "object"
+        }
+      },
+      "required": [
+        "snapshot_id",
+        "tool_name",
+        "registered",
+        "function_schema"
+      ],
+      "title": "SelectedToolIR",
+      "type": "object"
+    },
+    "SourceArtifactBindingIR": {
+      "additionalProperties": false,
+      "properties": {
+        "snapshot_id": {
+          "title": "Snapshot Id",
+          "type": "string"
+        },
+        "snapshot_type": {
+          "title": "Snapshot Type",
+          "type": "string"
+        },
+        "snapshot_format_version": {
+          "title": "Snapshot Format Version",
+          "type": "string"
+        },
+        "contract_version": {
+          "title": "Contract Version",
+          "type": "string"
+        },
+        "relative_path": {
+          "title": "Relative Path",
+          "type": "string"
+        },
+        "snapshot_sha256": {
+          "title": "Snapshot Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "snapshot_id",
+        "snapshot_type",
+        "snapshot_format_version",
+        "contract_version",
+        "relative_path",
+        "snapshot_sha256"
+      ],
+      "title": "SourceArtifactBindingIR",
+      "type": "object"
+    },
+    "SupportStatus": {
+      "enum": [
+        "supported",
+        "unknown",
+        "unsupported"
+      ],
+      "title": "SupportStatus",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "source_protocol_id": {
+      "title": "Source Protocol Id",
+      "type": "string"
+    },
+    "source_protocol_version": {
+      "title": "Source Protocol Version",
+      "type": "string"
+    },
+    "profile_id": {
+      "title": "Profile Id",
+      "type": "string"
+    },
+    "profile_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Profile Sha256",
+      "type": "string"
+    },
+    "adapter_protocol": {
+      "title": "Adapter Protocol",
+      "type": "string"
+    },
+    "adapter_version": {
+      "title": "Adapter Version",
+      "type": "string"
+    },
+    "agent_snapshot_id": {
+      "title": "Agent Snapshot Id",
+      "type": "string"
+    },
+    "agent_snapshot_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Agent Snapshot Sha256",
+      "type": "string"
+    },
+    "capability_bundle_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Capability Bundle Sha256",
+      "type": "string"
+    },
+    "selection": {
+      "$ref": "#/$defs/CapabilitySelection"
+    },
+    "selected_node": {
+      "$ref": "#/$defs/SelectedNodeIR"
+    },
+    "intent": {
+      "$ref": "#/$defs/SelectedIntentIR"
+    },
+    "tool": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/SelectedToolIR"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "support_status": {
+      "$ref": "#/$defs/SupportStatus"
+    },
+    "requirements": {
+      "items": {
+        "$ref": "#/$defs/RequirementResolutionIR"
+      },
+      "title": "Requirements",
+      "type": "array"
+    },
+    "claims": {
+      "items": {
+        "$ref": "#/$defs/CapabilityClaimIR"
+      },
+      "title": "Claims",
+      "type": "array"
+    },
+    "evidence": {
+      "items": {
+        "$ref": "#/$defs/EvidenceIR"
+      },
+      "title": "Evidence",
+      "type": "array"
+    },
+    "parameters_schema": {
+      "additionalProperties": true,
+      "title": "Parameters Schema",
+      "type": "object"
+    },
+    "decision_rules": {
+      "additionalProperties": true,
+      "title": "Decision Rules",
+      "type": "object"
+    },
+    "parameter_semantics": {
+      "additionalProperties": true,
+      "title": "Parameter Semantics",
+      "type": "object"
+    },
+    "semantic_rules": {
+      "additionalProperties": true,
+      "title": "Semantic Rules",
+      "type": "object"
+    },
+    "source_artifacts": {
+      "items": {
+        "$ref": "#/$defs/SourceArtifactBindingIR"
+      },
+      "title": "Source Artifacts",
+      "type": "array"
+    },
+    "diagnostics": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Diagnostics",
+      "type": "array"
+    },
+    "unmapped_facts": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Unmapped Facts",
+      "type": "array"
+    },
+    "canonical_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Canonical Sha256",
+      "type": "string"
+    }
+  },
+  "required": [
+    "source_protocol_id",
+    "source_protocol_version",
+    "profile_id",
+    "profile_sha256",
+    "adapter_protocol",
+    "adapter_version",
+    "agent_snapshot_id",
+    "agent_snapshot_sha256",
+    "capability_bundle_sha256",
+    "selection",
+    "selected_node",
+    "intent",
+    "support_status",
+    "requirements",
+    "claims",
+    "evidence",
+    "parameters_schema",
+    "source_artifacts",
+    "canonical_sha256"
+  ],
+  "title": "CapabilityIR",
+  "type": "object"
+}

@@ -1,0 +1,62 @@
+{
+  "metadata": {
+    "dataset_version": "fixture-json-document-v1",
+    "lifecycle_state": "FROZEN",
+    "provider_id": "fixture_provider",
+    "execution_profiles": {
+      "legacy": {
+        "allowed_tools": []
+      }
+    }
+  },
+  "cases": [
+    {
+      "schema_version": "1.0",
+      "case_id": "MODULE-1",
+      "task_id": "intent-routing",
+      "scenario_type": "normal",
+      "test_scope": "module",
+      "target": "intent_router",
+      "execution": {
+        "user_input": "query fixture",
+        "user_responses": [],
+        "tool_profile": "legacy",
+        "allowed_tools": null,
+        "fault_injection": {},
+        "max_steps": 4,
+        "timeout_seconds": 5
+      },
+      "oracle": {
+        "expected_module_output": {
+          "intent": "query_information",
+          "status": "READY",
+          "next_action": "CALL_TOOL",
+          "parameters": {
+            "resource_type": "fixture",
+            "environment": "test"
+          },
+          "missing_parameters": [],
+          "reason": "fixture"
+        },
+        "expected_agent_status": null,
+        "expected_tool_calls": [],
+        "forbidden_tools": [],
+        "goal_state": null,
+        "process_constraints": {},
+        "expected_response": null,
+        "evaluation": {
+          "checks": [
+            {
+              "name": "output_schema_valid",
+              "weight": 1,
+              "critical": true,
+              "config": {}
+            }
+          ]
+        }
+      },
+      "labels": ["offline", "module"],
+      "cleanup": null
+    }
+  ]
+}

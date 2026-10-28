@@ -1,0 +1,148 @@
+{
+  "$defs": {
+    "SnapshotReference": {
+      "additionalProperties": false,
+      "properties": {
+        "contract_version": {
+          "minLength": 1,
+          "title": "Contract Version",
+          "type": "string"
+        },
+        "path": {
+          "minLength": 1,
+          "title": "Path",
+          "type": "string"
+        },
+        "snapshot_format_version": {
+          "const": "2.0",
+          "title": "Snapshot Format Version",
+          "type": "string"
+        },
+        "snapshot_id": {
+          "pattern": "^(agent|module|intent|tool)\\.[a-z][a-z0-9_]*$",
+          "title": "Snapshot Id",
+          "type": "string"
+        },
+        "snapshot_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Snapshot Sha256",
+          "type": "string"
+        },
+        "snapshot_type": {
+          "$ref": "#/$defs/SnapshotType"
+        }
+      },
+      "required": [
+        "snapshot_id",
+        "snapshot_type",
+        "snapshot_format_version",
+        "contract_version",
+        "snapshot_sha256",
+        "path"
+      ],
+      "title": "SnapshotReference",
+      "type": "object"
+    },
+    "SnapshotType": {
+      "enum": [
+        "agent",
+        "module",
+        "intent",
+        "tool"
+      ],
+      "title": "SnapshotType",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "capability_id": {
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "title": "Capability Id",
+      "type": "string"
+    },
+    "contract_version": {
+      "minLength": 1,
+      "title": "Contract Version",
+      "type": "string"
+    },
+    "decision_rules": {
+      "additionalProperties": true,
+      "title": "Decision Rules",
+      "type": "object"
+    },
+    "missing_parameters": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Missing Parameters",
+      "type": "array"
+    },
+    "module_id": {
+      "pattern": "^module\\.[a-z][a-z0-9_]*$",
+      "title": "Module Id",
+      "type": "string"
+    },
+    "parameters_schema": {
+      "additionalProperties": true,
+      "title": "Parameters Schema",
+      "type": "object"
+    },
+    "semantic_rules": {
+      "additionalProperties": true,
+      "title": "Semantic Rules",
+      "type": "object"
+    },
+    "snapshot_format_version": {
+      "const": "2.0",
+      "title": "Snapshot Format Version",
+      "type": "string"
+    },
+    "snapshot_id": {
+      "pattern": "^(agent|module|intent|tool)\\.[a-z][a-z0-9_]*$",
+      "title": "Snapshot Id",
+      "type": "string"
+    },
+    "snapshot_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Snapshot Sha256",
+      "type": "string"
+    },
+    "snapshot_type": {
+      "const": "intent",
+      "title": "Snapshot Type",
+      "type": "string"
+    },
+    "source_hashes": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Source Hashes",
+      "type": "object"
+    },
+    "tool_refs": {
+      "items": {
+        "$ref": "#/$defs/SnapshotReference"
+      },
+      "title": "Tool Refs",
+      "type": "array"
+    }
+  },
+  "required": [
+    "snapshot_id",
+    "snapshot_type",
+    "snapshot_format_version",
+    "contract_version",
+    "source_hashes",
+    "snapshot_sha256",
+    "capability_id",
+    "module_id",
+    "parameters_schema",
+    "missing_parameters",
+    "decision_rules",
+    "semantic_rules",
+    "tool_refs"
+  ],
+  "title": "IntentSnapshotV2",
+  "type": "object"
+}

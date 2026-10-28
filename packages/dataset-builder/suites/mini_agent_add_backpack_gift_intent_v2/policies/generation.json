@@ -1,0 +1,55 @@
+{
+  "policy_kind": "generation",
+  "policy_version": "1.0",
+  "schema_version": "1.0",
+  "config": {
+    "candidate_protocol": {
+      "allowed_intents": ["add_backpack_gift"],
+      "allowed_statuses": ["NEED_CONFIRMATION", "NEED_CLARIFICATION"],
+      "allowed_next_actions": ["ASK_CONFIRMATION", "ASK_USER"],
+      "allowed_scenario_types": ["normal", "valid_boundary", "invalid_parameter", "missing_parameter", "multi_condition", "expression_variant"],
+      "allowed_difficulties": ["easy", "medium"],
+      "rule_refs_required": true
+    },
+    "compilation": {
+      "case_id_prefix": "MINI-ABGIFT-",
+      "case_id_width": 3,
+      "task_ids": {"add_backpack_gift": "intent-add-backpack-gift"},
+      "scenario_type_map": {},
+      "labels": [
+        {"source": "literal", "value": "mini_agent"},
+        {"source": "literal", "value": "module"},
+        {"source": "literal", "value": "intent_understanding"},
+        {"source": "literal", "value": "shadow"},
+        {"source": "literal", "value": "add_backpack_gift"},
+        {"source": "literal", "value": "add_gift_to_backpack"},
+        {"source": "snapshot", "prefix": "contract:", "snapshot_id": "intent.add_backpack_gift", "pointer": "/contract_version"},
+        {"source": "literal", "value": "bootstrap_generated"},
+        {"source": "slot", "field": "slot_id", "prefix": "slot:"},
+        {"source": "rule_refs", "prefix": "rule:"},
+        {"source": "candidate", "field": "expected_status"},
+        {"source": "slot", "field": "category"},
+        {"source": "candidate", "field": "difficulty"},
+        {"source": "coverage_tags"}
+      ],
+      "execution": {
+        "tool_profile": "shadow_intent",
+        "allowed_tools": [],
+        "fault_injection": {},
+        "max_steps": 4,
+        "timeout_seconds": 30.0
+      },
+      "user_responses_by_intent": {},
+      "cleanup_by_intent": {},
+      "oracle_reason": "预期决策仅由 add_backpack_gift 能力事实与覆盖约束定义；写操作在意图阶段只请求确认，不执行工具。",
+      "assertions": [
+        {"name": "output_schema_valid", "weight": 10, "critical": true, "config": {}},
+        {"name": "intent_match", "weight": 30, "critical": true, "config": {}},
+        {"name": "status_match", "weight": 20, "critical": true, "config": {}},
+        {"name": "next_action_match", "weight": 10, "critical": true, "config": {}},
+        {"name": "params_match", "weight": 20, "critical": true, "config": {}},
+        {"name": "missing_params_match", "weight": 10, "critical": true, "config": {}}
+      ]
+    }
+  }
+}

@@ -1,0 +1,20 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.venv/
+.env
+.env.*
+!.env.example
+
+# Preserve only the deliberate offline bootstrap run in this repository.
+workspaces/generation_run_*/
+!workspaces/generation_run_offline_bootstrap/
+!workspaces/generation_run_offline_bootstrap/**
+
+# Local installation metadata and platform cache.
+*.egg-info/
+.DS_Store
+
+# Raw provider request/response logs stay local; datasets and reports are versioned.
+workspaces/**/model_calls.jsonl

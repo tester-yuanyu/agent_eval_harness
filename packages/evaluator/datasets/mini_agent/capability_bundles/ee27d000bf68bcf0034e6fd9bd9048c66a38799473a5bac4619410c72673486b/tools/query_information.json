@@ -1,0 +1,168 @@
+{
+  "contract_version": "tool-query_information-contract-v2",
+  "description": "Query prepared mock resources.",
+  "empty_result_behavior": "SUPPORTED_BY_FAULT_MODE_AND_NORMAL_ZERO_COUNT",
+  "fault_modes": [
+    "normal",
+    "empty_result",
+    "error",
+    "timeout"
+  ],
+  "function_schema": {
+    "description": "Query prepared mock resources.",
+    "name": "query_information",
+    "parameters": {
+      "additionalProperties": false,
+      "description": "Strict arguments for the read-only information query.",
+      "properties": {
+        "environment": {
+          "minLength": 1,
+          "title": "Environment",
+          "type": "string"
+        },
+        "resource_type": {
+          "minLength": 1,
+          "title": "Resource Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "resource_type",
+        "environment"
+      ],
+      "title": "QueryInformationArguments",
+      "type": "object"
+    },
+    "strict": true,
+    "type": "function"
+  },
+  "idempotency_rules": {
+    "mode": "NOT_APPLICABLE"
+  },
+  "parameter_rules": {
+    "lookup": "EXACT_RESOURCE_TYPE_AND_ENVIRONMENT"
+  },
+  "partial_success_behavior": "UNSUPPORTED",
+  "permission_requirements": [
+    "REGISTERED_TOOL_AND_RUN_ALLOW_LIST"
+  ],
+  "rate_limit_behavior": "UNSUPPORTED_NO_SILENT_RETRY",
+  "requires_confirmation": false,
+  "result_codes": [
+    "OK",
+    "EMPTY_RESULT"
+  ],
+  "result_contracts": {
+    "EMPTY_RESULT": {
+      "data_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "count": {
+            "const": 0,
+            "type": "integer"
+          },
+          "fault_mode": {
+            "const": "empty_result",
+            "type": "string"
+          },
+          "resources": {
+            "maxItems": 0,
+            "type": "array"
+          }
+        },
+        "required": [
+          "count",
+          "resources",
+          "fault_mode"
+        ],
+        "type": "object"
+      },
+      "terminal_status": "success"
+    },
+    "OK": {
+      "data_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "count": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "resources": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "count",
+          "resources"
+        ],
+        "type": "object"
+      },
+      "terminal_status": "success"
+    }
+  },
+  "result_schema": {
+    "additionalProperties": false,
+    "description": "Uniform return protocol shared by all mock tools.",
+    "properties": {
+      "code": {
+        "title": "Code",
+        "type": "string"
+      },
+      "data": {
+        "additionalProperties": true,
+        "title": "Data",
+        "type": "object"
+      },
+      "message": {
+        "title": "Message",
+        "type": "string"
+      },
+      "success": {
+        "title": "Success",
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "success",
+      "code",
+      "message",
+      "data"
+    ],
+    "title": "ToolResult",
+    "type": "object"
+  },
+  "risk_level": "low",
+  "side_effects": [],
+  "snapshot_format_version": "2.0",
+  "snapshot_id": "tool.query_information",
+  "snapshot_sha256": "842e332e6b0fb287cc02e19a766992982ec5f5de2a069dd28dd94154632fbccc",
+  "snapshot_type": "tool",
+  "source_hashes": {
+    "function_schema_sha256": "4b4e9976008f117c46503ab0809f1e732af4acc8762ba33f0b5f1f0e54cd1624",
+    "parameter_rules_sha256": "36e58ef5f4623559d3ead7a5d8667f245c94df155cabf6e67a63843f2ac9cde2",
+    "result_contracts_sha256": "1547bbd00b0c5473f0ef694e7beb4a439a29e4f36ffe60f7929e19f21c32aa96",
+    "result_schema_sha256": "b04c3137b6db836a69fffa0ca2a646e2e5c4149d41bbacab77477767e18a865b"
+  },
+  "terminal_behaviors": {
+    "business_failure": "RETURN_TOOL_RESULT_WITH_SUCCESS_FALSE",
+    "error": "RAISE_EXPLICIT_ERROR",
+    "success": "RETURN_TOOL_RESULT",
+    "timeout": "RAISE_EXPLICIT_TIMEOUT"
+  },
+  "timeout_behavior": "EXPLICIT_TIMEOUT_NO_AUTOMATIC_RETRY",
+  "tool_name": "query_information",
+  "tool_type": "read",
+  "tool_version": "mock-tools-v1",
+  "trace_event_types": [
+    "tool_requested",
+    "tool_started",
+    "tool_succeeded",
+    "tool_failed",
+    "tool_timeout",
+    "permission_denied"
+  ]
+}

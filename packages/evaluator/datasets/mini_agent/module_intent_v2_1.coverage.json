@@ -1,0 +1,29 @@
+{
+  "name": "coverage",
+  "passed": true,
+  "issues": [],
+  "details": {
+    "case_count": 15,
+    "intent_status_distribution": {
+      "add_backpack_gift/NEED_CLARIFICATION": 1,
+      "add_backpack_gift/NEED_CONFIRMATION": 1,
+      "query_custom_gift_record/NEED_CLARIFICATION": 1,
+      "query_custom_gift_record/READY": 1,
+      "query_gift/NEED_CLARIFICATION": 1,
+      "query_gift/READY": 2,
+      "query_pool/NEED_CLARIFICATION": 1,
+      "query_pool/READY": 1,
+      "query_user/NEED_CLARIFICATION": 1,
+      "query_user/READY": 2,
+      "unsupported/REJECTED": 1,
+      "update_pool_weight/NEED_CLARIFICATION": 1,
+      "update_pool_weight/NEED_CONFIRMATION": 1
+    },
+    "status_distribution": {
+      "NEED_CLARIFICATION": 6,
+      "NEED_CONFIRMATION": 2,
+      "READY": 6,
+      "REJECTED": 1
+    }
+  }
+}

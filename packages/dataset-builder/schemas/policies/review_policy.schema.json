@@ -1,0 +1,62 @@
+{
+  "$defs": {
+    "ReviewPolicyConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "locale": {
+          "minLength": 1,
+          "title": "Locale",
+          "type": "string"
+        },
+        "require_all_cases": {
+          "title": "Require All Cases",
+          "type": "boolean"
+        },
+        "required_fields": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Required Fields",
+          "type": "array"
+        }
+      },
+      "required": [
+        "locale",
+        "require_all_cases",
+        "required_fields"
+      ],
+      "title": "ReviewPolicyConfig",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "policy_kind": {
+      "const": "review",
+      "title": "Policy Kind",
+      "type": "string"
+    },
+    "policy_version": {
+      "const": "1.0",
+      "title": "Policy Version",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "config": {
+      "$ref": "#/$defs/ReviewPolicyConfig"
+    }
+  },
+  "required": [
+    "policy_kind",
+    "policy_version",
+    "schema_version",
+    "config"
+  ],
+  "title": "ReviewPolicy",
+  "type": "object"
+}

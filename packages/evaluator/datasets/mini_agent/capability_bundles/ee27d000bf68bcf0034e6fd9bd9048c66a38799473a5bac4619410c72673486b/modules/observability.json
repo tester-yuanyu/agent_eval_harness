@@ -1,0 +1,291 @@
+{
+  "component_versions": {
+    "fault_injection_contract": "fault-injection-v1",
+    "trace_contract": "trace-v1"
+  },
+  "context_rules": [
+    "TRACE_SCOPED_TO_RUN",
+    "FAULT_SCOPED_TO_RUN"
+  ],
+  "contract_version": "observability-module-v2",
+  "execution_boundary": "Trace records public execution events and fault outcomes only; model chain-of-thought is excluded.",
+  "execution_boundary_ids": [
+    "end_to_end",
+    "guarded_write",
+    "intent_router_only",
+    "tool_chain"
+  ],
+  "input_schema": {
+    "$defs": {
+      "ToolMode": {
+        "description": "Supported deterministic execution modes for mock tools.",
+        "enum": [
+          "normal",
+          "empty_result",
+          "error",
+          "timeout",
+          "commit_then_timeout"
+        ],
+        "title": "ToolMode",
+        "type": "string"
+      }
+    },
+    "additionalProperties": false,
+    "description": "Fault modes supplied to one Agent run, never to the model.",
+    "properties": {
+      "add_gift_to_backpack": {
+        "$ref": "#/$defs/ToolMode",
+        "default": "normal"
+      },
+      "prepare_resource": {
+        "$ref": "#/$defs/ToolMode",
+        "default": "normal"
+      },
+      "query_gift_info": {
+        "$ref": "#/$defs/ToolMode",
+        "default": "normal"
+      },
+      "query_information": {
+        "$ref": "#/$defs/ToolMode",
+        "default": "normal"
+      },
+      "query_pool_config": {
+        "$ref": "#/$defs/ToolMode",
+        "default": "normal"
+      },
+      "query_user_info": {
+        "$ref": "#/$defs/ToolMode",
+        "default": "normal"
+      }
+    },
+    "title": "FaultInjectionConfig",
+    "type": "object"
+  },
+  "intent_refs": [],
+  "layers": {
+    "context": {
+      "downstream_dependencies": [],
+      "entrypoints": [
+        "TraceCollector"
+      ],
+      "evidence": [
+        "tool_trace"
+      ],
+      "failure_modes": [
+        "INVALID_TRACE_EVENT"
+      ],
+      "formal_rules": [
+        "RUN_SCOPED_TRACE"
+      ],
+      "inputs": [
+        "run_id",
+        "session_id"
+      ],
+      "outputs": [
+        "trace_context"
+      ],
+      "reason": null,
+      "related_tools": [],
+      "state_reads": [
+        "run_id",
+        "session_id"
+      ],
+      "state_writes": [
+        "trace_events"
+      ],
+      "stop_nodes": [
+        "trace_exported"
+      ],
+      "support_status": "supported",
+      "upstream_dependencies": []
+    },
+    "planning_execution": {
+      "downstream_dependencies": [],
+      "entrypoints": [],
+      "evidence": [],
+      "failure_modes": [
+        "UNSUPPORTED_TOOL_MODE"
+      ],
+      "formal_rules": [],
+      "inputs": [],
+      "outputs": [],
+      "reason": "Observability reports execution and does not plan tool calls.",
+      "related_tools": [],
+      "state_reads": [],
+      "state_writes": [],
+      "stop_nodes": [],
+      "support_status": "unsupported",
+      "upstream_dependencies": []
+    },
+    "result": {
+      "downstream_dependencies": [],
+      "entrypoints": [
+        "TraceCollector.export"
+      ],
+      "evidence": [
+        "tool_trace"
+      ],
+      "failure_modes": [
+        "INVALID_TRACE_EVENT"
+      ],
+      "formal_rules": [
+        "NO_CHAIN_OF_THOUGHT_CAPTURE"
+      ],
+      "inputs": [
+        "public_execution_events"
+      ],
+      "outputs": [
+        "trace_event_list"
+      ],
+      "reason": null,
+      "related_tools": [],
+      "state_reads": [
+        "trace_events"
+      ],
+      "state_writes": [],
+      "stop_nodes": [
+        "immutable_trace_copy_returned"
+      ],
+      "support_status": "supported",
+      "upstream_dependencies": []
+    },
+    "safety_recovery": {
+      "downstream_dependencies": [],
+      "entrypoints": [
+        "invoke_with_fault"
+      ],
+      "evidence": [
+        "tool_trace"
+      ],
+      "failure_modes": [
+        "INJECTED_ERROR",
+        "INJECTED_TIMEOUT",
+        "STATE_VERIFICATION_FAILED"
+      ],
+      "formal_rules": [
+        "NO_AUTOMATIC_RETRY",
+        "VERIFY_STATE_AFTER_COMMIT_THEN_TIMEOUT"
+      ],
+      "inputs": [
+        "fault_config",
+        "tool_invocation"
+      ],
+      "outputs": [
+        "fault_outcome_and_state_verification"
+      ],
+      "reason": null,
+      "related_tools": [],
+      "state_reads": [],
+      "state_writes": [],
+      "stop_nodes": [
+        "normal_error_timeout_or_verified_commit"
+      ],
+      "support_status": "supported",
+      "upstream_dependencies": []
+    },
+    "understanding": {
+      "downstream_dependencies": [],
+      "entrypoints": [],
+      "evidence": [],
+      "failure_modes": [],
+      "formal_rules": [],
+      "inputs": [],
+      "outputs": [],
+      "reason": "Observability records facts and does not interpret intent.",
+      "related_tools": [],
+      "state_reads": [],
+      "state_writes": [],
+      "stop_nodes": [],
+      "support_status": "unsupported",
+      "upstream_dependencies": []
+    }
+  },
+  "mockable_dependencies": [
+    "fault_injector",
+    "clock"
+  ],
+  "module_id": "observability",
+  "module_refs": [],
+  "output_schema": {
+    "items": {
+      "additionalProperties": false,
+      "description": "One observable execution event.",
+      "properties": {
+        "event_id": {
+          "title": "Event Id",
+          "type": "string"
+        },
+        "event_type": {
+          "title": "Event Type",
+          "type": "string"
+        },
+        "payload": {
+          "additionalProperties": true,
+          "title": "Payload",
+          "type": "object"
+        },
+        "run_id": {
+          "title": "Run Id",
+          "type": "string"
+        },
+        "session_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Session Id"
+        },
+        "timestamp": {
+          "title": "Timestamp",
+          "type": "string"
+        }
+      },
+      "required": [
+        "event_id",
+        "run_id",
+        "event_type",
+        "timestamp",
+        "payload"
+      ],
+      "title": "TraceEvent",
+      "type": "object"
+    },
+    "type": "array"
+  },
+  "responsibility": "Record observable execution facts and provide deterministic, run-scoped fault injection without recording hidden reasoning.",
+  "snapshot_format_version": "2.0",
+  "snapshot_id": "module.observability",
+  "snapshot_sha256": "31a9dda41dd9ea42f930a3a429330a6218ac5b1dc6dc556c72f31896cda71c56",
+  "snapshot_type": "module",
+  "source_hashes": {
+    "component_versions_sha256": "b972dd1938cbdba7c6c3116756ca37a401ceb49bf424e8cfaf8172878a88d01f",
+    "execution_boundary_ids_sha256": "d91de6d633965d502269788656c4daa28b1a0aa24191c304b880903d4c282135",
+    "input_schema_sha256": "e789b47ea328f644885a4c0f519abb07f5014c11fe50ca2e7ee3daba5dedef6f",
+    "layers_sha256": "fd11fe397c015a1a0ca91aa0196a8c48d8e38b99b4f8a13a3b1c56bbe9e2da63",
+    "output_schema_sha256": "c6e299b6e47259dc97d13f1f25eb34f6f0f29c652dad34ff626f7e4a03f1186f",
+    "references_sha256": "abca75ce114ad4f5f48cc86b155d85cb9035479199e99afb440a265877ef8466"
+  },
+  "supported_operations": [
+    "record_trace",
+    "export_trace",
+    "inject_fault"
+  ],
+  "tool_refs": [],
+  "trace_event_types": [
+    "intent_requested",
+    "intent_decided",
+    "tool_requested",
+    "tool_started",
+    "tool_succeeded",
+    "tool_failed",
+    "tool_timeout",
+    "state_verification_started",
+    "state_verification_succeeded",
+    "state_verification_failed"
+  ]
+}

@@ -1,0 +1,1196 @@
+{
+  "component_versions": {
+    "orchestration_contract": "minimal-agent-run-v1"
+  },
+  "context_rules": [
+    "RUN_SCOPED_CONTEXT",
+    "NO_LONG_TERM_MEMORY",
+    "NO_RAG",
+    "NO_USER_PROFILE_MEMORY",
+    "NO_CROSS_SESSION_SEMANTIC_MEMORY"
+  ],
+  "contract_version": "agent-orchestrator-module-v2",
+  "execution_boundary": "Starts at MinimalAgent.run or run_intent_only and stops at one explicit terminal public result; store.snapshot is independent.",
+  "execution_boundary_ids": [
+    "end_to_end",
+    "guarded_write",
+    "intent_router_only",
+    "tool_chain"
+  ],
+  "input_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "session_id": {
+        "anyOf": [
+          {
+            "minLength": 1,
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "user_input": {
+        "minLength": 1,
+        "type": "string"
+      }
+    },
+    "required": [
+      "user_input",
+      "session_id"
+    ],
+    "type": "object"
+  },
+  "intent_refs": [],
+  "layers": {
+    "context": {
+      "downstream_dependencies": [
+        "module.execution_guard",
+        "module.tool_loop"
+      ],
+      "entrypoints": [
+        "MinimalAgent.run"
+      ],
+      "evidence": [
+        "conversation_state"
+      ],
+      "failure_modes": [
+        "INVALID_SESSION_ID",
+        "PENDING_CONFIRMATION_CONFLICT"
+      ],
+      "formal_rules": [
+        "RUN_SCOPED_CONTEXT_ONLY",
+        "NO_LONG_TERM_MEMORY",
+        "NO_RAG",
+        "NO_USER_PROFILE_MEMORY",
+        "NO_CROSS_SESSION_SEMANTIC_MEMORY"
+      ],
+      "inputs": [
+        "user_input",
+        "session_id"
+      ],
+      "outputs": [
+        "current_run_context"
+      ],
+      "reason": null,
+      "related_tools": [],
+      "state_reads": [
+        "session_id",
+        "current_run_tool_context",
+        "pending_confirmation"
+      ],
+      "state_writes": [
+        "current_run_tool_context"
+      ],
+      "stop_nodes": [
+        "terminal_agent_result"
+      ],
+      "support_status": "supported",
+      "upstream_dependencies": []
+    },
+    "planning_execution": {
+      "downstream_dependencies": [
+        "module.tool_loop",
+        "module.execution_guard"
+      ],
+      "entrypoints": [
+        "MinimalAgent.run"
+      ],
+      "evidence": [
+        "tool_trace"
+      ],
+      "failure_modes": [
+        "UNKNOWN_TOOL",
+        "INVALID_TOOL_ARGUMENTS",
+        "MAX_STEPS_EXCEEDED"
+      ],
+      "formal_rules": [
+        "INTENT_ONLY_NEVER_EXECUTES_TOOLS"
+      ],
+      "inputs": [
+        "validated_intent_result"
+      ],
+      "outputs": [
+        "guarded_tool_execution_or_direct_terminal_result"
+      ],
+      "reason": null,
+      "related_tools": [],
+      "state_reads": [],
+      "state_writes": [],
+      "stop_nodes": [
+        "agent_terminal_status"
+      ],
+      "support_status": "supported",
+      "upstream_dependencies": []
+    },
+    "result": {
+      "downstream_dependencies": [
+        "module.state_store",
+        "module.observability"
+      ],
+      "entrypoints": [
+        "MinimalAgent.run",
+        "MinimalAgent.run_intent_only",
+        "SQLiteStore.snapshot"
+      ],
+      "evidence": [
+        "final_response",
+        "intent_router_output",
+        "system_state"
+      ],
+      "failure_modes": [
+        "RESULT_VALIDATION_ERROR"
+      ],
+      "formal_rules": [
+        "RESULTS_INCLUDE_OBSERVABLE_TRACE_NOT_COT"
+      ],
+      "inputs": [
+        "intent_and_execution_outcomes"
+      ],
+      "outputs": [
+        "intent_result_or_agent_result_or_store_snapshot"
+      ],
+      "reason": null,
+      "related_tools": [],
+      "state_reads": [],
+      "state_writes": [],
+      "stop_nodes": [
+        "public_result_returned"
+      ],
+      "support_status": "supported",
+      "upstream_dependencies": []
+    },
+    "safety_recovery": {
+      "downstream_dependencies": [
+        "module.execution_guard",
+        "module.observability"
+      ],
+      "entrypoints": [
+        "MinimalAgent.run"
+      ],
+      "evidence": [
+        "permission_event",
+        "tool_trace"
+      ],
+      "failure_modes": [
+        "UNKNOWN_TOOL",
+        "INVALID_TOOL_ARGUMENTS",
+        "TOOL_TIMEOUT",
+        "MAX_STEPS_EXCEEDED"
+      ],
+      "formal_rules": [
+        "NO_SILENT_FAILURE",
+        "NO_AUTOMATIC_RETRY"
+      ],
+      "inputs": [
+        "run_policy_and_execution_outcomes"
+      ],
+      "outputs": [
+        "explicit_terminal_status"
+      ],
+      "reason": null,
+      "related_tools": [],
+      "state_reads": [],
+      "state_writes": [],
+      "stop_nodes": [
+        "SUCCESS_OR_EXPLICIT_NON_SUCCESS"
+      ],
+      "support_status": "supported",
+      "upstream_dependencies": []
+    },
+    "understanding": {
+      "downstream_dependencies": [
+        "module.intent_router"
+      ],
+      "entrypoints": [
+        "MinimalAgent.run",
+        "MinimalAgent.run_intent_only"
+      ],
+      "evidence": [
+        "intent_router_output"
+      ],
+      "failure_modes": [
+        "MODEL_INVOCATION_FAILED",
+        "INVALID_MODEL_OUTPUT"
+      ],
+      "formal_rules": [
+        "EXPECTED_AND_SCORING_DATA_ARE_NOT_INPUTS"
+      ],
+      "inputs": [
+        "user_input"
+      ],
+      "outputs": [
+        "intent_result"
+      ],
+      "reason": null,
+      "related_tools": [],
+      "state_reads": [],
+      "state_writes": [],
+      "stop_nodes": [
+        "validated_intent_result"
+      ],
+      "support_status": "supported",
+      "upstream_dependencies": []
+    }
+  },
+  "mockable_dependencies": [
+    "model_client",
+    "tool_registry",
+    "execution_controller",
+    "state_store",
+    "trace_collector"
+  ],
+  "module_id": "agent_orchestrator",
+  "module_refs": [
+    {
+      "contract_version": "intent-router-module-v2",
+      "path": "modules/intent_router.json",
+      "snapshot_format_version": "2.0",
+      "snapshot_id": "module.intent_router",
+      "snapshot_sha256": "ebd262ec9739ceaaf90845f1540df3a7a966ea97ed395d252092452306614988",
+      "snapshot_type": "module"
+    },
+    {
+      "contract_version": "tool-loop-module-v2",
+      "path": "modules/tool_loop.json",
+      "snapshot_format_version": "2.0",
+      "snapshot_id": "module.tool_loop",
+      "snapshot_sha256": "e3a1f4cd8eb722d371cb06b018d0b9f7dd0c4e873b4d18a07509bf85627ca31d",
+      "snapshot_type": "module"
+    },
+    {
+      "contract_version": "execution-guard-module-v2",
+      "path": "modules/execution_guard.json",
+      "snapshot_format_version": "2.0",
+      "snapshot_id": "module.execution_guard",
+      "snapshot_sha256": "0ae55c34e9afbef14430404ea81395ae229645ad058d5e64562cc1ae37287a54",
+      "snapshot_type": "module"
+    },
+    {
+      "contract_version": "state-store-module-v2",
+      "path": "modules/state_store.json",
+      "snapshot_format_version": "2.0",
+      "snapshot_id": "module.state_store",
+      "snapshot_sha256": "ec16d6b11303ec9f108fa30b0503acc9a15efb0c3dff0872cbca56c22df8d9b9",
+      "snapshot_type": "module"
+    },
+    {
+      "contract_version": "observability-module-v2",
+      "path": "modules/observability.json",
+      "snapshot_format_version": "2.0",
+      "snapshot_id": "module.observability",
+      "snapshot_sha256": "31a9dda41dd9ea42f930a3a429330a6218ac5b1dc6dc556c72f31896cda71c56",
+      "snapshot_type": "module"
+    }
+  ],
+  "output_schema": {
+    "oneOf": [
+      {
+        "$defs": {
+          "IntentResult": {
+            "additionalProperties": false,
+            "description": "Observable result produced by the future intent router.",
+            "properties": {
+              "intent": {
+                "enum": [
+                  "query_information",
+                  "prepare_resource",
+                  "query_user",
+                  "query_gift",
+                  "add_backpack_gift",
+                  "query_pool",
+                  "unsupported"
+                ],
+                "title": "Intent",
+                "type": "string"
+              },
+              "missing_parameters": {
+                "items": {
+                  "type": "string"
+                },
+                "title": "Missing Parameters",
+                "type": "array"
+              },
+              "next_action": {
+                "enum": [
+                  "CALL_TOOL",
+                  "ASK_USER",
+                  "ASK_CONFIRMATION",
+                  "REJECT"
+                ],
+                "title": "Next Action",
+                "type": "string"
+              },
+              "parameters": {
+                "additionalProperties": true,
+                "title": "Parameters",
+                "type": "object"
+              },
+              "reason": {
+                "title": "Reason",
+                "type": "string"
+              },
+              "status": {
+                "enum": [
+                  "READY",
+                  "NEED_CLARIFICATION",
+                  "NEED_CONFIRMATION",
+                  "REJECTED"
+                ],
+                "title": "Status",
+                "type": "string"
+              }
+            },
+            "required": [
+              "intent",
+              "status",
+              "next_action",
+              "reason"
+            ],
+            "title": "IntentResult",
+            "type": "object"
+          },
+          "ToolCallRecord": {
+            "additionalProperties": false,
+            "description": "Observable terminal record for one tool call.",
+            "properties": {
+              "arguments": {
+                "additionalProperties": true,
+                "title": "Arguments",
+                "type": "object"
+              },
+              "call_id": {
+                "title": "Call Id",
+                "type": "string"
+              },
+              "duration_ms": {
+                "minimum": 0,
+                "title": "Duration Ms",
+                "type": "integer"
+              },
+              "error": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Error"
+              },
+              "name": {
+                "title": "Name",
+                "type": "string"
+              },
+              "output": {
+                "anyOf": [
+                  {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Output"
+              },
+              "status": {
+                "enum": [
+                  "SUCCESS",
+                  "FAILED",
+                  "TIMEOUT"
+                ],
+                "title": "Status",
+                "type": "string"
+              }
+            },
+            "required": [
+              "call_id",
+              "name",
+              "arguments",
+              "status",
+              "output",
+              "error",
+              "duration_ms"
+            ],
+            "title": "ToolCallRecord",
+            "type": "object"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Stable result boundary exposed to the future evaluation framework.",
+        "properties": {
+          "events": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Events",
+            "type": "array"
+          },
+          "final_response": {
+            "title": "Final Response",
+            "type": "string"
+          },
+          "intent_result": {
+            "$ref": "#/$defs/IntentResult"
+          },
+          "run_id": {
+            "title": "Run Id",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "SUCCESS",
+              "NEED_CLARIFICATION",
+              "NEED_CONFIRMATION",
+              "REJECTED",
+              "FAILED",
+              "MAX_STEPS_EXCEEDED"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "tool_calls": {
+            "items": {
+              "$ref": "#/$defs/ToolCallRecord"
+            },
+            "title": "Tool Calls",
+            "type": "array"
+          }
+        },
+        "required": [
+          "run_id",
+          "status",
+          "intent_result",
+          "tool_calls",
+          "final_response",
+          "events"
+        ],
+        "title": "AgentResult",
+        "type": "object"
+      },
+      {
+        "additionalProperties": false,
+        "description": "Observable result produced by the future intent router.",
+        "properties": {
+          "intent": {
+            "enum": [
+              "query_information",
+              "prepare_resource",
+              "query_user",
+              "query_gift",
+              "add_backpack_gift",
+              "query_pool",
+              "unsupported"
+            ],
+            "title": "Intent",
+            "type": "string"
+          },
+          "missing_parameters": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Missing Parameters",
+            "type": "array"
+          },
+          "next_action": {
+            "enum": [
+              "CALL_TOOL",
+              "ASK_USER",
+              "ASK_CONFIRMATION",
+              "REJECT"
+            ],
+            "title": "Next Action",
+            "type": "string"
+          },
+          "parameters": {
+            "additionalProperties": true,
+            "title": "Parameters",
+            "type": "object"
+          },
+          "reason": {
+            "title": "Reason",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "READY",
+              "NEED_CLARIFICATION",
+              "NEED_CONFIRMATION",
+              "REJECTED"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "intent",
+          "status",
+          "next_action",
+          "reason"
+        ],
+        "title": "IntentResult",
+        "type": "object"
+      },
+      {
+        "$defs": {
+          "MockBackpackGrantRecord": {
+            "additionalProperties": false,
+            "description": "One locally simulated backpack grant.",
+            "properties": {
+              "created_at": {
+                "format": "date-time",
+                "title": "Created At",
+                "type": "string"
+              },
+              "duration_days": {
+                "title": "Duration Days",
+                "type": "integer"
+              },
+              "expires_at": {
+                "anyOf": [
+                  {
+                    "format": "date-time",
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Expires At"
+              },
+              "gift_id": {
+                "title": "Gift Id",
+                "type": "integer"
+              },
+              "grant_id": {
+                "title": "Grant Id",
+                "type": "integer"
+              },
+              "num": {
+                "title": "Num",
+                "type": "integer"
+              },
+              "request_id": {
+                "title": "Request Id",
+                "type": "string"
+              },
+              "status": {
+                "title": "Status",
+                "type": "string"
+              },
+              "user_id": {
+                "title": "User Id",
+                "type": "integer"
+              }
+            },
+            "required": [
+              "grant_id",
+              "user_id",
+              "gift_id",
+              "num",
+              "duration_days",
+              "expires_at",
+              "request_id",
+              "status",
+              "created_at"
+            ],
+            "title": "MockBackpackGrantRecord",
+            "type": "object"
+          },
+          "MockCustomGiftRecord": {
+            "additionalProperties": false,
+            "description": "One fictional user- or room-specific gift record.",
+            "properties": {
+              "custom_type": {
+                "title": "Custom Type",
+                "type": "integer"
+              },
+              "element_id": {
+                "title": "Element Id",
+                "type": "integer"
+              },
+              "gift_id": {
+                "title": "Gift Id",
+                "type": "integer"
+              },
+              "record_id": {
+                "title": "Record Id",
+                "type": "integer"
+              },
+              "status": {
+                "title": "Status",
+                "type": "string"
+              }
+            },
+            "required": [
+              "record_id",
+              "element_id",
+              "custom_type",
+              "gift_id",
+              "status"
+            ],
+            "title": "MockCustomGiftRecord",
+            "type": "object"
+          },
+          "MockGiftRecord": {
+            "additionalProperties": false,
+            "description": "One fictional gift in the shadow-assistant data set.",
+            "properties": {
+              "description": {
+                "title": "Description",
+                "type": "string"
+              },
+              "gift_id": {
+                "title": "Gift Id",
+                "type": "integer"
+              },
+              "name": {
+                "title": "Name",
+                "type": "string"
+              },
+              "price": {
+                "title": "Price",
+                "type": "integer"
+              }
+            },
+            "required": [
+              "gift_id",
+              "name",
+              "price",
+              "description"
+            ],
+            "title": "MockGiftRecord",
+            "type": "object"
+          },
+          "MockGuaranteeInfo": {
+            "additionalProperties": false,
+            "description": "Normalized shadow representation of a pool guarantee.",
+            "properties": {
+              "enabled": {
+                "title": "Enabled",
+                "type": "boolean"
+              },
+              "threshold": {
+                "anyOf": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Threshold"
+              }
+            },
+            "required": [
+              "enabled",
+              "threshold"
+            ],
+            "title": "MockGuaranteeInfo",
+            "type": "object"
+          },
+          "MockPoolRateRecord": {
+            "additionalProperties": false,
+            "description": "One pool weight with a probability derived at read time.",
+            "properties": {
+              "gift_id": {
+                "title": "Gift Id",
+                "type": "integer"
+              },
+              "probability": {
+                "title": "Probability",
+                "type": "number"
+              },
+              "weight": {
+                "title": "Weight",
+                "type": "integer"
+              }
+            },
+            "required": [
+              "gift_id",
+              "weight",
+              "probability"
+            ],
+            "title": "MockPoolRateRecord",
+            "type": "object"
+          },
+          "MockPoolRecord": {
+            "additionalProperties": false,
+            "description": "One fictional pool and its derived rate information.",
+            "properties": {
+              "environment": {
+                "title": "Environment",
+                "type": "string"
+              },
+              "guarantee_info": {
+                "$ref": "#/$defs/MockGuaranteeInfo"
+              },
+              "internal_version": {
+                "title": "Internal Version",
+                "type": "integer"
+              },
+              "name": {
+                "title": "Name",
+                "type": "string"
+              },
+              "pool_id": {
+                "title": "Pool Id",
+                "type": "integer"
+              },
+              "rates": {
+                "items": {
+                  "$ref": "#/$defs/MockPoolRateRecord"
+                },
+                "title": "Rates",
+                "type": "array"
+              }
+            },
+            "required": [
+              "pool_id",
+              "name",
+              "environment",
+              "rates",
+              "guarantee_info",
+              "internal_version"
+            ],
+            "title": "MockPoolRecord",
+            "type": "object"
+          },
+          "MockUserRecord": {
+            "additionalProperties": false,
+            "description": "One fictional user in the shadow-assistant data set.",
+            "properties": {
+              "email": {
+                "title": "Email",
+                "type": "string"
+              },
+              "environment": {
+                "title": "Environment",
+                "type": "string"
+              },
+              "nickname": {
+                "title": "Nickname",
+                "type": "string"
+              },
+              "phone": {
+                "title": "Phone",
+                "type": "string"
+              },
+              "room_id": {
+                "title": "Room Id",
+                "type": "integer"
+              },
+              "room_name": {
+                "title": "Room Name",
+                "type": "string"
+              },
+              "status": {
+                "title": "Status",
+                "type": "string"
+              },
+              "user_id": {
+                "title": "User Id",
+                "type": "integer"
+              }
+            },
+            "required": [
+              "user_id",
+              "room_id",
+              "nickname",
+              "room_name",
+              "phone",
+              "email",
+              "status",
+              "environment"
+            ],
+            "title": "MockUserRecord",
+            "type": "object"
+          },
+          "PendingConfirmationRecord": {
+            "additionalProperties": false,
+            "description": "One durable, execution-layer confirmation state.",
+            "properties": {
+              "accepted_at": {
+                "anyOf": [
+                  {
+                    "format": "date-time",
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Accepted At"
+              },
+              "arguments": {
+                "additionalProperties": true,
+                "title": "Arguments",
+                "type": "object"
+              },
+              "arguments_hash": {
+                "title": "Arguments Hash",
+                "type": "string"
+              },
+              "confirmation_id": {
+                "title": "Confirmation Id",
+                "type": "string"
+              },
+              "created_at": {
+                "format": "date-time",
+                "title": "Created At",
+                "type": "string"
+              },
+              "environment": {
+                "title": "Environment",
+                "type": "string"
+              },
+              "expires_at": {
+                "format": "date-time",
+                "title": "Expires At",
+                "type": "string"
+              },
+              "internal_version": {
+                "anyOf": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Internal Version"
+              },
+              "request_id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Request Id"
+              },
+              "session_id": {
+                "title": "Session Id",
+                "type": "string"
+              },
+              "status": {
+                "enum": [
+                  "PENDING",
+                  "ACCEPTED",
+                  "CANCELLED",
+                  "EXPIRED",
+                  "INVALIDATED",
+                  "SUPERSEDED"
+                ],
+                "title": "Status",
+                "type": "string"
+              },
+              "summary": {
+                "title": "Summary",
+                "type": "string"
+              },
+              "tool_name": {
+                "title": "Tool Name",
+                "type": "string"
+              }
+            },
+            "required": [
+              "confirmation_id",
+              "session_id",
+              "tool_name",
+              "arguments",
+              "arguments_hash",
+              "environment",
+              "summary",
+              "status",
+              "internal_version",
+              "created_at",
+              "expires_at",
+              "accepted_at",
+              "request_id"
+            ],
+            "title": "PendingConfirmationRecord",
+            "type": "object"
+          },
+          "ResourceRecord": {
+            "additionalProperties": false,
+            "description": "One materialized mock resource.",
+            "properties": {
+              "environment": {
+                "title": "Environment",
+                "type": "string"
+              },
+              "request_id": {
+                "title": "Request Id",
+                "type": "string"
+              },
+              "resource_id": {
+                "title": "Resource Id",
+                "type": "integer"
+              },
+              "resource_type": {
+                "title": "Resource Type",
+                "type": "string"
+              }
+            },
+            "required": [
+              "resource_id",
+              "resource_type",
+              "environment",
+              "request_id"
+            ],
+            "title": "ResourceRecord",
+            "type": "object"
+          },
+          "ShadowIdempotencyRecord": {
+            "additionalProperties": false,
+            "description": "One durable request-id result for a future shadow write tool.",
+            "properties": {
+              "arguments_hash": {
+                "title": "Arguments Hash",
+                "type": "string"
+              },
+              "created_at": {
+                "format": "date-time",
+                "title": "Created At",
+                "type": "string"
+              },
+              "request_id": {
+                "title": "Request Id",
+                "type": "string"
+              },
+              "result": {
+                "additionalProperties": true,
+                "title": "Result",
+                "type": "object"
+              },
+              "tool_name": {
+                "title": "Tool Name",
+                "type": "string"
+              }
+            },
+            "required": [
+              "request_id",
+              "tool_name",
+              "arguments_hash",
+              "result",
+              "created_at"
+            ],
+            "title": "ShadowIdempotencyRecord",
+            "type": "object"
+          },
+          "WriteRequestRecord": {
+            "additionalProperties": false,
+            "description": "One committed idempotent write request.",
+            "properties": {
+              "created_count": {
+                "title": "Created Count",
+                "type": "integer"
+              },
+              "environment": {
+                "title": "Environment",
+                "type": "string"
+              },
+              "request_id": {
+                "title": "Request Id",
+                "type": "string"
+              },
+              "requested_count": {
+                "title": "Requested Count",
+                "type": "integer"
+              },
+              "resource_type": {
+                "title": "Resource Type",
+                "type": "string"
+              }
+            },
+            "required": [
+              "request_id",
+              "resource_type",
+              "environment",
+              "requested_count",
+              "created_count"
+            ],
+            "title": "WriteRequestRecord",
+            "type": "object"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Read-only database state associated with an external run ID.",
+        "properties": {
+          "mock_backpack_grant_count": {
+            "minimum": 0,
+            "title": "Mock Backpack Grant Count",
+            "type": "integer"
+          },
+          "mock_backpack_grants": {
+            "items": {
+              "$ref": "#/$defs/MockBackpackGrantRecord"
+            },
+            "title": "Mock Backpack Grants",
+            "type": "array"
+          },
+          "mock_custom_gift_record_count": {
+            "minimum": 0,
+            "title": "Mock Custom Gift Record Count",
+            "type": "integer"
+          },
+          "mock_custom_gift_records": {
+            "items": {
+              "$ref": "#/$defs/MockCustomGiftRecord"
+            },
+            "title": "Mock Custom Gift Records",
+            "type": "array"
+          },
+          "mock_gift_count": {
+            "minimum": 0,
+            "title": "Mock Gift Count",
+            "type": "integer"
+          },
+          "mock_gifts": {
+            "items": {
+              "$ref": "#/$defs/MockGiftRecord"
+            },
+            "title": "Mock Gifts",
+            "type": "array"
+          },
+          "mock_pool_count": {
+            "minimum": 0,
+            "title": "Mock Pool Count",
+            "type": "integer"
+          },
+          "mock_pools": {
+            "items": {
+              "$ref": "#/$defs/MockPoolRecord"
+            },
+            "title": "Mock Pools",
+            "type": "array"
+          },
+          "mock_user_count": {
+            "minimum": 0,
+            "title": "Mock User Count",
+            "type": "integer"
+          },
+          "mock_users": {
+            "items": {
+              "$ref": "#/$defs/MockUserRecord"
+            },
+            "title": "Mock Users",
+            "type": "array"
+          },
+          "pending_confirmation_count": {
+            "minimum": 0,
+            "title": "Pending Confirmation Count",
+            "type": "integer"
+          },
+          "pending_confirmations": {
+            "items": {
+              "$ref": "#/$defs/PendingConfirmationRecord"
+            },
+            "title": "Pending Confirmations",
+            "type": "array"
+          },
+          "resource_count": {
+            "minimum": 0,
+            "title": "Resource Count",
+            "type": "integer"
+          },
+          "resources": {
+            "items": {
+              "$ref": "#/$defs/ResourceRecord"
+            },
+            "title": "Resources",
+            "type": "array"
+          },
+          "run_id": {
+            "minLength": 1,
+            "title": "Run Id",
+            "type": "string"
+          },
+          "shadow_idempotency_record_count": {
+            "minimum": 0,
+            "title": "Shadow Idempotency Record Count",
+            "type": "integer"
+          },
+          "shadow_idempotency_records": {
+            "items": {
+              "$ref": "#/$defs/ShadowIdempotencyRecord"
+            },
+            "title": "Shadow Idempotency Records",
+            "type": "array"
+          },
+          "write_request_count": {
+            "minimum": 0,
+            "title": "Write Request Count",
+            "type": "integer"
+          },
+          "write_requests": {
+            "items": {
+              "$ref": "#/$defs/WriteRequestRecord"
+            },
+            "title": "Write Requests",
+            "type": "array"
+          }
+        },
+        "required": [
+          "run_id",
+          "resource_count",
+          "write_request_count",
+          "resources",
+          "write_requests",
+          "mock_user_count",
+          "mock_gift_count",
+          "mock_custom_gift_record_count",
+          "mock_pool_count",
+          "pending_confirmation_count",
+          "shadow_idempotency_record_count",
+          "mock_backpack_grant_count",
+          "mock_users",
+          "mock_gifts",
+          "mock_custom_gift_records",
+          "mock_pools",
+          "pending_confirmations",
+          "shadow_idempotency_records",
+          "mock_backpack_grants"
+        ],
+        "title": "StoreSnapshot",
+        "type": "object"
+      }
+    ]
+  },
+  "responsibility": "Orchestrate one validated user request through intent routing, guarding, bounded Tool execution, and a terminal public result.",
+  "snapshot_format_version": "2.0",
+  "snapshot_id": "module.agent_orchestrator",
+  "snapshot_sha256": "b3bded88a30b2f57283d48d00b453e41da526a7a67cc1313ab3faed17b83adb4",
+  "snapshot_type": "module",
+  "source_hashes": {
+    "component_versions_sha256": "f81a1e2e8483f4d4a9311652f494d7ef8586900babee6dedc8fe0488b47bca41",
+    "execution_boundary_ids_sha256": "d91de6d633965d502269788656c4daa28b1a0aa24191c304b880903d4c282135",
+    "input_schema_sha256": "ce41b0545a3ebcc5368c1fb08ac724d79dea2c3b2647497f8327a679fe141397",
+    "layers_sha256": "7d79ac60c3be1ccb54ece14eb4c0ef26355d1908d8a89a0922479c2819cbfe6e",
+    "output_schema_sha256": "12b9e3fa5cec61fa0f90bd5bae16ac0cd88a34d7dc1721b3539474709e1a5bd0",
+    "references_sha256": "b3ca11ab86016136332c48f6ea134130104b2b382f852fad244312a1f424c203"
+  },
+  "supported_operations": [
+    "run_intent_only",
+    "run",
+    "store_snapshot"
+  ],
+  "tool_refs": [],
+  "trace_event_types": [
+    "run_started",
+    "intent_requested",
+    "intent_decided",
+    "tool_requested",
+    "tool_succeeded",
+    "tool_failed",
+    "tool_timeout",
+    "run_finished"
+  ]
+}

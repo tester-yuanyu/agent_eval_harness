@@ -1,0 +1,159 @@
+{
+  "contract_version": "tool-prepare_resource-contract-v2",
+  "description": "Prepare mock resources idempotently.",
+  "empty_result_behavior": "UNSUPPORTED",
+  "fault_modes": [
+    "normal",
+    "error",
+    "timeout",
+    "commit_then_timeout"
+  ],
+  "function_schema": {
+    "description": "Prepare mock resources idempotently.",
+    "name": "prepare_resource",
+    "parameters": {
+      "additionalProperties": false,
+      "description": "Strict arguments for the idempotent resource write.",
+      "properties": {
+        "count": {
+          "exclusiveMinimum": 0,
+          "title": "Count",
+          "type": "integer"
+        },
+        "environment": {
+          "minLength": 1,
+          "title": "Environment",
+          "type": "string"
+        },
+        "request_id": {
+          "minLength": 1,
+          "title": "Request Id",
+          "type": "string"
+        },
+        "resource_type": {
+          "minLength": 1,
+          "title": "Resource Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "resource_type",
+        "environment",
+        "count",
+        "request_id"
+      ],
+      "title": "PrepareResourceArguments",
+      "type": "object"
+    },
+    "strict": true,
+    "type": "function"
+  },
+  "idempotency_rules": {
+    "mode": "REQUEST_ID",
+    "replay": "RETURN_FIRST_DURABLE_RESULT",
+    "source": "MODEL_ARGUMENT"
+  },
+  "parameter_rules": {
+    "count": "POSITIVE_INTEGER",
+    "request_id": "MODEL_VISIBLE_REQUIRED_NONEMPTY_STRING"
+  },
+  "partial_success_behavior": "UNSUPPORTED",
+  "permission_requirements": [
+    "REGISTERED_TOOL_AND_RUN_ALLOW_LIST"
+  ],
+  "rate_limit_behavior": "UNSUPPORTED_NO_SILENT_RETRY",
+  "requires_confirmation": false,
+  "result_codes": [
+    "OK"
+  ],
+  "result_contracts": {
+    "OK": {
+      "data_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "created_count": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "idempotent_replay": {
+            "type": "boolean"
+          },
+          "total_count": {
+            "minimum": 0,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "created_count",
+          "total_count",
+          "idempotent_replay"
+        ],
+        "type": "object"
+      },
+      "terminal_status": "success"
+    }
+  },
+  "result_schema": {
+    "additionalProperties": false,
+    "description": "Uniform return protocol shared by all mock tools.",
+    "properties": {
+      "code": {
+        "title": "Code",
+        "type": "string"
+      },
+      "data": {
+        "additionalProperties": true,
+        "title": "Data",
+        "type": "object"
+      },
+      "message": {
+        "title": "Message",
+        "type": "string"
+      },
+      "success": {
+        "title": "Success",
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "success",
+      "code",
+      "message",
+      "data"
+    ],
+    "title": "ToolResult",
+    "type": "object"
+  },
+  "risk_level": "medium",
+  "side_effects": [
+    "WRITE_LOCAL_SQLITE_RESOURCES"
+  ],
+  "snapshot_format_version": "2.0",
+  "snapshot_id": "tool.prepare_resource",
+  "snapshot_sha256": "c0b144de3eb78236f197b08c5265e0a094277556373115155ac335ab8dba7a38",
+  "snapshot_type": "tool",
+  "source_hashes": {
+    "function_schema_sha256": "4c940a5e6825baf034964170ee49e98657f2fb1139fff11d6590a1db9e252064",
+    "parameter_rules_sha256": "8dbe90023006c8c4cad19b34108f4c05895da68f70d8859094d9fe2c8d15c6f8",
+    "result_contracts_sha256": "06e5e942e7c285bef44451f2c445d5ec1441a619fb0f3a9fbb1e3869674ac793",
+    "result_schema_sha256": "b04c3137b6db836a69fffa0ca2a646e2e5c4149d41bbacab77477767e18a865b"
+  },
+  "terminal_behaviors": {
+    "business_failure": "RETURN_TOOL_RESULT_WITH_SUCCESS_FALSE",
+    "error": "RAISE_EXPLICIT_ERROR",
+    "success": "RETURN_TOOL_RESULT",
+    "timeout": "RAISE_EXPLICIT_TIMEOUT"
+  },
+  "timeout_behavior": "EXPLICIT_TIMEOUT_NO_AUTOMATIC_RETRY",
+  "tool_name": "prepare_resource",
+  "tool_type": "write",
+  "tool_version": "mock-tools-v1",
+  "trace_event_types": [
+    "tool_requested",
+    "tool_started",
+    "tool_succeeded",
+    "tool_failed",
+    "tool_timeout",
+    "permission_denied"
+  ]
+}

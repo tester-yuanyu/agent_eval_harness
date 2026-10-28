@@ -1,0 +1,41 @@
+{
+  "capabilities": [
+    {
+      "capability_key": "safety.run_allow_list",
+      "evidence_ids": [
+        "evidence.safety_recovery_event"
+      ],
+      "reason": null,
+      "support_status": "supported"
+    }
+  ],
+  "component_versions": {
+    "execution_guard": "v3"
+  },
+  "contract_version": "execution-guard-module-v3",
+  "execution_boundary_ids": [
+    "boundary.safety_recovery"
+  ],
+  "input_schema": {
+    "type": "object"
+  },
+  "intent_refs": [],
+  "module_id": "execution_guard",
+  "module_refs": [],
+  "output_schema": {
+    "type": "object"
+  },
+  "responsibility": "Enforce the run-scoped Tool allow list.",
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "module.execution_guard",
+  "snapshot_sha256": "aff59eb854c23b783ad62aae4f49900de8c644e0b39215b8b375e1b902b9b37a",
+  "snapshot_type": "module",
+  "source_hashes": {
+    "capabilities_sha256": "d9ab55ace2e1ae971c19d8e7a556e7cb807771925f8b6f6ca13dcfe1a42a0256",
+    "children_sha256": "b78ee59b8a819b12aaee9953ee472c98c34893d48db562e951cb5033d096ae54"
+  },
+  "tool_refs": [],
+  "trace_event_types": [
+    "tool_failed"
+  ]
+}

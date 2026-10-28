@@ -1,0 +1,30 @@
+{
+  "allowed_module_ids": [
+    "module.intent_router",
+    "module.model_gateway"
+  ],
+  "boundary_id": "understanding",
+  "contract_version": "mini-agent-capability-contract-v3",
+  "description": "Structural understanding execution boundary.",
+  "entry_node": "MinimalAgent.run_intent_only",
+  "evidence_ids": [
+    "evidence.intent_result"
+  ],
+  "no_overrun_rule": "No node after intent_decided may execute in this range.",
+  "prohibited_module_ids": [
+    "module.agent_orchestrator",
+    "module.execution_guard",
+    "module.observability",
+    "module.tool_loop",
+    "module.tool_registry"
+  ],
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "boundary.understanding",
+  "snapshot_sha256": "05c8b2c2fa209a1bbbda48bf3e10010868b4ee9aa5f3d2985e7134ecdc476f3e",
+  "snapshot_type": "boundary",
+  "source_hashes": {
+    "catalog_definition_sha256": "57aa2760a2381a9a9ee48a0fa9e1e963b82afaed51ee799bae8be120258e0436"
+  },
+  "stop_node": "intent_decided",
+  "terminal_condition": "The intent_decided node is reached."
+}

@@ -1,0 +1,33 @@
+{
+  "applicable_result_paths": [],
+  "availability": {
+    "capability_key": "evidence.context_state_available",
+    "evidence_ids": [],
+    "reason": "The runtime has no cross-turn state input or state snapshot output.",
+    "support_status": "unsupported"
+  },
+  "consumer_roles": [
+    "builder",
+    "evaluator"
+  ],
+  "contract_version": "mini-agent-capability-contract-v3",
+  "description": "Cross-turn conversation state observation interface.",
+  "event_types": [],
+  "evidence_id": "context_state",
+  "observation_interface": "unavailable",
+  "payload_schema": {
+    "type": "object"
+  },
+  "producer_module_ids": [
+    "module.agent_orchestrator"
+  ],
+  "production_timing": "not emitted by the current runtime",
+  "required": false,
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "evidence.context_state",
+  "snapshot_sha256": "74796fd6c0e70ec049b781ca71393b1674ba1df500b8dce285e208e9f0e4a71f",
+  "snapshot_type": "evidence",
+  "source_hashes": {
+    "catalog_definition_sha256": "30d5c6b1b92f6cb44ca69ce893a4c23213f63d65fa9fc86279798610e9a3155b"
+  }
+}

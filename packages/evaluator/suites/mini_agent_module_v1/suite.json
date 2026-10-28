@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0",
+  "suite_id": "mini_agent_module_query_user_v1_4",
+  "suite_version": "1.0.0",
+  "lifecycle_state": "FROZEN",
+  "dataset_loader": {
+    "plugin_id": "legacy_jsonl_eval_case_v1",
+    "version": "1.0.0",
+    "config": {}
+  },
+  "dataset_sources": [
+    {
+      "path": "dataset.jsonl",
+      "sha256": "151588403f57769553820bb679baba17238e7ac96f80c262b955fe6e789de5f3"
+    },
+    {
+      "path": "dataset.manifest.json",
+      "sha256": "0b50a0eb0c112b70bc36d1bdf8828a05629f176dc2af8621aa30d8257b9d20d7"
+    }
+  ],
+  "provider": {
+    "plugin_id": "mini_agent_provider_v1",
+    "version": "1.0.0",
+    "config": {}
+  },
+  "capability_bundle": {
+    "contract_id": "mini_agent_capability_bundle",
+    "version": "2.0",
+    "path": "capability_bundles/3f1dab0a5da77c763db69a9593da3d32ded65a4dba1e7ba8602e0b7c6f3693f5/bundle_manifest.json",
+    "sha256": "94a025d8611be99b178cfb3ede28584741c63a748557cba6dc24eea63fd98edd"
+  },
+  "assertion_profile": null,
+  "trace_profile": null,
+  "judge_profile": null,
+  "report_profile": null,
+  "gate_policy": null,
+  "run_config": {
+    "run_mode": "agent_benchmark",
+    "pass_threshold": 100.0,
+    "execution_type": "auto",
+    "filters": null,
+    "allow_non_frozen_dataset": false,
+    "trials_per_case": 1,
+    "judge": null
+  }
+}

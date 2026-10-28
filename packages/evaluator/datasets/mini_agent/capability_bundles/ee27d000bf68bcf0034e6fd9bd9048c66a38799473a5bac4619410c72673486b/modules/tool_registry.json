@@ -1,0 +1,347 @@
+{
+  "component_versions": {
+    "registry_contract": "tool-registry-v2"
+  },
+  "context_rules": [
+    "RUN_ALLOW_LIST",
+    "OPTIONAL_EXECUTION_CONTEXT"
+  ],
+  "contract_version": "tool-registry-module-v2",
+  "execution_boundary": "Dispatch only registered and allowed Tools after strict argument validation; unknown Tools and invalid arguments fail explicitly.",
+  "execution_boundary_ids": [
+    "end_to_end",
+    "guarded_write",
+    "tool_chain"
+  ],
+  "input_schema": {
+    "additionalProperties": false,
+    "description": "One function call requested by a scripted model step.",
+    "properties": {
+      "arguments": {
+        "additionalProperties": true,
+        "title": "Arguments",
+        "type": "object"
+      },
+      "call_id": {
+        "minLength": 1,
+        "title": "Call Id",
+        "type": "string"
+      },
+      "name": {
+        "minLength": 1,
+        "title": "Name",
+        "type": "string"
+      },
+      "type": {
+        "const": "function_call",
+        "title": "Type",
+        "type": "string"
+      }
+    },
+    "required": [
+      "type",
+      "call_id",
+      "name",
+      "arguments"
+    ],
+    "title": "FunctionCallItem",
+    "type": "object"
+  },
+  "intent_refs": [],
+  "layers": {
+    "context": {
+      "downstream_dependencies": [],
+      "entrypoints": [
+        "ToolRegistry.invoke"
+      ],
+      "evidence": [
+        "permission_event"
+      ],
+      "failure_modes": [
+        "TOOL_NOT_ALLOWED",
+        "CONFIRMATION_REQUIRED"
+      ],
+      "formal_rules": [
+        "NO_IMPLICIT_TOOL_PERMISSION"
+      ],
+      "inputs": [
+        "allowed_tools",
+        "execution_context"
+      ],
+      "outputs": [
+        "authorized_invocation_context"
+      ],
+      "reason": null,
+      "related_tools": [],
+      "state_reads": [
+        "run_allow_list",
+        "execution_context"
+      ],
+      "state_writes": [],
+      "stop_nodes": [
+        "dispatch_allowed_or_rejected"
+      ],
+      "support_status": "supported",
+      "upstream_dependencies": []
+    },
+    "planning_execution": {
+      "downstream_dependencies": [
+        "module.observability"
+      ],
+      "entrypoints": [
+        "ToolRegistry.invoke"
+      ],
+      "evidence": [
+        "tool_trace"
+      ],
+      "failure_modes": [
+        "UNKNOWN_TOOL",
+        "INVALID_TOOL_ARGUMENTS"
+      ],
+      "formal_rules": [
+        "STRICT_TRUE",
+        "ALL_PROPERTIES_REQUIRED"
+      ],
+      "inputs": [
+        "function_call"
+      ],
+      "outputs": [
+        "tool_result"
+      ],
+      "reason": null,
+      "related_tools": [
+        "tool.add_gift_to_backpack",
+        "tool.prepare_resource",
+        "tool.query_gift_info",
+        "tool.query_information",
+        "tool.query_pool_config",
+        "tool.query_user_info"
+      ],
+      "state_reads": [],
+      "state_writes": [],
+      "stop_nodes": [
+        "tool_handler_terminal_result"
+      ],
+      "support_status": "supported",
+      "upstream_dependencies": []
+    },
+    "result": {
+      "downstream_dependencies": [],
+      "entrypoints": [
+        "ToolRegistry.invoke"
+      ],
+      "evidence": [
+        "tool_trace"
+      ],
+      "failure_modes": [
+        "TOOL_FAILED",
+        "TOOL_TIMEOUT"
+      ],
+      "formal_rules": [
+        "TOOL_RESULT_IS_OBSERVABLE"
+      ],
+      "inputs": [
+        "handler_result"
+      ],
+      "outputs": [
+        "tool_result"
+      ],
+      "reason": null,
+      "related_tools": [
+        "tool.add_gift_to_backpack",
+        "tool.prepare_resource",
+        "tool.query_gift_info",
+        "tool.query_information",
+        "tool.query_pool_config",
+        "tool.query_user_info"
+      ],
+      "state_reads": [],
+      "state_writes": [],
+      "stop_nodes": [
+        "ToolResult returned"
+      ],
+      "support_status": "supported",
+      "upstream_dependencies": []
+    },
+    "safety_recovery": {
+      "downstream_dependencies": [],
+      "entrypoints": [
+        "ToolRegistry.invoke"
+      ],
+      "evidence": [
+        "permission_event",
+        "tool_trace"
+      ],
+      "failure_modes": [
+        "UNKNOWN_TOOL",
+        "INVALID_TOOL_ARGUMENTS",
+        "TOOL_NOT_ALLOWED",
+        "CONFIRMATION_REQUIRED"
+      ],
+      "formal_rules": [
+        "NO_SILENT_TOOL_FAILURE"
+      ],
+      "inputs": [
+        "function_call",
+        "run_allow_list"
+      ],
+      "outputs": [
+        "validated_dispatch_or_explicit_failure"
+      ],
+      "reason": null,
+      "related_tools": [
+        "tool.add_gift_to_backpack",
+        "tool.prepare_resource",
+        "tool.query_gift_info",
+        "tool.query_information",
+        "tool.query_pool_config",
+        "tool.query_user_info"
+      ],
+      "state_reads": [],
+      "state_writes": [],
+      "stop_nodes": [
+        "rejected_or_dispatched"
+      ],
+      "support_status": "supported",
+      "upstream_dependencies": []
+    },
+    "understanding": {
+      "downstream_dependencies": [],
+      "entrypoints": [],
+      "evidence": [],
+      "failure_modes": [],
+      "formal_rules": [],
+      "inputs": [],
+      "outputs": [],
+      "reason": "Tool registry consumes structured function calls only.",
+      "related_tools": [],
+      "state_reads": [],
+      "state_writes": [],
+      "stop_nodes": [],
+      "support_status": "unsupported",
+      "upstream_dependencies": []
+    }
+  },
+  "mockable_dependencies": [
+    "tool_handler",
+    "trace_collector"
+  ],
+  "module_id": "tool_registry",
+  "module_refs": [
+    {
+      "contract_version": "observability-module-v2",
+      "path": "modules/observability.json",
+      "snapshot_format_version": "2.0",
+      "snapshot_id": "module.observability",
+      "snapshot_sha256": "31a9dda41dd9ea42f930a3a429330a6218ac5b1dc6dc556c72f31896cda71c56",
+      "snapshot_type": "module"
+    }
+  ],
+  "output_schema": {
+    "additionalProperties": false,
+    "description": "Uniform return protocol shared by all mock tools.",
+    "properties": {
+      "code": {
+        "title": "Code",
+        "type": "string"
+      },
+      "data": {
+        "additionalProperties": true,
+        "title": "Data",
+        "type": "object"
+      },
+      "message": {
+        "title": "Message",
+        "type": "string"
+      },
+      "success": {
+        "title": "Success",
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "success",
+      "code",
+      "message",
+      "data"
+    ],
+    "title": "ToolResult",
+    "type": "object"
+  },
+  "responsibility": "Expose strict Tool schemas, validate arguments and allow-lists, and dispatch registered Tool calls.",
+  "snapshot_format_version": "2.0",
+  "snapshot_id": "module.tool_registry",
+  "snapshot_sha256": "5eadcb7a1adf22af6b2179c8ac46d454aecdb709f1923158188a6d1adeed6bfa",
+  "snapshot_type": "module",
+  "source_hashes": {
+    "component_versions_sha256": "592a5a594271ffc08ae7417d3754de177a3576d06ae7a9250023011898b7e446",
+    "execution_boundary_ids_sha256": "eb739223ec5716eb9d04e2326204fd24935b12022f81f97041b5e7371f579943",
+    "input_schema_sha256": "cb84054af4ba08bba3f463ae0087735068a84fc636a19977f7ecd4c8acec6c03",
+    "layers_sha256": "c8a0cf3c53cd473eb06c53fa8d0b02ed77048c836c823ef97bb67d2b89f76f98",
+    "output_schema_sha256": "b04c3137b6db836a69fffa0ca2a646e2e5c4149d41bbacab77477767e18a865b",
+    "references_sha256": "138683b6f716b8b008e83e75e13dd14e9bfa86f7bd0fb753e6f54726a12a358e"
+  },
+  "supported_operations": [
+    "schemas",
+    "metadata",
+    "invoke"
+  ],
+  "tool_refs": [
+    {
+      "contract_version": "tool-add_gift_to_backpack-contract-v2",
+      "path": "tools/add_gift_to_backpack.json",
+      "snapshot_format_version": "2.0",
+      "snapshot_id": "tool.add_gift_to_backpack",
+      "snapshot_sha256": "e9b0136e3b80eb3946acfdb4891882c52ee5d485c81f1c98650d18d913eef3b7",
+      "snapshot_type": "tool"
+    },
+    {
+      "contract_version": "tool-prepare_resource-contract-v2",
+      "path": "tools/prepare_resource.json",
+      "snapshot_format_version": "2.0",
+      "snapshot_id": "tool.prepare_resource",
+      "snapshot_sha256": "c0b144de3eb78236f197b08c5265e0a094277556373115155ac335ab8dba7a38",
+      "snapshot_type": "tool"
+    },
+    {
+      "contract_version": "tool-query_gift_info-contract-v2",
+      "path": "tools/query_gift_info.json",
+      "snapshot_format_version": "2.0",
+      "snapshot_id": "tool.query_gift_info",
+      "snapshot_sha256": "c6219cb9396ec8e520e0c5a4b8da85db5afecd3fa18e0fcd25d40349c82ec38e",
+      "snapshot_type": "tool"
+    },
+    {
+      "contract_version": "tool-query_information-contract-v2",
+      "path": "tools/query_information.json",
+      "snapshot_format_version": "2.0",
+      "snapshot_id": "tool.query_information",
+      "snapshot_sha256": "842e332e6b0fb287cc02e19a766992982ec5f5de2a069dd28dd94154632fbccc",
+      "snapshot_type": "tool"
+    },
+    {
+      "contract_version": "tool-query_pool_config-contract-v2",
+      "path": "tools/query_pool_config.json",
+      "snapshot_format_version": "2.0",
+      "snapshot_id": "tool.query_pool_config",
+      "snapshot_sha256": "48b7c7ca3cf20a5bbba7c44d8dc99953dc716e36b2e5bb4db8794127f406c1c9",
+      "snapshot_type": "tool"
+    },
+    {
+      "contract_version": "tool-query_user_info-contract-v2",
+      "path": "tools/query_user_info.json",
+      "snapshot_format_version": "2.0",
+      "snapshot_id": "tool.query_user_info",
+      "snapshot_sha256": "b23cf89f78b91c734b6f5c48111046171f51fe2d0562a469de1e1d0f39c0181c",
+      "snapshot_type": "tool"
+    }
+  ],
+  "trace_event_types": [
+    "tool_requested",
+    "tool_started",
+    "tool_succeeded",
+    "tool_failed",
+    "tool_timeout",
+    "permission_denied"
+  ]
+}

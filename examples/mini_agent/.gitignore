@@ -1,0 +1,10 @@
+.pytest_cache/
+.ruff_cache/
+.superpowers/
+.worktrees/
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.sqlite3
+/exports/

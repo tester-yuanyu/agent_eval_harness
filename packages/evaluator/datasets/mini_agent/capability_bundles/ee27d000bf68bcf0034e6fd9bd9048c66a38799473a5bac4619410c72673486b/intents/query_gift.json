@@ -1,0 +1,114 @@
+{
+  "capability_id": "query_gift",
+  "contract_version": "intent-contract-v1",
+  "decision_rules": {
+    "complete": {
+      "next_action": "CALL_TOOL",
+      "status": "READY"
+    },
+    "incomplete": {
+      "next_action": "ASK_USER",
+      "status": "NEED_CLARIFICATION"
+    }
+  },
+  "missing_parameters": [
+    "gift_id",
+    "gift_ids",
+    "gift_name",
+    "limit",
+    "single_gift_query_mode"
+  ],
+  "module_id": "module.intent_router",
+  "parameters_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "gift_id": {
+        "anyOf": [
+          {
+            "exclusiveMinimum": 0,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Gift Id"
+      },
+      "gift_ids": {
+        "anyOf": [
+          {
+            "items": {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Gift Ids"
+      },
+      "gift_name": {
+        "anyOf": [
+          {
+            "minLength": 1,
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Gift Name"
+      },
+      "limit": {
+        "anyOf": [
+          {
+            "exclusiveMinimum": 0,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Limit"
+      }
+    },
+    "title": "_QueryGiftParameters",
+    "type": "object"
+  },
+  "semantic_rules": {
+    "limit": "OPTIONAL_POSITIVE_INTEGER",
+    "query_mode_cardinality": "EXACTLY_ONE",
+    "query_modes": [
+      "gift_id",
+      "gift_ids",
+      "gift_name"
+    ]
+  },
+  "snapshot_format_version": "2.0",
+  "snapshot_id": "intent.query_gift",
+  "snapshot_sha256": "2b9d5a364e7543ecb0512d855120e2e9691eaa1b8aa5a785b3d95bbc70e4aada",
+  "snapshot_type": "intent",
+  "source_hashes": {
+    "decision_rules_sha256": "f88868121634126a29ab91a52a1666c3bb0db4273ed03ae1630ccf927dd2af19",
+    "parameters_schema_sha256": "5b1bc4c54fade97abdbd672d19cd2a3d6cac20949663647731962ac854fef894",
+    "semantic_rules_sha256": "f0bd8cfc8138da6c9c0e7f4ce129ac58df93aac39fab8fa2551758e1a211a420",
+    "tool_refs_sha256": "49fff366d8a244b8a64c526d52cb117a1eb580780b807248d14a7fb1b947c9d6"
+  },
+  "tool_refs": [
+    {
+      "contract_version": "tool-query_gift_info-contract-v2",
+      "path": "tools/query_gift_info.json",
+      "snapshot_format_version": "2.0",
+      "snapshot_id": "tool.query_gift_info",
+      "snapshot_sha256": "c6219cb9396ec8e520e0c5a4b8da85db5afecd3fa18e0fcd25d40349c82ec38e",
+      "snapshot_type": "tool"
+    }
+  ]
+}

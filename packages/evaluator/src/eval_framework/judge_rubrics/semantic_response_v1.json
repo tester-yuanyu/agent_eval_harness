@@ -1,0 +1,25 @@
+{
+  "rubric_id": "semantic-response",
+  "version": "1.0",
+  "prompt_version": "judge-prompt-v1",
+  "output_schema_version": "judge-output-v1",
+  "dimensions": [
+    {
+      "name": "completeness",
+      "instruction": "Score whether the response includes the information needed by the user."
+    },
+    {
+      "name": "relevance",
+      "instruction": "Score whether the response stays relevant to the user's request."
+    },
+    {
+      "name": "clarity",
+      "instruction": "Score whether the response is clear and understandable."
+    },
+    {
+      "name": "tool_summary_accuracy",
+      "instruction": "Score whether the response accurately summarizes the supplied tool-result facts."
+    }
+  ],
+  "max_text_chars": 4000
+}

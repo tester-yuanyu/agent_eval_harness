@@ -1,0 +1,80 @@
+{
+  "capability_id": "query_pool",
+  "contract_version": "intent-contract-v1",
+  "decision_rules": {
+    "complete": {
+      "next_action": "CALL_TOOL",
+      "status": "READY"
+    },
+    "incomplete": {
+      "next_action": "ASK_USER",
+      "status": "NEED_CLARIFICATION"
+    }
+  },
+  "missing_parameters": [
+    "gift_id",
+    "pool_id",
+    "single_pool_query_mode"
+  ],
+  "module_id": "module.intent_router",
+  "parameters_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "gift_id": {
+        "anyOf": [
+          {
+            "exclusiveMinimum": 0,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Gift Id"
+      },
+      "pool_id": {
+        "anyOf": [
+          {
+            "exclusiveMinimum": 0,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Pool Id"
+      }
+    },
+    "title": "_QueryPoolParameters",
+    "type": "object"
+  },
+  "semantic_rules": {
+    "query_mode_cardinality": "EXACTLY_ONE",
+    "query_modes": [
+      "pool_id",
+      "gift_id"
+    ]
+  },
+  "snapshot_format_version": "2.0",
+  "snapshot_id": "intent.query_pool",
+  "snapshot_sha256": "c81cd3913483890eb3ed76ad7d2d4a416ade92080fdfb6badfcea39a65f3aa85",
+  "snapshot_type": "intent",
+  "source_hashes": {
+    "decision_rules_sha256": "f88868121634126a29ab91a52a1666c3bb0db4273ed03ae1630ccf927dd2af19",
+    "parameters_schema_sha256": "4c2209afcc1f464524719ad0da3db5c2e8d6f679218aba08fe9924e2552903d3",
+    "semantic_rules_sha256": "13a0736d35339acfa5485018f7573e6adcb3912460353fa6a33635d52fb1544b",
+    "tool_refs_sha256": "f1d7687aa8df513d79420eafcfd6ea93094ffa24ca7adc81c5237ac0bad93b6d"
+  },
+  "tool_refs": [
+    {
+      "contract_version": "tool-query_pool_config-contract-v2",
+      "path": "tools/query_pool_config.json",
+      "snapshot_format_version": "2.0",
+      "snapshot_id": "tool.query_pool_config",
+      "snapshot_sha256": "48b7c7ca3cf20a5bbba7c44d8dc99953dc716e36b2e5bb4db8794127f406c1c9",
+      "snapshot_type": "tool"
+    }
+  ]
+}

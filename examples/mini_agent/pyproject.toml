@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "minimal-agent"
+version = "0.1.0"
+description = "A minimal Agent runtime with executable tools and capability snapshots"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "agent-trace-sdk>=0.1.0,<0.2",
+    "openai>=2.0,<4",
+    "pydantic>=2.6,<3",
+    "PyYAML>=6.0,<7",
+    "python-dotenv>=1.0,<2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4,<9",
+    "ruff>=0.6,<1",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+capability_snapshot_kit = ["resources/**/*.md"]
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+testpaths = ["tests"]
+markers = [
+    "openai_smoke: opt-in test that makes a paid OpenAI API request",
+]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]

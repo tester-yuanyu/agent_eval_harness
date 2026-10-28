@@ -1,0 +1,117 @@
+{
+  "$defs": {
+    "MiniAgentIntentV1Candidate": {
+      "additionalProperties": false,
+      "properties": {
+        "slot_id": {
+          "minLength": 1,
+          "title": "Slot Id",
+          "type": "string"
+        },
+        "user_input": {
+          "minLength": 1,
+          "title": "User Input",
+          "type": "string"
+        },
+        "expected_intent": {
+          "enum": [
+            "query_user",
+            "query_gift",
+            "query_custom_gift_record",
+            "query_pool",
+            "add_backpack_gift",
+            "update_pool_weight",
+            "unsupported"
+          ],
+          "title": "Expected Intent",
+          "type": "string"
+        },
+        "expected_status": {
+          "enum": [
+            "READY",
+            "NEED_CLARIFICATION",
+            "NEED_CONFIRMATION",
+            "REJECTED"
+          ],
+          "title": "Expected Status",
+          "type": "string"
+        },
+        "expected_next_action": {
+          "enum": [
+            "CALL_TOOL",
+            "ASK_USER",
+            "ASK_CONFIRMATION",
+            "REJECT"
+          ],
+          "title": "Expected Next Action",
+          "type": "string"
+        },
+        "expected_parameters_json": {
+          "title": "Expected Parameters Json",
+          "type": "string"
+        },
+        "missing_parameters": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Missing Parameters",
+          "type": "array"
+        },
+        "scenario_type": {
+          "enum": [
+            "complete_query",
+            "missing_required",
+            "complete_write",
+            "unsupported_request"
+          ],
+          "title": "Scenario Type",
+          "type": "string"
+        },
+        "difficulty": {
+          "enum": [
+            "easy",
+            "medium"
+          ],
+          "title": "Difficulty",
+          "type": "string"
+        },
+        "coverage_tags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Coverage Tags",
+          "type": "array"
+        }
+      },
+      "required": [
+        "slot_id",
+        "user_input",
+        "expected_intent",
+        "expected_status",
+        "expected_next_action",
+        "expected_parameters_json",
+        "missing_parameters",
+        "scenario_type",
+        "difficulty",
+        "coverage_tags"
+      ],
+      "title": "MiniAgentIntentV1Candidate",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "candidates": {
+      "items": {
+        "$ref": "#/$defs/MiniAgentIntentV1Candidate"
+      },
+      "title": "Candidates",
+      "type": "array"
+    }
+  },
+  "required": [
+    "candidates"
+  ],
+  "title": "GeneratedMiniAgentIntentV1Batch",
+  "type": "object"
+}

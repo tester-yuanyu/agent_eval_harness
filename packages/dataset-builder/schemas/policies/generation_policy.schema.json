@@ -1,0 +1,348 @@
+{
+  "$defs": {
+    "AssertionConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "weight": {
+          "exclusiveMinimum": 0,
+          "title": "Weight",
+          "type": "integer"
+        },
+        "critical": {
+          "title": "Critical",
+          "type": "boolean"
+        },
+        "config": {
+          "additionalProperties": true,
+          "title": "Config",
+          "type": "object"
+        }
+      },
+      "required": [
+        "name",
+        "weight",
+        "critical",
+        "config"
+      ],
+      "title": "AssertionConfig",
+      "type": "object"
+    },
+    "CandidateProtocolConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "allowed_intents": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Allowed Intents",
+          "type": "array"
+        },
+        "allowed_statuses": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Allowed Statuses",
+          "type": "array"
+        },
+        "allowed_next_actions": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Allowed Next Actions",
+          "type": "array"
+        },
+        "allowed_scenario_types": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Allowed Scenario Types",
+          "type": "array"
+        },
+        "allowed_difficulties": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Allowed Difficulties",
+          "type": "array"
+        },
+        "rule_refs_required": {
+          "title": "Rule Refs Required",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "allowed_intents",
+        "allowed_statuses",
+        "allowed_next_actions",
+        "allowed_scenario_types",
+        "allowed_difficulties",
+        "rule_refs_required"
+      ],
+      "title": "CandidateProtocolConfig",
+      "type": "object"
+    },
+    "CompilationConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "case_id_prefix": {
+          "minLength": 1,
+          "title": "Case Id Prefix",
+          "type": "string"
+        },
+        "case_id_width": {
+          "minimum": 1,
+          "title": "Case Id Width",
+          "type": "integer"
+        },
+        "task_ids": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Task Ids",
+          "type": "object"
+        },
+        "scenario_type_map": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Scenario Type Map",
+          "type": "object"
+        },
+        "labels": {
+          "items": {
+            "$ref": "#/$defs/LabelInstruction"
+          },
+          "minItems": 1,
+          "title": "Labels",
+          "type": "array"
+        },
+        "execution": {
+          "$ref": "#/$defs/ExecutionConfig"
+        },
+        "user_responses_by_intent": {
+          "additionalProperties": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "title": "User Responses By Intent",
+          "type": "object"
+        },
+        "cleanup_by_intent": {
+          "additionalProperties": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "title": "Cleanup By Intent",
+          "type": "object"
+        },
+        "oracle_reason": {
+          "title": "Oracle Reason",
+          "type": "string"
+        },
+        "assertions": {
+          "items": {
+            "$ref": "#/$defs/AssertionConfig"
+          },
+          "minItems": 1,
+          "title": "Assertions",
+          "type": "array"
+        }
+      },
+      "required": [
+        "case_id_prefix",
+        "case_id_width",
+        "task_ids",
+        "scenario_type_map",
+        "labels",
+        "execution",
+        "user_responses_by_intent",
+        "cleanup_by_intent",
+        "oracle_reason",
+        "assertions"
+      ],
+      "title": "CompilationConfig",
+      "type": "object"
+    },
+    "ExecutionConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "tool_profile": {
+          "minLength": 1,
+          "title": "Tool Profile",
+          "type": "string"
+        },
+        "allowed_tools": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Allowed Tools"
+        },
+        "fault_injection": {
+          "additionalProperties": true,
+          "title": "Fault Injection",
+          "type": "object"
+        },
+        "max_steps": {
+          "minimum": 1,
+          "title": "Max Steps",
+          "type": "integer"
+        },
+        "timeout_seconds": {
+          "exclusiveMinimum": 0,
+          "title": "Timeout Seconds",
+          "type": "number"
+        }
+      },
+      "required": [
+        "tool_profile",
+        "allowed_tools",
+        "fault_injection",
+        "max_steps",
+        "timeout_seconds"
+      ],
+      "title": "ExecutionConfig",
+      "type": "object"
+    },
+    "GenerationPolicyConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "candidate_protocol": {
+          "$ref": "#/$defs/CandidateProtocolConfig"
+        },
+        "compilation": {
+          "$ref": "#/$defs/CompilationConfig"
+        }
+      },
+      "required": [
+        "candidate_protocol",
+        "compilation"
+      ],
+      "title": "GenerationPolicyConfig",
+      "type": "object"
+    },
+    "LabelInstruction": {
+      "additionalProperties": false,
+      "properties": {
+        "source": {
+          "enum": [
+            "literal",
+            "candidate",
+            "slot",
+            "rule_refs",
+            "coverage_tags",
+            "snapshot"
+          ],
+          "title": "Source",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        },
+        "field": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Field"
+        },
+        "prefix": {
+          "default": "",
+          "title": "Prefix",
+          "type": "string"
+        },
+        "snapshot_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Snapshot Id"
+        },
+        "pointer": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pointer"
+        }
+      },
+      "required": [
+        "source"
+      ],
+      "title": "LabelInstruction",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "policy_kind": {
+      "const": "generation",
+      "title": "Policy Kind",
+      "type": "string"
+    },
+    "policy_version": {
+      "const": "1.0",
+      "title": "Policy Version",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "config": {
+      "$ref": "#/$defs/GenerationPolicyConfig"
+    }
+  },
+  "required": [
+    "policy_kind",
+    "policy_version",
+    "schema_version",
+    "config"
+  ],
+  "title": "GenerationPolicy",
+  "type": "object"
+}

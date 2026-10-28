@@ -1,0 +1,369 @@
+{
+  "$defs": {
+    "AgentLayers": {
+      "additionalProperties": false,
+      "properties": {
+        "context": {
+          "$ref": "#/$defs/LayerCapability"
+        },
+        "planning_execution": {
+          "$ref": "#/$defs/LayerCapability"
+        },
+        "result": {
+          "$ref": "#/$defs/LayerCapability"
+        },
+        "safety_recovery": {
+          "$ref": "#/$defs/LayerCapability"
+        },
+        "understanding": {
+          "$ref": "#/$defs/LayerCapability"
+        }
+      },
+      "required": [
+        "understanding",
+        "context",
+        "planning_execution",
+        "safety_recovery",
+        "result"
+      ],
+      "title": "AgentLayers",
+      "type": "object"
+    },
+    "LayerCapability": {
+      "additionalProperties": false,
+      "properties": {
+        "downstream_dependencies": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Downstream Dependencies",
+          "type": "array"
+        },
+        "entrypoints": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Entrypoints",
+          "type": "array"
+        },
+        "evidence": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "failure_modes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Failure Modes",
+          "type": "array"
+        },
+        "formal_rules": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Formal Rules",
+          "type": "array"
+        },
+        "inputs": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Inputs",
+          "type": "array"
+        },
+        "outputs": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Outputs",
+          "type": "array"
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Reason"
+        },
+        "related_tools": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Related Tools",
+          "type": "array"
+        },
+        "state_reads": {
+          "items": {
+            "type": "string"
+          },
+          "title": "State Reads",
+          "type": "array"
+        },
+        "state_writes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "State Writes",
+          "type": "array"
+        },
+        "stop_nodes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Stop Nodes",
+          "type": "array"
+        },
+        "support_status": {
+          "$ref": "#/$defs/SupportStatus"
+        },
+        "upstream_dependencies": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Upstream Dependencies",
+          "type": "array"
+        }
+      },
+      "required": [
+        "support_status",
+        "inputs",
+        "outputs",
+        "entrypoints",
+        "stop_nodes",
+        "upstream_dependencies",
+        "downstream_dependencies",
+        "evidence",
+        "state_reads",
+        "state_writes",
+        "failure_modes",
+        "related_tools",
+        "formal_rules",
+        "reason"
+      ],
+      "title": "LayerCapability",
+      "type": "object"
+    },
+    "SnapshotReference": {
+      "additionalProperties": false,
+      "properties": {
+        "contract_version": {
+          "minLength": 1,
+          "title": "Contract Version",
+          "type": "string"
+        },
+        "path": {
+          "minLength": 1,
+          "title": "Path",
+          "type": "string"
+        },
+        "snapshot_format_version": {
+          "const": "2.0",
+          "title": "Snapshot Format Version",
+          "type": "string"
+        },
+        "snapshot_id": {
+          "pattern": "^(agent|module|intent|tool)\\.[a-z][a-z0-9_]*$",
+          "title": "Snapshot Id",
+          "type": "string"
+        },
+        "snapshot_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Snapshot Sha256",
+          "type": "string"
+        },
+        "snapshot_type": {
+          "$ref": "#/$defs/SnapshotType"
+        }
+      },
+      "required": [
+        "snapshot_id",
+        "snapshot_type",
+        "snapshot_format_version",
+        "contract_version",
+        "snapshot_sha256",
+        "path"
+      ],
+      "title": "SnapshotReference",
+      "type": "object"
+    },
+    "SnapshotType": {
+      "enum": [
+        "agent",
+        "module",
+        "intent",
+        "tool"
+      ],
+      "title": "SnapshotType",
+      "type": "string"
+    },
+    "SupportStatus": {
+      "enum": [
+        "supported",
+        "unsupported",
+        "unknown"
+      ],
+      "title": "SupportStatus",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "component_versions": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "minProperties": 1,
+      "title": "Component Versions",
+      "type": "object"
+    },
+    "context_rules": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Context Rules",
+      "type": "array"
+    },
+    "contract_version": {
+      "minLength": 1,
+      "title": "Contract Version",
+      "type": "string"
+    },
+    "execution_boundary": {
+      "minLength": 1,
+      "title": "Execution Boundary",
+      "type": "string"
+    },
+    "execution_boundary_ids": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Execution Boundary Ids",
+      "type": "array"
+    },
+    "input_schema": {
+      "additionalProperties": true,
+      "title": "Input Schema",
+      "type": "object"
+    },
+    "intent_refs": {
+      "items": {
+        "$ref": "#/$defs/SnapshotReference"
+      },
+      "title": "Intent Refs",
+      "type": "array"
+    },
+    "layers": {
+      "$ref": "#/$defs/AgentLayers"
+    },
+    "mockable_dependencies": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Mockable Dependencies",
+      "type": "array"
+    },
+    "module_id": {
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "title": "Module Id",
+      "type": "string"
+    },
+    "module_refs": {
+      "items": {
+        "$ref": "#/$defs/SnapshotReference"
+      },
+      "title": "Module Refs",
+      "type": "array"
+    },
+    "output_schema": {
+      "additionalProperties": true,
+      "title": "Output Schema",
+      "type": "object"
+    },
+    "responsibility": {
+      "minLength": 1,
+      "title": "Responsibility",
+      "type": "string"
+    },
+    "snapshot_format_version": {
+      "const": "2.0",
+      "title": "Snapshot Format Version",
+      "type": "string"
+    },
+    "snapshot_id": {
+      "pattern": "^(agent|module|intent|tool)\\.[a-z][a-z0-9_]*$",
+      "title": "Snapshot Id",
+      "type": "string"
+    },
+    "snapshot_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Snapshot Sha256",
+      "type": "string"
+    },
+    "snapshot_type": {
+      "const": "module",
+      "title": "Snapshot Type",
+      "type": "string"
+    },
+    "source_hashes": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Source Hashes",
+      "type": "object"
+    },
+    "supported_operations": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Supported Operations",
+      "type": "array"
+    },
+    "tool_refs": {
+      "items": {
+        "$ref": "#/$defs/SnapshotReference"
+      },
+      "title": "Tool Refs",
+      "type": "array"
+    },
+    "trace_event_types": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Trace Event Types",
+      "type": "array"
+    }
+  },
+  "required": [
+    "snapshot_id",
+    "snapshot_type",
+    "snapshot_format_version",
+    "contract_version",
+    "source_hashes",
+    "snapshot_sha256",
+    "module_id",
+    "responsibility",
+    "component_versions",
+    "input_schema",
+    "output_schema",
+    "layers",
+    "module_refs",
+    "intent_refs",
+    "tool_refs",
+    "supported_operations",
+    "context_rules",
+    "execution_boundary",
+    "execution_boundary_ids",
+    "mockable_dependencies",
+    "trace_event_types"
+  ],
+  "title": "ModuleSnapshotV2",
+  "type": "object"
+}

@@ -1,0 +1,270 @@
+{
+  "contract_version": "tool-query_user_info-contract-v2",
+  "description": "Query fictional users using combined lookup conditions.",
+  "empty_result_behavior": "SUPPORTED_BY_FAULT_MODE",
+  "fault_modes": [
+    "normal",
+    "empty_result",
+    "error",
+    "timeout"
+  ],
+  "function_schema": {
+    "description": "Query fictional users using combined lookup conditions.",
+    "name": "query_user_info",
+    "parameters": {
+      "additionalProperties": false,
+      "description": "Lookup a mock user using one or more combined conditions.",
+      "properties": {
+        "email": {
+          "anyOf": [
+            {
+              "minLength": 3,
+              "pattern": "^[^@]+@[^@]+$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Email"
+        },
+        "phone": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9]{11}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Phone"
+        },
+        "room_id": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Room Id"
+        },
+        "user_id": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "User Id"
+        }
+      },
+      "required": [
+        "user_id",
+        "room_id",
+        "email",
+        "phone"
+      ],
+      "title": "QueryUserInfoArguments",
+      "type": "object"
+    },
+    "strict": true,
+    "type": "function"
+  },
+  "idempotency_rules": {
+    "mode": "NOT_APPLICABLE"
+  },
+  "parameter_rules": {
+    "email_format": "EXACTLY_ONE_AT_WITH_NONEMPTY_SIDES",
+    "email_output": "MASK_LOCAL_PART",
+    "minimum_conditions": 1,
+    "multiple_fields": "AND",
+    "phone_format": "ASCII_DIGITS_EXACTLY_11",
+    "phone_output": "MASK_MIDDLE_FOUR_DIGITS"
+  },
+  "partial_success_behavior": "UNSUPPORTED",
+  "permission_requirements": [
+    "REGISTERED_TOOL_AND_RUN_ALLOW_LIST"
+  ],
+  "rate_limit_behavior": "UNSUPPORTED_NO_SILENT_RETRY",
+  "requires_confirmation": false,
+  "result_codes": [
+    "OK",
+    "USER_NOT_FOUND",
+    "AMBIGUOUS_USER",
+    "QUERY_CONDITION_CONFLICT",
+    "EMPTY_RESULT"
+  ],
+  "result_contracts": {
+    "AMBIGUOUS_USER": {
+      "data_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "match_count": {
+            "minimum": 2,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "match_count"
+        ],
+        "type": "object"
+      },
+      "terminal_status": "business_failure"
+    },
+    "EMPTY_RESULT": {
+      "data_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "count": {
+            "const": 0,
+            "type": "integer"
+          },
+          "fault_mode": {
+            "const": "empty_result",
+            "type": "string"
+          },
+          "items": {
+            "maxItems": 0,
+            "type": "array"
+          }
+        },
+        "required": [
+          "count",
+          "items",
+          "fault_mode"
+        ],
+        "type": "object"
+      },
+      "terminal_status": "success"
+    },
+    "OK": {
+      "data_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "environment": {
+            "type": "string"
+          },
+          "nickname": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "room_id": {
+            "type": "integer"
+          },
+          "room_name": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "user_id",
+          "room_id",
+          "nickname",
+          "room_name",
+          "phone",
+          "email",
+          "status",
+          "environment"
+        ],
+        "type": "object"
+      },
+      "terminal_status": "success"
+    },
+    "QUERY_CONDITION_CONFLICT": {
+      "data_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "required": [],
+        "type": "object"
+      },
+      "terminal_status": "business_failure"
+    },
+    "USER_NOT_FOUND": {
+      "data_schema": {
+        "additionalProperties": false,
+        "properties": {},
+        "required": [],
+        "type": "object"
+      },
+      "terminal_status": "business_failure"
+    }
+  },
+  "result_schema": {
+    "additionalProperties": false,
+    "description": "Uniform return protocol shared by all mock tools.",
+    "properties": {
+      "code": {
+        "title": "Code",
+        "type": "string"
+      },
+      "data": {
+        "additionalProperties": true,
+        "title": "Data",
+        "type": "object"
+      },
+      "message": {
+        "title": "Message",
+        "type": "string"
+      },
+      "success": {
+        "title": "Success",
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "success",
+      "code",
+      "message",
+      "data"
+    ],
+    "title": "ToolResult",
+    "type": "object"
+  },
+  "risk_level": "low",
+  "side_effects": [],
+  "snapshot_format_version": "2.0",
+  "snapshot_id": "tool.query_user_info",
+  "snapshot_sha256": "b23cf89f78b91c734b6f5c48111046171f51fe2d0562a469de1e1d0f39c0181c",
+  "snapshot_type": "tool",
+  "source_hashes": {
+    "function_schema_sha256": "9a3574bea1af7e875adc439a6c4980d2a99fbbb983791cc30afe8b8bfc9cd2f8",
+    "parameter_rules_sha256": "c03bf46bab6692521ee6a7b16f6785c08c81e09419ffce21a22a088c7b4edf82",
+    "result_contracts_sha256": "dec6d2189a901716944b52daec8492d3dc1f28c167798ef5219fcdaaf4a0d33b",
+    "result_schema_sha256": "b04c3137b6db836a69fffa0ca2a646e2e5c4149d41bbacab77477767e18a865b"
+  },
+  "terminal_behaviors": {
+    "business_failure": "RETURN_TOOL_RESULT_WITH_SUCCESS_FALSE",
+    "error": "RAISE_EXPLICIT_ERROR",
+    "success": "RETURN_TOOL_RESULT",
+    "timeout": "RAISE_EXPLICIT_TIMEOUT"
+  },
+  "timeout_behavior": "EXPLICIT_TIMEOUT_NO_AUTOMATIC_RETRY",
+  "tool_name": "query_user_info",
+  "tool_type": "read",
+  "tool_version": "shadow-read-tools-v2",
+  "trace_event_types": [
+    "tool_requested",
+    "tool_started",
+    "tool_succeeded",
+    "tool_failed",
+    "tool_timeout",
+    "permission_denied"
+  ]
+}

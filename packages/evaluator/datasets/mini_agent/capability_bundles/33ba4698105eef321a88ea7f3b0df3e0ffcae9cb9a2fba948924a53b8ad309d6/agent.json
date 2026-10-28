@@ -1,0 +1,646 @@
+{
+  "agent_id": "mini_agent",
+  "agent_version": "0.1.0",
+  "capability_bundle_sha256": "33ba4698105eef321a88ea7f3b0df3e0ffcae9cb9a2fba948924a53b8ad309d6",
+  "contract_version": "mini-agent-capability-contract-v2",
+  "current_task_types": [
+    "add_backpack_gift",
+    "prepare_resource",
+    "query_gift",
+    "query_information",
+    "query_pool",
+    "query_user"
+  ],
+  "entrypoints": [
+    "MinimalAgent.run_intent_only",
+    "MinimalAgent.run"
+  ],
+  "evidence_catalog": {
+    "final_response": {
+      "description": "Terminal Agent response.",
+      "event_types": [
+        "final_response_generated"
+      ],
+      "observation_interface": "AgentResult.final_response",
+      "payload_schema": {
+        "type": "string"
+      },
+      "producer_module_ids": [
+        "module.agent_orchestrator",
+        "module.model_gateway"
+      ],
+      "source_kind": "final_response"
+    },
+    "intent_router_output": {
+      "description": "Validated IntentResult output.",
+      "event_types": [
+        "intent_decided"
+      ],
+      "observation_interface": "MinimalAgent.run_intent_only",
+      "payload_schema": {
+        "additionalProperties": false,
+        "description": "Observable result produced by the future intent router.",
+        "properties": {
+          "intent": {
+            "enum": [
+              "query_information",
+              "prepare_resource",
+              "query_user",
+              "query_gift",
+              "add_backpack_gift",
+              "query_pool",
+              "unsupported"
+            ],
+            "title": "Intent",
+            "type": "string"
+          },
+          "missing_parameters": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Missing Parameters",
+            "type": "array"
+          },
+          "next_action": {
+            "enum": [
+              "CALL_TOOL",
+              "ASK_USER",
+              "ASK_CONFIRMATION",
+              "REJECT"
+            ],
+            "title": "Next Action",
+            "type": "string"
+          },
+          "parameters": {
+            "additionalProperties": true,
+            "title": "Parameters",
+            "type": "object"
+          },
+          "reason": {
+            "title": "Reason",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "READY",
+              "NEED_CLARIFICATION",
+              "NEED_CONFIRMATION",
+              "REJECTED"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "intent",
+          "status",
+          "next_action",
+          "reason"
+        ],
+        "title": "IntentResult",
+        "type": "object"
+      },
+      "producer_module_ids": [
+        "module.intent_router"
+      ],
+      "source_kind": "intent_result"
+    },
+    "permission_event": {
+      "description": "Observable run-scoped Tool permission outcome.",
+      "event_types": [
+        "permission_denied"
+      ],
+      "observation_interface": "AgentResult.events",
+      "payload_schema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "producer_module_ids": [
+        "module.execution_guard"
+      ],
+      "source_kind": "trace_event"
+    },
+    "tool_trace": {
+      "description": "Observable Tool request and terminal events.",
+      "event_types": [
+        "tool_requested",
+        "tool_succeeded",
+        "tool_failed",
+        "tool_timeout"
+      ],
+      "observation_interface": "AgentResult.events",
+      "payload_schema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "producer_module_ids": [
+        "module.tool_loop",
+        "module.tool_registry"
+      ],
+      "source_kind": "trace_event"
+    }
+  },
+  "execution_boundaries": {
+    "end_to_end": {
+      "description": "Run from input through the terminal response.",
+      "entry": "run",
+      "evidence_ids": [
+        "intent_router_output",
+        "tool_trace",
+        "final_response"
+      ],
+      "module_ids": [
+        "module.agent_orchestrator",
+        "module.execution_guard",
+        "module.intent_router",
+        "module.model_gateway",
+        "module.observability",
+        "module.tool_loop",
+        "module.tool_registry"
+      ],
+      "stop_after": "final_response"
+    },
+    "intent_router_only": {
+      "description": "Stop after formal Intent validation.",
+      "entry": "run_intent_only",
+      "evidence_ids": [
+        "intent_router_output"
+      ],
+      "module_ids": [
+        "module.intent_router",
+        "module.model_gateway",
+        "module.observability"
+      ],
+      "stop_after": "intent_result"
+    },
+    "tool_chain": {
+      "description": "Execute a configured Tool call and observe its result.",
+      "entry": "run",
+      "evidence_ids": [
+        "tool_trace",
+        "permission_event"
+      ],
+      "module_ids": [
+        "module.tool_loop",
+        "module.tool_registry",
+        "module.execution_guard",
+        "module.observability"
+      ],
+      "stop_after": "tool_result"
+    }
+  },
+  "input_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "session_id": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "user_input": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "user_input",
+      "session_id"
+    ],
+    "type": "object"
+  },
+  "layers": {
+    "context": {
+      "downstream_dependencies": [],
+      "entrypoints": [
+        "MinimalAgent.run"
+      ],
+      "evidence": [
+        "tool_trace"
+      ],
+      "failure_modes": [],
+      "formal_rules": [],
+      "inputs": [
+        "request"
+      ],
+      "outputs": [
+        "observable_result"
+      ],
+      "reason": null,
+      "related_tools": [],
+      "state_reads": [],
+      "state_writes": [],
+      "stop_nodes": [
+        "observable_result"
+      ],
+      "support_status": "supported",
+      "supporting_module_ids": [
+        "module.agent_orchestrator",
+        "module.execution_guard",
+        "module.intent_router",
+        "module.model_gateway",
+        "module.observability",
+        "module.tool_loop",
+        "module.tool_registry"
+      ],
+      "upstream_dependencies": []
+    },
+    "planning_execution": {
+      "downstream_dependencies": [],
+      "entrypoints": [
+        "MinimalAgent.run"
+      ],
+      "evidence": [
+        "final_response",
+        "permission_event"
+      ],
+      "failure_modes": [],
+      "formal_rules": [],
+      "inputs": [
+        "request"
+      ],
+      "outputs": [
+        "observable_result"
+      ],
+      "reason": null,
+      "related_tools": [],
+      "state_reads": [],
+      "state_writes": [],
+      "stop_nodes": [
+        "observable_result"
+      ],
+      "support_status": "supported",
+      "supporting_module_ids": [
+        "module.execution_guard",
+        "module.intent_router",
+        "module.model_gateway",
+        "module.observability"
+      ],
+      "upstream_dependencies": []
+    },
+    "result": {
+      "downstream_dependencies": [],
+      "entrypoints": [
+        "MinimalAgent.run"
+      ],
+      "evidence": [
+        "final_response"
+      ],
+      "failure_modes": [],
+      "formal_rules": [],
+      "inputs": [
+        "request"
+      ],
+      "outputs": [
+        "observable_result"
+      ],
+      "reason": null,
+      "related_tools": [],
+      "state_reads": [],
+      "state_writes": [],
+      "stop_nodes": [
+        "observable_result"
+      ],
+      "support_status": "supported",
+      "supporting_module_ids": [
+        "module.agent_orchestrator",
+        "module.execution_guard",
+        "module.intent_router",
+        "module.model_gateway",
+        "module.observability",
+        "module.tool_loop",
+        "module.tool_registry"
+      ],
+      "upstream_dependencies": []
+    },
+    "safety_recovery": {
+      "downstream_dependencies": [],
+      "entrypoints": [
+        "ToolRegistry.invoke"
+      ],
+      "evidence": [
+        "permission_event"
+      ],
+      "failure_modes": [],
+      "formal_rules": [],
+      "inputs": [
+        "request"
+      ],
+      "outputs": [
+        "observable_result"
+      ],
+      "reason": null,
+      "related_tools": [],
+      "state_reads": [],
+      "state_writes": [],
+      "stop_nodes": [
+        "observable_result"
+      ],
+      "support_status": "supported",
+      "supporting_module_ids": [
+        "module.agent_orchestrator",
+        "module.execution_guard",
+        "module.intent_router",
+        "module.model_gateway",
+        "module.observability",
+        "module.tool_loop",
+        "module.tool_registry"
+      ],
+      "upstream_dependencies": []
+    },
+    "understanding": {
+      "downstream_dependencies": [],
+      "entrypoints": [
+        "MinimalAgent.run_intent_only"
+      ],
+      "evidence": [
+        "intent_router_output"
+      ],
+      "failure_modes": [],
+      "formal_rules": [],
+      "inputs": [
+        "request"
+      ],
+      "outputs": [
+        "observable_result"
+      ],
+      "reason": null,
+      "related_tools": [],
+      "state_reads": [],
+      "state_writes": [],
+      "stop_nodes": [
+        "observable_result"
+      ],
+      "support_status": "supported",
+      "supporting_module_ids": [
+        "module.agent_orchestrator",
+        "module.execution_guard",
+        "module.intent_router",
+        "module.model_gateway",
+        "module.observability",
+        "module.tool_loop",
+        "module.tool_registry"
+      ],
+      "upstream_dependencies": []
+    }
+  },
+  "module_refs": [
+    {
+      "contract_version": "agent-orchestrator-module-v2",
+      "path": "modules/agent_orchestrator.json",
+      "snapshot_format_version": "2.0",
+      "snapshot_id": "module.agent_orchestrator",
+      "snapshot_sha256": "5102731945f9617a8d803c8a87d0ff2ff1ced74cc96fba1c03c8b5e2d9baec8a",
+      "snapshot_type": "module"
+    },
+    {
+      "contract_version": "execution-guard-module-v2",
+      "path": "modules/execution_guard.json",
+      "snapshot_format_version": "2.0",
+      "snapshot_id": "module.execution_guard",
+      "snapshot_sha256": "46e25f07328c57a8b13d3b3c6b2b775f68a1ee40cffbf1ee8fd69ff18c7d8dbc",
+      "snapshot_type": "module"
+    },
+    {
+      "contract_version": "intent-router-module-v2",
+      "path": "modules/intent_router.json",
+      "snapshot_format_version": "2.0",
+      "snapshot_id": "module.intent_router",
+      "snapshot_sha256": "9bcfafc8e8d6f7c59be075a16018f1f1dfd333bd29110745dfc8aaf4c83d3c06",
+      "snapshot_type": "module"
+    },
+    {
+      "contract_version": "model-gateway-module-v2",
+      "path": "modules/model_gateway.json",
+      "snapshot_format_version": "2.0",
+      "snapshot_id": "module.model_gateway",
+      "snapshot_sha256": "c158f0884176be60f1b074d85ec33944d69183bb916debaa25f088513b4489b0",
+      "snapshot_type": "module"
+    },
+    {
+      "contract_version": "observability-module-v2",
+      "path": "modules/observability.json",
+      "snapshot_format_version": "2.0",
+      "snapshot_id": "module.observability",
+      "snapshot_sha256": "cda765f8a88b5a4abc2382faebfa97a6a1d92ebbde09aa62ec51ac1c3644d057",
+      "snapshot_type": "module"
+    },
+    {
+      "contract_version": "tool-loop-module-v2",
+      "path": "modules/tool_loop.json",
+      "snapshot_format_version": "2.0",
+      "snapshot_id": "module.tool_loop",
+      "snapshot_sha256": "d934f8a50df335eb4d14db44dff601693376deb8e600c5408b6a9d6d1429f0f4",
+      "snapshot_type": "module"
+    },
+    {
+      "contract_version": "tool-registry-module-v2",
+      "path": "modules/tool_registry.json",
+      "snapshot_format_version": "2.0",
+      "snapshot_id": "module.tool_registry",
+      "snapshot_sha256": "e3bb12acb1a0bcfe98b06dd2b6e1ad38c863bb8b73d4a823481c4fd4096a0cf1",
+      "snapshot_type": "module"
+    }
+  ],
+  "module_topology": [],
+  "output_schema": {
+    "$defs": {
+      "IntentResult": {
+        "additionalProperties": false,
+        "description": "Observable result produced by the future intent router.",
+        "properties": {
+          "intent": {
+            "enum": [
+              "query_information",
+              "prepare_resource",
+              "query_user",
+              "query_gift",
+              "add_backpack_gift",
+              "query_pool",
+              "unsupported"
+            ],
+            "title": "Intent",
+            "type": "string"
+          },
+          "missing_parameters": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Missing Parameters",
+            "type": "array"
+          },
+          "next_action": {
+            "enum": [
+              "CALL_TOOL",
+              "ASK_USER",
+              "ASK_CONFIRMATION",
+              "REJECT"
+            ],
+            "title": "Next Action",
+            "type": "string"
+          },
+          "parameters": {
+            "additionalProperties": true,
+            "title": "Parameters",
+            "type": "object"
+          },
+          "reason": {
+            "title": "Reason",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "READY",
+              "NEED_CLARIFICATION",
+              "NEED_CONFIRMATION",
+              "REJECTED"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "intent",
+          "status",
+          "next_action",
+          "reason"
+        ],
+        "title": "IntentResult",
+        "type": "object"
+      },
+      "ToolCallRecord": {
+        "additionalProperties": false,
+        "description": "Observable terminal record for one tool call.",
+        "properties": {
+          "arguments": {
+            "additionalProperties": true,
+            "title": "Arguments",
+            "type": "object"
+          },
+          "call_id": {
+            "title": "Call Id",
+            "type": "string"
+          },
+          "duration_ms": {
+            "minimum": 0,
+            "title": "Duration Ms",
+            "type": "integer"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "output": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Output"
+          },
+          "status": {
+            "enum": [
+              "SUCCESS",
+              "FAILED",
+              "TIMEOUT"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "call_id",
+          "name",
+          "arguments",
+          "status",
+          "output",
+          "error",
+          "duration_ms"
+        ],
+        "title": "ToolCallRecord",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "description": "Stable result boundary exposed to the future evaluation framework.",
+    "properties": {
+      "events": {
+        "items": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "title": "Events",
+        "type": "array"
+      },
+      "final_response": {
+        "title": "Final Response",
+        "type": "string"
+      },
+      "intent_result": {
+        "$ref": "#/$defs/IntentResult"
+      },
+      "run_id": {
+        "title": "Run Id",
+        "type": "string"
+      },
+      "status": {
+        "enum": [
+          "SUCCESS",
+          "NEED_CLARIFICATION",
+          "NEED_CONFIRMATION",
+          "REJECTED",
+          "FAILED",
+          "MAX_STEPS_EXCEEDED"
+        ],
+        "title": "Status",
+        "type": "string"
+      },
+      "tool_calls": {
+        "items": {
+          "$ref": "#/$defs/ToolCallRecord"
+        },
+        "title": "Tool Calls",
+        "type": "array"
+      }
+    },
+    "required": [
+      "run_id",
+      "status",
+      "intent_result",
+      "tool_calls",
+      "final_response",
+      "events"
+    ],
+    "title": "AgentResult",
+    "type": "object"
+  },
+  "runtime_versions": {
+    "intent_prompt": "intent-router-v5",
+    "model_client": "environment-configured-responses-api-v1",
+    "tool_prompt": "tool-loop-v2",
+    "tool_registry": "tool-registry-v2"
+  },
+  "snapshot_format_version": "2.0",
+  "snapshot_id": "agent.mini_agent",
+  "snapshot_sha256": "14a38df9e8f48c0be8d839ea72d5b7bde1790f90231f4aec596c65ef499f3f78",
+  "snapshot_type": "agent",
+  "source_hashes": {
+    "children_sha256": "33ba4698105eef321a88ea7f3b0df3e0ffcae9cb9a2fba948924a53b8ad309d6",
+    "evidence_sha256": "d1fbd42813d78030641fa3492b39e2b3815cf85cc7d7fb4ee1e9a451ff12c181",
+    "layers_sha256": "36782431be635658616f8383c5ef0a0cfe2d1dea3dfd407a663f45ea6b06e967"
+  }
+}

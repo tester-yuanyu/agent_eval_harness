@@ -1,0 +1,30 @@
+{
+  "allowed_module_ids": [
+    "module.agent_orchestrator",
+    "module.observability"
+  ],
+  "boundary_id": "result",
+  "contract_version": "mini-agent-capability-contract-v3",
+  "description": "Structural result execution boundary.",
+  "entry_node": "terminal_status_selected",
+  "evidence_ids": [
+    "evidence.final_response"
+  ],
+  "no_overrun_rule": "No node after run_finished may execute in this range.",
+  "prohibited_module_ids": [
+    "module.execution_guard",
+    "module.intent_router",
+    "module.model_gateway",
+    "module.tool_loop",
+    "module.tool_registry"
+  ],
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "boundary.result",
+  "snapshot_sha256": "62e6963bea18c1cb4396b08887a1a4e902f823733766101e0b1dd93a0aa474ab",
+  "snapshot_type": "boundary",
+  "source_hashes": {
+    "catalog_definition_sha256": "f67410a02fa1480eee4dc121ab5d49e47c9af4e08d067e4e52d017f77170f9a3"
+  },
+  "stop_node": "run_finished",
+  "terminal_condition": "The run_finished node is reached."
+}

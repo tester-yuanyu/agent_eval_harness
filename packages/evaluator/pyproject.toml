@@ -1,0 +1,49 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agent-evaluator"
+version = "0.1.0"
+description = "Reproducible Agent evaluation, analysis, comparison, and gates"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "agent-trace-sdk>=0.1.0,<0.2",
+    "inspect_ai==0.3.280",
+    "langfuse==5.0.2",
+    "jsonschema>=4.23,<5",
+    "minimal-agent>=0.1.0",
+    "openai>=3.4,<4",
+    "pydantic>=2.6,<3",
+]
+
+[project.optional-dependencies]
+conversation = ["deepeval==4.2.9"]
+dev = ["pytest>=7.4,<9", "ruff>=0.6,<1"]
+
+[project.scripts]
+agent-evaluator = "eval_framework.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+eval_framework = ["judge_rubrics/*.json"]
+
+[tool.pytest.ini_options]
+addopts = "-ra -p no:deepeval"
+testpaths = ["tests"]
+markers = [
+    "openai_eval_smoke: opt-in paid OpenAI evaluation smoke test",
+    "deepseek_judge_smoke: opt-in paid DeepSeek Judge smoke test",
+]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 88
+# The cloned upstream project has its own lint configuration and test suite.
+extend-exclude = ["third_party"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]

@@ -1,0 +1,79 @@
+{
+  "capability_id": "query_information",
+  "contract_version": "intent-contract-v1",
+  "decision_rules": {
+    "complete": {
+      "next_action": "CALL_TOOL",
+      "status": "READY"
+    },
+    "incomplete": {
+      "next_action": "ASK_USER",
+      "status": "NEED_CLARIFICATION"
+    }
+  },
+  "missing_parameters": [
+    "environment",
+    "resource_type"
+  ],
+  "module_id": "module.intent_router",
+  "parameters_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "environment": {
+        "anyOf": [
+          {
+            "minLength": 1,
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Environment"
+      },
+      "resource_type": {
+        "anyOf": [
+          {
+            "minLength": 1,
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Resource Type"
+      }
+    },
+    "title": "_QueryInformationParameters",
+    "type": "object"
+  },
+  "semantic_rules": {
+    "required_fields": [
+      "resource_type",
+      "environment"
+    ],
+    "string_normalization": "TRIM_SURROUNDING_WHITESPACE"
+  },
+  "snapshot_format_version": "2.0",
+  "snapshot_id": "intent.query_information",
+  "snapshot_sha256": "4388cea963bb3624b138a8d9f491b8f2f2212e00a64ff94e5f8bffc13fcc6f85",
+  "snapshot_type": "intent",
+  "source_hashes": {
+    "decision_rules_sha256": "f88868121634126a29ab91a52a1666c3bb0db4273ed03ae1630ccf927dd2af19",
+    "parameters_schema_sha256": "912718a302884802123177f6f2d6d953cbecf66fb4952118bb2ad3230cdc8773",
+    "semantic_rules_sha256": "5496f4fabe979405206e100b43367f95493b427b663925428c2a46c80de09b6b",
+    "tool_refs_sha256": "d13a1f863050892a3a080b2f825e60205c45b68d9084c41d3a0f590ae9349c77"
+  },
+  "tool_refs": [
+    {
+      "contract_version": "tool-query_information-contract-v2",
+      "path": "tools/query_information.json",
+      "snapshot_format_version": "2.0",
+      "snapshot_id": "tool.query_information",
+      "snapshot_sha256": "842e332e6b0fb287cc02e19a766992982ec5f5de2a069dd28dd94154632fbccc",
+      "snapshot_type": "tool"
+    }
+  ]
+}

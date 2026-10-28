@@ -1,0 +1,103 @@
+{
+  "applicable_result_paths": [
+    "success",
+    "need_clarification",
+    "need_confirmation",
+    "rejected",
+    "failure"
+  ],
+  "availability": {
+    "capability_key": "evidence.intent_result_available",
+    "evidence_ids": [
+      "evidence.intent_result"
+    ],
+    "reason": null,
+    "support_status": "supported"
+  },
+  "consumer_roles": [
+    "builder",
+    "evaluator"
+  ],
+  "contract_version": "mini-agent-capability-contract-v3",
+  "description": "Validated IntentResult returned by the intent router.",
+  "event_types": [
+    "intent_decided"
+  ],
+  "evidence_id": "intent_result",
+  "observation_interface": "agent_result.intent_result",
+  "payload_schema": {
+    "additionalProperties": false,
+    "description": "Observable result produced by the future intent router.",
+    "properties": {
+      "intent": {
+        "enum": [
+          "query_information",
+          "prepare_resource",
+          "query_user",
+          "query_gift",
+          "add_backpack_gift",
+          "query_pool",
+          "unsupported"
+        ],
+        "title": "Intent",
+        "type": "string"
+      },
+      "missing_parameters": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Missing Parameters",
+        "type": "array"
+      },
+      "next_action": {
+        "enum": [
+          "CALL_TOOL",
+          "ASK_USER",
+          "ASK_CONFIRMATION",
+          "REJECT"
+        ],
+        "title": "Next Action",
+        "type": "string"
+      },
+      "parameters": {
+        "additionalProperties": true,
+        "title": "Parameters",
+        "type": "object"
+      },
+      "reason": {
+        "title": "Reason",
+        "type": "string"
+      },
+      "status": {
+        "enum": [
+          "READY",
+          "NEED_CLARIFICATION",
+          "NEED_CONFIRMATION",
+          "REJECTED"
+        ],
+        "title": "Status",
+        "type": "string"
+      }
+    },
+    "required": [
+      "intent",
+      "status",
+      "next_action",
+      "reason"
+    ],
+    "title": "IntentResult",
+    "type": "object"
+  },
+  "producer_module_ids": [
+    "module.intent_router"
+  ],
+  "production_timing": "after formal Intent validation",
+  "required": true,
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "evidence.intent_result",
+  "snapshot_sha256": "a80df6e107a2cc8d2a7c16d77e3a75c018ba7f287403571478406030de31c920",
+  "snapshot_type": "evidence",
+  "source_hashes": {
+    "catalog_definition_sha256": "2936e2b931b905eefd36b741dfa91a76037a800f61262e8a265d82e593f533fd"
+  }
+}

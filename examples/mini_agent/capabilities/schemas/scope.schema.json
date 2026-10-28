@@ -1,0 +1,276 @@
+{
+  "$defs": {
+    "CapabilityProviderV3": {
+      "additionalProperties": false,
+      "properties": {
+        "role": {
+          "enum": [
+            "selected_intent",
+            "selected_tool",
+            "snapshot"
+          ],
+          "title": "Role",
+          "type": "string"
+        },
+        "snapshot_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Snapshot Id"
+        }
+      },
+      "required": [
+        "role",
+        "snapshot_id"
+      ],
+      "title": "CapabilityProviderV3",
+      "type": "object"
+    },
+    "CapabilityRequirementV3": {
+      "additionalProperties": false,
+      "properties": {
+        "capability_key": {
+          "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)+$",
+          "title": "Capability Key",
+          "type": "string"
+        },
+        "evidence_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Ids",
+          "type": "array"
+        },
+        "mandatory": {
+          "title": "Mandatory",
+          "type": "boolean"
+        },
+        "provider": {
+          "$ref": "#/$defs/CapabilityProviderV3"
+        },
+        "requirement_id": {
+          "pattern": "^[a-z][a-z0-9_]*$",
+          "title": "Requirement Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "requirement_id",
+        "capability_key",
+        "provider",
+        "mandatory",
+        "evidence_ids"
+      ],
+      "title": "CapabilityRequirementV3",
+      "type": "object"
+    },
+    "SnapshotReferenceV3": {
+      "additionalProperties": false,
+      "properties": {
+        "contract_version": {
+          "minLength": 1,
+          "title": "Contract Version",
+          "type": "string"
+        },
+        "path": {
+          "minLength": 1,
+          "title": "Path",
+          "type": "string"
+        },
+        "snapshot_format_version": {
+          "const": "3.0",
+          "title": "Snapshot Format Version",
+          "type": "string"
+        },
+        "snapshot_id": {
+          "pattern": "^(agent|module|intent|tool|scope|chain|evidence|boundary)\\.[a-z][a-z0-9_]*$",
+          "title": "Snapshot Id",
+          "type": "string"
+        },
+        "snapshot_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Snapshot Sha256",
+          "type": "string"
+        },
+        "snapshot_type": {
+          "$ref": "#/$defs/SnapshotTypeV3"
+        }
+      },
+      "required": [
+        "snapshot_id",
+        "snapshot_type",
+        "snapshot_format_version",
+        "contract_version",
+        "snapshot_sha256",
+        "path"
+      ],
+      "title": "SnapshotReferenceV3",
+      "type": "object"
+    },
+    "SnapshotTypeV3": {
+      "enum": [
+        "agent",
+        "module",
+        "intent",
+        "tool",
+        "scope",
+        "chain",
+        "evidence",
+        "boundary"
+      ],
+      "title": "SnapshotTypeV3",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "allowed_module_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Allowed Module Ids",
+      "type": "array"
+    },
+    "boundary_refs": {
+      "items": {
+        "$ref": "#/$defs/SnapshotReferenceV3"
+      },
+      "title": "Boundary Refs",
+      "type": "array"
+    },
+    "completion_condition": {
+      "minLength": 1,
+      "title": "Completion Condition",
+      "type": "string"
+    },
+    "contract_version": {
+      "minLength": 1,
+      "title": "Contract Version",
+      "type": "string"
+    },
+    "description": {
+      "minLength": 1,
+      "title": "Description",
+      "type": "string"
+    },
+    "entrypoint": {
+      "minLength": 1,
+      "title": "Entrypoint",
+      "type": "string"
+    },
+    "evidence_refs": {
+      "items": {
+        "$ref": "#/$defs/SnapshotReferenceV3"
+      },
+      "title": "Evidence Refs",
+      "type": "array"
+    },
+    "inputs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Inputs",
+      "type": "array"
+    },
+    "module_refs": {
+      "items": {
+        "$ref": "#/$defs/SnapshotReferenceV3"
+      },
+      "title": "Module Refs",
+      "type": "array"
+    },
+    "outputs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Outputs",
+      "type": "array"
+    },
+    "prohibited_module_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Prohibited Module Ids",
+      "type": "array"
+    },
+    "requirements": {
+      "items": {
+        "$ref": "#/$defs/CapabilityRequirementV3"
+      },
+      "title": "Requirements",
+      "type": "array"
+    },
+    "scope_id": {
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "title": "Scope Id",
+      "type": "string"
+    },
+    "snapshot_format_version": {
+      "const": "3.0",
+      "title": "Snapshot Format Version",
+      "type": "string"
+    },
+    "snapshot_id": {
+      "pattern": "^(agent|module|intent|tool|scope|chain|evidence|boundary)\\.[a-z][a-z0-9_]*$",
+      "title": "Snapshot Id",
+      "type": "string"
+    },
+    "snapshot_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Snapshot Sha256",
+      "type": "string"
+    },
+    "snapshot_type": {
+      "const": "scope",
+      "title": "Snapshot Type",
+      "type": "string"
+    },
+    "source_hashes": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "minProperties": 1,
+      "title": "Source Hashes",
+      "type": "object"
+    },
+    "stop_boundary": {
+      "minLength": 1,
+      "title": "Stop Boundary",
+      "type": "string"
+    },
+    "unresolved_behavior": {
+      "minLength": 1,
+      "title": "Unresolved Behavior",
+      "type": "string"
+    }
+  },
+  "required": [
+    "snapshot_id",
+    "snapshot_type",
+    "snapshot_format_version",
+    "contract_version",
+    "source_hashes",
+    "snapshot_sha256",
+    "scope_id",
+    "description",
+    "inputs",
+    "outputs",
+    "entrypoint",
+    "stop_boundary",
+    "allowed_module_ids",
+    "prohibited_module_ids",
+    "module_refs",
+    "evidence_refs",
+    "boundary_refs",
+    "requirements",
+    "completion_condition",
+    "unresolved_behavior"
+  ],
+  "title": "ScopeSnapshotV3",
+  "type": "object"
+}

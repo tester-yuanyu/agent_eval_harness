@@ -1,0 +1,316 @@
+{
+  "contract_version": "tool-query_gift_info-contract-v2",
+  "description": "Query fictional gift details by ID, ID list, or name.",
+  "empty_result_behavior": "SUPPORTED_BY_FAULT_MODE",
+  "fault_modes": [
+    "normal",
+    "empty_result",
+    "error",
+    "timeout"
+  ],
+  "function_schema": {
+    "description": "Query fictional gift details by ID, ID list, or name.",
+    "name": "query_gift_info",
+    "parameters": {
+      "additionalProperties": false,
+      "description": "Query mock gift details using exactly one lookup mode.",
+      "properties": {
+        "gift_id": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Gift Id"
+        },
+        "gift_ids": {
+          "anyOf": [
+            {
+              "items": {
+                "exclusiveMinimum": 0,
+                "type": "integer"
+              },
+              "minItems": 1,
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Gift Ids"
+        },
+        "gift_name": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Gift Name"
+        },
+        "limit": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Limit"
+        }
+      },
+      "required": [
+        "gift_id",
+        "gift_ids",
+        "gift_name",
+        "limit"
+      ],
+      "title": "QueryGiftInfoArguments",
+      "type": "object"
+    },
+    "strict": true,
+    "type": "function"
+  },
+  "idempotency_rules": {
+    "mode": "NOT_APPLICABLE"
+  },
+  "parameter_rules": {
+    "batch_order": "PRESERVE_INPUT_CORRESPONDENCE",
+    "default_limit": 10,
+    "gift_name_match": "CASE_INSENSITIVE_SUBSTRING",
+    "lookup_mode_cardinality": "EXACTLY_ONE",
+    "lookup_modes": [
+      "gift_id",
+      "gift_ids",
+      "gift_name"
+    ]
+  },
+  "partial_success_behavior": "SUPPORTED_FOR_GIFT_IDS",
+  "permission_requirements": [
+    "REGISTERED_TOOL_AND_RUN_ALLOW_LIST"
+  ],
+  "rate_limit_behavior": "UNSUPPORTED_NO_SILENT_RETRY",
+  "requires_confirmation": false,
+  "result_codes": [
+    "OK",
+    "PARTIAL_MATCH",
+    "MULTIPLE_MATCHES",
+    "GIFT_NOT_FOUND",
+    "EMPTY_RESULT"
+  ],
+  "result_contracts": {
+    "EMPTY_RESULT": {
+      "data_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "count": {
+            "const": 0,
+            "type": "integer"
+          },
+          "fault_mode": {
+            "const": "empty_result",
+            "type": "string"
+          },
+          "items": {
+            "maxItems": 0,
+            "type": "array"
+          }
+        },
+        "required": [
+          "count",
+          "items",
+          "fault_mode"
+        ],
+        "type": "object"
+      },
+      "terminal_status": "success"
+    },
+    "GIFT_NOT_FOUND": {
+      "data_schema": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "terminal_status": "business_failure"
+    },
+    "MULTIPLE_MATCHES": {
+      "data_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "count": {
+            "minimum": 2,
+            "type": "integer"
+          },
+          "matches": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "matches",
+          "count"
+        ],
+        "type": "object"
+      },
+      "terminal_status": "success"
+    },
+    "OK": {
+      "data_schema": {
+        "oneOf": [
+          {
+            "additionalProperties": false,
+            "properties": {
+              "gift": {
+                "additionalProperties": true,
+                "type": "object"
+              }
+            },
+            "required": [
+              "gift"
+            ],
+            "type": "object"
+          },
+          {
+            "additionalProperties": false,
+            "properties": {
+              "found_count": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "results": {
+                "items": {
+                  "additionalProperties": true,
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "results",
+              "found_count"
+            ],
+            "type": "object"
+          },
+          {
+            "additionalProperties": false,
+            "properties": {
+              "count": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "matches": {
+                "items": {
+                  "additionalProperties": true,
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "matches",
+              "count"
+            ],
+            "type": "object"
+          }
+        ]
+      },
+      "terminal_status": "success"
+    },
+    "PARTIAL_MATCH": {
+      "data_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "found_count": {
+            "minimum": 1,
+            "type": "integer"
+          },
+          "results": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "results",
+          "found_count"
+        ],
+        "type": "object"
+      },
+      "terminal_status": "success"
+    }
+  },
+  "result_schema": {
+    "additionalProperties": false,
+    "description": "Uniform return protocol shared by all mock tools.",
+    "properties": {
+      "code": {
+        "title": "Code",
+        "type": "string"
+      },
+      "data": {
+        "additionalProperties": true,
+        "title": "Data",
+        "type": "object"
+      },
+      "message": {
+        "title": "Message",
+        "type": "string"
+      },
+      "success": {
+        "title": "Success",
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "success",
+      "code",
+      "message",
+      "data"
+    ],
+    "title": "ToolResult",
+    "type": "object"
+  },
+  "risk_level": "low",
+  "side_effects": [],
+  "snapshot_format_version": "2.0",
+  "snapshot_id": "tool.query_gift_info",
+  "snapshot_sha256": "c6219cb9396ec8e520e0c5a4b8da85db5afecd3fa18e0fcd25d40349c82ec38e",
+  "snapshot_type": "tool",
+  "source_hashes": {
+    "function_schema_sha256": "5457af8330adaeeb7bb04c3a60ce1fa659f1393be28ee3a372dbc8c1c75fd58c",
+    "parameter_rules_sha256": "6dd425503a0c24d663cff05e525f927987bcd1c1fe5eb03ae32020100ff08cf1",
+    "result_contracts_sha256": "0de1c9e0c431049867f74dea266261aec894810a2f20e7e08570e1ae9858687c",
+    "result_schema_sha256": "b04c3137b6db836a69fffa0ca2a646e2e5c4149d41bbacab77477767e18a865b"
+  },
+  "terminal_behaviors": {
+    "business_failure": "RETURN_TOOL_RESULT_WITH_SUCCESS_FALSE",
+    "error": "RAISE_EXPLICIT_ERROR",
+    "success": "RETURN_TOOL_RESULT",
+    "timeout": "RAISE_EXPLICIT_TIMEOUT"
+  },
+  "timeout_behavior": "EXPLICIT_TIMEOUT_NO_AUTOMATIC_RETRY",
+  "tool_name": "query_gift_info",
+  "tool_type": "read",
+  "tool_version": "shadow-read-tools-v2",
+  "trace_event_types": [
+    "tool_requested",
+    "tool_started",
+    "tool_succeeded",
+    "tool_failed",
+    "tool_timeout",
+    "permission_denied"
+  ]
+}

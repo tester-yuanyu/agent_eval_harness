@@ -1,0 +1,450 @@
+{
+  "$defs": {
+    "AssertionSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "weight": {
+          "exclusiveMinimum": 0,
+          "title": "Weight",
+          "type": "number"
+        },
+        "critical": {
+          "default": false,
+          "title": "Critical",
+          "type": "boolean"
+        },
+        "config": {
+          "additionalProperties": true,
+          "title": "Config",
+          "type": "object"
+        }
+      },
+      "required": [
+        "name",
+        "weight"
+      ],
+      "title": "AssertionSpec",
+      "type": "object"
+    },
+    "CleanupSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "required": {
+          "default": true,
+          "title": "Required",
+          "type": "boolean"
+        },
+        "strategy": {
+          "const": "temporary_directory",
+          "default": "temporary_directory",
+          "title": "Strategy",
+          "type": "string"
+        }
+      },
+      "title": "CleanupSpec",
+      "type": "object"
+    },
+    "EvaluationSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "checks": {
+          "items": {
+            "$ref": "#/$defs/AssertionSpec"
+          },
+          "minItems": 1,
+          "title": "Checks",
+          "type": "array"
+        }
+      },
+      "required": [
+        "checks"
+      ],
+      "title": "EvaluationSpec",
+      "type": "object"
+    },
+    "ExecutionSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "adapter_input": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Adapter Input"
+        },
+        "user_input": {
+          "minLength": 1,
+          "title": "User Input",
+          "type": "string"
+        },
+        "user_responses": {
+          "items": {
+            "type": "string"
+          },
+          "title": "User Responses",
+          "type": "array"
+        },
+        "tool_profile": {
+          "minLength": 1,
+          "title": "Tool Profile",
+          "type": "string"
+        },
+        "allowed_tools": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Allowed Tools"
+        },
+        "fault_injection": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Fault Injection",
+          "type": "object"
+        },
+        "max_steps": {
+          "default": 4,
+          "exclusiveMinimum": 0,
+          "title": "Max Steps",
+          "type": "integer"
+        },
+        "timeout_seconds": {
+          "default": 30.0,
+          "exclusiveMinimum": 0,
+          "title": "Timeout Seconds",
+          "type": "number"
+        }
+      },
+      "required": [
+        "user_input",
+        "tool_profile"
+      ],
+      "title": "ExecutionSpec",
+      "type": "object"
+    },
+    "ExpectedToolCall": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "arguments": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Arguments"
+        },
+        "count": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Count"
+        },
+        "status": {
+          "anyOf": [
+            {
+              "enum": [
+                "SUCCESS",
+                "FAILED",
+                "TIMEOUT"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Status"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "ExpectedToolCall",
+      "type": "object"
+    },
+    "JudgeCaseSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "rubric_id": {
+          "minLength": 1,
+          "title": "Rubric Id",
+          "type": "string"
+        },
+        "rubric_version": {
+          "minLength": 1,
+          "title": "Rubric Version",
+          "type": "string"
+        },
+        "dimensions": {
+          "items": {
+            "$ref": "#/$defs/JudgeDimensionSpec"
+          },
+          "minItems": 1,
+          "title": "Dimensions",
+          "type": "array"
+        },
+        "reference_facts": {
+          "additionalProperties": true,
+          "title": "Reference Facts",
+          "type": "object"
+        },
+        "required": {
+          "default": false,
+          "title": "Required",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "rubric_id",
+        "rubric_version",
+        "dimensions"
+      ],
+      "title": "JudgeCaseSpec",
+      "type": "object"
+    },
+    "JudgeDimensionSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "weight": {
+          "exclusiveMinimum": 0,
+          "title": "Weight",
+          "type": "number"
+        },
+        "threshold": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Threshold",
+          "type": "number"
+        }
+      },
+      "required": [
+        "name",
+        "weight",
+        "threshold"
+      ],
+      "title": "JudgeDimensionSpec",
+      "type": "object"
+    },
+    "OracleSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "expected_module_output": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Expected Module Output"
+        },
+        "expected_agent_status": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Expected Agent Status"
+        },
+        "expected_tool_calls": {
+          "items": {
+            "$ref": "#/$defs/ExpectedToolCall"
+          },
+          "title": "Expected Tool Calls",
+          "type": "array"
+        },
+        "forbidden_tools": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Forbidden Tools",
+          "type": "array"
+        },
+        "goal_state": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Goal State"
+        },
+        "process_constraints": {
+          "additionalProperties": true,
+          "title": "Process Constraints",
+          "type": "object"
+        },
+        "expected_response": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Expected Response"
+        },
+        "evaluation": {
+          "$ref": "#/$defs/EvaluationSpec"
+        },
+        "judge": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/JudgeCaseSpec"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "evaluation"
+      ],
+      "title": "OracleSpec",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "minLength": 1,
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "case_id": {
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.-]+$",
+      "title": "Case Id",
+      "type": "string"
+    },
+    "task_id": {
+      "minLength": 1,
+      "title": "Task Id",
+      "type": "string"
+    },
+    "scenario_type": {
+      "enum": [
+        "normal",
+        "valid_boundary",
+        "invalid_parameter",
+        "missing_parameter",
+        "ambiguous_expression",
+        "multi_condition",
+        "expression_variant",
+        "correction_conflict",
+        "unsupported_batch"
+      ],
+      "title": "Scenario Type",
+      "type": "string"
+    },
+    "test_scope": {
+      "enum": [
+        "module",
+        "link",
+        "end_to_end"
+      ],
+      "title": "Test Scope",
+      "type": "string"
+    },
+    "target": {
+      "minLength": 1,
+      "title": "Target",
+      "type": "string"
+    },
+    "execution": {
+      "$ref": "#/$defs/ExecutionSpec"
+    },
+    "oracle": {
+      "$ref": "#/$defs/OracleSpec"
+    },
+    "labels": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Labels",
+      "type": "array"
+    },
+    "cleanup": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/CleanupSpec"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "required": [
+    "schema_version",
+    "case_id",
+    "task_id",
+    "scenario_type",
+    "test_scope",
+    "target",
+    "execution",
+    "oracle"
+  ],
+  "title": "EvalCase",
+  "type": "object"
+}

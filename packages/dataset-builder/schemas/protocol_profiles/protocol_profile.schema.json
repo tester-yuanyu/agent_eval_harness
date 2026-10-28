@@ -1,0 +1,159 @@
+{
+  "$defs": {
+    "AdapterReference": {
+      "additionalProperties": false,
+      "properties": {
+        "protocol": {
+          "minLength": 1,
+          "title": "Protocol",
+          "type": "string"
+        },
+        "version": {
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "protocol",
+        "version"
+      ],
+      "title": "AdapterReference",
+      "type": "object"
+    },
+    "SnapshotTypeProfile": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_path": {
+          "minLength": 1,
+          "title": "Schema Path",
+          "type": "string"
+        },
+        "schema_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Schema Sha256",
+          "type": "string"
+        },
+        "reference_fields": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Reference Fields",
+          "type": "array"
+        }
+      },
+      "required": [
+        "schema_path",
+        "schema_sha256",
+        "reference_fields"
+      ],
+      "title": "SnapshotTypeProfile",
+      "type": "object"
+    },
+    "TrustedSchemaProfile": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_path": {
+          "minLength": 1,
+          "title": "Schema Path",
+          "type": "string"
+        },
+        "schema_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Schema Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "schema_path",
+        "schema_sha256"
+      ],
+      "title": "TrustedSchemaProfile",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "profile_id": {
+      "minLength": 1,
+      "title": "Profile Id",
+      "type": "string"
+    },
+    "protocol_id": {
+      "minLength": 1,
+      "title": "Protocol Id",
+      "type": "string"
+    },
+    "protocol_version": {
+      "minLength": 1,
+      "title": "Protocol Version",
+      "type": "string"
+    },
+    "root_filename": {
+      "minLength": 1,
+      "title": "Root Filename",
+      "type": "string"
+    },
+    "root_snapshot_type": {
+      "minLength": 1,
+      "title": "Root Snapshot Type",
+      "type": "string"
+    },
+    "snapshot_types": {
+      "additionalProperties": {
+        "$ref": "#/$defs/SnapshotTypeProfile"
+      },
+      "minProperties": 1,
+      "title": "Snapshot Types",
+      "type": "object"
+    },
+    "supporting_schemas": {
+      "additionalProperties": {
+        "$ref": "#/$defs/TrustedSchemaProfile"
+      },
+      "title": "Supporting Schemas",
+      "type": "object"
+    },
+    "canonical_json_algorithm": {
+      "const": "sorted-json-v1",
+      "title": "Canonical Json Algorithm",
+      "type": "string"
+    },
+    "bundle_hash_algorithm": {
+      "const": "sorted-reference-projection-v1",
+      "title": "Bundle Hash Algorithm",
+      "type": "string"
+    },
+    "extension_policy": {
+      "enum": [
+        "reject",
+        "declared"
+      ],
+      "title": "Extension Policy",
+      "type": "string"
+    },
+    "adapter": {
+      "$ref": "#/$defs/AdapterReference"
+    }
+  },
+  "required": [
+    "schema_version",
+    "profile_id",
+    "protocol_id",
+    "protocol_version",
+    "root_filename",
+    "root_snapshot_type",
+    "snapshot_types",
+    "canonical_json_algorithm",
+    "bundle_hash_algorithm",
+    "extension_policy",
+    "adapter"
+  ],
+  "title": "ProtocolProfile",
+  "type": "object"
+}
