@@ -50,3 +50,11 @@ All three executions complete; success of execution alone does not imply quality
 The root setup installs evaluator, shared contracts, trace SDK and the optional reference Agent into `.venvs/evaluator`. Core-only installation can omit the Agent and still run the external demo. The package's paid/conversation extras remain opt-in. The coordinator owns independent clean-clone/core-only environment acceptance and final locks.
 
 No original repository was edited, no frozen JSON was rewritten, no credentials were used, and no changes were staged or committed by this worker.
+
+## Clean-clone timing regression follow-up
+
+The coordinator's clean-clone evaluator run exposed an intermittent failure in `test_legacy_builder_and_explicit_suite_produce_equivalent_results`. A single `-vv` rerun in that clone passed. A diagnostic run that delayed only the first fixture Provider execution by 30 ms reproduced the failure and recursively compared the actual normalized results: the only differences were `summary.performance.latency_p50_ms` and `summary.performance.latency_p95_ms` (40.0 versus 0.0 in that run). The normalizer already excluded case, top-level summary, and stability elapsed times, but omitted these newer nested quantiles.
+
+The test normalizer now excludes only those two additional measured latency values. The actual Inspect execution, assertions, verdicts, complete business summary, performance sample count, and Judge token usage remain compared. The integration test deliberately gives the two real results different saved timing quantiles, so this regression fails deterministically before the fix. Additional guards perturb sample count and each Judge usage field and require the normalized results to differ, preventing a future broad exclusion of the whole performance summary.
+
+Focused verification: `tests/test_suite_cli.py tests/test_compiled_execution.py tests/test_metric_authority.py tests/test_native_aggregation.py` — **32 passed in 2.81 seconds**; Ruff and `git diff --check` passed. Only the main repository's test and this report were edited. The clone was used for read-only diagnosis with bytecode/cache writes disabled; the coordinator owns syncing and repeating its full clean-clone acceptance.

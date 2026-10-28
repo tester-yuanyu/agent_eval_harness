@@ -3,21 +3,21 @@
 在仓库根目录运行命令。以下示例准备内置理解层 Suite，不会调用模型：
 
 ```bash
-make cli ARGS='dataset prepare --suite mini_agent_query_user_intent_v2 --workspace artifacts/query-user'
+.venvs/evaluator/bin/eval-suite dataset prepare --suite mini_agent_query_user_intent_v2 --workspace artifacts/query-user
 ```
 
 工作区生成 `generation_request.json` 等构建材料。候选可通过显式 `dataset generate` 在线生成，也可使用外部响应离线导入：
 
 ```bash
-make cli ARGS='dataset ingest --request artifacts/query-user/generation_request.json --response response.json --workspace artifacts/query-user'
-make cli ARGS='dataset validate --suite mini_agent_query_user_intent_v2 --draft artifacts/query-user/draft.jsonl'
-make cli ARGS='dataset review --suite mini_agent_query_user_intent_v2 --draft artifacts/query-user/draft.jsonl --output artifacts/query-user/review.md'
+.venvs/evaluator/bin/eval-suite dataset ingest --request artifacts/query-user/generation_request.json --response response.json --workspace artifacts/query-user
+.venvs/evaluator/bin/eval-suite dataset validate --suite mini_agent_query_user_intent_v2 --draft artifacts/query-user/draft.jsonl
+.venvs/evaluator/bin/eval-suite dataset review --suite mini_agent_query_user_intent_v2 --draft artifacts/query-user/draft.jsonl --output artifacts/query-user/review.md
 ```
 
 `response.json` 应按请求中的候选结构准备。导入不是自动审核：全部校验通过后，还需人工核对审核清单。完成真实审核后，可使用自己的审核标识显式冻结：
 
 ```bash
-make cli ARGS='dataset freeze --suite mini_agent_query_user_intent_v2 --draft artifacts/query-user/draft.jsonl --reviewer YOUR_REVIEWER_ID --review-file artifacts/query-user/review.md --output data/datasets/query-user-v1.jsonl'
+.venvs/evaluator/bin/eval-suite dataset freeze --suite mini_agent_query_user_intent_v2 --draft artifacts/query-user/draft.jsonl --reviewer YOUR_REVIEWER_ID --review-file artifacts/query-user/review.md --output data/datasets/query-user-v1.jsonl
 ```
 
 未完成审核、输入绑定变化或输出已存在，冻结会失败。不要通过直接改写生命周期字段绕过 Builder 的冻结流程。`make demo` 自带的合成自检 Suite 不代表这一人工生产流程已执行。

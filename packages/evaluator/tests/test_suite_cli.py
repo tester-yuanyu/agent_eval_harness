@@ -114,6 +114,9 @@ def _normalized_result(result) -> dict:
             case.pop(field)
     for field in ("average_latency_ms", "median_latency_ms", "max_latency_ms"):
         payload["summary"].pop(field)
+    if payload["summary"]["performance"] is not None:
+        for field in ("latency_p50_ms", "latency_p95_ms"):
+            payload["summary"]["performance"].pop(field)
     if payload["stability"] is not None:
         payload["stability"].pop("latency_p50_ms")
         payload["stability"].pop("latency_p95_ms")
@@ -248,7 +251,27 @@ def test_legacy_builder_and_explicit_suite_produce_equivalent_results(
         catalog,
     )
 
+    # Make the elapsed-time difference deterministic even when both fast fixture
+    # invocations happen to round to the same millisecond on this machine.
+    assert explicit_result.summary.performance is not None
+    assert legacy_result.summary.performance is not None
+    explicit_result.summary.performance.latency_p50_ms = 10
+    explicit_result.summary.performance.latency_p95_ms = 20
+    legacy_result.summary.performance.latency_p50_ms = 30
+    legacy_result.summary.performance.latency_p95_ms = 40
     assert _normalized_result(explicit_result) == _normalized_result(legacy_result)
+
+    # Normalization must preserve the performance population and Judge usage;
+    # dropping the entire performance summary would hide real semantic changes.
+    for field, value in (
+        ("latency_sample_count", 2),
+        ("judge_token_totals", {"MODULE-1/trial_001": 10}),
+        ("judge_token_total", 10),
+        ("judge_token_max", 10),
+    ):
+        changed = explicit_result.model_copy(deep=True)
+        setattr(changed.summary.performance, field, value)
+        assert _normalized_result(changed) != _normalized_result(legacy_result)
 
 
 def test_legacy_builder_keeps_explicit_capability_override_out_of_suite_document(

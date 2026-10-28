@@ -49,20 +49,20 @@ Builder 与 Evaluator 当前的 OpenAI 版本约束不同，因此分别安装�
 
 ```bash
 # 查看已登记的快照版本
-make cli ARGS='bundle list'
+.venvs/evaluator/bin/eval-suite bundle list
 
 # 解析并重新校验固定版本；返回相对路径和协议 Hash
-make cli ARGS='bundle resolve --agent mini_agent --version 0.1.0'
+.venvs/evaluator/bin/eval-suite bundle resolve --agent mini_agent --version 0.1.0
 
 # 准备内置 Suite 的生成请求（此步不调用模型）
-make cli ARGS='dataset prepare --suite mini_agent_query_user_intent_v2 --workspace artifacts/query-user'
+.venvs/evaluator/bin/eval-suite dataset prepare --suite mini_agent_query_user_intent_v2 --workspace artifacts/query-user
 
 # 查看各阶段真实参数
-make cli ARGS='dataset ingest --help'
-make cli ARGS='eval run --help'
+.venvs/evaluator/bin/eval-suite dataset ingest --help
+.venvs/evaluator/bin/eval-suite eval run --help
 
 # 全量离线回归与历史资产校验
-make test
+python3 scripts/test_all.py
 python3 scripts/verify_assets.py
 ```
 
@@ -84,7 +84,7 @@ python3 scripts/verify_assets.py
 
 ```bash
 # 仅安装不含 mini_agent 的评测核心
-make setup-core PYTHON=python3.11
+python3.11 scripts/setup.py --only core
 .venvs/core/bin/python scripts/demo.py --output-dir artifacts/core-demo
 ```
 

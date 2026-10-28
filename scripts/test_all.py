@@ -24,7 +24,11 @@ def main() -> int:
     parser.add_argument("--only", choices=GROUPS)
     parser.add_argument("--optional-metrics", action="store_true")
     args = parser.parse_args()
-    output = ROOT / "artifacts" / "verification"
+    output = (
+        ROOT
+        / "artifacts"
+        / ("verification-optional" if args.optional_metrics else "verification")
+    )
     output.mkdir(parents=True, exist_ok=True)
     # The offline test harness must not inherit credentials or live-smoke opt-ins.
     env = {
