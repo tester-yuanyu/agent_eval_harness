@@ -6,16 +6,18 @@
 
 ## 快速开始
 
-需要 Python 3.11+、Git 和 Make。首次安装需要访问 Python 包源；离线 demo 不需要模型密钥或 Langfuse 服务。当前验证环境为 macOS / Python 3.11。
+需要 Python 3.11+ 和 Git。首次安装需要访问 Python 包源；离线 demo 不需要模型密钥或 Langfuse 服务。当前验证环境为 macOS / Python 3.11。
 
 ```bash
 git clone <你的仓库地址> agent-eval-suite
 cd agent-eval-suite
-make setup PYTHON=python3.11
-make demo
+python3.11 scripts/setup.py
+.venvs/evaluator/bin/python scripts/demo.py
 ```
 
 尚未发布到远端时，直接进入本地仓库执行后两条命令。
+
+已安装 Make 的环境也可使用 `make setup PYTHON=python3.11` 与 `make demo`。部分 macOS 机器的 `/usr/bin/make` 只是未安装 Command Line Tools 时的占位程序；直接使用上述 Python 入口即可。
 
 `make demo` 使用外部静态适配器，通过真实的 Inspect 编译、执行和评分流程，验证三个预设场景：`PASS`、`FAIL`、`INCONCLUSIVE`。输出路径打印在终端，包括 Markdown 报告、结构化结果和原生 `.eval` 日志，保存在 `artifacts/demo-*/`。
 
@@ -86,7 +88,9 @@ make setup-core PYTHON=python3.11
 .venvs/core/bin/python scripts/demo.py --output-dir artifacts/core-demo
 ```
 
-`make setup` 默认不安装 DeepEval 等可选指标依赖。相关测试在缺少依赖时明确跳过，在线 smoke 测试默认关闭。可按需使用 `python3 scripts/setup.py --only builder --optional-metrics` 或 `python3 scripts/setup.py --only evaluator --optional-metrics`，它们使用各自独立解析的 `*-optional.txt` 约束。依赖约束升级应显式审查。
+`make setup` 默认不安装 DeepEval 等可选指标依赖。相关测试在缺少依赖时明确跳过，在线 smoke 测试默认关闭。可按需使用 `python3 scripts/setup.py --only builder --optional-metrics` 或 `python3 scripts/setup.py --only evaluator --optional-metrics`。它们使用独立解析的 `*-optional.txt` 约束，安装到 `.venvs/builder-optional`、`.venvs/evaluator-optional`，保持默认环境可用。
+
+使用可选后端时，在根 CLI 命令前增加 `--builder-python .venvs/builder-optional/bin/python` 或 `--evaluator-python .venvs/evaluator-optional/bin/python`。两套 optional 环境均安装后，可运行 `python3 scripts/test_all.py --optional-metrics`。依赖约束升级应显式审查。
 
 历史冻结数据和文档保留在各包内。当前入口以本 README 和以下文档为准：
 

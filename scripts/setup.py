@@ -19,7 +19,10 @@ def environment_python(name: str) -> Path:
 
 
 def install(name: str, optional_metrics: bool, use_locks: bool) -> None:
-    python = environment_python(name)
+    environment_name = (
+        f"{name}-optional" if optional_metrics and name != "core" else name
+    )
+    python = environment_python(environment_name)
     if not python.is_file():
         venv.EnvBuilder(with_pip=True).create(python.parent.parent)
     packages = ["packages/contracts", "."]
@@ -38,17 +41,14 @@ def install(name: str, optional_metrics: bool, use_locks: bool) -> None:
     elif name == "core":
         packages.extend(["packages/agent-trace-sdk", "packages/evaluator[dev]"])
     command = [str(python), "-m", "pip", "install", "--disable-pip-version-check"]
-    constraint_name = (
-        f"{name}-optional" if optional_metrics and name != "core" else name
-    )
-    lock = ROOT / "environments" / f"{constraint_name}.txt"
+    lock = ROOT / "environments" / f"{environment_name}.txt"
     if use_locks and lock.is_file():
         command.extend(["-c", str(lock)])
     for package in packages:
         command.extend(["-e", package])
     subprocess.run(command, cwd=ROOT, check=True)
     subprocess.run([str(python), "-m", "pip", "check"], cwd=ROOT, check=True)
-    print(f"{name}: {python}", flush=True)
+    print(f"{environment_name}: {python}", flush=True)
 
 
 def main() -> int:

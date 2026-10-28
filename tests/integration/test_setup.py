@@ -19,7 +19,7 @@ def test_optional_evaluator_uses_its_own_resolved_constraints(tmp_path):
     (constraints / "evaluator-optional.txt").touch()
     with (
         patch.object(setup, "ROOT", tmp_path),
-        patch.object(setup, "environment_python", return_value=python),
+        patch.object(setup, "environment_python", return_value=python) as environment,
         patch.object(setup.subprocess, "run") as run,
     ):
         setup.install("evaluator", optional_metrics=True, use_locks=True)
@@ -28,6 +28,7 @@ def test_optional_evaluator_uses_its_own_resolved_constraints(tmp_path):
         constraints / "evaluator-optional.txt"
     )
     assert "packages/evaluator[dev,conversation]" in command
+    environment.assert_called_once_with("evaluator-optional")
 
 
 def test_default_evaluator_keeps_default_constraints(tmp_path):

@@ -22,6 +22,7 @@ GROUPS = {
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--only", choices=GROUPS)
+    parser.add_argument("--optional-metrics", action="store_true")
     args = parser.parse_args()
     output = ROOT / "artifacts" / "verification"
     output.mkdir(parents=True, exist_ok=True)
@@ -43,6 +44,8 @@ def main() -> int:
     failed = []
     for name in [args.only] if args.only else GROUPS:
         environment, relative = GROUPS[name]
+        if args.optional_metrics:
+            environment += "-optional"
         python = (
             ROOT
             / ".venvs"
