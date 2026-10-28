@@ -1,0 +1,1467 @@
+# 全层级评测集审核清单
+
+状态：DRAFT；未运行 Agent；未批准、未冻结。
+确认每条输入、前置条件、Oracle 与快照一致；待适配定义不能标记运行通过。
+
+- [ ] C-intent.add_backpack_gift.0a9efc976abbff | intent.add_backpack_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "environment": "test", "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "duration_days", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.add_backpack_gift.0f85dd545aa44d | intent.add_backpack_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"environment": "test", "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "duration_days", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.add_backpack_gift.11912ab210ee4f | intent.add_backpack_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "environment": "test", "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1}, "parameter": "user_ids", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.add_backpack_gift.2e1c03783203ea | intent.add_backpack_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "environment": "test", "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": []}, "parameter": "user_ids", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.add_backpack_gift.45032d30e91110 | intent.add_backpack_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "environment": "test", "gift_id": 1, "gift_ids": [1], "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "gift_ids", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.add_backpack_gift.51e260e323dad9 | intent.add_backpack_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "environment": "", "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "environment", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.add_backpack_gift.523109d6d55a53 | intent.add_backpack_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "environment": "test", "gift_id": 1, "gift_ids": [], "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "gift_ids", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.add_backpack_gift.6b1cc92572c9ca | intent.add_backpack_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "environment": "test", "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "environment", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.add_backpack_gift.7839e7426806cb | intent.add_backpack_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": {"unexpected": "object"}, "environment": "test", "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "duration_days", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.add_backpack_gift.7c4fdfaa7c40b8 | intent.add_backpack_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "environment": "test", "gift_id": 1, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "gift_ids", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.add_backpack_gift.8084c71fae0023 | intent.add_backpack_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "environment": "test", "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": [1]}, "parameter": "user_ids", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.add_backpack_gift.820b8c37dc8c70 | intent.add_backpack_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "environment": "test", "gift_id": 1, "gift_ids": null, "gift_nums": null, "user_id": 1, "user_ids": null}, "parameter": "num", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.add_backpack_gift.88e6b66bb3e7d1 | intent.add_backpack_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "environment": "test", "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": {"unexpected": "object"}, "user_id": 1, "user_ids": null}, "parameter": "num", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.add_backpack_gift.88fdd093008198 | intent.add_backpack_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "environment": "test", "gift_id": 1, "gift_ids": {"unexpected": "object"}, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "gift_ids", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.add_backpack_gift.8952065f3eb596 | intent.add_backpack_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "environment": "test", "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 0, "user_ids": null}, "parameter": "user_id", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.add_backpack_gift.a4504b853003db | intent.add_backpack_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "environment": "test", "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": [1]}, "parameter": "user_ids", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.add_backpack_gift.b84431e53c784d | intent.add_backpack_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "environment": "test", "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "gift_id", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.add_backpack_gift.bb3cb160e593ff | intent.add_backpack_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "environment": "test", "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "user_id", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.add_backpack_gift.bcb16039ea4ade | intent.add_backpack_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "environment": "test", "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "num", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.add_backpack_gift.be88818da4e40c | intent.add_backpack_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "environment": "test", "gift_id": 0, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "gift_id", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.add_backpack_gift.be98fa63f540f5 | intent.add_backpack_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "environment": "test", "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": {"unexpected": "object"}, "user_ids": null}, "parameter": "user_id", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.add_backpack_gift.bfd481a517e612 | intent.add_backpack_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "environment": "test", "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1001, "user_id": 1, "user_ids": null}, "parameter": "num", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.add_backpack_gift.c26197f9574b32 | intent.add_backpack_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "environment": "test", "gift_id": 1, "gift_ids": null, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "gift_nums", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.add_backpack_gift.cae716f711a85d | intent.add_backpack_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1000, "environment": "test", "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "duration_days", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.add_backpack_gift.d207883da0be95 | intent.add_backpack_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "environment": "test", "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1000, "user_id": 1, "user_ids": null}, "parameter": "num", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.add_backpack_gift.d22cf363a03880 | intent.add_backpack_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "environment": "test", "gift_id": {"unexpected": "object"}, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "gift_id", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.add_backpack_gift.d3299dde9d87c0 | intent.add_backpack_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "environment": "test", "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "gift_id", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.add_backpack_gift.da3ef0b16cc6b1 | intent.add_backpack_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1001, "environment": "test", "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "duration_days", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.add_backpack_gift.e3492d6dc09905 | intent.add_backpack_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "environment": "test", "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "user_id", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.add_backpack_gift.edca77200a44fc | intent.add_backpack_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "environment": "test", "gift_id": 1, "gift_ids": [1], "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "gift_ids", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.add_backpack_gift.ef5618855fbae7 | intent.add_backpack_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "environment": "test", "gift_id": 1, "gift_ids": null, "gift_nums": {"unexpected": "object"}, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "gift_nums", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.add_backpack_gift.f06ac201433330 | intent.add_backpack_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "environment": "test", "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "gift_id", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.add_backpack_gift.f1c53c4e69170e | intent.add_backpack_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "environment": {"unexpected": "object"}, "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "environment", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.add_backpack_gift.f2436df2020f6b | intent.add_backpack_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "environment", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.add_backpack_gift.f28799c77339e6 | intent.add_backpack_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "environment": "test", "gift_id": 1, "gift_ids": null, "gift_nums": [{"gift_id": 1, "num": 1}], "num": 1, "user_id": 1, "user_ids": null}, "parameter": "gift_nums", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.add_backpack_gift.f561ae093ec237 | intent.add_backpack_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "environment": "test", "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": {"unexpected": "object"}}, "parameter": "user_ids", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.add_backpack_gift.f636deba167e9d | intent.add_backpack_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "environment": "test", "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_ids": null}, "parameter": "user_id", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.add_backpack_gift.f9c6ee8db87478 | intent.add_backpack_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "environment": "test", "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "environment", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.prepare_resource.0c8e17cc1d8dc6 | intent.prepare_resource | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"count": 1, "environment": "test", "request_id": "fixture-request-001", "resource_type": "x"}, "parameter": "resource_type", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.prepare_resource.0ef61f0866bf53 | intent.prepare_resource | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"count": 1, "environment": "test", "request_id": "fixture-request-001", "resource_type": "x"}, "parameter": "resource_type", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.prepare_resource.106a8d2a755d0f | intent.prepare_resource | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"count": 1, "environment": "test", "request_id": "fixture-request-001", "resource_type": ""}, "parameter": "resource_type", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.prepare_resource.18a7dd3e61ba44 | intent.prepare_resource | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"count": 1, "environment": "test", "request_id": "fixture-request-001", "resource_type": "x"}, "parameter": "request_id", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.prepare_resource.21ff38132a2f81 | intent.prepare_resource | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"count": 1, "environment": "test", "request_id": "fixture-request-001", "resource_type": "x"}, "parameter": "environment", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.prepare_resource.2f4b180660d6ea | intent.prepare_resource | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"count": 1, "environment": "test", "request_id": "fixture-request-001", "resource_type": "x"}, "parameter": "request_id", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.prepare_resource.34d9d80eaa31d3 | intent.prepare_resource | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"count": 1, "environment": "test", "request_id": "fixture-request-001", "resource_type": "x"}, "parameter": "count", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.prepare_resource.49c974727f9d9b | intent.prepare_resource | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"count": 1, "environment": "test", "request_id": "fixture-request-001", "resource_type": "x"}, "parameter": "count", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.prepare_resource.4f652d9060cad6 | intent.prepare_resource | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"count": 0, "environment": "test", "request_id": "fixture-request-001", "resource_type": "x"}, "parameter": "count", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.prepare_resource.5c6ecd3b7b83d5 | intent.prepare_resource | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"count": 1, "environment": "test", "request_id": "", "resource_type": "x"}, "parameter": "request_id", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.prepare_resource.7d814df957c6c8 | intent.prepare_resource | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"count": 1, "request_id": "fixture-request-001", "resource_type": "x"}, "parameter": "environment", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.prepare_resource.8650bbd468dfa3 | intent.prepare_resource | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"count": 1, "environment": "test", "request_id": "fixture-request-001", "resource_type": {"unexpected": "object"}}, "parameter": "resource_type", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.prepare_resource.88b8a2f46fd3b5 | intent.prepare_resource | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"count": 1, "environment": "", "request_id": "fixture-request-001", "resource_type": "x"}, "parameter": "environment", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.prepare_resource.913b78d9c0cb84 | intent.prepare_resource | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"count": 1, "environment": "test", "request_id": "fixture-request-001"}, "parameter": "resource_type", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.prepare_resource.922169581b20b3 | intent.prepare_resource | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"count": 1, "environment": "test", "request_id": {"unexpected": "object"}, "resource_type": "x"}, "parameter": "request_id", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.prepare_resource.ea86bb1b745d20 | intent.prepare_resource | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"count": {"unexpected": "object"}, "environment": "test", "request_id": "fixture-request-001", "resource_type": "x"}, "parameter": "count", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.prepare_resource.f2ccccbe374dd4 | intent.prepare_resource | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"environment": "test", "request_id": "fixture-request-001", "resource_type": "x"}, "parameter": "count", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.prepare_resource.f36da36a79525e | intent.prepare_resource | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"count": 1, "environment": "test", "request_id": "fixture-request-001", "resource_type": "x"}, "parameter": "environment", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.prepare_resource.f5f4fa905b0003 | intent.prepare_resource | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"count": 1, "environment": "test", "resource_type": "x"}, "parameter": "request_id", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.prepare_resource.fdde178b76a88b | intent.prepare_resource | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"count": 1, "environment": {"unexpected": "object"}, "request_id": "fixture-request-001", "resource_type": "x"}, "parameter": "environment", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.query_gift.04a8366e3b6416 | intent.query_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 1, "gift_ids": null, "gift_name": null}, "parameter": "limit", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.query_gift.111ef01c40069a | intent.query_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_ids": null, "gift_name": null, "limit": 1}, "parameter": "gift_id", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.query_gift.12bfe9edbdee04 | intent.query_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 1, "gift_ids": null, "gift_name": "x", "limit": 1}, "parameter": "gift_name", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.query_gift.1b4c6d661bd48e | intent.query_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 1, "gift_ids": null, "gift_name": {"unexpected": "object"}, "limit": 1}, "parameter": "gift_name", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.query_gift.2c3737cc5f90ee | intent.query_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 1, "gift_ids": null, "gift_name": null, "limit": 1}, "parameter": "limit", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.query_gift.35d40971270b0e | intent.query_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 0, "gift_ids": null, "gift_name": null, "limit": 1}, "parameter": "gift_id", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.query_gift.391a23f754b673 | intent.query_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 1, "gift_ids": null, "gift_name": null, "limit": 1}, "parameter": "gift_id", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.query_gift.4440abab85ca27 | intent.query_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 1, "gift_ids": {"unexpected": "object"}, "gift_name": null, "limit": 1}, "parameter": "gift_ids", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.query_gift.519d2a36bd397c | intent.query_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 1, "gift_ids": null, "gift_name": null, "limit": {"unexpected": "object"}}, "parameter": "limit", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.query_gift.5a3d9f3f80b92b | intent.query_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 1, "gift_ids": null, "limit": 1}, "parameter": "gift_name", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.query_gift.682d2ba3607cf3 | intent.query_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": {"unexpected": "object"}, "gift_ids": null, "gift_name": null, "limit": 1}, "parameter": "gift_id", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.query_gift.759addc10d6814 | intent.query_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 1, "gift_ids": [1], "gift_name": null, "limit": 1}, "parameter": "gift_ids", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.query_gift.7891c5d5b6e6d0 | intent.query_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 1, "gift_name": null, "limit": 1}, "parameter": "gift_ids", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.query_gift.9d55367960e0cb | intent.query_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 1, "gift_ids": null, "gift_name": null, "limit": 1}, "parameter": "limit", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.query_gift.ad80a843dcaf23 | intent.query_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 1, "gift_ids": null, "gift_name": null, "limit": 0}, "parameter": "limit", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.query_gift.bfa239c283885b | intent.query_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 1, "gift_ids": null, "gift_name": "", "limit": 1}, "parameter": "gift_name", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.query_gift.ca2eccf8573572 | intent.query_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 1, "gift_ids": null, "gift_name": "x", "limit": 1}, "parameter": "gift_name", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.query_gift.d04b81ee8eef8f | intent.query_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 1, "gift_ids": [], "gift_name": null, "limit": 1}, "parameter": "gift_ids", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.query_gift.d3040e210b1245 | intent.query_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 1, "gift_ids": [1], "gift_name": null, "limit": 1}, "parameter": "gift_ids", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.query_gift.d3bcc79acd5156 | intent.query_gift | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 1, "gift_ids": null, "gift_name": null, "limit": 1}, "parameter": "gift_id", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.query_information.0027431fed2fe1 | intent.query_information | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"environment": "", "resource_type": "x"}, "parameter": "environment", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.query_information.2fdf70554a2015 | intent.query_information | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"environment": "test", "resource_type": "x"}, "parameter": "environment", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.query_information.4a46ed7d6fbc35 | intent.query_information | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"environment": "test", "resource_type": "x"}, "parameter": "resource_type", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.query_information.592ba75241caf5 | intent.query_information | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"resource_type": "x"}, "parameter": "environment", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.query_information.59982f8bbaa526 | intent.query_information | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"environment": "test", "resource_type": "x"}, "parameter": "environment", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.query_information.7353b746fa9150 | intent.query_information | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"environment": {"unexpected": "object"}, "resource_type": "x"}, "parameter": "environment", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.query_information.967df9a97965a1 | intent.query_information | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"environment": "test"}, "parameter": "resource_type", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.query_information.b2e3f6c1e934ce | intent.query_information | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"environment": "test", "resource_type": "x"}, "parameter": "resource_type", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.query_information.b83a8f2a65e2bf | intent.query_information | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"environment": "test", "resource_type": ""}, "parameter": "resource_type", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.query_information.e7321a837d56aa | intent.query_information | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"environment": "test", "resource_type": {"unexpected": "object"}}, "parameter": "resource_type", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.query_pool.2bb8a229320347 | intent.query_pool | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": null, "pool_id": 0}, "parameter": "pool_id", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.query_pool.2cfaa26ebfb5b2 | intent.query_pool | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": null, "pool_id": 1}, "parameter": "pool_id", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.query_pool.33b869995dac40 | intent.query_pool | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": null}, "parameter": "pool_id", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.query_pool.3783ab7787f5e8 | intent.query_pool | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"pool_id": 1}, "parameter": "gift_id", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.query_pool.41817f93496b22 | intent.query_pool | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 0, "pool_id": 1}, "parameter": "gift_id", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.query_pool.a811531040fc9f | intent.query_pool | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 1, "pool_id": 1}, "parameter": "gift_id", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.query_pool.b24cb8b542739a | intent.query_pool | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": null, "pool_id": 1}, "parameter": "pool_id", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.query_pool.c5daf22f8c25a5 | intent.query_pool | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 1, "pool_id": 1}, "parameter": "gift_id", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.query_pool.e0dae2a6688c26 | intent.query_pool | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": null, "pool_id": {"unexpected": "object"}}, "parameter": "pool_id", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.query_pool.eb2d754815593b | intent.query_pool | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": {"unexpected": "object"}, "pool_id": 1}, "parameter": "gift_id", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.query_user.030a2386b27b77 | intent.query_user | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"email": "fixture@example.test", "phone": {"unexpected": "object"}, "room_id": 1, "user_id": 1}, "parameter": "phone", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.query_user.035518e1abea57 | intent.query_user | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"email": "fixture@example.test", "phone": "15000000200", "room_id": 1}, "parameter": "user_id", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.query_user.03b2771dc1f6d6 | intent.query_user | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"email": {"unexpected": "object"}, "phone": "15000000200", "room_id": 1, "user_id": 1}, "parameter": "email", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.query_user.1e4bfd7e8091dc | intent.query_user | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"email": "fixture@example.test", "phone": "15000000200", "room_id": 1, "user_id": 1}, "parameter": "phone", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.query_user.2566ae41b8eefe | intent.query_user | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"email": "fixture@example.test", "phone": "15000000200", "room_id": 1, "user_id": 1}, "parameter": "phone", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.query_user.3b5f84bcb281a1 | intent.query_user | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"email": "fixture@example.test", "phone": "bad-value", "room_id": 1, "user_id": 1}, "parameter": "phone", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.query_user.456f3785d4030d | intent.query_user | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"email": "fixture@example.test", "phone": "15000000200", "room_id": 1, "user_id": 1}, "parameter": "user_id", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.query_user.641313f29549a8 | intent.query_user | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"email": "fixture@example.test", "phone": "15000000200", "room_id": 1, "user_id": 1}, "parameter": "room_id", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.query_user.923693ad420487 | intent.query_user | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"email": "fixture@example.test", "phone": "15000000200", "room_id": 0, "user_id": 1}, "parameter": "room_id", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.query_user.93b84b45516bd5 | intent.query_user | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"email": "fixture@example.test", "phone": "15000000200", "room_id": 1, "user_id": 1}, "parameter": "user_id", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.query_user.9699f84858603a | intent.query_user | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"email": "fixture@example.test", "phone": "15000000200", "room_id": 1, "user_id": 1}, "parameter": "email", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.query_user.a8194494336dd6 | intent.query_user | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"email": "fixture@example.test", "phone": "15000000200", "room_id": 1, "user_id": {"unexpected": "object"}}, "parameter": "user_id", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.query_user.ae044276be1b1b | intent.query_user | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"email": "fixture@example.test", "phone": "15000000200", "room_id": {"unexpected": "object"}, "user_id": 1}, "parameter": "room_id", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.query_user.b2dcab82da3f20 | intent.query_user | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"email": "fixture@example.test", "phone": "15000000200", "room_id": 1, "user_id": 1}, "parameter": "room_id", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.query_user.bb10d78dff05cc | intent.query_user | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"phone": "15000000200", "room_id": 1, "user_id": 1}, "parameter": "email", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.query_user.c28ced8279b045 | intent.query_user | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"email": "bad-value", "phone": "15000000200", "room_id": 1, "user_id": 1}, "parameter": "email", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-intent.query_user.d3e0f0b754fa32 | intent.query_user | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"email": "fixture@example.test", "room_id": 1, "user_id": 1}, "parameter": "phone", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.query_user.ed5844d18645cb | intent.query_user | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"email": "fixture@example.test", "phone": "15000000200", "room_id": 1, "user_id": 1}, "parameter": "email", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.query_user.f0c171d12c6c50 | intent.query_user | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"email": "fixture@example.test", "phone": "15000000200", "user_id": 1}, "parameter": "room_id", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-intent.query_user.fa383f8ec5e390 | intent.query_user | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"email": "fixture@example.test", "phone": "15000000200", "room_id": 1, "user_id": 0}, "parameter": "user_id", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-module.agent_orchestrator.45130e44a0a079 | module.agent_orchestrator | needs_runner
+  - 输入：`{"operation": "observe_module_event", "stimulus": {"action": "start_single_run", "user_input": "查询用户 ID 1 的信息。"}}`
+  - 前置：`[{"kind": "controlled_module_harness", "isolated": true}]`
+  - 预期：`{"checks": [{"op": "subset", "actual": "trace.event_types", "expected": ["run_started"]}]}`
+- [ ] C-module.agent_orchestrator.8e48d20de4f6a5 | module.agent_orchestrator | needs_runner
+  - 输入：`{"operation": "observe_module_event", "stimulus": {"action": "complete_single_run", "user_input": "请查询用户信息。"}}`
+  - 前置：`[{"kind": "controlled_module_harness", "isolated": true}]`
+  - 预期：`{"checks": [{"op": "subset", "actual": "trace.event_types", "expected": ["run_finished"]}]}`
+- [ ] C-module.execution_guard.64297cdbb8d80b | module.execution_guard | needs_runner
+  - 输入：`{"operation": "observe_module_event", "stimulus": {"action": "request_disallowed_tool", "tool_name": "query_user_info", "allowed_tools": []}}`
+  - 前置：`[{"kind": "controlled_module_harness", "isolated": true}]`
+  - 预期：`{"checks": [{"op": "subset", "actual": "trace.event_types", "expected": ["tool_failed"]}]}`
+- [ ] C-module.intent_router.124cee223396dd | module.intent_router | needs_runner
+  - 输入：`{"operation": "observe_module_event", "stimulus": {"action": "validate_candidate", "intent": "query_user", "parameters": {"user_id": 1}}}`
+  - 前置：`[{"kind": "controlled_module_harness", "isolated": true}]`
+  - 预期：`{"checks": [{"op": "subset", "actual": "trace.event_types", "expected": ["intent_contract_validated"]}]}`
+- [ ] C-module.intent_router.44213222d69da8 | module.intent_router | needs_runner
+  - 输入：`{"operation": "observe_module_event", "stimulus": {"action": "validate_candidate", "intent": "query_user", "parameters": {"user_id": "1"}}}`
+  - 前置：`[{"kind": "controlled_module_harness", "isolated": true}]`
+  - 预期：`{"checks": [{"op": "subset", "actual": "trace.event_types", "expected": ["intent_parameter_normalized"]}]}`
+- [ ] C-module.intent_router.6b4133618977ab | module.intent_router | needs_runner
+  - 输入：`{"operation": "observe_module_event", "stimulus": {"action": "validate_candidate", "intent": "query_gift", "parameters": {"gift_id": 1, "gift_name": "x"}}}`
+  - 前置：`[{"kind": "controlled_module_harness", "isolated": true}]`
+  - 预期：`{"checks": [{"op": "subset", "actual": "trace.event_types", "expected": ["intent_semantic_constraint_failed"]}]}`
+- [ ] C-module.intent_router.742a60a2665039 | module.intent_router | needs_runner
+  - 输入：`{"operation": "observe_module_event", "stimulus": {"action": "validate_candidate", "intent": "query_user", "parameters": {"user_id": 0}}}`
+  - 前置：`[{"kind": "controlled_module_harness", "isolated": true}]`
+  - 预期：`{"checks": [{"op": "subset", "actual": "trace.event_types", "expected": ["intent_parameter_validation_failed"]}]}`
+- [ ] C-module.intent_router.b4fe183cee5e11 | module.intent_router | needs_runner
+  - 输入：`{"operation": "observe_module_event", "stimulus": {"action": "route_single_input", "user_input": "查询用户 ID 1 的信息。"}}`
+  - 前置：`[{"kind": "controlled_module_harness", "isolated": true}]`
+  - 预期：`{"checks": [{"op": "subset", "actual": "trace.event_types", "expected": ["intent_decided"]}]}`
+- [ ] C-module.model_gateway.1885eb23985978 | module.model_gateway | needs_runner
+  - 输入：`{"operation": "observe_module_event", "stimulus": {"action": "model_raises_exception", "exception_type": "RuntimeError"}}`
+  - 前置：`[{"kind": "controlled_module_harness", "isolated": true}]`
+  - 预期：`{"checks": [{"op": "subset", "actual": "trace.event_types", "expected": ["model_failed"]}]}`
+- [ ] C-module.model_gateway.a459f3a8e2b4cb | module.model_gateway | needs_runner
+  - 输入：`{"operation": "observe_module_event", "stimulus": {"action": "model_returns_structured_candidate", "intent": "query_user"}}`
+  - 前置：`[{"kind": "controlled_module_harness", "isolated": true}]`
+  - 预期：`{"checks": [{"op": "subset", "actual": "trace.event_types", "expected": ["intent_candidate_received"]}]}`
+- [ ] C-module.observability.27e97028fa6846 | module.observability | needs_runner
+  - 输入：`{"operation": "observe_module_event", "stimulus": {"action": "complete_read_run", "tool_name": "query_user_info"}}`
+  - 前置：`[{"kind": "controlled_module_harness", "isolated": true}]`
+  - 预期：`{"checks": [{"op": "subset", "actual": "trace.event_types", "expected": ["final_response_generated"]}]}`
+- [ ] C-module.observability.8849d9c5af4aab | module.observability | needs_runner
+  - 输入：`{"operation": "observe_module_event", "stimulus": {"action": "complete_single_run", "user_input": "请查询用户信息。"}}`
+  - 前置：`[{"kind": "controlled_module_harness", "isolated": true}]`
+  - 预期：`{"checks": [{"op": "subset", "actual": "trace.event_types", "expected": ["run_finished"]}]}`
+- [ ] C-module.tool_loop.01cc23af6fc347 | module.tool_loop | needs_runner
+  - 输入：`{"operation": "observe_module_event", "stimulus": {"action": "invoke_registered_tool", "tool_name": "query_user_info", "handler": "returns_declared_OK"}}`
+  - 前置：`[{"kind": "controlled_module_harness", "isolated": true}]`
+  - 预期：`{"checks": [{"op": "subset", "actual": "trace.event_types", "expected": ["tool_succeeded"]}]}`
+- [ ] C-module.tool_loop.1ba03aa7712732 | module.tool_loop | needs_runner
+  - 输入：`{"operation": "observe_module_event", "stimulus": {"action": "model_requests_registered_tool", "tool_name": "query_user_info"}}`
+  - 前置：`[{"kind": "controlled_module_harness", "isolated": true}]`
+  - 预期：`{"checks": [{"op": "subset", "actual": "trace.event_types", "expected": ["tool_requested"]}]}`
+- [ ] C-module.tool_loop.2af1632b8e6960 | module.tool_loop | needs_runner
+  - 输入：`{"operation": "observe_module_event", "stimulus": {"action": "invoke_registered_tool", "tool_name": "query_user_info", "handler": "raises_exception"}}`
+  - 前置：`[{"kind": "controlled_module_harness", "isolated": true}]`
+  - 预期：`{"checks": [{"op": "subset", "actual": "trace.event_types", "expected": ["tool_failed"]}]}`
+- [ ] C-module.tool_loop.6fe90970122356 | module.tool_loop | needs_runner
+  - 输入：`{"operation": "observe_module_event", "stimulus": {"action": "invoke_registered_tool", "tool_name": "query_user_info", "handler": "raises_timeout"}}`
+  - 前置：`[{"kind": "controlled_module_harness", "isolated": true}]`
+  - 预期：`{"checks": [{"op": "subset", "actual": "trace.event_types", "expected": ["tool_timeout"]}]}`
+- [ ] C-module.tool_loop.adb7f336ef6256 | module.tool_loop | needs_runner
+  - 输入：`{"operation": "observe_module_event", "stimulus": {"action": "model_repeats_tool_request", "max_steps": 1, "requests": 2}}`
+  - 前置：`[{"kind": "controlled_module_harness", "isolated": true}]`
+  - 预期：`{"checks": [{"op": "subset", "actual": "trace.event_types", "expected": ["max_steps_exceeded"]}]}`
+- [ ] C-module.tool_loop.af7c6512d1ac6a | module.tool_loop | needs_runner
+  - 输入：`{"operation": "observe_module_event", "stimulus": {"action": "invoke_registered_tool", "tool_name": "query_user_info"}}`
+  - 前置：`[{"kind": "controlled_module_harness", "isolated": true}]`
+  - 预期：`{"checks": [{"op": "subset", "actual": "trace.event_types", "expected": ["tool_started"]}]}`
+- [ ] C-module.tool_registry.37f5604bfb19f8 | module.tool_registry | needs_runner
+  - 输入：`{"operation": "observe_module_event", "stimulus": {"action": "invoke_registered_tool", "tool_name": "query_user_info", "handler": "raises_exception"}}`
+  - 前置：`[{"kind": "controlled_module_harness", "isolated": true}]`
+  - 预期：`{"checks": [{"op": "subset", "actual": "trace.event_types", "expected": ["tool_failed"]}]}`
+- [ ] C-module.tool_registry.900d89de923ac6 | module.tool_registry | needs_runner
+  - 输入：`{"operation": "observe_module_event", "stimulus": {"action": "invoke_registered_tool", "tool_name": "query_user_info"}}`
+  - 前置：`[{"kind": "controlled_module_harness", "isolated": true}]`
+  - 预期：`{"checks": [{"op": "subset", "actual": "trace.event_types", "expected": ["tool_started"]}]}`
+- [ ] C-module.tool_registry.bbd21e10a847ad | module.tool_registry | needs_runner
+  - 输入：`{"operation": "observe_module_event", "stimulus": {"action": "invoke_registered_tool", "tool_name": "query_user_info", "handler": "returns_declared_OK"}}`
+  - 前置：`[{"kind": "controlled_module_harness", "isolated": true}]`
+  - 预期：`{"checks": [{"op": "subset", "actual": "trace.event_types", "expected": ["tool_succeeded"]}]}`
+- [ ] C-tool.add_gift_to_backpack.0945732da2ae30 | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1001, "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "duration_days", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.add_gift_to_backpack.096ae68eff540d | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "gift_id": 1, "gift_ids": [1], "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "gift_ids", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.add_gift_to_backpack.09e15f44e4d081 | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "gift_id": 1, "gift_ids": [], "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "gift_ids", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.add_gift_to_backpack.12f6bc19036417 | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": {"unexpected": "object"}}, "parameter": "user_ids", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.add_gift_to_backpack.19ccafd0cb01f8 | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "invoke_tool", "tool_name": "add_gift_to_backpack", "arguments": {"duration_days": 1, "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": null, "user_id": 1, "user_ids": null}}`
+  - 前置：`[{"kind": "fixture_setup", "records": {"users": [{"user_id": 1}], "gifts": [{"gift_id": 1}], "grants": []}, "result_branch": "OK", "fresh_instance": true, "owner_authorized_attempts": 1}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "tool_result.data.grants[0].num", "expected": 1}]}`
+- [ ] C-tool.add_gift_to_backpack.1c78e4260a4dca | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "gift_id": 1, "gift_ids": null, "gift_nums": [{"gift_id": 1, "num": 1}], "num": 1, "user_id": 1, "user_ids": null}, "parameter": "gift_nums", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.add_gift_to_backpack.2a45b3be84cb1b | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_ids": null}, "parameter": "user_id", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.add_gift_to_backpack.2b2eaa0234b002 | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": {"unexpected": "object"}, "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "duration_days", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.add_gift_to_backpack.2bf4a7cd42a99d | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "gift_id": 1, "gift_ids": null, "gift_nums": [], "num": 1, "user_id": 1, "user_ids": null}, "parameter": "gift_nums", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.add_gift_to_backpack.3044c315335203 | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "gift_id": {"unexpected": "object"}, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "gift_id", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.add_gift_to_backpack.3245f88fa8bb38 | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "gift_id", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.add_gift_to_backpack.32846eebe9dc03 | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": [1]}, "parameter": "user_ids", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.add_gift_to_backpack.36af69acdd25ff | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "invoke_tool", "tool_name": "add_gift_to_backpack", "arguments": {"duration_days": null, "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}}`
+  - 前置：`[{"kind": "fixture_setup", "records": {"users": [{"user_id": 1}], "gifts": [{"gift_id": 1}], "grants": []}, "result_branch": "OK", "fresh_instance": true, "owner_authorized_attempts": 1}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "tool_result.data.grants[0].duration_days", "expected": 7}]}`
+- [ ] C-tool.add_gift_to_backpack.38f8fa4ae7d810 | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "gift_id", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.add_gift_to_backpack.3f7a4c3c5157cb | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "invoke_tool", "tool_name": "add_gift_to_backpack", "arguments": {"duration_days": 1, "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}}`
+  - 前置：`[{"kind": "fixture_setup", "records": {"users": [{"user_id": 1}], "gifts": [{"gift_id": 1}], "grants": []}, "result_branch": "OK", "fresh_instance": true, "owner_authorized_attempts": 1}, {"kind": "external_owner_authorization", "attempts": 1}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "tool_result.code", "expected": "OK"}, {"op": "schema_valid", "actual": "tool_result.data", "expected": {"additionalProperties": false, "properties": {"grants": {"items": {"additionalProperties": false, "properties": {"duration_days": {"maximum": 1000, "minimum": 1, "title": "Duration Days", "type": "integer"}, "gift_id": {"exclusiveMinimum": 0, "title": "Gift Id", "type": "integer"}, "num": {"maximum": 1000, "minimum": 1, "title": "Num", "type": "integer"}, "user_id": {"exclusiveMinimum": 0, "title": "User Id", "type": "integer"}}, "required": ["user_id", "gift_id", "num", "duration_days"], "title": "GrantRecord", "type": "object"}, "minItems": 1, "type": "array"}}, "required": ["grants"], "type": "object"}}], "declared_terminal_status": "success"}`
+- [ ] C-tool.add_gift_to_backpack.459e21314c1c01 | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "gift_id": 1, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "gift_ids", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.add_gift_to_backpack.4f4121406414ff | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "gift_id", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.add_gift_to_backpack.551406f097f0de | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "validate_selection_modes", "arguments": {"duration_days": 1, "gift_id": 1, "gift_ids": [1], "gift_nums": [{"gift_id": 1, "num": 1}], "num": 1, "user_id": 1, "user_ids": null}, "modes": ["gift_id", "gift_ids", "gift_nums"]}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false}]`
+  - 预期：`{"business_arguments_valid": false, "checks": [{"op": "equals", "actual": "argument_validator.accepted", "expected": false}]}`
+- [ ] C-tool.add_gift_to_backpack.57bfd07ebc2aa0 | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "gift_id": 1, "gift_ids": null, "gift_nums": null, "user_id": 1, "user_ids": null}, "parameter": "num", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.add_gift_to_backpack.59d4575e03eae6 | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "validate_selection_modes", "arguments": {"duration_days": 1, "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": [1]}, "modes": ["user_id", "user_ids"]}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false}]`
+  - 预期：`{"business_arguments_valid": false, "checks": [{"op": "equals", "actual": "argument_validator.accepted", "expected": false}]}`
+- [ ] C-tool.add_gift_to_backpack.6be0bb42a95ae6 | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1001, "user_id": 1, "user_ids": null}, "parameter": "num", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.add_gift_to_backpack.76d40ee9284cc9 | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "invoke_tool", "tool_name": "add_gift_to_backpack", "arguments": {"duration_days": 1, "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}}`
+  - 前置：`[{"kind": "fixture_setup", "records": {"users": [{"user_id": 1}], "gifts": [{"gift_id": 1}], "grants": []}, "result_branch": "CONFIRMATION_REQUIRED", "fresh_instance": true, "owner_authorized_attempts": 0}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "tool_result.code", "expected": "CONFIRMATION_REQUIRED"}, {"op": "schema_valid", "actual": "tool_result.data", "expected": {"additionalProperties": false, "type": "object"}}], "declared_terminal_status": "business_failure"}`
+- [ ] C-tool.add_gift_to_backpack.77d32823917f07 | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": {"unexpected": "object"}, "user_ids": null}, "parameter": "user_id", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.add_gift_to_backpack.7c05c5a0f7e950 | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "invoke_tool", "tool_name": "add_gift_to_backpack", "arguments": {"duration_days": 1, "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": null, "user_ids": [1, 1]}}`
+  - 前置：`[{"kind": "fixture_setup", "records": {"users": [{"user_id": 1}], "gifts": [{"gift_id": 1}], "grants": []}, "result_branch": "OK", "fresh_instance": true, "owner_authorized_attempts": 1}]`
+  - 预期：`{"checks": [{"op": "count", "actual": "tool_result.data.grants", "expected": 1}]}`
+- [ ] C-tool.add_gift_to_backpack.9956dc2258dc5f | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1000, "user_id": 1, "user_ids": null}, "parameter": "num", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.add_gift_to_backpack.a1c957d5cc92f2 | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "duration_days", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.add_gift_to_backpack.a76e9ee3692627 | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "gift_id": 1, "gift_ids": {"unexpected": "object"}, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "gift_ids", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.add_gift_to_backpack.acc00af42e8de4 | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "gift_id": 1, "gift_ids": [1], "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "gift_ids", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.add_gift_to_backpack.accdeb5e7edc25 | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "duration_days", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.add_gift_to_backpack.b5f675bed91911 | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "invoke_tool", "tool_name": "add_gift_to_backpack", "arguments": {"duration_days": 1, "gift_id": null, "gift_ids": [1, 1], "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}}`
+  - 前置：`[{"kind": "fixture_setup", "records": {"users": [{"user_id": 1}], "gifts": [{"gift_id": 1}], "grants": []}, "result_branch": "DUPLICATE_GIFT", "fresh_instance": true, "owner_authorized_attempts": 1}, {"kind": "external_owner_authorization", "attempts": 1}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "tool_result.code", "expected": "DUPLICATE_GIFT"}, {"op": "schema_valid", "actual": "tool_result.data", "expected": {"additionalProperties": false, "type": "object"}}], "declared_terminal_status": "business_failure"}`
+- [ ] C-tool.add_gift_to_backpack.bfc8dd5c1d2123 | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "validate_selection_modes", "arguments": {"duration_days": 1, "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": [1]}, "modes": ["user_id", "user_ids"]}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false}]`
+  - 预期：`{"business_arguments_valid": false, "checks": [{"op": "equals", "actual": "argument_validator.accepted", "expected": false}]}`
+- [ ] C-tool.add_gift_to_backpack.c85b165e29f03e | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "invoke_tool", "tool_name": "add_gift_to_backpack", "arguments": {"duration_days": 1, "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": null, "user_ids": [1, 99999]}}`
+  - 前置：`[{"kind": "fixture_setup", "records": {"users": [{"user_id": 1}], "gifts": [{"gift_id": 1}], "grants": []}, "result_branch": "OK", "fresh_instance": true, "owner_authorized_attempts": 1}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "tool_result.code", "expected": "NOT_FOUND"}, {"op": "unchanged", "actual": "fixture.after", "expected": {"ref": "fixture.before"}}]}`
+- [ ] C-tool.add_gift_to_backpack.ccef163f13d44d | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "gift_id": 0, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "gift_id", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.add_gift_to_backpack.cea3b354a0573c | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "num", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.add_gift_to_backpack.d123e284a9ded7 | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": []}, "parameter": "user_ids", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.add_gift_to_backpack.d6d5276082ee8d | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "gift_id": 1, "gift_ids": null, "gift_nums": {"unexpected": "object"}, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "gift_nums", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.add_gift_to_backpack.d94d42c27b36d1 | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 0, "user_ids": null}, "parameter": "user_id", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.add_gift_to_backpack.dce9e524f31502 | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "invoke_tool", "tool_name": "add_gift_to_backpack", "arguments": {"duration_days": 1, "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}}`
+  - 前置：`[{"kind": "fixture_setup", "records": {"users": [], "gifts": [{"gift_id": 1}], "grants": []}, "result_branch": "NOT_FOUND", "fresh_instance": true, "owner_authorized_attempts": 1}, {"kind": "external_owner_authorization", "attempts": 1}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "tool_result.code", "expected": "NOT_FOUND"}, {"op": "schema_valid", "actual": "tool_result.data", "expected": {"additionalProperties": false, "type": "object"}}], "declared_terminal_status": "business_failure"}`
+- [ ] C-tool.add_gift_to_backpack.e3b8589f253d48 | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "user_id", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.add_gift_to_backpack.e5b2c6a297a21f | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "authorization_sequence", "tool_name": "add_gift_to_backpack", "steps": [{"action": "owner_authorize_one_attempt"}, {"action": "invoke", "arguments": {"duration_days": 1, "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}}, {"action": "invoke", "arguments": {"duration_days": 1, "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}}]}`
+  - 前置：`[{"kind": "fixture_setup", "required": "All selected IDs exist; no authorization initially."}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "step[1].code", "expected": "OK"}, {"op": "equals", "actual": "step[2].code", "expected": "CONFIRMATION_REQUIRED"}, {"op": "unchanged", "actual": "state.after_step[2]", "expected": {"ref": "state.after_step[1]"}}]}`
+- [ ] C-tool.add_gift_to_backpack.e62b8b10c1fff5 | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "gift_id": 1, "gift_ids": null, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "gift_nums", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.add_gift_to_backpack.e9750975ce55cd | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "user_id", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.add_gift_to_backpack.ea08b6b300b3ee | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "gift_id": 1, "gift_ids": null, "gift_nums": [{"gift_id": 1, "num": 1}], "num": 1, "user_id": 1, "user_ids": null}, "parameter": "gift_nums", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.add_gift_to_backpack.ec61df2313cb89 | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": [1]}, "parameter": "user_ids", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.add_gift_to_backpack.f52ce3cd61dc32 | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1}, "parameter": "user_ids", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.add_gift_to_backpack.fd4182eb4782ff | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1000, "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": 1, "user_id": 1, "user_ids": null}, "parameter": "duration_days", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.add_gift_to_backpack.fd463ada14100f | tool.add_gift_to_backpack | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"duration_days": 1, "gift_id": 1, "gift_ids": null, "gift_nums": null, "num": {"unexpected": "object"}, "user_id": 1, "user_ids": null}, "parameter": "num", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.prepare_resource.194c55e63f4dce | tool.prepare_resource | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"environment": "test", "request_id": "fixture-request-001", "resource_type": "x"}, "parameter": "count", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.prepare_resource.2880cb4fc52d8b | tool.prepare_resource | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"count": 1, "environment": "test", "request_id": "fixture-request-001", "resource_type": ""}, "parameter": "resource_type", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.prepare_resource.2db45c177c6dbd | tool.prepare_resource | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"count": 1, "environment": "test", "request_id": "fixture-request-001", "resource_type": "x"}, "parameter": "request_id", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.prepare_resource.33616749ba2a13 | tool.prepare_resource | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"count": 0, "environment": "test", "request_id": "fixture-request-001", "resource_type": "x"}, "parameter": "count", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.prepare_resource.347eaa95d85c45 | tool.prepare_resource | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"count": 1, "environment": {"unexpected": "object"}, "request_id": "fixture-request-001", "resource_type": "x"}, "parameter": "environment", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.prepare_resource.386507e2569122 | tool.prepare_resource | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"count": 1, "request_id": "fixture-request-001", "resource_type": "x"}, "parameter": "environment", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.prepare_resource.487f5f02dc7c11 | tool.prepare_resource | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"count": 1, "environment": "test", "request_id": "", "resource_type": "x"}, "parameter": "request_id", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.prepare_resource.5c12a00f7b00ed | tool.prepare_resource | needs_runner
+  - 输入：`{"operation": "idempotency_sequence", "tool_name": "prepare_resource", "steps": [{"arguments": {"count": 1, "environment": "test", "request_id": "fixture-request-001", "resource_type": "x"}}, {"arguments": {"count": 1, "environment": "test", "request_id": "fixture-request-001", "resource_type": "x"}}, {"arguments": {"count": 2, "environment": "test", "request_id": "fixture-request-001", "resource_type": "x"}}]}`
+  - 前置：`[{"kind": "fresh_fixture", "share_instance_within_case": true}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "step[1].resources", "expected": {"ref": "step[0].resources"}}, {"op": "equals", "actual": "step[2].code", "expected": "CONFLICT"}, {"op": "unchanged", "actual": "state.after_step[2]", "expected": {"ref": "state.after_step[1]"}}]}`
+- [ ] C-tool.prepare_resource.6b638a4dff0958 | tool.prepare_resource | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"count": 1, "environment": "test", "request_id": "fixture-request-001", "resource_type": "x"}, "parameter": "count", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.prepare_resource.7ad21f0215cdb4 | tool.prepare_resource | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"count": 1, "environment": "test", "request_id": "fixture-request-001", "resource_type": "x"}, "parameter": "request_id", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.prepare_resource.7e2462cc99b3cd | tool.prepare_resource | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"count": 1, "environment": "test", "request_id": "fixture-request-001", "resource_type": "x"}, "parameter": "environment", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.prepare_resource.92a5b39f17be67 | tool.prepare_resource | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"count": 1, "environment": "", "request_id": "fixture-request-001", "resource_type": "x"}, "parameter": "environment", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.prepare_resource.945fdee6bcdc73 | tool.prepare_resource | needs_runner
+  - 输入：`{"operation": "invoke_tool", "tool_name": "prepare_resource", "arguments": {"count": 1, "environment": "test", "request_id": "fixture-request-001", "resource_type": "x"}}`
+  - 前置：`[{"kind": "fixture_setup", "records": {}, "result_branch": "CONFLICT", "fresh_instance": true, "steps": [{"invoke": "prepare_resource", "arguments": {"count": 2, "environment": "test", "request_id": "fixture-request-001", "resource_type": "x"}}]}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "tool_result.code", "expected": "CONFLICT"}, {"op": "schema_valid", "actual": "tool_result.data", "expected": {"additionalProperties": false, "type": "object"}}], "declared_terminal_status": "business_failure"}`
+- [ ] C-tool.prepare_resource.a52e3443842e5a | tool.prepare_resource | needs_runner
+  - 输入：`{"operation": "invoke_tool", "tool_name": "prepare_resource", "arguments": {"count": 1, "environment": "non-test", "request_id": "fixture-request-001", "resource_type": "x"}}`
+  - 前置：`[{"kind": "fixture_setup", "records": {}, "result_branch": "ENVIRONMENT_UNSUPPORTED", "fresh_instance": true}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "tool_result.code", "expected": "ENVIRONMENT_UNSUPPORTED"}, {"op": "schema_valid", "actual": "tool_result.data", "expected": {"additionalProperties": false, "type": "object"}}], "declared_terminal_status": "business_failure"}`
+- [ ] C-tool.prepare_resource.a559228715a558 | tool.prepare_resource | needs_runner
+  - 输入：`{"operation": "invoke_tool", "tool_name": "prepare_resource", "arguments": {"count": 1, "environment": "test", "request_id": "fixture-request-001", "resource_type": "x"}}`
+  - 前置：`[{"kind": "fixture_setup", "records": {"resources": [{"environment": "test", "resource_id": 1, "resource_type": "x"}]}, "result_branch": "OK", "fresh_instance": true}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "tool_result.code", "expected": "OK"}, {"op": "schema_valid", "actual": "tool_result.data", "expected": {"additionalProperties": false, "properties": {"resources": {"items": {"additionalProperties": false, "properties": {"environment": {"minLength": 1, "title": "Environment", "type": "string"}, "resource_id": {"exclusiveMinimum": 0, "title": "Resource Id", "type": "integer"}, "resource_type": {"minLength": 1, "title": "Resource Type", "type": "string"}}, "required": ["resource_id", "resource_type", "environment"], "title": "ResourceRecord", "type": "object"}, "minItems": 1, "type": "array"}}, "required": ["resources"], "type": "object"}}], "declared_terminal_status": "success"}`
+- [ ] C-tool.prepare_resource.a72042502b6701 | tool.prepare_resource | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"count": 1, "environment": "test", "request_id": "fixture-request-001", "resource_type": "x"}, "parameter": "resource_type", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.prepare_resource.afd3ee3236d88f | tool.prepare_resource | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"count": {"unexpected": "object"}, "environment": "test", "request_id": "fixture-request-001", "resource_type": "x"}, "parameter": "count", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.prepare_resource.afddb1d231103c | tool.prepare_resource | needs_runner
+  - 输入：`{"operation": "invoke_tool", "tool_name": "prepare_resource", "arguments": {"count": 1001, "environment": "test", "request_id": "fixture-request-001", "resource_type": "x"}}`
+  - 前置：`[{"kind": "fixture_setup", "records": {}, "result_branch": "LIMIT_EXCEEDED", "fresh_instance": true}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "tool_result.code", "expected": "LIMIT_EXCEEDED"}, {"op": "schema_valid", "actual": "tool_result.data", "expected": {"additionalProperties": false, "type": "object"}}], "declared_terminal_status": "business_failure"}`
+- [ ] C-tool.prepare_resource.b5127661b4b715 | tool.prepare_resource | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"count": 1, "environment": "test", "request_id": {"unexpected": "object"}, "resource_type": "x"}, "parameter": "request_id", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.prepare_resource.bbc85eb3644683 | tool.prepare_resource | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"count": 1, "environment": "test", "request_id": "fixture-request-001", "resource_type": "x"}, "parameter": "environment", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.prepare_resource.c0d19bab939701 | tool.prepare_resource | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"count": 1, "environment": "test", "resource_type": "x"}, "parameter": "request_id", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.prepare_resource.c676a9cf4dc001 | tool.prepare_resource | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"count": 1, "environment": "test", "request_id": "fixture-request-001", "resource_type": "x"}, "parameter": "resource_type", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.prepare_resource.d62b610547ba94 | tool.prepare_resource | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"count": 1, "environment": "test", "request_id": "fixture-request-001"}, "parameter": "resource_type", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.prepare_resource.dab8c7c54b6b6c | tool.prepare_resource | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"count": 1, "environment": "test", "request_id": "fixture-request-001", "resource_type": {"unexpected": "object"}}, "parameter": "resource_type", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.prepare_resource.ea5c609ba82af0 | tool.prepare_resource | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"count": 1, "environment": "test", "request_id": "fixture-request-001", "resource_type": "x"}, "parameter": "count", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.query_gift_info.018cd58e800a67 | tool.query_gift_info | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 1, "gift_ids": [1], "gift_name": null, "limit": 1}, "parameter": "gift_ids", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.query_gift_info.0b3d73c7c8d455 | tool.query_gift_info | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 1, "gift_ids": null, "gift_name": null}, "parameter": "limit", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.query_gift_info.0c7a34787edb6d | tool.query_gift_info | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 1, "gift_ids": null, "gift_name": "x", "limit": 1}, "parameter": "gift_name", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.query_gift_info.1c6801f6781369 | tool.query_gift_info | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 1, "gift_ids": null, "gift_name": null, "limit": 1}, "parameter": "limit", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.query_gift_info.2036337bd038db | tool.query_gift_info | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 1, "gift_ids": null, "gift_name": null, "limit": {"unexpected": "object"}}, "parameter": "limit", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.query_gift_info.43e6053e4e8141 | tool.query_gift_info | needs_runner
+  - 输入：`{"operation": "invoke_tool", "tool_name": "query_gift_info", "arguments": {"gift_id": null, "gift_ids": [1], "gift_name": null, "limit": 1}}`
+  - 前置：`[{"kind": "fixture_setup", "records": {"users": [], "gifts": [], "pools": [], "resources": []}, "result_branch": "NOT_FOUND", "fresh_instance": true}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "tool_result.code", "expected": "NOT_FOUND"}, {"op": "schema_valid", "actual": "tool_result.data", "expected": {"additionalProperties": false, "type": "object"}}], "declared_terminal_status": "business_failure"}`
+- [ ] C-tool.query_gift_info.48bf33f5b5a5ef | tool.query_gift_info | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 1, "gift_ids": null, "gift_name": null, "limit": 1}, "parameter": "limit", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.query_gift_info.63ca9b22fb9135 | tool.query_gift_info | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 1, "gift_ids": [], "gift_name": null, "limit": 1}, "parameter": "gift_ids", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.query_gift_info.647d098e964a11 | tool.query_gift_info | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 1, "gift_ids": [1], "gift_name": null, "limit": 1}, "parameter": "gift_ids", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.query_gift_info.677147df92c70a | tool.query_gift_info | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 1, "gift_ids": null, "limit": 1}, "parameter": "gift_name", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.query_gift_info.7323f7451c4268 | tool.query_gift_info | needs_runner
+  - 输入：`{"operation": "invoke_tool", "tool_name": "query_gift_info", "arguments": {"gift_id": 1, "gift_ids": null, "gift_name": null, "limit": 1}}`
+  - 前置：`[{"kind": "fixture_setup", "records": {"users": [], "gifts": [], "pools": [], "resources": []}, "result_branch": "EMPTY", "fresh_instance": true}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "tool_result.code", "expected": "EMPTY"}, {"op": "schema_valid", "actual": "tool_result.data", "expected": {"additionalProperties": false, "properties": {"gifts": {"maxItems": 0, "type": "array"}}, "required": ["gifts"], "type": "object"}}], "declared_terminal_status": "success"}`
+- [ ] C-tool.query_gift_info.76fbe352dc69fa | tool.query_gift_info | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 1, "gift_ids": null, "gift_name": "", "limit": 1}, "parameter": "gift_name", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.query_gift_info.771e030f8c448d | tool.query_gift_info | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 1, "gift_ids": null, "gift_name": {"unexpected": "object"}, "limit": 1}, "parameter": "gift_name", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.query_gift_info.a00305c6375986 | tool.query_gift_info | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 1, "gift_ids": null, "gift_name": null, "limit": 1}, "parameter": "gift_id", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.query_gift_info.a2bc9af26153b3 | tool.query_gift_info | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 1, "gift_ids": null, "gift_name": "x", "limit": 1}, "parameter": "gift_name", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.query_gift_info.ab11fa7b465631 | tool.query_gift_info | needs_runner
+  - 输入：`{"operation": "validate_selection_modes", "arguments": {"gift_id": 1, "gift_ids": [1], "gift_name": "x", "limit": 1}, "modes": ["gift_id", "gift_ids", "gift_name"]}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false}]`
+  - 预期：`{"business_arguments_valid": false, "checks": [{"op": "equals", "actual": "argument_validator.accepted", "expected": false}]}`
+- [ ] C-tool.query_gift_info.ad007de2d52e91 | tool.query_gift_info | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_ids": null, "gift_name": null, "limit": 1}, "parameter": "gift_id", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.query_gift_info.bde48976001def | tool.query_gift_info | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 1, "gift_ids": null, "gift_name": null, "limit": 1}, "parameter": "gift_id", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.query_gift_info.c34324e8302326 | tool.query_gift_info | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 1, "gift_ids": null, "gift_name": null, "limit": 0}, "parameter": "limit", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.query_gift_info.caa0760adc6295 | tool.query_gift_info | needs_runner
+  - 输入：`{"operation": "validate_selection_modes", "arguments": {"gift_id": 1, "gift_ids": [1], "gift_name": "x", "limit": 1}, "modes": ["gift_id", "gift_ids", "gift_name"]}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false}]`
+  - 预期：`{"business_arguments_valid": false, "checks": [{"op": "equals", "actual": "argument_validator.accepted", "expected": false}]}`
+- [ ] C-tool.query_gift_info.d18827792022eb | tool.query_gift_info | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 1, "gift_name": null, "limit": 1}, "parameter": "gift_ids", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.query_gift_info.dcb78b2291af1c | tool.query_gift_info | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": {"unexpected": "object"}, "gift_ids": null, "gift_name": null, "limit": 1}, "parameter": "gift_id", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.query_gift_info.de291fd167de25 | tool.query_gift_info | needs_runner
+  - 输入：`{"operation": "invoke_tool", "tool_name": "query_gift_info", "arguments": {"gift_id": 1, "gift_ids": null, "gift_name": null, "limit": 1}}`
+  - 前置：`[{"kind": "fixture_setup", "required": "Provide matching isolated records."}]`
+  - 预期：`{"checks": [{"op": "unchanged", "actual": "fixture.after", "expected": {"ref": "fixture.before"}}]}`
+- [ ] C-tool.query_gift_info.ed158d9f59de2b | tool.query_gift_info | needs_runner
+  - 输入：`{"operation": "invoke_tool", "tool_name": "query_gift_info", "arguments": {"gift_id": 1, "gift_ids": null, "gift_name": null, "limit": 1}}`
+  - 前置：`[{"kind": "fixture_setup", "records": {"gifts": [{"gift_id": 1, "gift_name": "x"}]}, "result_branch": "OK", "fresh_instance": true}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "tool_result.code", "expected": "OK"}, {"op": "schema_valid", "actual": "tool_result.data", "expected": {"additionalProperties": false, "properties": {"gifts": {"items": {"additionalProperties": false, "properties": {"gift_id": {"exclusiveMinimum": 0, "title": "Gift Id", "type": "integer"}, "gift_name": {"minLength": 1, "title": "Gift Name", "type": "string"}}, "required": ["gift_id", "gift_name"], "title": "GiftRecord", "type": "object"}, "minItems": 1, "type": "array"}}, "required": ["gifts"], "type": "object"}}], "declared_terminal_status": "success"}`
+- [ ] C-tool.query_gift_info.f72dac647b5dcb | tool.query_gift_info | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 0, "gift_ids": null, "gift_name": null, "limit": 1}, "parameter": "gift_id", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.query_gift_info.fcfb9d5362d008 | tool.query_gift_info | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 1, "gift_ids": {"unexpected": "object"}, "gift_name": null, "limit": 1}, "parameter": "gift_ids", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.query_information.0401615fef40af | tool.query_information | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"environment": "test"}, "parameter": "resource_type", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.query_information.136254a7149ea0 | tool.query_information | needs_runner
+  - 输入：`{"operation": "invoke_tool", "tool_name": "query_information", "arguments": {"environment": "non-test", "resource_type": "x"}}`
+  - 前置：`[{"kind": "fixture_setup", "records": {}, "result_branch": "ENVIRONMENT_UNSUPPORTED", "fresh_instance": true}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "tool_result.code", "expected": "ENVIRONMENT_UNSUPPORTED"}, {"op": "schema_valid", "actual": "tool_result.data", "expected": {"additionalProperties": false, "type": "object"}}], "declared_terminal_status": "business_failure"}`
+- [ ] C-tool.query_information.4014c248cd77c4 | tool.query_information | needs_runner
+  - 输入：`{"operation": "invoke_tool", "tool_name": "query_information", "arguments": {"environment": "test", "resource_type": "x"}}`
+  - 前置：`[{"kind": "fixture_setup", "records": {"users": [], "gifts": [], "pools": [], "resources": []}, "result_branch": "EMPTY", "fresh_instance": true}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "tool_result.code", "expected": "EMPTY"}, {"op": "schema_valid", "actual": "tool_result.data", "expected": {"additionalProperties": false, "properties": {"resources": {"maxItems": 0, "type": "array"}}, "required": ["resources"], "type": "object"}}], "declared_terminal_status": "success"}`
+- [ ] C-tool.query_information.517255fe625369 | tool.query_information | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"environment": {"unexpected": "object"}, "resource_type": "x"}, "parameter": "environment", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.query_information.5573c17518ab44 | tool.query_information | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"environment": "test", "resource_type": "x"}, "parameter": "resource_type", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.query_information.86f1099e1c006e | tool.query_information | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"environment": "test", "resource_type": "x"}, "parameter": "environment", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.query_information.a18431748543f1 | tool.query_information | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"environment": "test", "resource_type": {"unexpected": "object"}}, "parameter": "resource_type", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.query_information.a65dc20350a242 | tool.query_information | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"environment": "test", "resource_type": ""}, "parameter": "resource_type", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.query_information.ac70793a9bbb4e | tool.query_information | needs_runner
+  - 输入：`{"operation": "invoke_tool", "tool_name": "query_information", "arguments": {"environment": "test", "resource_type": "x"}}`
+  - 前置：`[{"kind": "fixture_setup", "required": "Provide matching isolated records."}]`
+  - 预期：`{"checks": [{"op": "unchanged", "actual": "fixture.after", "expected": {"ref": "fixture.before"}}]}`
+- [ ] C-tool.query_information.bd8ce9389bd207 | tool.query_information | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"resource_type": "x"}, "parameter": "environment", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.query_information.c11b5867e39c8d | tool.query_information | needs_runner
+  - 输入：`{"operation": "invoke_tool", "tool_name": "query_information", "arguments": {"environment": "test", "resource_type": "x"}}`
+  - 前置：`[{"kind": "fixture_setup", "records": {"resources": [{"environment": "test", "resource_id": 1, "resource_type": "x"}]}, "result_branch": "OK", "fresh_instance": true}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "tool_result.code", "expected": "OK"}, {"op": "schema_valid", "actual": "tool_result.data", "expected": {"additionalProperties": false, "properties": {"resources": {"items": {"additionalProperties": false, "properties": {"environment": {"minLength": 1, "title": "Environment", "type": "string"}, "resource_id": {"exclusiveMinimum": 0, "title": "Resource Id", "type": "integer"}, "resource_type": {"minLength": 1, "title": "Resource Type", "type": "string"}}, "required": ["resource_id", "resource_type", "environment"], "title": "ResourceRecord", "type": "object"}, "minItems": 1, "type": "array"}}, "required": ["resources"], "type": "object"}}], "declared_terminal_status": "success"}`
+- [ ] C-tool.query_information.ca83c80a642fdd | tool.query_information | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"environment": "test", "resource_type": "x"}, "parameter": "environment", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.query_information.d13482612e8e2d | tool.query_information | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"environment": "test", "resource_type": "x"}, "parameter": "resource_type", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.query_information.ee56c9954eec9f | tool.query_information | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"environment": "", "resource_type": "x"}, "parameter": "environment", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.query_pool_config.038f91476cbc5b | tool.query_pool_config | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 1, "pool_id": null}, "parameter": "gift_id", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.query_pool_config.09c255f03f83bc | tool.query_pool_config | needs_runner
+  - 输入：`{"operation": "invoke_tool", "tool_name": "query_pool_config", "arguments": {"gift_id": 1, "pool_id": null}}`
+  - 前置：`[{"kind": "fixture_setup", "records": {"pools": [{"gift_ids": [1], "pool_id": 1}]}, "result_branch": "OK", "fresh_instance": true}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "tool_result.code", "expected": "OK"}, {"op": "schema_valid", "actual": "tool_result.data", "expected": {"additionalProperties": false, "properties": {"pools": {"items": {"additionalProperties": false, "properties": {"gift_ids": {"items": {"exclusiveMinimum": 0, "type": "integer"}, "minItems": 1, "title": "Gift Ids", "type": "array"}, "pool_id": {"exclusiveMinimum": 0, "title": "Pool Id", "type": "integer"}}, "required": ["pool_id", "gift_ids"], "title": "PoolRecord", "type": "object"}, "minItems": 1, "type": "array"}}, "required": ["pools"], "type": "object"}}], "declared_terminal_status": "success"}`
+- [ ] C-tool.query_pool_config.18bbe087524a42 | tool.query_pool_config | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 1, "pool_id": 1}, "parameter": "pool_id", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.query_pool_config.2da99265749f0f | tool.query_pool_config | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 1, "pool_id": null}, "parameter": "gift_id", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.query_pool_config.563f77225daa33 | tool.query_pool_config | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 1, "pool_id": {"unexpected": "object"}}, "parameter": "pool_id", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.query_pool_config.64b6792df2878b | tool.query_pool_config | needs_runner
+  - 输入：`{"operation": "validate_selection_modes", "arguments": {"gift_id": 1, "pool_id": 1}, "modes": ["gift_id", "pool_id"]}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false}]`
+  - 预期：`{"business_arguments_valid": false, "checks": [{"op": "equals", "actual": "argument_validator.accepted", "expected": false}]}`
+- [ ] C-tool.query_pool_config.7eb11b517d7622 | tool.query_pool_config | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 1, "pool_id": 1}, "parameter": "pool_id", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.query_pool_config.7ec1bab024bcf6 | tool.query_pool_config | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 1, "pool_id": 0}, "parameter": "pool_id", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.query_pool_config.811eccfa319f78 | tool.query_pool_config | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 1}, "parameter": "pool_id", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.query_pool_config.addddef5276acc | tool.query_pool_config | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": {"unexpected": "object"}, "pool_id": null}, "parameter": "gift_id", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.query_pool_config.b4db7efe452252 | tool.query_pool_config | needs_runner
+  - 输入：`{"operation": "invoke_tool", "tool_name": "query_pool_config", "arguments": {"gift_id": 1, "pool_id": null}}`
+  - 前置：`[{"kind": "fixture_setup", "records": {"users": [], "gifts": [], "pools": [], "resources": []}, "result_branch": "EMPTY", "fresh_instance": true}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "tool_result.code", "expected": "EMPTY"}, {"op": "schema_valid", "actual": "tool_result.data", "expected": {"additionalProperties": false, "properties": {"pools": {"maxItems": 0, "type": "array"}}, "required": ["pools"], "type": "object"}}], "declared_terminal_status": "success"}`
+- [ ] C-tool.query_pool_config.b5a2d2c7713296 | tool.query_pool_config | needs_runner
+  - 输入：`{"operation": "invoke_tool", "tool_name": "query_pool_config", "arguments": {"gift_id": 1, "pool_id": null}}`
+  - 前置：`[{"kind": "fixture_setup", "required": "Provide matching isolated records."}]`
+  - 预期：`{"checks": [{"op": "unchanged", "actual": "fixture.after", "expected": {"ref": "fixture.before"}}]}`
+- [ ] C-tool.query_pool_config.bf73904ebc403d | tool.query_pool_config | needs_runner
+  - 输入：`{"operation": "validate_selection_modes", "arguments": {"gift_id": 1, "pool_id": 1}, "modes": ["gift_id", "pool_id"]}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false}]`
+  - 预期：`{"business_arguments_valid": false, "checks": [{"op": "equals", "actual": "argument_validator.accepted", "expected": false}]}`
+- [ ] C-tool.query_pool_config.c0d0f4b9c61cc2 | tool.query_pool_config | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"gift_id": 0, "pool_id": null}, "parameter": "gift_id", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.query_pool_config.ee0e4aba533d80 | tool.query_pool_config | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"pool_id": null}, "parameter": "gift_id", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.query_user_info.0ad63433821330 | tool.query_user_info | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"email": null, "phone": null, "room_id": 1, "user_id": 1}, "parameter": "room_id", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.query_user_info.0b067577c183b7 | tool.query_user_info | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"email": null, "phone": {"unexpected": "object"}, "room_id": null, "user_id": 1}, "parameter": "phone", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.query_user_info.19ee39a951e110 | tool.query_user_info | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"email": null, "phone": null, "room_id": null}, "parameter": "user_id", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.query_user_info.41f55d49e0c092 | tool.query_user_info | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"email": null, "phone": null, "room_id": null, "user_id": {"unexpected": "object"}}, "parameter": "user_id", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.query_user_info.43a318433f4a4e | tool.query_user_info | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"email": null, "phone": null, "room_id": 1, "user_id": 1}, "parameter": "room_id", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.query_user_info.477f16ba36906a | tool.query_user_info | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"email": null, "phone": null, "room_id": 0, "user_id": 1}, "parameter": "room_id", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.query_user_info.4c73f7ae99f535 | tool.query_user_info | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"email": {"unexpected": "object"}, "phone": null, "room_id": null, "user_id": 1}, "parameter": "email", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.query_user_info.4f8ffeed30e566 | tool.query_user_info | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"email": null, "phone": null, "room_id": null, "user_id": 1}, "parameter": "user_id", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.query_user_info.66cdb92622bcb4 | tool.query_user_info | needs_runner
+  - 输入：`{"operation": "invoke_tool", "tool_name": "query_user_info", "arguments": {"email": null, "phone": null, "room_id": null, "user_id": 1}}`
+  - 前置：`[{"kind": "fixture_setup", "records": {"user": {"email": "fixture@example.test", "phone": "15000000200", "room_id": 1, "user_id": 1}}, "result_branch": "OK", "fresh_instance": true}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "tool_result.code", "expected": "OK"}, {"op": "schema_valid", "actual": "tool_result.data", "expected": {"additionalProperties": false, "properties": {"user": {"additionalProperties": false, "properties": {"email": {"minLength": 3, "pattern": "^[^@]+@[^@]+$", "title": "Email", "type": "string"}, "phone": {"pattern": "^[0-9]{11}$", "title": "Phone", "type": "string"}, "room_id": {"exclusiveMinimum": 0, "title": "Room Id", "type": "integer"}, "user_id": {"exclusiveMinimum": 0, "title": "User Id", "type": "integer"}}, "required": ["user_id", "room_id", "email", "phone"], "title": "UserRecord", "type": "object"}}, "required": ["user"], "type": "object"}}], "declared_terminal_status": "success"}`
+- [ ] C-tool.query_user_info.773d6bac548e39 | tool.query_user_info | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"email": "fixture@example.test", "phone": null, "room_id": null, "user_id": 1}, "parameter": "email", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.query_user_info.7814de190c533c | tool.query_user_info | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"email": null, "phone": null, "room_id": null, "user_id": 0}, "parameter": "user_id", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.query_user_info.820eed4dddd8b6 | tool.query_user_info | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"email": null, "phone": null, "room_id": {"unexpected": "object"}, "user_id": 1}, "parameter": "room_id", "dimension": "wrong_type"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.query_user_info.840772a8ca3e96 | tool.query_user_info | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"email": null, "phone": "bad-value", "room_id": null, "user_id": 1}, "parameter": "phone", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.query_user_info.8e966c25ed789a | tool.query_user_info | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"email": null, "phone": "15000000200", "room_id": null, "user_id": 1}, "parameter": "phone", "dimension": "boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.query_user_info.997a63603bd673 | tool.query_user_info | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"email": null, "phone": "15000000200", "room_id": null, "user_id": 1}, "parameter": "phone", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.query_user_info.aa657fa6ce4a4b | tool.query_user_info | needs_runner
+  - 输入：`{"operation": "invoke_tool", "tool_name": "query_user_info", "arguments": {"email": null, "phone": null, "room_id": null, "user_id": 1}}`
+  - 前置：`[{"kind": "fixture_setup", "records": {"users": [], "gifts": [], "pools": [], "resources": []}, "result_branch": "EMPTY", "fresh_instance": true}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "tool_result.code", "expected": "EMPTY"}, {"op": "schema_valid", "actual": "tool_result.data", "expected": {"additionalProperties": false, "properties": {"user": {"type": "null"}}, "required": ["user"], "type": "object"}}], "declared_terminal_status": "success"}`
+- [ ] C-tool.query_user_info.ae44a445b34579 | tool.query_user_info | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"phone": null, "room_id": null, "user_id": 1}, "parameter": "email", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.query_user_info.b292f1a36d6609 | tool.query_user_info | needs_runner
+  - 输入：`{"operation": "invoke_tool", "tool_name": "query_user_info", "arguments": {"email": null, "phone": null, "room_id": null, "user_id": 1}}`
+  - 前置：`[{"kind": "fixture_setup", "required": "Provide matching isolated records."}]`
+  - 预期：`{"checks": [{"op": "unchanged", "actual": "fixture.after", "expected": {"ref": "fixture.before"}}]}`
+- [ ] C-tool.query_user_info.b67f3ba16f067b | tool.query_user_info | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"email": null, "phone": null, "room_id": null, "user_id": 1}, "parameter": "user_id", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.query_user_info.d0468da5aea3f5 | tool.query_user_info | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"email": "fixture@example.test", "phone": null, "room_id": null, "user_id": 1}, "parameter": "email", "dimension": "valid"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": true}], "arguments_schema_valid": true}`
+- [ ] C-tool.query_user_info.e996a111cfd8e1 | tool.query_user_info | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"email": null, "phone": null, "user_id": 1}, "parameter": "room_id", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.query_user_info.ea4a2d3f3ff775 | tool.query_user_info | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"email": null, "room_id": null, "user_id": 1}, "parameter": "phone", "dimension": "omitted"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] C-tool.query_user_info.ee92f9f69be417 | tool.query_user_info | needs_runner
+  - 输入：`{"operation": "validate_arguments", "arguments": {"email": "bad-value", "phone": null, "room_id": null, "user_id": 1}, "parameter": "email", "dimension": "outside_boundary"}`
+  - 前置：`[{"kind": "validation_only", "invoke_handler": false, "note": "JSON Schema acceptance only; business mode validation is separate."}]`
+  - 预期：`{"checks": [{"op": "schema_valid", "actual": "input.arguments", "expected": false}], "arguments_schema_valid": false}`
+- [ ] I-intent.add_backpack_gift.66647589a01fb8 | intent.add_backpack_gift | not_run
+  - 输入：`{"user_input": "给用户 10001 发放礼物 20001，数量 2，有效期 7 天。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": {"intent": "add_backpack_gift", "next_action": "ASK_USER", "status": "NEED_CLARIFICATION", "parameters": {"user_id": 10001, "gift_id": 20001, "num": 2, "duration_days": 7}, "missing_parameters": ["environment"], "reason": "依据绑定能力契约生成，待人工复核。"}, "expected_agent_status": null, "expected_tool_calls": [], "forbidden_tools": [], "goal_state": null, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "intent_parameters_schema_valid", "weight": 1.0, "critical": true, "config": {}}, {"name": "intent_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "status_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "next_action_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "params_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "missing_params_match", "weight": 1.0, "critical": true, "config": {}}]}, "judge": null}`
+- [ ] I-intent.add_backpack_gift.725b2249f16166 | intent.add_backpack_gift | not_run
+  - 输入：`{"user_input": "在 test 环境给用户 10001 发放礼物 20001，数量 2，有效期 7 天。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": {"intent": "add_backpack_gift", "next_action": "ASK_CONFIRMATION", "status": "NEED_CONFIRMATION", "parameters": {"user_id": 10001, "gift_id": 20001, "num": 2, "duration_days": 7, "environment": "test"}, "missing_parameters": [], "reason": "依据绑定能力契约生成，待人工复核。"}, "expected_agent_status": null, "expected_tool_calls": [], "forbidden_tools": [], "goal_state": null, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "intent_parameters_schema_valid", "weight": 1.0, "critical": true, "config": {}}, {"name": "intent_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "status_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "next_action_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "params_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "missing_params_match", "weight": 1.0, "critical": true, "config": {}}]}, "judge": null}`
+- [ ] I-intent.add_backpack_gift.9101ca688a883c | intent.add_backpack_gift | not_run
+  - 输入：`{"user_input": "在 test 环境给用户 10001 发放礼物 20001，数量 0，有效期 7 天。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": {"intent": "add_backpack_gift", "next_action": "ASK_USER", "status": "NEED_CLARIFICATION", "parameters": {"user_id": 10001, "gift_id": 20001, "duration_days": 7, "environment": "test"}, "missing_parameters": ["num"], "reason": "依据绑定能力契约生成，待人工复核。"}, "expected_agent_status": null, "expected_tool_calls": [], "forbidden_tools": [], "goal_state": null, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "intent_parameters_schema_valid", "weight": 1.0, "critical": true, "config": {}}, {"name": "intent_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "status_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "next_action_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "params_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "missing_params_match", "weight": 1.0, "critical": true, "config": {}}]}, "judge": null}`
+- [ ] I-intent.add_backpack_gift.ce1b822650c895 | intent.add_backpack_gift | not_run
+  - 输入：`{"user_input": "麻烦帮我处理一下：在 test 环境给用户 10001 发放礼物 20001，数量 2，有效期 7 天。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": {"intent": "add_backpack_gift", "next_action": "ASK_CONFIRMATION", "status": "NEED_CONFIRMATION", "parameters": {"user_id": 10001, "gift_id": 20001, "num": 2, "duration_days": 7, "environment": "test"}, "missing_parameters": [], "reason": "依据绑定能力契约生成，待人工复核。"}, "expected_agent_status": null, "expected_tool_calls": [], "forbidden_tools": [], "goal_state": null, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "intent_parameters_schema_valid", "weight": 1.0, "critical": true, "config": {}}, {"name": "intent_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "status_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "next_action_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "params_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "missing_params_match", "weight": 1.0, "critical": true, "config": {}}]}, "judge": null}`
+- [ ] I-intent.prepare_resource.4789cefa7c3562 | intent.prepare_resource | not_run
+  - 输入：`{"user_input": "在 test 环境准备 0 个账号资源，request_id 为 fixture-request-001。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": {"intent": "prepare_resource", "next_action": "ASK_USER", "status": "NEED_CLARIFICATION", "parameters": {"resource_type": "账号", "environment": "test", "request_id": "fixture-request-001"}, "missing_parameters": ["count"], "reason": "依据绑定能力契约生成，待人工复核。"}, "expected_agent_status": null, "expected_tool_calls": [], "forbidden_tools": [], "goal_state": null, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "intent_parameters_schema_valid", "weight": 1.0, "critical": true, "config": {}}, {"name": "intent_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "status_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "next_action_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "params_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "missing_params_match", "weight": 1.0, "critical": true, "config": {}}]}, "judge": null}`
+- [ ] I-intent.prepare_resource.a62e35979ab238 | intent.prepare_resource | not_run
+  - 输入：`{"user_input": "准备 2 个账号资源，request_id 为 fixture-request-001。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": {"intent": "prepare_resource", "next_action": "ASK_USER", "status": "NEED_CLARIFICATION", "parameters": {"resource_type": "账号", "count": 2, "request_id": "fixture-request-001"}, "missing_parameters": ["environment"], "reason": "依据绑定能力契约生成，待人工复核。"}, "expected_agent_status": null, "expected_tool_calls": [], "forbidden_tools": [], "goal_state": null, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "intent_parameters_schema_valid", "weight": 1.0, "critical": true, "config": {}}, {"name": "intent_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "status_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "next_action_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "params_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "missing_params_match", "weight": 1.0, "critical": true, "config": {}}]}, "judge": null}`
+- [ ] I-intent.prepare_resource.b29b3f308c5e95 | intent.prepare_resource | not_run
+  - 输入：`{"user_input": "麻烦帮我处理一下：在 test 环境准备 2 个账号资源，request_id 为 fixture-request-001。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": {"intent": "prepare_resource", "next_action": "CALL_TOOL", "status": "READY", "parameters": {"resource_type": "账号", "environment": "test", "count": 2, "request_id": "fixture-request-001"}, "missing_parameters": [], "reason": "依据绑定能力契约生成，待人工复核。"}, "expected_agent_status": null, "expected_tool_calls": [], "forbidden_tools": [], "goal_state": null, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "intent_parameters_schema_valid", "weight": 1.0, "critical": true, "config": {}}, {"name": "intent_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "status_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "next_action_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "params_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "missing_params_match", "weight": 1.0, "critical": true, "config": {}}]}, "judge": null}`
+- [ ] I-intent.prepare_resource.daaf6260194e90 | intent.prepare_resource | not_run
+  - 输入：`{"user_input": "在 test 环境准备 2 个账号资源，request_id 为 fixture-request-001。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": {"intent": "prepare_resource", "next_action": "CALL_TOOL", "status": "READY", "parameters": {"resource_type": "账号", "environment": "test", "count": 2, "request_id": "fixture-request-001"}, "missing_parameters": [], "reason": "依据绑定能力契约生成，待人工复核。"}, "expected_agent_status": null, "expected_tool_calls": [], "forbidden_tools": [], "goal_state": null, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "intent_parameters_schema_valid", "weight": 1.0, "critical": true, "config": {}}, {"name": "intent_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "status_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "next_action_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "params_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "missing_params_match", "weight": 1.0, "critical": true, "config": {}}]}, "judge": null}`
+- [ ] I-intent.query_gift.1d369616877b6b | intent.query_gift | not_run
+  - 输入：`{"user_input": "麻烦帮我处理一下：查询礼物 ID 20001 的信息。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": {"intent": "query_gift", "next_action": "CALL_TOOL", "status": "READY", "parameters": {"gift_id": 20001}, "missing_parameters": [], "reason": "依据绑定能力契约生成，待人工复核。"}, "expected_agent_status": null, "expected_tool_calls": [], "forbidden_tools": [], "goal_state": null, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "intent_parameters_schema_valid", "weight": 1.0, "critical": true, "config": {}}, {"name": "intent_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "status_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "next_action_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "params_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "missing_params_match", "weight": 1.0, "critical": true, "config": {}}]}, "judge": null}`
+- [ ] I-intent.query_gift.296ed04ad02b7a | intent.query_gift | not_run
+  - 输入：`{"user_input": "查询礼物 ID 为 0 的信息。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": {"intent": "query_gift", "next_action": "ASK_USER", "status": "NEED_CLARIFICATION", "parameters": {}, "missing_parameters": ["gift_id"], "reason": "依据绑定能力契约生成，待人工复核。"}, "expected_agent_status": null, "expected_tool_calls": [], "forbidden_tools": [], "goal_state": null, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "intent_parameters_schema_valid", "weight": 1.0, "critical": true, "config": {}}, {"name": "intent_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "status_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "next_action_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "params_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "missing_params_match", "weight": 1.0, "critical": true, "config": {}}]}, "judge": null}`
+- [ ] I-intent.query_gift.8206d9323bd881 | intent.query_gift | not_run
+  - 输入：`{"user_input": "查询礼物 ID 20001 的信息。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": {"intent": "query_gift", "next_action": "CALL_TOOL", "status": "READY", "parameters": {"gift_id": 20001}, "missing_parameters": [], "reason": "依据绑定能力契约生成，待人工复核。"}, "expected_agent_status": null, "expected_tool_calls": [], "forbidden_tools": [], "goal_state": null, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "intent_parameters_schema_valid", "weight": 1.0, "critical": true, "config": {}}, {"name": "intent_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "status_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "next_action_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "params_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "missing_params_match", "weight": 1.0, "critical": true, "config": {}}]}, "judge": null}`
+- [ ] I-intent.query_gift.e38cd26622c63f | intent.query_gift | not_run
+  - 输入：`{"user_input": "请查询礼物信息。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": {"intent": "query_gift", "next_action": "ASK_USER", "status": "NEED_CLARIFICATION", "parameters": {}, "missing_parameters": ["single_gift_query_mode"], "reason": "依据绑定能力契约生成，待人工复核。"}, "expected_agent_status": null, "expected_tool_calls": [], "forbidden_tools": [], "goal_state": null, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "intent_parameters_schema_valid", "weight": 1.0, "critical": true, "config": {}}, {"name": "intent_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "status_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "next_action_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "params_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "missing_params_match", "weight": 1.0, "critical": true, "config": {}}]}, "judge": null}`
+- [ ] I-intent.query_information.1491c00a60470b | intent.query_information | not_run
+  - 输入：`{"user_input": "查询 test 环境的账号资源。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": {"intent": "query_information", "next_action": "CALL_TOOL", "status": "READY", "parameters": {"resource_type": "账号", "environment": "test"}, "missing_parameters": [], "reason": "依据绑定能力契约生成，待人工复核。"}, "expected_agent_status": null, "expected_tool_calls": [], "forbidden_tools": [], "goal_state": null, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "intent_parameters_schema_valid", "weight": 1.0, "critical": true, "config": {}}, {"name": "intent_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "status_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "next_action_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "params_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "missing_params_match", "weight": 1.0, "critical": true, "config": {}}]}, "judge": null}`
+- [ ] I-intent.query_information.84f758a1a49954 | intent.query_information | not_run
+  - 输入：`{"user_input": "请查询账号资源。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": {"intent": "query_information", "next_action": "ASK_USER", "status": "NEED_CLARIFICATION", "parameters": {"resource_type": "账号"}, "missing_parameters": ["environment"], "reason": "依据绑定能力契约生成，待人工复核。"}, "expected_agent_status": null, "expected_tool_calls": [], "forbidden_tools": [], "goal_state": null, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "intent_parameters_schema_valid", "weight": 1.0, "critical": true, "config": {}}, {"name": "intent_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "status_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "next_action_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "params_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "missing_params_match", "weight": 1.0, "critical": true, "config": {}}]}, "judge": null}`
+- [ ] I-intent.query_information.96272bcdce31b1 | intent.query_information | not_run
+  - 输入：`{"user_input": "查询账号资源，environment 是空字符串。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": {"intent": "query_information", "next_action": "ASK_USER", "status": "NEED_CLARIFICATION", "parameters": {"resource_type": "账号"}, "missing_parameters": ["environment"], "reason": "依据绑定能力契约生成，待人工复核。"}, "expected_agent_status": null, "expected_tool_calls": [], "forbidden_tools": [], "goal_state": null, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "intent_parameters_schema_valid", "weight": 1.0, "critical": true, "config": {}}, {"name": "intent_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "status_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "next_action_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "params_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "missing_params_match", "weight": 1.0, "critical": true, "config": {}}]}, "judge": null}`
+- [ ] I-intent.query_information.d72365a46d4a43 | intent.query_information | not_run
+  - 输入：`{"user_input": "麻烦帮我处理一下：查询 test 环境的账号资源。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": {"intent": "query_information", "next_action": "CALL_TOOL", "status": "READY", "parameters": {"resource_type": "账号", "environment": "test"}, "missing_parameters": [], "reason": "依据绑定能力契约生成，待人工复核。"}, "expected_agent_status": null, "expected_tool_calls": [], "forbidden_tools": [], "goal_state": null, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "intent_parameters_schema_valid", "weight": 1.0, "critical": true, "config": {}}, {"name": "intent_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "status_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "next_action_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "params_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "missing_params_match", "weight": 1.0, "critical": true, "config": {}}]}, "judge": null}`
+- [ ] I-intent.query_pool.04207ae9dbe7f4 | intent.query_pool | not_run
+  - 输入：`{"user_input": "查询奖池 ID 30001 的配置。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": {"intent": "query_pool", "next_action": "CALL_TOOL", "status": "READY", "parameters": {"pool_id": 30001}, "missing_parameters": [], "reason": "依据绑定能力契约生成，待人工复核。"}, "expected_agent_status": null, "expected_tool_calls": [], "forbidden_tools": [], "goal_state": null, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "intent_parameters_schema_valid", "weight": 1.0, "critical": true, "config": {}}, {"name": "intent_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "status_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "next_action_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "params_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "missing_params_match", "weight": 1.0, "critical": true, "config": {}}]}, "judge": null}`
+- [ ] I-intent.query_pool.7c84bcbdc34035 | intent.query_pool | not_run
+  - 输入：`{"user_input": "麻烦帮我处理一下：查询奖池 ID 30001 的配置。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": {"intent": "query_pool", "next_action": "CALL_TOOL", "status": "READY", "parameters": {"pool_id": 30001}, "missing_parameters": [], "reason": "依据绑定能力契约生成，待人工复核。"}, "expected_agent_status": null, "expected_tool_calls": [], "forbidden_tools": [], "goal_state": null, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "intent_parameters_schema_valid", "weight": 1.0, "critical": true, "config": {}}, {"name": "intent_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "status_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "next_action_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "params_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "missing_params_match", "weight": 1.0, "critical": true, "config": {}}]}, "judge": null}`
+- [ ] I-intent.query_pool.a9686242d0217c | intent.query_pool | not_run
+  - 输入：`{"user_input": "查询奖池 ID 为 0 的配置。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": {"intent": "query_pool", "next_action": "ASK_USER", "status": "NEED_CLARIFICATION", "parameters": {}, "missing_parameters": ["pool_id"], "reason": "依据绑定能力契约生成，待人工复核。"}, "expected_agent_status": null, "expected_tool_calls": [], "forbidden_tools": [], "goal_state": null, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "intent_parameters_schema_valid", "weight": 1.0, "critical": true, "config": {}}, {"name": "intent_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "status_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "next_action_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "params_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "missing_params_match", "weight": 1.0, "critical": true, "config": {}}]}, "judge": null}`
+- [ ] I-intent.query_pool.e196acfe3a1418 | intent.query_pool | not_run
+  - 输入：`{"user_input": "请查询奖池配置。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": {"intent": "query_pool", "next_action": "ASK_USER", "status": "NEED_CLARIFICATION", "parameters": {}, "missing_parameters": ["single_pool_query_mode"], "reason": "依据绑定能力契约生成，待人工复核。"}, "expected_agent_status": null, "expected_tool_calls": [], "forbidden_tools": [], "goal_state": null, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "intent_parameters_schema_valid", "weight": 1.0, "critical": true, "config": {}}, {"name": "intent_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "status_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "next_action_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "params_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "missing_params_match", "weight": 1.0, "critical": true, "config": {}}]}, "judge": null}`
+- [ ] I-intent.query_user.2df03a9bd31b46 | intent.query_user | not_run
+  - 输入：`{"user_input": "查询用户 ID 10001 的信息。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": {"intent": "query_user", "next_action": "CALL_TOOL", "status": "READY", "parameters": {"user_id": 10001}, "missing_parameters": [], "reason": "依据绑定能力契约生成，待人工复核。"}, "expected_agent_status": null, "expected_tool_calls": [], "forbidden_tools": [], "goal_state": null, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "intent_parameters_schema_valid", "weight": 1.0, "critical": true, "config": {}}, {"name": "intent_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "status_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "next_action_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "params_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "missing_params_match", "weight": 1.0, "critical": true, "config": {}}]}, "judge": null}`
+- [ ] I-intent.query_user.483fc327798043 | intent.query_user | not_run
+  - 输入：`{"user_input": "请查询手机号 bad-phone 对应的用户。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": {"intent": "query_user", "next_action": "ASK_USER", "status": "NEED_CLARIFICATION", "parameters": {}, "missing_parameters": ["phone"], "reason": "依据绑定能力契约生成，待人工复核。"}, "expected_agent_status": null, "expected_tool_calls": [], "forbidden_tools": [], "goal_state": null, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "intent_parameters_schema_valid", "weight": 1.0, "critical": true, "config": {}}, {"name": "intent_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "status_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "next_action_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "params_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "missing_params_match", "weight": 1.0, "critical": true, "config": {}}]}, "judge": null}`
+- [ ] I-intent.query_user.889120dc219639 | intent.query_user | not_run
+  - 输入：`{"user_input": "请查询用户信息。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": {"intent": "query_user", "next_action": "ASK_USER", "status": "NEED_CLARIFICATION", "parameters": {}, "missing_parameters": ["user_id_or_room_id_or_email_or_phone"], "reason": "依据绑定能力契约生成，待人工复核。"}, "expected_agent_status": null, "expected_tool_calls": [], "forbidden_tools": [], "goal_state": null, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "intent_parameters_schema_valid", "weight": 1.0, "critical": true, "config": {}}, {"name": "intent_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "status_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "next_action_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "params_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "missing_params_match", "weight": 1.0, "critical": true, "config": {}}]}, "judge": null}`
+- [ ] I-intent.query_user.e22033261b4ede | intent.query_user | not_run
+  - 输入：`{"user_input": "麻烦帮我处理一下：查询用户 ID 10001 的信息。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": {"intent": "query_user", "next_action": "CALL_TOOL", "status": "READY", "parameters": {"user_id": 10001}, "missing_parameters": [], "reason": "依据绑定能力契约生成，待人工复核。"}, "expected_agent_status": null, "expected_tool_calls": [], "forbidden_tools": [], "goal_state": null, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "intent_parameters_schema_valid", "weight": 1.0, "critical": true, "config": {}}, {"name": "intent_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "status_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "next_action_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "params_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "missing_params_match", "weight": 1.0, "critical": true, "config": {}}]}, "judge": null}`
+- [ ] I-intent.unsupported.41041afb6aaf4c | intent.unsupported | not_run
+  - 输入：`{"user_input": "请预订明天从北京到上海的机票。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": {"intent": "unsupported", "next_action": "REJECT", "status": "REJECTED", "parameters": {}, "missing_parameters": [], "reason": "依据绑定能力契约生成，待人工复核。"}, "expected_agent_status": null, "expected_tool_calls": [], "forbidden_tools": [], "goal_state": null, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "intent_parameters_schema_valid", "weight": 1.0, "critical": true, "config": {}}, {"name": "intent_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "status_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "next_action_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "params_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "missing_params_match", "weight": 1.0, "critical": true, "config": {}}]}, "judge": null}`
+- [ ] I-intent.unsupported.bf3a5e15db0d93 | intent.unsupported | not_run
+  - 输入：`{"user_input": "麻烦帮我处理一下：请预订明天从北京到上海的机票。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": {"intent": "unsupported", "next_action": "REJECT", "status": "REJECTED", "parameters": {}, "missing_parameters": [], "reason": "依据绑定能力契约生成，待人工复核。"}, "expected_agent_status": null, "expected_tool_calls": [], "forbidden_tools": [], "goal_state": null, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "intent_parameters_schema_valid", "weight": 1.0, "critical": true, "config": {}}, {"name": "intent_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "status_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "next_action_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "params_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "missing_params_match", "weight": 1.0, "critical": true, "config": {}}]}, "judge": null}`
+- [ ] I-intent.unsupported.f5109f00a7b377 | intent.unsupported | not_run
+  - 输入：`{"user_input": "请播放一首古典音乐。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": {"intent": "unsupported", "next_action": "REJECT", "status": "REJECTED", "parameters": {}, "missing_parameters": [], "reason": "依据绑定能力契约生成，待人工复核。"}, "expected_agent_status": null, "expected_tool_calls": [], "forbidden_tools": [], "goal_state": null, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "intent_parameters_schema_valid", "weight": 1.0, "critical": true, "config": {}}, {"name": "intent_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "status_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "next_action_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "params_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "missing_params_match", "weight": 1.0, "critical": true, "config": {}}]}, "judge": null}`
+- [ ] I-intent.unsupported.fd306c80ed5860 | intent.unsupported | not_run
+  - 输入：`{"user_input": "请为我创建一幅水彩画。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": {"intent": "unsupported", "next_action": "REJECT", "status": "REJECTED", "parameters": {}, "missing_parameters": [], "reason": "依据绑定能力契约生成，待人工复核。"}, "expected_agent_status": null, "expected_tool_calls": [], "forbidden_tools": [], "goal_state": null, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "intent_parameters_schema_valid", "weight": 1.0, "critical": true, "config": {}}, {"name": "intent_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "status_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "next_action_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "params_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "missing_params_match", "weight": 1.0, "critical": true, "config": {}}]}, "judge": null}`
+- [ ] R-chain.end_to_end.28d70d493a1a1f | chain.end_to_end | needs_runner
+  - 输入：`{"user_input": "请查询礼物信息。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": null, "expected_agent_status": "NEED_CLARIFICATION", "expected_tool_calls": [], "forbidden_tools": ["add_gift_to_backpack", "prepare_resource", "query_gift_info", "query_information", "query_pool_config", "query_user_info"], "goal_state": {"terminal_status": "NEED_CLARIFICATION", "forbidden_tools": ["add_gift_to_backpack", "prepare_resource", "query_gift_info", "query_information", "query_pool_config", "query_user_info"]}, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "turns_match", "weight": 1.0, "critical": true, "config": {"turns": [{"status": "NEED_CLARIFICATION", "tool_calls": []}]}}]}, "judge": null}`
+- [ ] R-chain.end_to_end.31d98e29bb016f | chain.end_to_end | needs_runner
+  - 输入：`{"user_input": "准备 2 个账号资源，request_id 为 fixture-request-001。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": null, "expected_agent_status": "NEED_CLARIFICATION", "expected_tool_calls": [], "forbidden_tools": ["add_gift_to_backpack", "prepare_resource", "query_gift_info", "query_information", "query_pool_config", "query_user_info"], "goal_state": {"terminal_status": "NEED_CLARIFICATION", "forbidden_tools": ["add_gift_to_backpack", "prepare_resource", "query_gift_info", "query_information", "query_pool_config", "query_user_info"]}, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "turns_match", "weight": 1.0, "critical": true, "config": {"turns": [{"status": "NEED_CLARIFICATION", "tool_calls": []}]}}]}, "judge": null}`
+- [ ] R-chain.end_to_end.362fde91a1f41c | chain.end_to_end | needs_runner
+  - 输入：`{"user_input": "请预订明天从北京到上海的机票。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": null, "expected_agent_status": "REJECTED", "expected_tool_calls": [], "forbidden_tools": ["add_gift_to_backpack", "prepare_resource", "query_gift_info", "query_information", "query_pool_config", "query_user_info"], "goal_state": {"terminal_status": "REJECTED", "forbidden_tools": ["add_gift_to_backpack", "prepare_resource", "query_gift_info", "query_information", "query_pool_config", "query_user_info"]}, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "turns_match", "weight": 1.0, "critical": true, "config": {"turns": [{"status": "REJECTED", "tool_calls": []}]}}]}, "judge": null}`
+- [ ] R-chain.end_to_end.50978c9a7c25d5 | chain.end_to_end | needs_runner
+  - 输入：`{"user_input": "查询用户 ID 10001 的信息。", "operation": "agent_run", "intent_id": "intent.query_user", "tool_name": "query_user_info", "branch": "normal"}`
+  - 前置：`[{"kind": "isolated_fixture", "required": "Arrange matching records for the selected arguments; never assume production IDs."}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "agent_result.status", "expected": "SUCCESS"}, {"op": "subset", "actual": "tool_trace.names", "expected": ["query_user_info"]}], "boundary": "chain.end_to_end", "declared_branch": "normal", "coverage_limit": "Ordered node/evidence verification requires the declared runner binding."}`
+- [ ] R-chain.end_to_end.6a013fc8ea5cb2 | chain.end_to_end | needs_runner
+  - 输入：`{"user_input": "请查询奖池配置。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": null, "expected_agent_status": "NEED_CLARIFICATION", "expected_tool_calls": [], "forbidden_tools": ["add_gift_to_backpack", "prepare_resource", "query_gift_info", "query_information", "query_pool_config", "query_user_info"], "goal_state": {"terminal_status": "NEED_CLARIFICATION", "forbidden_tools": ["add_gift_to_backpack", "prepare_resource", "query_gift_info", "query_information", "query_pool_config", "query_user_info"]}, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "turns_match", "weight": 1.0, "critical": true, "config": {"turns": [{"status": "NEED_CLARIFICATION", "tool_calls": []}]}}]}, "judge": null}`
+- [ ] R-chain.end_to_end.739637e48f8251 | chain.end_to_end | needs_runner
+  - 输入：`{"user_input": "在 test 环境准备 2 个账号资源，request_id 为 fixture-request-001。", "operation": "agent_run", "intent_id": "intent.prepare_resource", "tool_name": "prepare_resource", "branch": "error", "controlled_fault": {"at": "tool_handler", "behavior": "raise_exception"}}`
+  - 前置：`[{"kind": "isolated_fixture", "required": "Arrange matching records for the selected arguments; never assume production IDs."}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "agent_result.status", "expected": "FAILED"}, {"op": "subset", "actual": "tool_trace.names", "expected": ["prepare_resource"]}], "boundary": "chain.end_to_end", "declared_branch": "error", "coverage_limit": "Ordered node/evidence verification requires the declared runner binding."}`
+- [ ] R-chain.end_to_end.94b629270c9c04 | chain.end_to_end | needs_runner
+  - 输入：`{"user_input": "请查询用户信息。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": null, "expected_agent_status": "NEED_CLARIFICATION", "expected_tool_calls": [], "forbidden_tools": ["add_gift_to_backpack", "prepare_resource", "query_gift_info", "query_information", "query_pool_config", "query_user_info"], "goal_state": {"terminal_status": "NEED_CLARIFICATION", "forbidden_tools": ["add_gift_to_backpack", "prepare_resource", "query_gift_info", "query_information", "query_pool_config", "query_user_info"]}, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "turns_match", "weight": 1.0, "critical": true, "config": {"turns": [{"status": "NEED_CLARIFICATION", "tool_calls": []}]}}]}, "judge": null}`
+- [ ] R-chain.end_to_end.d00f19dd455b6d | chain.end_to_end | needs_runner
+  - 输入：`{"user_input": "查询礼物 ID 20001 的信息。", "operation": "agent_run", "intent_id": "intent.query_gift", "tool_name": "query_gift_info", "branch": "error", "controlled_fault": {"at": "tool_handler", "behavior": "raise_exception"}}`
+  - 前置：`[{"kind": "isolated_fixture", "required": "Arrange matching records for the selected arguments; never assume production IDs."}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "agent_result.status", "expected": "FAILED"}, {"op": "subset", "actual": "tool_trace.names", "expected": ["query_gift_info"]}], "boundary": "chain.end_to_end", "declared_branch": "error", "coverage_limit": "Ordered node/evidence verification requires the declared runner binding."}`
+- [ ] R-chain.end_to_end.d2dda524ef9dd5 | chain.end_to_end | needs_runner
+  - 输入：`{"user_input": "在 test 环境给用户 10001 发放礼物 20001，数量 2，有效期 7 天。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": null, "expected_agent_status": "NEED_CONFIRMATION", "expected_tool_calls": [], "forbidden_tools": ["add_gift_to_backpack", "prepare_resource", "query_gift_info", "query_information", "query_pool_config", "query_user_info"], "goal_state": {"terminal_status": "NEED_CONFIRMATION", "forbidden_tools": ["add_gift_to_backpack", "prepare_resource", "query_gift_info", "query_information", "query_pool_config", "query_user_info"]}, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "turns_match", "weight": 1.0, "critical": true, "config": {"turns": [{"status": "NEED_CONFIRMATION", "tool_calls": []}]}}]}, "judge": null}`
+- [ ] R-chain.end_to_end.ee2a44c3949706 | chain.end_to_end | needs_runner
+  - 输入：`{"user_input": "查询奖池 ID 30001 的配置。", "operation": "agent_run", "intent_id": "intent.query_pool", "tool_name": "query_pool_config", "branch": "normal"}`
+  - 前置：`[{"kind": "isolated_fixture", "required": "Arrange matching records for the selected arguments; never assume production IDs."}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "agent_result.status", "expected": "SUCCESS"}, {"op": "subset", "actual": "tool_trace.names", "expected": ["query_pool_config"]}], "boundary": "chain.end_to_end", "declared_branch": "normal", "coverage_limit": "Ordered node/evidence verification requires the declared runner binding."}`
+- [ ] R-chain.end_to_end.f1ab294c0ad9d4 | chain.end_to_end | needs_runner
+  - 输入：`{"user_input": "查询 test 环境的账号资源。", "operation": "agent_run", "intent_id": "intent.query_information", "tool_name": "query_information", "branch": "normal"}`
+  - 前置：`[{"kind": "isolated_fixture", "required": "Arrange matching records for the selected arguments; never assume production IDs."}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "agent_result.status", "expected": "SUCCESS"}, {"op": "subset", "actual": "tool_trace.names", "expected": ["query_information"]}], "boundary": "chain.end_to_end", "declared_branch": "normal", "coverage_limit": "Ordered node/evidence verification requires the declared runner binding."}`
+- [ ] R-chain.end_to_end.f497830eb08e2a | chain.end_to_end | needs_runner
+  - 输入：`{"user_input": "查询 test 环境的账号资源。", "operation": "agent_run", "intent_id": "intent.query_information", "tool_name": "query_information", "branch": "error", "controlled_fault": {"at": "tool_handler", "behavior": "raise_exception"}}`
+  - 前置：`[{"kind": "isolated_fixture", "required": "Arrange matching records for the selected arguments; never assume production IDs."}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "agent_result.status", "expected": "FAILED"}, {"op": "subset", "actual": "tool_trace.names", "expected": ["query_information"]}], "boundary": "chain.end_to_end", "declared_branch": "error", "coverage_limit": "Ordered node/evidence verification requires the declared runner binding."}`
+- [ ] R-chain.end_to_end.f49a6ee616478b | chain.end_to_end | needs_runner
+  - 输入：`{"user_input": "查询奖池 ID 30001 的配置。", "operation": "agent_run", "intent_id": "intent.query_pool", "tool_name": "query_pool_config", "branch": "error", "controlled_fault": {"at": "tool_handler", "behavior": "raise_exception"}}`
+  - 前置：`[{"kind": "isolated_fixture", "required": "Arrange matching records for the selected arguments; never assume production IDs."}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "agent_result.status", "expected": "FAILED"}, {"op": "subset", "actual": "tool_trace.names", "expected": ["query_pool_config"]}], "boundary": "chain.end_to_end", "declared_branch": "error", "coverage_limit": "Ordered node/evidence verification requires the declared runner binding."}`
+- [ ] R-chain.end_to_end.f61d792e08e850 | chain.end_to_end | needs_runner
+  - 输入：`{"user_input": "查询礼物 ID 20001 的信息。", "operation": "agent_run", "intent_id": "intent.query_gift", "tool_name": "query_gift_info", "branch": "normal"}`
+  - 前置：`[{"kind": "isolated_fixture", "required": "Arrange matching records for the selected arguments; never assume production IDs."}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "agent_result.status", "expected": "SUCCESS"}, {"op": "subset", "actual": "tool_trace.names", "expected": ["query_gift_info"]}], "boundary": "chain.end_to_end", "declared_branch": "normal", "coverage_limit": "Ordered node/evidence verification requires the declared runner binding."}`
+- [ ] R-chain.end_to_end.fe4bc2f9d2367b | chain.end_to_end | needs_runner
+  - 输入：`{"user_input": "查询用户 ID 10001 的信息。", "operation": "agent_run", "intent_id": "intent.query_user", "tool_name": "query_user_info", "branch": "error", "controlled_fault": {"at": "tool_handler", "behavior": "raise_exception"}}`
+  - 前置：`[{"kind": "isolated_fixture", "required": "Arrange matching records for the selected arguments; never assume production IDs."}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "agent_result.status", "expected": "FAILED"}, {"op": "subset", "actual": "tool_trace.names", "expected": ["query_user_info"]}], "boundary": "chain.end_to_end", "declared_branch": "error", "coverage_limit": "Ordered node/evidence verification requires the declared runner binding."}`
+- [ ] R-chain.end_to_end.ff02fcb51562a0 | chain.end_to_end | needs_runner
+  - 输入：`{"user_input": "请查询账号资源。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": null, "expected_agent_status": "NEED_CLARIFICATION", "expected_tool_calls": [], "forbidden_tools": ["add_gift_to_backpack", "prepare_resource", "query_gift_info", "query_information", "query_pool_config", "query_user_info"], "goal_state": {"terminal_status": "NEED_CLARIFICATION", "forbidden_tools": ["add_gift_to_backpack", "prepare_resource", "query_gift_info", "query_information", "query_pool_config", "query_user_info"]}, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "turns_match", "weight": 1.0, "critical": true, "config": {"turns": [{"status": "NEED_CLARIFICATION", "tool_calls": []}]}}]}, "judge": null}`
+- [ ] R-chain.planning_to_result.07fa7238a519f7 | chain.planning_to_result | needs_runner
+  - 输入：`{"user_input": "在 test 环境给用户 10001 发放礼物 20001，数量 2，有效期 7 天。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": null, "expected_agent_status": "NEED_CONFIRMATION", "expected_tool_calls": [], "forbidden_tools": ["add_gift_to_backpack", "prepare_resource", "query_gift_info", "query_information", "query_pool_config", "query_user_info"], "goal_state": null, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "status_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "tool_not_called", "weight": 1.0, "critical": true, "config": {}}]}, "judge": null}`
+- [ ] R-chain.planning_to_result.29339f3217cac0 | chain.planning_to_result | needs_runner
+  - 输入：`{"user_input": "查询用户 ID 10001 的信息。", "operation": "agent_run", "intent_id": "intent.query_user", "tool_name": "query_user_info", "branch": "normal"}`
+  - 前置：`[{"kind": "isolated_fixture", "required": "Arrange matching records for the selected arguments; never assume production IDs."}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "agent_result.status", "expected": "SUCCESS"}, {"op": "subset", "actual": "tool_trace.names", "expected": ["query_user_info"]}], "boundary": "chain.planning_to_result", "declared_branch": "normal", "coverage_limit": "Ordered node/evidence verification requires the declared runner binding."}`
+- [ ] R-chain.planning_to_result.3ab9e4d8c499e1 | chain.planning_to_result | needs_runner
+  - 输入：`{"user_input": "查询礼物 ID 20001 的信息。", "operation": "agent_run", "intent_id": "intent.query_gift", "tool_name": "query_gift_info", "branch": "error", "controlled_fault": {"at": "tool_handler", "behavior": "raise_exception"}}`
+  - 前置：`[{"kind": "isolated_fixture", "required": "Arrange matching records for the selected arguments; never assume production IDs."}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "agent_result.status", "expected": "FAILED"}, {"op": "subset", "actual": "tool_trace.names", "expected": ["query_gift_info"]}], "boundary": "chain.planning_to_result", "declared_branch": "error", "coverage_limit": "Ordered node/evidence verification requires the declared runner binding."}`
+- [ ] R-chain.planning_to_result.3d914f81a61191 | chain.planning_to_result | needs_runner
+  - 输入：`{"user_input": "查询 test 环境的账号资源。", "operation": "agent_run", "intent_id": "intent.query_information", "tool_name": "query_information", "branch": "normal"}`
+  - 前置：`[{"kind": "isolated_fixture", "required": "Arrange matching records for the selected arguments; never assume production IDs."}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "agent_result.status", "expected": "SUCCESS"}, {"op": "subset", "actual": "tool_trace.names", "expected": ["query_information"]}], "boundary": "chain.planning_to_result", "declared_branch": "normal", "coverage_limit": "Ordered node/evidence verification requires the declared runner binding."}`
+- [ ] R-chain.planning_to_result.482472e8e0c52f | chain.planning_to_result | needs_runner
+  - 输入：`{"user_input": "查询 test 环境的账号资源。", "operation": "agent_run", "intent_id": "intent.query_information", "tool_name": "query_information", "branch": "error", "controlled_fault": {"at": "tool_handler", "behavior": "raise_exception"}}`
+  - 前置：`[{"kind": "isolated_fixture", "required": "Arrange matching records for the selected arguments; never assume production IDs."}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "agent_result.status", "expected": "FAILED"}, {"op": "subset", "actual": "tool_trace.names", "expected": ["query_information"]}], "boundary": "chain.planning_to_result", "declared_branch": "error", "coverage_limit": "Ordered node/evidence verification requires the declared runner binding."}`
+- [ ] R-chain.planning_to_result.5a634aef2fe259 | chain.planning_to_result | needs_runner
+  - 输入：`{"user_input": "准备 2 个账号资源，request_id 为 fixture-request-001。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": null, "expected_agent_status": "NEED_CLARIFICATION", "expected_tool_calls": [], "forbidden_tools": ["add_gift_to_backpack", "prepare_resource", "query_gift_info", "query_information", "query_pool_config", "query_user_info"], "goal_state": null, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "status_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "tool_not_called", "weight": 1.0, "critical": true, "config": {}}]}, "judge": null}`
+- [ ] R-chain.planning_to_result.61dda846f7424d | chain.planning_to_result | needs_runner
+  - 输入：`{"user_input": "查询奖池 ID 30001 的配置。", "operation": "agent_run", "intent_id": "intent.query_pool", "tool_name": "query_pool_config", "branch": "error", "controlled_fault": {"at": "tool_handler", "behavior": "raise_exception"}}`
+  - 前置：`[{"kind": "isolated_fixture", "required": "Arrange matching records for the selected arguments; never assume production IDs."}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "agent_result.status", "expected": "FAILED"}, {"op": "subset", "actual": "tool_trace.names", "expected": ["query_pool_config"]}], "boundary": "chain.planning_to_result", "declared_branch": "error", "coverage_limit": "Ordered node/evidence verification requires the declared runner binding."}`
+- [ ] R-chain.planning_to_result.8cee4a1a0966d4 | chain.planning_to_result | needs_runner
+  - 输入：`{"user_input": "查询用户 ID 10001 的信息。", "operation": "agent_run", "intent_id": "intent.query_user", "tool_name": "query_user_info", "branch": "error", "controlled_fault": {"at": "tool_handler", "behavior": "raise_exception"}}`
+  - 前置：`[{"kind": "isolated_fixture", "required": "Arrange matching records for the selected arguments; never assume production IDs."}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "agent_result.status", "expected": "FAILED"}, {"op": "subset", "actual": "tool_trace.names", "expected": ["query_user_info"]}], "boundary": "chain.planning_to_result", "declared_branch": "error", "coverage_limit": "Ordered node/evidence verification requires the declared runner binding."}`
+- [ ] R-chain.planning_to_result.8e0e600d4b1683 | chain.planning_to_result | needs_runner
+  - 输入：`{"user_input": "查询奖池 ID 30001 的配置。", "operation": "agent_run", "intent_id": "intent.query_pool", "tool_name": "query_pool_config", "branch": "normal"}`
+  - 前置：`[{"kind": "isolated_fixture", "required": "Arrange matching records for the selected arguments; never assume production IDs."}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "agent_result.status", "expected": "SUCCESS"}, {"op": "subset", "actual": "tool_trace.names", "expected": ["query_pool_config"]}], "boundary": "chain.planning_to_result", "declared_branch": "normal", "coverage_limit": "Ordered node/evidence verification requires the declared runner binding."}`
+- [ ] R-chain.planning_to_result.9b6e0ca452bcf8 | chain.planning_to_result | needs_runner
+  - 输入：`{"user_input": "查询礼物 ID 20001 的信息。", "operation": "agent_run", "intent_id": "intent.query_gift", "tool_name": "query_gift_info", "branch": "normal"}`
+  - 前置：`[{"kind": "isolated_fixture", "required": "Arrange matching records for the selected arguments; never assume production IDs."}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "agent_result.status", "expected": "SUCCESS"}, {"op": "subset", "actual": "tool_trace.names", "expected": ["query_gift_info"]}], "boundary": "chain.planning_to_result", "declared_branch": "normal", "coverage_limit": "Ordered node/evidence verification requires the declared runner binding."}`
+- [ ] R-chain.planning_to_result.a959aa7c1ec0b1 | chain.planning_to_result | needs_runner
+  - 输入：`{"user_input": "请查询账号资源。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": null, "expected_agent_status": "NEED_CLARIFICATION", "expected_tool_calls": [], "forbidden_tools": ["add_gift_to_backpack", "prepare_resource", "query_gift_info", "query_information", "query_pool_config", "query_user_info"], "goal_state": null, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "status_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "tool_not_called", "weight": 1.0, "critical": true, "config": {}}]}, "judge": null}`
+- [ ] R-chain.planning_to_result.cdd14b9e8a1fcb | chain.planning_to_result | needs_runner
+  - 输入：`{"user_input": "请预订明天从北京到上海的机票。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": null, "expected_agent_status": "REJECTED", "expected_tool_calls": [], "forbidden_tools": ["add_gift_to_backpack", "prepare_resource", "query_gift_info", "query_information", "query_pool_config", "query_user_info"], "goal_state": null, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "status_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "tool_not_called", "weight": 1.0, "critical": true, "config": {}}]}, "judge": null}`
+- [ ] R-chain.planning_to_result.de69749212ccbf | chain.planning_to_result | needs_runner
+  - 输入：`{"user_input": "请查询奖池配置。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": null, "expected_agent_status": "NEED_CLARIFICATION", "expected_tool_calls": [], "forbidden_tools": ["add_gift_to_backpack", "prepare_resource", "query_gift_info", "query_information", "query_pool_config", "query_user_info"], "goal_state": null, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "status_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "tool_not_called", "weight": 1.0, "critical": true, "config": {}}]}, "judge": null}`
+- [ ] R-chain.planning_to_result.e35f4259d75a7e | chain.planning_to_result | needs_runner
+  - 输入：`{"user_input": "在 test 环境准备 2 个账号资源，request_id 为 fixture-request-001。", "operation": "agent_run", "intent_id": "intent.prepare_resource", "tool_name": "prepare_resource", "branch": "error", "controlled_fault": {"at": "tool_handler", "behavior": "raise_exception"}}`
+  - 前置：`[{"kind": "isolated_fixture", "required": "Arrange matching records for the selected arguments; never assume production IDs."}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "agent_result.status", "expected": "FAILED"}, {"op": "subset", "actual": "tool_trace.names", "expected": ["prepare_resource"]}], "boundary": "chain.planning_to_result", "declared_branch": "error", "coverage_limit": "Ordered node/evidence verification requires the declared runner binding."}`
+- [ ] R-chain.planning_to_result.eb9e5763b43daf | chain.planning_to_result | needs_runner
+  - 输入：`{"user_input": "请查询用户信息。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": null, "expected_agent_status": "NEED_CLARIFICATION", "expected_tool_calls": [], "forbidden_tools": ["add_gift_to_backpack", "prepare_resource", "query_gift_info", "query_information", "query_pool_config", "query_user_info"], "goal_state": null, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "status_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "tool_not_called", "weight": 1.0, "critical": true, "config": {}}]}, "judge": null}`
+- [ ] R-chain.planning_to_result.ff9c5e352a7d82 | chain.planning_to_result | needs_runner
+  - 输入：`{"user_input": "请查询礼物信息。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": null, "expected_agent_status": "NEED_CLARIFICATION", "expected_tool_calls": [], "forbidden_tools": ["add_gift_to_backpack", "prepare_resource", "query_gift_info", "query_information", "query_pool_config", "query_user_info"], "goal_state": null, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "status_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "tool_not_called", "weight": 1.0, "critical": true, "config": {}}]}, "judge": null}`
+- [ ] R-chain.understanding_to_planning.1c1f05d29b8b1f | chain.understanding_to_planning | needs_runner
+  - 输入：`{"user_input": "请预订明天从北京到上海的机票。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": null, "expected_agent_status": "REJECTED", "expected_tool_calls": [], "forbidden_tools": ["add_gift_to_backpack", "prepare_resource", "query_gift_info", "query_information", "query_pool_config", "query_user_info"], "goal_state": null, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "status_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "tool_not_called", "weight": 1.0, "critical": true, "config": {}}]}, "judge": null}`
+- [ ] R-chain.understanding_to_planning.2f470f86cd8422 | chain.understanding_to_planning | needs_runner
+  - 输入：`{"user_input": "查询礼物 ID 20001 的信息。", "operation": "agent_run", "intent_id": "intent.query_gift", "tool_name": "query_gift_info", "branch": "normal"}`
+  - 前置：`[{"kind": "isolated_fixture", "required": "Arrange matching records for the selected arguments; never assume production IDs."}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "agent_result.status", "expected": "SUCCESS"}, {"op": "subset", "actual": "tool_trace.names", "expected": ["query_gift_info"]}], "boundary": "chain.understanding_to_planning", "declared_branch": "normal", "coverage_limit": "Ordered node/evidence verification requires the declared runner binding."}`
+- [ ] R-chain.understanding_to_planning.389b8d7dce41eb | chain.understanding_to_planning | needs_runner
+  - 输入：`{"user_input": "查询 test 环境的账号资源。", "operation": "agent_run", "intent_id": "intent.query_information", "tool_name": "query_information", "branch": "normal"}`
+  - 前置：`[{"kind": "isolated_fixture", "required": "Arrange matching records for the selected arguments; never assume production IDs."}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "agent_result.status", "expected": "SUCCESS"}, {"op": "subset", "actual": "tool_trace.names", "expected": ["query_information"]}], "boundary": "chain.understanding_to_planning", "declared_branch": "normal", "coverage_limit": "Ordered node/evidence verification requires the declared runner binding."}`
+- [ ] R-chain.understanding_to_planning.4731e215e82c6d | chain.understanding_to_planning | needs_runner
+  - 输入：`{"user_input": "请查询账号资源。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": null, "expected_agent_status": "NEED_CLARIFICATION", "expected_tool_calls": [], "forbidden_tools": ["add_gift_to_backpack", "prepare_resource", "query_gift_info", "query_information", "query_pool_config", "query_user_info"], "goal_state": null, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "status_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "tool_not_called", "weight": 1.0, "critical": true, "config": {}}]}, "judge": null}`
+- [ ] R-chain.understanding_to_planning.4cd4545e6aac8c | chain.understanding_to_planning | needs_runner
+  - 输入：`{"user_input": "查询用户 ID 10001 的信息。", "operation": "agent_run", "intent_id": "intent.query_user", "tool_name": "query_user_info", "branch": "error", "controlled_fault": {"at": "tool_handler", "behavior": "raise_exception"}}`
+  - 前置：`[{"kind": "isolated_fixture", "required": "Arrange matching records for the selected arguments; never assume production IDs."}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "agent_result.status", "expected": "FAILED"}, {"op": "subset", "actual": "tool_trace.names", "expected": ["query_user_info"]}], "boundary": "chain.understanding_to_planning", "declared_branch": "error", "coverage_limit": "Ordered node/evidence verification requires the declared runner binding."}`
+- [ ] R-chain.understanding_to_planning.7a96ec98fcfd19 | chain.understanding_to_planning | needs_runner
+  - 输入：`{"user_input": "在 test 环境给用户 10001 发放礼物 20001，数量 2，有效期 7 天。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": null, "expected_agent_status": "NEED_CONFIRMATION", "expected_tool_calls": [], "forbidden_tools": ["add_gift_to_backpack", "prepare_resource", "query_gift_info", "query_information", "query_pool_config", "query_user_info"], "goal_state": null, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "status_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "tool_not_called", "weight": 1.0, "critical": true, "config": {}}]}, "judge": null}`
+- [ ] R-chain.understanding_to_planning.7d461713335fc8 | chain.understanding_to_planning | needs_runner
+  - 输入：`{"user_input": "查询礼物 ID 20001 的信息。", "operation": "agent_run", "intent_id": "intent.query_gift", "tool_name": "query_gift_info", "branch": "error", "controlled_fault": {"at": "tool_handler", "behavior": "raise_exception"}}`
+  - 前置：`[{"kind": "isolated_fixture", "required": "Arrange matching records for the selected arguments; never assume production IDs."}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "agent_result.status", "expected": "FAILED"}, {"op": "subset", "actual": "tool_trace.names", "expected": ["query_gift_info"]}], "boundary": "chain.understanding_to_planning", "declared_branch": "error", "coverage_limit": "Ordered node/evidence verification requires the declared runner binding."}`
+- [ ] R-chain.understanding_to_planning.818d59c87b7864 | chain.understanding_to_planning | needs_runner
+  - 输入：`{"user_input": "请查询礼物信息。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": null, "expected_agent_status": "NEED_CLARIFICATION", "expected_tool_calls": [], "forbidden_tools": ["add_gift_to_backpack", "prepare_resource", "query_gift_info", "query_information", "query_pool_config", "query_user_info"], "goal_state": null, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "status_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "tool_not_called", "weight": 1.0, "critical": true, "config": {}}]}, "judge": null}`
+- [ ] R-chain.understanding_to_planning.ac730fbb4fe381 | chain.understanding_to_planning | needs_runner
+  - 输入：`{"user_input": "请查询奖池配置。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": null, "expected_agent_status": "NEED_CLARIFICATION", "expected_tool_calls": [], "forbidden_tools": ["add_gift_to_backpack", "prepare_resource", "query_gift_info", "query_information", "query_pool_config", "query_user_info"], "goal_state": null, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "status_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "tool_not_called", "weight": 1.0, "critical": true, "config": {}}]}, "judge": null}`
+- [ ] R-chain.understanding_to_planning.d5f9eea24b9979 | chain.understanding_to_planning | needs_runner
+  - 输入：`{"user_input": "查询奖池 ID 30001 的配置。", "operation": "agent_run", "intent_id": "intent.query_pool", "tool_name": "query_pool_config", "branch": "error", "controlled_fault": {"at": "tool_handler", "behavior": "raise_exception"}}`
+  - 前置：`[{"kind": "isolated_fixture", "required": "Arrange matching records for the selected arguments; never assume production IDs."}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "agent_result.status", "expected": "FAILED"}, {"op": "subset", "actual": "tool_trace.names", "expected": ["query_pool_config"]}], "boundary": "chain.understanding_to_planning", "declared_branch": "error", "coverage_limit": "Ordered node/evidence verification requires the declared runner binding."}`
+- [ ] R-chain.understanding_to_planning.e20e0540323e76 | chain.understanding_to_planning | needs_runner
+  - 输入：`{"user_input": "查询用户 ID 10001 的信息。", "operation": "agent_run", "intent_id": "intent.query_user", "tool_name": "query_user_info", "branch": "normal"}`
+  - 前置：`[{"kind": "isolated_fixture", "required": "Arrange matching records for the selected arguments; never assume production IDs."}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "agent_result.status", "expected": "SUCCESS"}, {"op": "subset", "actual": "tool_trace.names", "expected": ["query_user_info"]}], "boundary": "chain.understanding_to_planning", "declared_branch": "normal", "coverage_limit": "Ordered node/evidence verification requires the declared runner binding."}`
+- [ ] R-chain.understanding_to_planning.e68b144fdd9ce0 | chain.understanding_to_planning | needs_runner
+  - 输入：`{"user_input": "请查询用户信息。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": null, "expected_agent_status": "NEED_CLARIFICATION", "expected_tool_calls": [], "forbidden_tools": ["add_gift_to_backpack", "prepare_resource", "query_gift_info", "query_information", "query_pool_config", "query_user_info"], "goal_state": null, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "status_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "tool_not_called", "weight": 1.0, "critical": true, "config": {}}]}, "judge": null}`
+- [ ] R-chain.understanding_to_planning.e7532823731c1b | chain.understanding_to_planning | needs_runner
+  - 输入：`{"user_input": "查询 test 环境的账号资源。", "operation": "agent_run", "intent_id": "intent.query_information", "tool_name": "query_information", "branch": "error", "controlled_fault": {"at": "tool_handler", "behavior": "raise_exception"}}`
+  - 前置：`[{"kind": "isolated_fixture", "required": "Arrange matching records for the selected arguments; never assume production IDs."}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "agent_result.status", "expected": "FAILED"}, {"op": "subset", "actual": "tool_trace.names", "expected": ["query_information"]}], "boundary": "chain.understanding_to_planning", "declared_branch": "error", "coverage_limit": "Ordered node/evidence verification requires the declared runner binding."}`
+- [ ] R-chain.understanding_to_planning.eb1dcc7516ccc5 | chain.understanding_to_planning | needs_runner
+  - 输入：`{"user_input": "准备 2 个账号资源，request_id 为 fixture-request-001。", "user_responses": [], "tool_profile": "full_fixture", "allowed_tools": [], "fault_injection": {}, "max_steps": 4, "timeout_seconds": 30.0}`
+  - 前置：`[]`
+  - 预期：`{"expected_module_output": null, "expected_agent_status": "NEED_CLARIFICATION", "expected_tool_calls": [], "forbidden_tools": ["add_gift_to_backpack", "prepare_resource", "query_gift_info", "query_information", "query_pool_config", "query_user_info"], "goal_state": null, "process_constraints": {}, "expected_response": null, "evaluation": {"checks": [{"name": "status_match", "weight": 1.0, "critical": true, "config": {}}, {"name": "tool_not_called", "weight": 1.0, "critical": true, "config": {}}]}, "judge": null}`
+- [ ] R-chain.understanding_to_planning.f3a3ca15d5cd36 | chain.understanding_to_planning | needs_runner
+  - 输入：`{"user_input": "在 test 环境准备 2 个账号资源，request_id 为 fixture-request-001。", "operation": "agent_run", "intent_id": "intent.prepare_resource", "tool_name": "prepare_resource", "branch": "error", "controlled_fault": {"at": "tool_handler", "behavior": "raise_exception"}}`
+  - 前置：`[{"kind": "isolated_fixture", "required": "Arrange matching records for the selected arguments; never assume production IDs."}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "agent_result.status", "expected": "FAILED"}, {"op": "subset", "actual": "tool_trace.names", "expected": ["prepare_resource"]}], "boundary": "chain.understanding_to_planning", "declared_branch": "error", "coverage_limit": "Ordered node/evidence verification requires the declared runner binding."}`
+- [ ] R-chain.understanding_to_planning.fd644a66964d27 | chain.understanding_to_planning | needs_runner
+  - 输入：`{"user_input": "查询奖池 ID 30001 的配置。", "operation": "agent_run", "intent_id": "intent.query_pool", "tool_name": "query_pool_config", "branch": "normal"}`
+  - 前置：`[{"kind": "isolated_fixture", "required": "Arrange matching records for the selected arguments; never assume production IDs."}]`
+  - 预期：`{"checks": [{"op": "equals", "actual": "agent_result.status", "expected": "SUCCESS"}, {"op": "subset", "actual": "tool_trace.names", "expected": ["query_pool_config"]}], "boundary": "chain.understanding_to_planning", "declared_branch": "normal", "coverage_limit": "Ordered node/evidence verification requires the declared runner binding."}`
+
+契约检查与阻塞义务见 coverage_matrix.json 和 blockers.json；不计作已可运行的行为案例。

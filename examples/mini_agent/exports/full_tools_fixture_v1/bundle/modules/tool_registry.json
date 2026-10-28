@@ -1,0 +1,92 @@
+{
+  "capabilities": [
+    {
+      "capability_key": "execution.registered_tool_invocation",
+      "evidence_ids": [
+        "evidence.tool_trace"
+      ],
+      "reason": null,
+      "support_status": "supported"
+    }
+  ],
+  "component_versions": {
+    "tool_registry": "v3"
+  },
+  "contract_version": "tool-registry-module-v3",
+  "execution_boundary_ids": [
+    "boundary.planning_execution"
+  ],
+  "input_schema": {
+    "type": "object"
+  },
+  "intent_refs": [],
+  "module_id": "tool_registry",
+  "module_refs": [],
+  "output_schema": {
+    "type": "object"
+  },
+  "responsibility": "Validate and invoke explicitly registered Tools.",
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "module.tool_registry",
+  "snapshot_sha256": "ff8603012fabec82adcb7931dfebc559ec21d9c297ed7183869a45dd1febaed2",
+  "snapshot_type": "module",
+  "source_hashes": {
+    "capabilities_sha256": "a472452c799bf668d50272b55953756247bae875d0ed232e0e447ab708f7407e",
+    "children_sha256": "8289247776eab169185a7d23dc23ef76cc98d3aa55f57309fcd1479709b20e3f"
+  },
+  "tool_refs": [
+    {
+      "contract_version": "add-gift-to-backpack-example-fixture-v1",
+      "path": "tools/add_gift_to_backpack.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "tool.add_gift_to_backpack",
+      "snapshot_sha256": "66feafafe34076c192a9f9fcdc38e468ce7869f85b96ce7bba5a3cf67c745645",
+      "snapshot_type": "tool"
+    },
+    {
+      "contract_version": "prepare-resource-example-fixture-v1",
+      "path": "tools/prepare_resource.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "tool.prepare_resource",
+      "snapshot_sha256": "6e64b0b8edf653326db99fe4c03be6ef4b431a1da259d760ab2ee71acb8f8ff5",
+      "snapshot_type": "tool"
+    },
+    {
+      "contract_version": "query-gift-info-example-fixture-v1",
+      "path": "tools/query_gift_info.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "tool.query_gift_info",
+      "snapshot_sha256": "fd6355b3b1d4a58ce54a2d23afe0e79c6462ac529a7130c4c53c2e2b4429714f",
+      "snapshot_type": "tool"
+    },
+    {
+      "contract_version": "query-information-example-fixture-v1",
+      "path": "tools/query_information.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "tool.query_information",
+      "snapshot_sha256": "95754c28d93f3ed37c3c886ae3ac1583fc2463e37fd0c37c4e79c9c7e2c78e34",
+      "snapshot_type": "tool"
+    },
+    {
+      "contract_version": "query-pool-config-example-fixture-v1",
+      "path": "tools/query_pool_config.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "tool.query_pool_config",
+      "snapshot_sha256": "29b748a11e30954d02331d532f25b532f156ce757a0db7841000c6e480fdcce2",
+      "snapshot_type": "tool"
+    },
+    {
+      "contract_version": "query-user-info-example-fixture-v1",
+      "path": "tools/query_user_info.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "tool.query_user_info",
+      "snapshot_sha256": "9e71ac9d1dd966e713aa46e4c69356830329b24949d7d8594597aedb8df3068f",
+      "snapshot_type": "tool"
+    }
+  ],
+  "trace_event_types": [
+    "tool_started",
+    "tool_succeeded",
+    "tool_failed"
+  ]
+}

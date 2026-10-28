@@ -1,0 +1,144 @@
+{
+  "batch_behavior": {
+    "declared": false
+  },
+  "capabilities": [
+    {
+      "capability_key": "tool.execution",
+      "evidence_ids": [],
+      "reason": "Offline construction only: no model call, tool execution or external service verification.",
+      "support_status": "unknown"
+    }
+  ],
+  "combination_rules": {
+    "concurrency_safe": false,
+    "exclusive": true
+  },
+  "contract_version": "nanobot-collector-v1",
+  "description": "Interact with a running exec session created by exec with yield_time_ms. Use chars='' to poll without writing, chars to send stdin, close_stdin=true to send EOF, or terminate=true to stop the process. Use wait_for with wait_timeout_ms for dev servers, test watchers, and prompts where you need to wait for expected output. Do not use this to start new commands; start them with exec.",
+  "function_schema": {
+    "function": {
+      "description": "Interact with a running exec session created by exec with yield_time_ms. Use chars='' to poll without writing, chars to send stdin, close_stdin=true to send EOF, or terminate=true to stop the process. Use wait_for with wait_timeout_ms for dev servers, test watchers, and prompts where you need to wait for expected output. Do not use this to start new commands; start them with exec.",
+      "name": "write_stdin",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "chars": {
+            "description": "Bytes/text to write to stdin. Omit or pass an empty string to only poll recent output.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "close_stdin": {
+            "default": false,
+            "description": "Close stdin after writing chars. Useful for commands waiting for EOF.",
+            "type": "boolean"
+          },
+          "max_output_chars": {
+            "description": "Maximum output characters to return from this poll (default 10000, max 50000).",
+            "maximum": 50000,
+            "minimum": 1000,
+            "type": "integer"
+          },
+          "max_output_tokens": {
+            "description": "Compatibility alias for max_output_chars. The current runtime uses a character budget.",
+            "maximum": 50000,
+            "minimum": 1000,
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "session_id": {
+            "description": "Session id returned by exec when yield_time_ms is used.",
+            "type": "string"
+          },
+          "terminate": {
+            "default": false,
+            "description": "Terminate the running exec session.",
+            "type": "boolean"
+          },
+          "wait_for": {
+            "description": "Optional text to wait for in output before returning. Useful for interactive commands and dev servers.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "wait_timeout_ms": {
+            "description": "Maximum milliseconds to wait for wait_for text (default 10000, max 120000).",
+            "maximum": 120000,
+            "minimum": 0,
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "yield_time_ms": {
+            "description": "Milliseconds to wait before returning recent output (default 1000, max 30000).",
+            "maximum": 30000,
+            "minimum": 0,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "session_id"
+        ],
+        "type": "object"
+      }
+    },
+    "type": "function"
+  },
+  "idempotency_rules": {
+    "status": "unknown"
+  },
+  "implementation_profile": "production",
+  "observation_interfaces": [
+    "ToolRegistry.get_definitions",
+    "ToolRegistry.execute"
+  ],
+  "parameter_semantics": {
+    "chars": "Bytes/text to write to stdin. Omit or pass an empty string to only poll recent output.",
+    "close_stdin": "Close stdin after writing chars. Useful for commands waiting for EOF.",
+    "max_output_chars": "Maximum output characters to return from this poll (default 10000, max 50000).",
+    "max_output_tokens": "Compatibility alias for max_output_chars. The current runtime uses a character budget.",
+    "session_id": "Session id returned by exec when yield_time_ms is used.",
+    "terminate": "Terminate the running exec session.",
+    "wait_for": "Optional text to wait for in output before returning. Useful for interactive commands and dev servers.",
+    "wait_timeout_ms": "Maximum milliseconds to wait for wait_for text (default 10000, max 120000).",
+    "yield_time_ms": "Milliseconds to wait before returning recent output (default 1000, max 30000)."
+  },
+  "permission_requirements": [
+    "See implementation-specific guards; not audited here."
+  ],
+  "preconditions": [
+    "Registration is limited to the named offline profile.",
+    "Execution requires tool-specific services, request context and permissions."
+  ],
+  "registered": true,
+  "requires_confirmation": false,
+  "result_protocols": {
+    "error_marker": "ToolResult.is_error; see ToolRegistry.execute",
+    "registry_return_type": "Any; tool-specific return contract"
+  },
+  "retry_policy": {
+    "status": "unknown"
+  },
+  "risk_level": "high",
+  "side_effects": [
+    "Not audited; read_only declaration=False"
+  ],
+  "simulation_capabilities": [],
+  "simulation_protocol": null,
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "tool.write_stdin",
+  "snapshot_sha256": "e0d1b81e6070e154fa7f2b8782fd7d9f1819389b811db9f83c6647d89c823bb1",
+  "snapshot_type": "tool",
+  "source_hashes": {
+    "execution_contract_sha256": "8842c6d2165dba31d271dd8822255daf46ac2bc0c5608693c6d36efd25f8d395",
+    "function_schema_sha256": "f5aa8efaf91058b224bf02710e15e0308533a1807b80e43931abb64d49f89002"
+  },
+  "tool_name": "write_stdin",
+  "tool_version": "0.3.0"
+}

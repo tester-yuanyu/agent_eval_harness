@@ -1,0 +1,17 @@
+{
+  "agent_snapshot_sha256": "0fa379f7373a8912fe602dc68bb7d8a2d132fb097f6c76be9d56f846ba5f1cae",
+  "capability_bundle_sha256": "8462eaa3c43061cc6e9f5eefaee216f9fed12e2513d86b3f7efbd476e1d06adb",
+  "execution_verified": false,
+  "snapshot_counts": {
+    "agent": 1,
+    "boundary": 1,
+    "chain": 1,
+    "evidence": 3,
+    "intent": 1,
+    "module": 8,
+    "scope": 1,
+    "tool": 21
+  },
+  "valid": true,
+  "validation_scope": "schema_hash_references_and_source_integrity"
+}

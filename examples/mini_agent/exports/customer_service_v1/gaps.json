@@ -1,0 +1,10 @@
+{
+  "gaps": [
+    {
+      "capability_key": "context.inheritance",
+      "code": "CAPABILITY_UNSUPPORTED",
+      "fact_id": "module.customer_dialogue",
+      "reason": "Each call is stateless; no conversation memory."
+    }
+  ]
+}

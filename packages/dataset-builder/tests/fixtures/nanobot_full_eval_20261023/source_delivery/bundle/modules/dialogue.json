@@ -1,0 +1,125 @@
+{
+  "capabilities": [
+    {
+      "capability_key": "dialogue.respond",
+      "evidence_ids": [],
+      "reason": "Offline construction only: no model call, tool execution or external service verification.",
+      "support_status": "unknown"
+    }
+  ],
+  "component_versions": {
+    "nanobot": "0.3.0"
+  },
+  "contract_version": "nanobot-collector-v1",
+  "execution_boundary_ids": [
+    "boundary.conversation"
+  ],
+  "input_schema": {
+    "description": "Common Nanobot.run arguments; additional SDK keyword arguments allowed.",
+    "properties": {
+      "ephemeral": {
+        "default": false,
+        "type": "boolean"
+      },
+      "message": {
+        "type": "string"
+      },
+      "session_key": {
+        "default": "sdk:default",
+        "type": "string"
+      }
+    },
+    "required": [
+      "message"
+    ],
+    "type": "object"
+  },
+  "intent_refs": [
+    {
+      "contract_version": "nanobot-collector-v1",
+      "path": "intents/assistant.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "intent.assistant",
+      "snapshot_sha256": "f93c9beeaef98a4698e08b91c812476954620e23294a978f841f6faccb45b082",
+      "snapshot_type": "intent"
+    }
+  ],
+  "module_id": "dialogue",
+  "module_refs": [],
+  "output_schema": {
+    "description": "Result of a single agent run.",
+    "properties": {
+      "content": {
+        "title": "Content",
+        "type": "string"
+      },
+      "error": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Error"
+      },
+      "messages": {
+        "items": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "title": "Messages",
+        "type": "array"
+      },
+      "metadata": {
+        "additionalProperties": true,
+        "title": "Metadata",
+        "type": "object"
+      },
+      "stop_reason": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Stop Reason"
+      },
+      "tools_used": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Tools Used",
+        "type": "array"
+      },
+      "usage": {
+        "additionalProperties": {
+          "type": "integer"
+        },
+        "title": "Usage",
+        "type": "object"
+      }
+    },
+    "required": [
+      "content"
+    ],
+    "title": "RunResult",
+    "type": "object"
+  },
+  "responsibility": "Nanobot.run delegates to AgentLoop.process_direct and AgentRunner.",
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "module.dialogue",
+  "snapshot_sha256": "6deea192f99fee3573fa88da8cb307dd36e1b9680cd0a9fca25f256ddc394ebd",
+  "snapshot_type": "module",
+  "source_hashes": {
+    "capabilities_sha256": "65b769d04b2bcf4f0df2b63f5669c3669283c60b2a30233a0972b66a31b608b2",
+    "children_sha256": "6fd9003460ed6293f6944e42b877e6985f6e0c4530ed334efadf9ee86046f01b"
+  },
+  "tool_refs": [],
+  "trace_event_types": []
+}

@@ -1,0 +1,118 @@
+{
+  "gaps": [
+    {
+      "capability_key": "evidence.context_state_available",
+      "code": "CAPABILITY_UNSUPPORTED",
+      "fact_id": "evidence.context_state",
+      "reason": "The runtime has no cross-turn state input or state snapshot output."
+    },
+    {
+      "capability_key": "context.inheritance",
+      "code": "CAPABILITY_UNSUPPORTED",
+      "fact_id": "module.agent_orchestrator",
+      "reason": "MinimalAgent.run accepts one user input and no inherited conversation state."
+    },
+    {
+      "capability_key": "context.override",
+      "code": "CAPABILITY_UNSUPPORTED",
+      "fact_id": "module.agent_orchestrator",
+      "reason": "MinimalAgent.run accepts one user input and no inherited conversation state."
+    },
+    {
+      "capability_key": "context.cancellation",
+      "code": "CAPABILITY_UNSUPPORTED",
+      "fact_id": "module.agent_orchestrator",
+      "reason": "MinimalAgent.run accepts one user input and no inherited conversation state."
+    },
+    {
+      "capability_key": "context.session_isolation",
+      "code": "CAPABILITY_UNSUPPORTED",
+      "fact_id": "module.agent_orchestrator",
+      "reason": "MinimalAgent.run accepts one user input and no inherited conversation state."
+    },
+    {
+      "capability_key": "context.residual_state_handling",
+      "code": "CAPABILITY_UNSUPPORTED",
+      "fact_id": "module.agent_orchestrator",
+      "reason": "MinimalAgent.run accepts one user input and no inherited conversation state."
+    },
+    {
+      "capability_key": "context.cleanup",
+      "code": "CAPABILITY_UNSUPPORTED",
+      "fact_id": "module.agent_orchestrator",
+      "reason": "MinimalAgent.run accepts one user input and no inherited conversation state."
+    },
+    {
+      "capability_key": "tool.runtime_retry",
+      "code": "CAPABILITY_UNSUPPORTED",
+      "fact_id": "tool.add_gift_to_backpack",
+      "reason": "The runtime does not retry failed Tool handlers."
+    },
+    {
+      "capability_key": "tool.rate_limit_protocol",
+      "code": "CAPABILITY_UNKNOWN",
+      "fact_id": "tool.add_gift_to_backpack",
+      "reason": "Rate-limit semantics are owned by the injected handler."
+    },
+    {
+      "capability_key": "tool.runtime_retry",
+      "code": "CAPABILITY_UNSUPPORTED",
+      "fact_id": "tool.prepare_resource",
+      "reason": "The runtime does not retry failed Tool handlers."
+    },
+    {
+      "capability_key": "tool.rate_limit_protocol",
+      "code": "CAPABILITY_UNKNOWN",
+      "fact_id": "tool.prepare_resource",
+      "reason": "Rate-limit semantics are owned by the injected handler."
+    },
+    {
+      "capability_key": "tool.runtime_retry",
+      "code": "CAPABILITY_UNSUPPORTED",
+      "fact_id": "tool.query_gift_info",
+      "reason": "The runtime does not retry failed Tool handlers."
+    },
+    {
+      "capability_key": "tool.rate_limit_protocol",
+      "code": "CAPABILITY_UNKNOWN",
+      "fact_id": "tool.query_gift_info",
+      "reason": "Rate-limit semantics are owned by the injected handler."
+    },
+    {
+      "capability_key": "tool.runtime_retry",
+      "code": "CAPABILITY_UNSUPPORTED",
+      "fact_id": "tool.query_information",
+      "reason": "The runtime does not retry failed Tool handlers."
+    },
+    {
+      "capability_key": "tool.rate_limit_protocol",
+      "code": "CAPABILITY_UNKNOWN",
+      "fact_id": "tool.query_information",
+      "reason": "Rate-limit semantics are owned by the injected handler."
+    },
+    {
+      "capability_key": "tool.runtime_retry",
+      "code": "CAPABILITY_UNSUPPORTED",
+      "fact_id": "tool.query_pool_config",
+      "reason": "The runtime does not retry failed Tool handlers."
+    },
+    {
+      "capability_key": "tool.rate_limit_protocol",
+      "code": "CAPABILITY_UNKNOWN",
+      "fact_id": "tool.query_pool_config",
+      "reason": "Rate-limit semantics are owned by the injected handler."
+    },
+    {
+      "capability_key": "tool.runtime_retry",
+      "code": "CAPABILITY_UNSUPPORTED",
+      "fact_id": "tool.query_user_info",
+      "reason": "The runtime does not retry failed Tool handlers."
+    },
+    {
+      "capability_key": "tool.rate_limit_protocol",
+      "code": "CAPABILITY_UNKNOWN",
+      "fact_id": "tool.query_user_info",
+      "reason": "Rate-limit semantics are owned by the injected handler."
+    }
+  ]
+}

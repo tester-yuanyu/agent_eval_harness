@@ -1,0 +1,171 @@
+{
+  "batch_behavior": {
+    "declared": false
+  },
+  "capabilities": [
+    {
+      "capability_key": "tool.execution",
+      "evidence_ids": [],
+      "reason": "Offline construction only: no model call, tool execution or external service verification.",
+      "support_status": "unknown"
+    }
+  ],
+  "combination_rules": {
+    "concurrency_safe": false,
+    "exclusive": false
+  },
+  "contract_version": "nanobot-collector-v2",
+  "description": "Spawn a subagent to handle a task in the background. Use this for complex or time-consuming tasks that can run independently. Set wait=true for a consultation whose result must inform the current turn. The subagent will complete the task and report back when done. For deliverables or existing projects, inspect the workspace first and use a dedicated subdirectory when helpful.",
+  "function_schema": {
+    "function": {
+      "description": "Spawn a subagent to handle a task in the background. Use this for complex or time-consuming tasks that can run independently. Set wait=true for a consultation whose result must inform the current turn. The subagent will complete the task and report back when done. For deliverables or existing projects, inspect the workspace first and use a dedicated subdirectory when helpful.",
+      "name": "spawn",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "label": {
+            "description": "Optional short label for the task (for display)",
+            "type": "string"
+          },
+          "task": {
+            "description": "The task for the subagent to complete",
+            "type": "string"
+          },
+          "temperature": {
+            "description": "Optional sampling temperature for the subagent (0.0 = deterministic, higher = more creative). Defaults to the provider's configured temperature.",
+            "maximum": 2.0,
+            "minimum": 0.0,
+            "type": "number"
+          },
+          "wait": {
+            "default": false,
+            "description": "Wait for the subagent and return its result directly. Use this for a blocking consultation that must inform the current turn. Defaults to false for background execution.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "task"
+        ],
+        "type": "object"
+      }
+    },
+    "type": "function"
+  },
+  "idempotency_rules": {
+    "status": "unknown"
+  },
+  "implementation_profile": "production",
+  "observation_interfaces": [
+    "ToolRegistry.get_definitions",
+    "ToolRegistry.execute",
+    "AgentHookContext.tool_events (runner hooks)"
+  ],
+  "parameter_semantics": {
+    "label": "Optional short label for the task (for display)",
+    "task": "The task for the subagent to complete",
+    "temperature": "Optional sampling temperature for the subagent (0.0 = deterministic, higher = more creative). Defaults to the provider's configured temperature.",
+    "wait": "Wait for the subagent and return its result directly. Use this for a blocking consultation that must inform the current turn. Defaults to false for background execution."
+  },
+  "permission_requirements": [
+    "See implementation-specific guards; not audited here."
+  ],
+  "preconditions": [
+    "Registration is limited to the named offline profile.",
+    "Execution requires tool-specific services, request context and permissions."
+  ],
+  "registered": true,
+  "requires_confirmation": false,
+  "result_protocols": {
+    "business_error_codes": null,
+    "category_names_are_adapter_labels": true,
+    "dispatch_paths": [
+      "ToolRegistry.execute (direct registry API)",
+      "AgentRunner._run_tool -> ToolRegistry.prepare_call -> tool.execute (normal runner path)"
+    ],
+    "error_categories": [
+      {
+        "category": "unknown_tool",
+        "observation": "prepare_call returns error; tool implementation is not called."
+      },
+      {
+        "category": "invalid_arguments",
+        "observation": "prepare_call coerces/casts and validates parameters; rejected arguments do not call the implementation."
+      },
+      {
+        "category": "tool_marked_error",
+        "observation": "ToolResult.is_error produces an error event in the runner."
+      },
+      {
+        "category": "implementation_exception",
+        "observation": "Ordinary Exception becomes a registry ToolResult.error or a runner error event; handling differs by entrypoint."
+      },
+      {
+        "category": "policy_guard",
+        "observation": "Repeated external lookup/workspace violation guards can reject or escalate; do not infer recoverability from fail_on_tool_error alone."
+      },
+      {
+        "category": "control_flow",
+        "observation": "Cancellation and control-flow BaseException can propagate; hooks may also raise outside the implementation catch."
+      }
+    ],
+    "error_marker": "ToolResult.is_error; a plain string beginning with Error: is not by itself a builtin tool failure marker.",
+    "event_observation": "AgentHookContext.tool_events in runner hooks; not a top-level RunResult field and not emitted as StreamEvent by run().",
+    "fail_on_tool_error": "False generally returns tool errors to the model for possible recovery; True can terminate with tool_error. Policy guards and continuations also affect the terminal outcome.",
+    "registry_return_type": "Any; implementation-specific. No universal successful result shape is inferred.",
+    "retry": {
+      "automatic_tool_retry_guaranteed": false,
+      "description": "The registry does not automatically retry an implementation call. The model may request a new call; provider retries and tool-internal retries are separate.",
+      "status": "tool_specific_unknown"
+    },
+    "source_symbols": [
+      "ToolRegistry.prepare_call",
+      "ToolRegistry.execute",
+      "ToolResult",
+      "AgentRunner._run_tool",
+      "AgentRunner._classify_violation"
+    ],
+    "tool_event_schema": {
+      "properties": {
+        "detail": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "ok",
+            "error"
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "status",
+        "detail"
+      ],
+      "type": "object"
+    }
+  },
+  "retry_policy": {
+    "automatic_tool_retry_guaranteed": false,
+    "description": "The registry does not automatically retry an implementation call. The model may request a new call; provider retries and tool-internal retries are separate.",
+    "status": "tool_specific_unknown"
+  },
+  "risk_level": "high",
+  "side_effects": [
+    "Not audited; read_only declaration=False"
+  ],
+  "simulation_capabilities": [],
+  "simulation_protocol": null,
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "tool.spawn",
+  "snapshot_sha256": "933052af48b20299ab3f0e525ca30ea5f16d17d0608f0572b7c0df6e96494213",
+  "snapshot_type": "tool",
+  "source_hashes": {
+    "execution_contract_sha256": "1a5f5c277b6f381e3d47ec651511f6d1a80168e6f55f910f20242784ff4c8370",
+    "function_schema_sha256": "d432f16759744e565ff87a2f2e77e944cbae1c8829ab3ca8988fd3831a8a4824"
+  },
+  "tool_name": "spawn",
+  "tool_version": "0.3.0"
+}

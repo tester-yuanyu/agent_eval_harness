@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 from typing import TYPE_CHECKING, Any
 
-from eval_framework.schemas import EvalCase
+from eval_contracts.schemas import EvalCase
 from pydantic import BaseModel
 
 from .capability_ir import SupportStatus

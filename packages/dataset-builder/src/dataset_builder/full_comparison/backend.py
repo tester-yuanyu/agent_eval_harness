@@ -11,7 +11,6 @@ from importlib.metadata import version
 os.environ["DEEPEVAL_TELEMETRY_OPT_OUT"] = "1"
 os.environ["DEEPEVAL_UPDATE_WARNING_OPT_IN"] = "0"
 
-from deepeval.models import DeepSeekModel
 from jsonschema import Draft202012Validator
 
 from dataset_builder.full_generation.contract_cases import EVENT_STIMULI
@@ -40,35 +39,6 @@ def strict_sdk_value(raw, schema):
     return schema.model_validate_json(raw, strict=True)
 
 
-class ControlledDeepSeek(DeepSeekModel):
-    def __init__(self, provider, key):
-        self.provider = provider
-        super().__init__(
-            model=provider.model,
-            api_key=key,
-            temperature=0.4,
-            cost_per_input_token=0.3 / 1e6,
-            cost_per_output_token=1.2 / 1e6,
-        )
-
-    def generate(self, prompt, schema=None, audio=None):
-        if audio:
-            raise ValueError("text-only experiment")
-        if schema is not None:
-            prompt += (
-                "\nFINAL SDK TRANSPORT CONTRACT (takes priority over embedded candidate schemas): "
-                + canonical(schema.model_json_schema())
-                + "\nRespond ONLY with JSON matching this transport schema. All string fields, especially input, "
-                "must remain JSON strings, never objects. If a string contains JSON, serialize it once with normal JSON escaping. "
-                "Do not add candidate-envelope fields to the outer transport response. The candidate instructions describe the CONTENT of the string only."
-            )
-        else:
-            prompt += "\nReturn only the requested Candidate JSON object without markdown fences or explanatory text."
-        raw, cost = self.provider.complete(prompt, json_mode=True)
-        return (strict_sdk_value(raw, schema) if schema else raw), cost
-
-    async def a_generate(self, *args, **kwargs):
-        raise RuntimeError("per-slot generation must be synchronous")
 
 
 def slot_task(s, plan):
@@ -266,6 +236,8 @@ class DirectBackend:
 
 class DeepEvalBackend:
     def __init__(self, provider, key):
+        from ._deepeval_backend import ControlledDeepSeek
+
         if version("deepeval") != "4.3.2":
             raise RuntimeError("deepeval==4.3.2 required")
         self.model = ControlledDeepSeek(provider, key)
@@ -343,3 +315,10 @@ class DeepEvalBackend:
                 "metadata": g.additional_metadata,
             },
         }
+
+
+def __getattr__(name):
+    if name != "ControlledDeepSeek":
+        raise AttributeError(name)
+    from ._deepeval_backend import ControlledDeepSeek
+    return ControlledDeepSeek

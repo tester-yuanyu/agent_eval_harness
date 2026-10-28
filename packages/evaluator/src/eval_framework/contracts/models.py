@@ -5,6 +5,7 @@ from __future__ import annotations
 from pathlib import Path, PurePosixPath
 from typing import Any, Literal
 
+from eval_contracts.sources import ResolvedSource as ResolvedSource
 from pydantic import ConfigDict, Field, field_validator
 
 from ..plugins.models import PluginKind, PluginReference
@@ -60,13 +61,6 @@ class SuiteDefinition(StrictModel):
     report_profile: ContractReference | None = None
     gate_policy: ContractReference | None = None
     run_config: RunConfig = Field(default_factory=RunConfig)
-
-
-class ResolvedSource(StrictModel):
-    logical_path: str
-    filesystem_path: Path
-    sha256: str = Field(pattern=SHA256_PATTERN)
-    content: bytes
 
 
 class SourceFingerprint(StrictModel):

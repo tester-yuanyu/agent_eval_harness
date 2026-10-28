@@ -9,6 +9,7 @@ description = "A minimal Agent runtime with executable tools and capability snap
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+    "agent-eval-contracts>=0.1.0,<0.2",
     "agent-trace-sdk>=0.1.0,<0.2",
     "openai>=2.0,<4",
     "pydantic>=2.6,<3",
@@ -26,7 +27,7 @@ dev = [
 where = ["src"]
 
 [tool.setuptools.package-data]
-capability_snapshot_kit = ["resources/**/*.md"]
+minimal_agent = ["resources/capability_specs/**/*.md"]
 
 [tool.pytest.ini_options]
 addopts = "-ra"

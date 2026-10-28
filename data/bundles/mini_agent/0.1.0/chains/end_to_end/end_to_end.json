@@ -1,0 +1,243 @@
+{
+  "boundary_refs": [
+    {
+      "contract_version": "mini-agent-capability-contract-v3",
+      "path": "boundaries/end_to_end.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "boundary.end_to_end",
+      "snapshot_sha256": "9689b790829942df4e51bb37eebe656450fc153bc899becd53093f158d3b5cce",
+      "snapshot_type": "boundary"
+    }
+  ],
+  "branches": [
+    {
+      "branch_type": "normal",
+      "terminal_condition": "result_emission completes"
+    },
+    {
+      "branch_type": "error",
+      "terminal_condition": "a model or Tool failure is emitted"
+    },
+    {
+      "branch_type": "early_stop",
+      "terminal_condition": "clarification, confirmation, rejection, or policy stop is emitted"
+    }
+  ],
+  "chain_id": "end_to_end",
+  "completion_condition": "The entry node is reached, ordered mandatory nodes are traversed, a declared terminal branch stops at the boundary, and required Evidence is observable.",
+  "contract_version": "mini-agent-capability-contract-v3",
+  "description": "Reusable end_to_end capability chain.",
+  "evidence_refs": [
+    {
+      "contract_version": "mini-agent-capability-contract-v3",
+      "path": "evidence/intent_result.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "evidence.intent_result",
+      "snapshot_sha256": "a80df6e107a2cc8d2a7c16d77e3a75c018ba7f287403571478406030de31c920",
+      "snapshot_type": "evidence"
+    },
+    {
+      "contract_version": "mini-agent-capability-contract-v3",
+      "path": "evidence/tool_trace.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "evidence.tool_trace",
+      "snapshot_sha256": "9cb25c0db0fd5165eaebddaf196278294da00d8b467d18a5dd7bf80ab03b80b6",
+      "snapshot_type": "evidence"
+    },
+    {
+      "contract_version": "mini-agent-capability-contract-v3",
+      "path": "evidence/safety_recovery_event.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "evidence.safety_recovery_event",
+      "snapshot_sha256": "8068e14668f7deeec2d8b3d5013d16b52fde64fa2362cbe232866717d8786164",
+      "snapshot_type": "evidence"
+    },
+    {
+      "contract_version": "mini-agent-capability-contract-v3",
+      "path": "evidence/final_response.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "evidence.final_response",
+      "snapshot_sha256": "e98c3b73c8740d6196a2bdb803a325deff087fc329a6ef5037acd10326d344e3",
+      "snapshot_type": "evidence"
+    }
+  ],
+  "module_refs": [
+    {
+      "contract_version": "agent-orchestrator-module-v3",
+      "path": "modules/agent_orchestrator.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "module.agent_orchestrator",
+      "snapshot_sha256": "9144e0227f084b538e9c9d375d73c094b8bb947fd87b43e69f2d3d2946cdcd6d",
+      "snapshot_type": "module"
+    },
+    {
+      "contract_version": "model-gateway-module-v3",
+      "path": "modules/model_gateway.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "module.model_gateway",
+      "snapshot_sha256": "78f74ab0def8cb0e96c99463b4aa3060b77dd5ce0a9e4cf3818df83c2cca7852",
+      "snapshot_type": "module"
+    },
+    {
+      "contract_version": "intent-router-module-v3",
+      "path": "modules/intent_router.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "module.intent_router",
+      "snapshot_sha256": "94afdcac558a433a7b9b19c3e2584637b81009035672426c1d90d44e72d9d605",
+      "snapshot_type": "module"
+    },
+    {
+      "contract_version": "tool-loop-module-v3",
+      "path": "modules/tool_loop.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "module.tool_loop",
+      "snapshot_sha256": "7a5d59bd6db681ac79234591eb51255f964a03616fd7f4c97dd4d754191d89e3",
+      "snapshot_type": "module"
+    },
+    {
+      "contract_version": "tool-registry-module-v3",
+      "path": "modules/tool_registry.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "module.tool_registry",
+      "snapshot_sha256": "750583a3a0636478c336b375dc4d68672ea817c00588ff6ed26b86f5f5e347cf",
+      "snapshot_type": "module"
+    },
+    {
+      "contract_version": "execution-guard-module-v3",
+      "path": "modules/execution_guard.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "module.execution_guard",
+      "snapshot_sha256": "aff59eb854c23b783ad62aae4f49900de8c644e0b39215b8b375e1b902b9b37a",
+      "snapshot_type": "module"
+    },
+    {
+      "contract_version": "observability-module-v3",
+      "path": "modules/observability.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "module.observability",
+      "snapshot_sha256": "009b8b17a113ce14cc28eeaf8ebd1b8c18790eb5da85b7e5816abf3a65ffaa51",
+      "snapshot_type": "module"
+    }
+  ],
+  "nodes": [
+    {
+      "capability_key": "intent.contract_validation",
+      "depends_on": [],
+      "inputs": [
+        "intent_validation_input"
+      ],
+      "node_id": "intent_validation",
+      "outputs": [
+        "intent_validation_output"
+      ],
+      "provider": {
+        "role": "selected_intent",
+        "snapshot_id": null
+      },
+      "state_reads": [],
+      "state_writes": [],
+      "stop_conditions": [
+        "intent_validation_terminal"
+      ]
+    },
+    {
+      "capability_key": "tool.registered_execution",
+      "depends_on": [
+        "intent_validation"
+      ],
+      "inputs": [
+        "tool_execution_input"
+      ],
+      "node_id": "tool_execution",
+      "outputs": [
+        "tool_execution_output"
+      ],
+      "provider": {
+        "role": "selected_tool",
+        "snapshot_id": null
+      },
+      "state_reads": [],
+      "state_writes": [],
+      "stop_conditions": [
+        "tool_execution_terminal"
+      ]
+    },
+    {
+      "capability_key": "execution.bounded_tool_loop",
+      "depends_on": [
+        "tool_execution"
+      ],
+      "inputs": [
+        "bounded_execution_input"
+      ],
+      "node_id": "bounded_execution",
+      "outputs": [
+        "bounded_execution_output"
+      ],
+      "provider": {
+        "role": "snapshot",
+        "snapshot_id": "module.tool_loop"
+      },
+      "state_reads": [],
+      "state_writes": [],
+      "stop_conditions": [
+        "bounded_execution_terminal"
+      ]
+    },
+    {
+      "capability_key": "result.final_response",
+      "depends_on": [
+        "bounded_execution"
+      ],
+      "inputs": [
+        "result_emission_input"
+      ],
+      "node_id": "result_emission",
+      "outputs": [
+        "result_emission_output"
+      ],
+      "provider": {
+        "role": "snapshot",
+        "snapshot_id": "module.observability"
+      },
+      "state_reads": [],
+      "state_writes": [],
+      "stop_conditions": [
+        "result_emission_terminal"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "capability_key": "intent.contract_validation",
+      "evidence_ids": [
+        "evidence.intent_result"
+      ],
+      "mandatory": true,
+      "provider": {
+        "role": "selected_intent",
+        "snapshot_id": null
+      },
+      "requirement_id": "selected_intent_contract"
+    },
+    {
+      "capability_key": "tool.registered_execution",
+      "evidence_ids": [
+        "evidence.tool_trace"
+      ],
+      "mandatory": true,
+      "provider": {
+        "role": "selected_tool",
+        "snapshot_id": null
+      },
+      "requirement_id": "selected_tool_execution"
+    }
+  ],
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "chain.end_to_end",
+  "snapshot_sha256": "3d0e20c6c9b1361b3bf01a7ba9b82207b938db313898020fab7cec3a0444f82d",
+  "snapshot_type": "chain",
+  "source_hashes": {
+    "catalog_definition_sha256": "70f0001a3778a23709a31ecbce6e0e03e790c1dbeefb58e498604c903aa20381"
+  }
+}

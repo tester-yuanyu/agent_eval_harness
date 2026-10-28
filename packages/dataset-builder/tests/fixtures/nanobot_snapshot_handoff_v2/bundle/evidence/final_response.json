@@ -1,0 +1,99 @@
+{
+  "applicable_result_paths": [
+    "success"
+  ],
+  "availability": {
+    "capability_key": "evidence.final_response_available",
+    "evidence_ids": [
+      "evidence.final_response"
+    ],
+    "reason": null,
+    "support_status": "supported"
+  },
+  "consumer_roles": [
+    "builder",
+    "evaluator"
+  ],
+  "contract_version": "nanobot-collector-v1",
+  "description": "Public final response and terminal status.",
+  "event_types": [],
+  "evidence_id": "final_response",
+  "observation_interface": "dataclasses.asdict(RunResult)",
+  "payload_schema": {
+    "description": "Result of a single agent run.",
+    "properties": {
+      "content": {
+        "title": "Content",
+        "type": "string"
+      },
+      "error": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Error"
+      },
+      "messages": {
+        "items": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "title": "Messages",
+        "type": "array"
+      },
+      "metadata": {
+        "additionalProperties": true,
+        "title": "Metadata",
+        "type": "object"
+      },
+      "stop_reason": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Stop Reason"
+      },
+      "tools_used": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Tools Used",
+        "type": "array"
+      },
+      "usage": {
+        "additionalProperties": {
+          "type": "integer"
+        },
+        "title": "Usage",
+        "type": "object"
+      }
+    },
+    "required": [
+      "content"
+    ],
+    "title": "RunResult",
+    "type": "object"
+  },
+  "producer_module_ids": [
+    "module.observability"
+  ],
+  "production_timing": "On successful return of Nanobot.run; exceptions may propagate.",
+  "required": true,
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "evidence.final_response",
+  "snapshot_sha256": "f6c2a0999ed6c5a7db2ab5dac8773e683c497a8324559785c66e4f8f5c58865e",
+  "snapshot_type": "evidence",
+  "source_hashes": {
+    "catalog_definition_sha256": "d6bb676e0ebea53caca150e8b2a3375fdabba7228c5dc3aee586f200c4f99e1e"
+  }
+}

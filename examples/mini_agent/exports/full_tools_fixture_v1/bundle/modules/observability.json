@@ -1,0 +1,50 @@
+{
+  "capabilities": [
+    {
+      "capability_key": "observability.trace_export",
+      "evidence_ids": [
+        "evidence.final_response"
+      ],
+      "reason": null,
+      "support_status": "supported"
+    },
+    {
+      "capability_key": "result.final_response",
+      "evidence_ids": [
+        "evidence.final_response"
+      ],
+      "reason": null,
+      "support_status": "supported"
+    }
+  ],
+  "component_versions": {
+    "observability": "v3"
+  },
+  "contract_version": "observability-module-v3",
+  "execution_boundary_ids": [
+    "boundary.result"
+  ],
+  "input_schema": {
+    "type": "object"
+  },
+  "intent_refs": [],
+  "module_id": "observability",
+  "module_refs": [],
+  "output_schema": {
+    "type": "object"
+  },
+  "responsibility": "Expose terminal results and runtime Trace events.",
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "module.observability",
+  "snapshot_sha256": "009b8b17a113ce14cc28eeaf8ebd1b8c18790eb5da85b7e5816abf3a65ffaa51",
+  "snapshot_type": "module",
+  "source_hashes": {
+    "capabilities_sha256": "3e2e62c81475346c78b26dfee15939e0c9c11c0cfe4bf0a5d08e120151c1c0bb",
+    "children_sha256": "b78ee59b8a819b12aaee9953ee472c98c34893d48db562e951cb5033d096ae54"
+  },
+  "tool_refs": [],
+  "trace_event_types": [
+    "final_response_generated",
+    "run_finished"
+  ]
+}

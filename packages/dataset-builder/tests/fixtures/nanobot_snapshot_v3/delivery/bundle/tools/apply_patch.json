@@ -1,0 +1,196 @@
+{
+  "batch_behavior": {
+    "declared": false
+  },
+  "capabilities": [
+    {
+      "capability_key": "tool.execution",
+      "evidence_ids": [],
+      "reason": "Offline construction only: no model call, tool execution or external service verification.",
+      "support_status": "unknown"
+    }
+  ],
+  "combination_rules": {
+    "concurrency_safe": false,
+    "exclusive": false
+  },
+  "contract_version": "nanobot-collector-v2",
+  "description": "Default tool for code edits. Supports multi-file changes in a single call. Provide a list of structured edits, each specifying a file path, action (replace/add), and the exact text to change. Paths are resolved by the current workspace access policy. Set dry_run=true to validate and preview without writing files. Use edit_file only for small exact replacements on a single file.",
+  "function_schema": {
+    "function": {
+      "description": "Default tool for code edits. Supports multi-file changes in a single call. Provide a list of structured edits, each specifying a file path, action (replace/add), and the exact text to change. Paths are resolved by the current workspace access policy. Set dry_run=true to validate and preview without writing files. Use edit_file only for small exact replacements on a single file.",
+      "name": "apply_patch",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "dry_run": {
+            "default": false,
+            "description": "Validate and summarize the patch without writing files.",
+            "type": "boolean"
+          },
+          "edits": {
+            "description": "List of edits to apply. Each edit specifies a file and the change to make.",
+            "items": {
+              "properties": {
+                "action": {
+                  "description": "Operation type: replace or add.",
+                  "enum": [
+                    "replace",
+                    "add"
+                  ],
+                  "type": "string"
+                },
+                "new_text": {
+                  "description": "Text to replace with or append. Required for replace and add.",
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "old_text": {
+                  "description": "Exact text to search for in the file. Required for replace.",
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "path": {
+                  "description": "Path to the file to edit. Relative paths resolve against the workspace; absolute paths and '..' obey the workspace access policy.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path",
+                "action"
+              ],
+              "type": "object"
+            },
+            "maxItems": 20,
+            "minItems": 1,
+            "type": "array"
+          }
+        },
+        "required": [
+          "edits"
+        ],
+        "type": "object"
+      }
+    },
+    "type": "function"
+  },
+  "idempotency_rules": {
+    "status": "unknown"
+  },
+  "implementation_profile": "production",
+  "observation_interfaces": [
+    "ToolRegistry.get_definitions",
+    "ToolRegistry.execute",
+    "AgentHookContext.tool_events (runner hooks)"
+  ],
+  "parameter_semantics": {
+    "dry_run": "Validate and summarize the patch without writing files.",
+    "edits": "List of edits to apply. Each edit specifies a file and the change to make."
+  },
+  "permission_requirements": [
+    "See implementation-specific guards; not audited here."
+  ],
+  "preconditions": [
+    "Registration is limited to the named offline profile.",
+    "Execution requires tool-specific services, request context and permissions."
+  ],
+  "registered": true,
+  "requires_confirmation": false,
+  "result_protocols": {
+    "business_error_codes": null,
+    "category_names_are_adapter_labels": true,
+    "dispatch_paths": [
+      "ToolRegistry.execute (direct registry API)",
+      "AgentRunner._run_tool -> ToolRegistry.prepare_call -> tool.execute (normal runner path)"
+    ],
+    "error_categories": [
+      {
+        "category": "unknown_tool",
+        "observation": "prepare_call returns error; tool implementation is not called."
+      },
+      {
+        "category": "invalid_arguments",
+        "observation": "prepare_call coerces/casts and validates parameters; rejected arguments do not call the implementation."
+      },
+      {
+        "category": "tool_marked_error",
+        "observation": "ToolResult.is_error produces an error event in the runner."
+      },
+      {
+        "category": "implementation_exception",
+        "observation": "Ordinary Exception becomes a registry ToolResult.error or a runner error event; handling differs by entrypoint."
+      },
+      {
+        "category": "policy_guard",
+        "observation": "Repeated external lookup/workspace violation guards can reject or escalate; do not infer recoverability from fail_on_tool_error alone."
+      },
+      {
+        "category": "control_flow",
+        "observation": "Cancellation and control-flow BaseException can propagate; hooks may also raise outside the implementation catch."
+      }
+    ],
+    "error_marker": "ToolResult.is_error; a plain string beginning with Error: is not by itself a builtin tool failure marker.",
+    "event_observation": "AgentHookContext.tool_events in runner hooks; not a top-level RunResult field and not emitted as StreamEvent by run().",
+    "fail_on_tool_error": "False generally returns tool errors to the model for possible recovery; True can terminate with tool_error. Policy guards and continuations also affect the terminal outcome.",
+    "registry_return_type": "Any; implementation-specific. No universal successful result shape is inferred.",
+    "retry": {
+      "automatic_tool_retry_guaranteed": false,
+      "description": "The registry does not automatically retry an implementation call. The model may request a new call; provider retries and tool-internal retries are separate.",
+      "status": "tool_specific_unknown"
+    },
+    "source_symbols": [
+      "ToolRegistry.prepare_call",
+      "ToolRegistry.execute",
+      "ToolResult",
+      "AgentRunner._run_tool",
+      "AgentRunner._classify_violation"
+    ],
+    "tool_event_schema": {
+      "properties": {
+        "detail": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "ok",
+            "error"
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "status",
+        "detail"
+      ],
+      "type": "object"
+    }
+  },
+  "retry_policy": {
+    "automatic_tool_retry_guaranteed": false,
+    "description": "The registry does not automatically retry an implementation call. The model may request a new call; provider retries and tool-internal retries are separate.",
+    "status": "tool_specific_unknown"
+  },
+  "risk_level": "high",
+  "side_effects": [
+    "Not audited; read_only declaration=False"
+  ],
+  "simulation_capabilities": [],
+  "simulation_protocol": null,
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "tool.apply_patch",
+  "snapshot_sha256": "faceceb31cf1433814c61c93c94a3c38034dcbbca9195304cba4165bd9405be2",
+  "snapshot_type": "tool",
+  "source_hashes": {
+    "execution_contract_sha256": "d2b5f3f15f85b53ae561749e7f90512be2291d4492fa3968972e20cbd949fb1e",
+    "function_schema_sha256": "2dda046e48139e4774e77a027677d2f37e455421c158b5202b53e0246538b62a"
+  },
+  "tool_name": "apply_patch",
+  "tool_version": "0.3.0"
+}

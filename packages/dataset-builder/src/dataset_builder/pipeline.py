@@ -25,6 +25,7 @@ from .orchestration import (
 )
 from .plugins import PluginKey
 from .prompt_builder import build_prompt
+from .resources import resource_root
 from .schemas import (
     Approval,
     GenerationRequest,
@@ -67,7 +68,7 @@ def _materialize_request_snapshots(request: GenerationRequest, workspace: Path) 
     profile = load_trusted_profile(
         profile_binding["profile_id"],
         profile_binding["profile_version"],
-        Path(__file__).resolve().parents[2]
+        resource_root()
         / "protocol_profiles"
         / "trust_store.json",
     )
@@ -508,7 +509,7 @@ def _build_review_impl(
     reports: ValidationSummary,
     output: Path,
 ) -> Path:
-    from eval_framework import load_dataset
+    from eval_contracts import load_dataset
 
     cases = load_dataset(draft).cases
     gate_names = {
@@ -653,7 +654,7 @@ def approval_from_review(
 ) -> Approval:
     """Create hash-bound approval only from a fully checked review artifact."""
 
-    from eval_framework import load_dataset
+    from eval_contracts import load_dataset
 
     review_text = review_file.read_text()
     if "数据集状态：STALE" in review_text:

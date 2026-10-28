@@ -1,0 +1,68 @@
+{
+  "capability_bundle_sha256": "215a9a3a445c8857f3bdd8dbecba935ce646bd8c784f16ecfc4a5da6042cce3c",
+  "gaps": [
+    {
+      "affected_snapshot_ids": [
+        "tool.add_gift_to_backpack",
+        "tool.prepare_resource",
+        "tool.query_gift_info",
+        "tool.query_information",
+        "tool.query_pool_config",
+        "tool.query_user_info"
+      ],
+      "gap_id": "PRODUCTION_BACKENDS_MISSING",
+      "reason": "All six tools bind isolated example fixtures.",
+      "required_action": "Provide real handlers and production contracts; export a separate bundle.",
+      "status": "open"
+    },
+    {
+      "affected_snapshot_ids": [
+        "intent.add_backpack_gift",
+        "tool.add_gift_to_backpack",
+        "chain.end_to_end"
+      ],
+      "gap_id": "CONFIRMATION_RESUME_UNSUPPORTED",
+      "reason": "The Agent stops at NEED_CONFIRMATION. External fixture approval is not Agent resume.",
+      "required_action": "Implement confirmation state, acceptance, invalidation and resume.",
+      "status": "open"
+    },
+    {
+      "affected_snapshot_ids": [
+        "scope.context",
+        "module.agent_orchestrator",
+        "evidence.context_state"
+      ],
+      "gap_id": "CONTEXT_UNSUPPORTED",
+      "reason": "The runtime does not inherit business state between turns.",
+      "required_action": "Implement session state and state evidence.",
+      "status": "open"
+    },
+    {
+      "affected_snapshot_ids": [
+        "intent.prepare_resource",
+        "tool.prepare_resource"
+      ],
+      "gap_id": "PREPARE_RESOURCE_POLICY_MISMATCH",
+      "reason": "Intent uses a read policy; the fixture creates isolated resources.",
+      "required_action": "Define real business behavior and confirmation policy before production binding.",
+      "status": "open"
+    },
+    {
+      "affected_snapshot_ids": [
+        "intent.add_backpack_gift",
+        "tool.add_gift_to_backpack"
+      ],
+      "gap_id": "GIFT_ENVIRONMENT_NOT_IN_TOOL_ARGUMENTS",
+      "reason": "Intent requires environment; the tool model has no such field. This fixture is isolated only.",
+      "required_action": "Define trusted environment binding for real writes.",
+      "status": "open"
+    },
+    {
+      "affected_snapshot_ids": [],
+      "gap_id": "FULL_DATASET_AND_HUMAN_REVIEW_PENDING",
+      "reason": "This delivery contains capability facts and fixtures, not reviewed evaluation JSONL.",
+      "required_action": "Use Builder to author datasets, coverage and review checklists; evaluate and review before freezing.",
+      "status": "open"
+    }
+  ]
+}

@@ -1,0 +1,177 @@
+{
+  "batch_behavior": {
+    "declared": false
+  },
+  "capabilities": [
+    {
+      "capability_key": "tool.execution",
+      "evidence_ids": [],
+      "reason": "Offline construction only: no model call, tool execution or external service verification.",
+      "support_status": "unknown"
+    }
+  ],
+  "combination_rules": {
+    "concurrency_safe": false,
+    "exclusive": true
+  },
+  "contract_version": "nanobot-collector-v2",
+  "description": "Search the web. Returns titles, URLs, and snippets. count defaults to 5 (max 10). Some providers support timeRange, authLevel, and queryRewrite. Use web_fetch to read a specific page in full.",
+  "function_schema": {
+    "function": {
+      "description": "Search the web. Returns titles, URLs, and snippets. count defaults to 5 (max 10). Some providers support timeRange, authLevel, and queryRewrite. Use web_fetch to read a specific page in full.",
+      "name": "web_search",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "authLevel": {
+            "description": "Optional authority filter for providers that support it: 0=all, 1=authoritative",
+            "maximum": 1,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "count": {
+            "description": "Results (1-10)",
+            "maximum": 10,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "query": {
+            "description": "Search query",
+            "type": "string"
+          },
+          "queryRewrite": {
+            "description": "Optional provider-side query rewrite for conversational or ambiguous searches",
+            "type": "boolean"
+          },
+          "timeRange": {
+            "description": "Optional time filter for providers that support it: OneDay, OneWeek, OneMonth, OneYear, or YYYY-MM-DD..YYYY-MM-DD",
+            "type": "string"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "type": "object"
+      }
+    },
+    "type": "function"
+  },
+  "idempotency_rules": {
+    "status": "unknown"
+  },
+  "implementation_profile": "production",
+  "observation_interfaces": [
+    "ToolRegistry.get_definitions",
+    "ToolRegistry.execute",
+    "AgentHookContext.tool_events (runner hooks)"
+  ],
+  "parameter_semantics": {
+    "authLevel": "Optional authority filter for providers that support it: 0=all, 1=authoritative",
+    "count": "Results (1-10)",
+    "query": "Search query",
+    "queryRewrite": "Optional provider-side query rewrite for conversational or ambiguous searches",
+    "timeRange": "Optional time filter for providers that support it: OneDay, OneWeek, OneMonth, OneYear, or YYYY-MM-DD..YYYY-MM-DD"
+  },
+  "permission_requirements": [
+    "See implementation-specific guards; not audited here."
+  ],
+  "preconditions": [
+    "Registration is limited to the named offline profile.",
+    "Execution requires tool-specific services, request context and permissions."
+  ],
+  "registered": true,
+  "requires_confirmation": false,
+  "result_protocols": {
+    "business_error_codes": null,
+    "category_names_are_adapter_labels": true,
+    "dispatch_paths": [
+      "ToolRegistry.execute (direct registry API)",
+      "AgentRunner._run_tool -> ToolRegistry.prepare_call -> tool.execute (normal runner path)"
+    ],
+    "error_categories": [
+      {
+        "category": "unknown_tool",
+        "observation": "prepare_call returns error; tool implementation is not called."
+      },
+      {
+        "category": "invalid_arguments",
+        "observation": "prepare_call coerces/casts and validates parameters; rejected arguments do not call the implementation."
+      },
+      {
+        "category": "tool_marked_error",
+        "observation": "ToolResult.is_error produces an error event in the runner."
+      },
+      {
+        "category": "implementation_exception",
+        "observation": "Ordinary Exception becomes a registry ToolResult.error or a runner error event; handling differs by entrypoint."
+      },
+      {
+        "category": "policy_guard",
+        "observation": "Repeated external lookup/workspace violation guards can reject or escalate; do not infer recoverability from fail_on_tool_error alone."
+      },
+      {
+        "category": "control_flow",
+        "observation": "Cancellation and control-flow BaseException can propagate; hooks may also raise outside the implementation catch."
+      }
+    ],
+    "error_marker": "ToolResult.is_error; a plain string beginning with Error: is not by itself a builtin tool failure marker.",
+    "event_observation": "AgentHookContext.tool_events in runner hooks; not a top-level RunResult field and not emitted as StreamEvent by run().",
+    "fail_on_tool_error": "False generally returns tool errors to the model for possible recovery; True can terminate with tool_error. Policy guards and continuations also affect the terminal outcome.",
+    "registry_return_type": "Any; implementation-specific. No universal successful result shape is inferred.",
+    "retry": {
+      "automatic_tool_retry_guaranteed": false,
+      "description": "The registry does not automatically retry an implementation call. The model may request a new call; provider retries and tool-internal retries are separate.",
+      "status": "tool_specific_unknown"
+    },
+    "source_symbols": [
+      "ToolRegistry.prepare_call",
+      "ToolRegistry.execute",
+      "ToolResult",
+      "AgentRunner._run_tool",
+      "AgentRunner._classify_violation"
+    ],
+    "tool_event_schema": {
+      "properties": {
+        "detail": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "ok",
+            "error"
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "status",
+        "detail"
+      ],
+      "type": "object"
+    }
+  },
+  "retry_policy": {
+    "automatic_tool_retry_guaranteed": false,
+    "description": "The registry does not automatically retry an implementation call. The model may request a new call; provider retries and tool-internal retries are separate.",
+    "status": "tool_specific_unknown"
+  },
+  "risk_level": "medium",
+  "side_effects": [
+    "Not audited; read_only declaration=True"
+  ],
+  "simulation_capabilities": [],
+  "simulation_protocol": null,
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "tool.web_search",
+  "snapshot_sha256": "155b09f33da5bf7e933c2f0b66b01bbfeb168b6879aed0c1a58fff78bfec3fce",
+  "snapshot_type": "tool",
+  "source_hashes": {
+    "execution_contract_sha256": "1833b4e09be5ecd82d7b62a980aa24b5d9d11d61fb40b3b80d5185b945db2cde",
+    "function_schema_sha256": "217aac81211331731375052ba40911005e2e1ac1bf1e9c74089fb37a57d85dca"
+  },
+  "tool_name": "web_search",
+  "tool_version": "0.3.0"
+}

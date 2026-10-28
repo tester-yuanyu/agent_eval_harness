@@ -1,0 +1,109 @@
+{
+  "$defs": {
+    "SourceRef": {
+      "additionalProperties": false,
+      "properties": {
+        "snapshot_id": {
+          "title": "Snapshot Id",
+          "type": "string"
+        },
+        "relative_path": {
+          "title": "Relative Path",
+          "type": "string"
+        },
+        "snapshot_sha256": {
+          "title": "Snapshot Sha256",
+          "type": "string"
+        },
+        "pointer": {
+          "title": "Pointer",
+          "type": "string"
+        }
+      },
+      "required": [
+        "snapshot_id",
+        "relative_path",
+        "snapshot_sha256",
+        "pointer"
+      ],
+      "title": "SourceRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "dataset_format": {
+      "const": "capability_contract_case",
+      "default": "capability_contract_case",
+      "title": "Dataset Format",
+      "type": "string"
+    },
+    "case_id": {
+      "title": "Case Id",
+      "type": "string"
+    },
+    "slot_id": {
+      "title": "Slot Id",
+      "type": "string"
+    },
+    "target_id": {
+      "title": "Target Id",
+      "type": "string"
+    },
+    "layer": {
+      "title": "Layer",
+      "type": "string"
+    },
+    "preconditions": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Preconditions",
+      "type": "array"
+    },
+    "input": {
+      "additionalProperties": true,
+      "title": "Input",
+      "type": "object"
+    },
+    "oracle": {
+      "additionalProperties": true,
+      "title": "Oracle",
+      "type": "object"
+    },
+    "source_refs": {
+      "items": {
+        "$ref": "#/$defs/SourceRef"
+      },
+      "title": "Source Refs",
+      "type": "array"
+    },
+    "runner_requirements": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Runner Requirements",
+      "type": "array"
+    }
+  },
+  "required": [
+    "case_id",
+    "slot_id",
+    "target_id",
+    "layer",
+    "preconditions",
+    "input",
+    "oracle",
+    "source_refs",
+    "runner_requirements"
+  ],
+  "title": "ContractCase",
+  "type": "object"
+}

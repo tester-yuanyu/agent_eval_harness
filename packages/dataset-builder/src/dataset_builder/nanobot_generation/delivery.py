@@ -421,7 +421,7 @@ def readme_text(data, report, datasets, delta=None):
         "",
         "```bash",
         (
-            "PYTHONPATH=src ../agent_evaluator/.venv/bin/python "
+            "python "
             "-m dataset_builder.cli validate-nanobot --workspace workspaces/"
             + (
                 "nanobot_full_eval_v3_20261024"

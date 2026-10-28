@@ -1,0 +1,169 @@
+{
+  "$defs": {
+    "CapabilityClaimV3": {
+      "additionalProperties": false,
+      "properties": {
+        "capability_key": {
+          "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)+$",
+          "title": "Capability Key",
+          "type": "string"
+        },
+        "evidence_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Ids",
+          "type": "array"
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Reason"
+        },
+        "support_status": {
+          "$ref": "#/$defs/SupportStatusV3"
+        }
+      },
+      "required": [
+        "capability_key",
+        "support_status",
+        "evidence_ids",
+        "reason"
+      ],
+      "title": "CapabilityClaimV3",
+      "type": "object"
+    },
+    "SupportStatusV3": {
+      "enum": [
+        "supported",
+        "unsupported",
+        "unknown"
+      ],
+      "title": "SupportStatusV3",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "applicable_result_paths": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Applicable Result Paths",
+      "type": "array"
+    },
+    "availability": {
+      "$ref": "#/$defs/CapabilityClaimV3"
+    },
+    "consumer_roles": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Consumer Roles",
+      "type": "array"
+    },
+    "contract_version": {
+      "minLength": 1,
+      "title": "Contract Version",
+      "type": "string"
+    },
+    "description": {
+      "minLength": 1,
+      "title": "Description",
+      "type": "string"
+    },
+    "event_types": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Event Types",
+      "type": "array"
+    },
+    "evidence_id": {
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "title": "Evidence Id",
+      "type": "string"
+    },
+    "observation_interface": {
+      "minLength": 1,
+      "title": "Observation Interface",
+      "type": "string"
+    },
+    "payload_schema": {
+      "additionalProperties": true,
+      "title": "Payload Schema",
+      "type": "object"
+    },
+    "producer_module_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Producer Module Ids",
+      "type": "array"
+    },
+    "production_timing": {
+      "minLength": 1,
+      "title": "Production Timing",
+      "type": "string"
+    },
+    "required": {
+      "title": "Required",
+      "type": "boolean"
+    },
+    "snapshot_format_version": {
+      "const": "3.0",
+      "title": "Snapshot Format Version",
+      "type": "string"
+    },
+    "snapshot_id": {
+      "pattern": "^(agent|module|intent|tool|scope|chain|evidence|boundary)\\.[a-z][a-z0-9_]*$",
+      "title": "Snapshot Id",
+      "type": "string"
+    },
+    "snapshot_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Snapshot Sha256",
+      "type": "string"
+    },
+    "snapshot_type": {
+      "const": "evidence",
+      "title": "Snapshot Type",
+      "type": "string"
+    },
+    "source_hashes": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "minProperties": 1,
+      "title": "Source Hashes",
+      "type": "object"
+    }
+  },
+  "required": [
+    "snapshot_id",
+    "snapshot_type",
+    "snapshot_format_version",
+    "contract_version",
+    "source_hashes",
+    "snapshot_sha256",
+    "evidence_id",
+    "description",
+    "producer_module_ids",
+    "consumer_roles",
+    "production_timing",
+    "payload_schema",
+    "observation_interface",
+    "event_types",
+    "required",
+    "applicable_result_paths",
+    "availability"
+  ],
+  "title": "EvidenceSnapshotV3",
+  "type": "object"
+}

@@ -1,0 +1,112 @@
+{
+  "batch_behavior": {
+    "declared": false
+  },
+  "capabilities": [
+    {
+      "capability_key": "tool.execution",
+      "evidence_ids": [],
+      "reason": "Offline construction only: no model call, tool execution or external service verification.",
+      "support_status": "unknown"
+    }
+  ],
+  "combination_rules": {
+    "concurrency_safe": false,
+    "exclusive": false
+  },
+  "contract_version": "nanobot-collector-v1",
+  "description": "Proactively send a message to a user/channel, optionally with file attachments. Use this for reminders, cross-channel delivery, or explicit proactive sends. Do not use this for the normal reply in the current chat: answer naturally instead. If channel/chat_id would target the current runtime conversation, do not call this tool unless the user explicitly asked you to proactively send an existing file attachment. When generate_image creates images in the current chat, use the message tool with the artifact paths in the media parameter to deliver the images to the user. For proactive attachment delivery, use the 'media' parameter with file paths. Do NOT use read_file to send files — that only reads content for your own analysis.",
+  "function_schema": {
+    "function": {
+      "description": "Proactively send a message to a user/channel, optionally with file attachments. Use this for reminders, cross-channel delivery, or explicit proactive sends. Do not use this for the normal reply in the current chat: answer naturally instead. If channel/chat_id would target the current runtime conversation, do not call this tool unless the user explicitly asked you to proactively send an existing file attachment. When generate_image creates images in the current chat, use the message tool with the artifact paths in the media parameter to deliver the images to the user. For proactive attachment delivery, use the 'media' parameter with file paths. Do NOT use read_file to send files — that only reads content for your own analysis.",
+      "name": "message",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "buttons": {
+            "description": "Optional: inline keyboard buttons as list of rows, each row is list of button labels.",
+            "items": {
+              "items": {
+                "description": "Button label",
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "type": "array"
+          },
+          "channel": {
+            "description": "Optional target channel for cross-channel/proactive delivery. Do not set this to the current runtime channel for a normal reply.",
+            "type": "string"
+          },
+          "chat_id": {
+            "description": "Optional target chat/user ID for cross-channel/proactive delivery. On WebSocket/WebUI turns: omit chat_id to use the server's conversation id (never pass client_id values like anon-…). Do not set this to the current runtime chat for a normal reply.",
+            "type": "string"
+          },
+          "content": {
+            "description": "Message content for proactive or cross-channel delivery. Do not use this for a normal reply in the current chat.",
+            "type": "string"
+          },
+          "media": {
+            "description": "Optional list of existing file paths to attach. Use artifact paths returned by generate_image here when delivering generated images.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "content"
+        ],
+        "type": "object"
+      }
+    },
+    "type": "function"
+  },
+  "idempotency_rules": {
+    "status": "unknown"
+  },
+  "implementation_profile": "production",
+  "observation_interfaces": [
+    "ToolRegistry.get_definitions",
+    "ToolRegistry.execute"
+  ],
+  "parameter_semantics": {
+    "buttons": "Optional: inline keyboard buttons as list of rows, each row is list of button labels.",
+    "channel": "Optional target channel for cross-channel/proactive delivery. Do not set this to the current runtime channel for a normal reply.",
+    "chat_id": "Optional target chat/user ID for cross-channel/proactive delivery. On WebSocket/WebUI turns: omit chat_id to use the server's conversation id (never pass client_id values like anon-…). Do not set this to the current runtime chat for a normal reply.",
+    "content": "Message content for proactive or cross-channel delivery. Do not use this for a normal reply in the current chat.",
+    "media": "Optional list of existing file paths to attach. Use artifact paths returned by generate_image here when delivering generated images."
+  },
+  "permission_requirements": [
+    "See implementation-specific guards; not audited here."
+  ],
+  "preconditions": [
+    "Registration is limited to the named offline profile.",
+    "Execution requires tool-specific services, request context and permissions."
+  ],
+  "registered": true,
+  "requires_confirmation": false,
+  "result_protocols": {
+    "error_marker": "ToolResult.is_error; see ToolRegistry.execute",
+    "registry_return_type": "Any; tool-specific return contract"
+  },
+  "retry_policy": {
+    "status": "unknown"
+  },
+  "risk_level": "high",
+  "side_effects": [
+    "Not audited; read_only declaration=False"
+  ],
+  "simulation_capabilities": [],
+  "simulation_protocol": null,
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "tool.message",
+  "snapshot_sha256": "edf19f2f03488622f86e3a996fbcfc1374ce08146de82d01083278cc55b1ce82",
+  "snapshot_type": "tool",
+  "source_hashes": {
+    "execution_contract_sha256": "0082731643a549c87332a5bbcd13e3ff4c671ca6cd06753d0059166d0924c9ad",
+    "function_schema_sha256": "82af9f2d96a77bcbbd940404cc60ecb3177b0340c792de96e0fe21be42ed121b"
+  },
+  "tool_name": "message",
+  "tool_version": "0.3.0"
+}

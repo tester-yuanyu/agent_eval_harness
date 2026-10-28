@@ -1,0 +1,201 @@
+{
+  "$defs": {
+    "SourceRef": {
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "pointer": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pointer"
+        },
+        "anchor": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Anchor"
+        }
+      },
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "title": "SourceRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "dataset_format": {
+      "const": "nanobot_candidate",
+      "default": "nanobot_candidate",
+      "title": "Dataset Format",
+      "type": "string"
+    },
+    "agent_id": {
+      "const": "nanobot",
+      "default": "nanobot",
+      "title": "Agent Id",
+      "type": "string"
+    },
+    "case_id": {
+      "title": "Case Id",
+      "type": "string"
+    },
+    "target_id": {
+      "title": "Target Id",
+      "type": "string"
+    },
+    "layer": {
+      "enum": [
+        "modules",
+        "tools",
+        "critical_links",
+        "end_to_end",
+        "contracts"
+      ],
+      "title": "Layer",
+      "type": "string"
+    },
+    "kind": {
+      "enum": [
+        "schema_contract",
+        "contract_check",
+        "behavior_candidate",
+        "blocked_obligation"
+      ],
+      "title": "Kind",
+      "type": "string"
+    },
+    "category": {
+      "title": "Category",
+      "type": "string"
+    },
+    "title": {
+      "title": "Title",
+      "type": "string"
+    },
+    "support_status": {
+      "enum": [
+        "supported",
+        "unknown",
+        "unsupported"
+      ],
+      "title": "Support Status",
+      "type": "string"
+    },
+    "source_basis": {
+      "enum": [
+        "snapshot",
+        "implementation_derived",
+        "missing_contract"
+      ],
+      "title": "Source Basis",
+      "type": "string"
+    },
+    "execution_readiness": {
+      "enum": [
+        "static_only",
+        "needs_runner",
+        "blocked"
+      ],
+      "title": "Execution Readiness",
+      "type": "string"
+    },
+    "runtime_execution": {
+      "const": "NOT_RUN",
+      "default": "NOT_RUN",
+      "title": "Runtime Execution",
+      "type": "string"
+    },
+    "approval": {
+      "const": "PENDING",
+      "default": "PENDING",
+      "title": "Approval",
+      "type": "string"
+    },
+    "preconditions": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Preconditions",
+      "type": "array"
+    },
+    "input": {
+      "additionalProperties": true,
+      "title": "Input",
+      "type": "object"
+    },
+    "oracle": {
+      "additionalProperties": true,
+      "title": "Oracle",
+      "type": "object"
+    },
+    "source_refs": {
+      "items": {
+        "$ref": "#/$defs/SourceRef"
+      },
+      "minItems": 1,
+      "title": "Source Refs",
+      "type": "array"
+    },
+    "runner_requirements": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Runner Requirements",
+      "type": "array"
+    },
+    "blocker_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Blocker Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "case_id",
+    "target_id",
+    "layer",
+    "kind",
+    "category",
+    "title",
+    "support_status",
+    "source_basis",
+    "execution_readiness",
+    "input",
+    "oracle",
+    "source_refs"
+  ],
+  "title": "Candidate",
+  "type": "object"
+}

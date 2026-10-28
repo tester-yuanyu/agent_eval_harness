@@ -1,0 +1,1064 @@
+{
+  "execution_verified": false,
+  "facts": {
+    "agent.nanobot": {
+      "basis": "configured",
+      "claims": [],
+      "effective_fact_sha256": "2972870e08d24b6d819b94b5a8f647dd24709fd2419f1ac050365064fb922eda",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/EXECUTION_CONTRACT.md",
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/contracts.json",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/integrations/capability_snapshot/specs/boundaries/conversation.md",
+        "collector/integrations/capability_snapshot/specs/chains/end_to_end.md",
+        "collector/integrations/capability_snapshot/specs/evidence/execution_contract.md",
+        "collector/integrations/capability_snapshot/specs/evidence/final_response.md",
+        "collector/integrations/capability_snapshot/specs/evidence/run_exception.md",
+        "collector/integrations/capability_snapshot/specs/protocol.md",
+        "collector/integrations/capability_snapshot/specs/scopes/result.md",
+        "collector/nanobot/agent/hook.py",
+        "collector/nanobot/agent/loop.py",
+        "collector/nanobot/agent/model_runtime.py",
+        "collector/nanobot/agent/runner.py",
+        "collector/nanobot/config/schema.py",
+        "collector/nanobot/nanobot.py",
+        "collector/nanobot/sdk/runtime.py",
+        "collector/nanobot/sdk/types.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "evidence.execution_contract": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "evidence.execution_contract_available",
+          "declared_status": "supported",
+          "effective_status": "supported"
+        }
+      ],
+      "effective_fact_sha256": "0b304959a3bf71ec7f19d77226dcd2ef45313efd969fb5382796ddd0ef210263",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/EXECUTION_CONTRACT.md",
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/contracts.json",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/integrations/capability_snapshot/specs/boundaries/conversation.md",
+        "collector/integrations/capability_snapshot/specs/chains/end_to_end.md",
+        "collector/integrations/capability_snapshot/specs/evidence/execution_contract.md",
+        "collector/integrations/capability_snapshot/specs/evidence/final_response.md",
+        "collector/integrations/capability_snapshot/specs/evidence/run_exception.md",
+        "collector/integrations/capability_snapshot/specs/protocol.md",
+        "collector/integrations/capability_snapshot/specs/scopes/result.md",
+        "collector/nanobot/agent/hook.py",
+        "collector/nanobot/agent/loop.py",
+        "collector/nanobot/agent/model_runtime.py",
+        "collector/nanobot/agent/runner.py",
+        "collector/nanobot/agent/tools/base.py",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/config/schema.py",
+        "collector/nanobot/nanobot.py",
+        "collector/nanobot/sdk/runtime.py",
+        "collector/nanobot/sdk/types.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "evidence.final_response": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "evidence.final_response_available",
+          "declared_status": "supported",
+          "effective_status": "supported"
+        }
+      ],
+      "effective_fact_sha256": "a7c33a54dea8057dbddd1a25617f4149fbc5aaffb03e6313c2c73190c593127e",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/EXECUTION_CONTRACT.md",
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/contracts.json",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/integrations/capability_snapshot/specs/boundaries/conversation.md",
+        "collector/integrations/capability_snapshot/specs/chains/end_to_end.md",
+        "collector/integrations/capability_snapshot/specs/evidence/execution_contract.md",
+        "collector/integrations/capability_snapshot/specs/evidence/final_response.md",
+        "collector/integrations/capability_snapshot/specs/evidence/run_exception.md",
+        "collector/integrations/capability_snapshot/specs/protocol.md",
+        "collector/integrations/capability_snapshot/specs/scopes/result.md",
+        "collector/nanobot/agent/hook.py",
+        "collector/nanobot/config/schema.py",
+        "collector/nanobot/nanobot.py",
+        "collector/nanobot/sdk/types.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "evidence.run_exception": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "evidence.run_exception_available",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "52e32928b0cf0c7864f6f1801578e3377cae2b3be0024a69203d8c38427dbab4",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/EXECUTION_CONTRACT.md",
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/contracts.json",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/integrations/capability_snapshot/specs/boundaries/conversation.md",
+        "collector/integrations/capability_snapshot/specs/chains/end_to_end.md",
+        "collector/integrations/capability_snapshot/specs/evidence/execution_contract.md",
+        "collector/integrations/capability_snapshot/specs/evidence/final_response.md",
+        "collector/integrations/capability_snapshot/specs/evidence/run_exception.md",
+        "collector/integrations/capability_snapshot/specs/protocol.md",
+        "collector/integrations/capability_snapshot/specs/scopes/result.md",
+        "collector/nanobot/agent/loop.py",
+        "collector/nanobot/agent/model_runtime.py",
+        "collector/nanobot/agent/runner.py",
+        "collector/nanobot/config/schema.py",
+        "collector/nanobot/nanobot.py",
+        "collector/nanobot/sdk/runtime.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "intent.assistant": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "dialogue.business_task",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "e24be7de735ea932b620b6a42ef361771d5dd711760f75819143ead744c59489",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/EXECUTION_CONTRACT.md",
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/contracts.json",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/integrations/capability_snapshot/specs/boundaries/conversation.md",
+        "collector/integrations/capability_snapshot/specs/chains/end_to_end.md",
+        "collector/integrations/capability_snapshot/specs/evidence/execution_contract.md",
+        "collector/integrations/capability_snapshot/specs/evidence/final_response.md",
+        "collector/integrations/capability_snapshot/specs/evidence/run_exception.md",
+        "collector/integrations/capability_snapshot/specs/protocol.md",
+        "collector/integrations/capability_snapshot/specs/scopes/result.md",
+        "collector/nanobot/agent/loop.py",
+        "collector/nanobot/agent/model_runtime.py",
+        "collector/nanobot/agent/runner.py",
+        "collector/nanobot/config/schema.py",
+        "collector/nanobot/nanobot.py",
+        "collector/nanobot/sdk/runtime.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "module.channels": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "channel.delivery",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "1695d59088a0cde628ef41134cbdff9afa6721df0b2cbde0962c73fc75a7819d",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/EXECUTION_CONTRACT.md",
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/contracts.json",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/integrations/capability_snapshot/specs/boundaries/conversation.md",
+        "collector/integrations/capability_snapshot/specs/chains/end_to_end.md",
+        "collector/integrations/capability_snapshot/specs/evidence/execution_contract.md",
+        "collector/integrations/capability_snapshot/specs/evidence/final_response.md",
+        "collector/integrations/capability_snapshot/specs/evidence/run_exception.md",
+        "collector/integrations/capability_snapshot/specs/protocol.md",
+        "collector/integrations/capability_snapshot/specs/scopes/result.md",
+        "collector/nanobot/channels/manager.py",
+        "collector/nanobot/channels/registry.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "module.dialogue": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "dialogue.respond",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        },
+        {
+          "capability_key": "contract.sdk_boundary",
+          "declared_status": "supported",
+          "effective_status": "supported"
+        }
+      ],
+      "effective_fact_sha256": "5937841738fa539afdb54ab0db34f23c376d339cd283264d352b4315dc345ae2",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/EXECUTION_CONTRACT.md",
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/contracts.json",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/integrations/capability_snapshot/specs/boundaries/conversation.md",
+        "collector/integrations/capability_snapshot/specs/chains/end_to_end.md",
+        "collector/integrations/capability_snapshot/specs/evidence/execution_contract.md",
+        "collector/integrations/capability_snapshot/specs/evidence/final_response.md",
+        "collector/integrations/capability_snapshot/specs/evidence/run_exception.md",
+        "collector/integrations/capability_snapshot/specs/protocol.md",
+        "collector/integrations/capability_snapshot/specs/scopes/result.md",
+        "collector/nanobot/agent/loop.py",
+        "collector/nanobot/agent/model_runtime.py",
+        "collector/nanobot/agent/runner.py",
+        "collector/nanobot/config/schema.py",
+        "collector/nanobot/nanobot.py",
+        "collector/nanobot/sdk/runtime.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "module.mcp": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "mcp.discovery",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "af066c986d6bafc19bd770c176ad065c2ba11bb49e32dbb9895017b8d1c0beb7",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/EXECUTION_CONTRACT.md",
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/contracts.json",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/integrations/capability_snapshot/specs/boundaries/conversation.md",
+        "collector/integrations/capability_snapshot/specs/chains/end_to_end.md",
+        "collector/integrations/capability_snapshot/specs/evidence/execution_contract.md",
+        "collector/integrations/capability_snapshot/specs/evidence/final_response.md",
+        "collector/integrations/capability_snapshot/specs/evidence/run_exception.md",
+        "collector/integrations/capability_snapshot/specs/protocol.md",
+        "collector/integrations/capability_snapshot/specs/scopes/result.md",
+        "collector/nanobot/agent/tools/mcp.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "module.memory": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "context.inheritance",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        },
+        {
+          "capability_key": "memory.consolidation",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "950d45c2dddfe29fb843352ea9d12c5e43a3ad3aed88e687676012b0779f4e17",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/EXECUTION_CONTRACT.md",
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/contracts.json",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/integrations/capability_snapshot/specs/boundaries/conversation.md",
+        "collector/integrations/capability_snapshot/specs/chains/end_to_end.md",
+        "collector/integrations/capability_snapshot/specs/evidence/execution_contract.md",
+        "collector/integrations/capability_snapshot/specs/evidence/final_response.md",
+        "collector/integrations/capability_snapshot/specs/evidence/run_exception.md",
+        "collector/integrations/capability_snapshot/specs/protocol.md",
+        "collector/integrations/capability_snapshot/specs/scopes/result.md",
+        "collector/nanobot/agent/memory.py",
+        "collector/nanobot/config/schema.py",
+        "collector/nanobot/session/manager.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "module.observability": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "result.final_response",
+          "declared_status": "supported",
+          "effective_status": "supported"
+        },
+        {
+          "capability_key": "contract.run_result",
+          "declared_status": "supported",
+          "effective_status": "supported"
+        },
+        {
+          "capability_key": "contract.exception_exit",
+          "declared_status": "supported",
+          "effective_status": "supported"
+        }
+      ],
+      "effective_fact_sha256": "0fb2aecd408d32533ec9c1d128603af48c1111f3598de07934c7b229235ee36d",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/EXECUTION_CONTRACT.md",
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/contracts.json",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/integrations/capability_snapshot/specs/boundaries/conversation.md",
+        "collector/integrations/capability_snapshot/specs/chains/end_to_end.md",
+        "collector/integrations/capability_snapshot/specs/evidence/execution_contract.md",
+        "collector/integrations/capability_snapshot/specs/evidence/final_response.md",
+        "collector/integrations/capability_snapshot/specs/evidence/run_exception.md",
+        "collector/integrations/capability_snapshot/specs/protocol.md",
+        "collector/integrations/capability_snapshot/specs/scopes/result.md",
+        "collector/nanobot/agent/hook.py",
+        "collector/nanobot/config/schema.py",
+        "collector/nanobot/sdk/types.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "module.providers": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "provider.inference",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "2f9cc615c813e510f54cdd5a161c36b951ad4e730e12335c0c3a01ae08a087ec",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/EXECUTION_CONTRACT.md",
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/contracts.json",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/integrations/capability_snapshot/specs/boundaries/conversation.md",
+        "collector/integrations/capability_snapshot/specs/chains/end_to_end.md",
+        "collector/integrations/capability_snapshot/specs/evidence/execution_contract.md",
+        "collector/integrations/capability_snapshot/specs/evidence/final_response.md",
+        "collector/integrations/capability_snapshot/specs/evidence/run_exception.md",
+        "collector/integrations/capability_snapshot/specs/protocol.md",
+        "collector/integrations/capability_snapshot/specs/scopes/result.md",
+        "collector/nanobot/config/schema.py",
+        "collector/nanobot/providers/factory.py",
+        "collector/nanobot/providers/registry.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "module.skills": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "skills.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "a2609f684634304e289bb506faa6ef328872d8b87dd687b1aee71560db789ba3",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/EXECUTION_CONTRACT.md",
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/contracts.json",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/integrations/capability_snapshot/specs/boundaries/conversation.md",
+        "collector/integrations/capability_snapshot/specs/chains/end_to_end.md",
+        "collector/integrations/capability_snapshot/specs/evidence/execution_contract.md",
+        "collector/integrations/capability_snapshot/specs/evidence/final_response.md",
+        "collector/integrations/capability_snapshot/specs/evidence/run_exception.md",
+        "collector/integrations/capability_snapshot/specs/protocol.md",
+        "collector/integrations/capability_snapshot/specs/scopes/result.md",
+        "collector/nanobot/agent/context.py",
+        "collector/nanobot/agent/skills.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "module.tools": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        },
+        {
+          "capability_key": "contract.tool_dispatch",
+          "declared_status": "supported",
+          "effective_status": "supported"
+        }
+      ],
+      "effective_fact_sha256": "cd79909fdde05b424d4c76948e69982ea6ffcbed2695c9babdaf8f6a97f0071c",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/EXECUTION_CONTRACT.md",
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/contracts.json",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/integrations/capability_snapshot/specs/boundaries/conversation.md",
+        "collector/integrations/capability_snapshot/specs/chains/end_to_end.md",
+        "collector/integrations/capability_snapshot/specs/evidence/execution_contract.md",
+        "collector/integrations/capability_snapshot/specs/evidence/final_response.md",
+        "collector/integrations/capability_snapshot/specs/evidence/run_exception.md",
+        "collector/integrations/capability_snapshot/specs/protocol.md",
+        "collector/integrations/capability_snapshot/specs/scopes/result.md",
+        "collector/nanobot/agent/runner.py",
+        "collector/nanobot/agent/tools/base.py",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "tool.apply_patch": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "854aaac634581e49053ef02545878bf31c3e755dddf5aa2dd9bae3c4d63c27d7",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/EXECUTION_CONTRACT.md",
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/contracts.json",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/integrations/capability_snapshot/specs/boundaries/conversation.md",
+        "collector/integrations/capability_snapshot/specs/chains/end_to_end.md",
+        "collector/integrations/capability_snapshot/specs/evidence/execution_contract.md",
+        "collector/integrations/capability_snapshot/specs/evidence/final_response.md",
+        "collector/integrations/capability_snapshot/specs/evidence/run_exception.md",
+        "collector/integrations/capability_snapshot/specs/protocol.md",
+        "collector/integrations/capability_snapshot/specs/scopes/result.md",
+        "collector/nanobot/agent/runner.py",
+        "collector/nanobot/agent/tools/apply_patch.py",
+        "collector/nanobot/agent/tools/base.py",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "tool.create_goal": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "5c27e1d951d7365998494328672a6e5a03ee0fd311d4a059e36c53f7e0239348",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/EXECUTION_CONTRACT.md",
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/contracts.json",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/integrations/capability_snapshot/specs/boundaries/conversation.md",
+        "collector/integrations/capability_snapshot/specs/chains/end_to_end.md",
+        "collector/integrations/capability_snapshot/specs/evidence/execution_contract.md",
+        "collector/integrations/capability_snapshot/specs/evidence/final_response.md",
+        "collector/integrations/capability_snapshot/specs/evidence/run_exception.md",
+        "collector/integrations/capability_snapshot/specs/protocol.md",
+        "collector/integrations/capability_snapshot/specs/scopes/result.md",
+        "collector/nanobot/agent/runner.py",
+        "collector/nanobot/agent/tools/base.py",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/long_task.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "tool.cron": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "728da7ea949c6099cf59f2b77a8e7a7790e323d85b195467ea6a0f69bd7b23c7",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/EXECUTION_CONTRACT.md",
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/contracts.json",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/integrations/capability_snapshot/specs/boundaries/conversation.md",
+        "collector/integrations/capability_snapshot/specs/chains/end_to_end.md",
+        "collector/integrations/capability_snapshot/specs/evidence/execution_contract.md",
+        "collector/integrations/capability_snapshot/specs/evidence/final_response.md",
+        "collector/integrations/capability_snapshot/specs/evidence/run_exception.md",
+        "collector/integrations/capability_snapshot/specs/protocol.md",
+        "collector/integrations/capability_snapshot/specs/scopes/result.md",
+        "collector/nanobot/agent/runner.py",
+        "collector/nanobot/agent/tools/base.py",
+        "collector/nanobot/agent/tools/cron.py",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "tool.edit_file": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "798d1620af4bea6d58f60d51ec9902c5dbd8ff1b5340db5d7ce2f05d5c833939",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/EXECUTION_CONTRACT.md",
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/contracts.json",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/integrations/capability_snapshot/specs/boundaries/conversation.md",
+        "collector/integrations/capability_snapshot/specs/chains/end_to_end.md",
+        "collector/integrations/capability_snapshot/specs/evidence/execution_contract.md",
+        "collector/integrations/capability_snapshot/specs/evidence/final_response.md",
+        "collector/integrations/capability_snapshot/specs/evidence/run_exception.md",
+        "collector/integrations/capability_snapshot/specs/protocol.md",
+        "collector/integrations/capability_snapshot/specs/scopes/result.md",
+        "collector/nanobot/agent/runner.py",
+        "collector/nanobot/agent/tools/base.py",
+        "collector/nanobot/agent/tools/filesystem.py",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "tool.exec": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "5128eaff98351934cf90f7af2c382112e61e55ab12fa709bda07c0f2385c55b0",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/EXECUTION_CONTRACT.md",
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/contracts.json",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/integrations/capability_snapshot/specs/boundaries/conversation.md",
+        "collector/integrations/capability_snapshot/specs/chains/end_to_end.md",
+        "collector/integrations/capability_snapshot/specs/evidence/execution_contract.md",
+        "collector/integrations/capability_snapshot/specs/evidence/final_response.md",
+        "collector/integrations/capability_snapshot/specs/evidence/run_exception.md",
+        "collector/integrations/capability_snapshot/specs/protocol.md",
+        "collector/integrations/capability_snapshot/specs/scopes/result.md",
+        "collector/nanobot/agent/runner.py",
+        "collector/nanobot/agent/tools/base.py",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/agent/tools/shell.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "tool.find_files": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "6c1a890600c6582015389ba90408e54e5f7b02be3a5e2c144e275923b244611c",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/EXECUTION_CONTRACT.md",
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/contracts.json",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/integrations/capability_snapshot/specs/boundaries/conversation.md",
+        "collector/integrations/capability_snapshot/specs/chains/end_to_end.md",
+        "collector/integrations/capability_snapshot/specs/evidence/execution_contract.md",
+        "collector/integrations/capability_snapshot/specs/evidence/final_response.md",
+        "collector/integrations/capability_snapshot/specs/evidence/run_exception.md",
+        "collector/integrations/capability_snapshot/specs/protocol.md",
+        "collector/integrations/capability_snapshot/specs/scopes/result.md",
+        "collector/nanobot/agent/runner.py",
+        "collector/nanobot/agent/tools/base.py",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/agent/tools/search.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "tool.grep": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "9377227f057215735c166db558baa19fda8ca76c25ee5e0ff79b90eb2efc9fd3",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/EXECUTION_CONTRACT.md",
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/contracts.json",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/integrations/capability_snapshot/specs/boundaries/conversation.md",
+        "collector/integrations/capability_snapshot/specs/chains/end_to_end.md",
+        "collector/integrations/capability_snapshot/specs/evidence/execution_contract.md",
+        "collector/integrations/capability_snapshot/specs/evidence/final_response.md",
+        "collector/integrations/capability_snapshot/specs/evidence/run_exception.md",
+        "collector/integrations/capability_snapshot/specs/protocol.md",
+        "collector/integrations/capability_snapshot/specs/scopes/result.md",
+        "collector/nanobot/agent/runner.py",
+        "collector/nanobot/agent/tools/base.py",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/agent/tools/search.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "tool.list_dir": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "23fda9ecf5c5b7608effe16241e3368b03524e5d8eb2b6b7f62d4428eb532a15",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/EXECUTION_CONTRACT.md",
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/contracts.json",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/integrations/capability_snapshot/specs/boundaries/conversation.md",
+        "collector/integrations/capability_snapshot/specs/chains/end_to_end.md",
+        "collector/integrations/capability_snapshot/specs/evidence/execution_contract.md",
+        "collector/integrations/capability_snapshot/specs/evidence/final_response.md",
+        "collector/integrations/capability_snapshot/specs/evidence/run_exception.md",
+        "collector/integrations/capability_snapshot/specs/protocol.md",
+        "collector/integrations/capability_snapshot/specs/scopes/result.md",
+        "collector/nanobot/agent/runner.py",
+        "collector/nanobot/agent/tools/base.py",
+        "collector/nanobot/agent/tools/filesystem.py",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "tool.list_exec_sessions": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "4907688a4a136340bc847e90ebc15f670469d08f43af0333649278591de0f94d",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/EXECUTION_CONTRACT.md",
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/contracts.json",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/integrations/capability_snapshot/specs/boundaries/conversation.md",
+        "collector/integrations/capability_snapshot/specs/chains/end_to_end.md",
+        "collector/integrations/capability_snapshot/specs/evidence/execution_contract.md",
+        "collector/integrations/capability_snapshot/specs/evidence/final_response.md",
+        "collector/integrations/capability_snapshot/specs/evidence/run_exception.md",
+        "collector/integrations/capability_snapshot/specs/protocol.md",
+        "collector/integrations/capability_snapshot/specs/scopes/result.md",
+        "collector/nanobot/agent/runner.py",
+        "collector/nanobot/agent/tools/base.py",
+        "collector/nanobot/agent/tools/exec_session.py",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "tool.list_sessions": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "bbee6cfddcea2e8442279c0e09c88f93e6fbe2b886affd10d2d55f31ea75e401",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/EXECUTION_CONTRACT.md",
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/contracts.json",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/integrations/capability_snapshot/specs/boundaries/conversation.md",
+        "collector/integrations/capability_snapshot/specs/chains/end_to_end.md",
+        "collector/integrations/capability_snapshot/specs/evidence/execution_contract.md",
+        "collector/integrations/capability_snapshot/specs/evidence/final_response.md",
+        "collector/integrations/capability_snapshot/specs/evidence/run_exception.md",
+        "collector/integrations/capability_snapshot/specs/protocol.md",
+        "collector/integrations/capability_snapshot/specs/scopes/result.md",
+        "collector/nanobot/agent/runner.py",
+        "collector/nanobot/agent/tools/base.py",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/agent/tools/session_messages.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "tool.message": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "0cddf48d4c1ea2ae0d7e936a807d799208e5a92ae295f4ed9347dace16c5057b",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/EXECUTION_CONTRACT.md",
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/contracts.json",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/integrations/capability_snapshot/specs/boundaries/conversation.md",
+        "collector/integrations/capability_snapshot/specs/chains/end_to_end.md",
+        "collector/integrations/capability_snapshot/specs/evidence/execution_contract.md",
+        "collector/integrations/capability_snapshot/specs/evidence/final_response.md",
+        "collector/integrations/capability_snapshot/specs/evidence/run_exception.md",
+        "collector/integrations/capability_snapshot/specs/protocol.md",
+        "collector/integrations/capability_snapshot/specs/scopes/result.md",
+        "collector/nanobot/agent/runner.py",
+        "collector/nanobot/agent/tools/base.py",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/message.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "tool.read_file": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "0cc2b281022380d4fcfcd1cbef5ed2e7a6975c03fa18af15c385287d282bd1aa",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/EXECUTION_CONTRACT.md",
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/contracts.json",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/integrations/capability_snapshot/specs/boundaries/conversation.md",
+        "collector/integrations/capability_snapshot/specs/chains/end_to_end.md",
+        "collector/integrations/capability_snapshot/specs/evidence/execution_contract.md",
+        "collector/integrations/capability_snapshot/specs/evidence/final_response.md",
+        "collector/integrations/capability_snapshot/specs/evidence/run_exception.md",
+        "collector/integrations/capability_snapshot/specs/protocol.md",
+        "collector/integrations/capability_snapshot/specs/scopes/result.md",
+        "collector/nanobot/agent/runner.py",
+        "collector/nanobot/agent/tools/base.py",
+        "collector/nanobot/agent/tools/filesystem.py",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "tool.read_session": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "f16301b3dd70826ee91d4b36a174b6cf1dda6107fb30b15aeb21daa68b1f8fd9",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/EXECUTION_CONTRACT.md",
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/contracts.json",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/integrations/capability_snapshot/specs/boundaries/conversation.md",
+        "collector/integrations/capability_snapshot/specs/chains/end_to_end.md",
+        "collector/integrations/capability_snapshot/specs/evidence/execution_contract.md",
+        "collector/integrations/capability_snapshot/specs/evidence/final_response.md",
+        "collector/integrations/capability_snapshot/specs/evidence/run_exception.md",
+        "collector/integrations/capability_snapshot/specs/protocol.md",
+        "collector/integrations/capability_snapshot/specs/scopes/result.md",
+        "collector/nanobot/agent/runner.py",
+        "collector/nanobot/agent/tools/base.py",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/agent/tools/sessions.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "tool.search_sessions": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "cc0e1e69468670fc494d4f6875b35461f54a74775e7c7c0864dd37109cfe644a",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/EXECUTION_CONTRACT.md",
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/contracts.json",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/integrations/capability_snapshot/specs/boundaries/conversation.md",
+        "collector/integrations/capability_snapshot/specs/chains/end_to_end.md",
+        "collector/integrations/capability_snapshot/specs/evidence/execution_contract.md",
+        "collector/integrations/capability_snapshot/specs/evidence/final_response.md",
+        "collector/integrations/capability_snapshot/specs/evidence/run_exception.md",
+        "collector/integrations/capability_snapshot/specs/protocol.md",
+        "collector/integrations/capability_snapshot/specs/scopes/result.md",
+        "collector/nanobot/agent/runner.py",
+        "collector/nanobot/agent/tools/base.py",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/agent/tools/sessions.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "tool.send_session_message": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "fa73e895379b49f65dcb0027fe24e0ce3e02a79d878d29d1e448d197a7135e52",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/EXECUTION_CONTRACT.md",
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/contracts.json",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/integrations/capability_snapshot/specs/boundaries/conversation.md",
+        "collector/integrations/capability_snapshot/specs/chains/end_to_end.md",
+        "collector/integrations/capability_snapshot/specs/evidence/execution_contract.md",
+        "collector/integrations/capability_snapshot/specs/evidence/final_response.md",
+        "collector/integrations/capability_snapshot/specs/evidence/run_exception.md",
+        "collector/integrations/capability_snapshot/specs/protocol.md",
+        "collector/integrations/capability_snapshot/specs/scopes/result.md",
+        "collector/nanobot/agent/runner.py",
+        "collector/nanobot/agent/tools/base.py",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/agent/tools/session_messages.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "tool.spawn": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "4fa8508ed5098f60b9ee8f5f1b0f512a55122346a67798095d3d7970624dcd86",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/EXECUTION_CONTRACT.md",
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/contracts.json",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/integrations/capability_snapshot/specs/boundaries/conversation.md",
+        "collector/integrations/capability_snapshot/specs/chains/end_to_end.md",
+        "collector/integrations/capability_snapshot/specs/evidence/execution_contract.md",
+        "collector/integrations/capability_snapshot/specs/evidence/final_response.md",
+        "collector/integrations/capability_snapshot/specs/evidence/run_exception.md",
+        "collector/integrations/capability_snapshot/specs/protocol.md",
+        "collector/integrations/capability_snapshot/specs/scopes/result.md",
+        "collector/nanobot/agent/runner.py",
+        "collector/nanobot/agent/tools/base.py",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/agent/tools/spawn.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "tool.update_goal": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "30c9dc45826c74ad238ae048e908dbd8e79cca579edb9db88a9d15376a32127f",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/EXECUTION_CONTRACT.md",
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/contracts.json",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/integrations/capability_snapshot/specs/boundaries/conversation.md",
+        "collector/integrations/capability_snapshot/specs/chains/end_to_end.md",
+        "collector/integrations/capability_snapshot/specs/evidence/execution_contract.md",
+        "collector/integrations/capability_snapshot/specs/evidence/final_response.md",
+        "collector/integrations/capability_snapshot/specs/evidence/run_exception.md",
+        "collector/integrations/capability_snapshot/specs/protocol.md",
+        "collector/integrations/capability_snapshot/specs/scopes/result.md",
+        "collector/nanobot/agent/runner.py",
+        "collector/nanobot/agent/tools/base.py",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/long_task.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "tool.web_fetch": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "e5ceabc8bb6e60014d70fc4c17139157c236bf6b21e1176160640bc8f469198b",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/EXECUTION_CONTRACT.md",
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/contracts.json",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/integrations/capability_snapshot/specs/boundaries/conversation.md",
+        "collector/integrations/capability_snapshot/specs/chains/end_to_end.md",
+        "collector/integrations/capability_snapshot/specs/evidence/execution_contract.md",
+        "collector/integrations/capability_snapshot/specs/evidence/final_response.md",
+        "collector/integrations/capability_snapshot/specs/evidence/run_exception.md",
+        "collector/integrations/capability_snapshot/specs/protocol.md",
+        "collector/integrations/capability_snapshot/specs/scopes/result.md",
+        "collector/nanobot/agent/runner.py",
+        "collector/nanobot/agent/tools/base.py",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/agent/tools/web.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "tool.web_search": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "fea6aa27b36dc3445861ee4c7fae69ba49177bf4ff3c80632304bdc8408d96c0",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/EXECUTION_CONTRACT.md",
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/contracts.json",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/integrations/capability_snapshot/specs/boundaries/conversation.md",
+        "collector/integrations/capability_snapshot/specs/chains/end_to_end.md",
+        "collector/integrations/capability_snapshot/specs/evidence/execution_contract.md",
+        "collector/integrations/capability_snapshot/specs/evidence/final_response.md",
+        "collector/integrations/capability_snapshot/specs/evidence/run_exception.md",
+        "collector/integrations/capability_snapshot/specs/protocol.md",
+        "collector/integrations/capability_snapshot/specs/scopes/result.md",
+        "collector/nanobot/agent/runner.py",
+        "collector/nanobot/agent/tools/base.py",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/agent/tools/web.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "tool.write_file": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "b4996eafd09154d70fccbdf3b07c3c00c5c9def3a8a64abdfc9049ab550f3f5f",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/EXECUTION_CONTRACT.md",
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/contracts.json",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/integrations/capability_snapshot/specs/boundaries/conversation.md",
+        "collector/integrations/capability_snapshot/specs/chains/end_to_end.md",
+        "collector/integrations/capability_snapshot/specs/evidence/execution_contract.md",
+        "collector/integrations/capability_snapshot/specs/evidence/final_response.md",
+        "collector/integrations/capability_snapshot/specs/evidence/run_exception.md",
+        "collector/integrations/capability_snapshot/specs/protocol.md",
+        "collector/integrations/capability_snapshot/specs/scopes/result.md",
+        "collector/nanobot/agent/runner.py",
+        "collector/nanobot/agent/tools/base.py",
+        "collector/nanobot/agent/tools/filesystem.py",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "tool.write_stdin": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "037af2a3c5a721d9dd1fdcb75e651da2f44e13b62777fe00aa0cf91663579adb",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/EXECUTION_CONTRACT.md",
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/contracts.json",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/integrations/capability_snapshot/specs/boundaries/conversation.md",
+        "collector/integrations/capability_snapshot/specs/chains/end_to_end.md",
+        "collector/integrations/capability_snapshot/specs/evidence/execution_contract.md",
+        "collector/integrations/capability_snapshot/specs/evidence/final_response.md",
+        "collector/integrations/capability_snapshot/specs/evidence/run_exception.md",
+        "collector/integrations/capability_snapshot/specs/protocol.md",
+        "collector/integrations/capability_snapshot/specs/scopes/result.md",
+        "collector/nanobot/agent/runner.py",
+        "collector/nanobot/agent/tools/base.py",
+        "collector/nanobot/agent/tools/exec_session.py",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    }
+  },
+  "meaning": "Configured means a trusted collector declared the current configuration; source hashes do not prove behavior."
+}

@@ -1,28 +1,10 @@
 """Per-turn expectations over returned results and independently observed state."""
 
-from typing import Any, Literal
-
-from pydantic import Field
+from eval_contracts.turn_assertions import TurnCheckConfig as TurnCheckConfig
+from eval_contracts.turn_assertions import TurnExpectation as TurnExpectation
+from eval_contracts.turn_assertions import TurnToolExpectation as TurnToolExpectation
 
 from .native_scoring import exact_value
-from .schema_base import StrictModel
-
-
-class TurnToolExpectation(StrictModel):
-    name: str = Field(min_length=1)
-    arguments: dict[str, Any] | None = None
-    status: Literal["SUCCESS", "FAILED", "TIMEOUT"] | None = None
-
-
-class TurnExpectation(StrictModel):
-    status: str = Field(min_length=1)
-    parameters: dict[str, Any] | None = None
-    tool_calls: list[TurnToolExpectation] | None = None
-    state: dict[str, Any] | None = None
-
-
-class TurnCheckConfig(StrictModel):
-    turns: list[TurnExpectation] = Field(min_length=1)
 
 
 def evaluate_turns(ctx, spec, *, subset, tool_coverage_complete):

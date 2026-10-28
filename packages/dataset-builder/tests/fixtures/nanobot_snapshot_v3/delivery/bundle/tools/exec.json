@@ -1,0 +1,219 @@
+{
+  "batch_behavior": {
+    "declared": false
+  },
+  "capabilities": [
+    {
+      "capability_key": "tool.execution",
+      "evidence_ids": [],
+      "reason": "Offline construction only: no model call, tool execution or external service verification.",
+      "support_status": "unknown"
+    }
+  ],
+  "combination_rules": {
+    "concurrency_safe": false,
+    "exclusive": true
+  },
+  "contract_version": "nanobot-collector-v2",
+  "description": "Execute a shell command and return its output. Use this for tests, builds, package commands, git commands, and other process execution. Prefer read_file/find_files/grep for inspection and apply_patch/write_file/edit_file for file changes instead of cat, shell find/grep, echo, or sed. Use -y or --yes flags to avoid interactive prompts. On Unix, commands run through bash by default; pass shell='sh' or shell='zsh' when needed. For long-running or interactive commands, pass yield_time_ms; if the command keeps running, exec returns a session_id that can be polled or written to with write_stdin. Output is truncated at 10 000 chars; timeout defaults to 60s.",
+  "function_schema": {
+    "function": {
+      "description": "Execute a shell command and return its output. Use this for tests, builds, package commands, git commands, and other process execution. Prefer read_file/find_files/grep for inspection and apply_patch/write_file/edit_file for file changes instead of cat, shell find/grep, echo, or sed. Use -y or --yes flags to avoid interactive prompts. On Unix, commands run through bash by default; pass shell='sh' or shell='zsh' when needed. For long-running or interactive commands, pass yield_time_ms; if the command keeps running, exec returns a session_id that can be polled or written to with write_stdin. Output is truncated at 10 000 chars; timeout defaults to 60s.",
+      "name": "exec",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "cmd": {
+            "description": "Compatibility alias for command",
+            "type": "string"
+          },
+          "command": {
+            "description": "The shell command to execute",
+            "type": "string"
+          },
+          "login": {
+            "default": false,
+            "description": "Whether to run bash/zsh with login shell semantics (default false).",
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "max_output_chars": {
+            "description": "Maximum output characters to return when yield_time_ms is used (default 10000, max 50000).",
+            "maximum": 50000,
+            "minimum": 1000,
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "max_output_tokens": {
+            "description": "Compatibility alias for max_output_chars. The current runtime uses a character budget.",
+            "maximum": 50000,
+            "minimum": 1000,
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "shell": {
+            "description": "Override the Unix shell only when needed. Omit to use bash by default. Pass 'sh' for POSIX sh or 'zsh' for zsh-specific syntax.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "timeout": {
+            "description": "Timeout in seconds. Increase for long-running commands like compilation or installation (default 60, max 600).",
+            "maximum": 600,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "workdir": {
+            "description": "Compatibility alias for working_dir",
+            "type": "string"
+          },
+          "working_dir": {
+            "description": "Optional working directory for the command",
+            "type": "string"
+          },
+          "yield_time_ms": {
+            "description": "Optional milliseconds to wait before returning output. When set, a still-running command returns a session_id that can be polled or written to with write_stdin. Omit this field to keep one-shot exec behavior.",
+            "maximum": 30000,
+            "minimum": 0,
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "type": "object"
+      }
+    },
+    "type": "function"
+  },
+  "idempotency_rules": {
+    "status": "unknown"
+  },
+  "implementation_profile": "production",
+  "observation_interfaces": [
+    "ToolRegistry.get_definitions",
+    "ToolRegistry.execute",
+    "AgentHookContext.tool_events (runner hooks)"
+  ],
+  "parameter_semantics": {
+    "cmd": "Compatibility alias for command",
+    "command": "The shell command to execute",
+    "login": "Whether to run bash/zsh with login shell semantics (default false).",
+    "max_output_chars": "Maximum output characters to return when yield_time_ms is used (default 10000, max 50000).",
+    "max_output_tokens": "Compatibility alias for max_output_chars. The current runtime uses a character budget.",
+    "shell": "Override the Unix shell only when needed. Omit to use bash by default. Pass 'sh' for POSIX sh or 'zsh' for zsh-specific syntax.",
+    "timeout": "Timeout in seconds. Increase for long-running commands like compilation or installation (default 60, max 600).",
+    "workdir": "Compatibility alias for working_dir",
+    "working_dir": "Optional working directory for the command",
+    "yield_time_ms": "Optional milliseconds to wait before returning output. When set, a still-running command returns a session_id that can be polled or written to with write_stdin. Omit this field to keep one-shot exec behavior."
+  },
+  "permission_requirements": [
+    "See implementation-specific guards; not audited here."
+  ],
+  "preconditions": [
+    "Registration is limited to the named offline profile.",
+    "Execution requires tool-specific services, request context and permissions."
+  ],
+  "registered": true,
+  "requires_confirmation": false,
+  "result_protocols": {
+    "business_error_codes": null,
+    "category_names_are_adapter_labels": true,
+    "dispatch_paths": [
+      "ToolRegistry.execute (direct registry API)",
+      "AgentRunner._run_tool -> ToolRegistry.prepare_call -> tool.execute (normal runner path)"
+    ],
+    "error_categories": [
+      {
+        "category": "unknown_tool",
+        "observation": "prepare_call returns error; tool implementation is not called."
+      },
+      {
+        "category": "invalid_arguments",
+        "observation": "prepare_call coerces/casts and validates parameters; rejected arguments do not call the implementation."
+      },
+      {
+        "category": "tool_marked_error",
+        "observation": "ToolResult.is_error produces an error event in the runner."
+      },
+      {
+        "category": "implementation_exception",
+        "observation": "Ordinary Exception becomes a registry ToolResult.error or a runner error event; handling differs by entrypoint."
+      },
+      {
+        "category": "policy_guard",
+        "observation": "Repeated external lookup/workspace violation guards can reject or escalate; do not infer recoverability from fail_on_tool_error alone."
+      },
+      {
+        "category": "control_flow",
+        "observation": "Cancellation and control-flow BaseException can propagate; hooks may also raise outside the implementation catch."
+      }
+    ],
+    "error_marker": "ToolResult.is_error; a plain string beginning with Error: is not by itself a builtin tool failure marker.",
+    "event_observation": "AgentHookContext.tool_events in runner hooks; not a top-level RunResult field and not emitted as StreamEvent by run().",
+    "fail_on_tool_error": "False generally returns tool errors to the model for possible recovery; True can terminate with tool_error. Policy guards and continuations also affect the terminal outcome.",
+    "registry_return_type": "Any; implementation-specific. No universal successful result shape is inferred.",
+    "retry": {
+      "automatic_tool_retry_guaranteed": false,
+      "description": "The registry does not automatically retry an implementation call. The model may request a new call; provider retries and tool-internal retries are separate.",
+      "status": "tool_specific_unknown"
+    },
+    "source_symbols": [
+      "ToolRegistry.prepare_call",
+      "ToolRegistry.execute",
+      "ToolResult",
+      "AgentRunner._run_tool",
+      "AgentRunner._classify_violation"
+    ],
+    "tool_event_schema": {
+      "properties": {
+        "detail": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "ok",
+            "error"
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "status",
+        "detail"
+      ],
+      "type": "object"
+    }
+  },
+  "retry_policy": {
+    "automatic_tool_retry_guaranteed": false,
+    "description": "The registry does not automatically retry an implementation call. The model may request a new call; provider retries and tool-internal retries are separate.",
+    "status": "tool_specific_unknown"
+  },
+  "risk_level": "high",
+  "side_effects": [
+    "Not audited; read_only declaration=False"
+  ],
+  "simulation_capabilities": [],
+  "simulation_protocol": null,
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "tool.exec",
+  "snapshot_sha256": "a02dc0a05af7b06ca0977794fc35192325cb5134558a51f534e7428ec58f7340",
+  "snapshot_type": "tool",
+  "source_hashes": {
+    "execution_contract_sha256": "ed9135253c0e7bc0b6d0b0ef55a8eb5e897673389674ebf5b6954f2f4b85e81c",
+    "function_schema_sha256": "340eb673b2e46e4dabbf82e38121ec478b529cc4ec684850689957b4a353793d"
+  },
+  "tool_name": "exec",
+  "tool_version": "0.3.0"
+}

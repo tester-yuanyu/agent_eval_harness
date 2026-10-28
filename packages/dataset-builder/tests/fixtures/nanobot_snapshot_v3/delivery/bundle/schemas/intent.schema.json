@@ -1,0 +1,219 @@
+{
+  "$defs": {
+    "CapabilityClaimV3": {
+      "additionalProperties": false,
+      "properties": {
+        "capability_key": {
+          "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)+$",
+          "title": "Capability Key",
+          "type": "string"
+        },
+        "evidence_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Ids",
+          "type": "array"
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Reason"
+        },
+        "support_status": {
+          "$ref": "#/$defs/SupportStatusV3"
+        }
+      },
+      "required": [
+        "capability_key",
+        "support_status",
+        "evidence_ids",
+        "reason"
+      ],
+      "title": "CapabilityClaimV3",
+      "type": "object"
+    },
+    "SnapshotReferenceV3": {
+      "additionalProperties": false,
+      "properties": {
+        "contract_version": {
+          "minLength": 1,
+          "title": "Contract Version",
+          "type": "string"
+        },
+        "path": {
+          "minLength": 1,
+          "title": "Path",
+          "type": "string"
+        },
+        "snapshot_format_version": {
+          "const": "3.0",
+          "title": "Snapshot Format Version",
+          "type": "string"
+        },
+        "snapshot_id": {
+          "pattern": "^(agent|module|intent|tool|scope|chain|evidence|boundary)\\.[a-z][a-z0-9_]*$",
+          "title": "Snapshot Id",
+          "type": "string"
+        },
+        "snapshot_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Snapshot Sha256",
+          "type": "string"
+        },
+        "snapshot_type": {
+          "$ref": "#/$defs/SnapshotTypeV3"
+        }
+      },
+      "required": [
+        "snapshot_id",
+        "snapshot_type",
+        "snapshot_format_version",
+        "contract_version",
+        "snapshot_sha256",
+        "path"
+      ],
+      "title": "SnapshotReferenceV3",
+      "type": "object"
+    },
+    "SnapshotTypeV3": {
+      "enum": [
+        "agent",
+        "module",
+        "intent",
+        "tool",
+        "scope",
+        "chain",
+        "evidence",
+        "boundary"
+      ],
+      "title": "SnapshotTypeV3",
+      "type": "string"
+    },
+    "SupportStatusV3": {
+      "enum": [
+        "supported",
+        "unsupported",
+        "unknown"
+      ],
+      "title": "SupportStatusV3",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "capabilities": {
+      "items": {
+        "$ref": "#/$defs/CapabilityClaimV3"
+      },
+      "title": "Capabilities",
+      "type": "array"
+    },
+    "capability_id": {
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "title": "Capability Id",
+      "type": "string"
+    },
+    "contract_version": {
+      "minLength": 1,
+      "title": "Contract Version",
+      "type": "string"
+    },
+    "decision_rules": {
+      "additionalProperties": true,
+      "title": "Decision Rules",
+      "type": "object"
+    },
+    "module_id": {
+      "pattern": "^module\\.[a-z][a-z0-9_]*$",
+      "title": "Module Id",
+      "type": "string"
+    },
+    "parameter_semantics": {
+      "additionalProperties": true,
+      "title": "Parameter Semantics",
+      "type": "object"
+    },
+    "parameters_schema": {
+      "additionalProperties": true,
+      "title": "Parameters Schema",
+      "type": "object"
+    },
+    "required_tool_name": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Required Tool Name"
+    },
+    "semantic_rules": {
+      "additionalProperties": true,
+      "title": "Semantic Rules",
+      "type": "object"
+    },
+    "snapshot_format_version": {
+      "const": "3.0",
+      "title": "Snapshot Format Version",
+      "type": "string"
+    },
+    "snapshot_id": {
+      "pattern": "^(agent|module|intent|tool|scope|chain|evidence|boundary)\\.[a-z][a-z0-9_]*$",
+      "title": "Snapshot Id",
+      "type": "string"
+    },
+    "snapshot_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Snapshot Sha256",
+      "type": "string"
+    },
+    "snapshot_type": {
+      "const": "intent",
+      "title": "Snapshot Type",
+      "type": "string"
+    },
+    "source_hashes": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "minProperties": 1,
+      "title": "Source Hashes",
+      "type": "object"
+    },
+    "tool_refs": {
+      "items": {
+        "$ref": "#/$defs/SnapshotReferenceV3"
+      },
+      "title": "Tool Refs",
+      "type": "array"
+    }
+  },
+  "required": [
+    "snapshot_id",
+    "snapshot_type",
+    "snapshot_format_version",
+    "contract_version",
+    "source_hashes",
+    "snapshot_sha256",
+    "capability_id",
+    "module_id",
+    "parameters_schema",
+    "parameter_semantics",
+    "decision_rules",
+    "semantic_rules",
+    "required_tool_name",
+    "capabilities",
+    "tool_refs"
+  ],
+  "title": "IntentSnapshotV3",
+  "type": "object"
+}

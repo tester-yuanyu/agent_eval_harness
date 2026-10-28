@@ -400,7 +400,7 @@ def test_mini_agent_provider_rejects_stale_v2_frozen_contract():
 def test_mini_agent_provider_accepts_current_native_capabilities_without_tools():
     current = CapabilityRegistry(
         CapabilityBundle.load_v2_directory(
-            Path("/Users/yuanyu/Documents/ChatGPT/mini_agent/capabilities")
+            Path(__file__).resolve().parents[3] / "examples/mini_agent/capabilities"
         )
     )
     created = []

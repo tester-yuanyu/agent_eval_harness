@@ -1,0 +1,6 @@
+{
+  "version": "1.0",
+  "agent_id": "mini_agent",
+  "adapter": "static",
+  "env_names": []
+}

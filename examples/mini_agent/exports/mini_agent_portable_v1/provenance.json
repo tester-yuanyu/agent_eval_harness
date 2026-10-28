@@ -1,0 +1,890 @@
+{
+  "execution_verified": false,
+  "facts": {
+    "agent.mini_agent": {
+      "basis": "configured",
+      "claims": [],
+      "effective_fact_sha256": "406b7a9b2c4a71d5ea5df05e3bfbb79a997583ffc769cf153b3cd544431dd92b",
+      "source_ids": [
+        "collector/examples/full_tool_fixture/collector.py",
+        "collector/examples/full_tool_fixture/contracts.py",
+        "collector/examples/full_tool_fixture/environment.py",
+        "collector/examples/full_tool_fixture/results.py",
+        "collector/src/minimal_agent/capability_adapter.py",
+        "collector/src/minimal_agent/capability_facts/__init__.py",
+        "collector/src/minimal_agent/capability_facts/evidence.py",
+        "collector/src/minimal_agent/capability_facts/intents.py",
+        "collector/src/minimal_agent/capability_facts/modules.py",
+        "collector/src/minimal_agent/capability_facts/tools.py",
+        "collector/src/minimal_agent/contracts/__init__.py",
+        "collector/src/minimal_agent/contracts/agent.py",
+        "collector/src/minimal_agent/contracts/intent_parameters.py",
+        "collector/src/minimal_agent/contracts/intents.py",
+        "collector/src/minimal_agent/contracts/tools.py",
+        "collector/src/minimal_agent/runtime/agent.py",
+        "collector/src/minimal_agent/runtime/tool_registry.py"
+      ]
+    },
+    "evidence.context_state": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "evidence.context_state_available",
+          "declared_status": "unsupported",
+          "effective_status": "unsupported"
+        }
+      ],
+      "effective_fact_sha256": "8d39455306f722e32e18ad448b1f5b00018373c3cd59984bb1eb0e1eb417f3d6",
+      "source_ids": [
+        "collector/examples/full_tool_fixture/collector.py",
+        "collector/examples/full_tool_fixture/contracts.py",
+        "collector/examples/full_tool_fixture/environment.py",
+        "collector/examples/full_tool_fixture/results.py",
+        "collector/src/minimal_agent/capability_adapter.py",
+        "collector/src/minimal_agent/capability_facts/__init__.py",
+        "collector/src/minimal_agent/capability_facts/evidence.py",
+        "collector/src/minimal_agent/capability_facts/intents.py",
+        "collector/src/minimal_agent/capability_facts/modules.py",
+        "collector/src/minimal_agent/capability_facts/tools.py",
+        "collector/src/minimal_agent/contracts/__init__.py",
+        "collector/src/minimal_agent/contracts/agent.py",
+        "collector/src/minimal_agent/contracts/intent_parameters.py",
+        "collector/src/minimal_agent/contracts/intents.py",
+        "collector/src/minimal_agent/contracts/tools.py",
+        "collector/src/minimal_agent/runtime/agent.py",
+        "collector/src/minimal_agent/runtime/tool_registry.py"
+      ]
+    },
+    "evidence.final_response": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "evidence.final_response_available",
+          "declared_status": "supported",
+          "effective_status": "supported"
+        }
+      ],
+      "effective_fact_sha256": "afd6d36d81ca8445d64399bf792eaffd9414adc67ff034b66e30be5df688f250",
+      "source_ids": [
+        "collector/examples/full_tool_fixture/collector.py",
+        "collector/examples/full_tool_fixture/contracts.py",
+        "collector/examples/full_tool_fixture/environment.py",
+        "collector/examples/full_tool_fixture/results.py",
+        "collector/src/minimal_agent/capability_adapter.py",
+        "collector/src/minimal_agent/capability_facts/__init__.py",
+        "collector/src/minimal_agent/capability_facts/evidence.py",
+        "collector/src/minimal_agent/capability_facts/intents.py",
+        "collector/src/minimal_agent/capability_facts/modules.py",
+        "collector/src/minimal_agent/capability_facts/tools.py",
+        "collector/src/minimal_agent/contracts/__init__.py",
+        "collector/src/minimal_agent/contracts/agent.py",
+        "collector/src/minimal_agent/contracts/intent_parameters.py",
+        "collector/src/minimal_agent/contracts/intents.py",
+        "collector/src/minimal_agent/contracts/tools.py",
+        "collector/src/minimal_agent/runtime/agent.py",
+        "collector/src/minimal_agent/runtime/tool_registry.py"
+      ]
+    },
+    "evidence.intent_result": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "evidence.intent_result_available",
+          "declared_status": "supported",
+          "effective_status": "supported"
+        }
+      ],
+      "effective_fact_sha256": "dc40233af60d072c9c8a003922eecde87873e3128da9df49072d4a633469be5e",
+      "source_ids": [
+        "collector/examples/full_tool_fixture/collector.py",
+        "collector/examples/full_tool_fixture/contracts.py",
+        "collector/examples/full_tool_fixture/environment.py",
+        "collector/examples/full_tool_fixture/results.py",
+        "collector/src/minimal_agent/capability_adapter.py",
+        "collector/src/minimal_agent/capability_facts/__init__.py",
+        "collector/src/minimal_agent/capability_facts/evidence.py",
+        "collector/src/minimal_agent/capability_facts/intents.py",
+        "collector/src/minimal_agent/capability_facts/modules.py",
+        "collector/src/minimal_agent/capability_facts/tools.py",
+        "collector/src/minimal_agent/contracts/__init__.py",
+        "collector/src/minimal_agent/contracts/agent.py",
+        "collector/src/minimal_agent/contracts/intent_parameters.py",
+        "collector/src/minimal_agent/contracts/intents.py",
+        "collector/src/minimal_agent/contracts/tools.py",
+        "collector/src/minimal_agent/runtime/agent.py",
+        "collector/src/minimal_agent/runtime/tool_registry.py"
+      ]
+    },
+    "evidence.safety_recovery_event": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "evidence.safety_recovery_event_available",
+          "declared_status": "supported",
+          "effective_status": "supported"
+        }
+      ],
+      "effective_fact_sha256": "a7edd6b59765d4620d43468e1d6368aaa4b6a292e132d38401114e16df6a4ccf",
+      "source_ids": [
+        "collector/examples/full_tool_fixture/collector.py",
+        "collector/examples/full_tool_fixture/contracts.py",
+        "collector/examples/full_tool_fixture/environment.py",
+        "collector/examples/full_tool_fixture/results.py",
+        "collector/src/minimal_agent/capability_adapter.py",
+        "collector/src/minimal_agent/capability_facts/__init__.py",
+        "collector/src/minimal_agent/capability_facts/evidence.py",
+        "collector/src/minimal_agent/capability_facts/intents.py",
+        "collector/src/minimal_agent/capability_facts/modules.py",
+        "collector/src/minimal_agent/capability_facts/tools.py",
+        "collector/src/minimal_agent/contracts/__init__.py",
+        "collector/src/minimal_agent/contracts/agent.py",
+        "collector/src/minimal_agent/contracts/intent_parameters.py",
+        "collector/src/minimal_agent/contracts/intents.py",
+        "collector/src/minimal_agent/contracts/tools.py",
+        "collector/src/minimal_agent/runtime/agent.py",
+        "collector/src/minimal_agent/runtime/tool_registry.py"
+      ]
+    },
+    "evidence.tool_trace": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "evidence.tool_trace_available",
+          "declared_status": "supported",
+          "effective_status": "supported"
+        }
+      ],
+      "effective_fact_sha256": "03c44357601b25e126596e954d3e07331530ccb4336e566036bd071178b4e75b",
+      "source_ids": [
+        "collector/examples/full_tool_fixture/collector.py",
+        "collector/examples/full_tool_fixture/contracts.py",
+        "collector/examples/full_tool_fixture/environment.py",
+        "collector/examples/full_tool_fixture/results.py",
+        "collector/src/minimal_agent/capability_adapter.py",
+        "collector/src/minimal_agent/capability_facts/__init__.py",
+        "collector/src/minimal_agent/capability_facts/evidence.py",
+        "collector/src/minimal_agent/capability_facts/intents.py",
+        "collector/src/minimal_agent/capability_facts/modules.py",
+        "collector/src/minimal_agent/capability_facts/tools.py",
+        "collector/src/minimal_agent/contracts/__init__.py",
+        "collector/src/minimal_agent/contracts/agent.py",
+        "collector/src/minimal_agent/contracts/intent_parameters.py",
+        "collector/src/minimal_agent/contracts/intents.py",
+        "collector/src/minimal_agent/contracts/tools.py",
+        "collector/src/minimal_agent/runtime/agent.py",
+        "collector/src/minimal_agent/runtime/tool_registry.py"
+      ]
+    },
+    "intent.add_backpack_gift": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "intent.contract_validation",
+          "declared_status": "supported",
+          "effective_status": "supported"
+        }
+      ],
+      "effective_fact_sha256": "dfbd5cb6a2cc711fd9b5f21b2d4b838a517ee391053c06b8acdd98a203c74507",
+      "source_ids": [
+        "collector/examples/full_tool_fixture/collector.py",
+        "collector/examples/full_tool_fixture/contracts.py",
+        "collector/examples/full_tool_fixture/environment.py",
+        "collector/examples/full_tool_fixture/results.py",
+        "collector/src/minimal_agent/capability_adapter.py",
+        "collector/src/minimal_agent/capability_facts/__init__.py",
+        "collector/src/minimal_agent/capability_facts/evidence.py",
+        "collector/src/minimal_agent/capability_facts/intents.py",
+        "collector/src/minimal_agent/capability_facts/modules.py",
+        "collector/src/minimal_agent/capability_facts/tools.py",
+        "collector/src/minimal_agent/contracts/__init__.py",
+        "collector/src/minimal_agent/contracts/agent.py",
+        "collector/src/minimal_agent/contracts/intent_parameters.py",
+        "collector/src/minimal_agent/contracts/intents.py",
+        "collector/src/minimal_agent/contracts/tools.py",
+        "collector/src/minimal_agent/runtime/agent.py",
+        "collector/src/minimal_agent/runtime/tool_registry.py"
+      ]
+    },
+    "intent.prepare_resource": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "intent.contract_validation",
+          "declared_status": "supported",
+          "effective_status": "supported"
+        }
+      ],
+      "effective_fact_sha256": "a8032690633911c1782404930eba5390b91ddabb857a51a160917275ba17ee9f",
+      "source_ids": [
+        "collector/examples/full_tool_fixture/collector.py",
+        "collector/examples/full_tool_fixture/contracts.py",
+        "collector/examples/full_tool_fixture/environment.py",
+        "collector/examples/full_tool_fixture/results.py",
+        "collector/src/minimal_agent/capability_adapter.py",
+        "collector/src/minimal_agent/capability_facts/__init__.py",
+        "collector/src/minimal_agent/capability_facts/evidence.py",
+        "collector/src/minimal_agent/capability_facts/intents.py",
+        "collector/src/minimal_agent/capability_facts/modules.py",
+        "collector/src/minimal_agent/capability_facts/tools.py",
+        "collector/src/minimal_agent/contracts/__init__.py",
+        "collector/src/minimal_agent/contracts/agent.py",
+        "collector/src/minimal_agent/contracts/intent_parameters.py",
+        "collector/src/minimal_agent/contracts/intents.py",
+        "collector/src/minimal_agent/contracts/tools.py",
+        "collector/src/minimal_agent/runtime/agent.py",
+        "collector/src/minimal_agent/runtime/tool_registry.py"
+      ]
+    },
+    "intent.query_gift": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "intent.contract_validation",
+          "declared_status": "supported",
+          "effective_status": "supported"
+        }
+      ],
+      "effective_fact_sha256": "79a7eca47350c554297149539099727b59784ca09ca6051b6be47356bce61f15",
+      "source_ids": [
+        "collector/examples/full_tool_fixture/collector.py",
+        "collector/examples/full_tool_fixture/contracts.py",
+        "collector/examples/full_tool_fixture/environment.py",
+        "collector/examples/full_tool_fixture/results.py",
+        "collector/src/minimal_agent/capability_adapter.py",
+        "collector/src/minimal_agent/capability_facts/__init__.py",
+        "collector/src/minimal_agent/capability_facts/evidence.py",
+        "collector/src/minimal_agent/capability_facts/intents.py",
+        "collector/src/minimal_agent/capability_facts/modules.py",
+        "collector/src/minimal_agent/capability_facts/tools.py",
+        "collector/src/minimal_agent/contracts/__init__.py",
+        "collector/src/minimal_agent/contracts/agent.py",
+        "collector/src/minimal_agent/contracts/intent_parameters.py",
+        "collector/src/minimal_agent/contracts/intents.py",
+        "collector/src/minimal_agent/contracts/tools.py",
+        "collector/src/minimal_agent/runtime/agent.py",
+        "collector/src/minimal_agent/runtime/tool_registry.py"
+      ]
+    },
+    "intent.query_information": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "intent.contract_validation",
+          "declared_status": "supported",
+          "effective_status": "supported"
+        }
+      ],
+      "effective_fact_sha256": "aa4da3818f81c2224e962b0bed1f26463aacf3020ef22591c32ed8afe1e79762",
+      "source_ids": [
+        "collector/examples/full_tool_fixture/collector.py",
+        "collector/examples/full_tool_fixture/contracts.py",
+        "collector/examples/full_tool_fixture/environment.py",
+        "collector/examples/full_tool_fixture/results.py",
+        "collector/src/minimal_agent/capability_adapter.py",
+        "collector/src/minimal_agent/capability_facts/__init__.py",
+        "collector/src/minimal_agent/capability_facts/evidence.py",
+        "collector/src/minimal_agent/capability_facts/intents.py",
+        "collector/src/minimal_agent/capability_facts/modules.py",
+        "collector/src/minimal_agent/capability_facts/tools.py",
+        "collector/src/minimal_agent/contracts/__init__.py",
+        "collector/src/minimal_agent/contracts/agent.py",
+        "collector/src/minimal_agent/contracts/intent_parameters.py",
+        "collector/src/minimal_agent/contracts/intents.py",
+        "collector/src/minimal_agent/contracts/tools.py",
+        "collector/src/minimal_agent/runtime/agent.py",
+        "collector/src/minimal_agent/runtime/tool_registry.py"
+      ]
+    },
+    "intent.query_pool": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "intent.contract_validation",
+          "declared_status": "supported",
+          "effective_status": "supported"
+        }
+      ],
+      "effective_fact_sha256": "f1d3c4d21098d325d0eef8d12e651ed1e5facd7c52e4cb288907fe0296074807",
+      "source_ids": [
+        "collector/examples/full_tool_fixture/collector.py",
+        "collector/examples/full_tool_fixture/contracts.py",
+        "collector/examples/full_tool_fixture/environment.py",
+        "collector/examples/full_tool_fixture/results.py",
+        "collector/src/minimal_agent/capability_adapter.py",
+        "collector/src/minimal_agent/capability_facts/__init__.py",
+        "collector/src/minimal_agent/capability_facts/evidence.py",
+        "collector/src/minimal_agent/capability_facts/intents.py",
+        "collector/src/minimal_agent/capability_facts/modules.py",
+        "collector/src/minimal_agent/capability_facts/tools.py",
+        "collector/src/minimal_agent/contracts/__init__.py",
+        "collector/src/minimal_agent/contracts/agent.py",
+        "collector/src/minimal_agent/contracts/intent_parameters.py",
+        "collector/src/minimal_agent/contracts/intents.py",
+        "collector/src/minimal_agent/contracts/tools.py",
+        "collector/src/minimal_agent/runtime/agent.py",
+        "collector/src/minimal_agent/runtime/tool_registry.py"
+      ]
+    },
+    "intent.query_user": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "intent.contract_validation",
+          "declared_status": "supported",
+          "effective_status": "supported"
+        }
+      ],
+      "effective_fact_sha256": "2046dab1de5ff7a89af9d85d5797d8dacc51fde19b86ae51925aa386e0fc46cd",
+      "source_ids": [
+        "collector/examples/full_tool_fixture/collector.py",
+        "collector/examples/full_tool_fixture/contracts.py",
+        "collector/examples/full_tool_fixture/environment.py",
+        "collector/examples/full_tool_fixture/results.py",
+        "collector/src/minimal_agent/capability_adapter.py",
+        "collector/src/minimal_agent/capability_facts/__init__.py",
+        "collector/src/minimal_agent/capability_facts/evidence.py",
+        "collector/src/minimal_agent/capability_facts/intents.py",
+        "collector/src/minimal_agent/capability_facts/modules.py",
+        "collector/src/minimal_agent/capability_facts/tools.py",
+        "collector/src/minimal_agent/contracts/__init__.py",
+        "collector/src/minimal_agent/contracts/agent.py",
+        "collector/src/minimal_agent/contracts/intent_parameters.py",
+        "collector/src/minimal_agent/contracts/intents.py",
+        "collector/src/minimal_agent/contracts/tools.py",
+        "collector/src/minimal_agent/runtime/agent.py",
+        "collector/src/minimal_agent/runtime/tool_registry.py"
+      ]
+    },
+    "intent.unsupported": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "intent.contract_validation",
+          "declared_status": "supported",
+          "effective_status": "supported"
+        }
+      ],
+      "effective_fact_sha256": "29dacf547ab8317b5f00ca6aae3494bb08d9fdf08f4600a6c91bdca24b572d83",
+      "source_ids": [
+        "collector/examples/full_tool_fixture/collector.py",
+        "collector/examples/full_tool_fixture/contracts.py",
+        "collector/examples/full_tool_fixture/environment.py",
+        "collector/examples/full_tool_fixture/results.py",
+        "collector/src/minimal_agent/capability_adapter.py",
+        "collector/src/minimal_agent/capability_facts/__init__.py",
+        "collector/src/minimal_agent/capability_facts/evidence.py",
+        "collector/src/minimal_agent/capability_facts/intents.py",
+        "collector/src/minimal_agent/capability_facts/modules.py",
+        "collector/src/minimal_agent/capability_facts/tools.py",
+        "collector/src/minimal_agent/contracts/__init__.py",
+        "collector/src/minimal_agent/contracts/agent.py",
+        "collector/src/minimal_agent/contracts/intent_parameters.py",
+        "collector/src/minimal_agent/contracts/intents.py",
+        "collector/src/minimal_agent/contracts/tools.py",
+        "collector/src/minimal_agent/runtime/agent.py",
+        "collector/src/minimal_agent/runtime/tool_registry.py"
+      ]
+    },
+    "module.agent_orchestrator": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "orchestration.single_run",
+          "declared_status": "supported",
+          "effective_status": "supported"
+        },
+        {
+          "capability_key": "context.inheritance",
+          "declared_status": "unsupported",
+          "effective_status": "unsupported"
+        },
+        {
+          "capability_key": "context.override",
+          "declared_status": "unsupported",
+          "effective_status": "unsupported"
+        },
+        {
+          "capability_key": "context.cancellation",
+          "declared_status": "unsupported",
+          "effective_status": "unsupported"
+        },
+        {
+          "capability_key": "context.session_isolation",
+          "declared_status": "unsupported",
+          "effective_status": "unsupported"
+        },
+        {
+          "capability_key": "context.residual_state_handling",
+          "declared_status": "unsupported",
+          "effective_status": "unsupported"
+        },
+        {
+          "capability_key": "context.cleanup",
+          "declared_status": "unsupported",
+          "effective_status": "unsupported"
+        }
+      ],
+      "effective_fact_sha256": "dcdf5ac2cc25a22f289652077905a0f0cb239e17396c6cae535f75e20f7100ff",
+      "source_ids": [
+        "collector/examples/full_tool_fixture/collector.py",
+        "collector/examples/full_tool_fixture/contracts.py",
+        "collector/examples/full_tool_fixture/environment.py",
+        "collector/examples/full_tool_fixture/results.py",
+        "collector/src/minimal_agent/capability_adapter.py",
+        "collector/src/minimal_agent/capability_facts/__init__.py",
+        "collector/src/minimal_agent/capability_facts/evidence.py",
+        "collector/src/minimal_agent/capability_facts/intents.py",
+        "collector/src/minimal_agent/capability_facts/modules.py",
+        "collector/src/minimal_agent/capability_facts/tools.py",
+        "collector/src/minimal_agent/contracts/__init__.py",
+        "collector/src/minimal_agent/contracts/agent.py",
+        "collector/src/minimal_agent/contracts/intent_parameters.py",
+        "collector/src/minimal_agent/contracts/intents.py",
+        "collector/src/minimal_agent/contracts/tools.py",
+        "collector/src/minimal_agent/runtime/agent.py",
+        "collector/src/minimal_agent/runtime/tool_registry.py"
+      ]
+    },
+    "module.execution_guard": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "safety.run_allow_list",
+          "declared_status": "supported",
+          "effective_status": "supported"
+        }
+      ],
+      "effective_fact_sha256": "9a4e52fea6f07299ad4cba9ec31733753b9d82d7d9fb8ec21e74181d85a0d2d9",
+      "source_ids": [
+        "collector/examples/full_tool_fixture/collector.py",
+        "collector/examples/full_tool_fixture/contracts.py",
+        "collector/examples/full_tool_fixture/environment.py",
+        "collector/examples/full_tool_fixture/results.py",
+        "collector/src/minimal_agent/capability_adapter.py",
+        "collector/src/minimal_agent/capability_facts/__init__.py",
+        "collector/src/minimal_agent/capability_facts/evidence.py",
+        "collector/src/minimal_agent/capability_facts/intents.py",
+        "collector/src/minimal_agent/capability_facts/modules.py",
+        "collector/src/minimal_agent/capability_facts/tools.py",
+        "collector/src/minimal_agent/contracts/__init__.py",
+        "collector/src/minimal_agent/contracts/agent.py",
+        "collector/src/minimal_agent/contracts/intent_parameters.py",
+        "collector/src/minimal_agent/contracts/intents.py",
+        "collector/src/minimal_agent/contracts/tools.py",
+        "collector/src/minimal_agent/runtime/agent.py",
+        "collector/src/minimal_agent/runtime/tool_registry.py"
+      ]
+    },
+    "module.intent_router": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "intent.formal_validation",
+          "declared_status": "supported",
+          "effective_status": "supported"
+        },
+        {
+          "capability_key": "intent.semantic_validation",
+          "declared_status": "supported",
+          "effective_status": "supported"
+        }
+      ],
+      "effective_fact_sha256": "c48d7023047ce5bbdf980b769a6a65d31a8c19d3542922c93246d1bce11fa5f9",
+      "source_ids": [
+        "collector/examples/full_tool_fixture/collector.py",
+        "collector/examples/full_tool_fixture/contracts.py",
+        "collector/examples/full_tool_fixture/environment.py",
+        "collector/examples/full_tool_fixture/results.py",
+        "collector/src/minimal_agent/capability_adapter.py",
+        "collector/src/minimal_agent/capability_facts/__init__.py",
+        "collector/src/minimal_agent/capability_facts/evidence.py",
+        "collector/src/minimal_agent/capability_facts/intents.py",
+        "collector/src/minimal_agent/capability_facts/modules.py",
+        "collector/src/minimal_agent/capability_facts/tools.py",
+        "collector/src/minimal_agent/contracts/__init__.py",
+        "collector/src/minimal_agent/contracts/agent.py",
+        "collector/src/minimal_agent/contracts/intent_parameters.py",
+        "collector/src/minimal_agent/contracts/intents.py",
+        "collector/src/minimal_agent/contracts/tools.py",
+        "collector/src/minimal_agent/runtime/agent.py",
+        "collector/src/minimal_agent/runtime/tool_registry.py"
+      ]
+    },
+    "module.model_gateway": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "model.structured_output",
+          "declared_status": "supported",
+          "effective_status": "supported"
+        }
+      ],
+      "effective_fact_sha256": "5e438b09f0b4cc17a611c249cafa6c21f0a82805d3b8f6b6e6b54dbd8f2ff928",
+      "source_ids": [
+        "collector/examples/full_tool_fixture/collector.py",
+        "collector/examples/full_tool_fixture/contracts.py",
+        "collector/examples/full_tool_fixture/environment.py",
+        "collector/examples/full_tool_fixture/results.py",
+        "collector/src/minimal_agent/capability_adapter.py",
+        "collector/src/minimal_agent/capability_facts/__init__.py",
+        "collector/src/minimal_agent/capability_facts/evidence.py",
+        "collector/src/minimal_agent/capability_facts/intents.py",
+        "collector/src/minimal_agent/capability_facts/modules.py",
+        "collector/src/minimal_agent/capability_facts/tools.py",
+        "collector/src/minimal_agent/contracts/__init__.py",
+        "collector/src/minimal_agent/contracts/agent.py",
+        "collector/src/minimal_agent/contracts/intent_parameters.py",
+        "collector/src/minimal_agent/contracts/intents.py",
+        "collector/src/minimal_agent/contracts/tools.py",
+        "collector/src/minimal_agent/runtime/agent.py",
+        "collector/src/minimal_agent/runtime/tool_registry.py"
+      ]
+    },
+    "module.observability": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "observability.trace_export",
+          "declared_status": "supported",
+          "effective_status": "supported"
+        },
+        {
+          "capability_key": "result.final_response",
+          "declared_status": "supported",
+          "effective_status": "supported"
+        }
+      ],
+      "effective_fact_sha256": "c8fa55688fe88afb5ef99c500787be2c52ee6bef60f6e924c97f5716640b2fea",
+      "source_ids": [
+        "collector/examples/full_tool_fixture/collector.py",
+        "collector/examples/full_tool_fixture/contracts.py",
+        "collector/examples/full_tool_fixture/environment.py",
+        "collector/examples/full_tool_fixture/results.py",
+        "collector/src/minimal_agent/capability_adapter.py",
+        "collector/src/minimal_agent/capability_facts/__init__.py",
+        "collector/src/minimal_agent/capability_facts/evidence.py",
+        "collector/src/minimal_agent/capability_facts/intents.py",
+        "collector/src/minimal_agent/capability_facts/modules.py",
+        "collector/src/minimal_agent/capability_facts/tools.py",
+        "collector/src/minimal_agent/contracts/__init__.py",
+        "collector/src/minimal_agent/contracts/agent.py",
+        "collector/src/minimal_agent/contracts/intent_parameters.py",
+        "collector/src/minimal_agent/contracts/intents.py",
+        "collector/src/minimal_agent/contracts/tools.py",
+        "collector/src/minimal_agent/runtime/agent.py",
+        "collector/src/minimal_agent/runtime/tool_registry.py"
+      ]
+    },
+    "module.tool_loop": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "execution.bounded_tool_loop",
+          "declared_status": "supported",
+          "effective_status": "supported"
+        },
+        {
+          "capability_key": "safety.tool_failure_terminal",
+          "declared_status": "supported",
+          "effective_status": "supported"
+        },
+        {
+          "capability_key": "safety.tool_timeout_terminal",
+          "declared_status": "supported",
+          "effective_status": "supported"
+        }
+      ],
+      "effective_fact_sha256": "6ef2839b40e4f8e64a847513cd47932af322750fe858c303860cb04b94d4b565",
+      "source_ids": [
+        "collector/examples/full_tool_fixture/collector.py",
+        "collector/examples/full_tool_fixture/contracts.py",
+        "collector/examples/full_tool_fixture/environment.py",
+        "collector/examples/full_tool_fixture/results.py",
+        "collector/src/minimal_agent/capability_adapter.py",
+        "collector/src/minimal_agent/capability_facts/__init__.py",
+        "collector/src/minimal_agent/capability_facts/evidence.py",
+        "collector/src/minimal_agent/capability_facts/intents.py",
+        "collector/src/minimal_agent/capability_facts/modules.py",
+        "collector/src/minimal_agent/capability_facts/tools.py",
+        "collector/src/minimal_agent/contracts/__init__.py",
+        "collector/src/minimal_agent/contracts/agent.py",
+        "collector/src/minimal_agent/contracts/intent_parameters.py",
+        "collector/src/minimal_agent/contracts/intents.py",
+        "collector/src/minimal_agent/contracts/tools.py",
+        "collector/src/minimal_agent/runtime/agent.py",
+        "collector/src/minimal_agent/runtime/tool_registry.py"
+      ]
+    },
+    "module.tool_registry": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "execution.registered_tool_invocation",
+          "declared_status": "supported",
+          "effective_status": "supported"
+        }
+      ],
+      "effective_fact_sha256": "61d7650a9c01528b9d904976d96ac01fe064c09083d0a5a8cbce4fb401d4a4d8",
+      "source_ids": [
+        "collector/examples/full_tool_fixture/collector.py",
+        "collector/examples/full_tool_fixture/contracts.py",
+        "collector/examples/full_tool_fixture/environment.py",
+        "collector/examples/full_tool_fixture/results.py",
+        "collector/src/minimal_agent/capability_adapter.py",
+        "collector/src/minimal_agent/capability_facts/__init__.py",
+        "collector/src/minimal_agent/capability_facts/evidence.py",
+        "collector/src/minimal_agent/capability_facts/intents.py",
+        "collector/src/minimal_agent/capability_facts/modules.py",
+        "collector/src/minimal_agent/capability_facts/tools.py",
+        "collector/src/minimal_agent/contracts/__init__.py",
+        "collector/src/minimal_agent/contracts/agent.py",
+        "collector/src/minimal_agent/contracts/intent_parameters.py",
+        "collector/src/minimal_agent/contracts/intents.py",
+        "collector/src/minimal_agent/contracts/tools.py",
+        "collector/src/minimal_agent/runtime/agent.py",
+        "collector/src/minimal_agent/runtime/tool_registry.py"
+      ]
+    },
+    "tool.add_gift_to_backpack": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.registered_execution",
+          "declared_status": "supported",
+          "effective_status": "supported"
+        },
+        {
+          "capability_key": "tool.runtime_retry",
+          "declared_status": "unsupported",
+          "effective_status": "unsupported"
+        },
+        {
+          "capability_key": "tool.rate_limit_protocol",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "4d65b8765ea563e9868de24eb92a2fb3fca066c9a308257cb9e099aa871c0c08",
+      "source_ids": [
+        "collector/examples/full_tool_fixture/collector.py",
+        "collector/examples/full_tool_fixture/contracts.py",
+        "collector/examples/full_tool_fixture/environment.py",
+        "collector/examples/full_tool_fixture/results.py",
+        "collector/src/minimal_agent/capability_adapter.py",
+        "collector/src/minimal_agent/capability_facts/__init__.py",
+        "collector/src/minimal_agent/capability_facts/evidence.py",
+        "collector/src/minimal_agent/capability_facts/intents.py",
+        "collector/src/minimal_agent/capability_facts/modules.py",
+        "collector/src/minimal_agent/capability_facts/tools.py",
+        "collector/src/minimal_agent/contracts/__init__.py",
+        "collector/src/minimal_agent/contracts/agent.py",
+        "collector/src/minimal_agent/contracts/intent_parameters.py",
+        "collector/src/minimal_agent/contracts/intents.py",
+        "collector/src/minimal_agent/contracts/tools.py",
+        "collector/src/minimal_agent/runtime/agent.py",
+        "collector/src/minimal_agent/runtime/tool_registry.py"
+      ]
+    },
+    "tool.prepare_resource": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.registered_execution",
+          "declared_status": "supported",
+          "effective_status": "supported"
+        },
+        {
+          "capability_key": "tool.runtime_retry",
+          "declared_status": "unsupported",
+          "effective_status": "unsupported"
+        },
+        {
+          "capability_key": "tool.rate_limit_protocol",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "67d42b93855d28a714f6030dc452aafe8461009f2dbe72faed84a8dc43e31c83",
+      "source_ids": [
+        "collector/examples/full_tool_fixture/collector.py",
+        "collector/examples/full_tool_fixture/contracts.py",
+        "collector/examples/full_tool_fixture/environment.py",
+        "collector/examples/full_tool_fixture/results.py",
+        "collector/src/minimal_agent/capability_adapter.py",
+        "collector/src/minimal_agent/capability_facts/__init__.py",
+        "collector/src/minimal_agent/capability_facts/evidence.py",
+        "collector/src/minimal_agent/capability_facts/intents.py",
+        "collector/src/minimal_agent/capability_facts/modules.py",
+        "collector/src/minimal_agent/capability_facts/tools.py",
+        "collector/src/minimal_agent/contracts/__init__.py",
+        "collector/src/minimal_agent/contracts/agent.py",
+        "collector/src/minimal_agent/contracts/intent_parameters.py",
+        "collector/src/minimal_agent/contracts/intents.py",
+        "collector/src/minimal_agent/contracts/tools.py",
+        "collector/src/minimal_agent/runtime/agent.py",
+        "collector/src/minimal_agent/runtime/tool_registry.py"
+      ]
+    },
+    "tool.query_gift_info": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.registered_execution",
+          "declared_status": "supported",
+          "effective_status": "supported"
+        },
+        {
+          "capability_key": "tool.runtime_retry",
+          "declared_status": "unsupported",
+          "effective_status": "unsupported"
+        },
+        {
+          "capability_key": "tool.rate_limit_protocol",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "caa48f628a2d9a5c99956c9b07f29e3a39562d026fb06f6932ae6663be6f353a",
+      "source_ids": [
+        "collector/examples/full_tool_fixture/collector.py",
+        "collector/examples/full_tool_fixture/contracts.py",
+        "collector/examples/full_tool_fixture/environment.py",
+        "collector/examples/full_tool_fixture/results.py",
+        "collector/src/minimal_agent/capability_adapter.py",
+        "collector/src/minimal_agent/capability_facts/__init__.py",
+        "collector/src/minimal_agent/capability_facts/evidence.py",
+        "collector/src/minimal_agent/capability_facts/intents.py",
+        "collector/src/minimal_agent/capability_facts/modules.py",
+        "collector/src/minimal_agent/capability_facts/tools.py",
+        "collector/src/minimal_agent/contracts/__init__.py",
+        "collector/src/minimal_agent/contracts/agent.py",
+        "collector/src/minimal_agent/contracts/intent_parameters.py",
+        "collector/src/minimal_agent/contracts/intents.py",
+        "collector/src/minimal_agent/contracts/tools.py",
+        "collector/src/minimal_agent/runtime/agent.py",
+        "collector/src/minimal_agent/runtime/tool_registry.py"
+      ]
+    },
+    "tool.query_information": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.registered_execution",
+          "declared_status": "supported",
+          "effective_status": "supported"
+        },
+        {
+          "capability_key": "tool.runtime_retry",
+          "declared_status": "unsupported",
+          "effective_status": "unsupported"
+        },
+        {
+          "capability_key": "tool.rate_limit_protocol",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "c312ba615756415b32852e74f7709c4f10ba773306dcb960542c71ce8f0911f3",
+      "source_ids": [
+        "collector/examples/full_tool_fixture/collector.py",
+        "collector/examples/full_tool_fixture/contracts.py",
+        "collector/examples/full_tool_fixture/environment.py",
+        "collector/examples/full_tool_fixture/results.py",
+        "collector/src/minimal_agent/capability_adapter.py",
+        "collector/src/minimal_agent/capability_facts/__init__.py",
+        "collector/src/minimal_agent/capability_facts/evidence.py",
+        "collector/src/minimal_agent/capability_facts/intents.py",
+        "collector/src/minimal_agent/capability_facts/modules.py",
+        "collector/src/minimal_agent/capability_facts/tools.py",
+        "collector/src/minimal_agent/contracts/__init__.py",
+        "collector/src/minimal_agent/contracts/agent.py",
+        "collector/src/minimal_agent/contracts/intent_parameters.py",
+        "collector/src/minimal_agent/contracts/intents.py",
+        "collector/src/minimal_agent/contracts/tools.py",
+        "collector/src/minimal_agent/runtime/agent.py",
+        "collector/src/minimal_agent/runtime/tool_registry.py"
+      ]
+    },
+    "tool.query_pool_config": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.registered_execution",
+          "declared_status": "supported",
+          "effective_status": "supported"
+        },
+        {
+          "capability_key": "tool.runtime_retry",
+          "declared_status": "unsupported",
+          "effective_status": "unsupported"
+        },
+        {
+          "capability_key": "tool.rate_limit_protocol",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "f036262b07316fc30995c60abb8a34b24e831a08394743a12c02329ad45d2739",
+      "source_ids": [
+        "collector/examples/full_tool_fixture/collector.py",
+        "collector/examples/full_tool_fixture/contracts.py",
+        "collector/examples/full_tool_fixture/environment.py",
+        "collector/examples/full_tool_fixture/results.py",
+        "collector/src/minimal_agent/capability_adapter.py",
+        "collector/src/minimal_agent/capability_facts/__init__.py",
+        "collector/src/minimal_agent/capability_facts/evidence.py",
+        "collector/src/minimal_agent/capability_facts/intents.py",
+        "collector/src/minimal_agent/capability_facts/modules.py",
+        "collector/src/minimal_agent/capability_facts/tools.py",
+        "collector/src/minimal_agent/contracts/__init__.py",
+        "collector/src/minimal_agent/contracts/agent.py",
+        "collector/src/minimal_agent/contracts/intent_parameters.py",
+        "collector/src/minimal_agent/contracts/intents.py",
+        "collector/src/minimal_agent/contracts/tools.py",
+        "collector/src/minimal_agent/runtime/agent.py",
+        "collector/src/minimal_agent/runtime/tool_registry.py"
+      ]
+    },
+    "tool.query_user_info": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.registered_execution",
+          "declared_status": "supported",
+          "effective_status": "supported"
+        },
+        {
+          "capability_key": "tool.runtime_retry",
+          "declared_status": "unsupported",
+          "effective_status": "unsupported"
+        },
+        {
+          "capability_key": "tool.rate_limit_protocol",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "36ef3fab59df31d2c39a328ae1ba2747c5715c8dd25405ba261c9b7ebee512eb",
+      "source_ids": [
+        "collector/examples/full_tool_fixture/collector.py",
+        "collector/examples/full_tool_fixture/contracts.py",
+        "collector/examples/full_tool_fixture/environment.py",
+        "collector/examples/full_tool_fixture/results.py",
+        "collector/src/minimal_agent/capability_adapter.py",
+        "collector/src/minimal_agent/capability_facts/__init__.py",
+        "collector/src/minimal_agent/capability_facts/evidence.py",
+        "collector/src/minimal_agent/capability_facts/intents.py",
+        "collector/src/minimal_agent/capability_facts/modules.py",
+        "collector/src/minimal_agent/capability_facts/tools.py",
+        "collector/src/minimal_agent/contracts/__init__.py",
+        "collector/src/minimal_agent/contracts/agent.py",
+        "collector/src/minimal_agent/contracts/intent_parameters.py",
+        "collector/src/minimal_agent/contracts/intents.py",
+        "collector/src/minimal_agent/contracts/tools.py",
+        "collector/src/minimal_agent/runtime/agent.py",
+        "collector/src/minimal_agent/runtime/tool_registry.py"
+      ]
+    }
+  },
+  "meaning": "Configured means a trusted collector declared the current configuration; source hashes do not prove behavior."
+}

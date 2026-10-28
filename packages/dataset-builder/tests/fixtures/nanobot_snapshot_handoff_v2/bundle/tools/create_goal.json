@@ -1,0 +1,93 @@
+{
+  "batch_behavior": {
+    "declared": false
+  },
+  "capabilities": [
+    {
+      "capability_key": "tool.execution",
+      "evidence_ids": [],
+      "reason": "Offline construction only: no model call, tool execution or external service verification.",
+      "support_status": "unknown"
+    }
+  ],
+  "combination_rules": {
+    "concurrency_safe": false,
+    "exclusive": false
+  },
+  "contract_version": "nanobot-collector-v1",
+  "description": "Create one sustained goal for the current session when Goal Runtime Guidance asks you to record it. Consolidate relevant prior discussion into a durable objective that is self-contained, bounded, safe under repetition, and explicit about completion criteria. Do not retry after a successful creation.",
+  "function_schema": {
+    "function": {
+      "description": "Create one sustained goal for the current session when Goal Runtime Guidance asks you to record it. Consolidate relevant prior discussion into a durable objective that is self-contained, bounded, safe under repetition, and explicit about completion criteria. Do not retry after a successful creation.",
+      "name": "create_goal",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "objective": {
+            "description": "The sustained objective for this session. It may consolidate a plan from earlier discussion, but must be self-contained, bounded, safe under repetition, and explicit about done-ness.",
+            "maxLength": 4000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "ui_summary": {
+            "description": "Optional one-line display label for session lists and logs. It is not load-bearing.",
+            "maxLength": 120,
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "objective"
+        ],
+        "type": "object"
+      }
+    },
+    "type": "function"
+  },
+  "idempotency_rules": {
+    "status": "unknown"
+  },
+  "implementation_profile": "production",
+  "observation_interfaces": [
+    "ToolRegistry.get_definitions",
+    "ToolRegistry.execute"
+  ],
+  "parameter_semantics": {
+    "objective": "The sustained objective for this session. It may consolidate a plan from earlier discussion, but must be self-contained, bounded, safe under repetition, and explicit about done-ness.",
+    "ui_summary": "Optional one-line display label for session lists and logs. It is not load-bearing."
+  },
+  "permission_requirements": [
+    "See implementation-specific guards; not audited here."
+  ],
+  "preconditions": [
+    "Registration is limited to the named offline profile.",
+    "Execution requires tool-specific services, request context and permissions."
+  ],
+  "registered": true,
+  "requires_confirmation": false,
+  "result_protocols": {
+    "error_marker": "ToolResult.is_error; see ToolRegistry.execute",
+    "registry_return_type": "Any; tool-specific return contract"
+  },
+  "retry_policy": {
+    "status": "unknown"
+  },
+  "risk_level": "high",
+  "side_effects": [
+    "Not audited; read_only declaration=False"
+  ],
+  "simulation_capabilities": [],
+  "simulation_protocol": null,
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "tool.create_goal",
+  "snapshot_sha256": "25faecd64af366718d377f37f95954b0438dfd546bfbc84d660f759679e12380",
+  "snapshot_type": "tool",
+  "source_hashes": {
+    "execution_contract_sha256": "0019a26960652dd70fd3efe327ee85d71388319a31f6167c99c418c84526eed3",
+    "function_schema_sha256": "63b677e26b4abcc4711cc8cae47fae1fd0a163da6b8afe4872b37cf0be2b925c"
+  },
+  "tool_name": "create_goal",
+  "tool_version": "0.3.0"
+}

@@ -15,7 +15,7 @@ from dataset_builder.pipeline import (
 from dataset_builder.suite_definition import load_suite_from_path
 
 ROOT = Path(__file__).resolve().parents[1]
-MINI_AGENT_CAPABILITIES = ROOT.parent / "mini_agent" / "capabilities"
+MINI_AGENT_CAPABILITIES = ROOT.parents[1] / "examples/mini_agent" / "capabilities"
 
 
 def _synthetic_suite(tmp_path: Path):

@@ -1,0 +1,134 @@
+{
+  "capabilities": [
+    {
+      "capability_key": "dialogue.respond",
+      "evidence_ids": [
+        "evidence.final_response"
+      ],
+      "reason": null,
+      "support_status": "supported"
+    },
+    {
+      "capability_key": "dialogue.clarification",
+      "evidence_ids": [
+        "evidence.final_response"
+      ],
+      "reason": null,
+      "support_status": "supported"
+    },
+    {
+      "capability_key": "dialogue.handoff_suggestion",
+      "evidence_ids": [
+        "evidence.final_response"
+      ],
+      "reason": null,
+      "support_status": "supported"
+    },
+    {
+      "capability_key": "result.final_response",
+      "evidence_ids": [
+        "evidence.final_response"
+      ],
+      "reason": null,
+      "support_status": "supported"
+    },
+    {
+      "capability_key": "context.inheritance",
+      "evidence_ids": [],
+      "reason": "Each call is stateless; no conversation memory.",
+      "support_status": "unsupported"
+    }
+  ],
+  "component_versions": {
+    "implementation": "customer-demo-v1"
+  },
+  "contract_version": "dialogue-v1",
+  "execution_boundary_ids": [
+    "boundary.conversation"
+  ],
+  "input_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "user_input": {
+        "maxLength": 4000,
+        "title": "User Input",
+        "type": "string"
+      }
+    },
+    "required": [
+      "user_input"
+    ],
+    "title": "CustomerInput",
+    "type": "object"
+  },
+  "intent_refs": [
+    {
+      "contract_version": "support-v1",
+      "path": "intents/customer_support.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "intent.customer_support",
+      "snapshot_sha256": "babe33bf0bb82bf5832a4695cfd8fec5e8d8d1c0026aeb57b4920838e2e16e70",
+      "snapshot_type": "intent"
+    }
+  ],
+  "module_id": "customer_dialogue",
+  "module_refs": [],
+  "output_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "events": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Events",
+        "type": "array"
+      },
+      "final_response": {
+        "title": "Final Response",
+        "type": "string"
+      },
+      "handoff_executed": {
+        "const": false,
+        "default": false,
+        "title": "Handoff Executed",
+        "type": "boolean"
+      },
+      "policy_version": {
+        "title": "Policy Version",
+        "type": "string"
+      },
+      "status": {
+        "enum": [
+          "SUCCESS",
+          "NEED_CLARIFICATION",
+          "HANDOFF_SUGGESTED"
+        ],
+        "title": "Status",
+        "type": "string"
+      }
+    },
+    "required": [
+      "status",
+      "final_response",
+      "policy_version",
+      "events"
+    ],
+    "title": "CustomerResult",
+    "type": "object"
+  },
+  "responsibility": "Rule-based demo: empty input clarification, refund keyword policy response, otherwise handoff suggestion.",
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "module.customer_dialogue",
+  "snapshot_sha256": "16cd8510124cb402ee84e154449b45993f125b1d8cf15f5c5af295290b3d085a",
+  "snapshot_type": "module",
+  "source_hashes": {
+    "capabilities_sha256": "8f4bd1a09f4b72a5df0b7c7f12e54e46090861f7e9528444571bc196bc1c3fad",
+    "children_sha256": "8faf43ae2d0024273a58d9b724fe6a1a6d0374ff4be7056cf4986047a3f37f80"
+  },
+  "tool_refs": [],
+  "trace_event_types": [
+    "run_started",
+    "response_ready",
+    "run_finished"
+  ]
+}

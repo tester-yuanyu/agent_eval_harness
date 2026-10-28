@@ -1,0 +1,127 @@
+{
+  "capabilities": [
+    {
+      "capability_key": "intent.contract_validation",
+      "evidence_ids": [
+        "evidence.intent_result"
+      ],
+      "reason": null,
+      "support_status": "supported"
+    }
+  ],
+  "capability_id": "prepare_resource",
+  "contract_version": "intent-contract-v1",
+  "decision_rules": {
+    "complete": {
+      "next_action": "CALL_TOOL",
+      "status": "READY"
+    },
+    "execution_mode": "read",
+    "incomplete": {
+      "next_action": "ASK_USER",
+      "status": "NEED_CLARIFICATION"
+    }
+  },
+  "module_id": "module.intent_router",
+  "parameter_semantics": {
+    "missing_parameters": [
+      "count",
+      "environment",
+      "request_id",
+      "resource_type"
+    ],
+    "normalizers": [
+      "TrimStringNormalizer",
+      "IntegerStringNormalizer"
+    ]
+  },
+  "parameters_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "count": {
+        "anyOf": [
+          {
+            "exclusiveMinimum": 0,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Count"
+      },
+      "environment": {
+        "anyOf": [
+          {
+            "minLength": 1,
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Environment"
+      },
+      "request_id": {
+        "anyOf": [
+          {
+            "minLength": 1,
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Request Id"
+      },
+      "resource_type": {
+        "anyOf": [
+          {
+            "minLength": 1,
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Resource Type"
+      }
+    },
+    "title": "_PrepareResourceParameters",
+    "type": "object"
+  },
+  "required_tool_name": "prepare_resource",
+  "semantic_rules": {
+    "count": "POSITIVE_INTEGER",
+    "request_id": "NONEMPTY_MODEL_ARGUMENT",
+    "required_fields": [
+      "resource_type",
+      "environment",
+      "count",
+      "request_id"
+    ]
+  },
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "intent.prepare_resource",
+  "snapshot_sha256": "6b75363908b7b8210d9879337ef7222f4d6f914bfa4ae2cc61714007a435238a",
+  "snapshot_type": "intent",
+  "source_hashes": {
+    "intent_rules_sha256": "dedcfe7af80e580a7cbe3a9b3024f9c1e87c6ba4899801ec159e31c56cf42a6a",
+    "parameters_schema_sha256": "774a0785e334ee87901b3610bdc9ce4fe5d8852ab07e7fa050b78ffa41cffbb3",
+    "tool_refs_sha256": "cdde95b3e9d167cfb5bf57efee9a848341db00d8bc74678583376d6d411fb2bc"
+  },
+  "tool_refs": [
+    {
+      "contract_version": "prepare-resource-example-fixture-v1",
+      "path": "tools/prepare_resource.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "tool.prepare_resource",
+      "snapshot_sha256": "6e64b0b8edf653326db99fe4c03be6ef4b431a1da259d760ab2ee71acb8f8ff5",
+      "snapshot_type": "tool"
+    }
+  ]
+}

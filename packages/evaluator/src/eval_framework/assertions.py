@@ -6,6 +6,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any
 
+from eval_contracts.assertions import ASSERTION_SCOPES as ASSERTION_SCOPES
 from jsonschema import Draft202012Validator
 from jsonschema.exceptions import SchemaError
 
@@ -17,30 +18,6 @@ from .schemas import AssertionResult, AssertionSpec, EvalCase
 from .turn_assertions import evaluate_turns
 
 ASSERTION_REGISTRY_VERSION = "inspect-assertions-v1"
-ASSERTION_SCOPES = {
-    "observations_match": {"module", "link", "end_to_end"},
-    "turns_match": {"link", "end_to_end"},
-    "output_schema_valid": {"module"},
-    "intent_envelope_schema_valid": {"module"},
-    "intent_parameters_schema_valid": {"module"},
-    "intent_match": {"module"},
-    "status_match": {"module", "link"},
-    "next_action_match": {"module"},
-    "params_match": {"module"},
-    "missing_params_match": {"module"},
-    "tool_called": {"link"},
-    "tool_not_called": {"link"},
-    "tool_call_count": {"link"},
-    "tool_args_match": {"link"},
-    "tool_result_consistent": {"link"},
-    "no_state_change": {"link"},
-    "final_state_match": {"end_to_end"},
-    "no_duplicate_side_effect": {"end_to_end"},
-    "confirmation_requested": {"end_to_end"},
-    "confirmation_accepted": {"end_to_end"},
-    "no_write_before_confirmation": {"end_to_end"},
-    "response_consistent": {"end_to_end"},
-}
 
 
 @dataclass(frozen=True)

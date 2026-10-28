@@ -1,0 +1,349 @@
+{
+  "agent": {
+    "agent_id": "customer_service_demo",
+    "agent_version": "customer-demo-v1",
+    "contract_version": "customer-contract-v1",
+    "entrypoints": [
+      "CustomerServiceAgent.run"
+    ],
+    "input_schema": {
+      "additionalProperties": false,
+      "properties": {
+        "user_input": {
+          "maxLength": 4000,
+          "title": "User Input",
+          "type": "string"
+        }
+      },
+      "required": [
+        "user_input"
+      ],
+      "title": "CustomerInput",
+      "type": "object"
+    },
+    "output_schema": {
+      "additionalProperties": false,
+      "properties": {
+        "events": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Events",
+          "type": "array"
+        },
+        "final_response": {
+          "title": "Final Response",
+          "type": "string"
+        },
+        "handoff_executed": {
+          "const": false,
+          "default": false,
+          "title": "Handoff Executed",
+          "type": "boolean"
+        },
+        "policy_version": {
+          "title": "Policy Version",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "SUCCESS",
+            "NEED_CLARIFICATION",
+            "HANDOFF_SUGGESTED"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "status",
+        "final_response",
+        "policy_version",
+        "events"
+      ],
+      "title": "CustomerResult",
+      "type": "object"
+    },
+    "runtime_bindings": {
+      "entrypoint.run": "CustomerServiceAgent.run",
+      "node.finished": "run_finished"
+    },
+    "runtime_versions": {
+      "implementation": "customer-demo-v1",
+      "policy": "example-policy-v1"
+    }
+  },
+  "document_version": "1.0",
+  "evidence": [
+    {
+      "applicable_result_paths": [
+        "success",
+        "need_clarification",
+        "handoff_suggested"
+      ],
+      "availability": {
+        "capability_key": "evidence.final_response_available",
+        "evidence_ids": [
+          "evidence.final_response"
+        ],
+        "reason": null,
+        "support_status": "supported"
+      },
+      "event_types": [
+        "run_started",
+        "response_ready",
+        "run_finished"
+      ],
+      "evidence_id": "final_response",
+      "observation_interface": "CustomerResult.model_dump()",
+      "payload_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "events": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Events",
+            "type": "array"
+          },
+          "final_response": {
+            "title": "Final Response",
+            "type": "string"
+          },
+          "handoff_executed": {
+            "const": false,
+            "default": false,
+            "title": "Handoff Executed",
+            "type": "boolean"
+          },
+          "policy_version": {
+            "title": "Policy Version",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "SUCCESS",
+              "NEED_CLARIFICATION",
+              "HANDOFF_SUGGESTED"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "final_response",
+          "policy_version",
+          "events"
+        ],
+        "title": "CustomerResult",
+        "type": "object"
+      },
+      "producer_module_roles": [
+        "observability"
+      ],
+      "production_timing": "On return from CustomerServiceAgent.run"
+    }
+  ],
+  "intents": [
+    {
+      "capabilities": [
+        {
+          "capability_key": "dialogue.business_task",
+          "evidence_ids": [
+            "evidence.final_response"
+          ],
+          "reason": null,
+          "support_status": "supported"
+        }
+      ],
+      "contract_version": "support-v1",
+      "decision_rules": {
+        "contains_退款": "SUCCESS",
+        "empty": "NEED_CLARIFICATION",
+        "otherwise": "HANDOFF_SUGGESTED"
+      },
+      "intent_id": "customer_support",
+      "module_role": "dialogue",
+      "parameter_semantics": {
+        "user_input": "Text stripped before keyword matching."
+      },
+      "parameters_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "user_input": {
+            "maxLength": 4000,
+            "title": "User Input",
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_input"
+        ],
+        "title": "CustomerInput",
+        "type": "object"
+      },
+      "required_tool_name": null,
+      "semantic_rules": {
+        "handoff": "Suggestion only, no external transfer.",
+        "policy_version": "example-policy-v1"
+      }
+    }
+  ],
+  "modules": [
+    {
+      "capabilities": [
+        {
+          "capability_key": "dialogue.respond",
+          "evidence_ids": [
+            "evidence.final_response"
+          ],
+          "reason": null,
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "dialogue.clarification",
+          "evidence_ids": [
+            "evidence.final_response"
+          ],
+          "reason": null,
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "dialogue.handoff_suggestion",
+          "evidence_ids": [
+            "evidence.final_response"
+          ],
+          "reason": null,
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "result.final_response",
+          "evidence_ids": [
+            "evidence.final_response"
+          ],
+          "reason": null,
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "context.inheritance",
+          "evidence_ids": [],
+          "reason": "Each call is stateless; no conversation memory.",
+          "support_status": "unsupported"
+        }
+      ],
+      "component_versions": {
+        "implementation": "customer-demo-v1"
+      },
+      "contract_version": "dialogue-v1",
+      "execution_boundary_ids": [
+        "boundary.conversation"
+      ],
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "user_input": {
+            "maxLength": 4000,
+            "title": "User Input",
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_input"
+        ],
+        "title": "CustomerInput",
+        "type": "object"
+      },
+      "intent_ids": [
+        "intent.customer_support"
+      ],
+      "module_id": "customer_dialogue",
+      "module_ids": [],
+      "output_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "events": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Events",
+            "type": "array"
+          },
+          "final_response": {
+            "title": "Final Response",
+            "type": "string"
+          },
+          "handoff_executed": {
+            "const": false,
+            "default": false,
+            "title": "Handoff Executed",
+            "type": "boolean"
+          },
+          "policy_version": {
+            "title": "Policy Version",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "SUCCESS",
+              "NEED_CLARIFICATION",
+              "HANDOFF_SUGGESTED"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "final_response",
+          "policy_version",
+          "events"
+        ],
+        "title": "CustomerResult",
+        "type": "object"
+      },
+      "responsibility": "Rule-based demo: empty input clarification, refund keyword policy response, otherwise handoff suggestion.",
+      "roles": [
+        "dialogue",
+        "observability"
+      ],
+      "tool_ids": [],
+      "trace_event_types": [
+        "run_started",
+        "response_ready",
+        "run_finished"
+      ]
+    }
+  ],
+  "origins": {
+    "agent.customer_service_demo": [
+      "collector/examples/customer_service/agent.py",
+      "collector/examples/customer_service/collector.py"
+    ],
+    "evidence.final_response": [
+      "collector/examples/customer_service/agent.py",
+      "collector/examples/customer_service/collector.py"
+    ],
+    "intent.customer_support": [
+      "collector/examples/customer_service/agent.py",
+      "collector/examples/customer_service/collector.py"
+    ],
+    "module.customer_dialogue": [
+      "collector/examples/customer_service/agent.py",
+      "collector/examples/customer_service/collector.py"
+    ]
+  },
+  "sources": {
+    "collector/examples/customer_service/agent.py": {
+      "kind": "code",
+      "path": "examples/customer_service/agent.py",
+      "sha256": "50ceda91d763a6037fffe47ebe4b3df9e0704ef266b38fd70dbda34744fc84c0"
+    },
+    "collector/examples/customer_service/collector.py": {
+      "kind": "code",
+      "path": "examples/customer_service/collector.py",
+      "sha256": "9668c4958666e736222f893e9eac7ac5e75c27fde32f6a27235958a03c5d1d12"
+    }
+  },
+  "tools": []
+}

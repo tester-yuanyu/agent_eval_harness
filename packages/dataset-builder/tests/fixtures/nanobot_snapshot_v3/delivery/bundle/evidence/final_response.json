@@ -1,0 +1,112 @@
+{
+  "applicable_result_paths": [
+    "returned",
+    "returned_error",
+    "tool_error",
+    "iteration_limit",
+    "empty_response",
+    "command_return",
+    "suppressed_response"
+  ],
+  "availability": {
+    "capability_key": "evidence.final_response_available",
+    "evidence_ids": [
+      "evidence.final_response"
+    ],
+    "reason": null,
+    "support_status": "supported"
+  },
+  "consumer_roles": [
+    "builder",
+    "evaluator"
+  ],
+  "contract_version": "nanobot-collector-v2",
+  "description": "Native RunResult on returned paths, including error-bearing and short-circuit returns.",
+  "event_types": [],
+  "evidence_id": "final_response",
+  "observation_interface": "dataclasses.asdict(RunResult)",
+  "payload_schema": {
+    "description": "Native SDK returned value, including error-bearing or command returns. Not returned on raised/cancelled exits; presence does not imply business success.",
+    "properties": {
+      "content": {
+        "description": "Response text, or empty string when no outbound response/content is returned; no non-empty guarantee.",
+        "title": "Content",
+        "type": "string"
+      },
+      "error": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "description": "Nullable captured diagnostic text; inspect together with stop_reason and content/history. None does not prove task success or rule out earlier recoverable tool errors. Non-null error can retain an earlier failure after continuation produces a later answer; it is not an exact classification of that final answer.",
+        "title": "Error"
+      },
+      "messages": {
+        "description": "Captured runner message list; may be empty for command short-circuits. Not a guaranteed complete external event trace.",
+        "items": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "title": "Messages",
+        "type": "array"
+      },
+      "metadata": {
+        "additionalProperties": true,
+        "description": "Outbound metadata copied by SDK; arbitrary keys, not a stable business result schema.",
+        "title": "Metadata",
+        "type": "object"
+      },
+      "stop_reason": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "description": "Captured runner status, nullable when runner hooks did not execute (e.g. command shortcut). completed can include refusal/content-filter text. After injection-driven continuation, an earlier error status may remain alongside recovered final content.",
+        "title": "Stop Reason"
+      },
+      "tools_used": {
+        "description": "Authoritative after_run capture lists successful tool events; not a complete list of attempts or failures.",
+        "items": {
+          "type": "string"
+        },
+        "title": "Tools Used",
+        "type": "array"
+      },
+      "usage": {
+        "additionalProperties": {
+          "type": "integer"
+        },
+        "description": "Captured provider token/accounting values; may be empty.",
+        "title": "Usage",
+        "type": "object"
+      }
+    },
+    "required": [
+      "content"
+    ],
+    "title": "RunResult",
+    "type": "object"
+  },
+  "producer_module_ids": [
+    "module.observability"
+  ],
+  "production_timing": "On any returned Nanobot.run path, including error-bearing RunResult; absent on raised/cancelled exits.",
+  "required": true,
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "evidence.final_response",
+  "snapshot_sha256": "2a7a28da24c2b02cc9f98cf608062112934bf37262b8cf1d9d014a3813f52548",
+  "snapshot_type": "evidence",
+  "source_hashes": {
+    "catalog_definition_sha256": "9432d99e11d957c409acfd2c5d17c23dddb9715163d95be522939ad13249e42e"
+  }
+}

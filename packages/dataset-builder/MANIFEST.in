@@ -1,0 +1,4 @@
+recursive-include schemas *.json
+recursive-include suites *.json *.md
+recursive-include policies *.json
+recursive-include protocol_profiles *.json

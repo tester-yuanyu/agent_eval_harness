@@ -1,0 +1,62 @@
+{
+  "capabilities": [
+    {
+      "capability_key": "execution.bounded_tool_loop",
+      "evidence_ids": [
+        "evidence.tool_trace"
+      ],
+      "reason": null,
+      "support_status": "supported"
+    },
+    {
+      "capability_key": "safety.tool_failure_terminal",
+      "evidence_ids": [
+        "evidence.safety_recovery_event"
+      ],
+      "reason": null,
+      "support_status": "supported"
+    },
+    {
+      "capability_key": "safety.tool_timeout_terminal",
+      "evidence_ids": [
+        "evidence.safety_recovery_event"
+      ],
+      "reason": null,
+      "support_status": "supported"
+    }
+  ],
+  "component_versions": {
+    "tool_loop": "v3"
+  },
+  "contract_version": "tool-loop-module-v3",
+  "execution_boundary_ids": [
+    "boundary.planning_execution"
+  ],
+  "input_schema": {
+    "type": "object"
+  },
+  "intent_refs": [],
+  "module_id": "tool_loop",
+  "module_refs": [],
+  "output_schema": {
+    "type": "object"
+  },
+  "responsibility": "Run a bounded synchronous Tool-calling loop.",
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "module.tool_loop",
+  "snapshot_sha256": "7a5d59bd6db681ac79234591eb51255f964a03616fd7f4c97dd4d754191d89e3",
+  "snapshot_type": "module",
+  "source_hashes": {
+    "capabilities_sha256": "d69e7de40b4c3ca159e46012437e96c14ed27e9b6dd6cb52b10d5f472cecc076",
+    "children_sha256": "b78ee59b8a819b12aaee9953ee472c98c34893d48db562e951cb5033d096ae54"
+  },
+  "tool_refs": [],
+  "trace_event_types": [
+    "tool_requested",
+    "tool_started",
+    "tool_succeeded",
+    "tool_failed",
+    "tool_timeout",
+    "max_steps_exceeded"
+  ]
+}

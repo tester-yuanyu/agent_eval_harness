@@ -1,0 +1,16 @@
+{
+  "bundles": {
+    "mini_agent": {
+      "0.1.0": {
+        "agent_id": "mini_agent",
+        "agent_snapshot_sha256": "7f140848d755166188fdd22872a2ab782ab0b37ff51750938e609d6de0614b21",
+        "agent_version": "0.1.0",
+        "capability_bundle_sha256": "99baea74b9a4fbd6c493fb5a3159a8f019769804d94232f0d89aa072ea9af3d8",
+        "files_sha256": "e81e01cb5141e234da7b058f10b858597275bdc8502d059968af00a86f404180",
+        "path": "data/bundles/mini_agent/0.1.0",
+        "version": "0.1.0"
+      }
+    }
+  },
+  "schema_version": 1
+}

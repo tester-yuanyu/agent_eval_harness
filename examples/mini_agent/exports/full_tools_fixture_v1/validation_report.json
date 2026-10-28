@@ -1,0 +1,18 @@
+{
+  "agent_snapshot_sha256": "40e24e70014d5df6161755d106394f376747fd82dd03bbf3e6f7649f2667417f",
+  "capability_bundle_sha256": "215a9a3a445c8857f3bdd8dbecba935ce646bd8c784f16ecfc4a5da6042cce3c",
+  "production_ready": false,
+  "runtime_tests": "Run repository pytest; export itself does not execute tools.",
+  "snapshot_counts": {
+    "agent": 1,
+    "boundary": 7,
+    "chain": 3,
+    "evidence": 5,
+    "intent": 7,
+    "module": 7,
+    "scope": 5,
+    "tool": 6
+  },
+  "valid": true,
+  "validation_scope": "schema_hash_references_and_capability_resolution"
+}

@@ -1,0 +1,102 @@
+{
+  "allowed_module_ids": [
+    "module.dialogue",
+    "module.observability"
+  ],
+  "boundary_refs": [
+    {
+      "contract_version": "nanobot-collector-v2",
+      "path": "boundaries/conversation.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "boundary.conversation",
+      "snapshot_sha256": "123be13c80db3bc631f0aa2f327a05153808015ccff348d8cf777dbce7c5d76c",
+      "snapshot_type": "boundary"
+    }
+  ],
+  "completion_condition": "A returned RunResult is observed, or a caller records the raised exception/cancellation using a separately implemented observer. Only returned paths satisfy the response evidence requirement.",
+  "contract_version": "nanobot-collector-v2",
+  "description": "Inspect the native returned RunResult contract; raised exits are separate declared branches.",
+  "entrypoint": "nanobot.nanobot.Nanobot.run",
+  "evidence_refs": [
+    {
+      "contract_version": "nanobot-collector-v2",
+      "path": "evidence/execution_contract.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "evidence.execution_contract",
+      "snapshot_sha256": "4b00ec261f27c526bebb955684a413592651c95ad534e2c7adacadbf32109330",
+      "snapshot_type": "evidence"
+    },
+    {
+      "contract_version": "nanobot-collector-v2",
+      "path": "evidence/final_response.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "evidence.final_response",
+      "snapshot_sha256": "2a7a28da24c2b02cc9f98cf608062112934bf37262b8cf1d9d014a3813f52548",
+      "snapshot_type": "evidence"
+    },
+    {
+      "contract_version": "nanobot-collector-v2",
+      "path": "evidence/run_exception.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "evidence.run_exception",
+      "snapshot_sha256": "15ba22d9436ac8aaf26b39a42942ec4e40f84d8c883eeaebbbab150d6f20f832",
+      "snapshot_type": "evidence"
+    }
+  ],
+  "inputs": [
+    "sdk_arguments"
+  ],
+  "module_refs": [
+    {
+      "contract_version": "nanobot-collector-v2",
+      "path": "modules/dialogue.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "module.dialogue",
+      "snapshot_sha256": "0d601355de9fec774dfa85a45e8360940a860da2523f5cfad2b722aa14a445f1",
+      "snapshot_type": "module"
+    },
+    {
+      "contract_version": "nanobot-collector-v2",
+      "path": "modules/observability.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "module.observability",
+      "snapshot_sha256": "ca33c089b686c882e97a87d74b7135bff5ab50e9506dd66da70cfbf131761f25",
+      "snapshot_type": "module"
+    }
+  ],
+  "outputs": [
+    "run_result_or_raised_exit"
+  ],
+  "prohibited_module_ids": [
+    "module.channels",
+    "module.mcp",
+    "module.memory",
+    "module.providers",
+    "module.skills",
+    "module.tools"
+  ],
+  "requirements": [
+    {
+      "capability_key": "result.final_response",
+      "evidence_ids": [
+        "evidence.final_response"
+      ],
+      "mandatory": true,
+      "provider": {
+        "role": "snapshot",
+        "snapshot_id": "module.observability"
+      },
+      "requirement_id": "response"
+    }
+  ],
+  "scope_id": "result",
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "scope.result",
+  "snapshot_sha256": "72cae5224589858fa0cbb471b7619d5118e0edc343ddc04b668387a0112b2265",
+  "snapshot_type": "scope",
+  "source_hashes": {
+    "catalog_definition_sha256": "0446fdcca239e4c1e5a0afb4d4635aa8aee0ba56b664c79122c786f77f853c79"
+  },
+  "stop_boundary": "Nanobot.run returns RunResult, raises an exception, or propagates asyncio.CancelledError",
+  "unresolved_behavior": "Missing runtime observations, business oracles and exception capture remain unknown. Schema/interface support does not imply successful execution."
+}

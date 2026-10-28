@@ -6,7 +6,7 @@ import json
 import time
 from pathlib import Path
 
-from eval_framework.schemas import EvalCase
+from eval_contracts.schemas import EvalCase
 
 from dataset_builder.full_generation.intent_cases import assertions, execution
 from dataset_builder.full_generation.models import ContractCase

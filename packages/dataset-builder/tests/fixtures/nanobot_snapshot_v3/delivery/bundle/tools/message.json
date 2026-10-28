@@ -1,0 +1,183 @@
+{
+  "batch_behavior": {
+    "declared": false
+  },
+  "capabilities": [
+    {
+      "capability_key": "tool.execution",
+      "evidence_ids": [],
+      "reason": "Offline construction only: no model call, tool execution or external service verification.",
+      "support_status": "unknown"
+    }
+  ],
+  "combination_rules": {
+    "concurrency_safe": false,
+    "exclusive": false
+  },
+  "contract_version": "nanobot-collector-v2",
+  "description": "Proactively send a message to a user/channel, optionally with file attachments. Use this for reminders, cross-channel delivery, or explicit proactive sends. Do not use this for the normal reply in the current chat: answer naturally instead. If channel/chat_id would target the current runtime conversation, do not call this tool unless the user explicitly asked you to proactively send an existing file attachment. When generate_image creates images in the current chat, use the message tool with the artifact paths in the media parameter to deliver the images to the user. For proactive attachment delivery, use the 'media' parameter with file paths. Do NOT use read_file to send files — that only reads content for your own analysis.",
+  "function_schema": {
+    "function": {
+      "description": "Proactively send a message to a user/channel, optionally with file attachments. Use this for reminders, cross-channel delivery, or explicit proactive sends. Do not use this for the normal reply in the current chat: answer naturally instead. If channel/chat_id would target the current runtime conversation, do not call this tool unless the user explicitly asked you to proactively send an existing file attachment. When generate_image creates images in the current chat, use the message tool with the artifact paths in the media parameter to deliver the images to the user. For proactive attachment delivery, use the 'media' parameter with file paths. Do NOT use read_file to send files — that only reads content for your own analysis.",
+      "name": "message",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "buttons": {
+            "description": "Optional: inline keyboard buttons as list of rows, each row is list of button labels.",
+            "items": {
+              "items": {
+                "description": "Button label",
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "type": "array"
+          },
+          "channel": {
+            "description": "Optional target channel for cross-channel/proactive delivery. Do not set this to the current runtime channel for a normal reply.",
+            "type": "string"
+          },
+          "chat_id": {
+            "description": "Optional target chat/user ID for cross-channel/proactive delivery. On WebSocket/WebUI turns: omit chat_id to use the server's conversation id (never pass client_id values like anon-…). Do not set this to the current runtime chat for a normal reply.",
+            "type": "string"
+          },
+          "content": {
+            "description": "Message content for proactive or cross-channel delivery. Do not use this for a normal reply in the current chat.",
+            "type": "string"
+          },
+          "media": {
+            "description": "Optional list of existing file paths to attach. Use artifact paths returned by generate_image here when delivering generated images.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "content"
+        ],
+        "type": "object"
+      }
+    },
+    "type": "function"
+  },
+  "idempotency_rules": {
+    "status": "unknown"
+  },
+  "implementation_profile": "production",
+  "observation_interfaces": [
+    "ToolRegistry.get_definitions",
+    "ToolRegistry.execute",
+    "AgentHookContext.tool_events (runner hooks)"
+  ],
+  "parameter_semantics": {
+    "buttons": "Optional: inline keyboard buttons as list of rows, each row is list of button labels.",
+    "channel": "Optional target channel for cross-channel/proactive delivery. Do not set this to the current runtime channel for a normal reply.",
+    "chat_id": "Optional target chat/user ID for cross-channel/proactive delivery. On WebSocket/WebUI turns: omit chat_id to use the server's conversation id (never pass client_id values like anon-…). Do not set this to the current runtime chat for a normal reply.",
+    "content": "Message content for proactive or cross-channel delivery. Do not use this for a normal reply in the current chat.",
+    "media": "Optional list of existing file paths to attach. Use artifact paths returned by generate_image here when delivering generated images."
+  },
+  "permission_requirements": [
+    "See implementation-specific guards; not audited here."
+  ],
+  "preconditions": [
+    "Registration is limited to the named offline profile.",
+    "Execution requires tool-specific services, request context and permissions."
+  ],
+  "registered": true,
+  "requires_confirmation": false,
+  "result_protocols": {
+    "business_error_codes": null,
+    "category_names_are_adapter_labels": true,
+    "dispatch_paths": [
+      "ToolRegistry.execute (direct registry API)",
+      "AgentRunner._run_tool -> ToolRegistry.prepare_call -> tool.execute (normal runner path)"
+    ],
+    "error_categories": [
+      {
+        "category": "unknown_tool",
+        "observation": "prepare_call returns error; tool implementation is not called."
+      },
+      {
+        "category": "invalid_arguments",
+        "observation": "prepare_call coerces/casts and validates parameters; rejected arguments do not call the implementation."
+      },
+      {
+        "category": "tool_marked_error",
+        "observation": "ToolResult.is_error produces an error event in the runner."
+      },
+      {
+        "category": "implementation_exception",
+        "observation": "Ordinary Exception becomes a registry ToolResult.error or a runner error event; handling differs by entrypoint."
+      },
+      {
+        "category": "policy_guard",
+        "observation": "Repeated external lookup/workspace violation guards can reject or escalate; do not infer recoverability from fail_on_tool_error alone."
+      },
+      {
+        "category": "control_flow",
+        "observation": "Cancellation and control-flow BaseException can propagate; hooks may also raise outside the implementation catch."
+      }
+    ],
+    "error_marker": "ToolResult.is_error; a plain string beginning with Error: is not by itself a builtin tool failure marker.",
+    "event_observation": "AgentHookContext.tool_events in runner hooks; not a top-level RunResult field and not emitted as StreamEvent by run().",
+    "fail_on_tool_error": "False generally returns tool errors to the model for possible recovery; True can terminate with tool_error. Policy guards and continuations also affect the terminal outcome.",
+    "registry_return_type": "Any; implementation-specific. No universal successful result shape is inferred.",
+    "retry": {
+      "automatic_tool_retry_guaranteed": false,
+      "description": "The registry does not automatically retry an implementation call. The model may request a new call; provider retries and tool-internal retries are separate.",
+      "status": "tool_specific_unknown"
+    },
+    "source_symbols": [
+      "ToolRegistry.prepare_call",
+      "ToolRegistry.execute",
+      "ToolResult",
+      "AgentRunner._run_tool",
+      "AgentRunner._classify_violation"
+    ],
+    "tool_event_schema": {
+      "properties": {
+        "detail": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "ok",
+            "error"
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "status",
+        "detail"
+      ],
+      "type": "object"
+    }
+  },
+  "retry_policy": {
+    "automatic_tool_retry_guaranteed": false,
+    "description": "The registry does not automatically retry an implementation call. The model may request a new call; provider retries and tool-internal retries are separate.",
+    "status": "tool_specific_unknown"
+  },
+  "risk_level": "high",
+  "side_effects": [
+    "Not audited; read_only declaration=False"
+  ],
+  "simulation_capabilities": [],
+  "simulation_protocol": null,
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "tool.message",
+  "snapshot_sha256": "4ed814cc2e94a03f12310ebfa0d0bf2627aad7249d5905c0d06bcf056ffe7da0",
+  "snapshot_type": "tool",
+  "source_hashes": {
+    "execution_contract_sha256": "13bd8bbd5e0b9404e5756388e6012150ac719a5bdb3696637a176ef814fb1d5d",
+    "function_schema_sha256": "82af9f2d96a77bcbbd940404cc60ecb3177b0340c792de96e0fe21be42ed121b"
+  },
+  "tool_name": "message",
+  "tool_version": "0.3.0"
+}

@@ -1,6 +1,3 @@
-from pathlib import Path
-
-
 def test_content_identity_covers_uncommitted_runtime_and_templates(tmp_path):
     from eval_framework.source_identity import content_identity
 
@@ -18,20 +15,21 @@ def test_content_identity_covers_uncommitted_runtime_and_templates(tmp_path):
     (package / "__pycache__").mkdir()
     (package / "__pycache__/rule.pyc").write_bytes(b"cache")
     assert content_identity(package) == before
+    (package / "capability.md").write_text("Runtime contract version 1\n")
+    before = content_identity(package)
+    (package / "capability.md").write_text("Runtime contract version 2\n")
+    assert content_identity(package) != before
 
 
 def test_engine_identity_includes_running_source_and_extension():
-    import inspect_ai
+    from importlib.metadata import version
 
     from eval_framework.inspect_engine import backend_metadata
 
     identity = backend_metadata()
-    assert (
-        identity["source"]["upstream_commit"]
-        == "dfcb169e1cb170a8fbe2c37a0e3befc45c2c2b85"
-    )
+    assert identity["source"]["distribution"] == "inspect_ai"
+    assert identity["source"]["distribution_version"] == version("inspect_ai")
     assert len(identity["source"]["runtime_sha256"]) == 64
     assert len(identity["extension_sha256"]) == 64
-    assert "third_party/inspect_ai/src/inspect_ai" in str(
-        Path(inspect_ai.__file__).resolve()
-    )
+    assert len(identity["contracts_sha256"]) == 64
+    assert len(identity["capability_protocol_sha256"]) == 64

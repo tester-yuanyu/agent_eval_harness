@@ -1,0 +1,86 @@
+{
+  "allowed_module_ids": [
+    "module.dialogue",
+    "module.observability"
+  ],
+  "boundary_refs": [
+    {
+      "contract_version": "nanobot-collector-v1",
+      "path": "boundaries/conversation.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "boundary.conversation",
+      "snapshot_sha256": "aacf8fef91df3f5371347b6fd8e0f1e8e215ff3d59f99fea48d11b6fcf0c8773",
+      "snapshot_type": "boundary"
+    }
+  ],
+  "completion_condition": "A terminal response and its declared status are observable.",
+  "contract_version": "nanobot-collector-v1",
+  "description": "Observe a direct conversational response.",
+  "entrypoint": "nanobot.nanobot.Nanobot.run",
+  "evidence_refs": [
+    {
+      "contract_version": "nanobot-collector-v1",
+      "path": "evidence/final_response.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "evidence.final_response",
+      "snapshot_sha256": "f6c2a0999ed6c5a7db2ab5dac8773e683c497a8324559785c66e4f8f5c58865e",
+      "snapshot_type": "evidence"
+    }
+  ],
+  "inputs": [
+    "user_input"
+  ],
+  "module_refs": [
+    {
+      "contract_version": "nanobot-collector-v1",
+      "path": "modules/dialogue.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "module.dialogue",
+      "snapshot_sha256": "6deea192f99fee3573fa88da8cb307dd36e1b9680cd0a9fca25f256ddc394ebd",
+      "snapshot_type": "module"
+    },
+    {
+      "contract_version": "nanobot-collector-v1",
+      "path": "modules/observability.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "module.observability",
+      "snapshot_sha256": "3f4aa5e3923093154eca6e63a2cb405ae26386cc5f09591c2f11c0a87c38487d",
+      "snapshot_type": "module"
+    }
+  ],
+  "outputs": [
+    "final_response"
+  ],
+  "prohibited_module_ids": [
+    "module.channels",
+    "module.mcp",
+    "module.memory",
+    "module.providers",
+    "module.skills",
+    "module.tools"
+  ],
+  "requirements": [
+    {
+      "capability_key": "result.final_response",
+      "evidence_ids": [
+        "evidence.final_response"
+      ],
+      "mandatory": true,
+      "provider": {
+        "role": "snapshot",
+        "snapshot_id": "module.observability"
+      },
+      "requirement_id": "response"
+    }
+  ],
+  "scope_id": "result",
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "scope.result",
+  "snapshot_sha256": "b5ddbd1259526214ca14ff3e9bebe78f8e0795c6e7cac66bb47cebb782b3f815",
+  "snapshot_type": "scope",
+  "source_hashes": {
+    "catalog_definition_sha256": "df819a27a73b8d811164650b6866e35f68e4e5c0a9fbbd2a0682de8ecb97c796"
+  },
+  "stop_boundary": "Nanobot.run returns RunResult",
+  "unresolved_behavior": "Missing capabilities or evidence remain unknown."
+}

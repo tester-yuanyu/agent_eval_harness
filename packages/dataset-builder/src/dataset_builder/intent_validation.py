@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections import Counter
 from typing import TYPE_CHECKING, Any
 
-from eval_framework.schemas import EvalCase
+from eval_contracts.schemas import EvalCase
 from jsonschema import Draft202012Validator
 
 if TYPE_CHECKING:

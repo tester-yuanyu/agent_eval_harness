@@ -1,0 +1,3093 @@
+[
+  {
+    "blocker_id": "nanobot:CAPABILITY_UNKNOWN:agent.nanobot",
+    "code": "CAPABILITY_UNKNOWN",
+    "target_id": "agent.nanobot",
+    "reason": "Mandatory capability is unresolved: dialogue.respond",
+    "source_refs": [
+      {
+        "path": "bundle/agent.json",
+        "sha256": "eb801a4f1f4723a71799c2efc8de905410721346448a72cec464ee6cced30d2f",
+        "pointer": "/capabilities/0"
+      }
+    ],
+    "required_action": "Provide an explicit execution contract and an isolated runner binding."
+  },
+  {
+    "blocker_id": "nanobot:CAPABILITY_UNKNOWN:intent.assistant",
+    "code": "CAPABILITY_UNKNOWN",
+    "target_id": "intent.assistant",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "bundle/intents/assistant.json",
+        "sha256": "85e8ffdbfc2bfb730f9391751dedbd5c6a04a7bb22ce1d5d99442f8a05a6eb3b",
+        "pointer": "/capabilities/0"
+      }
+    ],
+    "required_action": "Provide an explicit execution contract and an isolated runner binding."
+  },
+  {
+    "blocker_id": "nanobot:CAPABILITY_UNKNOWN:module.channels",
+    "code": "CAPABILITY_UNKNOWN",
+    "target_id": "module.channels",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "bundle/modules/channels.json",
+        "sha256": "ca4fa5cd46fd88a61fd55667741e940032e6b7708342c908926cd7a0c58d0de6",
+        "pointer": "/capabilities/0"
+      }
+    ],
+    "required_action": "Provide an explicit execution contract and an isolated runner binding."
+  },
+  {
+    "blocker_id": "nanobot:CAPABILITY_UNKNOWN:module.dialogue",
+    "code": "CAPABILITY_UNKNOWN",
+    "target_id": "module.dialogue",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "bundle/modules/dialogue.json",
+        "sha256": "a66b5e1dc510803b938ec1e5720759279a440dbbee05b59872fa5d07eaebbf1e",
+        "pointer": "/capabilities/0"
+      }
+    ],
+    "required_action": "Provide an explicit execution contract and an isolated runner binding."
+  },
+  {
+    "blocker_id": "nanobot:CAPABILITY_UNKNOWN:module.mcp",
+    "code": "CAPABILITY_UNKNOWN",
+    "target_id": "module.mcp",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "bundle/modules/mcp.json",
+        "sha256": "c37aa7d448b48bd5e67eae309aedfafd0b90ba33110132b6e34b88229a9d53cf",
+        "pointer": "/capabilities/0"
+      }
+    ],
+    "required_action": "Provide an explicit execution contract and an isolated runner binding."
+  },
+  {
+    "blocker_id": "nanobot:CAPABILITY_UNKNOWN:module.memory",
+    "code": "CAPABILITY_UNKNOWN",
+    "target_id": "module.memory",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "bundle/modules/memory.json",
+        "sha256": "a97c007d88e30ccb7605f41aac141da9ae45f1147038049854dd8809bda55823",
+        "pointer": "/capabilities/0"
+      }
+    ],
+    "required_action": "Provide an explicit execution contract and an isolated runner binding."
+  },
+  {
+    "blocker_id": "nanobot:CAPABILITY_UNKNOWN:module.providers",
+    "code": "CAPABILITY_UNKNOWN",
+    "target_id": "module.providers",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "bundle/modules/providers.json",
+        "sha256": "80573e3800d469c6bb508147e9d4f46bbaed7970aa52b0f6ee410e7bdff7dcc9",
+        "pointer": "/capabilities/0"
+      }
+    ],
+    "required_action": "Provide an explicit execution contract and an isolated runner binding."
+  },
+  {
+    "blocker_id": "nanobot:CAPABILITY_UNKNOWN:module.skills",
+    "code": "CAPABILITY_UNKNOWN",
+    "target_id": "module.skills",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "bundle/modules/skills.json",
+        "sha256": "c4cd1bbabb59be915c434040856d0b75126108fb0c88e2f1e94181735e5b9e8f",
+        "pointer": "/capabilities/0"
+      }
+    ],
+    "required_action": "Provide an explicit execution contract and an isolated runner binding."
+  },
+  {
+    "blocker_id": "nanobot:CAPABILITY_UNKNOWN:module.tools",
+    "code": "CAPABILITY_UNKNOWN",
+    "target_id": "module.tools",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "bundle/modules/tools.json",
+        "sha256": "db501ecccbce372fb58acf470a1da75ed5345fc0df355c2f7a4942eb9999d30c",
+        "pointer": "/capabilities/0"
+      }
+    ],
+    "required_action": "Provide an explicit execution contract and an isolated runner binding."
+  },
+  {
+    "blocker_id": "nanobot:CAPABILITY_UNKNOWN:tool.apply_patch",
+    "code": "CAPABILITY_UNKNOWN",
+    "target_id": "tool.apply_patch",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/apply_patch.json",
+        "sha256": "446c4d028306fd336ba2fef698e2e9aaf2f2983c5800e2908aa6aed47c8dd2b5",
+        "pointer": "/capabilities/0"
+      }
+    ],
+    "required_action": "Provide an explicit execution contract and an isolated runner binding."
+  },
+  {
+    "blocker_id": "nanobot:CAPABILITY_UNKNOWN:tool.create_goal",
+    "code": "CAPABILITY_UNKNOWN",
+    "target_id": "tool.create_goal",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/create_goal.json",
+        "sha256": "eb7f5acc63d23b39ade11486ccb1bd29aae7cbc212e9e05e726b93e40c44b926",
+        "pointer": "/capabilities/0"
+      }
+    ],
+    "required_action": "Provide an explicit execution contract and an isolated runner binding."
+  },
+  {
+    "blocker_id": "nanobot:CAPABILITY_UNKNOWN:tool.cron",
+    "code": "CAPABILITY_UNKNOWN",
+    "target_id": "tool.cron",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/cron.json",
+        "sha256": "451ab0cd03736eb30b799c942aa70c4735bfcd843a9eca0a5c1018ec9648a5d4",
+        "pointer": "/capabilities/0"
+      }
+    ],
+    "required_action": "Provide an explicit execution contract and an isolated runner binding."
+  },
+  {
+    "blocker_id": "nanobot:CAPABILITY_UNKNOWN:tool.edit_file",
+    "code": "CAPABILITY_UNKNOWN",
+    "target_id": "tool.edit_file",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/edit_file.json",
+        "sha256": "cbbc87bf7fdaa84f8d24e57c73f18f3e4edb2a7c0e1f960034b712490b9dbd35",
+        "pointer": "/capabilities/0"
+      }
+    ],
+    "required_action": "Provide an explicit execution contract and an isolated runner binding."
+  },
+  {
+    "blocker_id": "nanobot:CAPABILITY_UNKNOWN:tool.exec",
+    "code": "CAPABILITY_UNKNOWN",
+    "target_id": "tool.exec",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/exec.json",
+        "sha256": "ff24c37da0512870289d2ffdaf8a1feca2e88d113b6f1ad9e16a8a965a7bf34f",
+        "pointer": "/capabilities/0"
+      }
+    ],
+    "required_action": "Provide an explicit execution contract and an isolated runner binding."
+  },
+  {
+    "blocker_id": "nanobot:CAPABILITY_UNKNOWN:tool.find_files",
+    "code": "CAPABILITY_UNKNOWN",
+    "target_id": "tool.find_files",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/find_files.json",
+        "sha256": "b480ba7ce1695ff89d2647042c6c19fefaecafe6eefc032adec3d368410cbab5",
+        "pointer": "/capabilities/0"
+      }
+    ],
+    "required_action": "Provide an explicit execution contract and an isolated runner binding."
+  },
+  {
+    "blocker_id": "nanobot:CAPABILITY_UNKNOWN:tool.grep",
+    "code": "CAPABILITY_UNKNOWN",
+    "target_id": "tool.grep",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/grep.json",
+        "sha256": "30278dd69228fc50d12eb2ba06cd887e5e50b95d49d74bfbb5ed886a7e7cd5fe",
+        "pointer": "/capabilities/0"
+      }
+    ],
+    "required_action": "Provide an explicit execution contract and an isolated runner binding."
+  },
+  {
+    "blocker_id": "nanobot:CAPABILITY_UNKNOWN:tool.list_dir",
+    "code": "CAPABILITY_UNKNOWN",
+    "target_id": "tool.list_dir",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/list_dir.json",
+        "sha256": "17b1d33e0b8b1d4362ab0af6141c98ffe9170b4273b1c305996748808ade48e2",
+        "pointer": "/capabilities/0"
+      }
+    ],
+    "required_action": "Provide an explicit execution contract and an isolated runner binding."
+  },
+  {
+    "blocker_id": "nanobot:CAPABILITY_UNKNOWN:tool.list_exec_sessions",
+    "code": "CAPABILITY_UNKNOWN",
+    "target_id": "tool.list_exec_sessions",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/list_exec_sessions.json",
+        "sha256": "a3f77c5b96c4210edc3af517e3e03ea5bc44f05b3bff116998547f9feea14149",
+        "pointer": "/capabilities/0"
+      }
+    ],
+    "required_action": "Provide an explicit execution contract and an isolated runner binding."
+  },
+  {
+    "blocker_id": "nanobot:CAPABILITY_UNKNOWN:tool.list_sessions",
+    "code": "CAPABILITY_UNKNOWN",
+    "target_id": "tool.list_sessions",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/list_sessions.json",
+        "sha256": "eab04d50326dd91a787bb08b3aebc81a950ed045074c4ed5485e3f95b4d7d2a8",
+        "pointer": "/capabilities/0"
+      }
+    ],
+    "required_action": "Provide an explicit execution contract and an isolated runner binding."
+  },
+  {
+    "blocker_id": "nanobot:CAPABILITY_UNKNOWN:tool.message",
+    "code": "CAPABILITY_UNKNOWN",
+    "target_id": "tool.message",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/message.json",
+        "sha256": "91c8a1d1f9977ac1ce569ef8f98870e8818c1e84302cb1f51bb75eb57e239670",
+        "pointer": "/capabilities/0"
+      }
+    ],
+    "required_action": "Provide an explicit execution contract and an isolated runner binding."
+  },
+  {
+    "blocker_id": "nanobot:CAPABILITY_UNKNOWN:tool.read_file",
+    "code": "CAPABILITY_UNKNOWN",
+    "target_id": "tool.read_file",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/read_file.json",
+        "sha256": "9df2b61fe605a1eabc54fa98a0aeaf65923637f3fc9bbe5a5254cc75d42319ed",
+        "pointer": "/capabilities/0"
+      }
+    ],
+    "required_action": "Provide an explicit execution contract and an isolated runner binding."
+  },
+  {
+    "blocker_id": "nanobot:CAPABILITY_UNKNOWN:tool.read_session",
+    "code": "CAPABILITY_UNKNOWN",
+    "target_id": "tool.read_session",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/read_session.json",
+        "sha256": "eaa707503fd9ee29a57d0fc49536f3ce183df06eb7e52d5539f75eb394c9509b",
+        "pointer": "/capabilities/0"
+      }
+    ],
+    "required_action": "Provide an explicit execution contract and an isolated runner binding."
+  },
+  {
+    "blocker_id": "nanobot:CAPABILITY_UNKNOWN:tool.search_sessions",
+    "code": "CAPABILITY_UNKNOWN",
+    "target_id": "tool.search_sessions",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/search_sessions.json",
+        "sha256": "4300331c18fac99cd8289e18d48f58cd2053755e6720ee4850a5a435cb7498c3",
+        "pointer": "/capabilities/0"
+      }
+    ],
+    "required_action": "Provide an explicit execution contract and an isolated runner binding."
+  },
+  {
+    "blocker_id": "nanobot:CAPABILITY_UNKNOWN:tool.send_session_message",
+    "code": "CAPABILITY_UNKNOWN",
+    "target_id": "tool.send_session_message",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/send_session_message.json",
+        "sha256": "3dd083ee1b09f8fe98825880951a16c43e13877690e1161a887c55909690a951",
+        "pointer": "/capabilities/0"
+      }
+    ],
+    "required_action": "Provide an explicit execution contract and an isolated runner binding."
+  },
+  {
+    "blocker_id": "nanobot:CAPABILITY_UNKNOWN:tool.spawn",
+    "code": "CAPABILITY_UNKNOWN",
+    "target_id": "tool.spawn",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/spawn.json",
+        "sha256": "8d4caf952420391dfabb60f3736018fbab2d7b910fd0316f81f77c2c0ed746f9",
+        "pointer": "/capabilities/0"
+      }
+    ],
+    "required_action": "Provide an explicit execution contract and an isolated runner binding."
+  },
+  {
+    "blocker_id": "nanobot:CAPABILITY_UNKNOWN:tool.update_goal",
+    "code": "CAPABILITY_UNKNOWN",
+    "target_id": "tool.update_goal",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/update_goal.json",
+        "sha256": "71096c2e0d6f1cee3fa80a358f3d331da374605c4edb8adecdd4f7c6ee16e43a",
+        "pointer": "/capabilities/0"
+      }
+    ],
+    "required_action": "Provide an explicit execution contract and an isolated runner binding."
+  },
+  {
+    "blocker_id": "nanobot:CAPABILITY_UNKNOWN:tool.web_fetch",
+    "code": "CAPABILITY_UNKNOWN",
+    "target_id": "tool.web_fetch",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/web_fetch.json",
+        "sha256": "a2a4d5c77a1c67f0a7d69116830cf787aa4732e8839348e6b59ae145945244a9",
+        "pointer": "/capabilities/0"
+      }
+    ],
+    "required_action": "Provide an explicit execution contract and an isolated runner binding."
+  },
+  {
+    "blocker_id": "nanobot:CAPABILITY_UNKNOWN:tool.web_search",
+    "code": "CAPABILITY_UNKNOWN",
+    "target_id": "tool.web_search",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/web_search.json",
+        "sha256": "d058873a9329292fc388531b45b10f5d8bc28e6129880da91fa36246608fc2bb",
+        "pointer": "/capabilities/0"
+      }
+    ],
+    "required_action": "Provide an explicit execution contract and an isolated runner binding."
+  },
+  {
+    "blocker_id": "nanobot:CAPABILITY_UNKNOWN:tool.write_file",
+    "code": "CAPABILITY_UNKNOWN",
+    "target_id": "tool.write_file",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/write_file.json",
+        "sha256": "a9ce405ef1196df56f1b9dc5b37eb0b65d284fc63c15701fd5a3a49a876b25e9",
+        "pointer": "/capabilities/0"
+      }
+    ],
+    "required_action": "Provide an explicit execution contract and an isolated runner binding."
+  },
+  {
+    "blocker_id": "nanobot:CAPABILITY_UNKNOWN:tool.write_stdin",
+    "code": "CAPABILITY_UNKNOWN",
+    "target_id": "tool.write_stdin",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/write_stdin.json",
+        "sha256": "ada5bc9b02f7b4c9d674759133a7b727a1ab5a75beebe6ad964e4c266dc8f79e",
+        "pointer": "/capabilities/0"
+      }
+    ],
+    "required_action": "Provide an explicit execution contract and an isolated runner binding."
+  },
+  {
+    "blocker_id": "nanobot:CONVERSATION_BOUNDARY_IMPLEMENTATION_MISMATCH:chain.end_to_end",
+    "code": "CONVERSATION_BOUNDARY_IMPLEMENTATION_MISMATCH",
+    "target_id": "chain.end_to_end",
+    "reason": "Conversation prohibits internal modules used by the implementation; observation scope vs runtime boundary is unresolved.",
+    "source_refs": [
+      {
+        "path": "bundle/boundaries/conversation.json",
+        "sha256": "da130b645987906665e6b40579db73fbda8ceea9e5696769be6ad116d1c1e278",
+        "pointer": "/prohibited_module_ids"
+      },
+      {
+        "path": "sources/nanobot/nanobot.py",
+        "sha256": "2b78b3d1948fa82182e58ddb1645f648723fc98413bb4b93b6006edba40bc732",
+        "anchor": "response = await self._loop.process_direct("
+      },
+      {
+        "path": "sources/nanobot/agent/context.py",
+        "sha256": "9e87348a8678d225d12ae7a074038de3cd9095899e64726eda83b5b02f735128",
+        "anchor": "self.memory"
+      }
+    ],
+    "required_action": "Re-export explicit observation scope and execution boundary; do not assert zero internal calls."
+  },
+  {
+    "blocker_id": "nanobot:CRITICAL_CHAIN_NOT_DECLARED:agent.nanobot",
+    "code": "CRITICAL_CHAIN_NOT_DECLARED",
+    "target_id": "agent.nanobot",
+    "reason": "Only the conversation end_to_end chain is declared; no critical-link graph exists.",
+    "source_refs": [
+      {
+        "path": "bundle/agent.json",
+        "sha256": "eb801a4f1f4723a71799c2efc8de905410721346448a72cec464ee6cced30d2f",
+        "pointer": "/chain_refs"
+      }
+    ],
+    "required_action": "Declare critical chain nodes, edges, allowed modules/tools, branches and evidence."
+  },
+  {
+    "blocker_id": "nanobot:EXECUTION_UNKNOWN:module.channels",
+    "code": "EXECUTION_UNKNOWN",
+    "target_id": "module.channels",
+    "reason": "Implementation-derived hypothesis; snapshot execution remains unknown.",
+    "source_refs": [
+      {
+        "path": "bundle/modules/channels.json",
+        "sha256": "ca4fa5cd46fd88a61fd55667741e940032e6b7708342c908926cd7a0c58d0de6",
+        "pointer": "/capabilities"
+      }
+    ],
+    "required_action": "Confirm semantics and bind an isolated runner before execution."
+  },
+  {
+    "blocker_id": "nanobot:EXECUTION_UNKNOWN:module.dialogue",
+    "code": "EXECUTION_UNKNOWN",
+    "target_id": "module.dialogue",
+    "reason": "Implementation-derived hypothesis; snapshot execution remains unknown.",
+    "source_refs": [
+      {
+        "path": "bundle/modules/dialogue.json",
+        "sha256": "a66b5e1dc510803b938ec1e5720759279a440dbbee05b59872fa5d07eaebbf1e",
+        "pointer": "/capabilities"
+      }
+    ],
+    "required_action": "Confirm semantics and bind an isolated runner before execution."
+  },
+  {
+    "blocker_id": "nanobot:EXECUTION_UNKNOWN:module.mcp",
+    "code": "EXECUTION_UNKNOWN",
+    "target_id": "module.mcp",
+    "reason": "Implementation-derived hypothesis; snapshot execution remains unknown.",
+    "source_refs": [
+      {
+        "path": "bundle/modules/mcp.json",
+        "sha256": "c37aa7d448b48bd5e67eae309aedfafd0b90ba33110132b6e34b88229a9d53cf",
+        "pointer": "/capabilities"
+      }
+    ],
+    "required_action": "Confirm semantics and bind an isolated runner before execution."
+  },
+  {
+    "blocker_id": "nanobot:EXECUTION_UNKNOWN:module.memory",
+    "code": "EXECUTION_UNKNOWN",
+    "target_id": "module.memory",
+    "reason": "Implementation-derived hypothesis; snapshot execution remains unknown.",
+    "source_refs": [
+      {
+        "path": "bundle/modules/memory.json",
+        "sha256": "a97c007d88e30ccb7605f41aac141da9ae45f1147038049854dd8809bda55823",
+        "pointer": "/capabilities"
+      }
+    ],
+    "required_action": "Confirm semantics and bind an isolated runner before execution."
+  },
+  {
+    "blocker_id": "nanobot:EXECUTION_UNKNOWN:module.providers",
+    "code": "EXECUTION_UNKNOWN",
+    "target_id": "module.providers",
+    "reason": "Implementation-derived hypothesis; snapshot execution remains unknown.",
+    "source_refs": [
+      {
+        "path": "bundle/modules/providers.json",
+        "sha256": "80573e3800d469c6bb508147e9d4f46bbaed7970aa52b0f6ee410e7bdff7dcc9",
+        "pointer": "/capabilities"
+      }
+    ],
+    "required_action": "Confirm semantics and bind an isolated runner before execution."
+  },
+  {
+    "blocker_id": "nanobot:EXECUTION_UNKNOWN:module.skills",
+    "code": "EXECUTION_UNKNOWN",
+    "target_id": "module.skills",
+    "reason": "Implementation-derived hypothesis; snapshot execution remains unknown.",
+    "source_refs": [
+      {
+        "path": "bundle/modules/skills.json",
+        "sha256": "c4cd1bbabb59be915c434040856d0b75126108fb0c88e2f1e94181735e5b9e8f",
+        "pointer": "/capabilities"
+      }
+    ],
+    "required_action": "Confirm semantics and bind an isolated runner before execution."
+  },
+  {
+    "blocker_id": "nanobot:EXECUTION_UNKNOWN:module.tools",
+    "code": "EXECUTION_UNKNOWN",
+    "target_id": "module.tools",
+    "reason": "Implementation-derived hypothesis; snapshot execution remains unknown.",
+    "source_refs": [
+      {
+        "path": "bundle/modules/tools.json",
+        "sha256": "db501ecccbce372fb58acf470a1da75ed5345fc0df355c2f7a4942eb9999d30c",
+        "pointer": "/capabilities"
+      }
+    ],
+    "required_action": "Confirm semantics and bind an isolated runner before execution."
+  },
+  {
+    "blocker_id": "nanobot:EXECUTION_UNKNOWN:tool.apply_patch",
+    "code": "EXECUTION_UNKNOWN",
+    "target_id": "tool.apply_patch",
+    "reason": "Implementation-derived hypothesis; snapshot execution remains unknown.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/apply_patch.json",
+        "sha256": "446c4d028306fd336ba2fef698e2e9aaf2f2983c5800e2908aa6aed47c8dd2b5",
+        "pointer": "/capabilities"
+      }
+    ],
+    "required_action": "Confirm semantics and bind an isolated runner before execution."
+  },
+  {
+    "blocker_id": "nanobot:EXECUTION_UNKNOWN:tool.create_goal",
+    "code": "EXECUTION_UNKNOWN",
+    "target_id": "tool.create_goal",
+    "reason": "Implementation-derived hypothesis; snapshot execution remains unknown.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/create_goal.json",
+        "sha256": "eb7f5acc63d23b39ade11486ccb1bd29aae7cbc212e9e05e726b93e40c44b926",
+        "pointer": "/capabilities"
+      }
+    ],
+    "required_action": "Confirm semantics and bind an isolated runner before execution."
+  },
+  {
+    "blocker_id": "nanobot:EXECUTION_UNKNOWN:tool.cron",
+    "code": "EXECUTION_UNKNOWN",
+    "target_id": "tool.cron",
+    "reason": "Implementation-derived hypothesis; snapshot execution remains unknown.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/cron.json",
+        "sha256": "451ab0cd03736eb30b799c942aa70c4735bfcd843a9eca0a5c1018ec9648a5d4",
+        "pointer": "/capabilities"
+      }
+    ],
+    "required_action": "Confirm semantics and bind an isolated runner before execution."
+  },
+  {
+    "blocker_id": "nanobot:EXECUTION_UNKNOWN:tool.edit_file",
+    "code": "EXECUTION_UNKNOWN",
+    "target_id": "tool.edit_file",
+    "reason": "Implementation-derived hypothesis; snapshot execution remains unknown.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/edit_file.json",
+        "sha256": "cbbc87bf7fdaa84f8d24e57c73f18f3e4edb2a7c0e1f960034b712490b9dbd35",
+        "pointer": "/capabilities"
+      }
+    ],
+    "required_action": "Confirm semantics and bind an isolated runner before execution."
+  },
+  {
+    "blocker_id": "nanobot:EXECUTION_UNKNOWN:tool.exec",
+    "code": "EXECUTION_UNKNOWN",
+    "target_id": "tool.exec",
+    "reason": "Implementation-derived hypothesis; snapshot execution remains unknown.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/exec.json",
+        "sha256": "ff24c37da0512870289d2ffdaf8a1feca2e88d113b6f1ad9e16a8a965a7bf34f",
+        "pointer": "/capabilities"
+      }
+    ],
+    "required_action": "Confirm semantics and bind an isolated runner before execution."
+  },
+  {
+    "blocker_id": "nanobot:EXECUTION_UNKNOWN:tool.find_files",
+    "code": "EXECUTION_UNKNOWN",
+    "target_id": "tool.find_files",
+    "reason": "Implementation-derived hypothesis; snapshot execution remains unknown.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/find_files.json",
+        "sha256": "b480ba7ce1695ff89d2647042c6c19fefaecafe6eefc032adec3d368410cbab5",
+        "pointer": "/capabilities"
+      }
+    ],
+    "required_action": "Confirm semantics and bind an isolated runner before execution."
+  },
+  {
+    "blocker_id": "nanobot:EXECUTION_UNKNOWN:tool.grep",
+    "code": "EXECUTION_UNKNOWN",
+    "target_id": "tool.grep",
+    "reason": "Implementation-derived hypothesis; snapshot execution remains unknown.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/grep.json",
+        "sha256": "30278dd69228fc50d12eb2ba06cd887e5e50b95d49d74bfbb5ed886a7e7cd5fe",
+        "pointer": "/capabilities"
+      }
+    ],
+    "required_action": "Confirm semantics and bind an isolated runner before execution."
+  },
+  {
+    "blocker_id": "nanobot:EXECUTION_UNKNOWN:tool.list_dir",
+    "code": "EXECUTION_UNKNOWN",
+    "target_id": "tool.list_dir",
+    "reason": "Implementation-derived hypothesis; snapshot execution remains unknown.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/list_dir.json",
+        "sha256": "17b1d33e0b8b1d4362ab0af6141c98ffe9170b4273b1c305996748808ade48e2",
+        "pointer": "/capabilities"
+      }
+    ],
+    "required_action": "Confirm semantics and bind an isolated runner before execution."
+  },
+  {
+    "blocker_id": "nanobot:EXECUTION_UNKNOWN:tool.list_exec_sessions",
+    "code": "EXECUTION_UNKNOWN",
+    "target_id": "tool.list_exec_sessions",
+    "reason": "Implementation-derived hypothesis; snapshot execution remains unknown.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/list_exec_sessions.json",
+        "sha256": "a3f77c5b96c4210edc3af517e3e03ea5bc44f05b3bff116998547f9feea14149",
+        "pointer": "/capabilities"
+      }
+    ],
+    "required_action": "Confirm semantics and bind an isolated runner before execution."
+  },
+  {
+    "blocker_id": "nanobot:EXECUTION_UNKNOWN:tool.list_sessions",
+    "code": "EXECUTION_UNKNOWN",
+    "target_id": "tool.list_sessions",
+    "reason": "Implementation-derived hypothesis; snapshot execution remains unknown.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/list_sessions.json",
+        "sha256": "eab04d50326dd91a787bb08b3aebc81a950ed045074c4ed5485e3f95b4d7d2a8",
+        "pointer": "/capabilities"
+      }
+    ],
+    "required_action": "Confirm semantics and bind an isolated runner before execution."
+  },
+  {
+    "blocker_id": "nanobot:EXECUTION_UNKNOWN:tool.message",
+    "code": "EXECUTION_UNKNOWN",
+    "target_id": "tool.message",
+    "reason": "Implementation-derived hypothesis; snapshot execution remains unknown.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/message.json",
+        "sha256": "91c8a1d1f9977ac1ce569ef8f98870e8818c1e84302cb1f51bb75eb57e239670",
+        "pointer": "/capabilities"
+      }
+    ],
+    "required_action": "Confirm semantics and bind an isolated runner before execution."
+  },
+  {
+    "blocker_id": "nanobot:EXECUTION_UNKNOWN:tool.read_file",
+    "code": "EXECUTION_UNKNOWN",
+    "target_id": "tool.read_file",
+    "reason": "Implementation-derived hypothesis; snapshot execution remains unknown.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/read_file.json",
+        "sha256": "9df2b61fe605a1eabc54fa98a0aeaf65923637f3fc9bbe5a5254cc75d42319ed",
+        "pointer": "/capabilities"
+      }
+    ],
+    "required_action": "Confirm semantics and bind an isolated runner before execution."
+  },
+  {
+    "blocker_id": "nanobot:EXECUTION_UNKNOWN:tool.read_session",
+    "code": "EXECUTION_UNKNOWN",
+    "target_id": "tool.read_session",
+    "reason": "Implementation-derived hypothesis; snapshot execution remains unknown.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/read_session.json",
+        "sha256": "eaa707503fd9ee29a57d0fc49536f3ce183df06eb7e52d5539f75eb394c9509b",
+        "pointer": "/capabilities"
+      }
+    ],
+    "required_action": "Confirm semantics and bind an isolated runner before execution."
+  },
+  {
+    "blocker_id": "nanobot:EXECUTION_UNKNOWN:tool.search_sessions",
+    "code": "EXECUTION_UNKNOWN",
+    "target_id": "tool.search_sessions",
+    "reason": "Implementation-derived hypothesis; snapshot execution remains unknown.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/search_sessions.json",
+        "sha256": "4300331c18fac99cd8289e18d48f58cd2053755e6720ee4850a5a435cb7498c3",
+        "pointer": "/capabilities"
+      }
+    ],
+    "required_action": "Confirm semantics and bind an isolated runner before execution."
+  },
+  {
+    "blocker_id": "nanobot:EXECUTION_UNKNOWN:tool.send_session_message",
+    "code": "EXECUTION_UNKNOWN",
+    "target_id": "tool.send_session_message",
+    "reason": "Implementation-derived hypothesis; snapshot execution remains unknown.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/send_session_message.json",
+        "sha256": "3dd083ee1b09f8fe98825880951a16c43e13877690e1161a887c55909690a951",
+        "pointer": "/capabilities"
+      }
+    ],
+    "required_action": "Confirm semantics and bind an isolated runner before execution."
+  },
+  {
+    "blocker_id": "nanobot:EXECUTION_UNKNOWN:tool.spawn",
+    "code": "EXECUTION_UNKNOWN",
+    "target_id": "tool.spawn",
+    "reason": "Implementation-derived hypothesis; snapshot execution remains unknown.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/spawn.json",
+        "sha256": "8d4caf952420391dfabb60f3736018fbab2d7b910fd0316f81f77c2c0ed746f9",
+        "pointer": "/capabilities"
+      }
+    ],
+    "required_action": "Confirm semantics and bind an isolated runner before execution."
+  },
+  {
+    "blocker_id": "nanobot:EXECUTION_UNKNOWN:tool.update_goal",
+    "code": "EXECUTION_UNKNOWN",
+    "target_id": "tool.update_goal",
+    "reason": "Implementation-derived hypothesis; snapshot execution remains unknown.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/update_goal.json",
+        "sha256": "71096c2e0d6f1cee3fa80a358f3d331da374605c4edb8adecdd4f7c6ee16e43a",
+        "pointer": "/capabilities"
+      }
+    ],
+    "required_action": "Confirm semantics and bind an isolated runner before execution."
+  },
+  {
+    "blocker_id": "nanobot:EXECUTION_UNKNOWN:tool.web_fetch",
+    "code": "EXECUTION_UNKNOWN",
+    "target_id": "tool.web_fetch",
+    "reason": "Implementation-derived hypothesis; snapshot execution remains unknown.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/web_fetch.json",
+        "sha256": "a2a4d5c77a1c67f0a7d69116830cf787aa4732e8839348e6b59ae145945244a9",
+        "pointer": "/capabilities"
+      }
+    ],
+    "required_action": "Confirm semantics and bind an isolated runner before execution."
+  },
+  {
+    "blocker_id": "nanobot:EXECUTION_UNKNOWN:tool.web_search",
+    "code": "EXECUTION_UNKNOWN",
+    "target_id": "tool.web_search",
+    "reason": "Implementation-derived hypothesis; snapshot execution remains unknown.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/web_search.json",
+        "sha256": "d058873a9329292fc388531b45b10f5d8bc28e6129880da91fa36246608fc2bb",
+        "pointer": "/capabilities"
+      }
+    ],
+    "required_action": "Confirm semantics and bind an isolated runner before execution."
+  },
+  {
+    "blocker_id": "nanobot:EXECUTION_UNKNOWN:tool.write_file",
+    "code": "EXECUTION_UNKNOWN",
+    "target_id": "tool.write_file",
+    "reason": "Implementation-derived hypothesis; snapshot execution remains unknown.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/write_file.json",
+        "sha256": "a9ce405ef1196df56f1b9dc5b37eb0b65d284fc63c15701fd5a3a49a876b25e9",
+        "pointer": "/capabilities"
+      }
+    ],
+    "required_action": "Confirm semantics and bind an isolated runner before execution."
+  },
+  {
+    "blocker_id": "nanobot:EXECUTION_UNKNOWN:tool.write_stdin",
+    "code": "EXECUTION_UNKNOWN",
+    "target_id": "tool.write_stdin",
+    "reason": "Implementation-derived hypothesis; snapshot execution remains unknown.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/write_stdin.json",
+        "sha256": "ada5bc9b02f7b4c9d674759133a7b727a1ab5a75beebe6ad964e4c266dc8f79e",
+        "pointer": "/capabilities"
+      }
+    ],
+    "required_action": "Confirm semantics and bind an isolated runner before execution."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_BATCH_BEHAVIOR:tool.apply_patch",
+    "code": "INCOMPLETE_BATCH_BEHAVIOR",
+    "target_id": "tool.apply_patch",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/apply_patch.json",
+        "sha256": "446c4d028306fd336ba2fef698e2e9aaf2f2983c5800e2908aa6aed47c8dd2b5",
+        "pointer": "/batch_behavior"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_BATCH_BEHAVIOR:tool.create_goal",
+    "code": "INCOMPLETE_BATCH_BEHAVIOR",
+    "target_id": "tool.create_goal",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/create_goal.json",
+        "sha256": "eb7f5acc63d23b39ade11486ccb1bd29aae7cbc212e9e05e726b93e40c44b926",
+        "pointer": "/batch_behavior"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_BATCH_BEHAVIOR:tool.cron",
+    "code": "INCOMPLETE_BATCH_BEHAVIOR",
+    "target_id": "tool.cron",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/cron.json",
+        "sha256": "451ab0cd03736eb30b799c942aa70c4735bfcd843a9eca0a5c1018ec9648a5d4",
+        "pointer": "/batch_behavior"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_BATCH_BEHAVIOR:tool.edit_file",
+    "code": "INCOMPLETE_BATCH_BEHAVIOR",
+    "target_id": "tool.edit_file",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/edit_file.json",
+        "sha256": "cbbc87bf7fdaa84f8d24e57c73f18f3e4edb2a7c0e1f960034b712490b9dbd35",
+        "pointer": "/batch_behavior"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_BATCH_BEHAVIOR:tool.exec",
+    "code": "INCOMPLETE_BATCH_BEHAVIOR",
+    "target_id": "tool.exec",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/exec.json",
+        "sha256": "ff24c37da0512870289d2ffdaf8a1feca2e88d113b6f1ad9e16a8a965a7bf34f",
+        "pointer": "/batch_behavior"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_BATCH_BEHAVIOR:tool.find_files",
+    "code": "INCOMPLETE_BATCH_BEHAVIOR",
+    "target_id": "tool.find_files",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/find_files.json",
+        "sha256": "b480ba7ce1695ff89d2647042c6c19fefaecafe6eefc032adec3d368410cbab5",
+        "pointer": "/batch_behavior"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_BATCH_BEHAVIOR:tool.grep",
+    "code": "INCOMPLETE_BATCH_BEHAVIOR",
+    "target_id": "tool.grep",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/grep.json",
+        "sha256": "30278dd69228fc50d12eb2ba06cd887e5e50b95d49d74bfbb5ed886a7e7cd5fe",
+        "pointer": "/batch_behavior"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_BATCH_BEHAVIOR:tool.list_dir",
+    "code": "INCOMPLETE_BATCH_BEHAVIOR",
+    "target_id": "tool.list_dir",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/list_dir.json",
+        "sha256": "17b1d33e0b8b1d4362ab0af6141c98ffe9170b4273b1c305996748808ade48e2",
+        "pointer": "/batch_behavior"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_BATCH_BEHAVIOR:tool.list_exec_sessions",
+    "code": "INCOMPLETE_BATCH_BEHAVIOR",
+    "target_id": "tool.list_exec_sessions",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/list_exec_sessions.json",
+        "sha256": "a3f77c5b96c4210edc3af517e3e03ea5bc44f05b3bff116998547f9feea14149",
+        "pointer": "/batch_behavior"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_BATCH_BEHAVIOR:tool.list_sessions",
+    "code": "INCOMPLETE_BATCH_BEHAVIOR",
+    "target_id": "tool.list_sessions",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/list_sessions.json",
+        "sha256": "eab04d50326dd91a787bb08b3aebc81a950ed045074c4ed5485e3f95b4d7d2a8",
+        "pointer": "/batch_behavior"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_BATCH_BEHAVIOR:tool.message",
+    "code": "INCOMPLETE_BATCH_BEHAVIOR",
+    "target_id": "tool.message",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/message.json",
+        "sha256": "91c8a1d1f9977ac1ce569ef8f98870e8818c1e84302cb1f51bb75eb57e239670",
+        "pointer": "/batch_behavior"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_BATCH_BEHAVIOR:tool.read_file",
+    "code": "INCOMPLETE_BATCH_BEHAVIOR",
+    "target_id": "tool.read_file",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/read_file.json",
+        "sha256": "9df2b61fe605a1eabc54fa98a0aeaf65923637f3fc9bbe5a5254cc75d42319ed",
+        "pointer": "/batch_behavior"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_BATCH_BEHAVIOR:tool.read_session",
+    "code": "INCOMPLETE_BATCH_BEHAVIOR",
+    "target_id": "tool.read_session",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/read_session.json",
+        "sha256": "eaa707503fd9ee29a57d0fc49536f3ce183df06eb7e52d5539f75eb394c9509b",
+        "pointer": "/batch_behavior"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_BATCH_BEHAVIOR:tool.search_sessions",
+    "code": "INCOMPLETE_BATCH_BEHAVIOR",
+    "target_id": "tool.search_sessions",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/search_sessions.json",
+        "sha256": "4300331c18fac99cd8289e18d48f58cd2053755e6720ee4850a5a435cb7498c3",
+        "pointer": "/batch_behavior"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_BATCH_BEHAVIOR:tool.send_session_message",
+    "code": "INCOMPLETE_BATCH_BEHAVIOR",
+    "target_id": "tool.send_session_message",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/send_session_message.json",
+        "sha256": "3dd083ee1b09f8fe98825880951a16c43e13877690e1161a887c55909690a951",
+        "pointer": "/batch_behavior"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_BATCH_BEHAVIOR:tool.spawn",
+    "code": "INCOMPLETE_BATCH_BEHAVIOR",
+    "target_id": "tool.spawn",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/spawn.json",
+        "sha256": "8d4caf952420391dfabb60f3736018fbab2d7b910fd0316f81f77c2c0ed746f9",
+        "pointer": "/batch_behavior"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_BATCH_BEHAVIOR:tool.update_goal",
+    "code": "INCOMPLETE_BATCH_BEHAVIOR",
+    "target_id": "tool.update_goal",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/update_goal.json",
+        "sha256": "71096c2e0d6f1cee3fa80a358f3d331da374605c4edb8adecdd4f7c6ee16e43a",
+        "pointer": "/batch_behavior"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_BATCH_BEHAVIOR:tool.web_fetch",
+    "code": "INCOMPLETE_BATCH_BEHAVIOR",
+    "target_id": "tool.web_fetch",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/web_fetch.json",
+        "sha256": "a2a4d5c77a1c67f0a7d69116830cf787aa4732e8839348e6b59ae145945244a9",
+        "pointer": "/batch_behavior"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_BATCH_BEHAVIOR:tool.web_search",
+    "code": "INCOMPLETE_BATCH_BEHAVIOR",
+    "target_id": "tool.web_search",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/web_search.json",
+        "sha256": "d058873a9329292fc388531b45b10f5d8bc28e6129880da91fa36246608fc2bb",
+        "pointer": "/batch_behavior"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_BATCH_BEHAVIOR:tool.write_file",
+    "code": "INCOMPLETE_BATCH_BEHAVIOR",
+    "target_id": "tool.write_file",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/write_file.json",
+        "sha256": "a9ce405ef1196df56f1b9dc5b37eb0b65d284fc63c15701fd5a3a49a876b25e9",
+        "pointer": "/batch_behavior"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_BATCH_BEHAVIOR:tool.write_stdin",
+    "code": "INCOMPLETE_BATCH_BEHAVIOR",
+    "target_id": "tool.write_stdin",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/write_stdin.json",
+        "sha256": "ada5bc9b02f7b4c9d674759133a7b727a1ab5a75beebe6ad964e4c266dc8f79e",
+        "pointer": "/batch_behavior"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_IDEMPOTENCY_RULES:tool.apply_patch",
+    "code": "INCOMPLETE_IDEMPOTENCY_RULES",
+    "target_id": "tool.apply_patch",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/apply_patch.json",
+        "sha256": "446c4d028306fd336ba2fef698e2e9aaf2f2983c5800e2908aa6aed47c8dd2b5",
+        "pointer": "/idempotency_rules"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_IDEMPOTENCY_RULES:tool.create_goal",
+    "code": "INCOMPLETE_IDEMPOTENCY_RULES",
+    "target_id": "tool.create_goal",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/create_goal.json",
+        "sha256": "eb7f5acc63d23b39ade11486ccb1bd29aae7cbc212e9e05e726b93e40c44b926",
+        "pointer": "/idempotency_rules"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_IDEMPOTENCY_RULES:tool.cron",
+    "code": "INCOMPLETE_IDEMPOTENCY_RULES",
+    "target_id": "tool.cron",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/cron.json",
+        "sha256": "451ab0cd03736eb30b799c942aa70c4735bfcd843a9eca0a5c1018ec9648a5d4",
+        "pointer": "/idempotency_rules"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_IDEMPOTENCY_RULES:tool.edit_file",
+    "code": "INCOMPLETE_IDEMPOTENCY_RULES",
+    "target_id": "tool.edit_file",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/edit_file.json",
+        "sha256": "cbbc87bf7fdaa84f8d24e57c73f18f3e4edb2a7c0e1f960034b712490b9dbd35",
+        "pointer": "/idempotency_rules"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_IDEMPOTENCY_RULES:tool.exec",
+    "code": "INCOMPLETE_IDEMPOTENCY_RULES",
+    "target_id": "tool.exec",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/exec.json",
+        "sha256": "ff24c37da0512870289d2ffdaf8a1feca2e88d113b6f1ad9e16a8a965a7bf34f",
+        "pointer": "/idempotency_rules"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_IDEMPOTENCY_RULES:tool.find_files",
+    "code": "INCOMPLETE_IDEMPOTENCY_RULES",
+    "target_id": "tool.find_files",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/find_files.json",
+        "sha256": "b480ba7ce1695ff89d2647042c6c19fefaecafe6eefc032adec3d368410cbab5",
+        "pointer": "/idempotency_rules"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_IDEMPOTENCY_RULES:tool.grep",
+    "code": "INCOMPLETE_IDEMPOTENCY_RULES",
+    "target_id": "tool.grep",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/grep.json",
+        "sha256": "30278dd69228fc50d12eb2ba06cd887e5e50b95d49d74bfbb5ed886a7e7cd5fe",
+        "pointer": "/idempotency_rules"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_IDEMPOTENCY_RULES:tool.list_dir",
+    "code": "INCOMPLETE_IDEMPOTENCY_RULES",
+    "target_id": "tool.list_dir",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/list_dir.json",
+        "sha256": "17b1d33e0b8b1d4362ab0af6141c98ffe9170b4273b1c305996748808ade48e2",
+        "pointer": "/idempotency_rules"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_IDEMPOTENCY_RULES:tool.list_exec_sessions",
+    "code": "INCOMPLETE_IDEMPOTENCY_RULES",
+    "target_id": "tool.list_exec_sessions",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/list_exec_sessions.json",
+        "sha256": "a3f77c5b96c4210edc3af517e3e03ea5bc44f05b3bff116998547f9feea14149",
+        "pointer": "/idempotency_rules"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_IDEMPOTENCY_RULES:tool.list_sessions",
+    "code": "INCOMPLETE_IDEMPOTENCY_RULES",
+    "target_id": "tool.list_sessions",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/list_sessions.json",
+        "sha256": "eab04d50326dd91a787bb08b3aebc81a950ed045074c4ed5485e3f95b4d7d2a8",
+        "pointer": "/idempotency_rules"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_IDEMPOTENCY_RULES:tool.message",
+    "code": "INCOMPLETE_IDEMPOTENCY_RULES",
+    "target_id": "tool.message",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/message.json",
+        "sha256": "91c8a1d1f9977ac1ce569ef8f98870e8818c1e84302cb1f51bb75eb57e239670",
+        "pointer": "/idempotency_rules"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_IDEMPOTENCY_RULES:tool.read_file",
+    "code": "INCOMPLETE_IDEMPOTENCY_RULES",
+    "target_id": "tool.read_file",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/read_file.json",
+        "sha256": "9df2b61fe605a1eabc54fa98a0aeaf65923637f3fc9bbe5a5254cc75d42319ed",
+        "pointer": "/idempotency_rules"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_IDEMPOTENCY_RULES:tool.read_session",
+    "code": "INCOMPLETE_IDEMPOTENCY_RULES",
+    "target_id": "tool.read_session",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/read_session.json",
+        "sha256": "eaa707503fd9ee29a57d0fc49536f3ce183df06eb7e52d5539f75eb394c9509b",
+        "pointer": "/idempotency_rules"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_IDEMPOTENCY_RULES:tool.search_sessions",
+    "code": "INCOMPLETE_IDEMPOTENCY_RULES",
+    "target_id": "tool.search_sessions",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/search_sessions.json",
+        "sha256": "4300331c18fac99cd8289e18d48f58cd2053755e6720ee4850a5a435cb7498c3",
+        "pointer": "/idempotency_rules"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_IDEMPOTENCY_RULES:tool.send_session_message",
+    "code": "INCOMPLETE_IDEMPOTENCY_RULES",
+    "target_id": "tool.send_session_message",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/send_session_message.json",
+        "sha256": "3dd083ee1b09f8fe98825880951a16c43e13877690e1161a887c55909690a951",
+        "pointer": "/idempotency_rules"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_IDEMPOTENCY_RULES:tool.spawn",
+    "code": "INCOMPLETE_IDEMPOTENCY_RULES",
+    "target_id": "tool.spawn",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/spawn.json",
+        "sha256": "8d4caf952420391dfabb60f3736018fbab2d7b910fd0316f81f77c2c0ed746f9",
+        "pointer": "/idempotency_rules"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_IDEMPOTENCY_RULES:tool.update_goal",
+    "code": "INCOMPLETE_IDEMPOTENCY_RULES",
+    "target_id": "tool.update_goal",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/update_goal.json",
+        "sha256": "71096c2e0d6f1cee3fa80a358f3d331da374605c4edb8adecdd4f7c6ee16e43a",
+        "pointer": "/idempotency_rules"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_IDEMPOTENCY_RULES:tool.web_fetch",
+    "code": "INCOMPLETE_IDEMPOTENCY_RULES",
+    "target_id": "tool.web_fetch",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/web_fetch.json",
+        "sha256": "a2a4d5c77a1c67f0a7d69116830cf787aa4732e8839348e6b59ae145945244a9",
+        "pointer": "/idempotency_rules"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_IDEMPOTENCY_RULES:tool.web_search",
+    "code": "INCOMPLETE_IDEMPOTENCY_RULES",
+    "target_id": "tool.web_search",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/web_search.json",
+        "sha256": "d058873a9329292fc388531b45b10f5d8bc28e6129880da91fa36246608fc2bb",
+        "pointer": "/idempotency_rules"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_IDEMPOTENCY_RULES:tool.write_file",
+    "code": "INCOMPLETE_IDEMPOTENCY_RULES",
+    "target_id": "tool.write_file",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/write_file.json",
+        "sha256": "a9ce405ef1196df56f1b9dc5b37eb0b65d284fc63c15701fd5a3a49a876b25e9",
+        "pointer": "/idempotency_rules"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_IDEMPOTENCY_RULES:tool.write_stdin",
+    "code": "INCOMPLETE_IDEMPOTENCY_RULES",
+    "target_id": "tool.write_stdin",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/write_stdin.json",
+        "sha256": "ada5bc9b02f7b4c9d674759133a7b727a1ab5a75beebe6ad964e4c266dc8f79e",
+        "pointer": "/idempotency_rules"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_PERMISSION_REQUIREMENTS:tool.apply_patch",
+    "code": "INCOMPLETE_PERMISSION_REQUIREMENTS",
+    "target_id": "tool.apply_patch",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/apply_patch.json",
+        "sha256": "446c4d028306fd336ba2fef698e2e9aaf2f2983c5800e2908aa6aed47c8dd2b5",
+        "pointer": "/permission_requirements"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_PERMISSION_REQUIREMENTS:tool.create_goal",
+    "code": "INCOMPLETE_PERMISSION_REQUIREMENTS",
+    "target_id": "tool.create_goal",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/create_goal.json",
+        "sha256": "eb7f5acc63d23b39ade11486ccb1bd29aae7cbc212e9e05e726b93e40c44b926",
+        "pointer": "/permission_requirements"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_PERMISSION_REQUIREMENTS:tool.cron",
+    "code": "INCOMPLETE_PERMISSION_REQUIREMENTS",
+    "target_id": "tool.cron",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/cron.json",
+        "sha256": "451ab0cd03736eb30b799c942aa70c4735bfcd843a9eca0a5c1018ec9648a5d4",
+        "pointer": "/permission_requirements"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_PERMISSION_REQUIREMENTS:tool.edit_file",
+    "code": "INCOMPLETE_PERMISSION_REQUIREMENTS",
+    "target_id": "tool.edit_file",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/edit_file.json",
+        "sha256": "cbbc87bf7fdaa84f8d24e57c73f18f3e4edb2a7c0e1f960034b712490b9dbd35",
+        "pointer": "/permission_requirements"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_PERMISSION_REQUIREMENTS:tool.exec",
+    "code": "INCOMPLETE_PERMISSION_REQUIREMENTS",
+    "target_id": "tool.exec",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/exec.json",
+        "sha256": "ff24c37da0512870289d2ffdaf8a1feca2e88d113b6f1ad9e16a8a965a7bf34f",
+        "pointer": "/permission_requirements"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_PERMISSION_REQUIREMENTS:tool.find_files",
+    "code": "INCOMPLETE_PERMISSION_REQUIREMENTS",
+    "target_id": "tool.find_files",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/find_files.json",
+        "sha256": "b480ba7ce1695ff89d2647042c6c19fefaecafe6eefc032adec3d368410cbab5",
+        "pointer": "/permission_requirements"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_PERMISSION_REQUIREMENTS:tool.grep",
+    "code": "INCOMPLETE_PERMISSION_REQUIREMENTS",
+    "target_id": "tool.grep",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/grep.json",
+        "sha256": "30278dd69228fc50d12eb2ba06cd887e5e50b95d49d74bfbb5ed886a7e7cd5fe",
+        "pointer": "/permission_requirements"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_PERMISSION_REQUIREMENTS:tool.list_dir",
+    "code": "INCOMPLETE_PERMISSION_REQUIREMENTS",
+    "target_id": "tool.list_dir",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/list_dir.json",
+        "sha256": "17b1d33e0b8b1d4362ab0af6141c98ffe9170b4273b1c305996748808ade48e2",
+        "pointer": "/permission_requirements"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_PERMISSION_REQUIREMENTS:tool.list_exec_sessions",
+    "code": "INCOMPLETE_PERMISSION_REQUIREMENTS",
+    "target_id": "tool.list_exec_sessions",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/list_exec_sessions.json",
+        "sha256": "a3f77c5b96c4210edc3af517e3e03ea5bc44f05b3bff116998547f9feea14149",
+        "pointer": "/permission_requirements"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_PERMISSION_REQUIREMENTS:tool.list_sessions",
+    "code": "INCOMPLETE_PERMISSION_REQUIREMENTS",
+    "target_id": "tool.list_sessions",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/list_sessions.json",
+        "sha256": "eab04d50326dd91a787bb08b3aebc81a950ed045074c4ed5485e3f95b4d7d2a8",
+        "pointer": "/permission_requirements"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_PERMISSION_REQUIREMENTS:tool.message",
+    "code": "INCOMPLETE_PERMISSION_REQUIREMENTS",
+    "target_id": "tool.message",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/message.json",
+        "sha256": "91c8a1d1f9977ac1ce569ef8f98870e8818c1e84302cb1f51bb75eb57e239670",
+        "pointer": "/permission_requirements"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_PERMISSION_REQUIREMENTS:tool.read_file",
+    "code": "INCOMPLETE_PERMISSION_REQUIREMENTS",
+    "target_id": "tool.read_file",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/read_file.json",
+        "sha256": "9df2b61fe605a1eabc54fa98a0aeaf65923637f3fc9bbe5a5254cc75d42319ed",
+        "pointer": "/permission_requirements"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_PERMISSION_REQUIREMENTS:tool.read_session",
+    "code": "INCOMPLETE_PERMISSION_REQUIREMENTS",
+    "target_id": "tool.read_session",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/read_session.json",
+        "sha256": "eaa707503fd9ee29a57d0fc49536f3ce183df06eb7e52d5539f75eb394c9509b",
+        "pointer": "/permission_requirements"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_PERMISSION_REQUIREMENTS:tool.search_sessions",
+    "code": "INCOMPLETE_PERMISSION_REQUIREMENTS",
+    "target_id": "tool.search_sessions",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/search_sessions.json",
+        "sha256": "4300331c18fac99cd8289e18d48f58cd2053755e6720ee4850a5a435cb7498c3",
+        "pointer": "/permission_requirements"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_PERMISSION_REQUIREMENTS:tool.send_session_message",
+    "code": "INCOMPLETE_PERMISSION_REQUIREMENTS",
+    "target_id": "tool.send_session_message",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/send_session_message.json",
+        "sha256": "3dd083ee1b09f8fe98825880951a16c43e13877690e1161a887c55909690a951",
+        "pointer": "/permission_requirements"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_PERMISSION_REQUIREMENTS:tool.spawn",
+    "code": "INCOMPLETE_PERMISSION_REQUIREMENTS",
+    "target_id": "tool.spawn",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/spawn.json",
+        "sha256": "8d4caf952420391dfabb60f3736018fbab2d7b910fd0316f81f77c2c0ed746f9",
+        "pointer": "/permission_requirements"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_PERMISSION_REQUIREMENTS:tool.update_goal",
+    "code": "INCOMPLETE_PERMISSION_REQUIREMENTS",
+    "target_id": "tool.update_goal",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/update_goal.json",
+        "sha256": "71096c2e0d6f1cee3fa80a358f3d331da374605c4edb8adecdd4f7c6ee16e43a",
+        "pointer": "/permission_requirements"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_PERMISSION_REQUIREMENTS:tool.web_fetch",
+    "code": "INCOMPLETE_PERMISSION_REQUIREMENTS",
+    "target_id": "tool.web_fetch",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/web_fetch.json",
+        "sha256": "a2a4d5c77a1c67f0a7d69116830cf787aa4732e8839348e6b59ae145945244a9",
+        "pointer": "/permission_requirements"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_PERMISSION_REQUIREMENTS:tool.web_search",
+    "code": "INCOMPLETE_PERMISSION_REQUIREMENTS",
+    "target_id": "tool.web_search",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/web_search.json",
+        "sha256": "d058873a9329292fc388531b45b10f5d8bc28e6129880da91fa36246608fc2bb",
+        "pointer": "/permission_requirements"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_PERMISSION_REQUIREMENTS:tool.write_file",
+    "code": "INCOMPLETE_PERMISSION_REQUIREMENTS",
+    "target_id": "tool.write_file",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/write_file.json",
+        "sha256": "a9ce405ef1196df56f1b9dc5b37eb0b65d284fc63c15701fd5a3a49a876b25e9",
+        "pointer": "/permission_requirements"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_PERMISSION_REQUIREMENTS:tool.write_stdin",
+    "code": "INCOMPLETE_PERMISSION_REQUIREMENTS",
+    "target_id": "tool.write_stdin",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/write_stdin.json",
+        "sha256": "ada5bc9b02f7b4c9d674759133a7b727a1ab5a75beebe6ad964e4c266dc8f79e",
+        "pointer": "/permission_requirements"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_RESULT_PROTOCOLS:tool.apply_patch",
+    "code": "INCOMPLETE_RESULT_PROTOCOLS",
+    "target_id": "tool.apply_patch",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/apply_patch.json",
+        "sha256": "446c4d028306fd336ba2fef698e2e9aaf2f2983c5800e2908aa6aed47c8dd2b5",
+        "pointer": "/result_protocols"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_RESULT_PROTOCOLS:tool.create_goal",
+    "code": "INCOMPLETE_RESULT_PROTOCOLS",
+    "target_id": "tool.create_goal",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/create_goal.json",
+        "sha256": "eb7f5acc63d23b39ade11486ccb1bd29aae7cbc212e9e05e726b93e40c44b926",
+        "pointer": "/result_protocols"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_RESULT_PROTOCOLS:tool.cron",
+    "code": "INCOMPLETE_RESULT_PROTOCOLS",
+    "target_id": "tool.cron",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/cron.json",
+        "sha256": "451ab0cd03736eb30b799c942aa70c4735bfcd843a9eca0a5c1018ec9648a5d4",
+        "pointer": "/result_protocols"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_RESULT_PROTOCOLS:tool.edit_file",
+    "code": "INCOMPLETE_RESULT_PROTOCOLS",
+    "target_id": "tool.edit_file",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/edit_file.json",
+        "sha256": "cbbc87bf7fdaa84f8d24e57c73f18f3e4edb2a7c0e1f960034b712490b9dbd35",
+        "pointer": "/result_protocols"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_RESULT_PROTOCOLS:tool.exec",
+    "code": "INCOMPLETE_RESULT_PROTOCOLS",
+    "target_id": "tool.exec",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/exec.json",
+        "sha256": "ff24c37da0512870289d2ffdaf8a1feca2e88d113b6f1ad9e16a8a965a7bf34f",
+        "pointer": "/result_protocols"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_RESULT_PROTOCOLS:tool.find_files",
+    "code": "INCOMPLETE_RESULT_PROTOCOLS",
+    "target_id": "tool.find_files",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/find_files.json",
+        "sha256": "b480ba7ce1695ff89d2647042c6c19fefaecafe6eefc032adec3d368410cbab5",
+        "pointer": "/result_protocols"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_RESULT_PROTOCOLS:tool.grep",
+    "code": "INCOMPLETE_RESULT_PROTOCOLS",
+    "target_id": "tool.grep",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/grep.json",
+        "sha256": "30278dd69228fc50d12eb2ba06cd887e5e50b95d49d74bfbb5ed886a7e7cd5fe",
+        "pointer": "/result_protocols"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_RESULT_PROTOCOLS:tool.list_dir",
+    "code": "INCOMPLETE_RESULT_PROTOCOLS",
+    "target_id": "tool.list_dir",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/list_dir.json",
+        "sha256": "17b1d33e0b8b1d4362ab0af6141c98ffe9170b4273b1c305996748808ade48e2",
+        "pointer": "/result_protocols"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_RESULT_PROTOCOLS:tool.list_exec_sessions",
+    "code": "INCOMPLETE_RESULT_PROTOCOLS",
+    "target_id": "tool.list_exec_sessions",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/list_exec_sessions.json",
+        "sha256": "a3f77c5b96c4210edc3af517e3e03ea5bc44f05b3bff116998547f9feea14149",
+        "pointer": "/result_protocols"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_RESULT_PROTOCOLS:tool.list_sessions",
+    "code": "INCOMPLETE_RESULT_PROTOCOLS",
+    "target_id": "tool.list_sessions",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/list_sessions.json",
+        "sha256": "eab04d50326dd91a787bb08b3aebc81a950ed045074c4ed5485e3f95b4d7d2a8",
+        "pointer": "/result_protocols"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_RESULT_PROTOCOLS:tool.message",
+    "code": "INCOMPLETE_RESULT_PROTOCOLS",
+    "target_id": "tool.message",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/message.json",
+        "sha256": "91c8a1d1f9977ac1ce569ef8f98870e8818c1e84302cb1f51bb75eb57e239670",
+        "pointer": "/result_protocols"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_RESULT_PROTOCOLS:tool.read_file",
+    "code": "INCOMPLETE_RESULT_PROTOCOLS",
+    "target_id": "tool.read_file",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/read_file.json",
+        "sha256": "9df2b61fe605a1eabc54fa98a0aeaf65923637f3fc9bbe5a5254cc75d42319ed",
+        "pointer": "/result_protocols"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_RESULT_PROTOCOLS:tool.read_session",
+    "code": "INCOMPLETE_RESULT_PROTOCOLS",
+    "target_id": "tool.read_session",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/read_session.json",
+        "sha256": "eaa707503fd9ee29a57d0fc49536f3ce183df06eb7e52d5539f75eb394c9509b",
+        "pointer": "/result_protocols"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_RESULT_PROTOCOLS:tool.search_sessions",
+    "code": "INCOMPLETE_RESULT_PROTOCOLS",
+    "target_id": "tool.search_sessions",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/search_sessions.json",
+        "sha256": "4300331c18fac99cd8289e18d48f58cd2053755e6720ee4850a5a435cb7498c3",
+        "pointer": "/result_protocols"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_RESULT_PROTOCOLS:tool.send_session_message",
+    "code": "INCOMPLETE_RESULT_PROTOCOLS",
+    "target_id": "tool.send_session_message",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/send_session_message.json",
+        "sha256": "3dd083ee1b09f8fe98825880951a16c43e13877690e1161a887c55909690a951",
+        "pointer": "/result_protocols"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_RESULT_PROTOCOLS:tool.spawn",
+    "code": "INCOMPLETE_RESULT_PROTOCOLS",
+    "target_id": "tool.spawn",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/spawn.json",
+        "sha256": "8d4caf952420391dfabb60f3736018fbab2d7b910fd0316f81f77c2c0ed746f9",
+        "pointer": "/result_protocols"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_RESULT_PROTOCOLS:tool.update_goal",
+    "code": "INCOMPLETE_RESULT_PROTOCOLS",
+    "target_id": "tool.update_goal",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/update_goal.json",
+        "sha256": "71096c2e0d6f1cee3fa80a358f3d331da374605c4edb8adecdd4f7c6ee16e43a",
+        "pointer": "/result_protocols"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_RESULT_PROTOCOLS:tool.web_fetch",
+    "code": "INCOMPLETE_RESULT_PROTOCOLS",
+    "target_id": "tool.web_fetch",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/web_fetch.json",
+        "sha256": "a2a4d5c77a1c67f0a7d69116830cf787aa4732e8839348e6b59ae145945244a9",
+        "pointer": "/result_protocols"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_RESULT_PROTOCOLS:tool.web_search",
+    "code": "INCOMPLETE_RESULT_PROTOCOLS",
+    "target_id": "tool.web_search",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/web_search.json",
+        "sha256": "d058873a9329292fc388531b45b10f5d8bc28e6129880da91fa36246608fc2bb",
+        "pointer": "/result_protocols"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_RESULT_PROTOCOLS:tool.write_file",
+    "code": "INCOMPLETE_RESULT_PROTOCOLS",
+    "target_id": "tool.write_file",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/write_file.json",
+        "sha256": "a9ce405ef1196df56f1b9dc5b37eb0b65d284fc63c15701fd5a3a49a876b25e9",
+        "pointer": "/result_protocols"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_RESULT_PROTOCOLS:tool.write_stdin",
+    "code": "INCOMPLETE_RESULT_PROTOCOLS",
+    "target_id": "tool.write_stdin",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/write_stdin.json",
+        "sha256": "ada5bc9b02f7b4c9d674759133a7b727a1ab5a75beebe6ad964e4c266dc8f79e",
+        "pointer": "/result_protocols"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_RETRY_POLICY:tool.apply_patch",
+    "code": "INCOMPLETE_RETRY_POLICY",
+    "target_id": "tool.apply_patch",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/apply_patch.json",
+        "sha256": "446c4d028306fd336ba2fef698e2e9aaf2f2983c5800e2908aa6aed47c8dd2b5",
+        "pointer": "/retry_policy"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_RETRY_POLICY:tool.create_goal",
+    "code": "INCOMPLETE_RETRY_POLICY",
+    "target_id": "tool.create_goal",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/create_goal.json",
+        "sha256": "eb7f5acc63d23b39ade11486ccb1bd29aae7cbc212e9e05e726b93e40c44b926",
+        "pointer": "/retry_policy"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_RETRY_POLICY:tool.cron",
+    "code": "INCOMPLETE_RETRY_POLICY",
+    "target_id": "tool.cron",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/cron.json",
+        "sha256": "451ab0cd03736eb30b799c942aa70c4735bfcd843a9eca0a5c1018ec9648a5d4",
+        "pointer": "/retry_policy"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_RETRY_POLICY:tool.edit_file",
+    "code": "INCOMPLETE_RETRY_POLICY",
+    "target_id": "tool.edit_file",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/edit_file.json",
+        "sha256": "cbbc87bf7fdaa84f8d24e57c73f18f3e4edb2a7c0e1f960034b712490b9dbd35",
+        "pointer": "/retry_policy"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_RETRY_POLICY:tool.exec",
+    "code": "INCOMPLETE_RETRY_POLICY",
+    "target_id": "tool.exec",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/exec.json",
+        "sha256": "ff24c37da0512870289d2ffdaf8a1feca2e88d113b6f1ad9e16a8a965a7bf34f",
+        "pointer": "/retry_policy"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_RETRY_POLICY:tool.find_files",
+    "code": "INCOMPLETE_RETRY_POLICY",
+    "target_id": "tool.find_files",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/find_files.json",
+        "sha256": "b480ba7ce1695ff89d2647042c6c19fefaecafe6eefc032adec3d368410cbab5",
+        "pointer": "/retry_policy"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_RETRY_POLICY:tool.grep",
+    "code": "INCOMPLETE_RETRY_POLICY",
+    "target_id": "tool.grep",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/grep.json",
+        "sha256": "30278dd69228fc50d12eb2ba06cd887e5e50b95d49d74bfbb5ed886a7e7cd5fe",
+        "pointer": "/retry_policy"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_RETRY_POLICY:tool.list_dir",
+    "code": "INCOMPLETE_RETRY_POLICY",
+    "target_id": "tool.list_dir",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/list_dir.json",
+        "sha256": "17b1d33e0b8b1d4362ab0af6141c98ffe9170b4273b1c305996748808ade48e2",
+        "pointer": "/retry_policy"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_RETRY_POLICY:tool.list_exec_sessions",
+    "code": "INCOMPLETE_RETRY_POLICY",
+    "target_id": "tool.list_exec_sessions",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/list_exec_sessions.json",
+        "sha256": "a3f77c5b96c4210edc3af517e3e03ea5bc44f05b3bff116998547f9feea14149",
+        "pointer": "/retry_policy"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_RETRY_POLICY:tool.list_sessions",
+    "code": "INCOMPLETE_RETRY_POLICY",
+    "target_id": "tool.list_sessions",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/list_sessions.json",
+        "sha256": "eab04d50326dd91a787bb08b3aebc81a950ed045074c4ed5485e3f95b4d7d2a8",
+        "pointer": "/retry_policy"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_RETRY_POLICY:tool.message",
+    "code": "INCOMPLETE_RETRY_POLICY",
+    "target_id": "tool.message",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/message.json",
+        "sha256": "91c8a1d1f9977ac1ce569ef8f98870e8818c1e84302cb1f51bb75eb57e239670",
+        "pointer": "/retry_policy"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_RETRY_POLICY:tool.read_file",
+    "code": "INCOMPLETE_RETRY_POLICY",
+    "target_id": "tool.read_file",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/read_file.json",
+        "sha256": "9df2b61fe605a1eabc54fa98a0aeaf65923637f3fc9bbe5a5254cc75d42319ed",
+        "pointer": "/retry_policy"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_RETRY_POLICY:tool.read_session",
+    "code": "INCOMPLETE_RETRY_POLICY",
+    "target_id": "tool.read_session",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/read_session.json",
+        "sha256": "eaa707503fd9ee29a57d0fc49536f3ce183df06eb7e52d5539f75eb394c9509b",
+        "pointer": "/retry_policy"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_RETRY_POLICY:tool.search_sessions",
+    "code": "INCOMPLETE_RETRY_POLICY",
+    "target_id": "tool.search_sessions",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/search_sessions.json",
+        "sha256": "4300331c18fac99cd8289e18d48f58cd2053755e6720ee4850a5a435cb7498c3",
+        "pointer": "/retry_policy"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_RETRY_POLICY:tool.send_session_message",
+    "code": "INCOMPLETE_RETRY_POLICY",
+    "target_id": "tool.send_session_message",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/send_session_message.json",
+        "sha256": "3dd083ee1b09f8fe98825880951a16c43e13877690e1161a887c55909690a951",
+        "pointer": "/retry_policy"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_RETRY_POLICY:tool.spawn",
+    "code": "INCOMPLETE_RETRY_POLICY",
+    "target_id": "tool.spawn",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/spawn.json",
+        "sha256": "8d4caf952420391dfabb60f3736018fbab2d7b910fd0316f81f77c2c0ed746f9",
+        "pointer": "/retry_policy"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_RETRY_POLICY:tool.update_goal",
+    "code": "INCOMPLETE_RETRY_POLICY",
+    "target_id": "tool.update_goal",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/update_goal.json",
+        "sha256": "71096c2e0d6f1cee3fa80a358f3d331da374605c4edb8adecdd4f7c6ee16e43a",
+        "pointer": "/retry_policy"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_RETRY_POLICY:tool.web_fetch",
+    "code": "INCOMPLETE_RETRY_POLICY",
+    "target_id": "tool.web_fetch",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/web_fetch.json",
+        "sha256": "a2a4d5c77a1c67f0a7d69116830cf787aa4732e8839348e6b59ae145945244a9",
+        "pointer": "/retry_policy"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_RETRY_POLICY:tool.web_search",
+    "code": "INCOMPLETE_RETRY_POLICY",
+    "target_id": "tool.web_search",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/web_search.json",
+        "sha256": "d058873a9329292fc388531b45b10f5d8bc28e6129880da91fa36246608fc2bb",
+        "pointer": "/retry_policy"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_RETRY_POLICY:tool.write_file",
+    "code": "INCOMPLETE_RETRY_POLICY",
+    "target_id": "tool.write_file",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/write_file.json",
+        "sha256": "a9ce405ef1196df56f1b9dc5b37eb0b65d284fc63c15701fd5a3a49a876b25e9",
+        "pointer": "/retry_policy"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_RETRY_POLICY:tool.write_stdin",
+    "code": "INCOMPLETE_RETRY_POLICY",
+    "target_id": "tool.write_stdin",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/write_stdin.json",
+        "sha256": "ada5bc9b02f7b4c9d674759133a7b727a1ab5a75beebe6ad964e4c266dc8f79e",
+        "pointer": "/retry_policy"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_SIDE_EFFECTS:tool.apply_patch",
+    "code": "INCOMPLETE_SIDE_EFFECTS",
+    "target_id": "tool.apply_patch",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/apply_patch.json",
+        "sha256": "446c4d028306fd336ba2fef698e2e9aaf2f2983c5800e2908aa6aed47c8dd2b5",
+        "pointer": "/side_effects"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_SIDE_EFFECTS:tool.create_goal",
+    "code": "INCOMPLETE_SIDE_EFFECTS",
+    "target_id": "tool.create_goal",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/create_goal.json",
+        "sha256": "eb7f5acc63d23b39ade11486ccb1bd29aae7cbc212e9e05e726b93e40c44b926",
+        "pointer": "/side_effects"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_SIDE_EFFECTS:tool.cron",
+    "code": "INCOMPLETE_SIDE_EFFECTS",
+    "target_id": "tool.cron",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/cron.json",
+        "sha256": "451ab0cd03736eb30b799c942aa70c4735bfcd843a9eca0a5c1018ec9648a5d4",
+        "pointer": "/side_effects"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_SIDE_EFFECTS:tool.edit_file",
+    "code": "INCOMPLETE_SIDE_EFFECTS",
+    "target_id": "tool.edit_file",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/edit_file.json",
+        "sha256": "cbbc87bf7fdaa84f8d24e57c73f18f3e4edb2a7c0e1f960034b712490b9dbd35",
+        "pointer": "/side_effects"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_SIDE_EFFECTS:tool.exec",
+    "code": "INCOMPLETE_SIDE_EFFECTS",
+    "target_id": "tool.exec",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/exec.json",
+        "sha256": "ff24c37da0512870289d2ffdaf8a1feca2e88d113b6f1ad9e16a8a965a7bf34f",
+        "pointer": "/side_effects"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_SIDE_EFFECTS:tool.find_files",
+    "code": "INCOMPLETE_SIDE_EFFECTS",
+    "target_id": "tool.find_files",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/find_files.json",
+        "sha256": "b480ba7ce1695ff89d2647042c6c19fefaecafe6eefc032adec3d368410cbab5",
+        "pointer": "/side_effects"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_SIDE_EFFECTS:tool.grep",
+    "code": "INCOMPLETE_SIDE_EFFECTS",
+    "target_id": "tool.grep",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/grep.json",
+        "sha256": "30278dd69228fc50d12eb2ba06cd887e5e50b95d49d74bfbb5ed886a7e7cd5fe",
+        "pointer": "/side_effects"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_SIDE_EFFECTS:tool.list_dir",
+    "code": "INCOMPLETE_SIDE_EFFECTS",
+    "target_id": "tool.list_dir",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/list_dir.json",
+        "sha256": "17b1d33e0b8b1d4362ab0af6141c98ffe9170b4273b1c305996748808ade48e2",
+        "pointer": "/side_effects"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_SIDE_EFFECTS:tool.list_exec_sessions",
+    "code": "INCOMPLETE_SIDE_EFFECTS",
+    "target_id": "tool.list_exec_sessions",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/list_exec_sessions.json",
+        "sha256": "a3f77c5b96c4210edc3af517e3e03ea5bc44f05b3bff116998547f9feea14149",
+        "pointer": "/side_effects"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_SIDE_EFFECTS:tool.list_sessions",
+    "code": "INCOMPLETE_SIDE_EFFECTS",
+    "target_id": "tool.list_sessions",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/list_sessions.json",
+        "sha256": "eab04d50326dd91a787bb08b3aebc81a950ed045074c4ed5485e3f95b4d7d2a8",
+        "pointer": "/side_effects"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_SIDE_EFFECTS:tool.message",
+    "code": "INCOMPLETE_SIDE_EFFECTS",
+    "target_id": "tool.message",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/message.json",
+        "sha256": "91c8a1d1f9977ac1ce569ef8f98870e8818c1e84302cb1f51bb75eb57e239670",
+        "pointer": "/side_effects"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_SIDE_EFFECTS:tool.read_file",
+    "code": "INCOMPLETE_SIDE_EFFECTS",
+    "target_id": "tool.read_file",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/read_file.json",
+        "sha256": "9df2b61fe605a1eabc54fa98a0aeaf65923637f3fc9bbe5a5254cc75d42319ed",
+        "pointer": "/side_effects"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_SIDE_EFFECTS:tool.read_session",
+    "code": "INCOMPLETE_SIDE_EFFECTS",
+    "target_id": "tool.read_session",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/read_session.json",
+        "sha256": "eaa707503fd9ee29a57d0fc49536f3ce183df06eb7e52d5539f75eb394c9509b",
+        "pointer": "/side_effects"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_SIDE_EFFECTS:tool.search_sessions",
+    "code": "INCOMPLETE_SIDE_EFFECTS",
+    "target_id": "tool.search_sessions",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/search_sessions.json",
+        "sha256": "4300331c18fac99cd8289e18d48f58cd2053755e6720ee4850a5a435cb7498c3",
+        "pointer": "/side_effects"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_SIDE_EFFECTS:tool.send_session_message",
+    "code": "INCOMPLETE_SIDE_EFFECTS",
+    "target_id": "tool.send_session_message",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/send_session_message.json",
+        "sha256": "3dd083ee1b09f8fe98825880951a16c43e13877690e1161a887c55909690a951",
+        "pointer": "/side_effects"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_SIDE_EFFECTS:tool.spawn",
+    "code": "INCOMPLETE_SIDE_EFFECTS",
+    "target_id": "tool.spawn",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/spawn.json",
+        "sha256": "8d4caf952420391dfabb60f3736018fbab2d7b910fd0316f81f77c2c0ed746f9",
+        "pointer": "/side_effects"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_SIDE_EFFECTS:tool.update_goal",
+    "code": "INCOMPLETE_SIDE_EFFECTS",
+    "target_id": "tool.update_goal",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/update_goal.json",
+        "sha256": "71096c2e0d6f1cee3fa80a358f3d331da374605c4edb8adecdd4f7c6ee16e43a",
+        "pointer": "/side_effects"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_SIDE_EFFECTS:tool.web_fetch",
+    "code": "INCOMPLETE_SIDE_EFFECTS",
+    "target_id": "tool.web_fetch",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/web_fetch.json",
+        "sha256": "a2a4d5c77a1c67f0a7d69116830cf787aa4732e8839348e6b59ae145945244a9",
+        "pointer": "/side_effects"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_SIDE_EFFECTS:tool.web_search",
+    "code": "INCOMPLETE_SIDE_EFFECTS",
+    "target_id": "tool.web_search",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/web_search.json",
+        "sha256": "d058873a9329292fc388531b45b10f5d8bc28e6129880da91fa36246608fc2bb",
+        "pointer": "/side_effects"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_SIDE_EFFECTS:tool.write_file",
+    "code": "INCOMPLETE_SIDE_EFFECTS",
+    "target_id": "tool.write_file",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/write_file.json",
+        "sha256": "a9ce405ef1196df56f1b9dc5b37eb0b65d284fc63c15701fd5a3a49a876b25e9",
+        "pointer": "/side_effects"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:INCOMPLETE_SIDE_EFFECTS:tool.write_stdin",
+    "code": "INCOMPLETE_SIDE_EFFECTS",
+    "target_id": "tool.write_stdin",
+    "reason": "Only registry metadata or unaudited/unknown semantics are supplied.",
+    "source_refs": [
+      {
+        "path": "bundle/tools/write_stdin.json",
+        "sha256": "ada5bc9b02f7b4c9d674759133a7b727a1ab5a75beebe6ad964e4c266dc8f79e",
+        "pointer": "/side_effects"
+      }
+    ],
+    "required_action": "Supply tool-specific audited semantics and test fixture; do not infer absence of capability."
+  },
+  {
+    "blocker_id": "nanobot:SOURCE_GAP_000:intent.assistant",
+    "code": "SOURCE_GAP_000",
+    "target_id": "intent.assistant",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "capability_contract_gaps.json",
+        "sha256": "b08a697e2a27115fca8424bd67ec9adc84fedc14dde805bcf134f7be8265e31d",
+        "pointer": "/gaps/0"
+      }
+    ],
+    "required_action": "Preserve source unknown status until capability owner supplies evidence."
+  },
+  {
+    "blocker_id": "nanobot:SOURCE_GAP_001:module.channels",
+    "code": "SOURCE_GAP_001",
+    "target_id": "module.channels",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "capability_contract_gaps.json",
+        "sha256": "b08a697e2a27115fca8424bd67ec9adc84fedc14dde805bcf134f7be8265e31d",
+        "pointer": "/gaps/1"
+      }
+    ],
+    "required_action": "Preserve source unknown status until capability owner supplies evidence."
+  },
+  {
+    "blocker_id": "nanobot:SOURCE_GAP_002:module.dialogue",
+    "code": "SOURCE_GAP_002",
+    "target_id": "module.dialogue",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "capability_contract_gaps.json",
+        "sha256": "b08a697e2a27115fca8424bd67ec9adc84fedc14dde805bcf134f7be8265e31d",
+        "pointer": "/gaps/2"
+      }
+    ],
+    "required_action": "Preserve source unknown status until capability owner supplies evidence."
+  },
+  {
+    "blocker_id": "nanobot:SOURCE_GAP_003:module.mcp",
+    "code": "SOURCE_GAP_003",
+    "target_id": "module.mcp",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "capability_contract_gaps.json",
+        "sha256": "b08a697e2a27115fca8424bd67ec9adc84fedc14dde805bcf134f7be8265e31d",
+        "pointer": "/gaps/3"
+      }
+    ],
+    "required_action": "Preserve source unknown status until capability owner supplies evidence."
+  },
+  {
+    "blocker_id": "nanobot:SOURCE_GAP_004:module.memory",
+    "code": "SOURCE_GAP_004",
+    "target_id": "module.memory",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "capability_contract_gaps.json",
+        "sha256": "b08a697e2a27115fca8424bd67ec9adc84fedc14dde805bcf134f7be8265e31d",
+        "pointer": "/gaps/4"
+      }
+    ],
+    "required_action": "Preserve source unknown status until capability owner supplies evidence."
+  },
+  {
+    "blocker_id": "nanobot:SOURCE_GAP_005:module.memory",
+    "code": "SOURCE_GAP_005",
+    "target_id": "module.memory",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "capability_contract_gaps.json",
+        "sha256": "b08a697e2a27115fca8424bd67ec9adc84fedc14dde805bcf134f7be8265e31d",
+        "pointer": "/gaps/5"
+      }
+    ],
+    "required_action": "Preserve source unknown status until capability owner supplies evidence."
+  },
+  {
+    "blocker_id": "nanobot:SOURCE_GAP_006:module.providers",
+    "code": "SOURCE_GAP_006",
+    "target_id": "module.providers",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "capability_contract_gaps.json",
+        "sha256": "b08a697e2a27115fca8424bd67ec9adc84fedc14dde805bcf134f7be8265e31d",
+        "pointer": "/gaps/6"
+      }
+    ],
+    "required_action": "Preserve source unknown status until capability owner supplies evidence."
+  },
+  {
+    "blocker_id": "nanobot:SOURCE_GAP_007:module.skills",
+    "code": "SOURCE_GAP_007",
+    "target_id": "module.skills",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "capability_contract_gaps.json",
+        "sha256": "b08a697e2a27115fca8424bd67ec9adc84fedc14dde805bcf134f7be8265e31d",
+        "pointer": "/gaps/7"
+      }
+    ],
+    "required_action": "Preserve source unknown status until capability owner supplies evidence."
+  },
+  {
+    "blocker_id": "nanobot:SOURCE_GAP_008:module.tools",
+    "code": "SOURCE_GAP_008",
+    "target_id": "module.tools",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "capability_contract_gaps.json",
+        "sha256": "b08a697e2a27115fca8424bd67ec9adc84fedc14dde805bcf134f7be8265e31d",
+        "pointer": "/gaps/8"
+      }
+    ],
+    "required_action": "Preserve source unknown status until capability owner supplies evidence."
+  },
+  {
+    "blocker_id": "nanobot:SOURCE_GAP_009:tool.apply_patch",
+    "code": "SOURCE_GAP_009",
+    "target_id": "tool.apply_patch",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "capability_contract_gaps.json",
+        "sha256": "b08a697e2a27115fca8424bd67ec9adc84fedc14dde805bcf134f7be8265e31d",
+        "pointer": "/gaps/9"
+      }
+    ],
+    "required_action": "Preserve source unknown status until capability owner supplies evidence."
+  },
+  {
+    "blocker_id": "nanobot:SOURCE_GAP_010:tool.create_goal",
+    "code": "SOURCE_GAP_010",
+    "target_id": "tool.create_goal",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "capability_contract_gaps.json",
+        "sha256": "b08a697e2a27115fca8424bd67ec9adc84fedc14dde805bcf134f7be8265e31d",
+        "pointer": "/gaps/10"
+      }
+    ],
+    "required_action": "Preserve source unknown status until capability owner supplies evidence."
+  },
+  {
+    "blocker_id": "nanobot:SOURCE_GAP_011:tool.cron",
+    "code": "SOURCE_GAP_011",
+    "target_id": "tool.cron",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "capability_contract_gaps.json",
+        "sha256": "b08a697e2a27115fca8424bd67ec9adc84fedc14dde805bcf134f7be8265e31d",
+        "pointer": "/gaps/11"
+      }
+    ],
+    "required_action": "Preserve source unknown status until capability owner supplies evidence."
+  },
+  {
+    "blocker_id": "nanobot:SOURCE_GAP_012:tool.edit_file",
+    "code": "SOURCE_GAP_012",
+    "target_id": "tool.edit_file",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "capability_contract_gaps.json",
+        "sha256": "b08a697e2a27115fca8424bd67ec9adc84fedc14dde805bcf134f7be8265e31d",
+        "pointer": "/gaps/12"
+      }
+    ],
+    "required_action": "Preserve source unknown status until capability owner supplies evidence."
+  },
+  {
+    "blocker_id": "nanobot:SOURCE_GAP_013:tool.exec",
+    "code": "SOURCE_GAP_013",
+    "target_id": "tool.exec",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "capability_contract_gaps.json",
+        "sha256": "b08a697e2a27115fca8424bd67ec9adc84fedc14dde805bcf134f7be8265e31d",
+        "pointer": "/gaps/13"
+      }
+    ],
+    "required_action": "Preserve source unknown status until capability owner supplies evidence."
+  },
+  {
+    "blocker_id": "nanobot:SOURCE_GAP_014:tool.find_files",
+    "code": "SOURCE_GAP_014",
+    "target_id": "tool.find_files",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "capability_contract_gaps.json",
+        "sha256": "b08a697e2a27115fca8424bd67ec9adc84fedc14dde805bcf134f7be8265e31d",
+        "pointer": "/gaps/14"
+      }
+    ],
+    "required_action": "Preserve source unknown status until capability owner supplies evidence."
+  },
+  {
+    "blocker_id": "nanobot:SOURCE_GAP_015:tool.grep",
+    "code": "SOURCE_GAP_015",
+    "target_id": "tool.grep",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "capability_contract_gaps.json",
+        "sha256": "b08a697e2a27115fca8424bd67ec9adc84fedc14dde805bcf134f7be8265e31d",
+        "pointer": "/gaps/15"
+      }
+    ],
+    "required_action": "Preserve source unknown status until capability owner supplies evidence."
+  },
+  {
+    "blocker_id": "nanobot:SOURCE_GAP_016:tool.list_dir",
+    "code": "SOURCE_GAP_016",
+    "target_id": "tool.list_dir",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "capability_contract_gaps.json",
+        "sha256": "b08a697e2a27115fca8424bd67ec9adc84fedc14dde805bcf134f7be8265e31d",
+        "pointer": "/gaps/16"
+      }
+    ],
+    "required_action": "Preserve source unknown status until capability owner supplies evidence."
+  },
+  {
+    "blocker_id": "nanobot:SOURCE_GAP_017:tool.list_exec_sessions",
+    "code": "SOURCE_GAP_017",
+    "target_id": "tool.list_exec_sessions",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "capability_contract_gaps.json",
+        "sha256": "b08a697e2a27115fca8424bd67ec9adc84fedc14dde805bcf134f7be8265e31d",
+        "pointer": "/gaps/17"
+      }
+    ],
+    "required_action": "Preserve source unknown status until capability owner supplies evidence."
+  },
+  {
+    "blocker_id": "nanobot:SOURCE_GAP_018:tool.list_sessions",
+    "code": "SOURCE_GAP_018",
+    "target_id": "tool.list_sessions",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "capability_contract_gaps.json",
+        "sha256": "b08a697e2a27115fca8424bd67ec9adc84fedc14dde805bcf134f7be8265e31d",
+        "pointer": "/gaps/18"
+      }
+    ],
+    "required_action": "Preserve source unknown status until capability owner supplies evidence."
+  },
+  {
+    "blocker_id": "nanobot:SOURCE_GAP_019:tool.message",
+    "code": "SOURCE_GAP_019",
+    "target_id": "tool.message",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "capability_contract_gaps.json",
+        "sha256": "b08a697e2a27115fca8424bd67ec9adc84fedc14dde805bcf134f7be8265e31d",
+        "pointer": "/gaps/19"
+      }
+    ],
+    "required_action": "Preserve source unknown status until capability owner supplies evidence."
+  },
+  {
+    "blocker_id": "nanobot:SOURCE_GAP_020:tool.read_file",
+    "code": "SOURCE_GAP_020",
+    "target_id": "tool.read_file",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "capability_contract_gaps.json",
+        "sha256": "b08a697e2a27115fca8424bd67ec9adc84fedc14dde805bcf134f7be8265e31d",
+        "pointer": "/gaps/20"
+      }
+    ],
+    "required_action": "Preserve source unknown status until capability owner supplies evidence."
+  },
+  {
+    "blocker_id": "nanobot:SOURCE_GAP_021:tool.read_session",
+    "code": "SOURCE_GAP_021",
+    "target_id": "tool.read_session",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "capability_contract_gaps.json",
+        "sha256": "b08a697e2a27115fca8424bd67ec9adc84fedc14dde805bcf134f7be8265e31d",
+        "pointer": "/gaps/21"
+      }
+    ],
+    "required_action": "Preserve source unknown status until capability owner supplies evidence."
+  },
+  {
+    "blocker_id": "nanobot:SOURCE_GAP_022:tool.search_sessions",
+    "code": "SOURCE_GAP_022",
+    "target_id": "tool.search_sessions",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "capability_contract_gaps.json",
+        "sha256": "b08a697e2a27115fca8424bd67ec9adc84fedc14dde805bcf134f7be8265e31d",
+        "pointer": "/gaps/22"
+      }
+    ],
+    "required_action": "Preserve source unknown status until capability owner supplies evidence."
+  },
+  {
+    "blocker_id": "nanobot:SOURCE_GAP_023:tool.send_session_message",
+    "code": "SOURCE_GAP_023",
+    "target_id": "tool.send_session_message",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "capability_contract_gaps.json",
+        "sha256": "b08a697e2a27115fca8424bd67ec9adc84fedc14dde805bcf134f7be8265e31d",
+        "pointer": "/gaps/23"
+      }
+    ],
+    "required_action": "Preserve source unknown status until capability owner supplies evidence."
+  },
+  {
+    "blocker_id": "nanobot:SOURCE_GAP_024:tool.spawn",
+    "code": "SOURCE_GAP_024",
+    "target_id": "tool.spawn",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "capability_contract_gaps.json",
+        "sha256": "b08a697e2a27115fca8424bd67ec9adc84fedc14dde805bcf134f7be8265e31d",
+        "pointer": "/gaps/24"
+      }
+    ],
+    "required_action": "Preserve source unknown status until capability owner supplies evidence."
+  },
+  {
+    "blocker_id": "nanobot:SOURCE_GAP_025:tool.update_goal",
+    "code": "SOURCE_GAP_025",
+    "target_id": "tool.update_goal",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "capability_contract_gaps.json",
+        "sha256": "b08a697e2a27115fca8424bd67ec9adc84fedc14dde805bcf134f7be8265e31d",
+        "pointer": "/gaps/25"
+      }
+    ],
+    "required_action": "Preserve source unknown status until capability owner supplies evidence."
+  },
+  {
+    "blocker_id": "nanobot:SOURCE_GAP_026:tool.web_fetch",
+    "code": "SOURCE_GAP_026",
+    "target_id": "tool.web_fetch",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "capability_contract_gaps.json",
+        "sha256": "b08a697e2a27115fca8424bd67ec9adc84fedc14dde805bcf134f7be8265e31d",
+        "pointer": "/gaps/26"
+      }
+    ],
+    "required_action": "Preserve source unknown status until capability owner supplies evidence."
+  },
+  {
+    "blocker_id": "nanobot:SOURCE_GAP_027:tool.web_search",
+    "code": "SOURCE_GAP_027",
+    "target_id": "tool.web_search",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "capability_contract_gaps.json",
+        "sha256": "b08a697e2a27115fca8424bd67ec9adc84fedc14dde805bcf134f7be8265e31d",
+        "pointer": "/gaps/27"
+      }
+    ],
+    "required_action": "Preserve source unknown status until capability owner supplies evidence."
+  },
+  {
+    "blocker_id": "nanobot:SOURCE_GAP_028:tool.write_file",
+    "code": "SOURCE_GAP_028",
+    "target_id": "tool.write_file",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "capability_contract_gaps.json",
+        "sha256": "b08a697e2a27115fca8424bd67ec9adc84fedc14dde805bcf134f7be8265e31d",
+        "pointer": "/gaps/28"
+      }
+    ],
+    "required_action": "Preserve source unknown status until capability owner supplies evidence."
+  },
+  {
+    "blocker_id": "nanobot:SOURCE_GAP_029:tool.write_stdin",
+    "code": "SOURCE_GAP_029",
+    "target_id": "tool.write_stdin",
+    "reason": "Offline construction only: no model call, tool execution or external service verification.",
+    "source_refs": [
+      {
+        "path": "capability_contract_gaps.json",
+        "sha256": "b08a697e2a27115fca8424bd67ec9adc84fedc14dde805bcf134f7be8265e31d",
+        "pointer": "/gaps/29"
+      }
+    ],
+    "required_action": "Preserve source unknown status until capability owner supplies evidence."
+  },
+  {
+    "blocker_id": "nanobot:UNRESOLVED_BRANCH_EARLY_STOP:chain.end_to_end",
+    "code": "UNRESOLVED_BRANCH_EARLY_STOP",
+    "target_id": "chain.end_to_end",
+    "reason": "Business-task support is unknown; evidence only covers successful SDK return, not business gold answers or all terminal branches.",
+    "source_refs": [
+      {
+        "path": "bundle/chains/end_to_end/end_to_end.json",
+        "sha256": "76c84d30a99605f8add27e265fb9af75911e147054c81f083cd81c9cb1549449",
+        "pointer": "/branches/1"
+      },
+      {
+        "path": "bundle/evidence/final_response.json",
+        "sha256": "3c6a8750220790ec88746c4c30512530e2ab8de32836eeb98f0b7bfea018969f",
+        "pointer": "/applicable_result_paths"
+      }
+    ],
+    "required_action": "Provide branch-specific stimuli, terminal oracle and replayable fixtures."
+  },
+  {
+    "blocker_id": "nanobot:UNRESOLVED_BRANCH_ERROR:chain.end_to_end",
+    "code": "UNRESOLVED_BRANCH_ERROR",
+    "target_id": "chain.end_to_end",
+    "reason": "Business-task support is unknown; evidence only covers successful SDK return, not business gold answers or all terminal branches.",
+    "source_refs": [
+      {
+        "path": "bundle/chains/end_to_end/end_to_end.json",
+        "sha256": "76c84d30a99605f8add27e265fb9af75911e147054c81f083cd81c9cb1549449",
+        "pointer": "/branches/2"
+      },
+      {
+        "path": "bundle/evidence/final_response.json",
+        "sha256": "3c6a8750220790ec88746c4c30512530e2ab8de32836eeb98f0b7bfea018969f",
+        "pointer": "/applicable_result_paths"
+      }
+    ],
+    "required_action": "Provide branch-specific stimuli, terminal oracle and replayable fixtures."
+  },
+  {
+    "blocker_id": "nanobot:UNRESOLVED_BRANCH_NORMAL:chain.end_to_end",
+    "code": "UNRESOLVED_BRANCH_NORMAL",
+    "target_id": "chain.end_to_end",
+    "reason": "Business-task support is unknown; evidence only covers successful SDK return, not business gold answers or all terminal branches.",
+    "source_refs": [
+      {
+        "path": "bundle/chains/end_to_end/end_to_end.json",
+        "sha256": "76c84d30a99605f8add27e265fb9af75911e147054c81f083cd81c9cb1549449",
+        "pointer": "/branches/0"
+      },
+      {
+        "path": "bundle/evidence/final_response.json",
+        "sha256": "3c6a8750220790ec88746c4c30512530e2ab8de32836eeb98f0b7bfea018969f",
+        "pointer": "/applicable_result_paths"
+      }
+    ],
+    "required_action": "Provide branch-specific stimuli, terminal oracle and replayable fixtures."
+  }
+]

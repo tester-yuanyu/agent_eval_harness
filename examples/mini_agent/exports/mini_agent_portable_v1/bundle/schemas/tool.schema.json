@@ -1,0 +1,250 @@
+{
+  "$defs": {
+    "CapabilityClaimV3": {
+      "additionalProperties": false,
+      "properties": {
+        "capability_key": {
+          "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)+$",
+          "title": "Capability Key",
+          "type": "string"
+        },
+        "evidence_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Ids",
+          "type": "array"
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Reason"
+        },
+        "support_status": {
+          "$ref": "#/$defs/SupportStatusV3"
+        }
+      },
+      "required": [
+        "capability_key",
+        "support_status",
+        "evidence_ids",
+        "reason"
+      ],
+      "title": "CapabilityClaimV3",
+      "type": "object"
+    },
+    "SupportStatusV3": {
+      "enum": [
+        "supported",
+        "unsupported",
+        "unknown"
+      ],
+      "title": "SupportStatusV3",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "batch_behavior": {
+      "additionalProperties": true,
+      "title": "Batch Behavior",
+      "type": "object"
+    },
+    "capabilities": {
+      "items": {
+        "$ref": "#/$defs/CapabilityClaimV3"
+      },
+      "title": "Capabilities",
+      "type": "array"
+    },
+    "combination_rules": {
+      "additionalProperties": true,
+      "title": "Combination Rules",
+      "type": "object"
+    },
+    "contract_version": {
+      "minLength": 1,
+      "title": "Contract Version",
+      "type": "string"
+    },
+    "description": {
+      "minLength": 1,
+      "title": "Description",
+      "type": "string"
+    },
+    "function_schema": {
+      "additionalProperties": true,
+      "title": "Function Schema",
+      "type": "object"
+    },
+    "idempotency_rules": {
+      "additionalProperties": true,
+      "title": "Idempotency Rules",
+      "type": "object"
+    },
+    "implementation_profile": {
+      "enum": [
+        "production",
+        "evaluation_adapter",
+        "test_fixture"
+      ],
+      "title": "Implementation Profile",
+      "type": "string"
+    },
+    "observation_interfaces": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Observation Interfaces",
+      "type": "array"
+    },
+    "parameter_semantics": {
+      "additionalProperties": true,
+      "title": "Parameter Semantics",
+      "type": "object"
+    },
+    "permission_requirements": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Permission Requirements",
+      "type": "array"
+    },
+    "preconditions": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Preconditions",
+      "type": "array"
+    },
+    "registered": {
+      "const": true,
+      "title": "Registered",
+      "type": "boolean"
+    },
+    "requires_confirmation": {
+      "title": "Requires Confirmation",
+      "type": "boolean"
+    },
+    "result_protocols": {
+      "additionalProperties": true,
+      "title": "Result Protocols",
+      "type": "object"
+    },
+    "retry_policy": {
+      "additionalProperties": true,
+      "title": "Retry Policy",
+      "type": "object"
+    },
+    "risk_level": {
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "title": "Risk Level",
+      "type": "string"
+    },
+    "side_effects": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Side Effects",
+      "type": "array"
+    },
+    "simulation_capabilities": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Simulation Capabilities",
+      "type": "array"
+    },
+    "simulation_protocol": {
+      "anyOf": [
+        {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Simulation Protocol"
+    },
+    "snapshot_format_version": {
+      "const": "3.0",
+      "title": "Snapshot Format Version",
+      "type": "string"
+    },
+    "snapshot_id": {
+      "pattern": "^(agent|module|intent|tool|scope|chain|evidence|boundary)\\.[a-z][a-z0-9_]*$",
+      "title": "Snapshot Id",
+      "type": "string"
+    },
+    "snapshot_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Snapshot Sha256",
+      "type": "string"
+    },
+    "snapshot_type": {
+      "const": "tool",
+      "title": "Snapshot Type",
+      "type": "string"
+    },
+    "source_hashes": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "minProperties": 1,
+      "title": "Source Hashes",
+      "type": "object"
+    },
+    "tool_name": {
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "title": "Tool Name",
+      "type": "string"
+    },
+    "tool_version": {
+      "minLength": 1,
+      "title": "Tool Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "snapshot_id",
+    "snapshot_type",
+    "snapshot_format_version",
+    "contract_version",
+    "source_hashes",
+    "snapshot_sha256",
+    "tool_name",
+    "tool_version",
+    "description",
+    "implementation_profile",
+    "registered",
+    "function_schema",
+    "parameter_semantics",
+    "combination_rules",
+    "batch_behavior",
+    "preconditions",
+    "result_protocols",
+    "permission_requirements",
+    "requires_confirmation",
+    "risk_level",
+    "idempotency_rules",
+    "side_effects",
+    "retry_policy",
+    "simulation_protocol",
+    "simulation_capabilities",
+    "observation_interfaces",
+    "capabilities"
+  ],
+  "title": "ToolSnapshotV3",
+  "type": "object"
+}

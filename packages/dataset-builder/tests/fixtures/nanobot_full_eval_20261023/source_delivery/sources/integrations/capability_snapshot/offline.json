@@ -1,0 +1,6 @@
+{
+  "profile_id": "nanobot_offline_core_v1",
+  "file_tools": true,
+  "exec_tool": true,
+  "web_tools": true
+}

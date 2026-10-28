@@ -1,0 +1,28 @@
+{
+  "valid": true,
+  "issues": [],
+  "runtime_execution": "NOT_RUN",
+  "approval": "PENDING",
+  "coverage": {
+    "target_count": 23,
+    "slot_count": 847,
+    "accounted_slot_count": 847
+  },
+  "counts": {
+    "dataset_format": {
+      "capability_contract_case": 798,
+      "eval_case": 49
+    },
+    "execution_readiness": {
+      "blocked": 280,
+      "needs_runner": 539,
+      "not_run": 28
+    },
+    "coverage_mode": {
+      "contract": 798,
+      "direct": 28,
+      "indirect": 21
+    }
+  },
+  "compatibility": "EvalCase validation uses explicit source-derived v3 ToolCatalog translation; runtime binding is separate."
+}

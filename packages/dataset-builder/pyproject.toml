@@ -9,14 +9,14 @@ description = "Reusable, review-gated dataset authoring for agent_evaluator"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-  "agent-evaluator>=0.1.0",
+  "agent-eval-contracts>=0.1.0,<0.2",
   "jsonschema>=4.21,<5",
   "openai>=1.0,<3",
   "pydantic>=2.6,<3",
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=7.4,<9", "ruff>=0.6,<1"]
+dev = ["pytest>=7.4,<9", "ruff>=0.6,<1", "setuptools>=68"]
 deepeval = ["deepeval==4.3.2"]
 
 [project.scripts]

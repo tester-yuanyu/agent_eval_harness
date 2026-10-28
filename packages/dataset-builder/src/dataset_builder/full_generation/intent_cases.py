@@ -1,6 +1,6 @@
 """Deterministic single-turn intent cases grounded in the selected contracts."""
 
-from eval_framework.schemas import EvalCase
+from eval_contracts.schemas import EvalCase
 
 from .models import CompiledCase
 

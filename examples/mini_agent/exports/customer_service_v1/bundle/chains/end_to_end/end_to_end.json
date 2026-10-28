@@ -1,0 +1,105 @@
+{
+  "boundary_refs": [
+    {
+      "contract_version": "customer-contract-v1",
+      "path": "boundaries/conversation.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "boundary.conversation",
+      "snapshot_sha256": "097838775c54bae86d6f60292516faebfff0b13e4d84947dc5401e949e47268a",
+      "snapshot_type": "boundary"
+    }
+  ],
+  "branches": [
+    {
+      "branch_type": "normal",
+      "terminal_condition": "A final response is returned"
+    },
+    {
+      "branch_type": "early_stop",
+      "terminal_condition": "A clarification or handoff suggestion is returned when declared by the Agent"
+    },
+    {
+      "branch_type": "error",
+      "terminal_condition": "A declared failure is returned or raised"
+    }
+  ],
+  "chain_id": "end_to_end",
+  "completion_condition": "The run reaches its terminal boundary and exposes the declared response evidence.",
+  "contract_version": "customer-contract-v1",
+  "description": "Direct conversation from business request to terminal response.",
+  "evidence_refs": [
+    {
+      "contract_version": "customer-contract-v1",
+      "path": "evidence/final_response.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "evidence.final_response",
+      "snapshot_sha256": "d390929178795c88bba95f8fca2105d2b5c443e21645c03ec727cddec757a328",
+      "snapshot_type": "evidence"
+    }
+  ],
+  "module_refs": [
+    {
+      "contract_version": "dialogue-v1",
+      "path": "modules/customer_dialogue.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "module.customer_dialogue",
+      "snapshot_sha256": "16cd8510124cb402ee84e154449b45993f125b1d8cf15f5c5af295290b3d085a",
+      "snapshot_type": "module"
+    }
+  ],
+  "nodes": [
+    {
+      "capability_key": "dialogue.respond",
+      "depends_on": [],
+      "inputs": [
+        "user_input"
+      ],
+      "node_id": "response",
+      "outputs": [
+        "final_response"
+      ],
+      "provider": {
+        "role": "snapshot",
+        "snapshot_id": "module.customer_dialogue"
+      },
+      "state_reads": [],
+      "state_writes": [],
+      "stop_conditions": [
+        "terminal_response"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "capability_key": "dialogue.business_task",
+      "evidence_ids": [
+        "evidence.final_response"
+      ],
+      "mandatory": true,
+      "provider": {
+        "role": "selected_intent",
+        "snapshot_id": null
+      },
+      "requirement_id": "business_task"
+    },
+    {
+      "capability_key": "result.final_response",
+      "evidence_ids": [
+        "evidence.final_response"
+      ],
+      "mandatory": true,
+      "provider": {
+        "role": "snapshot",
+        "snapshot_id": "module.customer_dialogue"
+      },
+      "requirement_id": "response_evidence"
+    }
+  ],
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "chain.end_to_end",
+  "snapshot_sha256": "9029663d30b21654ffcc983bc66ccade4dc9687d198fc840c70ebca188e3c33b",
+  "snapshot_type": "chain",
+  "source_hashes": {
+    "catalog_definition_sha256": "b4f3fdb403452e1ba120fbba29abc2d28baa3a6e9401aa362f48ac3e6ad2b148"
+  }
+}

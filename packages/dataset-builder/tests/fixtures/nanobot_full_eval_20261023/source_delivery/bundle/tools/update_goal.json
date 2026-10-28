@@ -1,0 +1,115 @@
+{
+  "batch_behavior": {
+    "declared": false
+  },
+  "capabilities": [
+    {
+      "capability_key": "tool.execution",
+      "evidence_ids": [],
+      "reason": "Offline construction only: no model call, tool execution or external service verification.",
+      "support_status": "unknown"
+    }
+  ],
+  "combination_rules": {
+    "concurrency_safe": false,
+    "exclusive": false
+  },
+  "contract_version": "nanobot-collector-v1",
+  "description": "Update the active sustained goal. Use action='complete' only after the objective is actually achieved and verified. Use action='cancel' when the user cancels, action='block' when progress is genuinely blocked, and action='replace' only when the requested objective changes.",
+  "function_schema": {
+    "function": {
+      "description": "Update the active sustained goal. Use action='complete' only after the objective is actually achieved and verified. Use action='cancel' when the user cancels, action='block' when progress is genuinely blocked, and action='replace' only when the requested objective changes.",
+      "name": "update_goal",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "description": "How to update the active goal.",
+            "enum": [
+              "complete",
+              "cancel",
+              "block",
+              "replace"
+            ],
+            "type": "string"
+          },
+          "objective": {
+            "description": "Replacement objective. Required only when action is 'replace'; make it durable, self-contained, bounded, and explicit about done-ness.",
+            "maxLength": 4000,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "recap": {
+            "description": "Brief honest recap for the user. Required in practice for complete, cancel, and block.",
+            "maxLength": 8000,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ui_summary": {
+            "description": "Optional one-line display label for a replacement goal.",
+            "maxLength": 120,
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "action"
+        ],
+        "type": "object"
+      }
+    },
+    "type": "function"
+  },
+  "idempotency_rules": {
+    "status": "unknown"
+  },
+  "implementation_profile": "production",
+  "observation_interfaces": [
+    "ToolRegistry.get_definitions",
+    "ToolRegistry.execute"
+  ],
+  "parameter_semantics": {
+    "action": "How to update the active goal.",
+    "objective": "Replacement objective. Required only when action is 'replace'; make it durable, self-contained, bounded, and explicit about done-ness.",
+    "recap": "Brief honest recap for the user. Required in practice for complete, cancel, and block.",
+    "ui_summary": "Optional one-line display label for a replacement goal."
+  },
+  "permission_requirements": [
+    "See implementation-specific guards; not audited here."
+  ],
+  "preconditions": [
+    "Registration is limited to the named offline profile.",
+    "Execution requires tool-specific services, request context and permissions."
+  ],
+  "registered": true,
+  "requires_confirmation": false,
+  "result_protocols": {
+    "error_marker": "ToolResult.is_error; see ToolRegistry.execute",
+    "registry_return_type": "Any; tool-specific return contract"
+  },
+  "retry_policy": {
+    "status": "unknown"
+  },
+  "risk_level": "high",
+  "side_effects": [
+    "Not audited; read_only declaration=False"
+  ],
+  "simulation_capabilities": [],
+  "simulation_protocol": null,
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "tool.update_goal",
+  "snapshot_sha256": "ea25388a2dc847545b03e421780d06d90bd36fb6a41dd444b11f32ff1405840a",
+  "snapshot_type": "tool",
+  "source_hashes": {
+    "execution_contract_sha256": "c8e60c5fb792ab618b5daea26d01d702244aa82feca3623ac8b4d99a51bd2c36",
+    "function_schema_sha256": "33ebdb1e75bdf781832e91d134c3360f888d7e85fe57b936f8440712841e82d5"
+  },
+  "tool_name": "update_goal",
+  "tool_version": "0.3.0"
+}

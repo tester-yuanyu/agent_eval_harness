@@ -1,0 +1,150 @@
+{
+  "agent_id": "customer_service_demo",
+  "agent_version": "customer-demo-v1",
+  "boundary_refs": [
+    {
+      "contract_version": "customer-contract-v1",
+      "path": "boundaries/conversation.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "boundary.conversation",
+      "snapshot_sha256": "097838775c54bae86d6f60292516faebfff0b13e4d84947dc5401e949e47268a",
+      "snapshot_type": "boundary"
+    }
+  ],
+  "capabilities": [
+    {
+      "capability_key": "agent.conversation",
+      "evidence_ids": [
+        "evidence.final_response"
+      ],
+      "reason": null,
+      "support_status": "supported"
+    }
+  ],
+  "capability_bundle_sha256": "a72639d1aa8dea275b2898e6cfa52fbe6f4d66879fbe002e3cdad5d6fe3a5329",
+  "chain_refs": [
+    {
+      "contract_version": "customer-contract-v1",
+      "path": "chains/end_to_end/end_to_end.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "chain.end_to_end",
+      "snapshot_sha256": "9029663d30b21654ffcc983bc66ccade4dc9687d198fc840c70ebca188e3c33b",
+      "snapshot_type": "chain"
+    }
+  ],
+  "contract_version": "customer-contract-v1",
+  "entrypoints": [
+    "CustomerServiceAgent.run"
+  ],
+  "evidence_refs": [
+    {
+      "contract_version": "customer-contract-v1",
+      "path": "evidence/final_response.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "evidence.final_response",
+      "snapshot_sha256": "d390929178795c88bba95f8fca2105d2b5c443e21645c03ec727cddec757a328",
+      "snapshot_type": "evidence"
+    }
+  ],
+  "input_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "user_input": {
+        "maxLength": 4000,
+        "title": "User Input",
+        "type": "string"
+      }
+    },
+    "required": [
+      "user_input"
+    ],
+    "title": "CustomerInput",
+    "type": "object"
+  },
+  "intent_refs": [
+    {
+      "contract_version": "support-v1",
+      "path": "intents/customer_support.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "intent.customer_support",
+      "snapshot_sha256": "babe33bf0bb82bf5832a4695cfd8fec5e8d8d1c0026aeb57b4920838e2e16e70",
+      "snapshot_type": "intent"
+    }
+  ],
+  "module_refs": [
+    {
+      "contract_version": "dialogue-v1",
+      "path": "modules/customer_dialogue.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "module.customer_dialogue",
+      "snapshot_sha256": "16cd8510124cb402ee84e154449b45993f125b1d8cf15f5c5af295290b3d085a",
+      "snapshot_type": "module"
+    }
+  ],
+  "output_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "events": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Events",
+        "type": "array"
+      },
+      "final_response": {
+        "title": "Final Response",
+        "type": "string"
+      },
+      "handoff_executed": {
+        "const": false,
+        "default": false,
+        "title": "Handoff Executed",
+        "type": "boolean"
+      },
+      "policy_version": {
+        "title": "Policy Version",
+        "type": "string"
+      },
+      "status": {
+        "enum": [
+          "SUCCESS",
+          "NEED_CLARIFICATION",
+          "HANDOFF_SUGGESTED"
+        ],
+        "title": "Status",
+        "type": "string"
+      }
+    },
+    "required": [
+      "status",
+      "final_response",
+      "policy_version",
+      "events"
+    ],
+    "title": "CustomerResult",
+    "type": "object"
+  },
+  "runtime_versions": {
+    "implementation": "customer-demo-v1",
+    "policy": "example-policy-v1"
+  },
+  "scope_refs": [
+    {
+      "contract_version": "customer-contract-v1",
+      "path": "scopes/result.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "scope.result",
+      "snapshot_sha256": "6d0e858df67439905dab7a8948e66219cbb70da3c968c470cc6e61732389bca5",
+      "snapshot_type": "scope"
+    }
+  ],
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "agent.customer_service_demo",
+  "snapshot_sha256": "233501f98292b96ba2cae5af48935a5a143e59877ddab0613ff189c9c68f1a56",
+  "snapshot_type": "agent",
+  "source_hashes": {
+    "capabilities_sha256": "db1b10b25148aa529c79f05102948940495e3156eedd797f52d9c3bae64fc5a0",
+    "children_sha256": "a72639d1aa8dea275b2898e6cfa52fbe6f4d66879fbe002e3cdad5d6fe3a5329"
+  },
+  "tool_refs": []
+}

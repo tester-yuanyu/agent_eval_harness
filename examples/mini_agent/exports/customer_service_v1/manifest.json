@@ -1,0 +1,33 @@
+{
+  "agent_snapshot_sha256": "233501f98292b96ba2cae5af48935a5a143e59877ddab0613ff189c9c68f1a56",
+  "bundle_path": "bundle",
+  "capability_bundle_sha256": "a72639d1aa8dea275b2898e6cfa52fbe6f4d66879fbe002e3cdad5d6fe3a5329",
+  "delivery_version": "1.0",
+  "execution_verified": false,
+  "files_sha256": {
+    "bundle/agent.json": "fc0965e93b3bdb359c53aba2294aba3ff536fc8a2eb7139174f3a455be05670f",
+    "bundle/boundaries/conversation.json": "b40d20294b2f9be7297e1c49077aacec4cac457c9d1bdb26a49c1685b84cf5fd",
+    "bundle/chains/end_to_end/end_to_end.json": "7621e88a81161630f20e7c05675c97eb866a2820b36329135f1b375c6551affa",
+    "bundle/evidence/final_response.json": "0da19da36d65f7f1d99645bf14d375f41a8b777f3507a2144bb21f8017a7198b",
+    "bundle/intents/customer_support.json": "5a3830f1caffaf74a1048d9633711e52ef5b6f895334e205ae0f9e8181f5f094",
+    "bundle/modules/customer_dialogue.json": "d0c89ddfdb3042e8e35896e9b8465bed02fb26c8d5189fc806100b59ba66507e",
+    "bundle/schemas/agent.schema.json": "a293a4d4ebcaedef6aebc100cbc9c324710d8befd1983cbc6ab2660c371708d5",
+    "bundle/schemas/boundary.schema.json": "e2b00f5dd2dbf03613c8c63f2c922d4df4b2104d3d851b3e26299641ec4a25c4",
+    "bundle/schemas/chain.schema.json": "62ce5cbed86a616a4638beb125dec6f8c3548f033015cc5f8e3374c8b6f1b1b6",
+    "bundle/schemas/evidence.schema.json": "f2ee42f197b1f2141544c562c80d81d53234d8eaae299962f5842ffe81505bef",
+    "bundle/schemas/intent.schema.json": "2c69fd8d6aebad5bd455d53b060b695adafc369a6e16585b6cfbf296f539392c",
+    "bundle/schemas/module.schema.json": "6470388fc35d72b5c491b75724ac912d01dd4f89e7615c746bed7722009d520c",
+    "bundle/schemas/scope.schema.json": "88e92a2cc2a5f116a0f26b041261d0ef770f16c86c6d621d0e527d9c35ff1e99",
+    "bundle/schemas/snapshot-reference.schema.json": "66817d867269704db6b0d31602a905e3bf114a03c86d0bd108a4707bc05a60fb",
+    "bundle/schemas/tool.schema.json": "fb0b5070a40a612f0568b37300737202caf6dea5c7aa50944eab8eb327507c9f",
+    "bundle/scopes/result.json": "ad98175e6d36db7885d835044ea7ff83174c3d6a0d7df5b1c13c9180624db670",
+    "bundle/tools/.gitkeep": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "facts.json": "49a3e3a7c5b86791646314ded1f412c87b8399cb62f71229b29a60c25bfd9164",
+    "gaps.json": "6ae16a558dbad334f667008779173ed04da3cde9d420e2c03e356b570ab651c6",
+    "inputs.json": "6fc746a3fb6f28df11ad7a76e6874918892f288a565db121504695a0c57b86a9",
+    "provenance.json": "3eda3073a2435bd978e86bd2d56740673ae823b778271ee2b7955e15aa33a23d",
+    "validation.json": "5d2e6182b445ac7986a30f045417733ce3564e26276ef9706eb08b2b8b355e32"
+  },
+  "snapshot_format_version": "3.0",
+  "spec_sha256": "e5cf2f63966124ba84b47b05b951fe736f65aac523fb99adda00506e75bd1f80"
+}

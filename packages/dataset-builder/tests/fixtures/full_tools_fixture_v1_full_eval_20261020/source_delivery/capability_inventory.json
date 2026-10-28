@@ -1,0 +1,2946 @@
+{
+  "capability_bundle_sha256": "215a9a3a445c8857f3bdd8dbecba935ce646bd8c784f16ecfc4a5da6042cce3c",
+  "note": "Resolution checks declarations, not goal attainment. See gaps for confirmation, context and production availability.",
+  "selections": [
+    {
+      "diagnostics": [
+        "scope.context -> inheritance -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state.",
+        "scope.context -> override -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state.",
+        "scope.context -> cancellation -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state.",
+        "scope.context -> session_isolation -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state.",
+        "scope.context -> residual_state_handling -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state.",
+        "scope.context -> cleanup -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+      ],
+      "requirements": [
+        {
+          "capability_key": "context.inheritance",
+          "diagnostics": [
+            "scope.context -> inheritance -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+          ],
+          "evidence_ids": [
+            "evidence.context_state"
+          ],
+          "provider_snapshot_ids": [
+            "module.agent_orchestrator"
+          ],
+          "requirement_id": "inheritance",
+          "support_status": "unsupported"
+        },
+        {
+          "capability_key": "context.override",
+          "diagnostics": [
+            "scope.context -> override -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+          ],
+          "evidence_ids": [
+            "evidence.context_state"
+          ],
+          "provider_snapshot_ids": [
+            "module.agent_orchestrator"
+          ],
+          "requirement_id": "override",
+          "support_status": "unsupported"
+        },
+        {
+          "capability_key": "context.cancellation",
+          "diagnostics": [
+            "scope.context -> cancellation -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+          ],
+          "evidence_ids": [
+            "evidence.context_state"
+          ],
+          "provider_snapshot_ids": [
+            "module.agent_orchestrator"
+          ],
+          "requirement_id": "cancellation",
+          "support_status": "unsupported"
+        },
+        {
+          "capability_key": "context.session_isolation",
+          "diagnostics": [
+            "scope.context -> session_isolation -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+          ],
+          "evidence_ids": [
+            "evidence.context_state"
+          ],
+          "provider_snapshot_ids": [
+            "module.agent_orchestrator"
+          ],
+          "requirement_id": "session_isolation",
+          "support_status": "unsupported"
+        },
+        {
+          "capability_key": "context.residual_state_handling",
+          "diagnostics": [
+            "scope.context -> residual_state_handling -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+          ],
+          "evidence_ids": [
+            "evidence.context_state"
+          ],
+          "provider_snapshot_ids": [
+            "module.agent_orchestrator"
+          ],
+          "requirement_id": "residual_state_handling",
+          "support_status": "unsupported"
+        },
+        {
+          "capability_key": "context.cleanup",
+          "diagnostics": [
+            "scope.context -> cleanup -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+          ],
+          "evidence_ids": [
+            "evidence.context_state"
+          ],
+          "provider_snapshot_ids": [
+            "module.agent_orchestrator"
+          ],
+          "requirement_id": "cleanup",
+          "support_status": "unsupported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.add_backpack_gift",
+        "scope_or_chain_id": "scope.context",
+        "tool_id": "tool.add_gift_to_backpack"
+      },
+      "snapshot_ids": [
+        "intent.add_backpack_gift",
+        "module.agent_orchestrator",
+        "scope.context",
+        "tool.add_gift_to_backpack"
+      ],
+      "support_status": "unsupported"
+    },
+    {
+      "diagnostics": [
+        "scope.context -> inheritance -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state.",
+        "scope.context -> override -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state.",
+        "scope.context -> cancellation -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state.",
+        "scope.context -> session_isolation -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state.",
+        "scope.context -> residual_state_handling -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state.",
+        "scope.context -> cleanup -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+      ],
+      "requirements": [
+        {
+          "capability_key": "context.inheritance",
+          "diagnostics": [
+            "scope.context -> inheritance -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+          ],
+          "evidence_ids": [
+            "evidence.context_state"
+          ],
+          "provider_snapshot_ids": [
+            "module.agent_orchestrator"
+          ],
+          "requirement_id": "inheritance",
+          "support_status": "unsupported"
+        },
+        {
+          "capability_key": "context.override",
+          "diagnostics": [
+            "scope.context -> override -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+          ],
+          "evidence_ids": [
+            "evidence.context_state"
+          ],
+          "provider_snapshot_ids": [
+            "module.agent_orchestrator"
+          ],
+          "requirement_id": "override",
+          "support_status": "unsupported"
+        },
+        {
+          "capability_key": "context.cancellation",
+          "diagnostics": [
+            "scope.context -> cancellation -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+          ],
+          "evidence_ids": [
+            "evidence.context_state"
+          ],
+          "provider_snapshot_ids": [
+            "module.agent_orchestrator"
+          ],
+          "requirement_id": "cancellation",
+          "support_status": "unsupported"
+        },
+        {
+          "capability_key": "context.session_isolation",
+          "diagnostics": [
+            "scope.context -> session_isolation -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+          ],
+          "evidence_ids": [
+            "evidence.context_state"
+          ],
+          "provider_snapshot_ids": [
+            "module.agent_orchestrator"
+          ],
+          "requirement_id": "session_isolation",
+          "support_status": "unsupported"
+        },
+        {
+          "capability_key": "context.residual_state_handling",
+          "diagnostics": [
+            "scope.context -> residual_state_handling -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+          ],
+          "evidence_ids": [
+            "evidence.context_state"
+          ],
+          "provider_snapshot_ids": [
+            "module.agent_orchestrator"
+          ],
+          "requirement_id": "residual_state_handling",
+          "support_status": "unsupported"
+        },
+        {
+          "capability_key": "context.cleanup",
+          "diagnostics": [
+            "scope.context -> cleanup -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+          ],
+          "evidence_ids": [
+            "evidence.context_state"
+          ],
+          "provider_snapshot_ids": [
+            "module.agent_orchestrator"
+          ],
+          "requirement_id": "cleanup",
+          "support_status": "unsupported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.prepare_resource",
+        "scope_or_chain_id": "scope.context",
+        "tool_id": "tool.prepare_resource"
+      },
+      "snapshot_ids": [
+        "intent.prepare_resource",
+        "module.agent_orchestrator",
+        "scope.context",
+        "tool.prepare_resource"
+      ],
+      "support_status": "unsupported"
+    },
+    {
+      "diagnostics": [
+        "scope.context -> inheritance -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state.",
+        "scope.context -> override -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state.",
+        "scope.context -> cancellation -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state.",
+        "scope.context -> session_isolation -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state.",
+        "scope.context -> residual_state_handling -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state.",
+        "scope.context -> cleanup -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+      ],
+      "requirements": [
+        {
+          "capability_key": "context.inheritance",
+          "diagnostics": [
+            "scope.context -> inheritance -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+          ],
+          "evidence_ids": [
+            "evidence.context_state"
+          ],
+          "provider_snapshot_ids": [
+            "module.agent_orchestrator"
+          ],
+          "requirement_id": "inheritance",
+          "support_status": "unsupported"
+        },
+        {
+          "capability_key": "context.override",
+          "diagnostics": [
+            "scope.context -> override -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+          ],
+          "evidence_ids": [
+            "evidence.context_state"
+          ],
+          "provider_snapshot_ids": [
+            "module.agent_orchestrator"
+          ],
+          "requirement_id": "override",
+          "support_status": "unsupported"
+        },
+        {
+          "capability_key": "context.cancellation",
+          "diagnostics": [
+            "scope.context -> cancellation -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+          ],
+          "evidence_ids": [
+            "evidence.context_state"
+          ],
+          "provider_snapshot_ids": [
+            "module.agent_orchestrator"
+          ],
+          "requirement_id": "cancellation",
+          "support_status": "unsupported"
+        },
+        {
+          "capability_key": "context.session_isolation",
+          "diagnostics": [
+            "scope.context -> session_isolation -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+          ],
+          "evidence_ids": [
+            "evidence.context_state"
+          ],
+          "provider_snapshot_ids": [
+            "module.agent_orchestrator"
+          ],
+          "requirement_id": "session_isolation",
+          "support_status": "unsupported"
+        },
+        {
+          "capability_key": "context.residual_state_handling",
+          "diagnostics": [
+            "scope.context -> residual_state_handling -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+          ],
+          "evidence_ids": [
+            "evidence.context_state"
+          ],
+          "provider_snapshot_ids": [
+            "module.agent_orchestrator"
+          ],
+          "requirement_id": "residual_state_handling",
+          "support_status": "unsupported"
+        },
+        {
+          "capability_key": "context.cleanup",
+          "diagnostics": [
+            "scope.context -> cleanup -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+          ],
+          "evidence_ids": [
+            "evidence.context_state"
+          ],
+          "provider_snapshot_ids": [
+            "module.agent_orchestrator"
+          ],
+          "requirement_id": "cleanup",
+          "support_status": "unsupported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.query_gift",
+        "scope_or_chain_id": "scope.context",
+        "tool_id": "tool.query_gift_info"
+      },
+      "snapshot_ids": [
+        "intent.query_gift",
+        "module.agent_orchestrator",
+        "scope.context",
+        "tool.query_gift_info"
+      ],
+      "support_status": "unsupported"
+    },
+    {
+      "diagnostics": [
+        "scope.context -> inheritance -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state.",
+        "scope.context -> override -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state.",
+        "scope.context -> cancellation -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state.",
+        "scope.context -> session_isolation -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state.",
+        "scope.context -> residual_state_handling -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state.",
+        "scope.context -> cleanup -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+      ],
+      "requirements": [
+        {
+          "capability_key": "context.inheritance",
+          "diagnostics": [
+            "scope.context -> inheritance -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+          ],
+          "evidence_ids": [
+            "evidence.context_state"
+          ],
+          "provider_snapshot_ids": [
+            "module.agent_orchestrator"
+          ],
+          "requirement_id": "inheritance",
+          "support_status": "unsupported"
+        },
+        {
+          "capability_key": "context.override",
+          "diagnostics": [
+            "scope.context -> override -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+          ],
+          "evidence_ids": [
+            "evidence.context_state"
+          ],
+          "provider_snapshot_ids": [
+            "module.agent_orchestrator"
+          ],
+          "requirement_id": "override",
+          "support_status": "unsupported"
+        },
+        {
+          "capability_key": "context.cancellation",
+          "diagnostics": [
+            "scope.context -> cancellation -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+          ],
+          "evidence_ids": [
+            "evidence.context_state"
+          ],
+          "provider_snapshot_ids": [
+            "module.agent_orchestrator"
+          ],
+          "requirement_id": "cancellation",
+          "support_status": "unsupported"
+        },
+        {
+          "capability_key": "context.session_isolation",
+          "diagnostics": [
+            "scope.context -> session_isolation -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+          ],
+          "evidence_ids": [
+            "evidence.context_state"
+          ],
+          "provider_snapshot_ids": [
+            "module.agent_orchestrator"
+          ],
+          "requirement_id": "session_isolation",
+          "support_status": "unsupported"
+        },
+        {
+          "capability_key": "context.residual_state_handling",
+          "diagnostics": [
+            "scope.context -> residual_state_handling -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+          ],
+          "evidence_ids": [
+            "evidence.context_state"
+          ],
+          "provider_snapshot_ids": [
+            "module.agent_orchestrator"
+          ],
+          "requirement_id": "residual_state_handling",
+          "support_status": "unsupported"
+        },
+        {
+          "capability_key": "context.cleanup",
+          "diagnostics": [
+            "scope.context -> cleanup -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+          ],
+          "evidence_ids": [
+            "evidence.context_state"
+          ],
+          "provider_snapshot_ids": [
+            "module.agent_orchestrator"
+          ],
+          "requirement_id": "cleanup",
+          "support_status": "unsupported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.query_information",
+        "scope_or_chain_id": "scope.context",
+        "tool_id": "tool.query_information"
+      },
+      "snapshot_ids": [
+        "intent.query_information",
+        "module.agent_orchestrator",
+        "scope.context",
+        "tool.query_information"
+      ],
+      "support_status": "unsupported"
+    },
+    {
+      "diagnostics": [
+        "scope.context -> inheritance -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state.",
+        "scope.context -> override -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state.",
+        "scope.context -> cancellation -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state.",
+        "scope.context -> session_isolation -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state.",
+        "scope.context -> residual_state_handling -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state.",
+        "scope.context -> cleanup -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+      ],
+      "requirements": [
+        {
+          "capability_key": "context.inheritance",
+          "diagnostics": [
+            "scope.context -> inheritance -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+          ],
+          "evidence_ids": [
+            "evidence.context_state"
+          ],
+          "provider_snapshot_ids": [
+            "module.agent_orchestrator"
+          ],
+          "requirement_id": "inheritance",
+          "support_status": "unsupported"
+        },
+        {
+          "capability_key": "context.override",
+          "diagnostics": [
+            "scope.context -> override -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+          ],
+          "evidence_ids": [
+            "evidence.context_state"
+          ],
+          "provider_snapshot_ids": [
+            "module.agent_orchestrator"
+          ],
+          "requirement_id": "override",
+          "support_status": "unsupported"
+        },
+        {
+          "capability_key": "context.cancellation",
+          "diagnostics": [
+            "scope.context -> cancellation -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+          ],
+          "evidence_ids": [
+            "evidence.context_state"
+          ],
+          "provider_snapshot_ids": [
+            "module.agent_orchestrator"
+          ],
+          "requirement_id": "cancellation",
+          "support_status": "unsupported"
+        },
+        {
+          "capability_key": "context.session_isolation",
+          "diagnostics": [
+            "scope.context -> session_isolation -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+          ],
+          "evidence_ids": [
+            "evidence.context_state"
+          ],
+          "provider_snapshot_ids": [
+            "module.agent_orchestrator"
+          ],
+          "requirement_id": "session_isolation",
+          "support_status": "unsupported"
+        },
+        {
+          "capability_key": "context.residual_state_handling",
+          "diagnostics": [
+            "scope.context -> residual_state_handling -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+          ],
+          "evidence_ids": [
+            "evidence.context_state"
+          ],
+          "provider_snapshot_ids": [
+            "module.agent_orchestrator"
+          ],
+          "requirement_id": "residual_state_handling",
+          "support_status": "unsupported"
+        },
+        {
+          "capability_key": "context.cleanup",
+          "diagnostics": [
+            "scope.context -> cleanup -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+          ],
+          "evidence_ids": [
+            "evidence.context_state"
+          ],
+          "provider_snapshot_ids": [
+            "module.agent_orchestrator"
+          ],
+          "requirement_id": "cleanup",
+          "support_status": "unsupported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.query_pool",
+        "scope_or_chain_id": "scope.context",
+        "tool_id": "tool.query_pool_config"
+      },
+      "snapshot_ids": [
+        "intent.query_pool",
+        "module.agent_orchestrator",
+        "scope.context",
+        "tool.query_pool_config"
+      ],
+      "support_status": "unsupported"
+    },
+    {
+      "diagnostics": [
+        "scope.context -> inheritance -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state.",
+        "scope.context -> override -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state.",
+        "scope.context -> cancellation -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state.",
+        "scope.context -> session_isolation -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state.",
+        "scope.context -> residual_state_handling -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state.",
+        "scope.context -> cleanup -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+      ],
+      "requirements": [
+        {
+          "capability_key": "context.inheritance",
+          "diagnostics": [
+            "scope.context -> inheritance -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+          ],
+          "evidence_ids": [
+            "evidence.context_state"
+          ],
+          "provider_snapshot_ids": [
+            "module.agent_orchestrator"
+          ],
+          "requirement_id": "inheritance",
+          "support_status": "unsupported"
+        },
+        {
+          "capability_key": "context.override",
+          "diagnostics": [
+            "scope.context -> override -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+          ],
+          "evidence_ids": [
+            "evidence.context_state"
+          ],
+          "provider_snapshot_ids": [
+            "module.agent_orchestrator"
+          ],
+          "requirement_id": "override",
+          "support_status": "unsupported"
+        },
+        {
+          "capability_key": "context.cancellation",
+          "diagnostics": [
+            "scope.context -> cancellation -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+          ],
+          "evidence_ids": [
+            "evidence.context_state"
+          ],
+          "provider_snapshot_ids": [
+            "module.agent_orchestrator"
+          ],
+          "requirement_id": "cancellation",
+          "support_status": "unsupported"
+        },
+        {
+          "capability_key": "context.session_isolation",
+          "diagnostics": [
+            "scope.context -> session_isolation -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+          ],
+          "evidence_ids": [
+            "evidence.context_state"
+          ],
+          "provider_snapshot_ids": [
+            "module.agent_orchestrator"
+          ],
+          "requirement_id": "session_isolation",
+          "support_status": "unsupported"
+        },
+        {
+          "capability_key": "context.residual_state_handling",
+          "diagnostics": [
+            "scope.context -> residual_state_handling -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+          ],
+          "evidence_ids": [
+            "evidence.context_state"
+          ],
+          "provider_snapshot_ids": [
+            "module.agent_orchestrator"
+          ],
+          "requirement_id": "residual_state_handling",
+          "support_status": "unsupported"
+        },
+        {
+          "capability_key": "context.cleanup",
+          "diagnostics": [
+            "scope.context -> cleanup -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+          ],
+          "evidence_ids": [
+            "evidence.context_state"
+          ],
+          "provider_snapshot_ids": [
+            "module.agent_orchestrator"
+          ],
+          "requirement_id": "cleanup",
+          "support_status": "unsupported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.query_user",
+        "scope_or_chain_id": "scope.context",
+        "tool_id": "tool.query_user_info"
+      },
+      "snapshot_ids": [
+        "intent.query_user",
+        "module.agent_orchestrator",
+        "scope.context",
+        "tool.query_user_info"
+      ],
+      "support_status": "unsupported"
+    },
+    {
+      "diagnostics": [
+        "scope.context -> inheritance -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state.",
+        "scope.context -> override -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state.",
+        "scope.context -> cancellation -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state.",
+        "scope.context -> session_isolation -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state.",
+        "scope.context -> residual_state_handling -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state.",
+        "scope.context -> cleanup -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+      ],
+      "requirements": [
+        {
+          "capability_key": "context.inheritance",
+          "diagnostics": [
+            "scope.context -> inheritance -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+          ],
+          "evidence_ids": [
+            "evidence.context_state"
+          ],
+          "provider_snapshot_ids": [
+            "module.agent_orchestrator"
+          ],
+          "requirement_id": "inheritance",
+          "support_status": "unsupported"
+        },
+        {
+          "capability_key": "context.override",
+          "diagnostics": [
+            "scope.context -> override -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+          ],
+          "evidence_ids": [
+            "evidence.context_state"
+          ],
+          "provider_snapshot_ids": [
+            "module.agent_orchestrator"
+          ],
+          "requirement_id": "override",
+          "support_status": "unsupported"
+        },
+        {
+          "capability_key": "context.cancellation",
+          "diagnostics": [
+            "scope.context -> cancellation -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+          ],
+          "evidence_ids": [
+            "evidence.context_state"
+          ],
+          "provider_snapshot_ids": [
+            "module.agent_orchestrator"
+          ],
+          "requirement_id": "cancellation",
+          "support_status": "unsupported"
+        },
+        {
+          "capability_key": "context.session_isolation",
+          "diagnostics": [
+            "scope.context -> session_isolation -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+          ],
+          "evidence_ids": [
+            "evidence.context_state"
+          ],
+          "provider_snapshot_ids": [
+            "module.agent_orchestrator"
+          ],
+          "requirement_id": "session_isolation",
+          "support_status": "unsupported"
+        },
+        {
+          "capability_key": "context.residual_state_handling",
+          "diagnostics": [
+            "scope.context -> residual_state_handling -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+          ],
+          "evidence_ids": [
+            "evidence.context_state"
+          ],
+          "provider_snapshot_ids": [
+            "module.agent_orchestrator"
+          ],
+          "requirement_id": "residual_state_handling",
+          "support_status": "unsupported"
+        },
+        {
+          "capability_key": "context.cleanup",
+          "diagnostics": [
+            "scope.context -> cleanup -> module.agent_orchestrator: provider claim is unsupported: MinimalAgent.run accepts one user input and no inherited conversation state."
+          ],
+          "evidence_ids": [
+            "evidence.context_state"
+          ],
+          "provider_snapshot_ids": [
+            "module.agent_orchestrator"
+          ],
+          "requirement_id": "cleanup",
+          "support_status": "unsupported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.unsupported",
+        "scope_or_chain_id": "scope.context",
+        "tool_id": null
+      },
+      "snapshot_ids": [
+        "intent.unsupported",
+        "module.agent_orchestrator",
+        "scope.context"
+      ],
+      "support_status": "unsupported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "execution.bounded_tool_loop",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.tool_trace"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.tool_trace",
+            "module.tool_loop"
+          ],
+          "requirement_id": "bounded_tool_loop",
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "tool.registered_execution",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.tool_trace"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.tool_trace",
+            "tool.add_gift_to_backpack"
+          ],
+          "requirement_id": "selected_tool_execution",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.add_backpack_gift",
+        "scope_or_chain_id": "scope.planning_execution",
+        "tool_id": "tool.add_gift_to_backpack"
+      },
+      "snapshot_ids": [
+        "evidence.tool_trace",
+        "intent.add_backpack_gift",
+        "module.tool_loop",
+        "scope.planning_execution",
+        "tool.add_gift_to_backpack"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "execution.bounded_tool_loop",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.tool_trace"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.tool_trace",
+            "module.tool_loop"
+          ],
+          "requirement_id": "bounded_tool_loop",
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "tool.registered_execution",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.tool_trace"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.tool_trace",
+            "tool.prepare_resource"
+          ],
+          "requirement_id": "selected_tool_execution",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.prepare_resource",
+        "scope_or_chain_id": "scope.planning_execution",
+        "tool_id": "tool.prepare_resource"
+      },
+      "snapshot_ids": [
+        "evidence.tool_trace",
+        "intent.prepare_resource",
+        "module.tool_loop",
+        "scope.planning_execution",
+        "tool.prepare_resource"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "execution.bounded_tool_loop",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.tool_trace"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.tool_trace",
+            "module.tool_loop"
+          ],
+          "requirement_id": "bounded_tool_loop",
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "tool.registered_execution",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.tool_trace"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.tool_trace",
+            "tool.query_gift_info"
+          ],
+          "requirement_id": "selected_tool_execution",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.query_gift",
+        "scope_or_chain_id": "scope.planning_execution",
+        "tool_id": "tool.query_gift_info"
+      },
+      "snapshot_ids": [
+        "evidence.tool_trace",
+        "intent.query_gift",
+        "module.tool_loop",
+        "scope.planning_execution",
+        "tool.query_gift_info"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "execution.bounded_tool_loop",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.tool_trace"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.tool_trace",
+            "module.tool_loop"
+          ],
+          "requirement_id": "bounded_tool_loop",
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "tool.registered_execution",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.tool_trace"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.tool_trace",
+            "tool.query_information"
+          ],
+          "requirement_id": "selected_tool_execution",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.query_information",
+        "scope_or_chain_id": "scope.planning_execution",
+        "tool_id": "tool.query_information"
+      },
+      "snapshot_ids": [
+        "evidence.tool_trace",
+        "intent.query_information",
+        "module.tool_loop",
+        "scope.planning_execution",
+        "tool.query_information"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "execution.bounded_tool_loop",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.tool_trace"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.tool_trace",
+            "module.tool_loop"
+          ],
+          "requirement_id": "bounded_tool_loop",
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "tool.registered_execution",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.tool_trace"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.tool_trace",
+            "tool.query_pool_config"
+          ],
+          "requirement_id": "selected_tool_execution",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.query_pool",
+        "scope_or_chain_id": "scope.planning_execution",
+        "tool_id": "tool.query_pool_config"
+      },
+      "snapshot_ids": [
+        "evidence.tool_trace",
+        "intent.query_pool",
+        "module.tool_loop",
+        "scope.planning_execution",
+        "tool.query_pool_config"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "execution.bounded_tool_loop",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.tool_trace"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.tool_trace",
+            "module.tool_loop"
+          ],
+          "requirement_id": "bounded_tool_loop",
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "tool.registered_execution",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.tool_trace"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.tool_trace",
+            "tool.query_user_info"
+          ],
+          "requirement_id": "selected_tool_execution",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.query_user",
+        "scope_or_chain_id": "scope.planning_execution",
+        "tool_id": "tool.query_user_info"
+      },
+      "snapshot_ids": [
+        "evidence.tool_trace",
+        "intent.query_user",
+        "module.tool_loop",
+        "scope.planning_execution",
+        "tool.query_user_info"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [
+        "scope.planning_execution -> selected_tool_execution: selected Intent declares no required Tool"
+      ],
+      "requirements": [
+        {
+          "capability_key": "execution.bounded_tool_loop",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.tool_trace"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.tool_trace",
+            "module.tool_loop"
+          ],
+          "requirement_id": "bounded_tool_loop",
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "tool.registered_execution",
+          "diagnostics": [
+            "scope.planning_execution -> selected_tool_execution: selected Intent declares no required Tool"
+          ],
+          "evidence_ids": [
+            "evidence.tool_trace"
+          ],
+          "provider_snapshot_ids": [],
+          "requirement_id": "selected_tool_execution",
+          "support_status": "unsupported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.unsupported",
+        "scope_or_chain_id": "scope.planning_execution",
+        "tool_id": null
+      },
+      "snapshot_ids": [
+        "evidence.tool_trace",
+        "intent.unsupported",
+        "module.tool_loop",
+        "scope.planning_execution"
+      ],
+      "support_status": "unsupported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "result.final_response",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.final_response"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.final_response",
+            "module.observability"
+          ],
+          "requirement_id": "final_response",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.add_backpack_gift",
+        "scope_or_chain_id": "scope.result",
+        "tool_id": "tool.add_gift_to_backpack"
+      },
+      "snapshot_ids": [
+        "evidence.final_response",
+        "intent.add_backpack_gift",
+        "module.observability",
+        "scope.result",
+        "tool.add_gift_to_backpack"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "result.final_response",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.final_response"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.final_response",
+            "module.observability"
+          ],
+          "requirement_id": "final_response",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.prepare_resource",
+        "scope_or_chain_id": "scope.result",
+        "tool_id": "tool.prepare_resource"
+      },
+      "snapshot_ids": [
+        "evidence.final_response",
+        "intent.prepare_resource",
+        "module.observability",
+        "scope.result",
+        "tool.prepare_resource"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "result.final_response",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.final_response"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.final_response",
+            "module.observability"
+          ],
+          "requirement_id": "final_response",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.query_gift",
+        "scope_or_chain_id": "scope.result",
+        "tool_id": "tool.query_gift_info"
+      },
+      "snapshot_ids": [
+        "evidence.final_response",
+        "intent.query_gift",
+        "module.observability",
+        "scope.result",
+        "tool.query_gift_info"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "result.final_response",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.final_response"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.final_response",
+            "module.observability"
+          ],
+          "requirement_id": "final_response",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.query_information",
+        "scope_or_chain_id": "scope.result",
+        "tool_id": "tool.query_information"
+      },
+      "snapshot_ids": [
+        "evidence.final_response",
+        "intent.query_information",
+        "module.observability",
+        "scope.result",
+        "tool.query_information"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "result.final_response",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.final_response"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.final_response",
+            "module.observability"
+          ],
+          "requirement_id": "final_response",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.query_pool",
+        "scope_or_chain_id": "scope.result",
+        "tool_id": "tool.query_pool_config"
+      },
+      "snapshot_ids": [
+        "evidence.final_response",
+        "intent.query_pool",
+        "module.observability",
+        "scope.result",
+        "tool.query_pool_config"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "result.final_response",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.final_response"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.final_response",
+            "module.observability"
+          ],
+          "requirement_id": "final_response",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.query_user",
+        "scope_or_chain_id": "scope.result",
+        "tool_id": "tool.query_user_info"
+      },
+      "snapshot_ids": [
+        "evidence.final_response",
+        "intent.query_user",
+        "module.observability",
+        "scope.result",
+        "tool.query_user_info"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "result.final_response",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.final_response"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.final_response",
+            "module.observability"
+          ],
+          "requirement_id": "final_response",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.unsupported",
+        "scope_or_chain_id": "scope.result",
+        "tool_id": null
+      },
+      "snapshot_ids": [
+        "evidence.final_response",
+        "intent.unsupported",
+        "module.observability",
+        "scope.result"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "safety.run_allow_list",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.safety_recovery_event"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.safety_recovery_event",
+            "module.execution_guard"
+          ],
+          "requirement_id": "run_allow_list",
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "safety.tool_failure_terminal",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.safety_recovery_event"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.safety_recovery_event",
+            "module.tool_loop"
+          ],
+          "requirement_id": "tool_failure_terminal",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.add_backpack_gift",
+        "scope_or_chain_id": "scope.safety_recovery",
+        "tool_id": "tool.add_gift_to_backpack"
+      },
+      "snapshot_ids": [
+        "evidence.safety_recovery_event",
+        "intent.add_backpack_gift",
+        "module.execution_guard",
+        "module.tool_loop",
+        "scope.safety_recovery",
+        "tool.add_gift_to_backpack"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "safety.run_allow_list",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.safety_recovery_event"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.safety_recovery_event",
+            "module.execution_guard"
+          ],
+          "requirement_id": "run_allow_list",
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "safety.tool_failure_terminal",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.safety_recovery_event"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.safety_recovery_event",
+            "module.tool_loop"
+          ],
+          "requirement_id": "tool_failure_terminal",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.prepare_resource",
+        "scope_or_chain_id": "scope.safety_recovery",
+        "tool_id": "tool.prepare_resource"
+      },
+      "snapshot_ids": [
+        "evidence.safety_recovery_event",
+        "intent.prepare_resource",
+        "module.execution_guard",
+        "module.tool_loop",
+        "scope.safety_recovery",
+        "tool.prepare_resource"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "safety.run_allow_list",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.safety_recovery_event"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.safety_recovery_event",
+            "module.execution_guard"
+          ],
+          "requirement_id": "run_allow_list",
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "safety.tool_failure_terminal",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.safety_recovery_event"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.safety_recovery_event",
+            "module.tool_loop"
+          ],
+          "requirement_id": "tool_failure_terminal",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.query_gift",
+        "scope_or_chain_id": "scope.safety_recovery",
+        "tool_id": "tool.query_gift_info"
+      },
+      "snapshot_ids": [
+        "evidence.safety_recovery_event",
+        "intent.query_gift",
+        "module.execution_guard",
+        "module.tool_loop",
+        "scope.safety_recovery",
+        "tool.query_gift_info"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "safety.run_allow_list",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.safety_recovery_event"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.safety_recovery_event",
+            "module.execution_guard"
+          ],
+          "requirement_id": "run_allow_list",
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "safety.tool_failure_terminal",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.safety_recovery_event"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.safety_recovery_event",
+            "module.tool_loop"
+          ],
+          "requirement_id": "tool_failure_terminal",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.query_information",
+        "scope_or_chain_id": "scope.safety_recovery",
+        "tool_id": "tool.query_information"
+      },
+      "snapshot_ids": [
+        "evidence.safety_recovery_event",
+        "intent.query_information",
+        "module.execution_guard",
+        "module.tool_loop",
+        "scope.safety_recovery",
+        "tool.query_information"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "safety.run_allow_list",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.safety_recovery_event"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.safety_recovery_event",
+            "module.execution_guard"
+          ],
+          "requirement_id": "run_allow_list",
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "safety.tool_failure_terminal",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.safety_recovery_event"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.safety_recovery_event",
+            "module.tool_loop"
+          ],
+          "requirement_id": "tool_failure_terminal",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.query_pool",
+        "scope_or_chain_id": "scope.safety_recovery",
+        "tool_id": "tool.query_pool_config"
+      },
+      "snapshot_ids": [
+        "evidence.safety_recovery_event",
+        "intent.query_pool",
+        "module.execution_guard",
+        "module.tool_loop",
+        "scope.safety_recovery",
+        "tool.query_pool_config"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "safety.run_allow_list",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.safety_recovery_event"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.safety_recovery_event",
+            "module.execution_guard"
+          ],
+          "requirement_id": "run_allow_list",
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "safety.tool_failure_terminal",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.safety_recovery_event"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.safety_recovery_event",
+            "module.tool_loop"
+          ],
+          "requirement_id": "tool_failure_terminal",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.query_user",
+        "scope_or_chain_id": "scope.safety_recovery",
+        "tool_id": "tool.query_user_info"
+      },
+      "snapshot_ids": [
+        "evidence.safety_recovery_event",
+        "intent.query_user",
+        "module.execution_guard",
+        "module.tool_loop",
+        "scope.safety_recovery",
+        "tool.query_user_info"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "safety.run_allow_list",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.safety_recovery_event"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.safety_recovery_event",
+            "module.execution_guard"
+          ],
+          "requirement_id": "run_allow_list",
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "safety.tool_failure_terminal",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.safety_recovery_event"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.safety_recovery_event",
+            "module.tool_loop"
+          ],
+          "requirement_id": "tool_failure_terminal",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.unsupported",
+        "scope_or_chain_id": "scope.safety_recovery",
+        "tool_id": null
+      },
+      "snapshot_ids": [
+        "evidence.safety_recovery_event",
+        "intent.unsupported",
+        "module.execution_guard",
+        "module.tool_loop",
+        "scope.safety_recovery"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "intent.formal_validation",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.intent_result"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.intent_result",
+            "module.intent_router"
+          ],
+          "requirement_id": "formal_intent_validation",
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "intent.contract_validation",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.intent_result"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.intent_result",
+            "intent.add_backpack_gift"
+          ],
+          "requirement_id": "selected_intent_contract",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.add_backpack_gift",
+        "scope_or_chain_id": "scope.understanding",
+        "tool_id": "tool.add_gift_to_backpack"
+      },
+      "snapshot_ids": [
+        "evidence.intent_result",
+        "intent.add_backpack_gift",
+        "module.intent_router",
+        "scope.understanding",
+        "tool.add_gift_to_backpack"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "intent.formal_validation",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.intent_result"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.intent_result",
+            "module.intent_router"
+          ],
+          "requirement_id": "formal_intent_validation",
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "intent.contract_validation",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.intent_result"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.intent_result",
+            "intent.prepare_resource"
+          ],
+          "requirement_id": "selected_intent_contract",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.prepare_resource",
+        "scope_or_chain_id": "scope.understanding",
+        "tool_id": "tool.prepare_resource"
+      },
+      "snapshot_ids": [
+        "evidence.intent_result",
+        "intent.prepare_resource",
+        "module.intent_router",
+        "scope.understanding",
+        "tool.prepare_resource"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "intent.formal_validation",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.intent_result"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.intent_result",
+            "module.intent_router"
+          ],
+          "requirement_id": "formal_intent_validation",
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "intent.contract_validation",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.intent_result"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.intent_result",
+            "intent.query_gift"
+          ],
+          "requirement_id": "selected_intent_contract",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.query_gift",
+        "scope_or_chain_id": "scope.understanding",
+        "tool_id": "tool.query_gift_info"
+      },
+      "snapshot_ids": [
+        "evidence.intent_result",
+        "intent.query_gift",
+        "module.intent_router",
+        "scope.understanding",
+        "tool.query_gift_info"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "intent.formal_validation",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.intent_result"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.intent_result",
+            "module.intent_router"
+          ],
+          "requirement_id": "formal_intent_validation",
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "intent.contract_validation",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.intent_result"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.intent_result",
+            "intent.query_information"
+          ],
+          "requirement_id": "selected_intent_contract",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.query_information",
+        "scope_or_chain_id": "scope.understanding",
+        "tool_id": "tool.query_information"
+      },
+      "snapshot_ids": [
+        "evidence.intent_result",
+        "intent.query_information",
+        "module.intent_router",
+        "scope.understanding",
+        "tool.query_information"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "intent.formal_validation",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.intent_result"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.intent_result",
+            "module.intent_router"
+          ],
+          "requirement_id": "formal_intent_validation",
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "intent.contract_validation",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.intent_result"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.intent_result",
+            "intent.query_pool"
+          ],
+          "requirement_id": "selected_intent_contract",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.query_pool",
+        "scope_or_chain_id": "scope.understanding",
+        "tool_id": "tool.query_pool_config"
+      },
+      "snapshot_ids": [
+        "evidence.intent_result",
+        "intent.query_pool",
+        "module.intent_router",
+        "scope.understanding",
+        "tool.query_pool_config"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "intent.formal_validation",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.intent_result"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.intent_result",
+            "module.intent_router"
+          ],
+          "requirement_id": "formal_intent_validation",
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "intent.contract_validation",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.intent_result"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.intent_result",
+            "intent.query_user"
+          ],
+          "requirement_id": "selected_intent_contract",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.query_user",
+        "scope_or_chain_id": "scope.understanding",
+        "tool_id": "tool.query_user_info"
+      },
+      "snapshot_ids": [
+        "evidence.intent_result",
+        "intent.query_user",
+        "module.intent_router",
+        "scope.understanding",
+        "tool.query_user_info"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "intent.formal_validation",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.intent_result"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.intent_result",
+            "module.intent_router"
+          ],
+          "requirement_id": "formal_intent_validation",
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "intent.contract_validation",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.intent_result"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.intent_result",
+            "intent.unsupported"
+          ],
+          "requirement_id": "selected_intent_contract",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.unsupported",
+        "scope_or_chain_id": "scope.understanding",
+        "tool_id": null
+      },
+      "snapshot_ids": [
+        "evidence.intent_result",
+        "intent.unsupported",
+        "module.intent_router",
+        "scope.understanding"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "intent.contract_validation",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.intent_result"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.intent_result",
+            "intent.add_backpack_gift"
+          ],
+          "requirement_id": "selected_intent_contract",
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "tool.registered_execution",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.tool_trace"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.tool_trace",
+            "tool.add_gift_to_backpack"
+          ],
+          "requirement_id": "selected_tool_execution",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.add_backpack_gift",
+        "scope_or_chain_id": "chain.planning_to_result",
+        "tool_id": "tool.add_gift_to_backpack"
+      },
+      "snapshot_ids": [
+        "chain.planning_to_result",
+        "evidence.intent_result",
+        "evidence.tool_trace",
+        "intent.add_backpack_gift",
+        "tool.add_gift_to_backpack"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "intent.contract_validation",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.intent_result"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.intent_result",
+            "intent.prepare_resource"
+          ],
+          "requirement_id": "selected_intent_contract",
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "tool.registered_execution",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.tool_trace"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.tool_trace",
+            "tool.prepare_resource"
+          ],
+          "requirement_id": "selected_tool_execution",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.prepare_resource",
+        "scope_or_chain_id": "chain.planning_to_result",
+        "tool_id": "tool.prepare_resource"
+      },
+      "snapshot_ids": [
+        "chain.planning_to_result",
+        "evidence.intent_result",
+        "evidence.tool_trace",
+        "intent.prepare_resource",
+        "tool.prepare_resource"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "intent.contract_validation",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.intent_result"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.intent_result",
+            "intent.query_gift"
+          ],
+          "requirement_id": "selected_intent_contract",
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "tool.registered_execution",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.tool_trace"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.tool_trace",
+            "tool.query_gift_info"
+          ],
+          "requirement_id": "selected_tool_execution",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.query_gift",
+        "scope_or_chain_id": "chain.planning_to_result",
+        "tool_id": "tool.query_gift_info"
+      },
+      "snapshot_ids": [
+        "chain.planning_to_result",
+        "evidence.intent_result",
+        "evidence.tool_trace",
+        "intent.query_gift",
+        "tool.query_gift_info"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "intent.contract_validation",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.intent_result"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.intent_result",
+            "intent.query_information"
+          ],
+          "requirement_id": "selected_intent_contract",
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "tool.registered_execution",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.tool_trace"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.tool_trace",
+            "tool.query_information"
+          ],
+          "requirement_id": "selected_tool_execution",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.query_information",
+        "scope_or_chain_id": "chain.planning_to_result",
+        "tool_id": "tool.query_information"
+      },
+      "snapshot_ids": [
+        "chain.planning_to_result",
+        "evidence.intent_result",
+        "evidence.tool_trace",
+        "intent.query_information",
+        "tool.query_information"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "intent.contract_validation",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.intent_result"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.intent_result",
+            "intent.query_pool"
+          ],
+          "requirement_id": "selected_intent_contract",
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "tool.registered_execution",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.tool_trace"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.tool_trace",
+            "tool.query_pool_config"
+          ],
+          "requirement_id": "selected_tool_execution",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.query_pool",
+        "scope_or_chain_id": "chain.planning_to_result",
+        "tool_id": "tool.query_pool_config"
+      },
+      "snapshot_ids": [
+        "chain.planning_to_result",
+        "evidence.intent_result",
+        "evidence.tool_trace",
+        "intent.query_pool",
+        "tool.query_pool_config"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "intent.contract_validation",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.intent_result"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.intent_result",
+            "intent.query_user"
+          ],
+          "requirement_id": "selected_intent_contract",
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "tool.registered_execution",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.tool_trace"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.tool_trace",
+            "tool.query_user_info"
+          ],
+          "requirement_id": "selected_tool_execution",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.query_user",
+        "scope_or_chain_id": "chain.planning_to_result",
+        "tool_id": "tool.query_user_info"
+      },
+      "snapshot_ids": [
+        "chain.planning_to_result",
+        "evidence.intent_result",
+        "evidence.tool_trace",
+        "intent.query_user",
+        "tool.query_user_info"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [
+        "chain.planning_to_result -> selected_tool_execution: selected Intent declares no required Tool"
+      ],
+      "requirements": [
+        {
+          "capability_key": "intent.contract_validation",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.intent_result"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.intent_result",
+            "intent.unsupported"
+          ],
+          "requirement_id": "selected_intent_contract",
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "tool.registered_execution",
+          "diagnostics": [
+            "chain.planning_to_result -> selected_tool_execution: selected Intent declares no required Tool"
+          ],
+          "evidence_ids": [
+            "evidence.tool_trace"
+          ],
+          "provider_snapshot_ids": [],
+          "requirement_id": "selected_tool_execution",
+          "support_status": "unsupported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.unsupported",
+        "scope_or_chain_id": "chain.planning_to_result",
+        "tool_id": null
+      },
+      "snapshot_ids": [
+        "chain.planning_to_result",
+        "evidence.intent_result",
+        "intent.unsupported"
+      ],
+      "support_status": "unsupported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "intent.contract_validation",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.intent_result"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.intent_result",
+            "intent.add_backpack_gift"
+          ],
+          "requirement_id": "selected_intent_contract",
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "tool.registered_execution",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.tool_trace"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.tool_trace",
+            "tool.add_gift_to_backpack"
+          ],
+          "requirement_id": "selected_tool_execution",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.add_backpack_gift",
+        "scope_or_chain_id": "chain.understanding_to_planning",
+        "tool_id": "tool.add_gift_to_backpack"
+      },
+      "snapshot_ids": [
+        "chain.understanding_to_planning",
+        "evidence.intent_result",
+        "evidence.tool_trace",
+        "intent.add_backpack_gift",
+        "tool.add_gift_to_backpack"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "intent.contract_validation",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.intent_result"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.intent_result",
+            "intent.prepare_resource"
+          ],
+          "requirement_id": "selected_intent_contract",
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "tool.registered_execution",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.tool_trace"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.tool_trace",
+            "tool.prepare_resource"
+          ],
+          "requirement_id": "selected_tool_execution",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.prepare_resource",
+        "scope_or_chain_id": "chain.understanding_to_planning",
+        "tool_id": "tool.prepare_resource"
+      },
+      "snapshot_ids": [
+        "chain.understanding_to_planning",
+        "evidence.intent_result",
+        "evidence.tool_trace",
+        "intent.prepare_resource",
+        "tool.prepare_resource"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "intent.contract_validation",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.intent_result"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.intent_result",
+            "intent.query_gift"
+          ],
+          "requirement_id": "selected_intent_contract",
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "tool.registered_execution",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.tool_trace"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.tool_trace",
+            "tool.query_gift_info"
+          ],
+          "requirement_id": "selected_tool_execution",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.query_gift",
+        "scope_or_chain_id": "chain.understanding_to_planning",
+        "tool_id": "tool.query_gift_info"
+      },
+      "snapshot_ids": [
+        "chain.understanding_to_planning",
+        "evidence.intent_result",
+        "evidence.tool_trace",
+        "intent.query_gift",
+        "tool.query_gift_info"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "intent.contract_validation",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.intent_result"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.intent_result",
+            "intent.query_information"
+          ],
+          "requirement_id": "selected_intent_contract",
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "tool.registered_execution",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.tool_trace"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.tool_trace",
+            "tool.query_information"
+          ],
+          "requirement_id": "selected_tool_execution",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.query_information",
+        "scope_or_chain_id": "chain.understanding_to_planning",
+        "tool_id": "tool.query_information"
+      },
+      "snapshot_ids": [
+        "chain.understanding_to_planning",
+        "evidence.intent_result",
+        "evidence.tool_trace",
+        "intent.query_information",
+        "tool.query_information"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "intent.contract_validation",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.intent_result"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.intent_result",
+            "intent.query_pool"
+          ],
+          "requirement_id": "selected_intent_contract",
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "tool.registered_execution",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.tool_trace"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.tool_trace",
+            "tool.query_pool_config"
+          ],
+          "requirement_id": "selected_tool_execution",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.query_pool",
+        "scope_or_chain_id": "chain.understanding_to_planning",
+        "tool_id": "tool.query_pool_config"
+      },
+      "snapshot_ids": [
+        "chain.understanding_to_planning",
+        "evidence.intent_result",
+        "evidence.tool_trace",
+        "intent.query_pool",
+        "tool.query_pool_config"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "intent.contract_validation",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.intent_result"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.intent_result",
+            "intent.query_user"
+          ],
+          "requirement_id": "selected_intent_contract",
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "tool.registered_execution",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.tool_trace"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.tool_trace",
+            "tool.query_user_info"
+          ],
+          "requirement_id": "selected_tool_execution",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.query_user",
+        "scope_or_chain_id": "chain.understanding_to_planning",
+        "tool_id": "tool.query_user_info"
+      },
+      "snapshot_ids": [
+        "chain.understanding_to_planning",
+        "evidence.intent_result",
+        "evidence.tool_trace",
+        "intent.query_user",
+        "tool.query_user_info"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [
+        "chain.understanding_to_planning -> selected_tool_execution: selected Intent declares no required Tool"
+      ],
+      "requirements": [
+        {
+          "capability_key": "intent.contract_validation",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.intent_result"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.intent_result",
+            "intent.unsupported"
+          ],
+          "requirement_id": "selected_intent_contract",
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "tool.registered_execution",
+          "diagnostics": [
+            "chain.understanding_to_planning -> selected_tool_execution: selected Intent declares no required Tool"
+          ],
+          "evidence_ids": [
+            "evidence.tool_trace"
+          ],
+          "provider_snapshot_ids": [],
+          "requirement_id": "selected_tool_execution",
+          "support_status": "unsupported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.unsupported",
+        "scope_or_chain_id": "chain.understanding_to_planning",
+        "tool_id": null
+      },
+      "snapshot_ids": [
+        "chain.understanding_to_planning",
+        "evidence.intent_result",
+        "intent.unsupported"
+      ],
+      "support_status": "unsupported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "intent.contract_validation",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.intent_result"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.intent_result",
+            "intent.add_backpack_gift"
+          ],
+          "requirement_id": "selected_intent_contract",
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "tool.registered_execution",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.tool_trace"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.tool_trace",
+            "tool.add_gift_to_backpack"
+          ],
+          "requirement_id": "selected_tool_execution",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.add_backpack_gift",
+        "scope_or_chain_id": "chain.end_to_end",
+        "tool_id": "tool.add_gift_to_backpack"
+      },
+      "snapshot_ids": [
+        "chain.end_to_end",
+        "evidence.intent_result",
+        "evidence.tool_trace",
+        "intent.add_backpack_gift",
+        "tool.add_gift_to_backpack"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "intent.contract_validation",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.intent_result"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.intent_result",
+            "intent.prepare_resource"
+          ],
+          "requirement_id": "selected_intent_contract",
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "tool.registered_execution",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.tool_trace"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.tool_trace",
+            "tool.prepare_resource"
+          ],
+          "requirement_id": "selected_tool_execution",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.prepare_resource",
+        "scope_or_chain_id": "chain.end_to_end",
+        "tool_id": "tool.prepare_resource"
+      },
+      "snapshot_ids": [
+        "chain.end_to_end",
+        "evidence.intent_result",
+        "evidence.tool_trace",
+        "intent.prepare_resource",
+        "tool.prepare_resource"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "intent.contract_validation",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.intent_result"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.intent_result",
+            "intent.query_gift"
+          ],
+          "requirement_id": "selected_intent_contract",
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "tool.registered_execution",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.tool_trace"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.tool_trace",
+            "tool.query_gift_info"
+          ],
+          "requirement_id": "selected_tool_execution",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.query_gift",
+        "scope_or_chain_id": "chain.end_to_end",
+        "tool_id": "tool.query_gift_info"
+      },
+      "snapshot_ids": [
+        "chain.end_to_end",
+        "evidence.intent_result",
+        "evidence.tool_trace",
+        "intent.query_gift",
+        "tool.query_gift_info"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "intent.contract_validation",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.intent_result"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.intent_result",
+            "intent.query_information"
+          ],
+          "requirement_id": "selected_intent_contract",
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "tool.registered_execution",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.tool_trace"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.tool_trace",
+            "tool.query_information"
+          ],
+          "requirement_id": "selected_tool_execution",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.query_information",
+        "scope_or_chain_id": "chain.end_to_end",
+        "tool_id": "tool.query_information"
+      },
+      "snapshot_ids": [
+        "chain.end_to_end",
+        "evidence.intent_result",
+        "evidence.tool_trace",
+        "intent.query_information",
+        "tool.query_information"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "intent.contract_validation",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.intent_result"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.intent_result",
+            "intent.query_pool"
+          ],
+          "requirement_id": "selected_intent_contract",
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "tool.registered_execution",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.tool_trace"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.tool_trace",
+            "tool.query_pool_config"
+          ],
+          "requirement_id": "selected_tool_execution",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.query_pool",
+        "scope_or_chain_id": "chain.end_to_end",
+        "tool_id": "tool.query_pool_config"
+      },
+      "snapshot_ids": [
+        "chain.end_to_end",
+        "evidence.intent_result",
+        "evidence.tool_trace",
+        "intent.query_pool",
+        "tool.query_pool_config"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [],
+      "requirements": [
+        {
+          "capability_key": "intent.contract_validation",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.intent_result"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.intent_result",
+            "intent.query_user"
+          ],
+          "requirement_id": "selected_intent_contract",
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "tool.registered_execution",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.tool_trace"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.tool_trace",
+            "tool.query_user_info"
+          ],
+          "requirement_id": "selected_tool_execution",
+          "support_status": "supported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.query_user",
+        "scope_or_chain_id": "chain.end_to_end",
+        "tool_id": "tool.query_user_info"
+      },
+      "snapshot_ids": [
+        "chain.end_to_end",
+        "evidence.intent_result",
+        "evidence.tool_trace",
+        "intent.query_user",
+        "tool.query_user_info"
+      ],
+      "support_status": "supported"
+    },
+    {
+      "diagnostics": [
+        "chain.end_to_end -> selected_tool_execution: selected Intent declares no required Tool"
+      ],
+      "requirements": [
+        {
+          "capability_key": "intent.contract_validation",
+          "diagnostics": [],
+          "evidence_ids": [
+            "evidence.intent_result"
+          ],
+          "provider_snapshot_ids": [
+            "evidence.intent_result",
+            "intent.unsupported"
+          ],
+          "requirement_id": "selected_intent_contract",
+          "support_status": "supported"
+        },
+        {
+          "capability_key": "tool.registered_execution",
+          "diagnostics": [
+            "chain.end_to_end -> selected_tool_execution: selected Intent declares no required Tool"
+          ],
+          "evidence_ids": [
+            "evidence.tool_trace"
+          ],
+          "provider_snapshot_ids": [],
+          "requirement_id": "selected_tool_execution",
+          "support_status": "unsupported"
+        }
+      ],
+      "selection": {
+        "intent_id": "intent.unsupported",
+        "scope_or_chain_id": "chain.end_to_end",
+        "tool_id": null
+      },
+      "snapshot_ids": [
+        "chain.end_to_end",
+        "evidence.intent_result",
+        "intent.unsupported"
+      ],
+      "support_status": "unsupported"
+    }
+  ],
+  "targets": [
+    {
+      "snapshot_id": "chain.end_to_end",
+      "snapshot_sha256": "02fdeccdc6fd25dce907c9683c6b62543b5b4d6daa0397256198067ce08be9e6",
+      "snapshot_type": "chain"
+    },
+    {
+      "snapshot_id": "chain.planning_to_result",
+      "snapshot_sha256": "8d66b22a1a8c9efb178145deeee75b0b7c7d2dfd3cd94f56cbb40590b3d2b324",
+      "snapshot_type": "chain"
+    },
+    {
+      "snapshot_id": "chain.understanding_to_planning",
+      "snapshot_sha256": "4ce096dc28baf05b32f4e13f82c5d7355a37c3cc3adc9d7c5d03a0994c669dbd",
+      "snapshot_type": "chain"
+    },
+    {
+      "snapshot_id": "intent.add_backpack_gift",
+      "snapshot_sha256": "63be4b4d32502d555b54c9906cb491081ae87b4a39d605caee500be214eb647c",
+      "snapshot_type": "intent"
+    },
+    {
+      "snapshot_id": "intent.prepare_resource",
+      "snapshot_sha256": "6b75363908b7b8210d9879337ef7222f4d6f914bfa4ae2cc61714007a435238a",
+      "snapshot_type": "intent"
+    },
+    {
+      "snapshot_id": "intent.query_gift",
+      "snapshot_sha256": "d3f00036df0212d350818fa34043a7fa283d6be168a4fcb2ea4c795fea79a8c5",
+      "snapshot_type": "intent"
+    },
+    {
+      "snapshot_id": "intent.query_information",
+      "snapshot_sha256": "1680f2dde5daa84df77f07d1e8b434236a983b00149357a07bbaadb2c8de6e4a",
+      "snapshot_type": "intent"
+    },
+    {
+      "snapshot_id": "intent.query_pool",
+      "snapshot_sha256": "5c7a19237710e038ed3df71aae163718dad112dcaabf7d835e6e62cac9d16f1b",
+      "snapshot_type": "intent"
+    },
+    {
+      "snapshot_id": "intent.query_user",
+      "snapshot_sha256": "10b8a3c6d031da99f6ed9a2d30f4b5bc6b678db4e2ccdb51f0bc45abaa8a944b",
+      "snapshot_type": "intent"
+    },
+    {
+      "snapshot_id": "intent.unsupported",
+      "snapshot_sha256": "dcba02d21dfab07e0418d302195aaf04989a010cd2f2e8927475c941810e00b4",
+      "snapshot_type": "intent"
+    },
+    {
+      "snapshot_id": "module.agent_orchestrator",
+      "snapshot_sha256": "9144e0227f084b538e9c9d375d73c094b8bb947fd87b43e69f2d3d2946cdcd6d",
+      "snapshot_type": "module"
+    },
+    {
+      "snapshot_id": "module.execution_guard",
+      "snapshot_sha256": "aff59eb854c23b783ad62aae4f49900de8c644e0b39215b8b375e1b902b9b37a",
+      "snapshot_type": "module"
+    },
+    {
+      "snapshot_id": "module.intent_router",
+      "snapshot_sha256": "8e803b2287fd615b8aa6ce33441f40c36cd9c3f8b6ebc168b824456fa9455a69",
+      "snapshot_type": "module"
+    },
+    {
+      "snapshot_id": "module.model_gateway",
+      "snapshot_sha256": "78f74ab0def8cb0e96c99463b4aa3060b77dd5ce0a9e4cf3818df83c2cca7852",
+      "snapshot_type": "module"
+    },
+    {
+      "snapshot_id": "module.observability",
+      "snapshot_sha256": "009b8b17a113ce14cc28eeaf8ebd1b8c18790eb5da85b7e5816abf3a65ffaa51",
+      "snapshot_type": "module"
+    },
+    {
+      "snapshot_id": "module.tool_loop",
+      "snapshot_sha256": "4c3ca60b1abc7ddffae2221401ad939fd0248cf5d2dbda63cbfafe4a85c5be7a",
+      "snapshot_type": "module"
+    },
+    {
+      "snapshot_id": "module.tool_registry",
+      "snapshot_sha256": "ff8603012fabec82adcb7931dfebc559ec21d9c297ed7183869a45dd1febaed2",
+      "snapshot_type": "module"
+    }
+  ],
+  "tools": [
+    {
+      "implementation_profile": "test_fixture",
+      "registered": true,
+      "snapshot_id": "tool.add_gift_to_backpack"
+    },
+    {
+      "implementation_profile": "test_fixture",
+      "registered": true,
+      "snapshot_id": "tool.prepare_resource"
+    },
+    {
+      "implementation_profile": "test_fixture",
+      "registered": true,
+      "snapshot_id": "tool.query_gift_info"
+    },
+    {
+      "implementation_profile": "test_fixture",
+      "registered": true,
+      "snapshot_id": "tool.query_information"
+    },
+    {
+      "implementation_profile": "test_fixture",
+      "registered": true,
+      "snapshot_id": "tool.query_pool_config"
+    },
+    {
+      "implementation_profile": "test_fixture",
+      "registered": true,
+      "snapshot_id": "tool.query_user_info"
+    }
+  ]
+}

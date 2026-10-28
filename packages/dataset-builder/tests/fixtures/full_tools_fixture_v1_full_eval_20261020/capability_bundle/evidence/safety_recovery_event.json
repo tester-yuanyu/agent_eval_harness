@@ -1,0 +1,148 @@
+{
+  "applicable_result_paths": [
+    "need_clarification",
+    "need_confirmation",
+    "rejected",
+    "failure",
+    "timeout"
+  ],
+  "availability": {
+    "capability_key": "evidence.safety_recovery_event_available",
+    "evidence_ids": [
+      "evidence.safety_recovery_event"
+    ],
+    "reason": null,
+    "support_status": "supported"
+  },
+  "consumer_roles": [
+    "builder",
+    "evaluator"
+  ],
+  "contract_version": "mini-agent-capability-contract-v3",
+  "description": "Observable stop, rejection, and failure events.",
+  "event_types": [
+    "clarification_returned",
+    "confirmation_required",
+    "request_rejected",
+    "model_failed",
+    "tool_failed",
+    "tool_timeout",
+    "max_steps_exceeded"
+  ],
+  "evidence_id": "safety_recovery_event",
+  "observation_interface": "agent_result.events",
+  "payload_schema": {
+    "type": "object",
+    "x-evidence-delivery": {
+      "correlation": [
+        "trace_id",
+        "run_id",
+        "turn_index"
+      ],
+      "coverage": "declared events only; not a full copy of AgentResult",
+      "enabled_when": "LocalEvidenceSink is injected by the caller",
+      "event_rules_version": "mini-agent-events-v1",
+      "events": {
+        "clarification_returned": {
+          "allowed_fields": [
+            "missing_parameters",
+            "response"
+          ],
+          "capability_layer": "understanding",
+          "required_fields": [
+            "missing_parameters",
+            "response"
+          ]
+        },
+        "confirmation_required": {
+          "allowed_fields": [
+            "response"
+          ],
+          "capability_layer": "safety_recovery",
+          "required_fields": [
+            "response"
+          ]
+        },
+        "max_steps_exceeded": {
+          "allowed_fields": [
+            "max_steps"
+          ],
+          "capability_layer": "safety_recovery",
+          "required_fields": [
+            "max_steps"
+          ]
+        },
+        "model_failed": {
+          "allowed_fields": [
+            "step",
+            "error"
+          ],
+          "capability_layer": "safety_recovery",
+          "required_fields": [
+            "step",
+            "error"
+          ]
+        },
+        "request_rejected": {
+          "allowed_fields": [
+            "response"
+          ],
+          "capability_layer": "safety_recovery",
+          "required_fields": [
+            "response"
+          ]
+        },
+        "tool_failed": {
+          "allowed_fields": [
+            "call_id",
+            "name",
+            "error"
+          ],
+          "capability_layer": "safety_recovery",
+          "required_fields": [
+            "call_id",
+            "name",
+            "error"
+          ]
+        },
+        "tool_timeout": {
+          "allowed_fields": [
+            "call_id",
+            "name",
+            "error"
+          ],
+          "capability_layer": "safety_recovery",
+          "required_fields": [
+            "call_id",
+            "name",
+            "error"
+          ]
+        }
+      },
+      "independent_interface": "agent_trace_sdk.EvidenceReader.read",
+      "legacy_interface": "agent_result.events",
+      "protocol_version": "1.0",
+      "unavailable_when": [
+        "sink not configured",
+        "execution interrupted before emission",
+        "export failed",
+        "required fields redacted or truncated"
+      ],
+      "version": "1.0"
+    }
+  },
+  "producer_module_ids": [
+    "module.agent_orchestrator",
+    "module.tool_loop",
+    "module.execution_guard"
+  ],
+  "production_timing": "when execution stops before normal completion",
+  "required": true,
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "evidence.safety_recovery_event",
+  "snapshot_sha256": "5a5802f798a16ba038c274c6e486117c4e3e2d91bb83e837a14ae1079dbd4e6b",
+  "snapshot_type": "evidence",
+  "source_hashes": {
+    "catalog_definition_sha256": "fd6d8ded58460969d0344bf55ddad078fe61c7ac133dd906eec8fe78c8dcc3c9"
+  }
+}

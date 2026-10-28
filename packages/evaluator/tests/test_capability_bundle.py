@@ -195,7 +195,7 @@ def test_v2_registry_indexes_typed_module_intent_and_tool_snapshots():
 
 
 def test_load_live_v2_directory_uses_agent_declared_bundle_identity():
-    root = Path("/Users/yuanyu/Documents/ChatGPT/mini_agent/capabilities")
+    root = Path(__file__).resolve().parents[3] / "examples/mini_agent/capabilities"
 
     bundle = CapabilityBundle.load_v2_directory(root)
 

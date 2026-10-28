@@ -1,0 +1,53 @@
+{
+  "capabilities": [
+    {
+      "capability_key": "dialogue.business_task",
+      "evidence_ids": [],
+      "reason": "Offline construction only: no model call, tool execution or external service verification.",
+      "support_status": "unknown"
+    }
+  ],
+  "capability_id": "assistant",
+  "contract_version": "nanobot-collector-v1",
+  "decision_rules": {
+    "routing": "Model-driven; no fixed business-intent router inferred."
+  },
+  "module_id": "module.dialogue",
+  "parameter_semantics": {
+    "message": "User input passed to Nanobot.run."
+  },
+  "parameters_schema": {
+    "description": "Common Nanobot.run arguments; additional SDK keyword arguments allowed.",
+    "properties": {
+      "ephemeral": {
+        "default": false,
+        "type": "boolean"
+      },
+      "message": {
+        "type": "string"
+      },
+      "session_key": {
+        "default": "sdk:default",
+        "type": "string"
+      }
+    },
+    "required": [
+      "message"
+    ],
+    "type": "object"
+  },
+  "required_tool_name": null,
+  "semantic_rules": {
+    "purpose": "General assistant; no business-specific competency inferred."
+  },
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "intent.assistant",
+  "snapshot_sha256": "f93c9beeaef98a4698e08b91c812476954620e23294a978f841f6faccb45b082",
+  "snapshot_type": "intent",
+  "source_hashes": {
+    "intent_rules_sha256": "d51480af49e02bafd9c227f62acc49842bc9fe1d5461afa4588459a55b1530e2",
+    "parameters_schema_sha256": "1c7fe5c3fdfad0a2943c48c10722890afc08a87e2a6d3bf2b131dab99ab6e44c",
+    "tool_refs_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "tool_refs": []
+}

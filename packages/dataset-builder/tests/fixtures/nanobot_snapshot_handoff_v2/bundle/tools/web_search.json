@@ -1,0 +1,106 @@
+{
+  "batch_behavior": {
+    "declared": false
+  },
+  "capabilities": [
+    {
+      "capability_key": "tool.execution",
+      "evidence_ids": [],
+      "reason": "Offline construction only: no model call, tool execution or external service verification.",
+      "support_status": "unknown"
+    }
+  ],
+  "combination_rules": {
+    "concurrency_safe": false,
+    "exclusive": true
+  },
+  "contract_version": "nanobot-collector-v1",
+  "description": "Search the web. Returns titles, URLs, and snippets. count defaults to 5 (max 10). Some providers support timeRange, authLevel, and queryRewrite. Use web_fetch to read a specific page in full.",
+  "function_schema": {
+    "function": {
+      "description": "Search the web. Returns titles, URLs, and snippets. count defaults to 5 (max 10). Some providers support timeRange, authLevel, and queryRewrite. Use web_fetch to read a specific page in full.",
+      "name": "web_search",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "authLevel": {
+            "description": "Optional authority filter for providers that support it: 0=all, 1=authoritative",
+            "maximum": 1,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "count": {
+            "description": "Results (1-10)",
+            "maximum": 10,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "query": {
+            "description": "Search query",
+            "type": "string"
+          },
+          "queryRewrite": {
+            "description": "Optional provider-side query rewrite for conversational or ambiguous searches",
+            "type": "boolean"
+          },
+          "timeRange": {
+            "description": "Optional time filter for providers that support it: OneDay, OneWeek, OneMonth, OneYear, or YYYY-MM-DD..YYYY-MM-DD",
+            "type": "string"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "type": "object"
+      }
+    },
+    "type": "function"
+  },
+  "idempotency_rules": {
+    "status": "unknown"
+  },
+  "implementation_profile": "production",
+  "observation_interfaces": [
+    "ToolRegistry.get_definitions",
+    "ToolRegistry.execute"
+  ],
+  "parameter_semantics": {
+    "authLevel": "Optional authority filter for providers that support it: 0=all, 1=authoritative",
+    "count": "Results (1-10)",
+    "query": "Search query",
+    "queryRewrite": "Optional provider-side query rewrite for conversational or ambiguous searches",
+    "timeRange": "Optional time filter for providers that support it: OneDay, OneWeek, OneMonth, OneYear, or YYYY-MM-DD..YYYY-MM-DD"
+  },
+  "permission_requirements": [
+    "See implementation-specific guards; not audited here."
+  ],
+  "preconditions": [
+    "Registration is limited to the named offline profile.",
+    "Execution requires tool-specific services, request context and permissions."
+  ],
+  "registered": true,
+  "requires_confirmation": false,
+  "result_protocols": {
+    "error_marker": "ToolResult.is_error; see ToolRegistry.execute",
+    "registry_return_type": "Any; tool-specific return contract"
+  },
+  "retry_policy": {
+    "status": "unknown"
+  },
+  "risk_level": "medium",
+  "side_effects": [
+    "Not audited; read_only declaration=True"
+  ],
+  "simulation_capabilities": [],
+  "simulation_protocol": null,
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "tool.web_search",
+  "snapshot_sha256": "b497541db2fce920ec65efa63615b006af9ee9b1aa44344044124dc70368aa6d",
+  "snapshot_type": "tool",
+  "source_hashes": {
+    "execution_contract_sha256": "00b1fe953ff408d24042e4bab86c78c054ea2639d6036337160c767a1d5b6687",
+    "function_schema_sha256": "217aac81211331731375052ba40911005e2e1ac1bf1e9c74089fb37a57d85dca"
+  },
+  "tool_name": "web_search",
+  "tool_version": "0.3.0"
+}

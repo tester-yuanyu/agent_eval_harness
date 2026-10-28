@@ -1,0 +1,216 @@
+{
+  "capabilities": [
+    {
+      "capability_key": "dialogue.respond",
+      "evidence_ids": [],
+      "reason": "Offline construction only: no model call, tool execution or external service verification.",
+      "support_status": "unknown"
+    },
+    {
+      "capability_key": "contract.sdk_boundary",
+      "evidence_ids": [
+        "evidence.execution_contract"
+      ],
+      "reason": null,
+      "support_status": "supported"
+    }
+  ],
+  "component_versions": {
+    "nanobot": "0.3.0"
+  },
+  "contract_version": "nanobot-collector-v2",
+  "execution_boundary_ids": [
+    "boundary.conversation"
+  ],
+  "input_schema": {
+    "additionalProperties": false,
+    "description": "Nanobot.run arguments. This is a declaration of the Python SDK surface, not a new runtime JSON validator. Non-null hooks require Python objects.",
+    "not": {
+      "properties": {
+        "model": {
+          "type": "string"
+        },
+        "model_preset": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "model",
+        "model_preset"
+      ]
+    },
+    "properties": {
+      "attributes": {
+        "additionalProperties": true,
+        "default": null,
+        "description": "Caller-owned context, kept separate from trusted message metadata; Python Mapping values may need serialization.",
+        "type": [
+          "object",
+          "null"
+        ]
+      },
+      "channel": {
+        "default": "cli",
+        "not": {
+          "const": "system"
+        },
+        "type": "string"
+      },
+      "chat_id": {
+        "default": "direct",
+        "type": "string"
+      },
+      "ephemeral": {
+        "default": false,
+        "description": "Controls session persistence/compaction policy; does not sandbox or roll back tool side effects.",
+        "type": "boolean"
+      },
+      "hooks": {
+        "default": null,
+        "items": {
+          "x-python-type": "nanobot.agent.hook.AgentHook"
+        },
+        "type": [
+          "array",
+          "null"
+        ],
+        "x-python-only": true
+      },
+      "media": {
+        "default": null,
+        "items": {
+          "type": "string"
+        },
+        "type": [
+          "array",
+          "null"
+        ]
+      },
+      "message": {
+        "description": "User message; slash commands may short-circuit model inference.",
+        "type": "string"
+      },
+      "model": {
+        "default": null,
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "model_preset": {
+        "default": null,
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "sender_id": {
+        "default": "user",
+        "type": "string"
+      },
+      "session_key": {
+        "default": "sdk:default",
+        "type": "string"
+      }
+    },
+    "required": [
+      "message"
+    ],
+    "type": "object"
+  },
+  "intent_refs": [
+    {
+      "contract_version": "nanobot-collector-v2",
+      "path": "intents/assistant.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "intent.assistant",
+      "snapshot_sha256": "95a4b2570fa0f637c25dc296dd3dd19315c816740d3ee799d586dd49ad3cfc8a",
+      "snapshot_type": "intent"
+    }
+  ],
+  "module_id": "dialogue",
+  "module_refs": [],
+  "output_schema": {
+    "description": "Native SDK returned value, including error-bearing or command returns. Not returned on raised/cancelled exits; presence does not imply business success.",
+    "properties": {
+      "content": {
+        "description": "Response text, or empty string when no outbound response/content is returned; no non-empty guarantee.",
+        "title": "Content",
+        "type": "string"
+      },
+      "error": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "description": "Nullable captured diagnostic text; inspect together with stop_reason and content/history. None does not prove task success or rule out earlier recoverable tool errors. Non-null error can retain an earlier failure after continuation produces a later answer; it is not an exact classification of that final answer.",
+        "title": "Error"
+      },
+      "messages": {
+        "description": "Captured runner message list; may be empty for command short-circuits. Not a guaranteed complete external event trace.",
+        "items": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "title": "Messages",
+        "type": "array"
+      },
+      "metadata": {
+        "additionalProperties": true,
+        "description": "Outbound metadata copied by SDK; arbitrary keys, not a stable business result schema.",
+        "title": "Metadata",
+        "type": "object"
+      },
+      "stop_reason": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "description": "Captured runner status, nullable when runner hooks did not execute (e.g. command shortcut). completed can include refusal/content-filter text. After injection-driven continuation, an earlier error status may remain alongside recovered final content.",
+        "title": "Stop Reason"
+      },
+      "tools_used": {
+        "description": "Authoritative after_run capture lists successful tool events; not a complete list of attempts or failures.",
+        "items": {
+          "type": "string"
+        },
+        "title": "Tools Used",
+        "type": "array"
+      },
+      "usage": {
+        "additionalProperties": {
+          "type": "integer"
+        },
+        "description": "Captured provider token/accounting values; may be empty.",
+        "title": "Usage",
+        "type": "object"
+      }
+    },
+    "required": [
+      "content"
+    ],
+    "title": "RunResult",
+    "type": "object"
+  },
+  "responsibility": "Nanobot.run performs per-call admission and optional MCP connect, then process_direct locks/restores the session, routes commands, builds context, runs model/tool iterations, persists and converts the result. Commands and exceptions skip later stages. Return is not background/global completion.",
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "module.dialogue",
+  "snapshot_sha256": "0d601355de9fec774dfa85a45e8360940a860da2523f5cfad2b722aa14a445f1",
+  "snapshot_type": "module",
+  "source_hashes": {
+    "capabilities_sha256": "d59189f941a1d0e707f57b53d04b4e2cb0dffc2cbf55e9663589b426990d72ee",
+    "children_sha256": "6fd9003460ed6293f6944e42b877e6985f6e0c4530ed334efadf9ee86046f01b"
+  },
+  "tool_refs": [],
+  "trace_event_types": []
+}

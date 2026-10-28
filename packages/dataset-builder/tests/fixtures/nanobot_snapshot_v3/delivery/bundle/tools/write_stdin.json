@@ -1,0 +1,215 @@
+{
+  "batch_behavior": {
+    "declared": false
+  },
+  "capabilities": [
+    {
+      "capability_key": "tool.execution",
+      "evidence_ids": [],
+      "reason": "Offline construction only: no model call, tool execution or external service verification.",
+      "support_status": "unknown"
+    }
+  ],
+  "combination_rules": {
+    "concurrency_safe": false,
+    "exclusive": true
+  },
+  "contract_version": "nanobot-collector-v2",
+  "description": "Interact with a running exec session created by exec with yield_time_ms. Use chars='' to poll without writing, chars to send stdin, close_stdin=true to send EOF, or terminate=true to stop the process. Use wait_for with wait_timeout_ms for dev servers, test watchers, and prompts where you need to wait for expected output. Do not use this to start new commands; start them with exec.",
+  "function_schema": {
+    "function": {
+      "description": "Interact with a running exec session created by exec with yield_time_ms. Use chars='' to poll without writing, chars to send stdin, close_stdin=true to send EOF, or terminate=true to stop the process. Use wait_for with wait_timeout_ms for dev servers, test watchers, and prompts where you need to wait for expected output. Do not use this to start new commands; start them with exec.",
+      "name": "write_stdin",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "chars": {
+            "description": "Bytes/text to write to stdin. Omit or pass an empty string to only poll recent output.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "close_stdin": {
+            "default": false,
+            "description": "Close stdin after writing chars. Useful for commands waiting for EOF.",
+            "type": "boolean"
+          },
+          "max_output_chars": {
+            "description": "Maximum output characters to return from this poll (default 10000, max 50000).",
+            "maximum": 50000,
+            "minimum": 1000,
+            "type": "integer"
+          },
+          "max_output_tokens": {
+            "description": "Compatibility alias for max_output_chars. The current runtime uses a character budget.",
+            "maximum": 50000,
+            "minimum": 1000,
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "session_id": {
+            "description": "Session id returned by exec when yield_time_ms is used.",
+            "type": "string"
+          },
+          "terminate": {
+            "default": false,
+            "description": "Terminate the running exec session.",
+            "type": "boolean"
+          },
+          "wait_for": {
+            "description": "Optional text to wait for in output before returning. Useful for interactive commands and dev servers.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "wait_timeout_ms": {
+            "description": "Maximum milliseconds to wait for wait_for text (default 10000, max 120000).",
+            "maximum": 120000,
+            "minimum": 0,
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "yield_time_ms": {
+            "description": "Milliseconds to wait before returning recent output (default 1000, max 30000).",
+            "maximum": 30000,
+            "minimum": 0,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "session_id"
+        ],
+        "type": "object"
+      }
+    },
+    "type": "function"
+  },
+  "idempotency_rules": {
+    "status": "unknown"
+  },
+  "implementation_profile": "production",
+  "observation_interfaces": [
+    "ToolRegistry.get_definitions",
+    "ToolRegistry.execute",
+    "AgentHookContext.tool_events (runner hooks)"
+  ],
+  "parameter_semantics": {
+    "chars": "Bytes/text to write to stdin. Omit or pass an empty string to only poll recent output.",
+    "close_stdin": "Close stdin after writing chars. Useful for commands waiting for EOF.",
+    "max_output_chars": "Maximum output characters to return from this poll (default 10000, max 50000).",
+    "max_output_tokens": "Compatibility alias for max_output_chars. The current runtime uses a character budget.",
+    "session_id": "Session id returned by exec when yield_time_ms is used.",
+    "terminate": "Terminate the running exec session.",
+    "wait_for": "Optional text to wait for in output before returning. Useful for interactive commands and dev servers.",
+    "wait_timeout_ms": "Maximum milliseconds to wait for wait_for text (default 10000, max 120000).",
+    "yield_time_ms": "Milliseconds to wait before returning recent output (default 1000, max 30000)."
+  },
+  "permission_requirements": [
+    "See implementation-specific guards; not audited here."
+  ],
+  "preconditions": [
+    "Registration is limited to the named offline profile.",
+    "Execution requires tool-specific services, request context and permissions."
+  ],
+  "registered": true,
+  "requires_confirmation": false,
+  "result_protocols": {
+    "business_error_codes": null,
+    "category_names_are_adapter_labels": true,
+    "dispatch_paths": [
+      "ToolRegistry.execute (direct registry API)",
+      "AgentRunner._run_tool -> ToolRegistry.prepare_call -> tool.execute (normal runner path)"
+    ],
+    "error_categories": [
+      {
+        "category": "unknown_tool",
+        "observation": "prepare_call returns error; tool implementation is not called."
+      },
+      {
+        "category": "invalid_arguments",
+        "observation": "prepare_call coerces/casts and validates parameters; rejected arguments do not call the implementation."
+      },
+      {
+        "category": "tool_marked_error",
+        "observation": "ToolResult.is_error produces an error event in the runner."
+      },
+      {
+        "category": "implementation_exception",
+        "observation": "Ordinary Exception becomes a registry ToolResult.error or a runner error event; handling differs by entrypoint."
+      },
+      {
+        "category": "policy_guard",
+        "observation": "Repeated external lookup/workspace violation guards can reject or escalate; do not infer recoverability from fail_on_tool_error alone."
+      },
+      {
+        "category": "control_flow",
+        "observation": "Cancellation and control-flow BaseException can propagate; hooks may also raise outside the implementation catch."
+      }
+    ],
+    "error_marker": "ToolResult.is_error; a plain string beginning with Error: is not by itself a builtin tool failure marker.",
+    "event_observation": "AgentHookContext.tool_events in runner hooks; not a top-level RunResult field and not emitted as StreamEvent by run().",
+    "fail_on_tool_error": "False generally returns tool errors to the model for possible recovery; True can terminate with tool_error. Policy guards and continuations also affect the terminal outcome.",
+    "registry_return_type": "Any; implementation-specific. No universal successful result shape is inferred.",
+    "retry": {
+      "automatic_tool_retry_guaranteed": false,
+      "description": "The registry does not automatically retry an implementation call. The model may request a new call; provider retries and tool-internal retries are separate.",
+      "status": "tool_specific_unknown"
+    },
+    "source_symbols": [
+      "ToolRegistry.prepare_call",
+      "ToolRegistry.execute",
+      "ToolResult",
+      "AgentRunner._run_tool",
+      "AgentRunner._classify_violation"
+    ],
+    "tool_event_schema": {
+      "properties": {
+        "detail": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "ok",
+            "error"
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "status",
+        "detail"
+      ],
+      "type": "object"
+    }
+  },
+  "retry_policy": {
+    "automatic_tool_retry_guaranteed": false,
+    "description": "The registry does not automatically retry an implementation call. The model may request a new call; provider retries and tool-internal retries are separate.",
+    "status": "tool_specific_unknown"
+  },
+  "risk_level": "high",
+  "side_effects": [
+    "Not audited; read_only declaration=False"
+  ],
+  "simulation_capabilities": [],
+  "simulation_protocol": null,
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "tool.write_stdin",
+  "snapshot_sha256": "9b44ca91ba75aa49f6f9707b15e74582d0444686e3731ee501271adb732d5477",
+  "snapshot_type": "tool",
+  "source_hashes": {
+    "execution_contract_sha256": "8bd05c72b6af11278fdf077260a7d9f2cf5e5ac190764e3646c48281c87ddc03",
+    "function_schema_sha256": "f5aa8efaf91058b224bf02710e15e0308533a1807b80e43931abb64d49f89002"
+  },
+  "tool_name": "write_stdin",
+  "tool_version": "0.3.0"
+}

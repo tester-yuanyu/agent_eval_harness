@@ -1,0 +1,53 @@
+{
+  "capabilities": [
+    {
+      "capability_key": "dialogue.business_task",
+      "evidence_ids": [
+        "evidence.final_response"
+      ],
+      "reason": null,
+      "support_status": "supported"
+    }
+  ],
+  "capability_id": "customer_support",
+  "contract_version": "support-v1",
+  "decision_rules": {
+    "contains_退款": "SUCCESS",
+    "empty": "NEED_CLARIFICATION",
+    "otherwise": "HANDOFF_SUGGESTED"
+  },
+  "module_id": "module.customer_dialogue",
+  "parameter_semantics": {
+    "user_input": "Text stripped before keyword matching."
+  },
+  "parameters_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "user_input": {
+        "maxLength": 4000,
+        "title": "User Input",
+        "type": "string"
+      }
+    },
+    "required": [
+      "user_input"
+    ],
+    "title": "CustomerInput",
+    "type": "object"
+  },
+  "required_tool_name": null,
+  "semantic_rules": {
+    "handoff": "Suggestion only, no external transfer.",
+    "policy_version": "example-policy-v1"
+  },
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "intent.customer_support",
+  "snapshot_sha256": "babe33bf0bb82bf5832a4695cfd8fec5e8d8d1c0026aeb57b4920838e2e16e70",
+  "snapshot_type": "intent",
+  "source_hashes": {
+    "intent_rules_sha256": "f3a92316e0d4c25ae1aaa58c63750a4c38ad4ef9e004adae32f91089c914b813",
+    "parameters_schema_sha256": "2d3fae634f6baf945c9be48e28d95c52885225e5c29564e5d2d47b16ab9c2058",
+    "tool_refs_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "tool_refs": []
+}

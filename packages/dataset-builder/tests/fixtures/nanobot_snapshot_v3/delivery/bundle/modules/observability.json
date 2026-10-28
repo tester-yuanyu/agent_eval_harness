@@ -1,0 +1,120 @@
+{
+  "capabilities": [
+    {
+      "capability_key": "result.final_response",
+      "evidence_ids": [
+        "evidence.final_response"
+      ],
+      "reason": null,
+      "support_status": "supported"
+    },
+    {
+      "capability_key": "contract.run_result",
+      "evidence_ids": [
+        "evidence.execution_contract"
+      ],
+      "reason": null,
+      "support_status": "supported"
+    },
+    {
+      "capability_key": "contract.exception_exit",
+      "evidence_ids": [
+        "evidence.execution_contract"
+      ],
+      "reason": null,
+      "support_status": "supported"
+    }
+  ],
+  "component_versions": {
+    "nanobot": "0.3.0"
+  },
+  "contract_version": "nanobot-collector-v2",
+  "execution_boundary_ids": [],
+  "input_schema": {},
+  "intent_refs": [],
+  "module_id": "observability",
+  "module_refs": [],
+  "output_schema": {
+    "description": "Native SDK returned value, including error-bearing or command returns. Not returned on raised/cancelled exits; presence does not imply business success.",
+    "properties": {
+      "content": {
+        "description": "Response text, or empty string when no outbound response/content is returned; no non-empty guarantee.",
+        "title": "Content",
+        "type": "string"
+      },
+      "error": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "description": "Nullable captured diagnostic text; inspect together with stop_reason and content/history. None does not prove task success or rule out earlier recoverable tool errors. Non-null error can retain an earlier failure after continuation produces a later answer; it is not an exact classification of that final answer.",
+        "title": "Error"
+      },
+      "messages": {
+        "description": "Captured runner message list; may be empty for command short-circuits. Not a guaranteed complete external event trace.",
+        "items": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "title": "Messages",
+        "type": "array"
+      },
+      "metadata": {
+        "additionalProperties": true,
+        "description": "Outbound metadata copied by SDK; arbitrary keys, not a stable business result schema.",
+        "title": "Metadata",
+        "type": "object"
+      },
+      "stop_reason": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "description": "Captured runner status, nullable when runner hooks did not execute (e.g. command shortcut). completed can include refusal/content-filter text. After injection-driven continuation, an earlier error status may remain alongside recovered final content.",
+        "title": "Stop Reason"
+      },
+      "tools_used": {
+        "description": "Authoritative after_run capture lists successful tool events; not a complete list of attempts or failures.",
+        "items": {
+          "type": "string"
+        },
+        "title": "Tools Used",
+        "type": "array"
+      },
+      "usage": {
+        "additionalProperties": {
+          "type": "integer"
+        },
+        "description": "Captured provider token/accounting values; may be empty.",
+        "title": "Usage",
+        "type": "object"
+      }
+    },
+    "required": [
+      "content"
+    ],
+    "title": "RunResult",
+    "type": "object"
+  },
+  "responsibility": "Native RunResult on returned paths; Python exceptions/cancellation on raised exits. run() does not emit SDK StreamEvent. Static contract evidence is separate from uncollected runtime observations.",
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "module.observability",
+  "snapshot_sha256": "ca33c089b686c882e97a87d74b7135bff5ab50e9506dd66da70cfbf131761f25",
+  "snapshot_type": "module",
+  "source_hashes": {
+    "capabilities_sha256": "d70b0917653457907cb994f20b676cd6d502587e3fc1fd712e3e7c9ca1aebd3d",
+    "children_sha256": "b78ee59b8a819b12aaee9953ee472c98c34893d48db562e951cb5033d096ae54"
+  },
+  "tool_refs": [],
+  "trace_event_types": []
+}

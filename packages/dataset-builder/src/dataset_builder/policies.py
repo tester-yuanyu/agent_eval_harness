@@ -9,6 +9,7 @@ from typing import Literal, TypeAlias
 
 from pydantic import Field
 
+from .resources import resource_root
 from .suite_config import (
     CandidateProtocolConfig,
     CompilationConfig,
@@ -137,7 +138,7 @@ class PolicySet(ConfigModel):
 
 
 def _resolve(reference: PathReference, suite_dir: Path) -> Path:
-    builder_root = Path(__file__).resolve().parents[2]
+    builder_root = resource_root()
     bases = {
         "builder_root": builder_root,
         "projects_root": builder_root.parent,

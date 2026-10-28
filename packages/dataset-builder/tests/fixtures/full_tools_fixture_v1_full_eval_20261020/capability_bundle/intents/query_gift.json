@@ -1,0 +1,131 @@
+{
+  "capabilities": [
+    {
+      "capability_key": "intent.contract_validation",
+      "evidence_ids": [
+        "evidence.intent_result"
+      ],
+      "reason": null,
+      "support_status": "supported"
+    }
+  ],
+  "capability_id": "query_gift",
+  "contract_version": "intent-contract-v1",
+  "decision_rules": {
+    "complete": {
+      "next_action": "CALL_TOOL",
+      "status": "READY"
+    },
+    "execution_mode": "read",
+    "incomplete": {
+      "next_action": "ASK_USER",
+      "status": "NEED_CLARIFICATION"
+    }
+  },
+  "module_id": "module.intent_router",
+  "parameter_semantics": {
+    "missing_parameters": [
+      "gift_id",
+      "gift_ids",
+      "gift_name",
+      "limit",
+      "single_gift_query_mode"
+    ],
+    "normalizers": [
+      "TrimStringNormalizer",
+      "IntegerStringNormalizer"
+    ]
+  },
+  "parameters_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "gift_id": {
+        "anyOf": [
+          {
+            "exclusiveMinimum": 0,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Gift Id"
+      },
+      "gift_ids": {
+        "anyOf": [
+          {
+            "items": {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Gift Ids"
+      },
+      "gift_name": {
+        "anyOf": [
+          {
+            "minLength": 1,
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Gift Name"
+      },
+      "limit": {
+        "anyOf": [
+          {
+            "exclusiveMinimum": 0,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Limit"
+      }
+    },
+    "title": "_QueryGiftParameters",
+    "type": "object"
+  },
+  "required_tool_name": "query_gift_info",
+  "semantic_rules": {
+    "limit": "OPTIONAL_POSITIVE_INTEGER",
+    "query_mode_cardinality": "EXACTLY_ONE",
+    "query_modes": [
+      "gift_id",
+      "gift_ids",
+      "gift_name"
+    ]
+  },
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "intent.query_gift",
+  "snapshot_sha256": "d3f00036df0212d350818fa34043a7fa283d6be168a4fcb2ea4c795fea79a8c5",
+  "snapshot_type": "intent",
+  "source_hashes": {
+    "intent_rules_sha256": "174953373498ce59b7f5419aeda034b67ea7c634850dcb96a19c659fe1ac0574",
+    "parameters_schema_sha256": "5b1bc4c54fade97abdbd672d19cd2a3d6cac20949663647731962ac854fef894",
+    "tool_refs_sha256": "10b2c8ce24c796c0acf257eccc14eb55e04922317e24576e52bbb94c65ea2a98"
+  },
+  "tool_refs": [
+    {
+      "contract_version": "query-gift-info-example-fixture-v1",
+      "path": "tools/query_gift_info.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "tool.query_gift_info",
+      "snapshot_sha256": "fd6355b3b1d4a58ce54a2d23afe0e79c6462ac529a7130c4c53c2e2b4429714f",
+      "snapshot_type": "tool"
+    }
+  ]
+}

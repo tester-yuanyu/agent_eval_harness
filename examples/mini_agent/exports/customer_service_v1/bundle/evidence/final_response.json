@@ -1,0 +1,83 @@
+{
+  "applicable_result_paths": [
+    "success",
+    "need_clarification",
+    "handoff_suggested"
+  ],
+  "availability": {
+    "capability_key": "evidence.final_response_available",
+    "evidence_ids": [
+      "evidence.final_response"
+    ],
+    "reason": null,
+    "support_status": "supported"
+  },
+  "consumer_roles": [
+    "builder",
+    "evaluator"
+  ],
+  "contract_version": "customer-contract-v1",
+  "description": "Public final response and terminal status.",
+  "event_types": [
+    "run_started",
+    "response_ready",
+    "run_finished"
+  ],
+  "evidence_id": "final_response",
+  "observation_interface": "CustomerResult.model_dump()",
+  "payload_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "events": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Events",
+        "type": "array"
+      },
+      "final_response": {
+        "title": "Final Response",
+        "type": "string"
+      },
+      "handoff_executed": {
+        "const": false,
+        "default": false,
+        "title": "Handoff Executed",
+        "type": "boolean"
+      },
+      "policy_version": {
+        "title": "Policy Version",
+        "type": "string"
+      },
+      "status": {
+        "enum": [
+          "SUCCESS",
+          "NEED_CLARIFICATION",
+          "HANDOFF_SUGGESTED"
+        ],
+        "title": "Status",
+        "type": "string"
+      }
+    },
+    "required": [
+      "status",
+      "final_response",
+      "policy_version",
+      "events"
+    ],
+    "title": "CustomerResult",
+    "type": "object"
+  },
+  "producer_module_ids": [
+    "module.customer_dialogue"
+  ],
+  "production_timing": "On return from CustomerServiceAgent.run",
+  "required": true,
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "evidence.final_response",
+  "snapshot_sha256": "d390929178795c88bba95f8fca2105d2b5c443e21645c03ec727cddec757a328",
+  "snapshot_type": "evidence",
+  "source_hashes": {
+    "catalog_definition_sha256": "1c01c5a137a34f67dfc935196c10892fbac533b0d0ccc2b802077ff09c26698c"
+  }
+}

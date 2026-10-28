@@ -1,0 +1,27 @@
+{
+  "path": "datasets/modules/intent.query_information.capability_contract_case.blocked_obligation.jsonl",
+  "dataset_format": "capability_contract_case",
+  "definition_kind": "blocked_obligation",
+  "target_id": "intent.query_information",
+  "layer": "modules",
+  "case_count": 8,
+  "sha256": "39083cdd83832cb3fb75dc5fd2ba81efd7ed172b2f3cdef21b1bb182eba2ddee",
+  "dataset_sha256": "39083cdd83832cb3fb75dc5fd2ba81efd7ed172b2f3cdef21b1bb182eba2ddee",
+  "state": "DRAFT",
+  "dataset_version": "full-fixture-1.0",
+  "suite_id": "full_tools_fixture_v1",
+  "capability_bundle_sha256": "215a9a3a445c8857f3bdd8dbecba935ce646bd8c784f16ecfc4a5da6042cce3c",
+  "execution_profiles": {
+    "full_fixture": {
+      "allowed_tools": [
+        "add_gift_to_backpack",
+        "prepare_resource",
+        "query_gift_info",
+        "query_information",
+        "query_pool_config",
+        "query_user_info"
+      ]
+    }
+  },
+  "runtime_binding": "Explicit fixture Provider and v3 catalog adapter required; no production binding."
+}

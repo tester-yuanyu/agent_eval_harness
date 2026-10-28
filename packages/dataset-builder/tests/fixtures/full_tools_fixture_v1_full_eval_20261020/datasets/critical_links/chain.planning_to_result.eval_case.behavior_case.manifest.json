@@ -1,0 +1,27 @@
+{
+  "path": "datasets/critical_links/chain.planning_to_result.eval_case.behavior_case.jsonl",
+  "dataset_format": "eval_case",
+  "definition_kind": "behavior_case",
+  "target_id": "chain.planning_to_result",
+  "layer": "critical_links",
+  "case_count": 7,
+  "sha256": "6616f7f75dfe3913a2c2f43899c6fc3dd1e431b144d72695182f18751603c6ee",
+  "dataset_sha256": "6616f7f75dfe3913a2c2f43899c6fc3dd1e431b144d72695182f18751603c6ee",
+  "state": "DRAFT",
+  "dataset_version": "full-fixture-1.0",
+  "suite_id": "full_tools_fixture_v1",
+  "capability_bundle_sha256": "215a9a3a445c8857f3bdd8dbecba935ce646bd8c784f16ecfc4a5da6042cce3c",
+  "execution_profiles": {
+    "full_fixture": {
+      "allowed_tools": [
+        "add_gift_to_backpack",
+        "prepare_resource",
+        "query_gift_info",
+        "query_information",
+        "query_pool_config",
+        "query_user_info"
+      ]
+    }
+  },
+  "runtime_binding": "Explicit fixture Provider and v3 catalog adapter required; no production binding."
+}

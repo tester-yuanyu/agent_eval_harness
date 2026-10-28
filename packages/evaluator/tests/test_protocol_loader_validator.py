@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+from pathlib import Path
 
 import pytest
 from conftest import link_case, module_case
@@ -50,9 +51,7 @@ def test_loads_manifest_execution_profiles(tmp_path):
     dataset = load_dataset(path)
 
     assert dataset.execution_profiles_source == "manifest"
-    assert dataset.execution_profiles["legacy"].allowed_tools == [
-        "query_information"
-    ]
+    assert dataset.execution_profiles["legacy"].allowed_tools == ["query_information"]
 
 
 def test_legacy_module_subset_synthesizes_empty_profiles(tmp_path):
@@ -101,9 +100,7 @@ def test_invalid_execution_profile_shape_has_stable_error_code(
     assert error.value.code == "EXECUTION_PROFILE_INVALID"
 
 
-def test_load_validate_hash_order_and_filters(
-    dataset_path, cases, legacy_tool_catalog
-):
+def test_load_validate_hash_order_and_filters(dataset_path, cases, legacy_tool_catalog):
     dataset = load_dataset(dataset_path)
     assert [case.case_id for case in dataset.cases] == [
         case["case_id"] for case in cases
@@ -267,7 +264,9 @@ def test_semantic_validation_rejects_invalid_cases(
 
 def test_schema_is_generated_from_eval_case():
     committed = json.loads(
-        open("schemas/eval_case.schema.json", encoding="utf-8").read()
+        (
+            Path(__file__).resolve().parents[1] / "schemas/eval_case.schema.json"
+        ).read_text(encoding="utf-8")
     )
     assert committed == EvalCase.model_json_schema()
     assert "scenario_type" in committed["required"]

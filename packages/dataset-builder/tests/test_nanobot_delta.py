@@ -306,9 +306,9 @@ def reviewed_migration():
     from dataset_builder.nanobot_generation.inputs import load_input
 
     previous = (
-        Path(__file__).resolve().parents[1] / "workspaces/nanobot_full_eval_20261023"
+        Path(__file__).resolve().parents[1] / "tests/fixtures/nanobot_full_eval_20261023"
     )
-    source = Path("/Users/yuanyu/Desktop/nanobot/exports/nanobot_snapshot_v3")
+    source = Path(__file__).resolve().parent / "fixtures/nanobot_snapshot_v3"
     baseline = make_baseline(previous)
     data = load_input(
         source, "8462eaa3c43061cc6e9f5eefaee216f9fed12e2513d86b3f7efbd476e1d06adb"

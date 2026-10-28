@@ -1,0 +1,277 @@
+{
+  "basis": "isolated builtin registry construction, not a running gateway",
+  "execution_verified": false,
+  "exported_tool_count": 21,
+  "fact_count": 34,
+  "limits": [
+    "Registry completeness only applies to the explicit offline profile.",
+    "Tool execution, model output quality, memory and business competencies are unverified.",
+    "MCP servers, external tool plugins and user-installed skills are not discovered.",
+    "Channels/providers are represented at subsystem level, not per-integration verification.",
+    "Skill files are inventoried; their semantic abilities and requirements are not evaluated.",
+    "Nanobot SDK conversation profile declares error exits; it does not evaluate individual tool execution.",
+    "Risk levels are conservative adapter labels; confirmation/idempotency need per-tool review."
+  ],
+  "manual_tools": [
+    {
+      "reason": "Requires AgentLoop runtime control.",
+      "source": "nanobot/agent/tools/self.py",
+      "status": "disabled",
+      "tool_name": "my"
+    }
+  ],
+  "missing_registered_tools": [],
+  "module_ids": [
+    "dialogue",
+    "observability",
+    "tools",
+    "memory",
+    "skills",
+    "providers",
+    "channels",
+    "mcp"
+  ],
+  "profile_id": "nanobot_offline_core_v1",
+  "registered_tool_count": 21,
+  "skills": [
+    {
+      "path": "nanobot/skills/clawhub/SKILL.md",
+      "sha256": "623a6e31e97abb358854f08908263709a4a36ff7e643472ccb90ee6a7cc352e7",
+      "status": "source_only"
+    },
+    {
+      "path": "nanobot/skills/cron/SKILL.md",
+      "sha256": "5f050ee98a943a918f8030536677d773fd783c6909a62ae76b463466bd24231a",
+      "status": "source_only"
+    },
+    {
+      "path": "nanobot/skills/github/SKILL.md",
+      "sha256": "bd1c4b4acec5fa7af31c2e26d1d26e5854fd74e53071c9d782edfc011cdcc145",
+      "status": "source_only"
+    },
+    {
+      "path": "nanobot/skills/image-generation/SKILL.md",
+      "sha256": "6b93425db72019649365cce0f1edeab95adbde0610939bf48418a13b9532cec0",
+      "status": "source_only"
+    },
+    {
+      "path": "nanobot/skills/memory/SKILL.md",
+      "sha256": "1c384dd9d304b8f0ea025ff7919f89200310891f43cde7e4f617d34e482b8e0b",
+      "status": "source_only"
+    },
+    {
+      "path": "nanobot/skills/my/SKILL.md",
+      "sha256": "8378b8b079df1dc80377c2afdd797a665130899b172a0e022268e3e4a43c5c94",
+      "status": "source_only"
+    },
+    {
+      "path": "nanobot/skills/skill-creator/SKILL.md",
+      "sha256": "0efd563abf220edabe046734a0cf30be72409b443e255619471c4073bd483268",
+      "status": "source_only"
+    },
+    {
+      "path": "nanobot/skills/summarize/SKILL.md",
+      "sha256": "6bd7eaac4ddcfab1b23535488229047feff002404b6170ddd5d95d74188919f5",
+      "status": "source_only"
+    },
+    {
+      "path": "nanobot/skills/tmux/SKILL.md",
+      "sha256": "906a130fb461ec9cef36674f17222a8365b0e6aac486768815d708caf7c1ac6e",
+      "status": "source_only"
+    },
+    {
+      "path": "nanobot/skills/update-setup/SKILL.md",
+      "sha256": "6bd9b1f642e8b429b7fae49fcc8b2aae41b0320c15b3aa8e9e3c92dc505d02c8",
+      "status": "source_only"
+    },
+    {
+      "path": "nanobot/skills/weather/SKILL.md",
+      "sha256": "964e97c904e9c16b633127bfcd3567a0c83a320fe85fb4bf5900b181f36eb361",
+      "status": "source_only"
+    }
+  ],
+  "sourced_fact_count": 34,
+  "tool_classes": [
+    {
+      "class": "ApplyPatchTool",
+      "source": "nanobot/agent/tools/apply_patch.py",
+      "status": "registered",
+      "tool_names": [
+        "apply_patch"
+      ]
+    },
+    {
+      "class": "CliAppsTool",
+      "source": "nanobot/agent/tools/cli_apps.py",
+      "status": "disabled",
+      "tool_names": []
+    },
+    {
+      "class": "CreateGoalTool",
+      "source": "nanobot/agent/tools/long_task.py",
+      "status": "registered",
+      "tool_names": [
+        "create_goal"
+      ]
+    },
+    {
+      "class": "CronTool",
+      "source": "nanobot/agent/tools/cron.py",
+      "status": "registered",
+      "tool_names": [
+        "cron"
+      ]
+    },
+    {
+      "class": "EditFileTool",
+      "source": "nanobot/agent/tools/filesystem.py",
+      "status": "registered",
+      "tool_names": [
+        "edit_file"
+      ]
+    },
+    {
+      "class": "ExecTool",
+      "source": "nanobot/agent/tools/shell.py",
+      "status": "registered",
+      "tool_names": [
+        "exec"
+      ]
+    },
+    {
+      "class": "FindFilesTool",
+      "source": "nanobot/agent/tools/search.py",
+      "status": "registered",
+      "tool_names": [
+        "find_files"
+      ]
+    },
+    {
+      "class": "GrepTool",
+      "source": "nanobot/agent/tools/search.py",
+      "status": "registered",
+      "tool_names": [
+        "grep"
+      ]
+    },
+    {
+      "class": "ImageGenerationTool",
+      "source": "nanobot/agent/tools/image_generation.py",
+      "status": "disabled",
+      "tool_names": []
+    },
+    {
+      "class": "ListDirTool",
+      "source": "nanobot/agent/tools/filesystem.py",
+      "status": "registered",
+      "tool_names": [
+        "list_dir"
+      ]
+    },
+    {
+      "class": "ListExecSessionsTool",
+      "source": "nanobot/agent/tools/exec_session.py",
+      "status": "registered",
+      "tool_names": [
+        "list_exec_sessions"
+      ]
+    },
+    {
+      "class": "ListSessionsTool",
+      "source": "nanobot/agent/tools/session_messages.py",
+      "status": "registered",
+      "tool_names": [
+        "list_sessions"
+      ]
+    },
+    {
+      "class": "MessageTool",
+      "source": "nanobot/agent/tools/message.py",
+      "status": "registered",
+      "tool_names": [
+        "message"
+      ]
+    },
+    {
+      "class": "ReadFileTool",
+      "source": "nanobot/agent/tools/filesystem.py",
+      "status": "registered",
+      "tool_names": [
+        "read_file"
+      ]
+    },
+    {
+      "class": "ReadSessionTool",
+      "source": "nanobot/agent/tools/sessions.py",
+      "status": "registered",
+      "tool_names": [
+        "read_session"
+      ]
+    },
+    {
+      "class": "SearchSessionsTool",
+      "source": "nanobot/agent/tools/sessions.py",
+      "status": "registered",
+      "tool_names": [
+        "search_sessions"
+      ]
+    },
+    {
+      "class": "SendSessionMessageTool",
+      "source": "nanobot/agent/tools/session_messages.py",
+      "status": "registered",
+      "tool_names": [
+        "send_session_message"
+      ]
+    },
+    {
+      "class": "SpawnTool",
+      "source": "nanobot/agent/tools/spawn.py",
+      "status": "registered",
+      "tool_names": [
+        "spawn"
+      ]
+    },
+    {
+      "class": "UpdateGoalTool",
+      "source": "nanobot/agent/tools/long_task.py",
+      "status": "registered",
+      "tool_names": [
+        "update_goal"
+      ]
+    },
+    {
+      "class": "WebFetchTool",
+      "source": "nanobot/agent/tools/web.py",
+      "status": "registered",
+      "tool_names": [
+        "web_fetch"
+      ]
+    },
+    {
+      "class": "WebSearchTool",
+      "source": "nanobot/agent/tools/web.py",
+      "status": "registered",
+      "tool_names": [
+        "web_search"
+      ]
+    },
+    {
+      "class": "WriteFileTool",
+      "source": "nanobot/agent/tools/filesystem.py",
+      "status": "registered",
+      "tool_names": [
+        "write_file"
+      ]
+    },
+    {
+      "class": "WriteStdinTool",
+      "source": "nanobot/agent/tools/exec_session.py",
+      "status": "registered",
+      "tool_names": [
+        "write_stdin"
+      ]
+    }
+  ],
+  "unexpected_exported_tools": []
+}

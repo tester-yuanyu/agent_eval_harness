@@ -19,7 +19,7 @@ def main():
     ap.add_argument("workspace", type=Path)
     args = ap.parse_args()
     w = args.workspace.resolve()
-    plan = load_plan(ROOT / "workspaces/full_tools_fixture_v1_full_eval_20261020")
+    plan = load_plan(ROOT / "tests/fixtures/full_tools_fixture_v1_full_eval_20261020")
     protocol = read(w / "protocol.json")
     ids = set(protocol["planned_slots"])
     specs = {s["slot_id"]: s for s in plan.specs if s["slot_id"] in ids}

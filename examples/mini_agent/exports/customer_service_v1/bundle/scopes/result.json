@@ -1,0 +1,70 @@
+{
+  "allowed_module_ids": [
+    "module.customer_dialogue"
+  ],
+  "boundary_refs": [
+    {
+      "contract_version": "customer-contract-v1",
+      "path": "boundaries/conversation.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "boundary.conversation",
+      "snapshot_sha256": "097838775c54bae86d6f60292516faebfff0b13e4d84947dc5401e949e47268a",
+      "snapshot_type": "boundary"
+    }
+  ],
+  "completion_condition": "A terminal response and its declared status are observable.",
+  "contract_version": "customer-contract-v1",
+  "description": "Observe a direct conversational response.",
+  "entrypoint": "CustomerServiceAgent.run",
+  "evidence_refs": [
+    {
+      "contract_version": "customer-contract-v1",
+      "path": "evidence/final_response.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "evidence.final_response",
+      "snapshot_sha256": "d390929178795c88bba95f8fca2105d2b5c443e21645c03ec727cddec757a328",
+      "snapshot_type": "evidence"
+    }
+  ],
+  "inputs": [
+    "user_input"
+  ],
+  "module_refs": [
+    {
+      "contract_version": "dialogue-v1",
+      "path": "modules/customer_dialogue.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "module.customer_dialogue",
+      "snapshot_sha256": "16cd8510124cb402ee84e154449b45993f125b1d8cf15f5c5af295290b3d085a",
+      "snapshot_type": "module"
+    }
+  ],
+  "outputs": [
+    "final_response"
+  ],
+  "prohibited_module_ids": [],
+  "requirements": [
+    {
+      "capability_key": "result.final_response",
+      "evidence_ids": [
+        "evidence.final_response"
+      ],
+      "mandatory": true,
+      "provider": {
+        "role": "snapshot",
+        "snapshot_id": "module.customer_dialogue"
+      },
+      "requirement_id": "response"
+    }
+  ],
+  "scope_id": "result",
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "scope.result",
+  "snapshot_sha256": "6d0e858df67439905dab7a8948e66219cbb70da3c968c470cc6e61732389bca5",
+  "snapshot_type": "scope",
+  "source_hashes": {
+    "catalog_definition_sha256": "2b977f102978a368a4d3ad5179c52ac20d3bacbe3151b74208aca5222041412c"
+  },
+  "stop_boundary": "run_finished",
+  "unresolved_behavior": "Missing capabilities or evidence remain unknown."
+}

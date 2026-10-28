@@ -1,0 +1,55 @@
+{
+  "applicable_result_paths": [
+    "contract_inspection"
+  ],
+  "availability": {
+    "capability_key": "evidence.execution_contract_available",
+    "evidence_ids": [
+      "evidence.execution_contract"
+    ],
+    "reason": null,
+    "support_status": "supported"
+  },
+  "consumer_roles": [
+    "builder",
+    "evaluator"
+  ],
+  "contract_version": "nanobot-collector-v2",
+  "description": "Source-backed static execution contract, not a runtime trace or execution verdict.",
+  "event_types": [],
+  "evidence_id": "execution_contract",
+  "observation_interface": "integrations/capability_snapshot/contracts.json (static declaration, not execution evidence)",
+  "payload_schema": {
+    "properties": {
+      "contract_version": {
+        "const": "nanobot-collector-v2"
+      },
+      "evidence_kind": {
+        "const": "source_contract_not_execution_trace"
+      }
+    },
+    "required": [
+      "contract_version",
+      "evidence_kind",
+      "boundary",
+      "input_schema",
+      "output",
+      "exceptions",
+      "tool_dispatch",
+      "remaining_gaps"
+    ],
+    "type": "object"
+  },
+  "producer_module_ids": [
+    "module.observability"
+  ],
+  "production_timing": "Static source inspection at snapshot export, not during Agent execution.",
+  "required": false,
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "evidence.execution_contract",
+  "snapshot_sha256": "4b00ec261f27c526bebb955684a413592651c95ad534e2c7adacadbf32109330",
+  "snapshot_type": "evidence",
+  "source_hashes": {
+    "catalog_definition_sha256": "74cf184bd0baa8bd96ff9c7c1b5cb710ee22ccb355f6e92c517d1ce8c6f5f67d"
+  }
+}

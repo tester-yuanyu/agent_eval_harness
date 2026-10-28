@@ -57,7 +57,7 @@ def test_trace_v1_suite_loads_and_preserves_business_case_inputs(
         tmp_path / SUITE_MIGRATIONS[suite_id],
     )
 
-    assert suite.capability_bundle_path == ROOT.parent / "mini_agent/exports/trace_v1"
+    assert suite.capability_bundle_path == ROOT.parents[1] / "examples/mini_agent/exports/trace_v1"
     assert suite.config.capability_input.bundle_hash == TRACE_V1_HASH
     assert suite.validated_capability_bundle.capability_bundle_sha256 == TRACE_V1_HASH
     assert suite.config.capability_input.scope_or_chain_id == (

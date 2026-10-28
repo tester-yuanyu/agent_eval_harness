@@ -1,0 +1,190 @@
+{
+  "gaps": [
+    {
+      "capability_key": "evidence.run_exception_available",
+      "code": "CAPABILITY_UNKNOWN",
+      "fact_id": "evidence.run_exception",
+      "reason": "Native exceptions propagate, but this exporter does not implement the evaluator capture envelope or collect traces."
+    },
+    {
+      "capability_key": "dialogue.business_task",
+      "code": "CAPABILITY_UNKNOWN",
+      "fact_id": "intent.assistant",
+      "reason": "Offline construction only: no model call, tool execution or external service verification."
+    },
+    {
+      "capability_key": "channel.delivery",
+      "code": "CAPABILITY_UNKNOWN",
+      "fact_id": "module.channels",
+      "reason": "Offline construction only: no model call, tool execution or external service verification."
+    },
+    {
+      "capability_key": "dialogue.respond",
+      "code": "CAPABILITY_UNKNOWN",
+      "fact_id": "module.dialogue",
+      "reason": "Offline construction only: no model call, tool execution or external service verification."
+    },
+    {
+      "capability_key": "mcp.discovery",
+      "code": "CAPABILITY_UNKNOWN",
+      "fact_id": "module.mcp",
+      "reason": "Offline construction only: no model call, tool execution or external service verification."
+    },
+    {
+      "capability_key": "context.inheritance",
+      "code": "CAPABILITY_UNKNOWN",
+      "fact_id": "module.memory",
+      "reason": "Offline construction only: no model call, tool execution or external service verification."
+    },
+    {
+      "capability_key": "memory.consolidation",
+      "code": "CAPABILITY_UNKNOWN",
+      "fact_id": "module.memory",
+      "reason": "Offline construction only: no model call, tool execution or external service verification."
+    },
+    {
+      "capability_key": "provider.inference",
+      "code": "CAPABILITY_UNKNOWN",
+      "fact_id": "module.providers",
+      "reason": "Offline construction only: no model call, tool execution or external service verification."
+    },
+    {
+      "capability_key": "skills.execution",
+      "code": "CAPABILITY_UNKNOWN",
+      "fact_id": "module.skills",
+      "reason": "Offline construction only: no model call, tool execution or external service verification."
+    },
+    {
+      "capability_key": "tool.execution",
+      "code": "CAPABILITY_UNKNOWN",
+      "fact_id": "module.tools",
+      "reason": "Offline construction only: no model call, tool execution or external service verification."
+    },
+    {
+      "capability_key": "tool.execution",
+      "code": "CAPABILITY_UNKNOWN",
+      "fact_id": "tool.apply_patch",
+      "reason": "Offline construction only: no model call, tool execution or external service verification."
+    },
+    {
+      "capability_key": "tool.execution",
+      "code": "CAPABILITY_UNKNOWN",
+      "fact_id": "tool.create_goal",
+      "reason": "Offline construction only: no model call, tool execution or external service verification."
+    },
+    {
+      "capability_key": "tool.execution",
+      "code": "CAPABILITY_UNKNOWN",
+      "fact_id": "tool.cron",
+      "reason": "Offline construction only: no model call, tool execution or external service verification."
+    },
+    {
+      "capability_key": "tool.execution",
+      "code": "CAPABILITY_UNKNOWN",
+      "fact_id": "tool.edit_file",
+      "reason": "Offline construction only: no model call, tool execution or external service verification."
+    },
+    {
+      "capability_key": "tool.execution",
+      "code": "CAPABILITY_UNKNOWN",
+      "fact_id": "tool.exec",
+      "reason": "Offline construction only: no model call, tool execution or external service verification."
+    },
+    {
+      "capability_key": "tool.execution",
+      "code": "CAPABILITY_UNKNOWN",
+      "fact_id": "tool.find_files",
+      "reason": "Offline construction only: no model call, tool execution or external service verification."
+    },
+    {
+      "capability_key": "tool.execution",
+      "code": "CAPABILITY_UNKNOWN",
+      "fact_id": "tool.grep",
+      "reason": "Offline construction only: no model call, tool execution or external service verification."
+    },
+    {
+      "capability_key": "tool.execution",
+      "code": "CAPABILITY_UNKNOWN",
+      "fact_id": "tool.list_dir",
+      "reason": "Offline construction only: no model call, tool execution or external service verification."
+    },
+    {
+      "capability_key": "tool.execution",
+      "code": "CAPABILITY_UNKNOWN",
+      "fact_id": "tool.list_exec_sessions",
+      "reason": "Offline construction only: no model call, tool execution or external service verification."
+    },
+    {
+      "capability_key": "tool.execution",
+      "code": "CAPABILITY_UNKNOWN",
+      "fact_id": "tool.list_sessions",
+      "reason": "Offline construction only: no model call, tool execution or external service verification."
+    },
+    {
+      "capability_key": "tool.execution",
+      "code": "CAPABILITY_UNKNOWN",
+      "fact_id": "tool.message",
+      "reason": "Offline construction only: no model call, tool execution or external service verification."
+    },
+    {
+      "capability_key": "tool.execution",
+      "code": "CAPABILITY_UNKNOWN",
+      "fact_id": "tool.read_file",
+      "reason": "Offline construction only: no model call, tool execution or external service verification."
+    },
+    {
+      "capability_key": "tool.execution",
+      "code": "CAPABILITY_UNKNOWN",
+      "fact_id": "tool.read_session",
+      "reason": "Offline construction only: no model call, tool execution or external service verification."
+    },
+    {
+      "capability_key": "tool.execution",
+      "code": "CAPABILITY_UNKNOWN",
+      "fact_id": "tool.search_sessions",
+      "reason": "Offline construction only: no model call, tool execution or external service verification."
+    },
+    {
+      "capability_key": "tool.execution",
+      "code": "CAPABILITY_UNKNOWN",
+      "fact_id": "tool.send_session_message",
+      "reason": "Offline construction only: no model call, tool execution or external service verification."
+    },
+    {
+      "capability_key": "tool.execution",
+      "code": "CAPABILITY_UNKNOWN",
+      "fact_id": "tool.spawn",
+      "reason": "Offline construction only: no model call, tool execution or external service verification."
+    },
+    {
+      "capability_key": "tool.execution",
+      "code": "CAPABILITY_UNKNOWN",
+      "fact_id": "tool.update_goal",
+      "reason": "Offline construction only: no model call, tool execution or external service verification."
+    },
+    {
+      "capability_key": "tool.execution",
+      "code": "CAPABILITY_UNKNOWN",
+      "fact_id": "tool.web_fetch",
+      "reason": "Offline construction only: no model call, tool execution or external service verification."
+    },
+    {
+      "capability_key": "tool.execution",
+      "code": "CAPABILITY_UNKNOWN",
+      "fact_id": "tool.web_search",
+      "reason": "Offline construction only: no model call, tool execution or external service verification."
+    },
+    {
+      "capability_key": "tool.execution",
+      "code": "CAPABILITY_UNKNOWN",
+      "fact_id": "tool.write_file",
+      "reason": "Offline construction only: no model call, tool execution or external service verification."
+    },
+    {
+      "capability_key": "tool.execution",
+      "code": "CAPABILITY_UNKNOWN",
+      "fact_id": "tool.write_stdin",
+      "reason": "Offline construction only: no model call, tool execution or external service verification."
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "capabilities": [
+    {
+      "capability_key": "skills.execution",
+      "evidence_ids": [],
+      "reason": "Offline construction only: no model call, tool execution or external service verification.",
+      "support_status": "unknown"
+    }
+  ],
+  "component_versions": {
+    "nanobot": "0.3.0"
+  },
+  "contract_version": "nanobot-collector-v2",
+  "execution_boundary_ids": [],
+  "input_schema": {},
+  "intent_refs": [],
+  "module_id": "skills",
+  "module_refs": [],
+  "output_schema": {},
+  "responsibility": "Prompt skill loading code; inventory does not establish skill execution.",
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "module.skills",
+  "snapshot_sha256": "95b94bcd6e0de6c72d7354543ac35314c363638d513f18d1244ec64757443015",
+  "snapshot_type": "module",
+  "source_hashes": {
+    "capabilities_sha256": "d2e03b5fc2591baf5b3ae0ed7e1d7ce233bc07dadbb2519ba46f77ef88e123a3",
+    "children_sha256": "b78ee59b8a819b12aaee9953ee472c98c34893d48db562e951cb5033d096ae54"
+  },
+  "tool_refs": [],
+  "trace_event_types": []
+}

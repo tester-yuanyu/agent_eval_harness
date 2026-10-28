@@ -1,0 +1,208 @@
+{
+  "capabilities": [
+    {
+      "capability_key": "tool.execution",
+      "evidence_ids": [],
+      "reason": "Offline construction only: no model call, tool execution or external service verification.",
+      "support_status": "unknown"
+    },
+    {
+      "capability_key": "contract.tool_dispatch",
+      "evidence_ids": [
+        "evidence.execution_contract"
+      ],
+      "reason": null,
+      "support_status": "supported"
+    }
+  ],
+  "component_versions": {
+    "nanobot": "0.3.0"
+  },
+  "contract_version": "nanobot-collector-v2",
+  "execution_boundary_ids": [],
+  "input_schema": {},
+  "intent_refs": [],
+  "module_id": "tools",
+  "module_refs": [],
+  "output_schema": {},
+  "responsibility": "Builtin ToolLoader registration in the explicit offline profile.",
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "module.tools",
+  "snapshot_sha256": "c74faadd519571f806fd8ae5ce3902f87a88813dc8c747fdab27a9b14c768d36",
+  "snapshot_type": "module",
+  "source_hashes": {
+    "capabilities_sha256": "88f04b4be66114894f0a447cdfcde1e819afd1b96017f2196e499179538dbcea",
+    "children_sha256": "32fbc9d38848430149469bdea41fbfef0972a29516f29716744f22621e701e2c"
+  },
+  "tool_refs": [
+    {
+      "contract_version": "nanobot-collector-v2",
+      "path": "tools/apply_patch.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "tool.apply_patch",
+      "snapshot_sha256": "faceceb31cf1433814c61c93c94a3c38034dcbbca9195304cba4165bd9405be2",
+      "snapshot_type": "tool"
+    },
+    {
+      "contract_version": "nanobot-collector-v2",
+      "path": "tools/create_goal.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "tool.create_goal",
+      "snapshot_sha256": "87b2db89ad5eca54e3667bae79fe36b980d8495767501d9d025dc58b94a429d4",
+      "snapshot_type": "tool"
+    },
+    {
+      "contract_version": "nanobot-collector-v2",
+      "path": "tools/cron.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "tool.cron",
+      "snapshot_sha256": "ecdd2cfe37a8415e864d129b25d4834da849e7972a0fa9a0461d3a93564a4311",
+      "snapshot_type": "tool"
+    },
+    {
+      "contract_version": "nanobot-collector-v2",
+      "path": "tools/edit_file.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "tool.edit_file",
+      "snapshot_sha256": "b8a25eb56e5395c57225f19b00bc54591f455674384ee88f08de4a78873176dc",
+      "snapshot_type": "tool"
+    },
+    {
+      "contract_version": "nanobot-collector-v2",
+      "path": "tools/exec.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "tool.exec",
+      "snapshot_sha256": "a02dc0a05af7b06ca0977794fc35192325cb5134558a51f534e7428ec58f7340",
+      "snapshot_type": "tool"
+    },
+    {
+      "contract_version": "nanobot-collector-v2",
+      "path": "tools/find_files.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "tool.find_files",
+      "snapshot_sha256": "cc828c17859af69891904a24760028b370d3a282f983f69810c55cfc66f95ff1",
+      "snapshot_type": "tool"
+    },
+    {
+      "contract_version": "nanobot-collector-v2",
+      "path": "tools/grep.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "tool.grep",
+      "snapshot_sha256": "9146886e970aeb6aa7f24e68574ef3728d8416e573afee0254d78cbc9b1f7da9",
+      "snapshot_type": "tool"
+    },
+    {
+      "contract_version": "nanobot-collector-v2",
+      "path": "tools/list_dir.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "tool.list_dir",
+      "snapshot_sha256": "055846007e868ae3de6939be7a3099566c2c2db476e721aac0f784f4f70b2cc9",
+      "snapshot_type": "tool"
+    },
+    {
+      "contract_version": "nanobot-collector-v2",
+      "path": "tools/list_exec_sessions.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "tool.list_exec_sessions",
+      "snapshot_sha256": "f3ebbdfbdea0022863d85ad8db627602202b070348adf0c98b640b255e3dc92f",
+      "snapshot_type": "tool"
+    },
+    {
+      "contract_version": "nanobot-collector-v2",
+      "path": "tools/list_sessions.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "tool.list_sessions",
+      "snapshot_sha256": "3de339582af70447d39754d5290edefec84b37390df5673ce5e6b5e2ea66e66c",
+      "snapshot_type": "tool"
+    },
+    {
+      "contract_version": "nanobot-collector-v2",
+      "path": "tools/message.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "tool.message",
+      "snapshot_sha256": "4ed814cc2e94a03f12310ebfa0d0bf2627aad7249d5905c0d06bcf056ffe7da0",
+      "snapshot_type": "tool"
+    },
+    {
+      "contract_version": "nanobot-collector-v2",
+      "path": "tools/read_file.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "tool.read_file",
+      "snapshot_sha256": "5d99c66f1a4b0c9d6ac4a6287f133327bf5e5859f412f2cf263f1e24d608ab42",
+      "snapshot_type": "tool"
+    },
+    {
+      "contract_version": "nanobot-collector-v2",
+      "path": "tools/read_session.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "tool.read_session",
+      "snapshot_sha256": "7aacaf4fb8f1e4ab015d651f78d4cd463727642f53cdae60c5780928a6d7f734",
+      "snapshot_type": "tool"
+    },
+    {
+      "contract_version": "nanobot-collector-v2",
+      "path": "tools/search_sessions.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "tool.search_sessions",
+      "snapshot_sha256": "0e5530c9135c4da92e550f261f7cfe1ada39130d04d922f215f99ed2a6119376",
+      "snapshot_type": "tool"
+    },
+    {
+      "contract_version": "nanobot-collector-v2",
+      "path": "tools/send_session_message.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "tool.send_session_message",
+      "snapshot_sha256": "78139203b9a9b4a58937cc628dda8c1c330cf0fae5228c5841dfcdd812fbed20",
+      "snapshot_type": "tool"
+    },
+    {
+      "contract_version": "nanobot-collector-v2",
+      "path": "tools/spawn.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "tool.spawn",
+      "snapshot_sha256": "933052af48b20299ab3f0e525ca30ea5f16d17d0608f0572b7c0df6e96494213",
+      "snapshot_type": "tool"
+    },
+    {
+      "contract_version": "nanobot-collector-v2",
+      "path": "tools/update_goal.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "tool.update_goal",
+      "snapshot_sha256": "556c03ed1de2516f83db3b2fca500a89dabedfcd48d8696d2803eb5497532d95",
+      "snapshot_type": "tool"
+    },
+    {
+      "contract_version": "nanobot-collector-v2",
+      "path": "tools/web_fetch.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "tool.web_fetch",
+      "snapshot_sha256": "48b014f1fd3c6827518ec70254b07666c4b29f750fa2f1392c7a00a59d48fcae",
+      "snapshot_type": "tool"
+    },
+    {
+      "contract_version": "nanobot-collector-v2",
+      "path": "tools/web_search.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "tool.web_search",
+      "snapshot_sha256": "155b09f33da5bf7e933c2f0b66b01bbfeb168b6879aed0c1a58fff78bfec3fce",
+      "snapshot_type": "tool"
+    },
+    {
+      "contract_version": "nanobot-collector-v2",
+      "path": "tools/write_file.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "tool.write_file",
+      "snapshot_sha256": "637766e65b1fdd204c0f34a0b94d6554899e382f3160347965f14d5a6acb5f30",
+      "snapshot_type": "tool"
+    },
+    {
+      "contract_version": "nanobot-collector-v2",
+      "path": "tools/write_stdin.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "tool.write_stdin",
+      "snapshot_sha256": "9b44ca91ba75aa49f6f9707b15e74582d0444686e3731ee501271adb732d5477",
+      "snapshot_type": "tool"
+    }
+  ],
+  "trace_event_types": []
+}

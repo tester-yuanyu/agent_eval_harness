@@ -22,9 +22,10 @@ from .policies import (
     load_policy_set,
     validate_kernel_policy_compatibility,
 )
+from .resources import resource_root
 from .suite_config import PathReference, SuiteConfig, load_suite_config_file
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = resource_root()
 SUITES_ROOT = ROOT / "suites"
 
 
@@ -39,6 +40,23 @@ def resolve_path_reference(
         "projects_root": builder_root.parent,
         "suite_dir": suite_dir,
     }
+    if reference.base == "projects_root":
+        # Historical suite JSON is hash-bound. Translate its project anchor at
+        # the filesystem boundary without rewriting those source documents.
+        monorepo = builder_root.parent.parent
+        projects = {
+            "mini_agent": monorepo / "examples/mini_agent",
+            "agent_evaluator": monorepo / "packages/evaluator",
+            "agent_dataset_builder": builder_root,
+        }
+        parts = Path(reference.path).parts
+        if (
+            builder_root.parent.name == "packages"
+            and (monorepo / "examples").is_dir()
+            and parts
+            and parts[0] in projects
+        ):
+            return projects[parts[0]].joinpath(*parts[1:]).resolve()
     return (bases[reference.base] / reference.path).resolve()
 
 

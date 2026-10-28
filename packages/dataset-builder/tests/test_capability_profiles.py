@@ -202,7 +202,7 @@ def test_checked_in_profile_trusts_the_standalone_bundle_schemas():
 
     bindings = verify_bundle_schemas(
         loaded,
-        ROOT.parent / "mini_agent" / "capabilities",
+        ROOT.parents[1] / "examples/mini_agent" / "capabilities",
     )
 
     assert len(bindings) == 9

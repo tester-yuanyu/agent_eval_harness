@@ -56,7 +56,7 @@ def main():
     args = parser.parse_args()
     if not 1 <= args.workers <= 16:
         raise ValueError("workers must be1..16")
-    plan = load_plan(ROOT / "workspaces/full_tools_fixture_v1_full_eval_20261020")
+    plan = load_plan(ROOT / "tests/fixtures/full_tools_fixture_v1_full_eval_20261020")
     if args.pilot:
         plan.specs = select_pilot(plan.specs)
     workspace = (

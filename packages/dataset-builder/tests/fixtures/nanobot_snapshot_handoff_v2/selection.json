@@ -1,0 +1,5 @@
+{
+  "intent_id": "intent.assistant",
+  "scope_or_chain_id": "chain.end_to_end",
+  "tool_id": null
+}

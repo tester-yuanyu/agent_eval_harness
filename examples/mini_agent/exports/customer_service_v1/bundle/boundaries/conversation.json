@@ -1,0 +1,23 @@
+{
+  "allowed_module_ids": [
+    "module.customer_dialogue"
+  ],
+  "boundary_id": "conversation",
+  "contract_version": "customer-contract-v1",
+  "description": "One direct conversation turn.",
+  "entry_node": "CustomerServiceAgent.run",
+  "evidence_ids": [
+    "evidence.final_response"
+  ],
+  "no_overrun_rule": "No further work is performed after run_finished within this turn.",
+  "prohibited_module_ids": [],
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "boundary.conversation",
+  "snapshot_sha256": "097838775c54bae86d6f60292516faebfff0b13e4d84947dc5401e949e47268a",
+  "snapshot_type": "boundary",
+  "source_hashes": {
+    "catalog_definition_sha256": "8269c4df3e713551924896e9c1596223f95bfb7ad465354ebbcafb07ed901a83"
+  },
+  "stop_node": "run_finished",
+  "terminal_condition": "The run_finished boundary is reached."
+}

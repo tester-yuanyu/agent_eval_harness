@@ -1,0 +1,12 @@
+{
+  "policy_version": "nanobot-full-1.0",
+  "state": "DRAFT",
+  "source_policy": "Only manifest-bound snapshots, specifications and source evidence.",
+  "coverage_policy": "Every snapshot; recursive schema types, required/optional, nullable, enum, min/max and additionalProperties; source-backed isolated behavior candidates.",
+  "combination_policy": "Only declared chains; no arbitrary module/tool Cartesian product. Nested argument combinations vary one constraint at a time; explicit sequences come from implementation.",
+  "oracle_policy": "JSON Schema validity or explicit implementation-derived expectations; no inferred business error codes, retry or idempotency.",
+  "unknown_policy": "Preserve unknown; block behavior until contract/runner binding is resolved.",
+  "execution_policy": "Do not execute Agent, tool handlers, external services or paid models.",
+  "freeze_policy": "PENDING review; no automatic approval or freeze.",
+  "consumer_protocol": "nanobot_candidate 1.0; not EvalCase; runtime adapter absent."
+}

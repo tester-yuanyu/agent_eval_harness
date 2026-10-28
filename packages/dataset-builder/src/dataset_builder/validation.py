@@ -7,16 +7,16 @@ from dataclasses import replace
 from pathlib import Path
 from typing import Any
 
-from eval_framework import load_dataset, validate_dataset
-from eval_framework.capabilities import (
+from eval_contracts import load_dataset, validate_dataset
+from eval_contracts.capabilities import (
     CapabilityBundle as RuntimeCapabilityBundle,
 )
-from eval_framework.capabilities import (
+from eval_contracts.capabilities import (
     CapabilityDocument,
     CapabilityRegistry,
 )
-from eval_framework.schemas import EvalCase
-from eval_framework.tool_catalog import ToolCatalog, ToolContract
+from eval_contracts.schemas import EvalCase
+from eval_contracts.tool_catalog import ToolCatalog, ToolContract
 from pydantic import ValidationError
 
 from .capability_bundle import CapabilityBundleError

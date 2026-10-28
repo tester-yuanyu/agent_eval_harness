@@ -5,9 +5,7 @@ from pathlib import Path
 import pytest
 from jsonschema import Draft202012Validator
 
-SOURCE = Path(
-    "/Users/yuanyu/Desktop/nanobot/exports/nanobot_snapshot_handoff_v2/nanobot_capability_snapshot"
-)
+SOURCE = Path(__file__).resolve().parent / "fixtures/nanobot_snapshot_handoff_v2"
 HASH = "b5dbc1184326a2d3edd641b046b6cba7029bd6f71ef7f561ac9367a787d6655f"
 
 

@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 import re
 
-from eval_framework.schemas import EvalCase
+from eval_contracts.schemas import EvalCase
 
 from .schemas import GateResult
 

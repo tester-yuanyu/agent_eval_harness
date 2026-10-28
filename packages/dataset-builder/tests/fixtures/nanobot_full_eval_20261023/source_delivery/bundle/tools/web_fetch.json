@@ -1,0 +1,96 @@
+{
+  "batch_behavior": {
+    "declared": false
+  },
+  "capabilities": [
+    {
+      "capability_key": "tool.execution",
+      "evidence_ids": [],
+      "reason": "Offline construction only: no model call, tool execution or external service verification.",
+      "support_status": "unknown"
+    }
+  ],
+  "combination_rules": {
+    "concurrency_safe": true,
+    "exclusive": false
+  },
+  "contract_version": "nanobot-collector-v1",
+  "description": "Fetch a URL and extract readable content (HTML → markdown/text). Output is capped at maxChars (default 50 000). Works for most web pages and docs; may fail on login-walled or JS-heavy sites.",
+  "function_schema": {
+    "function": {
+      "description": "Fetch a URL and extract readable content (HTML → markdown/text). Output is capped at maxChars (default 50 000). Works for most web pages and docs; may fail on login-walled or JS-heavy sites.",
+      "name": "web_fetch",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "extractMode": {
+            "default": "markdown",
+            "enum": [
+              "markdown",
+              "text"
+            ],
+            "type": "string"
+          },
+          "maxChars": {
+            "minimum": 100,
+            "type": "integer"
+          },
+          "url": {
+            "description": "URL to fetch",
+            "type": "string"
+          }
+        },
+        "required": [
+          "url"
+        ],
+        "type": "object"
+      }
+    },
+    "type": "function"
+  },
+  "idempotency_rules": {
+    "status": "unknown"
+  },
+  "implementation_profile": "production",
+  "observation_interfaces": [
+    "ToolRegistry.get_definitions",
+    "ToolRegistry.execute"
+  ],
+  "parameter_semantics": {
+    "extractMode": "See the exact function schema.",
+    "maxChars": "See the exact function schema.",
+    "url": "URL to fetch"
+  },
+  "permission_requirements": [
+    "See implementation-specific guards; not audited here."
+  ],
+  "preconditions": [
+    "Registration is limited to the named offline profile.",
+    "Execution requires tool-specific services, request context and permissions."
+  ],
+  "registered": true,
+  "requires_confirmation": false,
+  "result_protocols": {
+    "error_marker": "ToolResult.is_error; see ToolRegistry.execute",
+    "registry_return_type": "Any; tool-specific return contract"
+  },
+  "retry_policy": {
+    "status": "unknown"
+  },
+  "risk_level": "medium",
+  "side_effects": [
+    "Not audited; read_only declaration=True"
+  ],
+  "simulation_capabilities": [],
+  "simulation_protocol": null,
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "tool.web_fetch",
+  "snapshot_sha256": "20bf93db7ddf77cb5e9bd4e407c9475be19ecc6eaf516328d0169ac5c334b9a3",
+  "snapshot_type": "tool",
+  "source_hashes": {
+    "execution_contract_sha256": "effe7332ad1cdb92464ae7f091cf8788ca32e02f1d8353ea8f466d27c7b1f2b8",
+    "function_schema_sha256": "2d93fa198e9d439f4597bedb0829b076c5e0aa6e205ff0229a014f0a546452c7"
+  },
+  "tool_name": "web_fetch",
+  "tool_version": "0.3.0"
+}

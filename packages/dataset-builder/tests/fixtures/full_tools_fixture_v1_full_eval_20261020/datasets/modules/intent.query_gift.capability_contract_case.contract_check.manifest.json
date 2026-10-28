@@ -1,0 +1,27 @@
+{
+  "path": "datasets/modules/intent.query_gift.capability_contract_case.contract_check.jsonl",
+  "dataset_format": "capability_contract_case",
+  "definition_kind": "contract_check",
+  "target_id": "intent.query_gift",
+  "layer": "modules",
+  "case_count": 16,
+  "sha256": "8a51ecb69248f8686521c5bbd6d8b38ad80f519bb29491a4a2cad57914df3351",
+  "dataset_sha256": "8a51ecb69248f8686521c5bbd6d8b38ad80f519bb29491a4a2cad57914df3351",
+  "state": "DRAFT",
+  "dataset_version": "full-fixture-1.0",
+  "suite_id": "full_tools_fixture_v1",
+  "capability_bundle_sha256": "215a9a3a445c8857f3bdd8dbecba935ce646bd8c784f16ecfc4a5da6042cce3c",
+  "execution_profiles": {
+    "full_fixture": {
+      "allowed_tools": [
+        "add_gift_to_backpack",
+        "prepare_resource",
+        "query_gift_info",
+        "query_information",
+        "query_pool_config",
+        "query_user_info"
+      ]
+    }
+  },
+  "runtime_binding": "Explicit fixture Provider and v3 catalog adapter required; no production binding."
+}

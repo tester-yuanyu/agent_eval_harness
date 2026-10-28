@@ -9,7 +9,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from uuid import uuid4
 
-from eval_framework import load_dataset
+from eval_contracts import load_dataset
 
 from .capability_bundle import ValidatedCapabilityBundle, load_validated_bundle
 from .schemas import Approval, ValidationSummary

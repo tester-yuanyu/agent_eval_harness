@@ -38,8 +38,10 @@ capability_snapshot_kit = ["resources/**/*.md"]
 
 
 def stage_project(repository: Path, destination: Path) -> None:
+    # The public namespace now belongs to the shared contracts distribution.
+    source = repository.parents[1] / "packages/contracts/src/capability_snapshot_kit"
     shutil.copytree(
-        repository / "src/capability_snapshot_kit",
+        source,
         destination / "src/capability_snapshot_kit",
         ignore=shutil.ignore_patterns("__pycache__", "*.pyc"),
     )

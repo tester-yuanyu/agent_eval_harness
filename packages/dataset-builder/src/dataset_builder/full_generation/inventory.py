@@ -7,9 +7,10 @@ from typing import Any
 
 from ..capability_bundle import load_validated_bundle
 from ..capability_profiles import load_trusted_profile
+from ..resources import resource_root
 from .models import FullInventory, SourceRef
 
-ROOT = Path(__file__).resolve().parents[3]
+ROOT = resource_root()
 
 
 def digest(path: Path) -> str:

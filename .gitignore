@@ -1,7 +1,9 @@
 .migration/
 .superpowers/
 .venv*/
+.venvs/
 .cache/
+.sources/
 __pycache__/
 *.py[cod]
 *.egg-info/
@@ -18,4 +20,3 @@ dist/
 artifacts/
 workspaces/
 *.log
-

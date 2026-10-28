@@ -1,5 +1,6 @@
 """MiniAgent compatibility wrappers over the portable v3 compiler."""
 
+from importlib.resources import files
 from pathlib import Path
 
 from capability_snapshot_kit.bundle import (
@@ -20,11 +21,14 @@ from capability_snapshot_kit.exporting import (
 )
 from capability_snapshot_kit.models import SnapshotV3
 from capability_snapshot_kit.spec_loader import load_capability_spec_pack_v3
+
 from minimal_agent.capability_adapter import MiniAgentCapabilityAdapter
 from minimal_agent.contracts.intents import IntentRegistry
 from minimal_agent.runtime.tool_registry import ToolRegistry
 
-DEFAULT_CAPABILITY_SPEC_ROOT = Path(__file__).resolve().parents[4] / "capability_specs"
+DEFAULT_CAPABILITY_SPEC_ROOT = Path(
+    str(files("minimal_agent").joinpath("resources", "capability_specs"))
+)
 _write_capability_bundle_v3 = _portable_write_capability_bundle_v3
 
 

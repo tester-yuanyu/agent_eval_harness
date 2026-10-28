@@ -19,7 +19,7 @@ from dataset_builder.capability_profiles import load_trusted_profile
 from dataset_builder.plugins import PluginKey, PluginRegistry
 
 ROOT = Path(__file__).resolve().parents[1]
-BUNDLE = ROOT.parent / "mini_agent" / "capabilities"
+BUNDLE = ROOT.parents[1] / "examples/mini_agent" / "capabilities"
 TRUST_STORE = ROOT / "protocol_profiles" / "trust_store.json"
 
 

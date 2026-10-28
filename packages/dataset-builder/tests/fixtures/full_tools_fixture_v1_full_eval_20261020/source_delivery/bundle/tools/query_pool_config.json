@@ -1,0 +1,218 @@
+{
+  "batch_behavior": {
+    "reason": "No generic batch behavior is declared by ToolContract.",
+    "support_status": "unknown"
+  },
+  "capabilities": [
+    {
+      "capability_key": "tool.registered_execution",
+      "evidence_ids": [
+        "evidence.tool_trace"
+      ],
+      "reason": null,
+      "support_status": "supported"
+    },
+    {
+      "capability_key": "tool.runtime_retry",
+      "evidence_ids": [],
+      "reason": "The runtime does not retry failed Tool handlers.",
+      "support_status": "unsupported"
+    },
+    {
+      "capability_key": "tool.rate_limit_protocol",
+      "evidence_ids": [],
+      "reason": "Rate-limit semantics are owned by the injected handler.",
+      "support_status": "unknown"
+    }
+  ],
+  "combination_rules": {
+    "source": "parameter_schema",
+    "undeclared_combinations": "unknown"
+  },
+  "contract_version": "query-pool-config-example-fixture-v1",
+  "description": "Execute query_pool_config against an isolated in-memory example fixture. No production backend or real business data is connected.",
+  "function_schema": {
+    "description": "Execute query_pool_config against an isolated in-memory example fixture. No production backend or real business data is connected.",
+    "name": "query_pool_config",
+    "parameters": {
+      "additionalProperties": false,
+      "description": "Query mock pools using exactly one lookup mode.",
+      "properties": {
+        "gift_id": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Gift Id"
+        },
+        "pool_id": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Pool Id"
+        }
+      },
+      "required": [
+        "gift_id",
+        "pool_id"
+      ],
+      "title": "QueryPoolConfigArguments",
+      "type": "object"
+    },
+    "strict": true,
+    "type": "function"
+  },
+  "idempotency_rules": {
+    "mode": "READ_ONLY"
+  },
+  "implementation_profile": "test_fixture",
+  "observation_interfaces": [
+    "agent_result.tool_calls",
+    "agent_result.events"
+  ],
+  "parameter_semantics": {
+    "rules": {
+      "matching": "EXACT_ID_OR_GIFT_MEMBERSHIP",
+      "query_mode_cardinality": "EXACTLY_ONE",
+      "query_modes": [
+        "gift_id",
+        "pool_id"
+      ]
+    },
+    "validation": "STRICT_ARGUMENT_MODEL"
+  },
+  "permission_requirements": [
+    "REGISTERED_TOOL_AND_RUN_ALLOW_LIST"
+  ],
+  "preconditions": [
+    "REGISTERED_TOOL_AND_RUN_ALLOW_LIST"
+  ],
+  "registered": true,
+  "requires_confirmation": false,
+  "result_protocols": {
+    "async": {
+      "reason": "The runtime invokes handlers synchronously.",
+      "support_status": "unsupported"
+    },
+    "declared_results": {
+      "EMPTY": {
+        "data_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "pools": {
+              "maxItems": 0,
+              "type": "array"
+            }
+          },
+          "required": [
+            "pools"
+          ],
+          "type": "object"
+        },
+        "terminal_status": "success"
+      },
+      "OK": {
+        "data_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "pools": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "gift_ids": {
+                    "items": {
+                      "exclusiveMinimum": 0,
+                      "type": "integer"
+                    },
+                    "minItems": 1,
+                    "title": "Gift Ids",
+                    "type": "array"
+                  },
+                  "pool_id": {
+                    "exclusiveMinimum": 0,
+                    "title": "Pool Id",
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "pool_id",
+                  "gift_ids"
+                ],
+                "title": "PoolRecord",
+                "type": "object"
+              },
+              "minItems": 1,
+              "type": "array"
+            }
+          },
+          "required": [
+            "pools"
+          ],
+          "type": "object"
+        },
+        "terminal_status": "success"
+      }
+    },
+    "empty_result": {
+      "behavior": "EMPTY_SUCCESS_WITH_NULL_USER_OR_EMPTY_LIST",
+      "source": "tool_contract"
+    },
+    "execution_failure": {
+      "runtime_event": "tool_failed",
+      "terminal_status": "failure"
+    },
+    "partial_success": {
+      "behavior": "UNSUPPORTED_ALL_OR_NOTHING",
+      "source": "tool_contract"
+    },
+    "rate_limit": {
+      "reason": "No runtime-specific rate-limit protocol is declared.",
+      "support_status": "unknown"
+    },
+    "timeout": {
+      "runtime_event": "tool_timeout",
+      "terminal_status": "failure"
+    }
+  },
+  "retry_policy": {
+    "eligible": false,
+    "maximum_attempts": 1,
+    "reason": "The runtime performs one handler invocation per call.",
+    "stop_conditions": [
+      "success",
+      "failure",
+      "timeout"
+    ]
+  },
+  "risk_level": "low",
+  "side_effects": [],
+  "simulation_capabilities": [
+    "success",
+    "empty_result"
+  ],
+  "simulation_protocol": {
+    "name": "deterministic_injected_handler",
+    "version": "query-pool-config-example-fixture-v1"
+  },
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "tool.query_pool_config",
+  "snapshot_sha256": "29b748a11e30954d02331d532f25b532f156ce757a0db7841000c6e480fdcce2",
+  "snapshot_type": "tool",
+  "source_hashes": {
+    "execution_contract_sha256": "8ed32263e44f414fe95f3ecabc60879275b118b191ef181719131ee50d07255d",
+    "function_schema_sha256": "2b455d811f0edf045bfac5a8b33ec6f7b2fc66b4c25d3090c7f2391768060967"
+  },
+  "tool_name": "query_pool_config",
+  "tool_version": "query-pool-config-example-fixture-v1"
+}

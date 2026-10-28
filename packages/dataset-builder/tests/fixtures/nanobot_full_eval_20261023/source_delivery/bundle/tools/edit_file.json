@@ -1,0 +1,126 @@
+{
+  "batch_behavior": {
+    "declared": false
+  },
+  "capabilities": [
+    {
+      "capability_key": "tool.execution",
+      "evidence_ids": [],
+      "reason": "Offline construction only: no model call, tool execution or external service verification.",
+      "support_status": "unknown"
+    }
+  ],
+  "combination_rules": {
+    "concurrency_safe": false,
+    "exclusive": false
+  },
+  "contract_version": "nanobot-collector-v1",
+  "description": "Perform a small, exact replacement in one file by replacing old_text with new_text. When replacing text in an existing file, old_text and new_text must be different. Use this for narrow text substitutions with old_text copied from read_file. For multi-file, structural, or generated code edits, prefer apply_patch. If old_text matches multiple times, provide more context or set occurrence, line_hint, replace_all, and expected_replacements. When editing from numbered read_file output, set line_hint to the exact target line. Shows closest-match diagnostics on failure.",
+  "function_schema": {
+    "function": {
+      "description": "Perform a small, exact replacement in one file by replacing old_text with new_text. When replacing text in an existing file, old_text and new_text must be different. Use this for narrow text substitutions with old_text copied from read_file. For multi-file, structural, or generated code edits, prefer apply_patch. If old_text matches multiple times, provide more context or set occurrence, line_hint, replace_all, and expected_replacements. When editing from numbered read_file output, set line_hint to the exact target line. Shows closest-match diagnostics on failure.",
+      "name": "edit_file",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "expected_replacements": {
+            "description": "Optional guard for the number of replacements that must be made.",
+            "minimum": 1,
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "line_hint": {
+            "description": "Optional exact 1-based target line copied from read_file. The selected old_text match must cover this line.",
+            "minimum": 1,
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "new_text": {
+            "description": "The text to replace with",
+            "type": "string"
+          },
+          "occurrence": {
+            "description": "Optional 1-based occurrence to replace when old_text appears multiple times.",
+            "minimum": 1,
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "old_text": {
+            "description": "The text to find and replace",
+            "type": "string"
+          },
+          "path": {
+            "description": "The file path to edit",
+            "type": "string"
+          },
+          "replace_all": {
+            "description": "Replace all occurrences (default false)",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "path",
+          "old_text",
+          "new_text"
+        ],
+        "type": "object"
+      }
+    },
+    "type": "function"
+  },
+  "idempotency_rules": {
+    "status": "unknown"
+  },
+  "implementation_profile": "production",
+  "observation_interfaces": [
+    "ToolRegistry.get_definitions",
+    "ToolRegistry.execute"
+  ],
+  "parameter_semantics": {
+    "expected_replacements": "Optional guard for the number of replacements that must be made.",
+    "line_hint": "Optional exact 1-based target line copied from read_file. The selected old_text match must cover this line.",
+    "new_text": "The text to replace with",
+    "occurrence": "Optional 1-based occurrence to replace when old_text appears multiple times.",
+    "old_text": "The text to find and replace",
+    "path": "The file path to edit",
+    "replace_all": "Replace all occurrences (default false)"
+  },
+  "permission_requirements": [
+    "See implementation-specific guards; not audited here."
+  ],
+  "preconditions": [
+    "Registration is limited to the named offline profile.",
+    "Execution requires tool-specific services, request context and permissions."
+  ],
+  "registered": true,
+  "requires_confirmation": false,
+  "result_protocols": {
+    "error_marker": "ToolResult.is_error; see ToolRegistry.execute",
+    "registry_return_type": "Any; tool-specific return contract"
+  },
+  "retry_policy": {
+    "status": "unknown"
+  },
+  "risk_level": "high",
+  "side_effects": [
+    "Not audited; read_only declaration=False"
+  ],
+  "simulation_capabilities": [],
+  "simulation_protocol": null,
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "tool.edit_file",
+  "snapshot_sha256": "b5c85cd5f76e2382fec5eb500019344f5ffa83d2ba852339827c43adc90c9d11",
+  "snapshot_type": "tool",
+  "source_hashes": {
+    "execution_contract_sha256": "374d77ced8cc95d45accbac3c8dbec74f041283e48bec45338bb013c76f31513",
+    "function_schema_sha256": "9e7f20fcb988778f91810db0e7ee23a80ee1141c2219498ac528be1bb9196a96"
+  },
+  "tool_name": "edit_file",
+  "tool_version": "0.3.0"
+}

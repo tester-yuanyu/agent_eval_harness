@@ -1,0 +1,31 @@
+{
+  "allowed_module_ids": [
+    "module.dialogue",
+    "module.observability"
+  ],
+  "boundary_id": "conversation",
+  "contract_version": "nanobot-collector-v1",
+  "description": "One direct conversation turn.",
+  "entry_node": "nanobot.nanobot.Nanobot.run",
+  "evidence_ids": [
+    "evidence.final_response"
+  ],
+  "no_overrun_rule": "No further work is performed after Nanobot.run returns RunResult within this turn.",
+  "prohibited_module_ids": [
+    "module.channels",
+    "module.mcp",
+    "module.memory",
+    "module.providers",
+    "module.skills",
+    "module.tools"
+  ],
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "boundary.conversation",
+  "snapshot_sha256": "aacf8fef91df3f5371347b6fd8e0f1e8e215ff3d59f99fea48d11b6fcf0c8773",
+  "snapshot_type": "boundary",
+  "source_hashes": {
+    "catalog_definition_sha256": "f34192ff2e9dcdb6314e3429c57f344013c8502b6b3d102e5dd5e302f0153436"
+  },
+  "stop_node": "Nanobot.run returns RunResult",
+  "terminal_condition": "The Nanobot.run returns RunResult boundary is reached."
+}

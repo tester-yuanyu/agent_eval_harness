@@ -1,0 +1,57 @@
+{
+  "applicable_result_paths": [
+    "raised_exception",
+    "cancelled"
+  ],
+  "availability": {
+    "capability_key": "evidence.run_exception_available",
+    "evidence_ids": [],
+    "reason": "Native exceptions propagate, but this exporter does not implement the evaluator capture envelope or collect traces.",
+    "support_status": "unknown"
+  },
+  "consumer_roles": [
+    "builder",
+    "evaluator"
+  ],
+  "contract_version": "nanobot-collector-v2",
+  "description": "Caller-owned observation of a native raised Python exception or cancellation; exporter does not implement capture.",
+  "event_types": [],
+  "evidence_id": "run_exception",
+  "observation_interface": "Caller-owned try/except and separate cancellation capture; proposed envelope, not a native Nanobot output.",
+  "payload_schema": {
+    "additionalProperties": false,
+    "description": "Evaluator-owned observation envelope, not a native Nanobot response. Capture at the SDK call boundary; cancellation needs separate handling from Exception.",
+    "properties": {
+      "exception_type": {
+        "type": "string"
+      },
+      "message": {
+        "type": "string"
+      },
+      "outcome": {
+        "enum": [
+          "raised_exception",
+          "cancelled"
+        ]
+      }
+    },
+    "required": [
+      "outcome",
+      "exception_type",
+      "message"
+    ],
+    "type": "object"
+  },
+  "producer_module_ids": [
+    "module.observability"
+  ],
+  "production_timing": "At the caller's await boundary when an exception/cancellation propagates.",
+  "required": false,
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "evidence.run_exception",
+  "snapshot_sha256": "15ba22d9436ac8aaf26b39a42942ec4e40f84d8c883eeaebbbab150d6f20f832",
+  "snapshot_type": "evidence",
+  "source_hashes": {
+    "catalog_definition_sha256": "8660ad0322a13223df4e6feffc8cbc83f5d1b891a40a50b4bdcc3902be08bfc8"
+  }
+}

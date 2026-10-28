@@ -1,0 +1,95 @@
+{
+  "capabilities": [
+    {
+      "capability_key": "intent.contract_validation",
+      "evidence_ids": [
+        "evidence.intent_result"
+      ],
+      "reason": null,
+      "support_status": "supported"
+    }
+  ],
+  "capability_id": "query_information",
+  "contract_version": "intent-contract-v1",
+  "decision_rules": {
+    "complete": {
+      "next_action": "CALL_TOOL",
+      "status": "READY"
+    },
+    "execution_mode": "read",
+    "incomplete": {
+      "next_action": "ASK_USER",
+      "status": "NEED_CLARIFICATION"
+    }
+  },
+  "module_id": "module.intent_router",
+  "parameter_semantics": {
+    "missing_parameters": [
+      "environment",
+      "resource_type"
+    ],
+    "normalizers": [
+      "TrimStringNormalizer"
+    ]
+  },
+  "parameters_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "environment": {
+        "anyOf": [
+          {
+            "minLength": 1,
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Environment"
+      },
+      "resource_type": {
+        "anyOf": [
+          {
+            "minLength": 1,
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Resource Type"
+      }
+    },
+    "title": "_QueryInformationParameters",
+    "type": "object"
+  },
+  "required_tool_name": "query_information",
+  "semantic_rules": {
+    "required_fields": [
+      "resource_type",
+      "environment"
+    ],
+    "string_normalization": "TRIM_SURROUNDING_WHITESPACE"
+  },
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "intent.query_information",
+  "snapshot_sha256": "1680f2dde5daa84df77f07d1e8b434236a983b00149357a07bbaadb2c8de6e4a",
+  "snapshot_type": "intent",
+  "source_hashes": {
+    "intent_rules_sha256": "ec76e27344311dc46c05609dc6b0674af5f8932f2bd9c061e87c809a558c6859",
+    "parameters_schema_sha256": "912718a302884802123177f6f2d6d953cbecf66fb4952118bb2ad3230cdc8773",
+    "tool_refs_sha256": "4e0809139fd64041863b78144a409d22bf39d9953f1ee09c7eb28b5cc0ac34ec"
+  },
+  "tool_refs": [
+    {
+      "contract_version": "query-information-example-fixture-v1",
+      "path": "tools/query_information.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "tool.query_information",
+      "snapshot_sha256": "95754c28d93f3ed37c3c886ae3ac1583fc2463e37fd0c37c4e79c9c7e2c78e34",
+      "snapshot_type": "tool"
+    }
+  ]
+}

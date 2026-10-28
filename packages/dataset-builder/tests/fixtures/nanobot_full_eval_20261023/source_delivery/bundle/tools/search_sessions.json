@@ -1,0 +1,84 @@
+{
+  "batch_behavior": {
+    "declared": false
+  },
+  "capabilities": [
+    {
+      "capability_key": "tool.execution",
+      "evidence_ids": [],
+      "reason": "Offline construction only: no model call, tool execution or external service verification.",
+      "support_status": "unknown"
+    }
+  ],
+  "combination_rules": {
+    "concurrency_safe": true,
+    "exclusive": false
+  },
+  "contract_version": "nanobot-collector-v1",
+  "description": "Search other persisted conversation sessions by title or recent visible message text. Use this only when the user asks about a past conversation or when prior discussion is needed to answer. Results contain bounded excerpts; use read_session for more context. When citing a result, link its title to the exact session_ref using Markdown. The current session is excluded.",
+  "function_schema": {
+    "function": {
+      "description": "Search other persisted conversation sessions by title or recent visible message text. Use this only when the user asks about a past conversation or when prior discussion is needed to answer. Results contain bounded excerpts; use read_session for more context. When citing a result, link its title to the exact session_ref using Markdown. The current session is excluded.",
+      "name": "search_sessions",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "query": {
+            "description": "Text to find in persisted session titles or visible user and assistant messages.",
+            "maxLength": 500,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "type": "object"
+      }
+    },
+    "type": "function"
+  },
+  "idempotency_rules": {
+    "status": "unknown"
+  },
+  "implementation_profile": "production",
+  "observation_interfaces": [
+    "ToolRegistry.get_definitions",
+    "ToolRegistry.execute"
+  ],
+  "parameter_semantics": {
+    "query": "Text to find in persisted session titles or visible user and assistant messages."
+  },
+  "permission_requirements": [
+    "See implementation-specific guards; not audited here."
+  ],
+  "preconditions": [
+    "Registration is limited to the named offline profile.",
+    "Execution requires tool-specific services, request context and permissions."
+  ],
+  "registered": true,
+  "requires_confirmation": false,
+  "result_protocols": {
+    "error_marker": "ToolResult.is_error; see ToolRegistry.execute",
+    "registry_return_type": "Any; tool-specific return contract"
+  },
+  "retry_policy": {
+    "status": "unknown"
+  },
+  "risk_level": "medium",
+  "side_effects": [
+    "Not audited; read_only declaration=True"
+  ],
+  "simulation_capabilities": [],
+  "simulation_protocol": null,
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "tool.search_sessions",
+  "snapshot_sha256": "c31d38fa3df047a9eddc1ca8ffdc7a0bcf915230e36d176ccc4f229a3eb7c069",
+  "snapshot_type": "tool",
+  "source_hashes": {
+    "execution_contract_sha256": "214cc0bcc29636330919374c113fba0b35fc66dca32646f09d21adf8e28d4788",
+    "function_schema_sha256": "dafe8f508dc8f492f4fe23f5f4038fd3240b244d47d557c47e168f54a2fc5b19"
+  },
+  "tool_name": "search_sessions",
+  "tool_version": "0.3.0"
+}

@@ -5,6 +5,7 @@ from __future__ import annotations
 import importlib.metadata
 import os
 from pathlib import Path
+from tempfile import TemporaryDirectory
 from typing import Any
 
 import minimal_agent
@@ -502,8 +503,15 @@ def _runtime(value: object) -> Runtime:
 
 
 def _load_current_capabilities() -> CapabilityRegistry:
-    root = Path(minimal_agent.__file__).resolve().parents[2] / "capabilities"
-    return CapabilityRegistry(load_mini_agent_capability_bundle(root))
+    """Derive current runtime identity from installed code and packaged specs."""
+    with TemporaryDirectory(prefix="agent-evaluator-current-bundle-") as temporary:
+        root = Path(temporary) / "bundle"
+        minimal_agent.export_capability_bundle(
+            root,
+            minimal_agent.build_default_intent_registry(),
+            minimal_agent.ToolRegistry(),
+        )
+        return CapabilityRegistry(load_mini_agent_capability_bundle(root))
 
 
 def _verify_legacy_snapshot_bindings(

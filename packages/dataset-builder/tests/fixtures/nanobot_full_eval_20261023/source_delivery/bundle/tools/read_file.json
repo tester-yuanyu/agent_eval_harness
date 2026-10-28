@@ -1,0 +1,105 @@
+{
+  "batch_behavior": {
+    "declared": false
+  },
+  "capabilities": [
+    {
+      "capability_key": "tool.execution",
+      "evidence_ids": [],
+      "reason": "Offline construction only: no model call, tool execution or external service verification.",
+      "support_status": "unknown"
+    }
+  ],
+  "combination_rules": {
+    "concurrency_safe": true,
+    "exclusive": false
+  },
+  "contract_version": "nanobot-collector-v1",
+  "description": "Read a file (text, image, or document). Text output format: LINE_NUM|CONTENT. Images return visual content for analysis. Supports PDF, DOCX, XLSX, PPTX documents. Uploaded non-image attachments are referenced by path; read them with this tool only when their contents are needed. Use find_files/list_dir first when the path is uncertain. Read the relevant range before editing so replacements or patches are based on current content. Use offset and limit for large text files. Use force=true to re-read content even if unchanged. Reads exceeding ~128K chars are truncated.",
+  "function_schema": {
+    "function": {
+      "description": "Read a file (text, image, or document). Text output format: LINE_NUM|CONTENT. Images return visual content for analysis. Supports PDF, DOCX, XLSX, PPTX documents. Uploaded non-image attachments are referenced by path; read them with this tool only when their contents are needed. Use find_files/list_dir first when the path is uncertain. Read the relevant range before editing so replacements or patches are based on current content. Use offset and limit for large text files. Use force=true to re-read content even if unchanged. Reads exceeding ~128K chars are truncated.",
+      "name": "read_file",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "force": {
+            "default": false,
+            "description": "Bypass same-file read deduplication and return content again.",
+            "type": "boolean"
+          },
+          "limit": {
+            "description": "Maximum number of lines to read (default 2000)",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "offset": {
+            "description": "Line number to start reading from (1-indexed, default 1)",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "pages": {
+            "description": "Page range for PDF files, e.g. '1-5' (default: all, max 20 pages)",
+            "type": "string"
+          },
+          "path": {
+            "description": "The file path to read",
+            "type": "string"
+          }
+        },
+        "required": [
+          "path"
+        ],
+        "type": "object"
+      }
+    },
+    "type": "function"
+  },
+  "idempotency_rules": {
+    "status": "unknown"
+  },
+  "implementation_profile": "production",
+  "observation_interfaces": [
+    "ToolRegistry.get_definitions",
+    "ToolRegistry.execute"
+  ],
+  "parameter_semantics": {
+    "force": "Bypass same-file read deduplication and return content again.",
+    "limit": "Maximum number of lines to read (default 2000)",
+    "offset": "Line number to start reading from (1-indexed, default 1)",
+    "pages": "Page range for PDF files, e.g. '1-5' (default: all, max 20 pages)",
+    "path": "The file path to read"
+  },
+  "permission_requirements": [
+    "See implementation-specific guards; not audited here."
+  ],
+  "preconditions": [
+    "Registration is limited to the named offline profile.",
+    "Execution requires tool-specific services, request context and permissions."
+  ],
+  "registered": true,
+  "requires_confirmation": false,
+  "result_protocols": {
+    "error_marker": "ToolResult.is_error; see ToolRegistry.execute",
+    "registry_return_type": "Any; tool-specific return contract"
+  },
+  "retry_policy": {
+    "status": "unknown"
+  },
+  "risk_level": "medium",
+  "side_effects": [
+    "Not audited; read_only declaration=True"
+  ],
+  "simulation_capabilities": [],
+  "simulation_protocol": null,
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "tool.read_file",
+  "snapshot_sha256": "972fef015bdbc80cffa72be186430deb6972f1eee7cdda67c603d49629df0cc0",
+  "snapshot_type": "tool",
+  "source_hashes": {
+    "execution_contract_sha256": "6987ede1557750d540d2d3fad11bbfe7144b36f186622cb0e72d060713eb4423",
+    "function_schema_sha256": "52d1e344d5b0ebbc0b31ecdaafa8aa0d9da5671833fb245c9951f70aba5a8c47"
+  },
+  "tool_name": "read_file",
+  "tool_version": "0.3.0"
+}

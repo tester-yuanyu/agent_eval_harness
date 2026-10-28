@@ -1,8 +1,7 @@
-"""Shared strict Pydantic base for evaluator protocols."""
+"""Compatibility alias for the shared schema_base contract API."""
 
-from pydantic import BaseModel, ConfigDict
+import sys
 
+from eval_contracts import schema_base as _shared
 
-class StrictModel(BaseModel):
-    model_config = ConfigDict(extra="forbid")
-
+sys.modules[__name__] = _shared

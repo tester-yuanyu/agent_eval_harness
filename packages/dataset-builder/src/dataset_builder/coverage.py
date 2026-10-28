@@ -6,11 +6,11 @@ import re
 from collections import Counter
 from typing import Any
 
-from eval_framework.schemas import EvalCase
+from eval_contracts.schemas import EvalCase
 
 from .intent_validation import resolve_json_pointer
-from .schemas import GateResult
 from .scenario_requirements import scenario_issues
+from .schemas import GateResult
 from .suite_definition import SuiteDefinition
 
 

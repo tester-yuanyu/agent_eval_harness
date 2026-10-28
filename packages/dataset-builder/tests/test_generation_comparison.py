@@ -271,6 +271,7 @@ def test_native_sdk_rejects_extra_oracles_before_pydantic_discards_them(containe
     import runpy
     from pathlib import Path
 
+    pytest.importorskip("deepeval", reason="DeepEval optional dependency is not installed")
     from deepeval.synthesizer.schema import SyntheticData, SyntheticDataList
 
     namespace = runpy.run_path(

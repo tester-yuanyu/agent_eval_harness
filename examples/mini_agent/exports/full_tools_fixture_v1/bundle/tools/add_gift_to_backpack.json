@@ -1,0 +1,351 @@
+{
+  "batch_behavior": {
+    "reason": "No generic batch behavior is declared by ToolContract.",
+    "support_status": "unknown"
+  },
+  "capabilities": [
+    {
+      "capability_key": "tool.registered_execution",
+      "evidence_ids": [
+        "evidence.tool_trace"
+      ],
+      "reason": null,
+      "support_status": "supported"
+    },
+    {
+      "capability_key": "tool.runtime_retry",
+      "evidence_ids": [],
+      "reason": "The runtime does not retry failed Tool handlers.",
+      "support_status": "unsupported"
+    },
+    {
+      "capability_key": "tool.rate_limit_protocol",
+      "evidence_ids": [],
+      "reason": "Rate-limit semantics are owned by the injected handler.",
+      "support_status": "unknown"
+    }
+  ],
+  "combination_rules": {
+    "source": "parameter_schema",
+    "undeclared_combinations": "unknown"
+  },
+  "contract_version": "add-gift-to-backpack-example-fixture-v1",
+  "description": "Execute add_gift_to_backpack against an isolated in-memory example fixture. No production backend or real business data is connected.",
+  "function_schema": {
+    "description": "Execute add_gift_to_backpack against an isolated in-memory example fixture. No production backend or real business data is connected.",
+    "name": "add_gift_to_backpack",
+    "parameters": {
+      "$defs": {
+        "GiftQuantity": {
+          "additionalProperties": false,
+          "description": "One gift and its quantity in a strict batch payload.",
+          "properties": {
+            "gift_id": {
+              "exclusiveMinimum": 0,
+              "title": "Gift Id",
+              "type": "integer"
+            },
+            "num": {
+              "maximum": 1000,
+              "minimum": 1,
+              "title": "Num",
+              "type": "integer"
+            }
+          },
+          "required": [
+            "gift_id",
+            "num"
+          ],
+          "title": "GiftQuantity",
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Business parameters for a confirmed mock backpack grant.",
+      "properties": {
+        "duration_days": {
+          "anyOf": [
+            {
+              "maximum": 1000,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Duration Days"
+        },
+        "gift_id": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Gift Id"
+        },
+        "gift_ids": {
+          "anyOf": [
+            {
+              "items": {
+                "exclusiveMinimum": 0,
+                "type": "integer"
+              },
+              "minItems": 1,
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Gift Ids"
+        },
+        "gift_nums": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/GiftQuantity"
+              },
+              "minItems": 1,
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Gift Nums"
+        },
+        "num": {
+          "anyOf": [
+            {
+              "maximum": 1000,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Num"
+        },
+        "user_id": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "User Id"
+        },
+        "user_ids": {
+          "anyOf": [
+            {
+              "items": {
+                "exclusiveMinimum": 0,
+                "type": "integer"
+              },
+              "minItems": 1,
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "User Ids"
+        }
+      },
+      "required": [
+        "gift_id",
+        "gift_ids",
+        "gift_nums",
+        "user_id",
+        "user_ids",
+        "num",
+        "duration_days"
+      ],
+      "title": "AddGiftToBackpackArguments",
+      "type": "object"
+    },
+    "strict": true,
+    "type": "function"
+  },
+  "idempotency_rules": {
+    "mode": "NOT_IDEMPOTENT"
+  },
+  "implementation_profile": "test_fixture",
+  "observation_interfaces": [
+    "agent_result.tool_calls",
+    "agent_result.events"
+  ],
+  "parameter_semantics": {
+    "rules": {
+      "confirmation": "EXTERNAL_ONE_CALL_APPROVAL_CONSUMED_ON_ATTEMPT",
+      "default_duration_days": 7,
+      "default_num": 1,
+      "duplicate_gifts": "REJECT",
+      "duplicate_users": "DEDUPLICATE",
+      "environment_binding": "ISOLATED_FIXTURE_ONLY",
+      "gift_selection_modes": [
+        "gift_id",
+        "gift_ids",
+        "gift_nums"
+      ],
+      "mutation": "VALIDATE_ALL_REFERENCES_BEFORE_WRITING",
+      "selection_cardinality": "EXACTLY_ONE_PER_GROUP",
+      "user_selection_modes": [
+        "user_id",
+        "user_ids"
+      ]
+    },
+    "validation": "STRICT_ARGUMENT_MODEL"
+  },
+  "permission_requirements": [
+    "REGISTERED_TOOL_AND_RUN_ALLOW_LIST",
+    "EXTERNAL_FIXTURE_APPROVAL"
+  ],
+  "preconditions": [
+    "REGISTERED_TOOL_AND_RUN_ALLOW_LIST",
+    "EXTERNAL_FIXTURE_APPROVAL"
+  ],
+  "registered": true,
+  "requires_confirmation": true,
+  "result_protocols": {
+    "async": {
+      "reason": "The runtime invokes handlers synchronously.",
+      "support_status": "unsupported"
+    },
+    "declared_results": {
+      "CONFIRMATION_REQUIRED": {
+        "data_schema": {
+          "additionalProperties": false,
+          "type": "object"
+        },
+        "terminal_status": "business_failure"
+      },
+      "DUPLICATE_GIFT": {
+        "data_schema": {
+          "additionalProperties": false,
+          "type": "object"
+        },
+        "terminal_status": "business_failure"
+      },
+      "NOT_FOUND": {
+        "data_schema": {
+          "additionalProperties": false,
+          "type": "object"
+        },
+        "terminal_status": "business_failure"
+      },
+      "OK": {
+        "data_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "grants": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "duration_days": {
+                    "maximum": 1000,
+                    "minimum": 1,
+                    "title": "Duration Days",
+                    "type": "integer"
+                  },
+                  "gift_id": {
+                    "exclusiveMinimum": 0,
+                    "title": "Gift Id",
+                    "type": "integer"
+                  },
+                  "num": {
+                    "maximum": 1000,
+                    "minimum": 1,
+                    "title": "Num",
+                    "type": "integer"
+                  },
+                  "user_id": {
+                    "exclusiveMinimum": 0,
+                    "title": "User Id",
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "user_id",
+                  "gift_id",
+                  "num",
+                  "duration_days"
+                ],
+                "title": "GrantRecord",
+                "type": "object"
+              },
+              "minItems": 1,
+              "type": "array"
+            }
+          },
+          "required": [
+            "grants"
+          ],
+          "type": "object"
+        },
+        "terminal_status": "success"
+      }
+    },
+    "empty_result": {
+      "behavior": "NOT_APPLICABLE",
+      "source": "tool_contract"
+    },
+    "execution_failure": {
+      "runtime_event": "tool_failed",
+      "terminal_status": "failure"
+    },
+    "partial_success": {
+      "behavior": "UNSUPPORTED_ALL_OR_NOTHING",
+      "source": "tool_contract"
+    },
+    "rate_limit": {
+      "reason": "No runtime-specific rate-limit protocol is declared.",
+      "support_status": "unknown"
+    },
+    "timeout": {
+      "runtime_event": "tool_timeout",
+      "terminal_status": "failure"
+    }
+  },
+  "retry_policy": {
+    "eligible": false,
+    "maximum_attempts": 1,
+    "reason": "The runtime performs one handler invocation per call.",
+    "stop_conditions": [
+      "success",
+      "failure",
+      "timeout"
+    ]
+  },
+  "risk_level": "low",
+  "side_effects": [
+    "isolated_fixture.grants"
+  ],
+  "simulation_capabilities": [
+    "success",
+    "business_failure"
+  ],
+  "simulation_protocol": {
+    "name": "deterministic_injected_handler",
+    "version": "add-gift-to-backpack-example-fixture-v1"
+  },
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "tool.add_gift_to_backpack",
+  "snapshot_sha256": "66feafafe34076c192a9f9fcdc38e468ce7869f85b96ce7bba5a3cf67c745645",
+  "snapshot_type": "tool",
+  "source_hashes": {
+    "execution_contract_sha256": "68ef0d718e8ec927f4b042510226330e2af82a9dbcb3f8491d4c3773074b631c",
+    "function_schema_sha256": "3555928a7535d996910f498772939ebf5c76ef5cc0583b1dd060b827435881bf"
+  },
+  "tool_name": "add_gift_to_backpack",
+  "tool_version": "add-gift-to-backpack-example-fixture-v1"
+}

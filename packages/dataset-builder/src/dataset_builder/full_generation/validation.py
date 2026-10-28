@@ -6,14 +6,14 @@ from collections import Counter
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from eval_framework import load_dataset, validate_dataset
-from eval_framework.capabilities import (
+from eval_contracts import load_dataset, validate_dataset
+from eval_contracts.capabilities import (
     CapabilityBundle,
     CapabilityDocument,
     CapabilityRegistry,
 )
-from eval_framework.schemas import EvalCase
-from eval_framework.tool_catalog import ToolCatalog, ToolContract
+from eval_contracts.schemas import EvalCase
+from eval_contracts.tool_catalog import ToolCatalog, ToolContract
 from jsonschema import Draft202012Validator
 
 from .inventory import source_ref, verify_sources

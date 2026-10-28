@@ -1,0 +1,98 @@
+{
+  "allowed_module_ids": [
+    "module.execution_guard",
+    "module.tool_loop"
+  ],
+  "boundary_refs": [
+    {
+      "contract_version": "mini-agent-capability-contract-v3",
+      "path": "boundaries/safety_recovery.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "boundary.safety_recovery",
+      "snapshot_sha256": "09ff07e25a317b1ccf156ec7738974549e0353ede723611b6bc74b9032c6dfd4",
+      "snapshot_type": "boundary"
+    }
+  ],
+  "completion_condition": "The entrypoint is reached, every mandatory requirement is resolved, the stop boundary is reached, and required Evidence is observable.",
+  "contract_version": "mini-agent-capability-contract-v3",
+  "description": "Reusable safety_recovery evaluation range.",
+  "entrypoint": "policy_or_failure_detected",
+  "evidence_refs": [
+    {
+      "contract_version": "mini-agent-capability-contract-v3",
+      "path": "evidence/safety_recovery_event.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "evidence.safety_recovery_event",
+      "snapshot_sha256": "8068e14668f7deeec2d8b3d5013d16b52fde64fa2362cbe232866717d8786164",
+      "snapshot_type": "evidence"
+    }
+  ],
+  "inputs": [
+    "policy_decision",
+    "execution_failure"
+  ],
+  "module_refs": [
+    {
+      "contract_version": "execution-guard-module-v3",
+      "path": "modules/execution_guard.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "module.execution_guard",
+      "snapshot_sha256": "aff59eb854c23b783ad62aae4f49900de8c644e0b39215b8b375e1b902b9b37a",
+      "snapshot_type": "module"
+    },
+    {
+      "contract_version": "tool-loop-module-v3",
+      "path": "modules/tool_loop.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "module.tool_loop",
+      "snapshot_sha256": "7a5d59bd6db681ac79234591eb51255f964a03616fd7f4c97dd4d754191d89e3",
+      "snapshot_type": "module"
+    }
+  ],
+  "outputs": [
+    "terminal_stop"
+  ],
+  "prohibited_module_ids": [
+    "module.agent_orchestrator",
+    "module.intent_router",
+    "module.model_gateway",
+    "module.observability",
+    "module.tool_registry"
+  ],
+  "requirements": [
+    {
+      "capability_key": "safety.run_allow_list",
+      "evidence_ids": [
+        "evidence.safety_recovery_event"
+      ],
+      "mandatory": true,
+      "provider": {
+        "role": "snapshot",
+        "snapshot_id": "module.execution_guard"
+      },
+      "requirement_id": "run_allow_list"
+    },
+    {
+      "capability_key": "safety.tool_failure_terminal",
+      "evidence_ids": [
+        "evidence.safety_recovery_event"
+      ],
+      "mandatory": true,
+      "provider": {
+        "role": "snapshot",
+        "snapshot_id": "module.tool_loop"
+      },
+      "requirement_id": "tool_failure_terminal"
+    }
+  ],
+  "scope_id": "safety_recovery",
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "scope.safety_recovery",
+  "snapshot_sha256": "4b87f727eb28a61aba4ec5453448630a4fd4d105a27251297324c5e2ff450dd9",
+  "snapshot_type": "scope",
+  "source_hashes": {
+    "catalog_definition_sha256": "1a3598f96d9b4d46b9c939506b192c2ea16e68d73809667f3ae95b2ae74660aa"
+  },
+  "stop_boundary": "terminal_stop",
+  "unresolved_behavior": "A missing or undeclared capability remains unknown; the Scope does not infer support."
+}

@@ -1,0 +1,113 @@
+{
+  "boundary_refs": [
+    {
+      "contract_version": "nanobot-collector-v1",
+      "path": "boundaries/conversation.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "boundary.conversation",
+      "snapshot_sha256": "aacf8fef91df3f5371347b6fd8e0f1e8e215ff3d59f99fea48d11b6fcf0c8773",
+      "snapshot_type": "boundary"
+    }
+  ],
+  "branches": [
+    {
+      "branch_type": "normal",
+      "terminal_condition": "A final response is returned"
+    },
+    {
+      "branch_type": "early_stop",
+      "terminal_condition": "A clarification or handoff suggestion is returned when declared by the Agent"
+    },
+    {
+      "branch_type": "error",
+      "terminal_condition": "A declared failure is returned or raised"
+    }
+  ],
+  "chain_id": "end_to_end",
+  "completion_condition": "The run reaches its terminal boundary and exposes the declared response evidence.",
+  "contract_version": "nanobot-collector-v1",
+  "description": "Direct conversation from business request to terminal response.",
+  "evidence_refs": [
+    {
+      "contract_version": "nanobot-collector-v1",
+      "path": "evidence/final_response.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "evidence.final_response",
+      "snapshot_sha256": "f6c2a0999ed6c5a7db2ab5dac8773e683c497a8324559785c66e4f8f5c58865e",
+      "snapshot_type": "evidence"
+    }
+  ],
+  "module_refs": [
+    {
+      "contract_version": "nanobot-collector-v1",
+      "path": "modules/dialogue.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "module.dialogue",
+      "snapshot_sha256": "6deea192f99fee3573fa88da8cb307dd36e1b9680cd0a9fca25f256ddc394ebd",
+      "snapshot_type": "module"
+    },
+    {
+      "contract_version": "nanobot-collector-v1",
+      "path": "modules/observability.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "module.observability",
+      "snapshot_sha256": "3f4aa5e3923093154eca6e63a2cb405ae26386cc5f09591c2f11c0a87c38487d",
+      "snapshot_type": "module"
+    }
+  ],
+  "nodes": [
+    {
+      "capability_key": "dialogue.respond",
+      "depends_on": [],
+      "inputs": [
+        "user_input"
+      ],
+      "node_id": "response",
+      "outputs": [
+        "final_response"
+      ],
+      "provider": {
+        "role": "snapshot",
+        "snapshot_id": "module.dialogue"
+      },
+      "state_reads": [],
+      "state_writes": [],
+      "stop_conditions": [
+        "terminal_response"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "capability_key": "dialogue.business_task",
+      "evidence_ids": [
+        "evidence.final_response"
+      ],
+      "mandatory": true,
+      "provider": {
+        "role": "selected_intent",
+        "snapshot_id": null
+      },
+      "requirement_id": "business_task"
+    },
+    {
+      "capability_key": "result.final_response",
+      "evidence_ids": [
+        "evidence.final_response"
+      ],
+      "mandatory": true,
+      "provider": {
+        "role": "snapshot",
+        "snapshot_id": "module.observability"
+      },
+      "requirement_id": "response_evidence"
+    }
+  ],
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "chain.end_to_end",
+  "snapshot_sha256": "32f1ceed7a427b4e093f1aa3b7dccdb65851865431ee283fc4af2bd3290f593d",
+  "snapshot_type": "chain",
+  "source_hashes": {
+    "catalog_definition_sha256": "19489a77ccaf5b60ff7540fa22a8df9931db12a977e4cf3154bd6fd26b504470"
+  }
+}

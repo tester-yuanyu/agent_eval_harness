@@ -1,0 +1,121 @@
+{
+  "batch_behavior": {
+    "declared": false
+  },
+  "capabilities": [
+    {
+      "capability_key": "tool.execution",
+      "evidence_ids": [],
+      "reason": "Offline construction only: no model call, tool execution or external service verification.",
+      "support_status": "unknown"
+    }
+  ],
+  "combination_rules": {
+    "concurrency_safe": true,
+    "exclusive": false
+  },
+  "contract_version": "nanobot-collector-v1",
+  "description": "Find files by path fragment, glob, or file type. Use this before read_file when you need to locate files, and prefer it over shell find/ls for ordinary workspace discovery. Returns workspace-relative paths and skips common dependency/build directories.",
+  "function_schema": {
+    "function": {
+      "description": "Find files by path fragment, glob, or file type. Use this before read_file when you need to locate files, and prefer it over shell find/ls for ordinary workspace discovery. Returns workspace-relative paths and skips common dependency/build directories.",
+      "name": "find_files",
+      "parameters": {
+        "properties": {
+          "glob": {
+            "description": "Optional file filter, e.g. '*.py' or 'tests/**/test_*.py'",
+            "type": "string"
+          },
+          "head_limit": {
+            "description": "Maximum number of paths to return (default 200, 0 for all, max 1000)",
+            "maximum": 1000,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "include_dirs": {
+            "description": "Include matching directories as well as files (default false)",
+            "type": "boolean"
+          },
+          "offset": {
+            "description": "Skip the first N results before applying head_limit",
+            "maximum": 100000,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "path": {
+            "description": "Directory or file to search in (default '.')",
+            "type": "string"
+          },
+          "query": {
+            "description": "Optional case-insensitive path fragment search. Whitespace-separated terms must all be present.",
+            "type": "string"
+          },
+          "sort": {
+            "description": "Sort by path or most recently modified first (default path)",
+            "enum": [
+              "path",
+              "modified"
+            ],
+            "type": "string"
+          },
+          "type": {
+            "description": "Optional file type shorthand, e.g. 'py', 'ts', 'md', 'json'",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      }
+    },
+    "type": "function"
+  },
+  "idempotency_rules": {
+    "status": "unknown"
+  },
+  "implementation_profile": "production",
+  "observation_interfaces": [
+    "ToolRegistry.get_definitions",
+    "ToolRegistry.execute"
+  ],
+  "parameter_semantics": {
+    "glob": "Optional file filter, e.g. '*.py' or 'tests/**/test_*.py'",
+    "head_limit": "Maximum number of paths to return (default 200, 0 for all, max 1000)",
+    "include_dirs": "Include matching directories as well as files (default false)",
+    "offset": "Skip the first N results before applying head_limit",
+    "path": "Directory or file to search in (default '.')",
+    "query": "Optional case-insensitive path fragment search. Whitespace-separated terms must all be present.",
+    "sort": "Sort by path or most recently modified first (default path)",
+    "type": "Optional file type shorthand, e.g. 'py', 'ts', 'md', 'json'"
+  },
+  "permission_requirements": [
+    "See implementation-specific guards; not audited here."
+  ],
+  "preconditions": [
+    "Registration is limited to the named offline profile.",
+    "Execution requires tool-specific services, request context and permissions."
+  ],
+  "registered": true,
+  "requires_confirmation": false,
+  "result_protocols": {
+    "error_marker": "ToolResult.is_error; see ToolRegistry.execute",
+    "registry_return_type": "Any; tool-specific return contract"
+  },
+  "retry_policy": {
+    "status": "unknown"
+  },
+  "risk_level": "medium",
+  "side_effects": [
+    "Not audited; read_only declaration=True"
+  ],
+  "simulation_capabilities": [],
+  "simulation_protocol": null,
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "tool.find_files",
+  "snapshot_sha256": "6366a15dbac8a4155ce7fb988a050cf0d989ab8511a2eb93823d29af08203402",
+  "snapshot_type": "tool",
+  "source_hashes": {
+    "execution_contract_sha256": "f7683312eaaa0b629940ef433b2f9a22e99858a24fa086d10995ab9122fc645f",
+    "function_schema_sha256": "4232ffd22280b46cfcd1ea965ba46b5f55bd542a9ad5af142d74d6cc827824b1"
+  },
+  "tool_name": "find_files",
+  "tool_version": "0.3.0"
+}

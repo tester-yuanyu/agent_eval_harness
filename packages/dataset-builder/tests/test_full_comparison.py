@@ -11,7 +11,7 @@ from dataset_builder.full_comparison.validation import validate_candidate
 
 BASE = (
     Path(__file__).resolve().parents[1]
-    / "workspaces/full_tools_fixture_v1_full_eval_20261020"
+    / "tests/fixtures/full_tools_fixture_v1_full_eval_20261020"
 )
 
 
@@ -284,6 +284,7 @@ def test_backend_direct_uses_one_call_and_does_not_copy_seed(plan):
 
 
 def test_native_sdk_forbids_nested_extra_fields():
+    pytest.importorskip("deepeval", reason="DeepEval optional dependency is not installed")
     from deepeval.synthesizer.schema import SyntheticDataList
 
     from dataset_builder.full_comparison.backend import strict_sdk_value

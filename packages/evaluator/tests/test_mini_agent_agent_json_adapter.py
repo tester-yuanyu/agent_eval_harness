@@ -28,8 +28,10 @@ def _bundle_root() -> Path:
     )
 
 
-def test_loads_frozen_agent_json_bundle_without_empty_tools_directory() -> None:
-    root = _bundle_root()
+def test_loads_frozen_agent_json_bundle_without_empty_tools_directory(tmp_path) -> None:
+    root = tmp_path / "bundle"
+    shutil.copytree(_bundle_root(), root)
+    shutil.rmtree(root / "tools", ignore_errors=True)
     assert not (root / "tools").exists()
 
     bundle = load_mini_agent_capability_bundle(
@@ -43,9 +45,24 @@ def test_loads_frozen_agent_json_bundle_without_empty_tools_directory() -> None:
     assert bundle.capability_bundle_sha256 == BUNDLE_SHA256
     assert registry.get_module("intent_router").snapshot_id == "module.intent_router"
     assert registry.parameter_schema("query_user")["additionalProperties"] is False
-    assert bundle.get_document("evidence.intent_result").payload[
-        "observation_interface"
-    ] == "agent_result.intent_result"
+    assert (
+        bundle.get_document("evidence.intent_result").payload["observation_interface"]
+        == "agent_result.intent_result"
+    )
+
+
+def test_current_capabilities_do_not_require_an_agent_checkout(monkeypatch, tmp_path):
+    import minimal_agent
+
+    from eval_framework.providers.mini_agent.provider import _load_current_capabilities
+
+    monkeypatch.setattr(
+        minimal_agent, "__file__", str(tmp_path / "minimal_agent/__init__.py")
+    )
+    registry = _load_current_capabilities()
+    assert registry.bundle.provider_id == "mini_agent"
+    assert registry.bundle.bundle_format_version == "3.0"
+    assert registry.get_module("intent_router").snapshot_id == "module.intent_router"
 
 
 def test_rejects_expected_bundle_hash_mismatch() -> None:
@@ -157,9 +174,7 @@ def test_rejects_duplicate_module_id(tmp_path: Path) -> None:
         for item in value
     ]
     agent["capability_bundle_sha256"] = hashlib.sha256(
-        canonical_json_bytes(
-            sorted(references, key=lambda item: item["snapshot_id"])
-        )
+        canonical_json_bytes(sorted(references, key=lambda item: item["snapshot_id"]))
     ).hexdigest()
     agent["snapshot_sha256"] = _snapshot_hash(agent)
     agent_path.write_text(json.dumps(agent), encoding="utf-8")

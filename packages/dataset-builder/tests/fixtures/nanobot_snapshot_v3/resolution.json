@@ -1,0 +1,61 @@
+{
+  "diagnostics": [
+    "chain.end_to_end -> business_task -> intent.assistant: provider claim is unknown: Offline construction only: no model call, tool execution or external service verification."
+  ],
+  "requirements": [
+    {
+      "capability_key": "dialogue.business_task",
+      "diagnostics": [
+        "chain.end_to_end -> business_task -> intent.assistant: provider claim is unknown: Offline construction only: no model call, tool execution or external service verification."
+      ],
+      "evidence_ids": [
+        "evidence.final_response"
+      ],
+      "provider_snapshot_ids": [
+        "intent.assistant"
+      ],
+      "requirement_id": "business_task",
+      "support_status": "unknown"
+    },
+    {
+      "capability_key": "result.final_response",
+      "diagnostics": [],
+      "evidence_ids": [
+        "evidence.final_response"
+      ],
+      "provider_snapshot_ids": [
+        "evidence.final_response",
+        "module.observability"
+      ],
+      "requirement_id": "response_evidence",
+      "support_status": "supported"
+    },
+    {
+      "capability_key": "contract.sdk_boundary",
+      "diagnostics": [],
+      "evidence_ids": [
+        "evidence.execution_contract"
+      ],
+      "provider_snapshot_ids": [
+        "evidence.execution_contract",
+        "module.dialogue"
+      ],
+      "requirement_id": "declared_boundary",
+      "support_status": "supported"
+    }
+  ],
+  "selection": {
+    "intent_id": "intent.assistant",
+    "scope_or_chain_id": "chain.end_to_end",
+    "tool_id": null
+  },
+  "snapshot_ids": [
+    "chain.end_to_end",
+    "evidence.execution_contract",
+    "evidence.final_response",
+    "intent.assistant",
+    "module.dialogue",
+    "module.observability"
+  ],
+  "support_status": "unknown"
+}

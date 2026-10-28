@@ -1,0 +1,80 @@
+{
+  "execution_verified": false,
+  "facts": {
+    "agent.customer_service_demo": {
+      "basis": "configured",
+      "claims": [],
+      "effective_fact_sha256": "778f56680e935bd715dd29fafb2359251b99c178fdffb824cdac25a4d4a8ae83",
+      "source_ids": [
+        "collector/examples/customer_service/agent.py",
+        "collector/examples/customer_service/collector.py"
+      ]
+    },
+    "evidence.final_response": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "evidence.final_response_available",
+          "declared_status": "supported",
+          "effective_status": "supported"
+        }
+      ],
+      "effective_fact_sha256": "1016f92d2fcce05c9e0834e7f330ac1fcde99a7017daff415afee25b02e8144c",
+      "source_ids": [
+        "collector/examples/customer_service/agent.py",
+        "collector/examples/customer_service/collector.py"
+      ]
+    },
+    "intent.customer_support": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "dialogue.business_task",
+          "declared_status": "supported",
+          "effective_status": "supported"
+        }
+      ],
+      "effective_fact_sha256": "448f1b608899afc3b5f56fe93e4f2e13db9b2f9072b4003f3a7775c8279634bc",
+      "source_ids": [
+        "collector/examples/customer_service/agent.py",
+        "collector/examples/customer_service/collector.py"
+      ]
+    },
+    "module.customer_dialogue": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "dialogue.respond",
+          "declared_status": "supported",
+          "effective_status": "supported"
+        },
+        {
+          "capability_key": "dialogue.clarification",
+          "declared_status": "supported",
+          "effective_status": "supported"
+        },
+        {
+          "capability_key": "dialogue.handoff_suggestion",
+          "declared_status": "supported",
+          "effective_status": "supported"
+        },
+        {
+          "capability_key": "result.final_response",
+          "declared_status": "supported",
+          "effective_status": "supported"
+        },
+        {
+          "capability_key": "context.inheritance",
+          "declared_status": "unsupported",
+          "effective_status": "unsupported"
+        }
+      ],
+      "effective_fact_sha256": "fb4a593db7952edbfa3b7cb2823b4bafe4a15c28d29ceb54833a11f60d81ef85",
+      "source_ids": [
+        "collector/examples/customer_service/agent.py",
+        "collector/examples/customer_service/collector.py"
+      ]
+    }
+  },
+  "meaning": "Configured means a trusted collector declared the current configuration; source hashes do not prove behavior."
+}

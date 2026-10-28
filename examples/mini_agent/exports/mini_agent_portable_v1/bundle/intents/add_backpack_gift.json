@@ -1,0 +1,231 @@
+{
+  "capabilities": [
+    {
+      "capability_key": "intent.contract_validation",
+      "evidence_ids": [
+        "evidence.intent_result"
+      ],
+      "reason": null,
+      "support_status": "supported"
+    }
+  ],
+  "capability_id": "add_backpack_gift",
+  "contract_version": "intent-contract-v1",
+  "decision_rules": {
+    "complete": {
+      "next_action": "ASK_CONFIRMATION",
+      "status": "NEED_CONFIRMATION"
+    },
+    "execution_mode": "write",
+    "incomplete": {
+      "next_action": "ASK_USER",
+      "status": "NEED_CLARIFICATION"
+    }
+  },
+  "module_id": "module.intent_router",
+  "parameter_semantics": {
+    "missing_parameters": [
+      "duration_days",
+      "environment",
+      "gift_id",
+      "gift_ids",
+      "gift_nums",
+      "num",
+      "single_gift_selection_mode",
+      "single_user_selection_mode",
+      "user_id",
+      "user_ids"
+    ],
+    "normalizers": [
+      "TrimStringNormalizer",
+      "IntegerStringNormalizer"
+    ]
+  },
+  "parameters_schema": {
+    "$defs": {
+      "GiftQuantity": {
+        "additionalProperties": false,
+        "description": "One gift and its quantity in a strict batch payload.",
+        "properties": {
+          "gift_id": {
+            "exclusiveMinimum": 0,
+            "title": "Gift Id",
+            "type": "integer"
+          },
+          "num": {
+            "maximum": 1000,
+            "minimum": 1,
+            "title": "Num",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "gift_id",
+          "num"
+        ],
+        "title": "GiftQuantity",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "duration_days": {
+        "anyOf": [
+          {
+            "maximum": 1000,
+            "minimum": 1,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Duration Days"
+      },
+      "environment": {
+        "anyOf": [
+          {
+            "minLength": 1,
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Environment"
+      },
+      "gift_id": {
+        "anyOf": [
+          {
+            "exclusiveMinimum": 0,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Gift Id"
+      },
+      "gift_ids": {
+        "anyOf": [
+          {
+            "items": {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Gift Ids"
+      },
+      "gift_nums": {
+        "anyOf": [
+          {
+            "items": {
+              "$ref": "#/$defs/GiftQuantity"
+            },
+            "type": "array"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Gift Nums"
+      },
+      "num": {
+        "anyOf": [
+          {
+            "maximum": 1000,
+            "minimum": 1,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Num"
+      },
+      "user_id": {
+        "anyOf": [
+          {
+            "exclusiveMinimum": 0,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "User Id"
+      },
+      "user_ids": {
+        "anyOf": [
+          {
+            "items": {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "User Ids"
+      }
+    },
+    "title": "_AddBackpackGiftParameters",
+    "type": "object"
+  },
+  "required_tool_name": "add_gift_to_backpack",
+  "semantic_rules": {
+    "default_duration_days": 7,
+    "default_num": 1,
+    "gift_selection_cardinality": "EXACTLY_ONE",
+    "gift_selection_modes": [
+      "gift_id",
+      "gift_ids",
+      "gift_nums"
+    ],
+    "permanent_duration_days": 1000,
+    "required_fields": [
+      "environment"
+    ],
+    "user_selection_cardinality": "EXACTLY_ONE",
+    "user_selection_modes": [
+      "user_id",
+      "user_ids"
+    ]
+  },
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "intent.add_backpack_gift",
+  "snapshot_sha256": "63be4b4d32502d555b54c9906cb491081ae87b4a39d605caee500be214eb647c",
+  "snapshot_type": "intent",
+  "source_hashes": {
+    "intent_rules_sha256": "d88793c7dd876b8d78684639503ab08e9e16afd08c15a63a45080ec64e09912b",
+    "parameters_schema_sha256": "a1e13b5a62e151757cdf7041d629c8842e1b96319e4afee2661e5780a3dbcce1",
+    "tool_refs_sha256": "4795fcaef7833c3a17f9d257d2fbc960d6e6ea0fbfc426e60918bd5475a5c064"
+  },
+  "tool_refs": [
+    {
+      "contract_version": "add-gift-to-backpack-example-fixture-v1",
+      "path": "tools/add_gift_to_backpack.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "tool.add_gift_to_backpack",
+      "snapshot_sha256": "66feafafe34076c192a9f9fcdc38e468ce7869f85b96ce7bba5a3cf67c745645",
+      "snapshot_type": "tool"
+    }
+  ]
+}

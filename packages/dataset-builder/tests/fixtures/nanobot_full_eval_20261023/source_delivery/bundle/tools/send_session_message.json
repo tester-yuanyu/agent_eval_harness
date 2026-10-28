@@ -1,0 +1,101 @@
+{
+  "batch_behavior": {
+    "declared": false
+  },
+  "capabilities": [
+    {
+      "capability_key": "tool.execution",
+      "evidence_ids": [],
+      "reason": "Offline construction only: no model call, tool execution or external service verification.",
+      "support_status": "unknown"
+    }
+  ],
+  "combination_rules": {
+    "concurrency_safe": false,
+    "exclusive": false
+  },
+  "contract_version": "nanobot-collector-v1",
+  "description": "Send a message to a persisted session by @handle.",
+  "function_schema": {
+    "function": {
+      "description": "Send a message to a persisted session by @handle.",
+      "name": "send_session_message",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "content": {
+            "description": "Message.",
+            "type": "string"
+          },
+          "expect_reply": {
+            "description": "Notify this session if no reply arrives.",
+            "type": "boolean"
+          },
+          "reply_timeout_seconds": {
+            "description": "Timeout before that notification; required when expect_reply is true.",
+            "maximum": 60,
+            "minimum": 5,
+            "type": "integer"
+          },
+          "to": {
+            "description": "Target @handle.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "to",
+          "content",
+          "expect_reply"
+        ],
+        "type": "object"
+      }
+    },
+    "type": "function"
+  },
+  "idempotency_rules": {
+    "status": "unknown"
+  },
+  "implementation_profile": "production",
+  "observation_interfaces": [
+    "ToolRegistry.get_definitions",
+    "ToolRegistry.execute"
+  ],
+  "parameter_semantics": {
+    "content": "Message.",
+    "expect_reply": "Notify this session if no reply arrives.",
+    "reply_timeout_seconds": "Timeout before that notification; required when expect_reply is true.",
+    "to": "Target @handle."
+  },
+  "permission_requirements": [
+    "See implementation-specific guards; not audited here."
+  ],
+  "preconditions": [
+    "Registration is limited to the named offline profile.",
+    "Execution requires tool-specific services, request context and permissions."
+  ],
+  "registered": true,
+  "requires_confirmation": false,
+  "result_protocols": {
+    "error_marker": "ToolResult.is_error; see ToolRegistry.execute",
+    "registry_return_type": "Any; tool-specific return contract"
+  },
+  "retry_policy": {
+    "status": "unknown"
+  },
+  "risk_level": "high",
+  "side_effects": [
+    "Not audited; read_only declaration=False"
+  ],
+  "simulation_capabilities": [],
+  "simulation_protocol": null,
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "tool.send_session_message",
+  "snapshot_sha256": "b645904edaf2e38de343e8aef5b7d2dc299539d659403465d3d26ebf5e4f1db9",
+  "snapshot_type": "tool",
+  "source_hashes": {
+    "execution_contract_sha256": "89918b3e05b5405e38a14b1b043e1e1d1a9a6f5237280b37b7b5befd8fa4df7c",
+    "function_schema_sha256": "1527bb5756f6d518bf6bd715b5d2b410f7160bfc70f7791b1883fe094bac5ea6"
+  },
+  "tool_name": "send_session_message",
+  "tool_version": "0.3.0"
+}

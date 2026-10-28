@@ -1,0 +1,72 @@
+{
+  "batch_behavior": {
+    "declared": false
+  },
+  "capabilities": [
+    {
+      "capability_key": "tool.execution",
+      "evidence_ids": [],
+      "reason": "Offline construction only: no model call, tool execution or external service verification.",
+      "support_status": "unknown"
+    }
+  ],
+  "combination_rules": {
+    "concurrency_safe": false,
+    "exclusive": false
+  },
+  "contract_version": "nanobot-collector-v1",
+  "description": "List other persisted sessions by @handle.",
+  "function_schema": {
+    "function": {
+      "description": "List other persisted sessions by @handle.",
+      "name": "list_sessions",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      }
+    },
+    "type": "function"
+  },
+  "idempotency_rules": {
+    "status": "unknown"
+  },
+  "implementation_profile": "production",
+  "observation_interfaces": [
+    "ToolRegistry.get_definitions",
+    "ToolRegistry.execute"
+  ],
+  "parameter_semantics": {},
+  "permission_requirements": [
+    "See implementation-specific guards; not audited here."
+  ],
+  "preconditions": [
+    "Registration is limited to the named offline profile.",
+    "Execution requires tool-specific services, request context and permissions."
+  ],
+  "registered": true,
+  "requires_confirmation": false,
+  "result_protocols": {
+    "error_marker": "ToolResult.is_error; see ToolRegistry.execute",
+    "registry_return_type": "Any; tool-specific return contract"
+  },
+  "retry_policy": {
+    "status": "unknown"
+  },
+  "risk_level": "high",
+  "side_effects": [
+    "Not audited; read_only declaration=False"
+  ],
+  "simulation_capabilities": [],
+  "simulation_protocol": null,
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "tool.list_sessions",
+  "snapshot_sha256": "d40bef926c1120aab1d23db752fc1c26e78001bf5b5363aab9d59948e377117c",
+  "snapshot_type": "tool",
+  "source_hashes": {
+    "execution_contract_sha256": "f7527728ae643c68b36ebacaa286409143524b3dd34cd8587e2a57d588a8a465",
+    "function_schema_sha256": "34400172369caf2d2274c08b045c457eab05bcb918f3ade4d4937b45fdfcc941"
+  },
+  "tool_name": "list_sessions",
+  "tool_version": "0.3.0"
+}

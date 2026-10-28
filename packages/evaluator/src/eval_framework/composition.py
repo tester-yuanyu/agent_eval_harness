@@ -17,7 +17,7 @@ from .providers.external import (
     RuntimeBinding,
     RuntimeFileIdentity,
 )
-from .providers.mini_agent import MiniAgentProviderFactory
+from .schemas import DatasetBundle, ValidationReport
 
 _EMPTY_CONFIG_SCHEMA = {
     "type": "object",
@@ -72,8 +72,53 @@ def _descriptor(plugin_id: str, kind: str, implementation: Any) -> PluginDescrip
 
 def default_provider_registry() -> ProviderRegistry:
     registry = ProviderRegistry()
-    registry.register("mini_agent", MiniAgentProviderFactory())
+    provider = _optional_mini_agent_factory()
+    if provider is not None:
+        registry.register("mini_agent", provider)
     return registry
+
+
+class _LazyMiniAgentFactory:
+    """Describe the optional integration without importing its runtime."""
+
+    provider_id = "mini_agent"
+
+    def __init__(self, package_root: Path) -> None:
+        self._package_root = package_root
+
+    def fingerprint_sources(self) -> list[Path]:
+        return [Path(__file__).resolve().parent, self._package_root]
+
+    @staticmethod
+    def _factory() -> Any:
+        from .providers.mini_agent import MiniAgentProviderFactory
+
+        return MiniAgentProviderFactory()
+
+    def validate_dataset(
+        self, dataset: DatasetBundle, **config: Any
+    ) -> ValidationReport:
+        return self._factory().validate_dataset(dataset, **config)
+
+    def create(
+        self, dataset: DatasetBundle, model_client_factory: Any = None, **config: Any
+    ) -> Any:
+        return self._factory().create(dataset, model_client_factory, **config)
+
+
+def _optional_mini_agent_factory() -> _LazyMiniAgentFactory | None:
+    """Load the reference integration only when its optional package is present."""
+    from importlib.util import find_spec
+
+    try:
+        spec = find_spec("minimal_agent")
+    except ModuleNotFoundError as exc:
+        if exc.name != "minimal_agent":
+            raise
+        spec = None
+    if spec is None or spec.origin is None:
+        return None
+    return _LazyMiniAgentFactory(Path(spec.origin).resolve().parent)
 
 
 def default_plugin_catalog() -> PluginCatalog:
@@ -112,7 +157,9 @@ def default_plugin_catalog() -> PluginCatalog:
         _descriptor("fixture_json_document_v1", "dataset_loader", document_loader),
         document_loader,
     )
-    provider = MiniAgentProviderFactory()
+    provider = _optional_mini_agent_factory()
+    if provider is None:
+        return catalog
     provider_descriptor = _descriptor("mini_agent_provider_v1", "provider", provider)
     provider_descriptor = provider_descriptor.model_copy(
         update={

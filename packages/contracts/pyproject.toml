@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agent-eval-contracts"
+version = "0.1.0"
+description = "Shared capability snapshots and engine-independent evaluation contracts"
+requires-python = ">=3.11"
+dependencies = ["pydantic>=2.6,<3", "jsonschema>=4.21,<5", "referencing>=0.30", "PyYAML>=6.0,<7"]
+
+[project.scripts]
+capability-snapshot = "capability_snapshot_kit.ingestion.cli:main"
+
+[project.optional-dependencies]
+dev = ["pytest>=7.4,<9"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+capability_snapshot_kit = ["resources/**/*.md"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"

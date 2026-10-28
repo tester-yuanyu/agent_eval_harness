@@ -1,0 +1,255 @@
+{
+  "batch_behavior": {
+    "reason": "No generic batch behavior is declared by ToolContract.",
+    "support_status": "unknown"
+  },
+  "capabilities": [
+    {
+      "capability_key": "tool.registered_execution",
+      "evidence_ids": [
+        "evidence.tool_trace"
+      ],
+      "reason": null,
+      "support_status": "supported"
+    },
+    {
+      "capability_key": "tool.runtime_retry",
+      "evidence_ids": [],
+      "reason": "The runtime does not retry failed Tool handlers.",
+      "support_status": "unsupported"
+    },
+    {
+      "capability_key": "tool.rate_limit_protocol",
+      "evidence_ids": [],
+      "reason": "Rate-limit semantics are owned by the injected handler.",
+      "support_status": "unknown"
+    }
+  ],
+  "combination_rules": {
+    "source": "parameter_schema",
+    "undeclared_combinations": "unknown"
+  },
+  "contract_version": "query-gift-info-example-fixture-v1",
+  "description": "Execute query_gift_info against an isolated in-memory example fixture. No production backend or real business data is connected.",
+  "function_schema": {
+    "description": "Execute query_gift_info against an isolated in-memory example fixture. No production backend or real business data is connected.",
+    "name": "query_gift_info",
+    "parameters": {
+      "additionalProperties": false,
+      "description": "Query mock gift details using exactly one lookup mode.",
+      "properties": {
+        "gift_id": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Gift Id"
+        },
+        "gift_ids": {
+          "anyOf": [
+            {
+              "items": {
+                "exclusiveMinimum": 0,
+                "type": "integer"
+              },
+              "minItems": 1,
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Gift Ids"
+        },
+        "gift_name": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Gift Name"
+        },
+        "limit": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Limit"
+        }
+      },
+      "required": [
+        "gift_id",
+        "gift_ids",
+        "gift_name",
+        "limit"
+      ],
+      "title": "QueryGiftInfoArguments",
+      "type": "object"
+    },
+    "strict": true,
+    "type": "function"
+  },
+  "idempotency_rules": {
+    "mode": "READ_ONLY"
+  },
+  "implementation_profile": "test_fixture",
+  "observation_interfaces": [
+    "agent_result.tool_calls",
+    "agent_result.events"
+  ],
+  "parameter_semantics": {
+    "rules": {
+      "gift_ids": "ALL_MUST_EXIST; UNIQUE_SORTED_RESULTS",
+      "gift_name_matching": "CASE_INSENSITIVE_SUBSTRING",
+      "limit": "APPLIED_AFTER_MATCHING",
+      "query_mode_cardinality": "EXACTLY_ONE",
+      "query_modes": [
+        "gift_id",
+        "gift_ids",
+        "gift_name"
+      ]
+    },
+    "validation": "STRICT_ARGUMENT_MODEL"
+  },
+  "permission_requirements": [
+    "REGISTERED_TOOL_AND_RUN_ALLOW_LIST"
+  ],
+  "preconditions": [
+    "REGISTERED_TOOL_AND_RUN_ALLOW_LIST"
+  ],
+  "registered": true,
+  "requires_confirmation": false,
+  "result_protocols": {
+    "async": {
+      "reason": "The runtime invokes handlers synchronously.",
+      "support_status": "unsupported"
+    },
+    "declared_results": {
+      "EMPTY": {
+        "data_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "gifts": {
+              "maxItems": 0,
+              "type": "array"
+            }
+          },
+          "required": [
+            "gifts"
+          ],
+          "type": "object"
+        },
+        "terminal_status": "success"
+      },
+      "NOT_FOUND": {
+        "data_schema": {
+          "additionalProperties": false,
+          "type": "object"
+        },
+        "terminal_status": "business_failure"
+      },
+      "OK": {
+        "data_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "gifts": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "gift_id": {
+                    "exclusiveMinimum": 0,
+                    "title": "Gift Id",
+                    "type": "integer"
+                  },
+                  "gift_name": {
+                    "minLength": 1,
+                    "title": "Gift Name",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "gift_id",
+                  "gift_name"
+                ],
+                "title": "GiftRecord",
+                "type": "object"
+              },
+              "minItems": 1,
+              "type": "array"
+            }
+          },
+          "required": [
+            "gifts"
+          ],
+          "type": "object"
+        },
+        "terminal_status": "success"
+      }
+    },
+    "empty_result": {
+      "behavior": "EMPTY_SUCCESS_WITH_NULL_USER_OR_EMPTY_LIST",
+      "source": "tool_contract"
+    },
+    "execution_failure": {
+      "runtime_event": "tool_failed",
+      "terminal_status": "failure"
+    },
+    "partial_success": {
+      "behavior": "UNSUPPORTED_ALL_OR_NOTHING",
+      "source": "tool_contract"
+    },
+    "rate_limit": {
+      "reason": "No runtime-specific rate-limit protocol is declared.",
+      "support_status": "unknown"
+    },
+    "timeout": {
+      "runtime_event": "tool_timeout",
+      "terminal_status": "failure"
+    }
+  },
+  "retry_policy": {
+    "eligible": false,
+    "maximum_attempts": 1,
+    "reason": "The runtime performs one handler invocation per call.",
+    "stop_conditions": [
+      "success",
+      "failure",
+      "timeout"
+    ]
+  },
+  "risk_level": "low",
+  "side_effects": [],
+  "simulation_capabilities": [
+    "success",
+    "empty_result",
+    "business_failure"
+  ],
+  "simulation_protocol": {
+    "name": "deterministic_injected_handler",
+    "version": "query-gift-info-example-fixture-v1"
+  },
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "tool.query_gift_info",
+  "snapshot_sha256": "fd6355b3b1d4a58ce54a2d23afe0e79c6462ac529a7130c4c53c2e2b4429714f",
+  "snapshot_type": "tool",
+  "source_hashes": {
+    "execution_contract_sha256": "268fde2eaa3dff8cafa812fa69f9fdd7ea877b4b04f6402beb760b82a3c8a1c1",
+    "function_schema_sha256": "c88c3d730f14dcbb0b378ab0c3b8ecaf144c918285f42c2334ba4dfa727b31bf"
+  },
+  "tool_name": "query_gift_info",
+  "tool_version": "query-gift-info-example-fixture-v1"
+}

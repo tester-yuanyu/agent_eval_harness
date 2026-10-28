@@ -1,0 +1,100 @@
+{
+  "batch_behavior": {
+    "declared": false
+  },
+  "capabilities": [
+    {
+      "capability_key": "tool.execution",
+      "evidence_ids": [],
+      "reason": "Offline construction only: no model call, tool execution or external service verification.",
+      "support_status": "unknown"
+    }
+  ],
+  "combination_rules": {
+    "concurrency_safe": false,
+    "exclusive": false
+  },
+  "contract_version": "nanobot-collector-v1",
+  "description": "Spawn a subagent to handle a task in the background. Use this for complex or time-consuming tasks that can run independently. Set wait=true for a consultation whose result must inform the current turn. The subagent will complete the task and report back when done. For deliverables or existing projects, inspect the workspace first and use a dedicated subdirectory when helpful.",
+  "function_schema": {
+    "function": {
+      "description": "Spawn a subagent to handle a task in the background. Use this for complex or time-consuming tasks that can run independently. Set wait=true for a consultation whose result must inform the current turn. The subagent will complete the task and report back when done. For deliverables or existing projects, inspect the workspace first and use a dedicated subdirectory when helpful.",
+      "name": "spawn",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "label": {
+            "description": "Optional short label for the task (for display)",
+            "type": "string"
+          },
+          "task": {
+            "description": "The task for the subagent to complete",
+            "type": "string"
+          },
+          "temperature": {
+            "description": "Optional sampling temperature for the subagent (0.0 = deterministic, higher = more creative). Defaults to the provider's configured temperature.",
+            "maximum": 2.0,
+            "minimum": 0.0,
+            "type": "number"
+          },
+          "wait": {
+            "default": false,
+            "description": "Wait for the subagent and return its result directly. Use this for a blocking consultation that must inform the current turn. Defaults to false for background execution.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "task"
+        ],
+        "type": "object"
+      }
+    },
+    "type": "function"
+  },
+  "idempotency_rules": {
+    "status": "unknown"
+  },
+  "implementation_profile": "production",
+  "observation_interfaces": [
+    "ToolRegistry.get_definitions",
+    "ToolRegistry.execute"
+  ],
+  "parameter_semantics": {
+    "label": "Optional short label for the task (for display)",
+    "task": "The task for the subagent to complete",
+    "temperature": "Optional sampling temperature for the subagent (0.0 = deterministic, higher = more creative). Defaults to the provider's configured temperature.",
+    "wait": "Wait for the subagent and return its result directly. Use this for a blocking consultation that must inform the current turn. Defaults to false for background execution."
+  },
+  "permission_requirements": [
+    "See implementation-specific guards; not audited here."
+  ],
+  "preconditions": [
+    "Registration is limited to the named offline profile.",
+    "Execution requires tool-specific services, request context and permissions."
+  ],
+  "registered": true,
+  "requires_confirmation": false,
+  "result_protocols": {
+    "error_marker": "ToolResult.is_error; see ToolRegistry.execute",
+    "registry_return_type": "Any; tool-specific return contract"
+  },
+  "retry_policy": {
+    "status": "unknown"
+  },
+  "risk_level": "high",
+  "side_effects": [
+    "Not audited; read_only declaration=False"
+  ],
+  "simulation_capabilities": [],
+  "simulation_protocol": null,
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "tool.spawn",
+  "snapshot_sha256": "867397ac2736e64b979a3aa51ae2baf856a9edee8a72c3a3b162d5c4391c6c6a",
+  "snapshot_type": "tool",
+  "source_hashes": {
+    "execution_contract_sha256": "340f99f49f51c25f89c899512d5fd1008cd3610f4e79d7c16d3f6c6c77a872c7",
+    "function_schema_sha256": "d432f16759744e565ff87a2f2e77e944cbae1c8829ab3ca8988fd3831a8a4824"
+  },
+  "tool_name": "spawn",
+  "tool_version": "0.3.0"
+}

@@ -1,0 +1,17 @@
+{
+  "status": "PASS",
+  "wheel_sha256": "86f290b18f0b1f160824d6b89861010a09c8d682fcba88219b351d9fcac33ff8",
+  "checks": [
+    "clean_environment_install",
+    "no_mini_agent_or_openai",
+    "collector_export",
+    "validate",
+    "resolve",
+    "prepare",
+    "candidate_import",
+    "customer_agent_run"
+  ],
+  "candidate_was_local_fixture_not_live_llm": true,
+  "minimal_agent_installed": false,
+  "openai_installed": false
+}

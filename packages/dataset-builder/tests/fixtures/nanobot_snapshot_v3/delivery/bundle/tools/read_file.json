@@ -1,0 +1,176 @@
+{
+  "batch_behavior": {
+    "declared": false
+  },
+  "capabilities": [
+    {
+      "capability_key": "tool.execution",
+      "evidence_ids": [],
+      "reason": "Offline construction only: no model call, tool execution or external service verification.",
+      "support_status": "unknown"
+    }
+  ],
+  "combination_rules": {
+    "concurrency_safe": true,
+    "exclusive": false
+  },
+  "contract_version": "nanobot-collector-v2",
+  "description": "Read a file (text, image, or document). Text output format: LINE_NUM|CONTENT. Images return visual content for analysis. Supports PDF, DOCX, XLSX, PPTX documents. Uploaded non-image attachments are referenced by path; read them with this tool only when their contents are needed. Use find_files/list_dir first when the path is uncertain. Read the relevant range before editing so replacements or patches are based on current content. Use offset and limit for large text files. Use force=true to re-read content even if unchanged. Reads exceeding ~128K chars are truncated.",
+  "function_schema": {
+    "function": {
+      "description": "Read a file (text, image, or document). Text output format: LINE_NUM|CONTENT. Images return visual content for analysis. Supports PDF, DOCX, XLSX, PPTX documents. Uploaded non-image attachments are referenced by path; read them with this tool only when their contents are needed. Use find_files/list_dir first when the path is uncertain. Read the relevant range before editing so replacements or patches are based on current content. Use offset and limit for large text files. Use force=true to re-read content even if unchanged. Reads exceeding ~128K chars are truncated.",
+      "name": "read_file",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "force": {
+            "default": false,
+            "description": "Bypass same-file read deduplication and return content again.",
+            "type": "boolean"
+          },
+          "limit": {
+            "description": "Maximum number of lines to read (default 2000)",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "offset": {
+            "description": "Line number to start reading from (1-indexed, default 1)",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "pages": {
+            "description": "Page range for PDF files, e.g. '1-5' (default: all, max 20 pages)",
+            "type": "string"
+          },
+          "path": {
+            "description": "The file path to read",
+            "type": "string"
+          }
+        },
+        "required": [
+          "path"
+        ],
+        "type": "object"
+      }
+    },
+    "type": "function"
+  },
+  "idempotency_rules": {
+    "status": "unknown"
+  },
+  "implementation_profile": "production",
+  "observation_interfaces": [
+    "ToolRegistry.get_definitions",
+    "ToolRegistry.execute",
+    "AgentHookContext.tool_events (runner hooks)"
+  ],
+  "parameter_semantics": {
+    "force": "Bypass same-file read deduplication and return content again.",
+    "limit": "Maximum number of lines to read (default 2000)",
+    "offset": "Line number to start reading from (1-indexed, default 1)",
+    "pages": "Page range for PDF files, e.g. '1-5' (default: all, max 20 pages)",
+    "path": "The file path to read"
+  },
+  "permission_requirements": [
+    "See implementation-specific guards; not audited here."
+  ],
+  "preconditions": [
+    "Registration is limited to the named offline profile.",
+    "Execution requires tool-specific services, request context and permissions."
+  ],
+  "registered": true,
+  "requires_confirmation": false,
+  "result_protocols": {
+    "business_error_codes": null,
+    "category_names_are_adapter_labels": true,
+    "dispatch_paths": [
+      "ToolRegistry.execute (direct registry API)",
+      "AgentRunner._run_tool -> ToolRegistry.prepare_call -> tool.execute (normal runner path)"
+    ],
+    "error_categories": [
+      {
+        "category": "unknown_tool",
+        "observation": "prepare_call returns error; tool implementation is not called."
+      },
+      {
+        "category": "invalid_arguments",
+        "observation": "prepare_call coerces/casts and validates parameters; rejected arguments do not call the implementation."
+      },
+      {
+        "category": "tool_marked_error",
+        "observation": "ToolResult.is_error produces an error event in the runner."
+      },
+      {
+        "category": "implementation_exception",
+        "observation": "Ordinary Exception becomes a registry ToolResult.error or a runner error event; handling differs by entrypoint."
+      },
+      {
+        "category": "policy_guard",
+        "observation": "Repeated external lookup/workspace violation guards can reject or escalate; do not infer recoverability from fail_on_tool_error alone."
+      },
+      {
+        "category": "control_flow",
+        "observation": "Cancellation and control-flow BaseException can propagate; hooks may also raise outside the implementation catch."
+      }
+    ],
+    "error_marker": "ToolResult.is_error; a plain string beginning with Error: is not by itself a builtin tool failure marker.",
+    "event_observation": "AgentHookContext.tool_events in runner hooks; not a top-level RunResult field and not emitted as StreamEvent by run().",
+    "fail_on_tool_error": "False generally returns tool errors to the model for possible recovery; True can terminate with tool_error. Policy guards and continuations also affect the terminal outcome.",
+    "registry_return_type": "Any; implementation-specific. No universal successful result shape is inferred.",
+    "retry": {
+      "automatic_tool_retry_guaranteed": false,
+      "description": "The registry does not automatically retry an implementation call. The model may request a new call; provider retries and tool-internal retries are separate.",
+      "status": "tool_specific_unknown"
+    },
+    "source_symbols": [
+      "ToolRegistry.prepare_call",
+      "ToolRegistry.execute",
+      "ToolResult",
+      "AgentRunner._run_tool",
+      "AgentRunner._classify_violation"
+    ],
+    "tool_event_schema": {
+      "properties": {
+        "detail": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "ok",
+            "error"
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "status",
+        "detail"
+      ],
+      "type": "object"
+    }
+  },
+  "retry_policy": {
+    "automatic_tool_retry_guaranteed": false,
+    "description": "The registry does not automatically retry an implementation call. The model may request a new call; provider retries and tool-internal retries are separate.",
+    "status": "tool_specific_unknown"
+  },
+  "risk_level": "medium",
+  "side_effects": [
+    "Not audited; read_only declaration=True"
+  ],
+  "simulation_capabilities": [],
+  "simulation_protocol": null,
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "tool.read_file",
+  "snapshot_sha256": "5d99c66f1a4b0c9d6ac4a6287f133327bf5e5859f412f2cf263f1e24d608ab42",
+  "snapshot_type": "tool",
+  "source_hashes": {
+    "execution_contract_sha256": "72881df2dcd3a684e42584cb5c06aca7c3db643b9438ca7c83e3f311de834dcf",
+    "function_schema_sha256": "52d1e344d5b0ebbc0b31ecdaafa8aa0d9da5671833fb245c9951f70aba5a8c47"
+  },
+  "tool_name": "read_file",
+  "tool_version": "0.3.0"
+}

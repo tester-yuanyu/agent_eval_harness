@@ -1,0 +1,72 @@
+{
+  "batch_behavior": {
+    "declared": false
+  },
+  "capabilities": [
+    {
+      "capability_key": "tool.execution",
+      "evidence_ids": [],
+      "reason": "Offline construction only: no model call, tool execution or external service verification.",
+      "support_status": "unknown"
+    }
+  ],
+  "combination_rules": {
+    "concurrency_safe": true,
+    "exclusive": false
+  },
+  "contract_version": "nanobot-collector-v1",
+  "description": "List active long-running exec sessions, including session_id, cwd, elapsed time, idle time, remaining timeout, and command preview. Use this to recover a session_id after context shifts before polling, writing stdin, or terminating with write_stdin.",
+  "function_schema": {
+    "function": {
+      "description": "List active long-running exec sessions, including session_id, cwd, elapsed time, idle time, remaining timeout, and command preview. Use this to recover a session_id after context shifts before polling, writing stdin, or terminating with write_stdin.",
+      "name": "list_exec_sessions",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      }
+    },
+    "type": "function"
+  },
+  "idempotency_rules": {
+    "status": "unknown"
+  },
+  "implementation_profile": "production",
+  "observation_interfaces": [
+    "ToolRegistry.get_definitions",
+    "ToolRegistry.execute"
+  ],
+  "parameter_semantics": {},
+  "permission_requirements": [
+    "See implementation-specific guards; not audited here."
+  ],
+  "preconditions": [
+    "Registration is limited to the named offline profile.",
+    "Execution requires tool-specific services, request context and permissions."
+  ],
+  "registered": true,
+  "requires_confirmation": false,
+  "result_protocols": {
+    "error_marker": "ToolResult.is_error; see ToolRegistry.execute",
+    "registry_return_type": "Any; tool-specific return contract"
+  },
+  "retry_policy": {
+    "status": "unknown"
+  },
+  "risk_level": "medium",
+  "side_effects": [
+    "Not audited; read_only declaration=True"
+  ],
+  "simulation_capabilities": [],
+  "simulation_protocol": null,
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "tool.list_exec_sessions",
+  "snapshot_sha256": "a952199562dba9ffd6936eab36e56279e12d9080c8e051e5576675b5d8508efe",
+  "snapshot_type": "tool",
+  "source_hashes": {
+    "execution_contract_sha256": "0131b4b56984c15b93c8293379ada972d6d82cf14a09938583d6c18c36c79bc8",
+    "function_schema_sha256": "9c7b818694427581e6adde0ec6495758650259810650ed1cfd83e8a878819db1"
+  },
+  "tool_name": "list_exec_sessions",
+  "tool_version": "0.3.0"
+}

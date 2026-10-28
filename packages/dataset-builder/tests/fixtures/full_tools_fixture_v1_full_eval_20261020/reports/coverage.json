@@ -1,0 +1,30 @@
+{
+  "definition_counts": {
+    "blocked_obligation": 280,
+    "contract_check": 202,
+    "behavior_case": 365
+  },
+  "layers": {
+    "modules": {
+      "contract_check": 103,
+      "behavior_case": 167,
+      "blocked_obligation": 106
+    },
+    "tools": {
+      "behavior_case": 150,
+      "blocked_obligation": 122,
+      "contract_check": 99
+    },
+    "critical_links": {
+      "blocked_obligation": 33,
+      "behavior_case": 32
+    },
+    "end_to_end": {
+      "blocked_obligation": 19,
+      "behavior_case": 16
+    }
+  },
+  "target_count": 23,
+  "slot_count": 847,
+  "note": "Accounting completeness is not runtime coverage; contract checks and blockers are excluded from behavior case totals."
+}

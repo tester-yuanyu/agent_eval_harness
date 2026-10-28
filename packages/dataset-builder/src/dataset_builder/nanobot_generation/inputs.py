@@ -9,8 +9,9 @@ from ..capability_bundle import load_validated_bundle
 from ..capability_ir import CapabilitySelection
 from ..capability_profiles import load_trusted_profile
 from ..full_generation.inventory import pointer_value
+from ..resources import resource_root
 
-ROOT = Path(__file__).resolve().parents[3]
+ROOT = resource_root()
 
 
 def sha256(path):

@@ -7,9 +7,9 @@ from jsonschema import Draft202012Validator
 
 from dataset_builder.nanobot_generation.inputs import load_input
 
-SOURCE = Path("/Users/yuanyu/Desktop/nanobot/exports/nanobot_snapshot_v3")
+SOURCE = Path(__file__).resolve().parent / "fixtures/nanobot_snapshot_v3"
 HASH = "8462eaa3c43061cc6e9f5eefaee216f9fed12e2513d86b3f7efbd476e1d06adb"
-PREVIOUS = Path("workspaces/nanobot_full_eval_20261023")
+PREVIOUS = Path(__file__).resolve().parent / "fixtures/nanobot_full_eval_20261023"
 
 
 def load():

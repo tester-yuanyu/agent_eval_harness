@@ -1,0 +1,230 @@
+{
+  "batch_behavior": {
+    "declared": false
+  },
+  "capabilities": [
+    {
+      "capability_key": "tool.execution",
+      "evidence_ids": [],
+      "reason": "Offline construction only: no model call, tool execution or external service verification.",
+      "support_status": "unknown"
+    }
+  ],
+  "combination_rules": {
+    "concurrency_safe": true,
+    "exclusive": false
+  },
+  "contract_version": "nanobot-collector-v2",
+  "description": "Search file contents with a regex pattern. Default output_mode is files_with_matches (file paths only); use content mode for matching lines with context. Prefer this over shell grep for ordinary workspace searches. Binary and file-size limits are enforced by the tool; explicit file paths use a larger bounded limit than directory searches. Supports glob/type filtering.",
+  "function_schema": {
+    "function": {
+      "description": "Search file contents with a regex pattern. Default output_mode is files_with_matches (file paths only); use content mode for matching lines with context. Prefer this over shell grep for ordinary workspace searches. Binary and file-size limits are enforced by the tool; explicit file paths use a larger bounded limit than directory searches. Supports glob/type filtering.",
+      "name": "grep",
+      "parameters": {
+        "properties": {
+          "case_insensitive": {
+            "description": "Case-insensitive search (default false)",
+            "type": "boolean"
+          },
+          "context_after": {
+            "description": "Number of lines of context after each match",
+            "maximum": 20,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "context_before": {
+            "description": "Number of lines of context before each match",
+            "maximum": 20,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "fixed_strings": {
+            "description": "Treat pattern as plain text instead of regex (default false)",
+            "type": "boolean"
+          },
+          "glob": {
+            "description": "Optional file filter, e.g. '*.py' or 'tests/**/test_*.py'",
+            "type": "string"
+          },
+          "head_limit": {
+            "description": "Maximum number of results to return. In content mode this limits matching line blocks; in other modes it limits file entries. Default 250",
+            "maximum": 1000,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "max_matches": {
+            "description": "Legacy alias for head_limit in content mode",
+            "maximum": 1000,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "max_results": {
+            "description": "Legacy alias for head_limit in files_with_matches or count mode",
+            "maximum": 1000,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "offset": {
+            "description": "Skip the first N results before applying head_limit",
+            "maximum": 100000,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "output_mode": {
+            "description": "content: matching lines with optional context; files_with_matches: only matching file paths; count: matching line counts per file. Default: files_with_matches",
+            "enum": [
+              "content",
+              "files_with_matches",
+              "count"
+            ],
+            "type": "string"
+          },
+          "path": {
+            "description": "File or directory to search in (default '.')",
+            "type": "string"
+          },
+          "pattern": {
+            "description": "Regex or plain text pattern to search for",
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": {
+            "description": "Optional file type shorthand, e.g. 'py', 'ts', 'md', 'json'",
+            "type": "string"
+          }
+        },
+        "required": [
+          "pattern"
+        ],
+        "type": "object"
+      }
+    },
+    "type": "function"
+  },
+  "idempotency_rules": {
+    "status": "unknown"
+  },
+  "implementation_profile": "production",
+  "observation_interfaces": [
+    "ToolRegistry.get_definitions",
+    "ToolRegistry.execute",
+    "AgentHookContext.tool_events (runner hooks)"
+  ],
+  "parameter_semantics": {
+    "case_insensitive": "Case-insensitive search (default false)",
+    "context_after": "Number of lines of context after each match",
+    "context_before": "Number of lines of context before each match",
+    "fixed_strings": "Treat pattern as plain text instead of regex (default false)",
+    "glob": "Optional file filter, e.g. '*.py' or 'tests/**/test_*.py'",
+    "head_limit": "Maximum number of results to return. In content mode this limits matching line blocks; in other modes it limits file entries. Default 250",
+    "max_matches": "Legacy alias for head_limit in content mode",
+    "max_results": "Legacy alias for head_limit in files_with_matches or count mode",
+    "offset": "Skip the first N results before applying head_limit",
+    "output_mode": "content: matching lines with optional context; files_with_matches: only matching file paths; count: matching line counts per file. Default: files_with_matches",
+    "path": "File or directory to search in (default '.')",
+    "pattern": "Regex or plain text pattern to search for",
+    "type": "Optional file type shorthand, e.g. 'py', 'ts', 'md', 'json'"
+  },
+  "permission_requirements": [
+    "See implementation-specific guards; not audited here."
+  ],
+  "preconditions": [
+    "Registration is limited to the named offline profile.",
+    "Execution requires tool-specific services, request context and permissions."
+  ],
+  "registered": true,
+  "requires_confirmation": false,
+  "result_protocols": {
+    "business_error_codes": null,
+    "category_names_are_adapter_labels": true,
+    "dispatch_paths": [
+      "ToolRegistry.execute (direct registry API)",
+      "AgentRunner._run_tool -> ToolRegistry.prepare_call -> tool.execute (normal runner path)"
+    ],
+    "error_categories": [
+      {
+        "category": "unknown_tool",
+        "observation": "prepare_call returns error; tool implementation is not called."
+      },
+      {
+        "category": "invalid_arguments",
+        "observation": "prepare_call coerces/casts and validates parameters; rejected arguments do not call the implementation."
+      },
+      {
+        "category": "tool_marked_error",
+        "observation": "ToolResult.is_error produces an error event in the runner."
+      },
+      {
+        "category": "implementation_exception",
+        "observation": "Ordinary Exception becomes a registry ToolResult.error or a runner error event; handling differs by entrypoint."
+      },
+      {
+        "category": "policy_guard",
+        "observation": "Repeated external lookup/workspace violation guards can reject or escalate; do not infer recoverability from fail_on_tool_error alone."
+      },
+      {
+        "category": "control_flow",
+        "observation": "Cancellation and control-flow BaseException can propagate; hooks may also raise outside the implementation catch."
+      }
+    ],
+    "error_marker": "ToolResult.is_error; a plain string beginning with Error: is not by itself a builtin tool failure marker.",
+    "event_observation": "AgentHookContext.tool_events in runner hooks; not a top-level RunResult field and not emitted as StreamEvent by run().",
+    "fail_on_tool_error": "False generally returns tool errors to the model for possible recovery; True can terminate with tool_error. Policy guards and continuations also affect the terminal outcome.",
+    "registry_return_type": "Any; implementation-specific. No universal successful result shape is inferred.",
+    "retry": {
+      "automatic_tool_retry_guaranteed": false,
+      "description": "The registry does not automatically retry an implementation call. The model may request a new call; provider retries and tool-internal retries are separate.",
+      "status": "tool_specific_unknown"
+    },
+    "source_symbols": [
+      "ToolRegistry.prepare_call",
+      "ToolRegistry.execute",
+      "ToolResult",
+      "AgentRunner._run_tool",
+      "AgentRunner._classify_violation"
+    ],
+    "tool_event_schema": {
+      "properties": {
+        "detail": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "ok",
+            "error"
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "status",
+        "detail"
+      ],
+      "type": "object"
+    }
+  },
+  "retry_policy": {
+    "automatic_tool_retry_guaranteed": false,
+    "description": "The registry does not automatically retry an implementation call. The model may request a new call; provider retries and tool-internal retries are separate.",
+    "status": "tool_specific_unknown"
+  },
+  "risk_level": "medium",
+  "side_effects": [
+    "Not audited; read_only declaration=True"
+  ],
+  "simulation_capabilities": [],
+  "simulation_protocol": null,
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "tool.grep",
+  "snapshot_sha256": "9146886e970aeb6aa7f24e68574ef3728d8416e573afee0254d78cbc9b1f7da9",
+  "snapshot_type": "tool",
+  "source_hashes": {
+    "execution_contract_sha256": "d77f1d3745891293b8d21dfcf0d0127f37909f92d8b317cf426e21f43004f230",
+    "function_schema_sha256": "29d9a765fd2fbc13a604a1726512505b4a48125262f3d640ef19800eb9b92238"
+  },
+  "tool_name": "grep",
+  "tool_version": "0.3.0"
+}

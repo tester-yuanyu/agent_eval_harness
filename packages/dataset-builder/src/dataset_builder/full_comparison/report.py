@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 from collections import Counter, defaultdict
 
-from eval_framework import load_dataset, validate_dataset
+from eval_contracts import load_dataset, validate_dataset
 
 from dataset_builder.comparison_provider import usage_summary
 from dataset_builder.full_generation.models import FullInventory

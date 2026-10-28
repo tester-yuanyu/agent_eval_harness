@@ -1,0 +1,32 @@
+{
+  "valid": true,
+  "issues": [],
+  "runtime_execution": "NOT_RUN",
+  "approval": "PENDING",
+  "agent_id": "nanobot",
+  "bundle_sha256": "b5dbc1184326a2d3edd641b046b6cba7029bd6f71ef7f561ac9367a787d6655f",
+  "snapshot_count": 35,
+  "primary_target_count": 31,
+  "case_count": 2378,
+  "counts_by_kind": {
+    "contract_check": 529,
+    "schema_contract": 1599,
+    "blocked_obligation": 160,
+    "behavior_candidate": 90
+  },
+  "counts_by_layer": {
+    "contracts": 238,
+    "critical_links": 1,
+    "end_to_end": 11,
+    "modules": 424,
+    "tools": 1704
+  },
+  "counts_by_readiness": {
+    "static_only": 2128,
+    "blocked": 247,
+    "needs_runner": 3
+  },
+  "blocker_count": 219,
+  "evalcase_count": 0,
+  "validation_scope": "source integrity, strict candidate protocol, schema expectations, references and coverage; no Agent or business execution"
+}

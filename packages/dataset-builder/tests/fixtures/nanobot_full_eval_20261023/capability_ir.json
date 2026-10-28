@@ -1,0 +1,244 @@
+{
+  "schema_version": "1.0",
+  "source_protocol_id": "capability-snapshot",
+  "source_protocol_version": "3.0",
+  "profile_id": "capability-snapshot",
+  "profile_sha256": "b63a6da43917791bfadd947f69c5f9f359a7bfb0eb1865a0cc621ab0d43e87f7",
+  "adapter_protocol": "capability-snapshot",
+  "adapter_version": "1.0",
+  "agent_snapshot_id": "agent.nanobot",
+  "agent_snapshot_sha256": "6d21bd93c8d9f179f8aa7f524c600077b5cb06790302ae3eade330bfbbd59bab",
+  "capability_bundle_sha256": "b5dbc1184326a2d3edd641b046b6cba7029bd6f71ef7f561ac9367a787d6655f",
+  "selection": {
+    "scope_or_chain_id": "chain.end_to_end",
+    "intent_id": "intent.assistant",
+    "tool_id": null
+  },
+  "selected_node": {
+    "snapshot_id": "chain.end_to_end",
+    "snapshot_type": "chain",
+    "description": "Direct conversation from business request to terminal response.",
+    "completion_condition": "The run reaches its terminal boundary and exposes the declared response evidence.",
+    "boundary_ids": [
+      "boundary.conversation"
+    ]
+  },
+  "intent": {
+    "snapshot_id": "intent.assistant",
+    "capability_id": "assistant",
+    "contract_version": "nanobot-collector-v1",
+    "module_id": "module.dialogue",
+    "required_tool_name": null
+  },
+  "tool": null,
+  "support_status": "unknown",
+  "requirements": [
+    {
+      "requirement_id": "business_task",
+      "capability_key": "dialogue.business_task",
+      "mandatory": true,
+      "provider_role": "selected_intent",
+      "provider_snapshot_id": "intent.assistant",
+      "support_status": "unknown",
+      "evidence_ids": [
+        "evidence.final_response"
+      ],
+      "reason": "Offline construction only: no model call, tool execution or external service verification."
+    },
+    {
+      "requirement_id": "response_evidence",
+      "capability_key": "result.final_response",
+      "mandatory": true,
+      "provider_role": "snapshot",
+      "provider_snapshot_id": "module.observability",
+      "support_status": "supported",
+      "evidence_ids": [
+        "evidence.final_response"
+      ],
+      "reason": null
+    }
+  ],
+  "claims": [
+    {
+      "capability_key": "dialogue.business_task",
+      "support_status": "unknown",
+      "evidence_ids": [],
+      "reason": "Offline construction only: no model call, tool execution or external service verification.",
+      "source_snapshot_id": "intent.assistant"
+    },
+    {
+      "capability_key": "result.final_response",
+      "support_status": "supported",
+      "evidence_ids": [
+        "evidence.final_response"
+      ],
+      "reason": null,
+      "source_snapshot_id": "module.observability"
+    }
+  ],
+  "evidence": [
+    {
+      "snapshot_id": "evidence.final_response",
+      "availability": "supported",
+      "observation_interface": "dataclasses.asdict(RunResult)",
+      "payload_schema": {
+        "description": "Result of a single agent run.",
+        "properties": {
+          "content": {
+            "title": "Content",
+            "type": "string"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Error"
+          },
+          "messages": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Messages",
+            "type": "array"
+          },
+          "metadata": {
+            "additionalProperties": true,
+            "title": "Metadata",
+            "type": "object"
+          },
+          "stop_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Stop Reason"
+          },
+          "tools_used": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Tools Used",
+            "type": "array"
+          },
+          "usage": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "title": "Usage",
+            "type": "object"
+          }
+        },
+        "required": [
+          "content"
+        ],
+        "title": "RunResult",
+        "type": "object"
+      },
+      "producer_module_ids": [
+        "module.observability"
+      ]
+    }
+  ],
+  "parameters_schema": {
+    "description": "Common Nanobot.run arguments; additional SDK keyword arguments allowed.",
+    "properties": {
+      "ephemeral": {
+        "default": false,
+        "type": "boolean"
+      },
+      "message": {
+        "type": "string"
+      },
+      "session_key": {
+        "default": "sdk:default",
+        "type": "string"
+      }
+    },
+    "required": [
+      "message"
+    ],
+    "type": "object"
+  },
+  "decision_rules": {
+    "routing": "Model-driven; no fixed business-intent router inferred."
+  },
+  "parameter_semantics": {
+    "message": "User input passed to Nanobot.run."
+  },
+  "semantic_rules": {
+    "purpose": "General assistant; no business-specific competency inferred."
+  },
+  "source_artifacts": [
+    {
+      "snapshot_id": "agent.nanobot",
+      "snapshot_type": "agent",
+      "snapshot_format_version": "3.0",
+      "contract_version": "nanobot-collector-v1",
+      "relative_path": "agent.json",
+      "snapshot_sha256": "6d21bd93c8d9f179f8aa7f524c600077b5cb06790302ae3eade330bfbbd59bab"
+    },
+    {
+      "snapshot_id": "boundary.conversation",
+      "snapshot_type": "boundary",
+      "snapshot_format_version": "3.0",
+      "contract_version": "nanobot-collector-v1",
+      "relative_path": "boundaries/conversation.json",
+      "snapshot_sha256": "aacf8fef91df3f5371347b6fd8e0f1e8e215ff3d59f99fea48d11b6fcf0c8773"
+    },
+    {
+      "snapshot_id": "chain.end_to_end",
+      "snapshot_type": "chain",
+      "snapshot_format_version": "3.0",
+      "contract_version": "nanobot-collector-v1",
+      "relative_path": "chains/end_to_end/end_to_end.json",
+      "snapshot_sha256": "32f1ceed7a427b4e093f1aa3b7dccdb65851865431ee283fc4af2bd3290f593d"
+    },
+    {
+      "snapshot_id": "evidence.final_response",
+      "snapshot_type": "evidence",
+      "snapshot_format_version": "3.0",
+      "contract_version": "nanobot-collector-v1",
+      "relative_path": "evidence/final_response.json",
+      "snapshot_sha256": "f6c2a0999ed6c5a7db2ab5dac8773e683c497a8324559785c66e4f8f5c58865e"
+    },
+    {
+      "snapshot_id": "intent.assistant",
+      "snapshot_type": "intent",
+      "snapshot_format_version": "3.0",
+      "contract_version": "nanobot-collector-v1",
+      "relative_path": "intents/assistant.json",
+      "snapshot_sha256": "f93c9beeaef98a4698e08b91c812476954620e23294a978f841f6faccb45b082"
+    },
+    {
+      "snapshot_id": "module.dialogue",
+      "snapshot_type": "module",
+      "snapshot_format_version": "3.0",
+      "contract_version": "nanobot-collector-v1",
+      "relative_path": "modules/dialogue.json",
+      "snapshot_sha256": "6deea192f99fee3573fa88da8cb307dd36e1b9680cd0a9fca25f256ddc394ebd"
+    },
+    {
+      "snapshot_id": "module.observability",
+      "snapshot_type": "module",
+      "snapshot_format_version": "3.0",
+      "contract_version": "nanobot-collector-v1",
+      "relative_path": "modules/observability.json",
+      "snapshot_sha256": "3f4aa5e3923093154eca6e63a2cb405ae26386cc5f09591c2f11c0a87c38487d"
+    }
+  ],
+  "diagnostics": [],
+  "unmapped_facts": [],
+  "canonical_sha256": "02df2cf7c26a8b6f9c7ba49dedd4a73435984637e5ab01edeb27d3888de179db"
+}

@@ -1,0 +1,88 @@
+{
+  "batch_behavior": {
+    "declared": false
+  },
+  "capabilities": [
+    {
+      "capability_key": "tool.execution",
+      "evidence_ids": [],
+      "reason": "Offline construction only: no model call, tool execution or external service verification.",
+      "support_status": "unknown"
+    }
+  ],
+  "combination_rules": {
+    "concurrency_safe": false,
+    "exclusive": false
+  },
+  "contract_version": "nanobot-collector-v1",
+  "description": "Create a new file or intentionally replace an entire file with the provided content. Overwrites existing files and creates parent directories as needed. For code changes or partial edits, prefer apply_patch; use edit_file only for small exact replacements.",
+  "function_schema": {
+    "function": {
+      "description": "Create a new file or intentionally replace an entire file with the provided content. Overwrites existing files and creates parent directories as needed. For code changes or partial edits, prefer apply_patch; use edit_file only for small exact replacements.",
+      "name": "write_file",
+      "parameters": {
+        "additionalProperties": false,
+        "properties": {
+          "content": {
+            "description": "The content to write",
+            "type": "string"
+          },
+          "path": {
+            "description": "The file path to write to",
+            "type": "string"
+          }
+        },
+        "required": [
+          "path",
+          "content"
+        ],
+        "type": "object"
+      }
+    },
+    "type": "function"
+  },
+  "idempotency_rules": {
+    "status": "unknown"
+  },
+  "implementation_profile": "production",
+  "observation_interfaces": [
+    "ToolRegistry.get_definitions",
+    "ToolRegistry.execute"
+  ],
+  "parameter_semantics": {
+    "content": "The content to write",
+    "path": "The file path to write to"
+  },
+  "permission_requirements": [
+    "See implementation-specific guards; not audited here."
+  ],
+  "preconditions": [
+    "Registration is limited to the named offline profile.",
+    "Execution requires tool-specific services, request context and permissions."
+  ],
+  "registered": true,
+  "requires_confirmation": false,
+  "result_protocols": {
+    "error_marker": "ToolResult.is_error; see ToolRegistry.execute",
+    "registry_return_type": "Any; tool-specific return contract"
+  },
+  "retry_policy": {
+    "status": "unknown"
+  },
+  "risk_level": "high",
+  "side_effects": [
+    "Not audited; read_only declaration=False"
+  ],
+  "simulation_capabilities": [],
+  "simulation_protocol": null,
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "tool.write_file",
+  "snapshot_sha256": "aaf194e12c3e7d5d69f732ec8e78e74d01b97dca915e3a081256708bc04e0229",
+  "snapshot_type": "tool",
+  "source_hashes": {
+    "execution_contract_sha256": "8dc8bb66d78e1af1b43f12cbdbfdcc4f8c3cf9a614f26d2c4e1fb3e0f95d8864",
+    "function_schema_sha256": "18d2a8ef811d334807a627d1be61367af84822b8d534179c916df52275990e6b"
+  },
+  "tool_name": "write_file",
+  "tool_version": "0.3.0"
+}

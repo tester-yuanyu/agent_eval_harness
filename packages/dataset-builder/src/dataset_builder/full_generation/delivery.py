@@ -7,8 +7,8 @@ from collections import Counter, defaultdict
 from pathlib import Path
 from tempfile import mkdtemp
 
-from eval_framework import load_dataset, validate_dataset
-from eval_framework.schemas import EvalCase
+from eval_contracts import load_dataset, validate_dataset
+from eval_contracts.schemas import EvalCase
 
 from .contract_cases import compile_contract_cases
 from .intent_cases import compile_intent_cases
@@ -316,7 +316,7 @@ def generate_full_dataset(
             "在 Builder 根目录执行：",
             "```bash",
             (
-                "PYTHONPATH=src ../agent_evaluator/.venv/bin/python "
+                "python "
                 f'-m dataset_builder.cli validate-full --workspace "{output}"'
             ),
             "```",

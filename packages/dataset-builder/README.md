@@ -1,5 +1,8 @@
 # Agent Dataset Builder
 
+Monorepo 安装、环境和离线演示请先阅读 [根目录 README](../../README.md)。
+下方历史 Suite 内的项目相对地址由兼容解析器映射到当前仓库目录；无需恢复旧同级项目布局。
+
 这是一个独立、可复用、由人工审核把关的 Agent 评测集生产框架。Builder 不运行
 被测 Agent，也不根据 Agent 的实际回答反推标准答案。
 
@@ -75,19 +78,23 @@ Markdown 只用于说明，不参与执行。
 需要 Python 3.11+。Builder 不需要安装 mini_agent：
 
 ```bash
-python3.11 -m venv .venv
-.venv/bin/python -m pip install -e ../agent_evaluator
-.venv/bin/python -m pip install -e '.[dev]'
-.venv/bin/python -m pytest -q
-.venv/bin/ruff check .
+make setup  # 在 monorepo 根目录执行
+(cd packages/dataset-builder && ../../.venvs/builder/bin/python -m pytest -q)
+.venvs/builder/bin/python -m ruff check packages/dataset-builder/src
 ```
 
+Builder 依赖 `agent-eval-contracts`，不依赖 evaluator 或 Inspect。DeepEval 为显式安装的可选扩展，默认环境相应 SDK 测试会跳过。
+
+Wheel 包含可信 Profile、Schema、Policy 和 Suite 配置。内置 mini_agent Suite 还需要此仓库的例子能力包及数据集目录；独立使用请通过 `load_suite_from_path` 加载显式引用输入文件的自定义 Suite。Builder 的 Capability IR 始终留在本包。
+
 ## CLI
+
+以下命令在 `packages/dataset-builder` 目录执行。
 
 准备生成请求：
 
 ```bash
-.venv/bin/python -m dataset_builder.cli prepare \
+../../.venvs/builder/bin/python -m dataset_builder.cli prepare \
   --suite mini_agent_query_user_intent_v2 \
   --workspace workspaces/query_user_review
 ```
@@ -95,7 +102,7 @@ python3.11 -m venv .venv
 导入外部模型返回的严格 JSON：
 
 ```bash
-.venv/bin/python -m dataset_builder.cli ingest \
+../../.venvs/builder/bin/python -m dataset_builder.cli ingest \
   --request workspaces/query_user_review/generation_request.json \
   --response response.json \
   --workspace workspaces/query_user_review
@@ -106,11 +113,11 @@ python3.11 -m venv .venv
 校验与生成人工审核清单：
 
 ```bash
-.venv/bin/python -m dataset_builder.cli validate \
+../../.venvs/builder/bin/python -m dataset_builder.cli validate \
   --suite mini_agent_query_user_intent_v2 \
   --draft workspaces/query_user_review/draft.jsonl
 
-.venv/bin/python -m dataset_builder.cli review \
+../../.venvs/builder/bin/python -m dataset_builder.cli review \
   --suite mini_agent_query_user_intent_v2 \
   --draft workspaces/query_user_review/draft.jsonl \
   --output workspaces/query_user_review/review.md
@@ -149,13 +156,13 @@ Adapter 实现、Bundle、Agent 根快照、Capability IR、Suite、Policy、Cov
 生成可追溯的评测定义。该编译器含此 fixture 的明确业务规则，尚非任意 Agent 的通用语义编译器。
 
 ```bash
-PYTHONPATH=src ../agent_evaluator/.venv/bin/python -m dataset_builder.cli generate-full \
+../../.venvs/builder/bin/python -m dataset_builder.cli generate-full \
   --bundle ../mini_agent/exports/full_tools_fixture_v1/bundle \
   --delivery-root ../mini_agent/exports/full_tools_fixture_v1 \
   --expected-bundle-hash 215a9a3a445c8857f3bdd8dbecba935ce646bd8c784f16ecfc4a5da6042cce3c \
   --workspace workspaces/full_tools_fixture_v1_full_eval_20261020
 
-PYTHONPATH=src ../agent_evaluator/.venv/bin/python -m dataset_builder.cli validate-full \
+../../.venvs/builder/bin/python -m dataset_builder.cli validate-full \
   --workspace workspaces/full_tools_fixture_v1_full_eval_20261020
 ```
 
@@ -163,7 +170,7 @@ PYTHONPATH=src ../agent_evaluator/.venv/bin/python -m dataset_builder.cli valida
 行为案例、静态契约检查和阻塞义务分别输出；EvalCase 子集使用 evaluator 实际加载与校验 API。
 静态校验不代表 Agent 执行通过：交付保持 DRAFT、NOT_RUN、PENDING，不自动冻结。
 赠礼确认恢复、生产后端、跨轮上下文以及缺少运行适配的路径不会被宣称已执行。
-若本项目虚拟环境已安装完整 evaluator 依赖，也可直接使用 `.venv/bin/python`。
+上述生成与静态校验使用独立 Builder 环境，无需安装 evaluator。
 
 ## Nanobot 独立评测候选集
 
@@ -172,13 +179,13 @@ OpenAI function envelope 和 fact_id 缺口报告，复用受信任 v3 快照校
 unknown 状态；不会套用 mini_agent 的业务意图、错误码或 fixture。
 
 ```bash
-PYTHONPATH=src ../agent_evaluator/.venv/bin/python -m dataset_builder.cli generate-nanobot \
+../../.venvs/builder/bin/python -m dataset_builder.cli generate-nanobot \
   --delivery-root /Users/yuanyu/Desktop/nanobot/exports/nanobot_snapshot_v3 \
   --expected-bundle-hash 8462eaa3c43061cc6e9f5eefaee216f9fed12e2513d86b3f7efbd476e1d06adb \
   --previous workspaces/nanobot_full_eval_20261023 \
   --workspace workspaces/nanobot_full_eval_v3_20261024
 
-PYTHONPATH=src ../agent_evaluator/.venv/bin/python -m dataset_builder.cli validate-nanobot \
+../../.venvs/builder/bin/python -m dataset_builder.cli validate-nanobot \
   --workspace workspaces/nanobot_full_eval_v3_20261024
 ```
 

@@ -1,6 +1,6 @@
 """Runtime-compatible terminal cases and explicit fixture/runner obligations."""
 
-from eval_framework.schemas import EvalCase
+from eval_contracts.schemas import EvalCase
 
 from .intent_cases import assertions, execution, intent_example
 from .inventory import source_ref

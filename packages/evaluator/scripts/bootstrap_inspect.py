@@ -1,4 +1,4 @@
-"""Install the local Inspect tree, evidence SDK and business extension."""
+"""Install local Suite packages and the declared public Inspect dependency."""
 
 import argparse
 import subprocess
@@ -13,8 +13,8 @@ def main() -> None:
     )
     args = parser.parse_args()
     extension = Path(__file__).resolve().parents[1]
-    inspect_repo = extension.parents[1]
-    projects = [inspect_repo, extension / "packages/agent_trace_sdk"]
+    packages = extension.parent
+    projects = [packages / "contracts", packages / "agent-trace-sdk"]
     if args.agent_path:
         projects.append(args.agent_path.resolve())
     extras = "dev"
@@ -30,16 +30,18 @@ def main() -> None:
             sys.executable,
             "-c",
             """
+from importlib.metadata import version
 from pathlib import Path
 import inspect_ai, eval_framework, agent_trace_sdk
 import sys
-assert Path(inspect_ai.__file__).resolve().is_relative_to(Path(sys.argv[1]).resolve())
+assert version('inspect_ai') == '0.3.280'
 extension = Path(sys.argv[2]).resolve()
 assert Path(eval_framework.__file__).resolve().is_relative_to(extension)
-assert Path(agent_trace_sdk.__file__).resolve().is_relative_to(extension)
-print('Local Inspect, Evaluator extension and evidence SDK imports verified.')
+sdk_root = Path(sys.argv[1]).resolve()
+assert Path(agent_trace_sdk.__file__).resolve().is_relative_to(sdk_root)
+print('Pinned Inspect, Evaluator extension and evidence SDK imports verified.')
 """,
-            str(inspect_repo / "src"),
+            str(packages / "agent-trace-sdk"),
             str(extension),
         ],
         check=True,

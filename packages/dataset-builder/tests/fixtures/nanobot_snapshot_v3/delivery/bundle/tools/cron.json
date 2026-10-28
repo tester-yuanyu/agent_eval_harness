@@ -1,0 +1,194 @@
+{
+  "batch_behavior": {
+    "declared": false
+  },
+  "capabilities": [
+    {
+      "capability_key": "tool.execution",
+      "evidence_ids": [],
+      "reason": "Offline construction only: no model call, tool execution or external service verification.",
+      "support_status": "unknown"
+    }
+  ],
+  "combination_rules": {
+    "concurrency_safe": false,
+    "exclusive": false
+  },
+  "contract_version": "nanobot-collector-v2",
+  "description": "Schedule reminders and recurring tasks. Actions: add, list, remove. If tz is omitted, cron expressions and naive ISO times default to UTC.",
+  "function_schema": {
+    "function": {
+      "description": "Schedule reminders and recurring tasks. Actions: add, list, remove. If tz is omitted, cron expressions and naive ISO times default to UTC.",
+      "name": "cron",
+      "parameters": {
+        "additionalProperties": false,
+        "description": "Action-specific parameters: add requires a non-empty message plus one schedule (every_seconds, cron_expr, or at); remove requires job_id; list only needs action. Per-action requirements are enforced at runtime (see field descriptions) so the top-level schema stays compatible with providers (e.g. OpenAI Codex/Responses) that reject oneOf/anyOf/allOf/enum/not at the root of function parameters.",
+        "properties": {
+          "action": {
+            "description": "Action to perform",
+            "enum": [
+              "add",
+              "list",
+              "remove"
+            ],
+            "type": "string"
+          },
+          "at": {
+            "description": "ISO datetime for one-time execution (e.g. '2026-02-12T10:30:00'). Naive values use the tool's default timezone.",
+            "type": "string"
+          },
+          "cron_expr": {
+            "description": "Cron expression like '0 9 * * *' (for scheduled tasks)",
+            "type": "string"
+          },
+          "every_seconds": {
+            "description": "Interval in seconds (for recurring tasks)",
+            "type": "integer"
+          },
+          "job_id": {
+            "description": "REQUIRED when action='remove'. Job ID to remove (obtain via action='list').",
+            "type": "string"
+          },
+          "message": {
+            "description": "REQUIRED when action='add'. Instruction for the agent to execute when the job triggers (e.g., 'Send a reminder to WeChat: xxx' or 'Check system status and report'). Not used for action='list' or action='remove'.",
+            "type": "string"
+          },
+          "name": {
+            "description": "Optional short human-readable label for the job (e.g., 'weather-monitor', 'daily-standup'). Defaults to first 30 chars of message.",
+            "type": "string"
+          },
+          "tz": {
+            "description": "Optional IANA timezone for cron expressions (e.g. 'America/Vancouver'). When omitted with cron_expr, the tool's default timezone applies.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "action"
+        ],
+        "type": "object"
+      }
+    },
+    "type": "function"
+  },
+  "idempotency_rules": {
+    "status": "unknown"
+  },
+  "implementation_profile": "production",
+  "observation_interfaces": [
+    "ToolRegistry.get_definitions",
+    "ToolRegistry.execute",
+    "AgentHookContext.tool_events (runner hooks)"
+  ],
+  "parameter_semantics": {
+    "action": "Action to perform",
+    "at": "ISO datetime for one-time execution (e.g. '2026-02-12T10:30:00'). Naive values use the tool's default timezone.",
+    "cron_expr": "Cron expression like '0 9 * * *' (for scheduled tasks)",
+    "every_seconds": "Interval in seconds (for recurring tasks)",
+    "job_id": "REQUIRED when action='remove'. Job ID to remove (obtain via action='list').",
+    "message": "REQUIRED when action='add'. Instruction for the agent to execute when the job triggers (e.g., 'Send a reminder to WeChat: xxx' or 'Check system status and report'). Not used for action='list' or action='remove'.",
+    "name": "Optional short human-readable label for the job (e.g., 'weather-monitor', 'daily-standup'). Defaults to first 30 chars of message.",
+    "tz": "Optional IANA timezone for cron expressions (e.g. 'America/Vancouver'). When omitted with cron_expr, the tool's default timezone applies."
+  },
+  "permission_requirements": [
+    "See implementation-specific guards; not audited here."
+  ],
+  "preconditions": [
+    "Registration is limited to the named offline profile.",
+    "Execution requires tool-specific services, request context and permissions."
+  ],
+  "registered": true,
+  "requires_confirmation": false,
+  "result_protocols": {
+    "business_error_codes": null,
+    "category_names_are_adapter_labels": true,
+    "dispatch_paths": [
+      "ToolRegistry.execute (direct registry API)",
+      "AgentRunner._run_tool -> ToolRegistry.prepare_call -> tool.execute (normal runner path)"
+    ],
+    "error_categories": [
+      {
+        "category": "unknown_tool",
+        "observation": "prepare_call returns error; tool implementation is not called."
+      },
+      {
+        "category": "invalid_arguments",
+        "observation": "prepare_call coerces/casts and validates parameters; rejected arguments do not call the implementation."
+      },
+      {
+        "category": "tool_marked_error",
+        "observation": "ToolResult.is_error produces an error event in the runner."
+      },
+      {
+        "category": "implementation_exception",
+        "observation": "Ordinary Exception becomes a registry ToolResult.error or a runner error event; handling differs by entrypoint."
+      },
+      {
+        "category": "policy_guard",
+        "observation": "Repeated external lookup/workspace violation guards can reject or escalate; do not infer recoverability from fail_on_tool_error alone."
+      },
+      {
+        "category": "control_flow",
+        "observation": "Cancellation and control-flow BaseException can propagate; hooks may also raise outside the implementation catch."
+      }
+    ],
+    "error_marker": "ToolResult.is_error; a plain string beginning with Error: is not by itself a builtin tool failure marker.",
+    "event_observation": "AgentHookContext.tool_events in runner hooks; not a top-level RunResult field and not emitted as StreamEvent by run().",
+    "fail_on_tool_error": "False generally returns tool errors to the model for possible recovery; True can terminate with tool_error. Policy guards and continuations also affect the terminal outcome.",
+    "registry_return_type": "Any; implementation-specific. No universal successful result shape is inferred.",
+    "retry": {
+      "automatic_tool_retry_guaranteed": false,
+      "description": "The registry does not automatically retry an implementation call. The model may request a new call; provider retries and tool-internal retries are separate.",
+      "status": "tool_specific_unknown"
+    },
+    "source_symbols": [
+      "ToolRegistry.prepare_call",
+      "ToolRegistry.execute",
+      "ToolResult",
+      "AgentRunner._run_tool",
+      "AgentRunner._classify_violation"
+    ],
+    "tool_event_schema": {
+      "properties": {
+        "detail": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "ok",
+            "error"
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "status",
+        "detail"
+      ],
+      "type": "object"
+    }
+  },
+  "retry_policy": {
+    "automatic_tool_retry_guaranteed": false,
+    "description": "The registry does not automatically retry an implementation call. The model may request a new call; provider retries and tool-internal retries are separate.",
+    "status": "tool_specific_unknown"
+  },
+  "risk_level": "high",
+  "side_effects": [
+    "Not audited; read_only declaration=False"
+  ],
+  "simulation_capabilities": [],
+  "simulation_protocol": null,
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "tool.cron",
+  "snapshot_sha256": "ecdd2cfe37a8415e864d129b25d4834da849e7972a0fa9a0461d3a93564a4311",
+  "snapshot_type": "tool",
+  "source_hashes": {
+    "execution_contract_sha256": "3fedcefd22bc7e0a257a936a3c01cd801aa64cec49a097c818e7041916624db2",
+    "function_schema_sha256": "8d1cc7584b34cfcb9b53aa0c6c8078d64d948d281d9fa28dc9b80268213efafa"
+  },
+  "tool_name": "cron",
+  "tool_version": "0.3.0"
+}

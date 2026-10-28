@@ -1,0 +1,253 @@
+{
+  "batch_behavior": {
+    "reason": "No generic batch behavior is declared by ToolContract.",
+    "support_status": "unknown"
+  },
+  "capabilities": [
+    {
+      "capability_key": "tool.registered_execution",
+      "evidence_ids": [
+        "evidence.tool_trace"
+      ],
+      "reason": null,
+      "support_status": "supported"
+    },
+    {
+      "capability_key": "tool.runtime_retry",
+      "evidence_ids": [],
+      "reason": "The runtime does not retry failed Tool handlers.",
+      "support_status": "unsupported"
+    },
+    {
+      "capability_key": "tool.rate_limit_protocol",
+      "evidence_ids": [],
+      "reason": "Rate-limit semantics are owned by the injected handler.",
+      "support_status": "unknown"
+    }
+  ],
+  "combination_rules": {
+    "source": "parameter_schema",
+    "undeclared_combinations": "unknown"
+  },
+  "contract_version": "query-user-info-example-fixture-v1",
+  "description": "Execute query_user_info against an isolated in-memory example fixture. No production backend or real business data is connected.",
+  "function_schema": {
+    "description": "Execute query_user_info against an isolated in-memory example fixture. No production backend or real business data is connected.",
+    "name": "query_user_info",
+    "parameters": {
+      "additionalProperties": false,
+      "description": "Lookup a mock user using one or more combined conditions.",
+      "properties": {
+        "email": {
+          "anyOf": [
+            {
+              "minLength": 3,
+              "pattern": "^[^@]+@[^@]+$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Email"
+        },
+        "phone": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9]{11}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Phone"
+        },
+        "room_id": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Room Id"
+        },
+        "user_id": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "User Id"
+        }
+      },
+      "required": [
+        "user_id",
+        "room_id",
+        "email",
+        "phone"
+      ],
+      "title": "QueryUserInfoArguments",
+      "type": "object"
+    },
+    "strict": true,
+    "type": "function"
+  },
+  "idempotency_rules": {
+    "mode": "READ_ONLY"
+  },
+  "implementation_profile": "test_fixture",
+  "observation_interfaces": [
+    "agent_result.tool_calls",
+    "agent_result.events"
+  ],
+  "parameter_semantics": {
+    "rules": {
+      "accepted_fields": [
+        "user_id",
+        "room_id",
+        "email",
+        "phone"
+      ],
+      "batch_queries": "UNSUPPORTED",
+      "condition_cardinality": "AT_LEAST_ONE",
+      "matching": "EXACT",
+      "multiple_conditions": "AND"
+    },
+    "validation": "STRICT_ARGUMENT_MODEL"
+  },
+  "permission_requirements": [
+    "REGISTERED_TOOL_AND_RUN_ALLOW_LIST"
+  ],
+  "preconditions": [
+    "REGISTERED_TOOL_AND_RUN_ALLOW_LIST"
+  ],
+  "registered": true,
+  "requires_confirmation": false,
+  "result_protocols": {
+    "async": {
+      "reason": "The runtime invokes handlers synchronously.",
+      "support_status": "unsupported"
+    },
+    "declared_results": {
+      "EMPTY": {
+        "data_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "user": {
+              "type": "null"
+            }
+          },
+          "required": [
+            "user"
+          ],
+          "type": "object"
+        },
+        "terminal_status": "success"
+      },
+      "OK": {
+        "data_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "user": {
+              "additionalProperties": false,
+              "properties": {
+                "email": {
+                  "minLength": 3,
+                  "pattern": "^[^@]+@[^@]+$",
+                  "title": "Email",
+                  "type": "string"
+                },
+                "phone": {
+                  "pattern": "^[0-9]{11}$",
+                  "title": "Phone",
+                  "type": "string"
+                },
+                "room_id": {
+                  "exclusiveMinimum": 0,
+                  "title": "Room Id",
+                  "type": "integer"
+                },
+                "user_id": {
+                  "exclusiveMinimum": 0,
+                  "title": "User Id",
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "user_id",
+                "room_id",
+                "email",
+                "phone"
+              ],
+              "title": "UserRecord",
+              "type": "object"
+            }
+          },
+          "required": [
+            "user"
+          ],
+          "type": "object"
+        },
+        "terminal_status": "success"
+      }
+    },
+    "empty_result": {
+      "behavior": "EMPTY_SUCCESS_WITH_NULL_USER_OR_EMPTY_LIST",
+      "source": "tool_contract"
+    },
+    "execution_failure": {
+      "runtime_event": "tool_failed",
+      "terminal_status": "failure"
+    },
+    "partial_success": {
+      "behavior": "UNSUPPORTED_ALL_OR_NOTHING",
+      "source": "tool_contract"
+    },
+    "rate_limit": {
+      "reason": "No runtime-specific rate-limit protocol is declared.",
+      "support_status": "unknown"
+    },
+    "timeout": {
+      "runtime_event": "tool_timeout",
+      "terminal_status": "failure"
+    }
+  },
+  "retry_policy": {
+    "eligible": false,
+    "maximum_attempts": 1,
+    "reason": "The runtime performs one handler invocation per call.",
+    "stop_conditions": [
+      "success",
+      "failure",
+      "timeout"
+    ]
+  },
+  "risk_level": "low",
+  "side_effects": [],
+  "simulation_capabilities": [
+    "success",
+    "empty_result"
+  ],
+  "simulation_protocol": {
+    "name": "deterministic_injected_handler",
+    "version": "query-user-info-example-fixture-v1"
+  },
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "tool.query_user_info",
+  "snapshot_sha256": "9e71ac9d1dd966e713aa46e4c69356830329b24949d7d8594597aedb8df3068f",
+  "snapshot_type": "tool",
+  "source_hashes": {
+    "execution_contract_sha256": "795a3a794e62dfe4ab06e9e34c2ebf5aaf262cb71a9d2f3db68f544de1773722",
+    "function_schema_sha256": "82386dca5a270fc8aad47b935f7d185341568eed59c84ed8c9db277a4d72362a"
+  },
+  "tool_name": "query_user_info",
+  "tool_version": "query-user-info-example-fixture-v1"
+}

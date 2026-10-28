@@ -1,0 +1,660 @@
+{
+  "execution_verified": false,
+  "facts": {
+    "agent.nanobot": {
+      "basis": "configured",
+      "claims": [],
+      "effective_fact_sha256": "270c313eb60d98023611ec32be358ed61b06ea2a22b272cbc6a0396615decb9c",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/nanobot/agent/loop.py",
+        "collector/nanobot/agent/runner.py",
+        "collector/nanobot/config/schema.py",
+        "collector/nanobot/nanobot.py",
+        "collector/nanobot/sdk/streaming.py",
+        "collector/nanobot/sdk/types.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "evidence.final_response": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "evidence.final_response_available",
+          "declared_status": "supported",
+          "effective_status": "supported"
+        }
+      ],
+      "effective_fact_sha256": "c3211f97fde828bf47873b0fe9aa8e082f86b1bff4eca1df48d031edefc4205c",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/nanobot/config/schema.py",
+        "collector/nanobot/nanobot.py",
+        "collector/nanobot/sdk/streaming.py",
+        "collector/nanobot/sdk/types.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "intent.assistant": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "dialogue.business_task",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "f66fd8ca10855e102dd229c9b19b393755b7939f2dd904bacabdd02bb0bde884",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/nanobot/agent/loop.py",
+        "collector/nanobot/agent/runner.py",
+        "collector/nanobot/config/schema.py",
+        "collector/nanobot/nanobot.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "module.channels": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "channel.delivery",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "2c6c55c623419b027175a3913e7c0cf5d39de322283cc4b5852d10cd7fc4ab9d",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/nanobot/channels/manager.py",
+        "collector/nanobot/channels/registry.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "module.dialogue": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "dialogue.respond",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "41200d1d6cd5787d5bd7ad2dc835446b86d48401b3ec83fee1ada50a6a986a0b",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/nanobot/agent/loop.py",
+        "collector/nanobot/agent/runner.py",
+        "collector/nanobot/config/schema.py",
+        "collector/nanobot/nanobot.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "module.mcp": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "mcp.discovery",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "59c445d0da7d4ef5c3c21c7e96995676fe9e5db1d681e9634df18d028b79ffea",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/nanobot/agent/tools/mcp.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "module.memory": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "context.inheritance",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        },
+        {
+          "capability_key": "memory.consolidation",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "e200a6bee33575459c0ad3ce7b44739f59ad0c4531f8c90db2952e880f44db59",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/nanobot/agent/memory.py",
+        "collector/nanobot/config/schema.py",
+        "collector/nanobot/session/manager.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "module.observability": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "result.final_response",
+          "declared_status": "supported",
+          "effective_status": "supported"
+        }
+      ],
+      "effective_fact_sha256": "5a2ef621965d0805c4332785fa24cd26d8a88ca1469592ae8675600d2d30bcc9",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/nanobot/config/schema.py",
+        "collector/nanobot/sdk/streaming.py",
+        "collector/nanobot/sdk/types.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "module.providers": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "provider.inference",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "9c08a708c504e6cd1e14156e8470dc1a35f387e7f1aef748e36ecd5731b3b6a5",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/nanobot/config/schema.py",
+        "collector/nanobot/providers/factory.py",
+        "collector/nanobot/providers/registry.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "module.skills": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "skills.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "320dcc7a76694c19af4a87a2c7a19576a49ee1fe66ef457f9597c45aa3286ed9",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/nanobot/agent/context.py",
+        "collector/nanobot/agent/skills.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "module.tools": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "c18e51fa06421755302171f7dfbfc9d7dbc85862f4b5c4026b52d6707a95ea8e",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "tool.apply_patch": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "54a367dd259349fc312a3c9fbbadb79ad5e56ee3b786c56fa221c37c1daf97bf",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/nanobot/agent/tools/apply_patch.py",
+        "collector/nanobot/agent/tools/base.py",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "tool.create_goal": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "242981ad226237b222e8c1516732392d84aa195c8f75ef37dc383fbc6c3bac04",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/nanobot/agent/tools/base.py",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/long_task.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "tool.cron": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "cf852ad8f77bd6ce82937543c486b93f470e99e263ee6dc59456fb5144ced69c",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/nanobot/agent/tools/base.py",
+        "collector/nanobot/agent/tools/cron.py",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "tool.edit_file": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "c0d8b8a2c51759057c80d0d2d2629afa1b50993c3b19e5c76d7bda2886d3c186",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/nanobot/agent/tools/base.py",
+        "collector/nanobot/agent/tools/filesystem.py",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "tool.exec": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "d3c463bf300fa0b6b71442c7452e035b2148cedb4ce06646581b519d1be04550",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/nanobot/agent/tools/base.py",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/agent/tools/shell.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "tool.find_files": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "893fc740422401919c522be11663280ddb378c1b621b40aab48d557bbdd09374",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/nanobot/agent/tools/base.py",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/agent/tools/search.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "tool.grep": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "e5a2e9ec65fb5e8e4dc6a2d41843940574eabaae0f9ed3f50372a2cd6dfcfb8b",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/nanobot/agent/tools/base.py",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/agent/tools/search.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "tool.list_dir": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "02bad7b97ada2e3da4a4db909161aed7623002df97370754b9c4ee1354b8b827",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/nanobot/agent/tools/base.py",
+        "collector/nanobot/agent/tools/filesystem.py",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "tool.list_exec_sessions": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "7a2435cf9498b5b103e82c1cb6470789babd02ccc4d7120177e1ec1f837e53c5",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/nanobot/agent/tools/base.py",
+        "collector/nanobot/agent/tools/exec_session.py",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "tool.list_sessions": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "e11d7f46ed81668953ce1a623ba232bcd24cacbafb961d5254192bec43304319",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/nanobot/agent/tools/base.py",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/agent/tools/session_messages.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "tool.message": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "fb1c341443d812cc37d46660e3ad4cb3edb2164413602755613fe39c7a1efdee",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/nanobot/agent/tools/base.py",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/message.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "tool.read_file": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "cee3374de1d87d268df794652267c958aad2beb176d4ebbe9f255854977c98a2",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/nanobot/agent/tools/base.py",
+        "collector/nanobot/agent/tools/filesystem.py",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "tool.read_session": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "cad9bcdc233cce0707574683dfac32d8b79f0335bdff28c2106ec54b894435e7",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/nanobot/agent/tools/base.py",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/agent/tools/sessions.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "tool.search_sessions": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "207ceb1397060a1c31ff5dc1fc77af2e4b917eb8a3c7425cf2eb1b4e07e2ffdb",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/nanobot/agent/tools/base.py",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/agent/tools/sessions.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "tool.send_session_message": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "466bde8bc054d76cc058fbcaaef95f3b822424e26fb7257290af017488373e66",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/nanobot/agent/tools/base.py",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/agent/tools/session_messages.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "tool.spawn": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "7f010be9d7f2e59ae109ce0348c54a6cc821474d366797a8505dd9afd9550b09",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/nanobot/agent/tools/base.py",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/agent/tools/spawn.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "tool.update_goal": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "a5a061ff18f5e53f826f626eb0a63ceaad67cb3b0fbaa779fa1ba8738bbf8f4b",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/nanobot/agent/tools/base.py",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/long_task.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "tool.web_fetch": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "687ee1715c274cc411ade53ea18c823d7f2ed3b3c031218a786f1ce48def3127",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/nanobot/agent/tools/base.py",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/agent/tools/web.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "tool.web_search": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "37ca864b8ff250d29617a9637e17c07959151dfd75a5fd84e06e7da1e5c08619",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/nanobot/agent/tools/base.py",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/agent/tools/web.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "tool.write_file": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "b0290ab9e5debd53f656ffdc54a34aa71bdfbe30bfbb98a3417b77889b3d0017",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/nanobot/agent/tools/base.py",
+        "collector/nanobot/agent/tools/filesystem.py",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    },
+    "tool.write_stdin": {
+      "basis": "configured",
+      "claims": [
+        {
+          "capability_key": "tool.execution",
+          "declared_status": "unknown",
+          "effective_status": "unknown"
+        }
+      ],
+      "effective_fact_sha256": "d2597a2821e17bd8a0f2bd94a0344dabec0fedc47e42598a5d8428516a3fbe47",
+      "source_ids": [
+        "collector/integrations/capability_snapshot/collector.py",
+        "collector/integrations/capability_snapshot/offline.json",
+        "collector/nanobot/agent/tools/base.py",
+        "collector/nanobot/agent/tools/exec_session.py",
+        "collector/nanobot/agent/tools/loader.py",
+        "collector/nanobot/agent/tools/registry.py",
+        "collector/nanobot/config/schema.py",
+        "collector/pyproject.toml"
+      ]
+    }
+  },
+  "meaning": "Configured means a trusted collector declared the current configuration; source hashes do not prove behavior."
+}

@@ -1,0 +1,33 @@
+{
+  "allowed_module_ids": [
+    "module.dialogue",
+    "module.memory",
+    "module.observability",
+    "module.providers",
+    "module.skills",
+    "module.tools"
+  ],
+  "boundary_id": "conversation",
+  "contract_version": "nanobot-collector-v2",
+  "description": "One foreground await Nanobot.run call on an existing instance, including returned and raised exits.",
+  "entry_node": "nanobot.nanobot.Nanobot.run",
+  "evidence_ids": [
+    "evidence.execution_contract",
+    "evidence.final_response",
+    "evidence.run_exception"
+  ],
+  "no_overrun_rule": "Observation of this call stops at Nanobot.run returns RunResult, raises an exception, or propagates asyncio.CancelledError. Separate background consolidation, detached spawned tasks (spawn(wait=false)), future cron jobs and detached processes are not awaited by this boundary and may continue; external channel acknowledgement and global quiescence are excluded. Awaited spawn(wait=true) work remains inside the foreground call.",
+  "prohibited_module_ids": [
+    "module.channels",
+    "module.mcp"
+  ],
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "boundary.conversation",
+  "snapshot_sha256": "123be13c80db3bc631f0aa2f327a05153808015ccff348d8cf777dbce7c5d76c",
+  "snapshot_type": "boundary",
+  "source_hashes": {
+    "catalog_definition_sha256": "549e004c8a0c49572a5266f4a9ef46766682dcc597d2f54ab661862faaea3547"
+  },
+  "stop_node": "Nanobot.run returns RunResult, raises an exception, or propagates asyncio.CancelledError",
+  "terminal_condition": "The call Nanobot.run returns RunResult, raises an exception, or propagates asyncio.CancelledError. A return or raised exit ends this foreground boundary, not business acceptance."
+}

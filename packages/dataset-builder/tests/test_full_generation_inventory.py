@@ -5,7 +5,7 @@ from pathlib import Path
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
-DELIVERY = ROOT.parent / "mini_agent/exports/full_tools_fixture_v1"
+DELIVERY = ROOT.parents[1] / "examples/mini_agent/exports/full_tools_fixture_v1"
 HASH = "215a9a3a445c8857f3bdd8dbecba935ce646bd8c784f16ecfc4a5da6042cce3c"
 
 

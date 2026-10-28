@@ -1,0 +1,31 @@
+{
+  "capabilities": [
+    {
+      "capability_key": "channel.delivery",
+      "evidence_ids": [],
+      "reason": "Offline construction only: no model call, tool execution or external service verification.",
+      "support_status": "unknown"
+    }
+  ],
+  "component_versions": {
+    "nanobot": "0.3.0"
+  },
+  "contract_version": "nanobot-collector-v1",
+  "execution_boundary_ids": [],
+  "input_schema": {},
+  "intent_refs": [],
+  "module_id": "channels",
+  "module_refs": [],
+  "output_schema": {},
+  "responsibility": "Channel discovery and manager; no external channel is started.",
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "module.channels",
+  "snapshot_sha256": "f64f0ffe180439a07a149125ec224d99a1507af7eae224e91c010fc280855018",
+  "snapshot_type": "module",
+  "source_hashes": {
+    "capabilities_sha256": "20eaf0cbd824ae657d57088ffc74cb742ac73a42fa12de8aa5862925e8f32d74",
+    "children_sha256": "b78ee59b8a819b12aaee9953ee472c98c34893d48db562e951cb5033d096ae54"
+  },
+  "tool_refs": [],
+  "trace_event_types": []
+}
