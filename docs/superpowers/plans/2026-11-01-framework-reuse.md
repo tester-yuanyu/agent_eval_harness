@@ -58,8 +58,10 @@
 
 ## Task 4: 集成、审查与回归（P0）
 
-- [ ] 合并文件变更、审查原生API使用与用户要求覆盖；对发现问题先复现再修复。
-- [ ] 执行 Evaluator 全套、根 scripts/test_all.py、ruff、scripts/verify_assets.py。
-- [ ] 真实 nanobot 模块 + 受控 mock 模型的 Docker bridge 集成（无付费模型）；验证 epochs、恢复、轨迹和预算。
-- [ ] 提交后全新 clone（不共享环境），安装并执行 demo/原生报告；记录命令与数量到 docs/migration/。
-- [ ] 独立最终代码审查，修复后复跑必要检查；快进整合工作分支，报告完成内容与实际限制。
+- [x] 合并文件变更、审查原生API使用与用户要求覆盖；对发现问题先复现再修复。
+- [x] 执行 Evaluator 全套、根 scripts/test_all.py、ruff、scripts/verify_assets.py。
+- [x] 真实 nanobot 模块 + 受控 mock 模型的 Docker bridge 集成（无付费模型）；验证 epochs、恢复、轨迹和预算。
+- [x] 提交后全新 clone（不共享环境），安装并执行 demo/原生报告；记录命令与数量到 docs/migration/。
+- [x] 独立最终代码审查，修复后复跑必要检查；快进整合工作分支，报告完成内容与实际限制。
+
+最终代码 `0416ec8`；验收与剩余边界见 [框架复用验收记录](../../migration/framework-reuse-acceptance-2026-11-02.md)。

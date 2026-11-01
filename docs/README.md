@@ -5,6 +5,7 @@
 | 要做的事 | 阅读入口 |
 | --- | --- |
 | 查看框架分工、原生能力与必要自研边界 | [框架复用说明](benchmark/framework-reuse.md) |
+| 核对框架复用的回归、Docker 与全新安装验收 | [框架复用验收](migration/framework-reuse-acceptance-2026-11-02.md) |
 | 运行模块、模型决策、关键链路或端到端评测 | [分层评测指南](benchmark/v2-usage.md) |
 | 核对本轮结果与尚未完成的工作 | [七项问题清单](benchmark/status-v2.md) · [v2 作品集](../reports/file-tools-v2/index.html) |
 | 查阅当前指标公式、分母与轨迹诊断 | [当前指标规格](benchmark/metric-specification.md) · [质量检查报告](../reports/evaluation-quality-v1/README.md) |

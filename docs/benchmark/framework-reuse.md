@@ -8,7 +8,8 @@
 | 独立工作区与进程 | Inspect `Sample.files`、sandbox、`sandbox_agent_bridge` | nanobot 启动适配与只包含运行源码的 Docker 构建配置 |
 | 工具与预算 | nanobot 原生 ToolRegistry / 文件工具；Inspect 时间、Token、消息预算 | 依据任务注册允许的工具；路径转换与任务 max_steps；不另造进程超时管理器 |
 | 轨迹 | Inspect `ModelEvent`、`SandboxEvent`、`InfoEvent` | 工具前后文件快照、轮次状态及事件 ID 映射；Agent 内部工具不会自动变成 Inspect `ToolEvent` |
-| 正式评分 | DeepEval `BaseMetric` / `ToolCorrectnessMetric` | 文件精确真值、目录约束、声明的检查点等业务规则 |
+| 正式评分 | 自定义 DeepEval `BaseMetric` | 文件精确真值、目录约束、声明的检查点等业务规则 |
+| 参考工具覆盖诊断 | DeepEval `ToolCorrectnessMetric` | 映射参考工具名；`formal=false`，不参与正式 verdict |
 | 语义步骤、轮次与链路评分 | DeepEval `ArgumentCorrectnessMetric`、`TaskCompletionMetric`、`StepEfficiencyMetric` 与 GEval | 保存证据到公开 tracing API 的映射、业务 rubric、缺失值与调用预算 |
 | 重复调用诊断 | 默认由 DeepEval `StepEfficiencyMetric` 评价效率 | `quality-audit` 显式保留同文件状态、错误重试等精确审计，不参与默认正式 verdict |
 | 实验、对比、报告 | Inspect View；Langfuse Dataset / Experiment / Trace / Score | 四层分母、严格身份配对、来源 Hash；历史独立 HTML 兼容 |
@@ -68,5 +69,7 @@ Docker 模式把 Agent 源码和 worker 放入独立镜像，Evaluator 仍在自
 Inspect 提供日志浏览、评分展示与多运行查看。`comparison.json` 仍保留同任务、同 repeat 配对及计划分母；重复或越界 trial、损坏身份、任务不完整、评分/Inspect 版本等控制项不一致时拒绝比较。模型和兼容的运行身份可作为实验变量，差异会记录。这里的差值是描述性比较，不声称统计显著性。
 
 Langfuse 本身支持查询和导出。本仓库的 `export-langfuse` 是把本地保存结果送入 Langfuse 的兼容命令名，并非替代 Langfuse 数据导出功能。实验关联复用官方 OTel 属性，不再次运行 Agent。稳定 ID、证据原字节绑定和完整回读是本项目可复现要求；不能仅以 API 接收成功代替验证。
+
+新建的无损元数据补证使用 `langfuse-exact-metadata-v2`：目标 ID 和来源 Hash 带类型前缀，避免看起来像数字的十六进制字符串被 API 解析为数字。已有 v1 回执继续按原格式重建和校验；原始轨迹、分数和保存结果不改写。
 
 上游参考：[Inspect Agent Bridge](https://inspect.aisi.org.uk/agent-bridge.html)、[Inspect View](https://inspect.aisi.org.uk/log-viewer.html)、[DeepEval Step Efficiency](https://deepeval.com/docs/metrics-step-efficiency)、[Langfuse OTel 实验](https://langfuse.com/docs/evaluation/experiments/experiments-via-opentelemetry)。实现以锁定的 Inspect 0.3.280 / DeepEval 4.2.9 / Langfuse 5.0.2 公开 API 和离线回归为准，在线文档可能对应更新版本。
