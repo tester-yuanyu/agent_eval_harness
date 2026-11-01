@@ -1,0 +1,31 @@
+{
+  "kind": "dataset_quality_reference_validation_not_agent_results",
+  "validated_at_utc": "2026-11-01T05:45:30.844018+00:00",
+  "tasks_sha256": "5b3a4feb3f82ba9a6b2c2eeebc9904f0fbb19069cdf46087bfbaa4fb35fe666f",
+  "case_count": 300,
+  "unique_ids": 300,
+  "unique_execution_problems_excluding_id_and_guard": 300,
+  "unique_prompt_strings": 114,
+  "family_count": 80,
+  "category_counts": {
+    "create_edit": 100,
+    "missing_error": 20,
+    "multi_file": 80,
+    "multi_turn": 40,
+    "read_search": 60
+  },
+  "split_counts": {
+    "dev": 240,
+    "holdout": 60
+  },
+  "families_shared_across_splits": [],
+  "reference_oracle_passed": 300,
+  "reference_oracle_failed": 0,
+  "real_agent_trials": 0,
+  "human_reviewed": false,
+  "limitations": [
+    "Parameterized variants are correlated within each family.",
+    "Reference validation is not a real Agent benchmark result.",
+    "No real model or Langfuse calls occur in this quality check."
+  ]
+}

@@ -9,8 +9,6 @@ import sys
 from types import SimpleNamespace
 
 import pytest
-from inspect_ai.model import ModelOutput, get_model
-
 from eval_framework.diagnostic_metrics import (
     METRIC_ID,
     ConversationMetricConfig,
@@ -18,6 +16,7 @@ from eval_framework.diagnostic_metrics import (
     conversation_input,
 )
 from eval_framework.judges.conversation import ConversationMetricClient
+from inspect_ai.model import ModelOutput, ModelUsage, get_model
 
 
 def dialogue():
@@ -74,9 +73,13 @@ def mock_client(*, intention_payload=None, verdict_payload=None):
             data = verdict_payload or {"verdict": "yes", "reason": "Found"}
         else:
             data = {"reason": "The requested gift was found"}
-        return ModelOutput.from_content(
+        result = ModelOutput.from_content(
             model="mockllm/metric", content=json.dumps(data)
         )
+        # MockLLM otherwise estimates usage with tiktoken, whose cold cache can
+        # download tokenizer data. This transport test must stay fully local.
+        result.usage = ModelUsage(input_tokens=10, output_tokens=5, total_tokens=15)
+        return result
 
     return ConversationMetricClient(
         get_model("mockllm/metric", custom_outputs=output),
@@ -94,6 +97,10 @@ def test_public_metric_via_inspect_transport():
     assert result.evidence["intentions"] == ["Find gift 42 in CN"]
     assert len(result.evidence["verdicts"]) == 1
     assert prompts and all("Find gift 42" in p for p in prompts[:2])
+    assert result.token_usage == {
+        "input_tokens": 10 * len(prompts),
+        "output_tokens": 5 * len(prompts),
+    }
     assert client.metadata()["metric_id"] == METRIC_ID
     assert client.metadata()["eval_mode"] == "llm"
 
@@ -181,14 +188,16 @@ def forbidden(*args, **kwargs):
     attempts.append(True)
     raise AssertionError("Unexpected external network")
 socket.socket.connect = forbidden
-from inspect_ai.model import get_model, ModelOutput
+from inspect_ai.model import get_model, ModelOutput, ModelUsage
 from eval_framework.judges.conversation import ConversationMetricClient
 from eval_framework.diagnostic_metrics import ConversationMetricConfig
 def output(messages, *_):
     text = "\\n".join(m.text for m in messages)
     data = {"intentions": ["hello"]} if '"intentions"' in text else (
         {"verdict": "yes", "reason": "ok"} if '"verdict"' in text else {"reason": "ok"})
-    return ModelOutput.from_content(model="mockllm/judge", content=json.dumps(data))
+    result = ModelOutput.from_content(model="mockllm/judge", content=json.dumps(data))
+    result.usage = ModelUsage(input_tokens=10, output_tokens=5, total_tokens=15)
+    return result
 client = ConversationMetricClient(
     get_model("mockllm/judge", custom_outputs=output), ConversationMetricConfig())
 result = asyncio.run(client.evaluate([
@@ -206,6 +215,7 @@ assert attempts == [], attempts
             "CONFIDENT_API_KEY": "test-ambient-key",
             "DEEPEVAL_TELEMETRY_OPT_OUT": "0",
             "CONFIDENT_TRACE_INTERNAL": "1",
+            "TIKTOKEN_CACHE_DIR": str(tmp_path / "empty-tokenizer-cache"),
         },
         capture_output=True,
         text=True,

@@ -1,0 +1,721 @@
+{
+  "baseline_run_id": "baseline300x3-1c31c79890394464",
+  "candidate_run_id": "tool-aware300x3-6db1d4b91d38473b",
+  "dataset": {
+    "dataset_id": "file-tools-v1",
+    "version": "1.0.0",
+    "contract_version": "file-tools-task-v1",
+    "grader_version": "file-tools-oracle-v1",
+    "tasks_file": "tasks.jsonl",
+    "tasks_sha256": "5b3a4feb3f82ba9a6b2c2eeebc9904f0fbb19069cdf46087bfbaa4fb35fe666f",
+    "case_count": 300,
+    "category_counts": {
+      "create_edit": 100,
+      "missing_error": 20,
+      "multi_file": 80,
+      "multi_turn": 40,
+      "read_search": 60
+    },
+    "split_counts": {
+      "dev": 240,
+      "holdout": 60
+    },
+    "family_count": 80,
+    "split_strategy": "family-disjoint: last fifth of families in each category held out",
+    "provenance": {
+      "source": "AI-assisted authored synthetic file fixtures and task recipes",
+      "human_reviewed": false,
+      "reference_execution": "deterministic fixture transformations; not measured Agent results"
+    },
+    "limitations": [
+      "Local UTF-8 file tools only; no shell, browser, DB, messaging, or production side effects.",
+      "Variations within each family are parameterized fixtures, not independent task families.",
+      "Final-state oracle checks exact formatting when explicitly requested; no private chain-of-thought is collected.",
+      "Multi-turn tasks verify final state and turn count; do not establish arbitrary user-simulator ability."
+    ]
+  },
+  "changed_trials": [
+    {
+      "case_id": "file-tools-v1/create_edit/csv_filter_active/001",
+      "trial": 1,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/create_edit/csv_filter_active/002",
+      "trial": 1,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/create_edit/csv_filter_active/002",
+      "trial": 2,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/create_edit/csv_filter_active/003",
+      "trial": 2,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/create_edit/csv_filter_active/003",
+      "trial": 3,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/create_edit/csv_filter_active/004",
+      "trial": 2,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/create_edit/csv_filter_active/005",
+      "trial": 1,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/create_edit/csv_update_region/002",
+      "trial": 3,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/create_edit/csv_update_region/005",
+      "trial": 3,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/create_edit/dedupe_tags/002",
+      "trial": 3,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/create_edit/dedupe_tags/003",
+      "trial": 2,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/create_edit/dedupe_tags/003",
+      "trial": 3,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/create_edit/dedupe_tags/004",
+      "trial": 3,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/create_edit/dedupe_tags/005",
+      "trial": 2,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/create_edit/lowercase_keys/004",
+      "trial": 3,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/create_edit/number_steps/004",
+      "trial": 3,
+      "baseline": "FAIL",
+      "candidate": "PASS"
+    },
+    {
+      "case_id": "file-tools-v1/create_edit/prefix_tasks/004",
+      "trial": 2,
+      "baseline": "FAIL",
+      "candidate": "PASS"
+    },
+    {
+      "case_id": "file-tools-v1/create_edit/prepend_header/002",
+      "trial": 1,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/create_edit/replace_setting/003",
+      "trial": 1,
+      "baseline": "FAIL",
+      "candidate": "PASS"
+    },
+    {
+      "case_id": "file-tools-v1/create_edit/replace_setting/004",
+      "trial": 3,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/create_edit/sort_records/002",
+      "trial": 3,
+      "baseline": "FAIL",
+      "candidate": "PASS"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/archive_report/001",
+      "trial": 1,
+      "baseline": "FAIL",
+      "candidate": "PASS"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/archive_report/002",
+      "trial": 1,
+      "baseline": "FAIL",
+      "candidate": "PASS"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/archive_report/002",
+      "trial": 2,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/archive_report/004",
+      "trial": 3,
+      "baseline": "FAIL",
+      "candidate": "PASS"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/build_index/001",
+      "trial": 1,
+      "baseline": "FAIL",
+      "candidate": "PASS"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/build_index/001",
+      "trial": 2,
+      "baseline": "FAIL",
+      "candidate": "PASS"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/build_index/001",
+      "trial": 3,
+      "baseline": "FAIL",
+      "candidate": "PASS"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/join_csv/001",
+      "trial": 1,
+      "baseline": "FAIL",
+      "candidate": "PASS"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/join_csv/001",
+      "trial": 2,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/join_csv/001",
+      "trial": 3,
+      "baseline": "FAIL",
+      "candidate": "PASS"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/join_csv/004",
+      "trial": 1,
+      "baseline": "FAIL",
+      "candidate": "PASS"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/join_csv/004",
+      "trial": 2,
+      "baseline": "FAIL",
+      "candidate": "PASS"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/manifest_from_json/001",
+      "trial": 2,
+      "baseline": "FAIL",
+      "candidate": "PASS"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/manifest_from_json/001",
+      "trial": 3,
+      "baseline": "FAIL",
+      "candidate": "PASS"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/manifest_from_json/002",
+      "trial": 1,
+      "baseline": "FAIL",
+      "candidate": "PASS"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/manifest_from_json/002",
+      "trial": 3,
+      "baseline": "FAIL",
+      "candidate": "PASS"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/manifest_from_json/003",
+      "trial": 1,
+      "baseline": "FAIL",
+      "candidate": "PASS"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/manifest_from_json/003",
+      "trial": 2,
+      "baseline": "FAIL",
+      "candidate": "PASS"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/manifest_from_json/003",
+      "trial": 3,
+      "baseline": "FAIL",
+      "candidate": "PASS"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/manifest_from_json/004",
+      "trial": 1,
+      "baseline": "FAIL",
+      "candidate": "PASS"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/manifest_from_json/004",
+      "trial": 2,
+      "baseline": "FAIL",
+      "candidate": "PASS"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/merge_fragments/001",
+      "trial": 1,
+      "baseline": "FAIL",
+      "candidate": "PASS"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/merge_fragments/001",
+      "trial": 2,
+      "baseline": "FAIL",
+      "candidate": "PASS"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/merge_fragments/001",
+      "trial": 3,
+      "baseline": "FAIL",
+      "candidate": "PASS"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/merge_fragments/003",
+      "trial": 1,
+      "baseline": "FAIL",
+      "candidate": "PASS"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/merge_fragments/004",
+      "trial": 2,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/merge_fragments/004",
+      "trial": 3,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/reconcile_inventory/002",
+      "trial": 1,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/reconcile_inventory/002",
+      "trial": 3,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/redact_multi/001",
+      "trial": 2,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/redact_multi/001",
+      "trial": 3,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/redact_multi/002",
+      "trial": 2,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/redact_multi/002",
+      "trial": 3,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/redact_multi/004",
+      "trial": 2,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/route_records/001",
+      "trial": 2,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/route_records/001",
+      "trial": 3,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/route_records/002",
+      "trial": 1,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/route_records/002",
+      "trial": 3,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/route_records/003",
+      "trial": 3,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/route_records/004",
+      "trial": 1,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/route_records/004",
+      "trial": 2,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/route_records/004",
+      "trial": 3,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/sync_versions/003",
+      "trial": 2,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/sync_versions/003",
+      "trial": 3,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/sync_versions/004",
+      "trial": 2,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/multi_file/sync_versions/004",
+      "trial": 3,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/multi_turn/append_then_correct/003",
+      "trial": 1,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/multi_turn/change_mode/001",
+      "trial": 2,
+      "baseline": "FAIL",
+      "candidate": "PASS"
+    },
+    {
+      "case_id": "file-tools-v1/multi_turn/change_region/002",
+      "trial": 3,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/multi_turn/filter_then_expand/002",
+      "trial": 1,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/multi_turn/filter_then_expand/002",
+      "trial": 2,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/multi_turn/filter_then_expand/003",
+      "trial": 2,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/multi_turn/filter_then_expand/003",
+      "trial": 3,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/multi_turn/filter_then_expand/004",
+      "trial": 1,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/multi_turn/filter_then_expand/004",
+      "trial": 3,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/read_search/common_values/001",
+      "trial": 2,
+      "baseline": "FAIL",
+      "candidate": "PASS"
+    },
+    {
+      "case_id": "file-tools-v1/read_search/markdown_heading/001",
+      "trial": 3,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    },
+    {
+      "case_id": "file-tools-v1/read_search/markdown_heading/002",
+      "trial": 2,
+      "baseline": "PASS",
+      "candidate": "FAIL"
+    }
+  ],
+  "baseline": {
+    "unique_tasks": 300,
+    "trials_per_case": 3,
+    "planned_trials": 900,
+    "completed_trials": 900,
+    "missing_trials": 0,
+    "valid_trials": 900,
+    "verdicts": {
+      "PASS": 820,
+      "FAIL": 80
+    },
+    "pass_rate_planned": 0.9111111111111111,
+    "pass_rate_valid": 0.9111111111111111,
+    "all_trials_pass_rate": 0.8666666666666667,
+    "all_trials_pass_definition": "All k planned real trials passed; missing and invalid trials cannot prove success.",
+    "latency_seconds_median": 9.890725562523585,
+    "latency_seconds_p95": 15.149422207963653,
+    "usage": {
+      "input_tokens": 14632153,
+      "input_tokens_known_subtotal": 14632153,
+      "input_tokens_known_trials": 900,
+      "output_tokens": 394085,
+      "output_tokens_known_subtotal": 394085,
+      "output_tokens_known_trials": 900,
+      "total_tokens": 15026238,
+      "total_tokens_known_subtotal": 15026238,
+      "total_tokens_known_trials": 900,
+      "cost_usd": null,
+      "cost_usd_known_subtotal": null,
+      "cost_usd_known_trials": 0
+    },
+    "by_split": {
+      "dev": {
+        "trials": 720,
+        "unique_tasks": 240,
+        "verdicts": {
+          "PASS": 649,
+          "FAIL": 71
+        },
+        "pass_rate_observed": 0.9013888888888889
+      },
+      "holdout": {
+        "trials": 180,
+        "unique_tasks": 60,
+        "verdicts": {
+          "PASS": 171,
+          "FAIL": 9
+        },
+        "pass_rate_observed": 0.95
+      }
+    },
+    "by_category": {
+      "create_edit": {
+        "trials": 300,
+        "unique_tasks": 100,
+        "verdicts": {
+          "PASS": 257,
+          "FAIL": 43
+        },
+        "pass_rate_observed": 0.8566666666666667
+      },
+      "missing_error": {
+        "trials": 60,
+        "unique_tasks": 20,
+        "verdicts": {
+          "PASS": 60
+        },
+        "pass_rate_observed": 1.0
+      },
+      "multi_file": {
+        "trials": 240,
+        "unique_tasks": 80,
+        "verdicts": {
+          "PASS": 205,
+          "FAIL": 35
+        },
+        "pass_rate_observed": 0.8541666666666666
+      },
+      "multi_turn": {
+        "trials": 120,
+        "unique_tasks": 40,
+        "verdicts": {
+          "PASS": 119,
+          "FAIL": 1
+        },
+        "pass_rate_observed": 0.9916666666666667
+      },
+      "read_search": {
+        "trials": 180,
+        "unique_tasks": 60,
+        "verdicts": {
+          "PASS": 179,
+          "FAIL": 1
+        },
+        "pass_rate_observed": 0.9944444444444445
+      }
+    }
+  },
+  "candidate": {
+    "unique_tasks": 300,
+    "trials_per_case": 3,
+    "planned_trials": 900,
+    "completed_trials": 900,
+    "missing_trials": 0,
+    "valid_trials": 900,
+    "verdicts": {
+      "PASS": 799,
+      "FAIL": 101
+    },
+    "pass_rate_planned": 0.8877777777777778,
+    "pass_rate_valid": 0.8877777777777778,
+    "all_trials_pass_rate": 0.84,
+    "all_trials_pass_definition": "All k planned real trials passed; missing and invalid trials cannot prove success.",
+    "latency_seconds_median": 9.79400535399327,
+    "latency_seconds_p95": 14.926158667076379,
+    "usage": {
+      "input_tokens": 14529923,
+      "input_tokens_known_subtotal": 14529923,
+      "input_tokens_known_trials": 900,
+      "output_tokens": 378069,
+      "output_tokens_known_subtotal": 378069,
+      "output_tokens_known_trials": 900,
+      "total_tokens": 14907992,
+      "total_tokens_known_subtotal": 14907992,
+      "total_tokens_known_trials": 900,
+      "cost_usd": null,
+      "cost_usd_known_subtotal": null,
+      "cost_usd_known_trials": 0
+    },
+    "by_split": {
+      "dev": {
+        "trials": 720,
+        "unique_tasks": 240,
+        "verdicts": {
+          "PASS": 624,
+          "FAIL": 96
+        },
+        "pass_rate_observed": 0.8666666666666667
+      },
+      "holdout": {
+        "trials": 180,
+        "unique_tasks": 60,
+        "verdicts": {
+          "PASS": 175,
+          "FAIL": 5
+        },
+        "pass_rate_observed": 0.9722222222222222
+      }
+    },
+    "by_category": {
+      "create_edit": {
+        "trials": 300,
+        "unique_tasks": 100,
+        "verdicts": {
+          "PASS": 244,
+          "FAIL": 56
+        },
+        "pass_rate_observed": 0.8133333333333334
+      },
+      "missing_error": {
+        "trials": 60,
+        "unique_tasks": 20,
+        "verdicts": {
+          "PASS": 60
+        },
+        "pass_rate_observed": 1.0
+      },
+      "multi_file": {
+        "trials": 240,
+        "unique_tasks": 80,
+        "verdicts": {
+          "PASS": 205,
+          "FAIL": 35
+        },
+        "pass_rate_observed": 0.8541666666666666
+      },
+      "multi_turn": {
+        "trials": 120,
+        "unique_tasks": 40,
+        "verdicts": {
+          "PASS": 112,
+          "FAIL": 8
+        },
+        "pass_rate_observed": 0.9333333333333333
+      },
+      "read_search": {
+        "trials": 180,
+        "unique_tasks": 60,
+        "verdicts": {
+          "PASS": 178,
+          "FAIL": 2
+        },
+        "pass_rate_observed": 0.9888888888888889
+      }
+    }
+  },
+  "pass_rate_delta": -0.023333333333333317,
+  "interpretation": "Descriptive paired comparison; no statistical significance claim.",
+  "configuration_changes": {
+    "variant": [
+      "baseline",
+      "tool-aware"
+    ],
+    "instructions": [
+      "",
+      "本环境只提供 read_file、write_file、edit_file、list_dir 四种文件工具。只调用这些已提供工具；不要尝试 exec、shell、apply_patch、grep 或其他未提供工具。read_file 输出的行号和分隔符不是原文件内容，复制时保留原始空白与换行；严格遵循用户指定格式。处理文件后可使用 read_file 核验实际内容，仅在有证据时宣称完成。"
+    ]
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "kind": "actual_clean_core_install_and_offline_smoke",
+  "environment": ".venvs/benchmark-clean",
+  "python_version": "3.11.4",
+  "install_command": [
+    ".venvs/benchmark-clean/bin/python",
+    "-m",
+    "pip",
+    "install",
+    "--disable-pip-version-check",
+    "-c",
+    "environments/core.txt",
+    "-e",
+    "packages/contracts",
+    "-e",
+    ".",
+    "-e",
+    "packages/agent-trace-sdk",
+    "-e",
+    "packages/evaluator[dev]"
+  ],
+  "install_exit_code": 0,
+  "versions": {
+    "deepeval": "4.2.9",
+    "inspect_ai": "0.3.280",
+    "langfuse": "5.0.2",
+    "openai": "3.40.0"
+  },
+  "minimal_agent_installed": false,
+  "checks": [
+    {
+      "command": [
+        ".venvs/benchmark-clean/bin/python",
+        "-m",
+        "pip",
+        "check"
+      ],
+      "exit_code": 0,
+      "log": "artifacts/benchmark/verification/clean-check-1.log"
+    },
+    {
+      "command": [
+        ".venvs/benchmark-clean/bin/python",
+        "-m",
+        "agent_eval_suite.cli",
+        "--evaluator-python",
+        ".venvs/benchmark-clean/bin/python",
+        "benchmark",
+        "demo",
+        "--limit",
+        "5",
+        "--split",
+        "dev",
+        "--output",
+        "artifacts/benchmark/clean-install-demo"
+      ],
+      "exit_code": 0,
+      "log": "artifacts/benchmark/verification/clean-check-2.log"
+    },
+    {
+      "command": [
+        ".venvs/benchmark-clean/bin/python",
+        "-m",
+        "agent_eval_suite.cli",
+        "--evaluator-python",
+        ".venvs/benchmark-clean/bin/python",
+        "benchmark",
+        "report",
+        "--run",
+        "artifacts/benchmark/clean-install-demo"
+      ],
+      "exit_code": 0,
+      "log": "artifacts/benchmark/verification/clean-check-3.log"
+    }
+  ],
+  "checked_at_utc": "2026-11-01T06:07:35.897046+00:00",
+  "passed": true,
+  "mode": "offline_reference_smoke",
+  "offline_trials": 5,
+  "offline_verdicts": {
+    "PASS": 5
+  },
+  "run_directory": "artifacts/benchmark/clean-install-demo",
+  "inspect_logs": 1
+}

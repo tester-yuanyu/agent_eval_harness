@@ -13,6 +13,7 @@ dependencies = [
     "agent-trace-sdk>=0.1.0,<0.2",
     "inspect_ai==0.3.280",
     "langfuse==5.0.2",
+    "deepeval==4.2.9",
     "jsonschema>=4.23,<5",
     "openai>=3.4,<4",
     "pydantic>=2.6,<3",
@@ -24,7 +25,8 @@ conversation = ["deepeval==4.2.9"]
 dev = ["pytest>=7.4,<9", "ruff>=0.6,<1"]
 
 [project.scripts]
-agent-evaluator = "eval_framework.cli:main"
+agent-evaluator = "eval_framework.benchmark.cli:main"
+agent-evaluator-legacy = "eval_framework.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

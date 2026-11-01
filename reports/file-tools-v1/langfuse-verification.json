@@ -1,0 +1,74 @@
+{
+  "status": "VERIFIED",
+  "scope": "Remote API read-back of all 1800 formal trials, not merely upload acknowledgements",
+  "runs": {
+    "baseline300x3": {
+      "status": "VERIFIED",
+      "verified_at": "2026-11-01T06:31:40.774323+00:00",
+      "source_hash": "edda7834859907a80339ebeef043c306601e1bf906c91b14253b52506af4f722",
+      "trials": 900,
+      "observation_count": 9919,
+      "score_count": 4500,
+      "failed_checks": 0,
+      "experiments": [
+        {
+          "experiment_id": "38a00e4eeba8627094f60ec9898fde80",
+          "items": 300,
+          "expected": 300
+        },
+        {
+          "experiment_id": "9d27ed684c65cbe1ee2362ef3b9de2ec",
+          "items": 300,
+          "expected": 300
+        },
+        {
+          "experiment_id": "cdf57c1bc3366ecd7eb770cb12b850d5",
+          "items": 300,
+          "expected": 300
+        }
+      ],
+      "scope": "Remote API read-back: identity, IO, type, parent, timestamps, model, usage, scores and experiment counts. UI verification is separate."
+    },
+    "tool-aware300x3": {
+      "status": "VERIFIED",
+      "verified_at": "2026-11-01T06:29:34.601110+00:00",
+      "source_hash": "2b6f3d220e3565efff37c27122b80e6aefd4055e56ff8dc163cdf16d20bbe7ad",
+      "trials": 900,
+      "observation_count": 9677,
+      "score_count": 4500,
+      "failed_checks": 0,
+      "experiments": [
+        {
+          "experiment_id": "0811c1b47065cd6da37948a8561957b7",
+          "items": 300,
+          "expected": 300
+        },
+        {
+          "experiment_id": "44a266801dfb10d6c90384cc3fe631c9",
+          "items": 300,
+          "expected": 300
+        },
+        {
+          "experiment_id": "bd724ab94a4d583ef60d4a625fdd00a9",
+          "items": 300,
+          "expected": 300
+        }
+      ],
+      "scope": "Remote API read-back: identity, IO, type, parent, timestamps, model, usage, scores and experiment counts. UI verification is separate."
+    }
+  },
+  "totals": {
+    "trials": 1800,
+    "observation_count": 19596,
+    "score_count": 9000,
+    "failed_checks": 0
+  },
+  "browser_verification": {
+    "status": "VERIFIED",
+    "scope": "Formal trial-3 baseline/candidate comparison; 300 items across 15 pages; opened actual prefix_tasks/001 Agent/Turn/Generation/Tool tree; raw write_file IO and root file snapshots visible. Screenshot summary is page-scoped, not overall.",
+    "screenshots": [
+      "docs/benchmark/screenshots/langfuse-experiments.png",
+      "docs/benchmark/screenshots/langfuse-trace.png"
+    ]
+  }
+}

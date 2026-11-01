@@ -1,0 +1,27 @@
+{
+  "evaluator_tests": {
+    "passed": 688,
+    "skipped": 2,
+    "skip_reason": "explicit opt-in paid smoke tests"
+  },
+  "root_integration_tests": {
+    "passed": 35
+  },
+  "imported_assets_verified": 1172,
+  "clean_core_install": "passed; pip check and 5 offline reference trials; mini_agent not installed",
+  "langfuse": {
+    "trials": 1800,
+    "observation_count": 19596,
+    "score_count": 9000,
+    "failed_checks": 0
+  },
+  "credential_value_scan": "no matches in tracked or publishable new files",
+  "harness_source": "c10daf50b5960a5b1a9b31306c1634524fbda2588b694d45cb07064332cbe4e7",
+  "scoring_identity": {
+    "version": "file-tools-deepeval-v1.1",
+    "deepeval": "4.2.9",
+    "oracle": "file-tools-oracle-v1",
+    "source_sha256": "b2f14471a2af151aa8621e0dba5d906e80511721fa712896fe34ad1da0f42274"
+  },
+  "original_results_hashes_unchanged": true
+}

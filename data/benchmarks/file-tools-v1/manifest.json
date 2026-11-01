@@ -1,0 +1,33 @@
+{
+  "dataset_id": "file-tools-v1",
+  "version": "1.0.0",
+  "contract_version": "file-tools-task-v1",
+  "grader_version": "file-tools-oracle-v1",
+  "tasks_file": "tasks.jsonl",
+  "tasks_sha256": "5b3a4feb3f82ba9a6b2c2eeebc9904f0fbb19069cdf46087bfbaa4fb35fe666f",
+  "case_count": 300,
+  "category_counts": {
+    "create_edit": 100,
+    "missing_error": 20,
+    "multi_file": 80,
+    "multi_turn": 40,
+    "read_search": 60
+  },
+  "split_counts": {
+    "dev": 240,
+    "holdout": 60
+  },
+  "family_count": 80,
+  "split_strategy": "family-disjoint: last fifth of families in each category held out",
+  "provenance": {
+    "source": "AI-assisted authored synthetic file fixtures and task recipes",
+    "human_reviewed": false,
+    "reference_execution": "deterministic fixture transformations; not measured Agent results"
+  },
+  "limitations": [
+    "Local UTF-8 file tools only; no shell, browser, DB, messaging, or production side effects.",
+    "Variations within each family are parameterized fixtures, not independent task families.",
+    "Final-state oracle checks exact formatting when explicitly requested; no private chain-of-thought is collected.",
+    "Multi-turn tasks verify final state and turn count; do not establish arbitrary user-simulator ability."
+  ]
+}

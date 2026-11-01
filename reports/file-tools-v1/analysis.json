@@ -1,0 +1,3738 @@
+{
+  "schema_version": "file-tools-failure-analysis-v1",
+  "sources": {
+    "tasks_path": "data/benchmarks/file-tools-v1/tasks.jsonl",
+    "tasks_sha256": "5b3a4feb3f82ba9a6b2c2eeebc9904f0fbb19069cdf46087bfbaa4fb35fe666f",
+    "runs": {
+      "baseline300x3": {
+        "results_path": "artifacts/benchmark/baseline300x3/results.json",
+        "results_sha256": "edda7834859907a80339ebeef043c306601e1bf906c91b14253b52506af4f722",
+        "run_id": "baseline300x3-1c31c79890394464",
+        "identity_hash": "6af74c62cf1d1d6a189a32aeb9f3ba15581ffd1afe3e98ec0368c000e5275436"
+      },
+      "tool-aware300x3": {
+        "results_path": "artifacts/benchmark/tool-aware300x3/results.json",
+        "results_sha256": "2b6f3d220e3565efff37c27122b80e6aefd4055e56ff8dc163cdf16d20bbe7ad",
+        "run_id": "tool-aware300x3-6db1d4b91d38473b",
+        "identity_hash": "cc71fd719c6e024676e7e5d31a6caf0504a6b974cd028c4fb95ae3b34624eecf"
+      }
+    }
+  },
+  "integrity_checks": {
+    "unique_slots_per_run": 900,
+    "cases_per_run": 300,
+    "trials_per_case": 3,
+    "same_case_ids_dataset_scoring_harness_agent_source": true,
+    "all_completed_valid_real_agent_evidence_complete": true,
+    "initial_files_match_task_fixtures": true,
+    "config_changed_fields": [
+      "variant",
+      "instructions"
+    ],
+    "runtime_identity_changed_fields": [
+      "variant"
+    ],
+    "scoring_identity": {
+      "version": "file-tools-deepeval-v1.1",
+      "deepeval": "4.2.9",
+      "oracle": "file-tools-oracle-v1",
+      "source_sha256": "b2f14471a2af151aa8621e0dba5d906e80511721fa712896fe34ad1da0f42274"
+    },
+    "harness_source": "c10daf50b5960a5b1a9b31306c1634524fbda2588b694d45cb07064332cbe4e7",
+    "agent_runtime": {
+      "agent": "nanobot",
+      "source_commit": "415df576b46464445121fe1bc68d24cd5b649635",
+      "working_tree_sha256": "5ada630fbf47faae8181732472ffcb392a34e9533c85c36f11c9a60af3c94730",
+      "source_dirty": true,
+      "model": "deepseek-flash",
+      "temperature": 0,
+      "max_tokens": 2048,
+      "max_steps": 12,
+      "adapter_version": "nanobot-file-sdk-v1",
+      "isolation": "application-path-policy",
+      "tokenizer_mode": "byte_fallback",
+      "tokenizer_sha256": null,
+      "extra_body": {
+        "thinking": {
+          "type": "disabled"
+        }
+      }
+    }
+  },
+  "methodology": {
+    "scores": "Read saved assessment verdicts and metrics only; no scorer invocation, no Agent rerun, no score modification.",
+    "unit": "One case_id × trial; 300 cases × 3 repeats per variant. Repeats are not independent cases.",
+    "formal_gates": "task_success + workspace_policy + interactive_evidence; tool_correctness is diagnostic and excluded from verdict decomposition.",
+    "file_diff": "Compare final_files against frozen oracle.expected_files byte-for-byte (UTF-8 strings). Missing paths are missing_expected_file. Whitespace-only iff removing all Python Unicode whitespace via re.sub(r\"\\s+\", \"\", text) makes unequal strings equal. Other differences are content_or_structure_difference.",
+    "whitespace_caution": "Whitespace-only is a syntactic difference class, not a semantic-equivalence judgment. Spaces may alter CSV values/headers and exact-format tasks. All frozen FAIL verdicts are preserved.",
+    "leading_space": "Each actual line equals one ASCII space plus its expected line, with equal line counts and final-LF presence.",
+    "primary_failure_bucket": "Mutually exclusive, priority: workspace_policy failure; missing expected file; any content/structure difference; whitespace-only expected file differences; response/other task check; other formal gate. Formal metric and individual file counts overlap.",
+    "paired_slots": "Task and repeat-index comparison is descriptive. Trial indices do not imply shared provider randomness or controlled causal pairing.",
+    "causal_limit": "The candidate changes tool instructions, whitespace guidance and verification guidance together; single model/provider configuration, three repeats, synthetic task families. Associations cannot identify which sentence caused changes.",
+    "response_failure_review": "Manually inspected all 3 response-only failures. Baseline common_values/001 trial2 outputs RESULT=b1, c1 versus exact marker RESULT=b1,c1. Candidate markdown_heading/001 trial3 and /002 trial2 remove internal spaces from Release 1/2; these have a documented prompt ambiguity, not established capability regressions."
+  },
+  "runs": {
+    "baseline300x3": {
+      "results_path": "artifacts/benchmark/baseline300x3/results.json",
+      "results_sha256": "edda7834859907a80339ebeef043c306601e1bf906c91b14253b52506af4f722",
+      "run_id": "baseline300x3-1c31c79890394464",
+      "identity_hash": "6af74c62cf1d1d6a189a32aeb9f3ba15581ffd1afe3e98ec0368c000e5275436",
+      "total": {
+        "trials": 900,
+        "pass": 820,
+        "fail": 80,
+        "invalid": 0,
+        "inconclusive": 0,
+        "pass_rate": 0.9111111111111111
+      },
+      "by_split": {
+        "dev": {
+          "trials": 720,
+          "pass": 649,
+          "fail": 71,
+          "invalid": 0,
+          "inconclusive": 0,
+          "pass_rate": 0.9013888888888889
+        },
+        "holdout": {
+          "trials": 180,
+          "pass": 171,
+          "fail": 9,
+          "invalid": 0,
+          "inconclusive": 0,
+          "pass_rate": 0.95
+        }
+      },
+      "by_category": {
+        "create_edit": {
+          "trials": 300,
+          "pass": 257,
+          "fail": 43,
+          "invalid": 0,
+          "inconclusive": 0,
+          "pass_rate": 0.8566666666666667
+        },
+        "missing_error": {
+          "trials": 60,
+          "pass": 60,
+          "fail": 0,
+          "invalid": 0,
+          "inconclusive": 0,
+          "pass_rate": 1.0
+        },
+        "multi_file": {
+          "trials": 240,
+          "pass": 205,
+          "fail": 35,
+          "invalid": 0,
+          "inconclusive": 0,
+          "pass_rate": 0.8541666666666666
+        },
+        "multi_turn": {
+          "trials": 120,
+          "pass": 119,
+          "fail": 1,
+          "invalid": 0,
+          "inconclusive": 0,
+          "pass_rate": 0.9916666666666667
+        },
+        "read_search": {
+          "trials": 180,
+          "pass": 179,
+          "fail": 1,
+          "invalid": 0,
+          "inconclusive": 0,
+          "pass_rate": 0.9944444444444445
+        }
+      },
+      "cases_all_three_pass": 260,
+      "cases_at_least_one_pass": 286,
+      "cases_all_three_fail": 14,
+      "formal_metric_failures": {
+        "task_success": 53,
+        "workspace_policy": 33,
+        "interactive_evidence": 0
+      },
+      "diagnostic_tool_correctness_failures": 22,
+      "formal_gate_overlap": {
+        "none": 820,
+        "task_success": 47,
+        "task_success+workspace_policy": 6,
+        "workspace_policy": 27
+      },
+      "failed_verdict_primary_buckets": {
+        "response_or_other_task_check": 1,
+        "tool_or_workspace_policy": 33,
+        "whitespace_character_differences_only": 46
+      },
+      "task_failure_difference_buckets": {
+        "response_or_other_task_check": 1,
+        "whitespace_character_differences_only": 52
+      },
+      "failed_expected_file_difference_counts": {
+        "one_added_leading_space_per_line": 51,
+        "other_whitespace_character_difference": 7
+      },
+      "trials_with_added_leading_space": 46,
+      "tool_calls": {
+        "edit_file": 115,
+        "exec": 33,
+        "list_dir": 675,
+        "read_file": 2131,
+        "write_file": 858
+      },
+      "exec_attempts": 33,
+      "exec_attempt_trials": 33,
+      "exec_rejected_by_registry": 33,
+      "trials_with_protected_file_changes": 0,
+      "trials_with_unexpected_files": 0,
+      "failed_trials": [
+        {
+          "case_id": "file-tools-v1/read_search/common_values/001",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "response_or_other_task_check",
+          "primary_failure_bucket": "response_or_other_task_check",
+          "file_differences": [],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/archive_report/001",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "archive/report.txt",
+              "kind": "other_whitespace_character_difference"
+            },
+            {
+              "path": "report.txt",
+              "kind": "other_whitespace_character_difference"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_turn/change_mode/001",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "work.ini",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/build_index/001",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "workspace_policy"
+          ],
+          "state_difference": "task_checks_pass",
+          "primary_failure_bucket": "tool_or_workspace_policy",
+          "file_differences": [],
+          "forbidden_tool_attempts": 1
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/build_index/001",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "workspace_policy"
+          ],
+          "state_difference": "task_checks_pass",
+          "primary_failure_bucket": "tool_or_workspace_policy",
+          "file_differences": [],
+          "forbidden_tool_attempts": 1
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/build_index/001",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "workspace_policy"
+          ],
+          "state_difference": "task_checks_pass",
+          "primary_failure_bucket": "tool_or_workspace_policy",
+          "file_differences": [],
+          "forbidden_tool_attempts": 1
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/dedupe_tags/001",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/dedupe_tags/001",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "workspace_policy"
+          ],
+          "state_difference": "task_checks_pass",
+          "primary_failure_bucket": "tool_or_workspace_policy",
+          "file_differences": [],
+          "forbidden_tool_attempts": 1
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/dedupe_tags/001",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/join_csv/001",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "workspace_policy"
+          ],
+          "state_difference": "task_checks_pass",
+          "primary_failure_bucket": "tool_or_workspace_policy",
+          "file_differences": [],
+          "forbidden_tool_attempts": 1
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/join_csv/001",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "workspace_policy"
+          ],
+          "state_difference": "task_checks_pass",
+          "primary_failure_bucket": "tool_or_workspace_policy",
+          "file_differences": [],
+          "forbidden_tool_attempts": 1
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/manifest_from_json/001",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "workspace_policy"
+          ],
+          "state_difference": "task_checks_pass",
+          "primary_failure_bucket": "tool_or_workspace_policy",
+          "file_differences": [],
+          "forbidden_tool_attempts": 1
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/manifest_from_json/001",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "workspace_policy"
+          ],
+          "state_difference": "task_checks_pass",
+          "primary_failure_bucket": "tool_or_workspace_policy",
+          "file_differences": [],
+          "forbidden_tool_attempts": 1
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/lowercase_keys/001",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/lowercase_keys/001",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/lowercase_keys/001",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/merge_fragments/001",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "workspace_policy"
+          ],
+          "state_difference": "task_checks_pass",
+          "primary_failure_bucket": "tool_or_workspace_policy",
+          "file_differences": [],
+          "forbidden_tool_attempts": 1
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/merge_fragments/001",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success",
+            "workspace_policy"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "tool_or_workspace_policy",
+          "file_differences": [
+            {
+              "path": "release.txt",
+              "kind": "other_whitespace_character_difference"
+            }
+          ],
+          "forbidden_tool_attempts": 1
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/merge_fragments/001",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success",
+            "workspace_policy"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "tool_or_workspace_policy",
+          "file_differences": [
+            {
+              "path": "release.txt",
+              "kind": "other_whitespace_character_difference"
+            }
+          ],
+          "forbidden_tool_attempts": 1
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/redact_multi/001",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "contact.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/uppercase_codes/001",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/uppercase_codes/001",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "other_whitespace_character_difference"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/uppercase_codes/001",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/archive_report/002",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "archive/report.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/dedupe_tags/002",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "workspace_policy"
+          ],
+          "state_difference": "task_checks_pass",
+          "primary_failure_bucket": "tool_or_workspace_policy",
+          "file_differences": [],
+          "forbidden_tool_attempts": 1
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/dedupe_tags/002",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/join_csv/002",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "workspace_policy"
+          ],
+          "state_difference": "task_checks_pass",
+          "primary_failure_bucket": "tool_or_workspace_policy",
+          "file_differences": [],
+          "forbidden_tool_attempts": 1
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/join_csv/002",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "workspace_policy"
+          ],
+          "state_difference": "task_checks_pass",
+          "primary_failure_bucket": "tool_or_workspace_policy",
+          "file_differences": [],
+          "forbidden_tool_attempts": 1
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/manifest_from_json/002",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "workspace_policy"
+          ],
+          "state_difference": "task_checks_pass",
+          "primary_failure_bucket": "tool_or_workspace_policy",
+          "file_differences": [],
+          "forbidden_tool_attempts": 1
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/manifest_from_json/002",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "workspace_policy"
+          ],
+          "state_difference": "task_checks_pass",
+          "primary_failure_bucket": "tool_or_workspace_policy",
+          "file_differences": [],
+          "forbidden_tool_attempts": 1
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/lowercase_keys/002",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/lowercase_keys/002",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/lowercase_keys/002",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/merge_fragments/002",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "workspace_policy"
+          ],
+          "state_difference": "task_checks_pass",
+          "primary_failure_bucket": "tool_or_workspace_policy",
+          "file_differences": [],
+          "forbidden_tool_attempts": 1
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/redact_multi/002",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "contact.txt",
+              "kind": "one_added_leading_space_per_line"
+            },
+            {
+              "path": "notes.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/sort_records/002",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/uppercase_codes/002",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/uppercase_codes/002",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/uppercase_codes/002",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/dedupe_tags/003",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "workspace_policy"
+          ],
+          "state_difference": "task_checks_pass",
+          "primary_failure_bucket": "tool_or_workspace_policy",
+          "file_differences": [],
+          "forbidden_tool_attempts": 1
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/manifest_from_json/003",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "workspace_policy"
+          ],
+          "state_difference": "task_checks_pass",
+          "primary_failure_bucket": "tool_or_workspace_policy",
+          "file_differences": [],
+          "forbidden_tool_attempts": 1
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/manifest_from_json/003",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "workspace_policy"
+          ],
+          "state_difference": "task_checks_pass",
+          "primary_failure_bucket": "tool_or_workspace_policy",
+          "file_differences": [],
+          "forbidden_tool_attempts": 1
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/manifest_from_json/003",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "workspace_policy"
+          ],
+          "state_difference": "task_checks_pass",
+          "primary_failure_bucket": "tool_or_workspace_policy",
+          "file_differences": [],
+          "forbidden_tool_attempts": 1
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/lowercase_keys/003",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/lowercase_keys/003",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/lowercase_keys/003",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/merge_fragments/003",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "workspace_policy"
+          ],
+          "state_difference": "task_checks_pass",
+          "primary_failure_bucket": "tool_or_workspace_policy",
+          "file_differences": [],
+          "forbidden_tool_attempts": 1
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/merge_fragments/003",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success",
+            "workspace_policy"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "tool_or_workspace_policy",
+          "file_differences": [
+            {
+              "path": "release.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 1
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/redact_multi/003",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "contact.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/redact_multi/003",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "contact.txt",
+              "kind": "one_added_leading_space_per_line"
+            },
+            {
+              "path": "notes.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/redact_multi/003",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "contact.txt",
+              "kind": "one_added_leading_space_per_line"
+            },
+            {
+              "path": "notes.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/replace_setting/003",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/uppercase_codes/003",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/uppercase_codes/003",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/uppercase_codes/003",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/archive_report/004",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "archive/report.txt",
+              "kind": "other_whitespace_character_difference"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/dedupe_tags/004",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success",
+            "workspace_policy"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "tool_or_workspace_policy",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 1
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/dedupe_tags/004",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/join_csv/004",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "workspace_policy"
+          ],
+          "state_difference": "task_checks_pass",
+          "primary_failure_bucket": "tool_or_workspace_policy",
+          "file_differences": [],
+          "forbidden_tool_attempts": 1
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/join_csv/004",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success",
+            "workspace_policy"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "tool_or_workspace_policy",
+          "file_differences": [
+            {
+              "path": "combined.csv",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 1
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/manifest_from_json/004",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "workspace_policy"
+          ],
+          "state_difference": "task_checks_pass",
+          "primary_failure_bucket": "tool_or_workspace_policy",
+          "file_differences": [],
+          "forbidden_tool_attempts": 1
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/manifest_from_json/004",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "workspace_policy"
+          ],
+          "state_difference": "task_checks_pass",
+          "primary_failure_bucket": "tool_or_workspace_policy",
+          "file_differences": [],
+          "forbidden_tool_attempts": 1
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/lowercase_keys/004",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/lowercase_keys/004",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/merge_fragments/004",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success",
+            "workspace_policy"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "tool_or_workspace_policy",
+          "file_differences": [
+            {
+              "path": "release.txt",
+              "kind": "other_whitespace_character_difference"
+            }
+          ],
+          "forbidden_tool_attempts": 1
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/number_steps/004",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "workspace_policy"
+          ],
+          "state_difference": "task_checks_pass",
+          "primary_failure_bucket": "tool_or_workspace_policy",
+          "file_differences": [],
+          "forbidden_tool_attempts": 1
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/prefix_tasks/004",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "workspace_policy"
+          ],
+          "state_difference": "task_checks_pass",
+          "primary_failure_bucket": "tool_or_workspace_policy",
+          "file_differences": [],
+          "forbidden_tool_attempts": 1
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/redact_multi/004",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "contact.txt",
+              "kind": "one_added_leading_space_per_line"
+            },
+            {
+              "path": "notes.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/redact_multi/004",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "contact.txt",
+              "kind": "one_added_leading_space_per_line"
+            },
+            {
+              "path": "notes.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/uppercase_codes/004",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/uppercase_codes/004",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/uppercase_codes/004",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/dedupe_tags/005",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "workspace_policy"
+          ],
+          "state_difference": "task_checks_pass",
+          "primary_failure_bucket": "tool_or_workspace_policy",
+          "file_differences": [],
+          "forbidden_tool_attempts": 1
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/dedupe_tags/005",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "workspace_policy"
+          ],
+          "state_difference": "task_checks_pass",
+          "primary_failure_bucket": "tool_or_workspace_policy",
+          "file_differences": [],
+          "forbidden_tool_attempts": 1
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/lowercase_keys/005",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/lowercase_keys/005",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/lowercase_keys/005",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/uppercase_codes/005",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/uppercase_codes/005",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/uppercase_codes/005",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        }
+      ]
+    },
+    "tool-aware300x3": {
+      "results_path": "artifacts/benchmark/tool-aware300x3/results.json",
+      "results_sha256": "2b6f3d220e3565efff37c27122b80e6aefd4055e56ff8dc163cdf16d20bbe7ad",
+      "run_id": "tool-aware300x3-6db1d4b91d38473b",
+      "identity_hash": "cc71fd719c6e024676e7e5d31a6caf0504a6b974cd028c4fb95ae3b34624eecf",
+      "total": {
+        "trials": 900,
+        "pass": 799,
+        "fail": 101,
+        "invalid": 0,
+        "inconclusive": 0,
+        "pass_rate": 0.8877777777777778
+      },
+      "by_split": {
+        "dev": {
+          "trials": 720,
+          "pass": 624,
+          "fail": 96,
+          "invalid": 0,
+          "inconclusive": 0,
+          "pass_rate": 0.8666666666666667
+        },
+        "holdout": {
+          "trials": 180,
+          "pass": 175,
+          "fail": 5,
+          "invalid": 0,
+          "inconclusive": 0,
+          "pass_rate": 0.9722222222222222
+        }
+      },
+      "by_category": {
+        "create_edit": {
+          "trials": 300,
+          "pass": 244,
+          "fail": 56,
+          "invalid": 0,
+          "inconclusive": 0,
+          "pass_rate": 0.8133333333333334
+        },
+        "missing_error": {
+          "trials": 60,
+          "pass": 60,
+          "fail": 0,
+          "invalid": 0,
+          "inconclusive": 0,
+          "pass_rate": 1.0
+        },
+        "multi_file": {
+          "trials": 240,
+          "pass": 205,
+          "fail": 35,
+          "invalid": 0,
+          "inconclusive": 0,
+          "pass_rate": 0.8541666666666666
+        },
+        "multi_turn": {
+          "trials": 120,
+          "pass": 112,
+          "fail": 8,
+          "invalid": 0,
+          "inconclusive": 0,
+          "pass_rate": 0.9333333333333333
+        },
+        "read_search": {
+          "trials": 180,
+          "pass": 178,
+          "fail": 2,
+          "invalid": 0,
+          "inconclusive": 0,
+          "pass_rate": 0.9888888888888889
+        }
+      },
+      "cases_all_three_pass": 252,
+      "cases_at_least_one_pass": 279,
+      "cases_all_three_fail": 21,
+      "formal_metric_failures": {
+        "task_success": 101,
+        "workspace_policy": 0,
+        "interactive_evidence": 0
+      },
+      "diagnostic_tool_correctness_failures": 40,
+      "formal_gate_overlap": {
+        "none": 799,
+        "task_success": 101
+      },
+      "failed_verdict_primary_buckets": {
+        "response_or_other_task_check": 2,
+        "whitespace_character_differences_only": 99
+      },
+      "task_failure_difference_buckets": {
+        "response_or_other_task_check": 2,
+        "whitespace_character_differences_only": 99
+      },
+      "failed_expected_file_difference_counts": {
+        "one_added_leading_space_per_line": 94,
+        "other_whitespace_character_difference": 20
+      },
+      "trials_with_added_leading_space": 82,
+      "tool_calls": {
+        "edit_file": 94,
+        "list_dir": 592,
+        "read_file": 2133,
+        "write_file": 878
+      },
+      "exec_attempts": 0,
+      "exec_attempt_trials": 0,
+      "exec_rejected_by_registry": 0,
+      "trials_with_protected_file_changes": 0,
+      "trials_with_unexpected_files": 0,
+      "failed_trials": [
+        {
+          "case_id": "file-tools-v1/create_edit/csv_filter_active/001",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/dedupe_tags/001",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/dedupe_tags/001",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/dedupe_tags/001",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/join_csv/001",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "combined.csv",
+              "kind": "other_whitespace_character_difference"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/read_search/markdown_heading/001",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "response_or_other_task_check",
+          "primary_failure_bucket": "response_or_other_task_check",
+          "file_differences": [],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/lowercase_keys/001",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/lowercase_keys/001",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/lowercase_keys/001",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_turn/change_region/002",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "output.csv",
+              "kind": "other_whitespace_character_difference"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_turn/filter_then_expand/002",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "selected.csv",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_turn/filter_then_expand/002",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "selected.csv",
+              "kind": "other_whitespace_character_difference"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/redact_multi/001",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "contact.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/redact_multi/001",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "contact.txt",
+              "kind": "one_added_leading_space_per_line"
+            },
+            {
+              "path": "notes.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/redact_multi/001",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "contact.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/route_records/001",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "core.csv",
+              "kind": "one_added_leading_space_per_line"
+            },
+            {
+              "path": "web.csv",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/route_records/001",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "core.csv",
+              "kind": "other_whitespace_character_difference"
+            },
+            {
+              "path": "web.csv",
+              "kind": "other_whitespace_character_difference"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/uppercase_codes/001",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "other_whitespace_character_difference"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/uppercase_codes/001",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "other_whitespace_character_difference"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/uppercase_codes/001",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_turn/append_then_correct/003",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "list.txt",
+              "kind": "other_whitespace_character_difference"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/csv_filter_active/002",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/csv_filter_active/002",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/archive_report/002",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "archive/report.txt",
+              "kind": "other_whitespace_character_difference"
+            },
+            {
+              "path": "report.txt",
+              "kind": "other_whitespace_character_difference"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_turn/filter_then_expand/003",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "selected.csv",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_turn/filter_then_expand/003",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "selected.csv",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/csv_update_region/002",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/dedupe_tags/002",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/dedupe_tags/002",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/dedupe_tags/002",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/join_csv/002",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "combined.csv",
+              "kind": "other_whitespace_character_difference"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/join_csv/002",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "combined.csv",
+              "kind": "other_whitespace_character_difference"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/read_search/markdown_heading/002",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "response_or_other_task_check",
+          "primary_failure_bucket": "response_or_other_task_check",
+          "file_differences": [],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/lowercase_keys/002",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/lowercase_keys/002",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/lowercase_keys/002",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/merge_fragments/002",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "release.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/reconcile_inventory/002",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "missing.txt",
+              "kind": "other_whitespace_character_difference"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/reconcile_inventory/002",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "missing.txt",
+              "kind": "other_whitespace_character_difference"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_turn/filter_then_expand/004",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "selected.csv",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_turn/filter_then_expand/004",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "selected.csv",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/redact_multi/002",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "contact.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/redact_multi/002",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "contact.txt",
+              "kind": "one_added_leading_space_per_line"
+            },
+            {
+              "path": "notes.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/redact_multi/002",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "contact.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/prepend_header/002",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "other_whitespace_character_difference"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/route_records/002",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "core.csv",
+              "kind": "one_added_leading_space_per_line"
+            },
+            {
+              "path": "web.csv",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/route_records/002",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "core.csv",
+              "kind": "one_added_leading_space_per_line"
+            },
+            {
+              "path": "web.csv",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/uppercase_codes/002",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/uppercase_codes/002",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/uppercase_codes/002",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/csv_filter_active/003",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/csv_filter_active/003",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/dedupe_tags/003",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/dedupe_tags/003",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/dedupe_tags/003",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/lowercase_keys/003",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/lowercase_keys/003",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/lowercase_keys/003",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/merge_fragments/003",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "release.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/redact_multi/003",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "contact.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/redact_multi/003",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "contact.txt",
+              "kind": "one_added_leading_space_per_line"
+            },
+            {
+              "path": "notes.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/redact_multi/003",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "contact.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/route_records/003",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "core.csv",
+              "kind": "one_added_leading_space_per_line"
+            },
+            {
+              "path": "web.csv",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/sync_versions/003",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "VERSION",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/sync_versions/003",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "VERSION",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/uppercase_codes/003",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "other_whitespace_character_difference"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/uppercase_codes/003",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/uppercase_codes/003",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/csv_filter_active/004",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/dedupe_tags/004",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/dedupe_tags/004",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/dedupe_tags/004",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/lowercase_keys/004",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/lowercase_keys/004",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/lowercase_keys/004",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/merge_fragments/004",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "release.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/merge_fragments/004",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "release.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/merge_fragments/004",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "release.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/redact_multi/004",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "contact.txt",
+              "kind": "one_added_leading_space_per_line"
+            },
+            {
+              "path": "notes.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/redact_multi/004",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "contact.txt",
+              "kind": "one_added_leading_space_per_line"
+            },
+            {
+              "path": "notes.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/redact_multi/004",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "contact.txt",
+              "kind": "one_added_leading_space_per_line"
+            },
+            {
+              "path": "notes.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/replace_setting/004",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/route_records/004",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "core.csv",
+              "kind": "one_added_leading_space_per_line"
+            },
+            {
+              "path": "web.csv",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/route_records/004",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "core.csv",
+              "kind": "other_whitespace_character_difference"
+            },
+            {
+              "path": "web.csv",
+              "kind": "other_whitespace_character_difference"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/route_records/004",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "core.csv",
+              "kind": "one_added_leading_space_per_line"
+            },
+            {
+              "path": "web.csv",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/sync_versions/004",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "VERSION",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/multi_file/sync_versions/004",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "VERSION",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/uppercase_codes/004",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "other_whitespace_character_difference"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/uppercase_codes/004",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/uppercase_codes/004",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/csv_filter_active/005",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/csv_update_region/005",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/dedupe_tags/005",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/dedupe_tags/005",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/dedupe_tags/005",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/lowercase_keys/005",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/lowercase_keys/005",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/lowercase_keys/005",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/uppercase_codes/005",
+          "trial": 1,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "other_whitespace_character_difference"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/uppercase_codes/005",
+          "trial": 2,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        },
+        {
+          "case_id": "file-tools-v1/create_edit/uppercase_codes/005",
+          "trial": 3,
+          "verdict": "FAIL",
+          "formal_metric_failures": [
+            "task_success"
+          ],
+          "state_difference": "whitespace_character_differences_only",
+          "primary_failure_bucket": "whitespace_character_differences_only",
+          "file_differences": [
+            {
+              "path": "result.txt",
+              "kind": "one_added_leading_space_per_line"
+            }
+          ],
+          "forbidden_tool_attempts": 0
+        }
+      ]
+    }
+  },
+  "comparison": {
+    "pass_delta": -21,
+    "pass_rate_delta_percentage_points": -2.3333333333333317,
+    "paired_slot_verdict_transitions": {
+      "PASS_to_PASS": 770,
+      "FAIL_to_PASS": 29,
+      "PASS_to_FAIL": 50,
+      "FAIL_to_FAIL": 51
+    },
+    "transition_details": {
+      "PASS_to_FAIL": {
+        "trials": 50,
+        "candidate_failure_buckets": {
+          "whitespace_character_differences_only": 48,
+          "response_or_other_task_check": 2
+        },
+        "baseline_failure_buckets": {
+          "pass": 50
+        },
+        "by_split": {
+          "dev": 45,
+          "holdout": 5
+        }
+      },
+      "FAIL_to_PASS": {
+        "trials": 29,
+        "candidate_failure_buckets": {
+          "pass": 29
+        },
+        "baseline_failure_buckets": {
+          "response_or_other_task_check": 1,
+          "whitespace_character_differences_only": 6,
+          "tool_or_workspace_policy": 22
+        },
+        "by_split": {
+          "dev": 20,
+          "holdout": 9
+        }
+      },
+      "FAIL_to_FAIL": {
+        "trials": 51,
+        "candidate_failure_buckets": {
+          "whitespace_character_differences_only": 51
+        },
+        "baseline_failure_buckets": {
+          "whitespace_character_differences_only": 40,
+          "tool_or_workspace_policy": 11
+        },
+        "by_split": {
+          "dev": 51
+        }
+      }
+    },
+    "changed_families": [
+      {
+        "family": "multi_file/route_records",
+        "trials_per_variant": 12,
+        "baseline_pass": 12,
+        "candidate_pass": 4,
+        "delta_pass": -8
+      },
+      {
+        "family": "create_edit/csv_filter_active",
+        "trials_per_variant": 15,
+        "baseline_pass": 15,
+        "candidate_pass": 8,
+        "delta_pass": -7
+      },
+      {
+        "family": "multi_turn/filter_then_expand",
+        "trials_per_variant": 12,
+        "baseline_pass": 12,
+        "candidate_pass": 6,
+        "delta_pass": -6
+      },
+      {
+        "family": "create_edit/dedupe_tags",
+        "trials_per_variant": 15,
+        "baseline_pass": 5,
+        "candidate_pass": 0,
+        "delta_pass": -5
+      },
+      {
+        "family": "multi_file/redact_multi",
+        "trials_per_variant": 12,
+        "baseline_pass": 5,
+        "candidate_pass": 0,
+        "delta_pass": -5
+      },
+      {
+        "family": "multi_file/sync_versions",
+        "trials_per_variant": 12,
+        "baseline_pass": 12,
+        "candidate_pass": 8,
+        "delta_pass": -4
+      },
+      {
+        "family": "create_edit/csv_update_region",
+        "trials_per_variant": 15,
+        "baseline_pass": 15,
+        "candidate_pass": 13,
+        "delta_pass": -2
+      },
+      {
+        "family": "multi_file/reconcile_inventory",
+        "trials_per_variant": 12,
+        "baseline_pass": 12,
+        "candidate_pass": 10,
+        "delta_pass": -2
+      },
+      {
+        "family": "read_search/markdown_heading",
+        "trials_per_variant": 9,
+        "baseline_pass": 9,
+        "candidate_pass": 7,
+        "delta_pass": -2
+      },
+      {
+        "family": "create_edit/lowercase_keys",
+        "trials_per_variant": 15,
+        "baseline_pass": 1,
+        "candidate_pass": 0,
+        "delta_pass": -1
+      },
+      {
+        "family": "create_edit/prepend_header",
+        "trials_per_variant": 15,
+        "baseline_pass": 15,
+        "candidate_pass": 14,
+        "delta_pass": -1
+      },
+      {
+        "family": "multi_turn/append_then_correct",
+        "trials_per_variant": 12,
+        "baseline_pass": 12,
+        "candidate_pass": 11,
+        "delta_pass": -1
+      },
+      {
+        "family": "multi_turn/change_region",
+        "trials_per_variant": 12,
+        "baseline_pass": 12,
+        "candidate_pass": 11,
+        "delta_pass": -1
+      },
+      {
+        "family": "create_edit/number_steps",
+        "trials_per_variant": 15,
+        "baseline_pass": 14,
+        "candidate_pass": 15,
+        "delta_pass": 1
+      },
+      {
+        "family": "create_edit/prefix_tasks",
+        "trials_per_variant": 15,
+        "baseline_pass": 14,
+        "candidate_pass": 15,
+        "delta_pass": 1
+      },
+      {
+        "family": "create_edit/sort_records",
+        "trials_per_variant": 15,
+        "baseline_pass": 14,
+        "candidate_pass": 15,
+        "delta_pass": 1
+      },
+      {
+        "family": "multi_turn/change_mode",
+        "trials_per_variant": 12,
+        "baseline_pass": 11,
+        "candidate_pass": 12,
+        "delta_pass": 1
+      },
+      {
+        "family": "read_search/common_values",
+        "trials_per_variant": 9,
+        "baseline_pass": 8,
+        "candidate_pass": 9,
+        "delta_pass": 1
+      },
+      {
+        "family": "multi_file/archive_report",
+        "trials_per_variant": 12,
+        "baseline_pass": 9,
+        "candidate_pass": 11,
+        "delta_pass": 2
+      },
+      {
+        "family": "multi_file/merge_fragments",
+        "trials_per_variant": 12,
+        "baseline_pass": 5,
+        "candidate_pass": 7,
+        "delta_pass": 2
+      },
+      {
+        "family": "multi_file/build_index",
+        "trials_per_variant": 12,
+        "baseline_pass": 9,
+        "candidate_pass": 12,
+        "delta_pass": 3
+      },
+      {
+        "family": "multi_file/join_csv",
+        "trials_per_variant": 12,
+        "baseline_pass": 6,
+        "candidate_pass": 9,
+        "delta_pass": 3
+      },
+      {
+        "family": "multi_file/manifest_from_json",
+        "trials_per_variant": 12,
+        "baseline_pass": 3,
+        "candidate_pass": 12,
+        "delta_pass": 9
+      }
+    ]
+  },
+  "representative_cases": [
+    {
+      "kind": "regression_file_whitespace",
+      "case_id": "file-tools-v1/create_edit/csv_filter_active/001",
+      "trial": 1,
+      "split": "dev",
+      "baseline_verdict": "PASS",
+      "candidate_verdict": "FAIL",
+      "baseline_source": {
+        "path": "artifacts/benchmark/baseline300x3/trials/0007-t1.json",
+        "sha256": "48215b9dd4611f7e7c3d3da47a3b453c1f0f38a419425be4bd1ae63c068e590b"
+      },
+      "candidate_source": {
+        "path": "artifacts/benchmark/tool-aware300x3/trials/0007-t1.json",
+        "sha256": "10f7c5b7ac26e11d31486a98c7a8295b3470402539edb1024d6edb9456759abc"
+      },
+      "prompt": "读取 source.txt CSV，仅保留 status=active 的行，保持原顺序及全部列，保存为 result.txt，保留表头，使用 LF 换行。\n只在当前工作区内操作；未指定的文件保持不变，不要创建额外说明文件。",
+      "read_tool_output_first_line": "1| name,status,price,region",
+      "expected_file": "result.txt",
+      "expected_content": "name,status,price,region\nA1,active,11,east\nC1,active,21,west\n",
+      "candidate_write_tool_arguments": {
+        "path": "<workspace>/result.txt",
+        "content": " name,status,price,region\n A1,active,11,east\n C1,active,21,west\n"
+      },
+      "candidate_final_response_excerpt": "注：源文件每行开头有一个空格，已原样保留。",
+      "interpretation": "Saved source bytes have no leading spaces; display is 1| followed by a separator space. The write and final claim are consistent with mistaking that separator for content. This supports a display/content confusion mechanism for this trial, not a causal attribution to one instruction sentence."
+    },
+    {
+      "kind": "improvement_removed_unsupported_tool_attempt",
+      "case_id": "file-tools-v1/multi_file/build_index/001",
+      "trial": 1,
+      "split": "dev",
+      "baseline_verdict": "FAIL",
+      "candidate_verdict": "PASS",
+      "baseline_source": {
+        "path": "artifacts/benchmark/baseline300x3/trials/0013-t1.json",
+        "sha256": "5976092ea9b26c445a58e9cf90fc0b2d428e4d414aa351c847d1a4c46609249f"
+      },
+      "candidate_source": {
+        "path": "artifacts/benchmark/tool-aware300x3/trials/0013-t1.json",
+        "sha256": "91a47a99a70bdf19278b8e2513dae1cc4c2aacf2dd1d413191985ef17a05c225"
+      },
+      "baseline_formal_metrics": {
+        "task_success": true,
+        "workspace_policy": false,
+        "interactive_evidence": true
+      },
+      "baseline_exec_arguments": {
+        "command": "cd <workspace> && od -c chapters/a.txt && od -c chapters/b.txt"
+      },
+      "baseline_exec_output": "Tool 'exec' not found. Available: read_file, write_file, edit_file, list_dir",
+      "candidate_tool_names": [
+        "list_dir",
+        "read_file",
+        "read_file",
+        "write_file",
+        "read_file"
+      ],
+      "same_correct_index_contents": true,
+      "interpretation": "Both final task states are correct. Baseline fails solely for an unsupported exec call; the registry rejects the call. Candidate uses declared tools and passes. No actual shell execution is evidenced."
+    },
+    {
+      "kind": "multi_turn_regression_is_formatting",
+      "case_id": "file-tools-v1/multi_turn/filter_then_expand/002",
+      "trial": 2,
+      "split": "dev",
+      "baseline_verdict": "PASS",
+      "candidate_verdict": "FAIL",
+      "baseline_source": {
+        "path": "artifacts/benchmark/baseline300x3/trials/0069-t2.json",
+        "sha256": "db4f6b5b15a1f3bebb7ced15763c43823211b58ffa472d07dd4ab4b1a0c8638f"
+      },
+      "candidate_source": {
+        "path": "artifacts/benchmark/tool-aware300x3/trials/0069-t2.json",
+        "sha256": "7d54e8bc66259abc4be1a72a91b183499815b0306af86779a0b8c27262ed1d54"
+      },
+      "followup": "范围调整：刚才的输出现在应包含全部状态，按源文件的原始顺序，不要重复表头。",
+      "expected_file": "selected.csv",
+      "expected_content": "id,status\nA2,open\nB2,closed\nC2,open\n",
+      "candidate_actual_content": " id,status\nA2,open\nB2,closed\nC2,open\n",
+      "candidate_final_response_excerpt": "表头首列前的空格仍原样保留。",
+      "interpretation": "All requested records are present in order; the CSV header acquires a leading space. This trial supports exact-format failure, not a claim that the Agent forgot the followup."
+    },
+    {
+      "kind": "ambiguous_prompt_response_contract",
+      "case_id": "file-tools-v1/read_search/markdown_heading/001",
+      "trial": 3,
+      "split": "holdout",
+      "baseline_verdict": "PASS",
+      "candidate_verdict": "FAIL",
+      "baseline_source": {
+        "path": "artifacts/benchmark/baseline300x3/trials/0056-t3.json",
+        "sha256": "90c4480156c26ddcf9e0a8af6e957b8c7c40a016c1a7e1194b9933503c694fd1"
+      },
+      "candidate_source": {
+        "path": "artifacts/benchmark/tool-aware300x3/trials/0056-t3.json",
+        "sha256": "94fa9413c61499064e37a642462c75fc646e0d9917ebf0594c3c297d8182efca"
+      },
+      "prompt": "读取 input.txt 的一级 Markdown 标题，去掉 # 和空格。最后一条回复包含 RESULT=<答案>，不写文件。\n只在当前工作区内操作；未指定的文件保持不变，不要创建额外说明文件。",
+      "expected_response_contains": [
+        "RESULT=Release 1"
+      ],
+      "candidate_response": "一级标题是“# Release 1”，去掉 # 和空格后为“Release1”。\n\nRESULT=Release1",
+      "interpretation": "Prompt says remove # and spaces; whether title-internal spaces must remain is unspecified. The frozen oracle keeps them. This recorded FAIL is not confidently attributable to a capability regression."
+    }
+  ],
+  "dataset_errata": {
+    "document": "docs/benchmark/dataset-errata.md",
+    "id": "FTV1-E001",
+    "family": "read_search/markdown_heading",
+    "affected_case_ids": [
+      "file-tools-v1/read_search/markdown_heading/001",
+      "file-tools-v1/read_search/markdown_heading/002",
+      "file-tools-v1/read_search/markdown_heading/003"
+    ],
+    "split": "holdout",
+    "ambiguity": "去掉 # 和空格 does not distinguish Markdown delimiter whitespace from title-internal whitespace; oracle preserves title-internal spaces.",
+    "recorded_failed_slots": [
+      {
+        "variant": "tool-aware300x3",
+        "case_id": "file-tools-v1/read_search/markdown_heading/001",
+        "trial": 3
+      },
+      {
+        "variant": "tool-aware300x3",
+        "case_id": "file-tools-v1/read_search/markdown_heading/002",
+        "trial": 2
+      }
+    ],
+    "recommended_next_version_prompt": "读取 input.txt 的一级 Markdown 标题。只移除行首 Markdown 标记 # 及其后用于分隔标题的空格，完整保留标题正文内部的空格。最后一条回复包含 RESULT=<标题正文>，不写文件。",
+    "frozen_v1_modified": false,
+    "sensitivity_analysis": {
+      "status": "Post-hoc diagnostic only; original 900-trial summaries and all verdicts remain unchanged.",
+      "exclusion_rule": "Remove the entire markdown_heading family from BOTH variants, including all passing and failing repeats; never exclude only failed cases.",
+      "excluded_cases_per_variant": 3,
+      "excluded_trials_per_variant": 9,
+      "remaining_cases_per_variant": 297,
+      "runs": {
+        "baseline300x3": {
+          "overall": {
+            "trials": 891,
+            "pass": 811,
+            "fail": 80,
+            "pass_rate": 0.9102132435465768
+          },
+          "by_split": {
+            "dev": {
+              "trials": 720,
+              "pass": 649,
+              "fail": 71,
+              "pass_rate": 0.9013888888888889
+            },
+            "holdout": {
+              "trials": 171,
+              "pass": 162,
+              "fail": 9,
+              "pass_rate": 0.9473684210526315
+            }
+          }
+        },
+        "tool-aware300x3": {
+          "overall": {
+            "trials": 891,
+            "pass": 792,
+            "fail": 99,
+            "pass_rate": 0.8888888888888888
+          },
+          "by_split": {
+            "dev": {
+              "trials": 720,
+              "pass": 624,
+              "fail": 96,
+              "pass_rate": 0.8666666666666667
+            },
+            "holdout": {
+              "trials": 171,
+              "pass": 168,
+              "fail": 3,
+              "pass_rate": 0.9824561403508771
+            }
+          }
+        }
+      },
+      "overall_candidate_minus_baseline_percentage_points": -2.1324354657688005,
+      "holdout_candidate_minus_baseline_percentage_points": 3.508771929824561
+    }
+  },
+  "dataset_context": {
+    "family_count": 80,
+    "dev_cases": 240,
+    "dev_families": 64,
+    "holdout_cases": 60,
+    "holdout_families": 16,
+    "split_strategy": "family-disjoint",
+    "human_reviewed": false,
+    "scope": "AI-assisted synthetic local UTF-8 file tools; no shell/browser/DB/messaging benchmark.",
+    "post_analysis_holdout": "Inspected during this report; future tuning should use a new untouched holdout for fresh selection claims."
+  }
+}

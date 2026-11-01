@@ -96,6 +96,11 @@ def parser() -> argparse.ArgumentParser:
     groups = root.add_subparsers(dest="group", required=True)
     for name, aliases, commands, description in (
         (
+            "benchmark", [],
+            ("validate", "demo", "run", "compare", "report", "regrade", "export-langfuse", "verify-langfuse"),
+            "Fixed task datasets + Inspect Harness + DeepEval scoring. Live calls and Langfuse exports are explicit.",
+        ),
+        (
             "dataset",
             ["builder"],
             BUILDER_COMMANDS,
@@ -173,7 +178,7 @@ def main(argv: list[str] | None = None) -> int:
     args, unknown = root_parser.parse_known_args(arguments)
     try:
         root = args.root.resolve()
-        if args.group in ("dataset", "builder", "eval"):
+        if args.group in ("dataset", "builder", "eval", "benchmark"):
             # Find the selected namespace after global options, then retain its tail.
             global_parser = argparse.ArgumentParser(add_help=False)
             global_parser.add_argument("--root")
@@ -185,7 +190,7 @@ def main(argv: list[str] | None = None) -> int:
             forward = global_parser.parse_args(arguments).tail
             if forward[:1] == ["--"]:
                 forward = forward[1:]
-            kind = "evaluator" if args.group == "eval" else "builder"
+            kind = "evaluator" if args.group in ("eval", "benchmark") else "builder"
             command = args.command
             if kind == "evaluator" and command == "compare":
                 flags = [value.split("=", 1)[0] for value in forward]
@@ -201,6 +206,8 @@ def main(argv: list[str] | None = None) -> int:
             module = (
                 "eval_framework.cli" if kind == "evaluator" else "dataset_builder.cli"
             )
+            if args.group == "benchmark":
+                module = "eval_framework.benchmark.cli"
             return invoke(python, module, [command, *forward])
         if unknown:
             root_parser.error("unrecognized arguments: " + " ".join(unknown))

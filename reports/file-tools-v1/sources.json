@@ -1,0 +1,14 @@
+{
+  "baseline300x3": {
+    "run_id": "baseline300x3-1c31c79890394464",
+    "results_sha256": "edda7834859907a80339ebeef043c306601e1bf906c91b14253b52506af4f722",
+    "relative_path": "artifacts/benchmark/baseline300x3/results.json",
+    "bytes": 91948566
+  },
+  "tool-aware300x3": {
+    "run_id": "tool-aware300x3-6db1d4b91d38473b",
+    "results_sha256": "2b6f3d220e3565efff37c27122b80e6aefd4055e56ff8dc163cdf16d20bbe7ad",
+    "relative_path": "artifacts/benchmark/tool-aware300x3/results.json",
+    "bytes": 90837665
+  }
+}
