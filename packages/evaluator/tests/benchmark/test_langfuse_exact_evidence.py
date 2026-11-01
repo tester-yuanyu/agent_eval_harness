@@ -47,6 +47,38 @@ def decode_evidence(span):
     return json.loads(raw), metadata
 
 
+def test_new_evidence_target_identity_survives_json_value_parsing():
+    original = saved_span("24481393e7248852", {"snapshot": {"config.json": "{}"}})
+
+    evidence = langfuse_export.build_evidence_payload([original], SOURCE_HASH)
+
+    metadata = metadata_of(evidence[0])
+    assert metadata["evidence_for_observation_id"] == ("observation:24481393e7248852")
+    assert (
+        langfuse_export._metadata_with_json_values(metadata)[
+            "evidence_for_observation_id"
+        ]
+        == metadata["evidence_for_observation_id"]
+    )
+    assert evidence[0].parent_span_id == original.span_id
+    assert evidence[0].trace_id == original.trace_id
+
+
+def test_v2_numeric_source_hash_survives_json_value_parsing():
+    numeric_source_hash = "2" * 64
+    original = saved_span("2" * 16, {"snapshot": {"config.json": "{}"}})
+
+    evidence = langfuse_export.build_evidence_payload(
+        [original], numeric_source_hash
+    )
+
+    metadata = metadata_of(evidence[0])
+    assert metadata["evidence_source_sha256"] == "sha256:" + numeric_source_hash
+    assert langfuse_export._metadata_with_json_values(metadata)[
+        "evidence_source_sha256"
+    ] == metadata["evidence_source_sha256"]
+
+
 @pytest.mark.parametrize(
     "content",
     [
@@ -70,14 +102,42 @@ def test_evidence_preserves_json_text_bytes_and_source_binding(content):
     restored, metadata = decode_evidence(evidence[0])
     assert restored == {"before_files": {"docs/a.v1.json": content}}
     assert restored["before_files"]["docs/a.v1.json"].encode() == content.encode()
-    assert metadata["evidence_source_sha256"] == SOURCE_HASH
-    assert metadata["evidence_for_observation_id"] == original.span_id
+    assert metadata["evidence_source_sha256"] == "sha256:" + SOURCE_HASH
+    assert metadata["evidence_for_observation_id"] == (
+        langfuse_export.EVIDENCE_TARGET_PREFIX + original.span_id
+    )
     assert metadata["is_export_evidence"] is True
     assert isinstance(metadata["evidence_export_version"], str)
     assert metadata["evidence_export_version"]
     assert evidence[0].parent_span_id == original.span_id
     assert evidence[0].trace_id == original.trace_id
     assert evidence[0].name == "saved-exact-metadata"
+
+
+def test_v1_evidence_identity_remains_rebuildable_for_existing_receipts():
+    original = saved_span("6501968862483609", {"snapshot": {"config.json": "{}"}})
+
+    first = langfuse_export.build_evidence_payload(
+        [original], SOURCE_HASH, version=langfuse_export.EVIDENCE_VERSION_V1
+    )
+    replay = langfuse_export.build_evidence_payload(
+        [original], SOURCE_HASH, version=langfuse_export.EVIDENCE_VERSION_V1
+    )
+
+    assert [span.model_dump() for span in first] == [
+        span.model_dump() for span in replay
+    ]
+    metadata = metadata_of(first[0])
+    assert metadata["evidence_export_version"] == (langfuse_export.EVIDENCE_VERSION_V1)
+    assert metadata["evidence_source_sha256"] == SOURCE_HASH
+    assert metadata["evidence_for_observation_id"] == original.span_id
+    assert first[0].parent_span_id == original.span_id
+    assert first[0].trace_id == original.trace_id
+
+
+def test_unknown_evidence_version_is_rejected_even_without_payload():
+    with pytest.raises(ValueError, match="Unsupported supplemental evidence version"):
+        langfuse_export.build_evidence_payload([], SOURCE_HASH, version="unknown-v9")
 
 
 def test_only_affected_verified_fields_and_observations_get_evidence():
@@ -152,8 +212,8 @@ def test_evidence_ids_are_stable_unique_and_bound_to_the_saved_source():
         {span.span_id for span in first} & {span.span_id for span in changed_source}
     )
     assert [metadata_of(span)["evidence_source_sha256"] for span in changed_source] == [
-        "b" * 64,
-        "b" * 64,
+        "sha256:" + "b" * 64,
+        "sha256:" + "b" * 64,
     ]
 
 

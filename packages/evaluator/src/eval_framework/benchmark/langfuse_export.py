@@ -20,8 +20,11 @@ from .runner import digest, now, save_json
 from .tasks import dataset_identity, load_tasks
 
 VERSION = "file-benchmark-langfuse-v1"
-EVIDENCE_VERSION = "langfuse-exact-metadata-v1"
+EVIDENCE_VERSION_V1 = "langfuse-exact-metadata-v1"
+EVIDENCE_VERSION = "langfuse-exact-metadata-v2"
+EVIDENCE_VERSIONS = frozenset((EVIDENCE_VERSION_V1, EVIDENCE_VERSION))
 EVIDENCE_RECEIPT = "langfuse_exact_metadata_export.json"
+EVIDENCE_TARGET_PREFIX = "observation:"
 EVIDENCE_FIELDS = (
     "exact_metadata_base64",
     "exact_metadata_sha256",
@@ -624,12 +627,30 @@ def _contains_json_string(value):
     return False
 
 
-def build_evidence_payload(spans, source_hash):
+def _evidence_target_id(span_id: str, version: str) -> str:
+    if version == EVIDENCE_VERSION_V1:
+        return span_id
+    if version == EVIDENCE_VERSION:
+        return EVIDENCE_TARGET_PREFIX + span_id
+    raise ValueError(f"Unsupported supplemental evidence version: {version!r}")
+
+
+def _evidence_source_id(source_hash: str, version: str) -> str:
+    if version == EVIDENCE_VERSION_V1:
+        return source_hash
+    if version == EVIDENCE_VERSION:
+        return "sha256:" + source_hash
+    raise ValueError(f"Unsupported supplemental evidence version: {version!r}")
+
+
+def build_evidence_payload(spans, source_hash, *, version=EVIDENCE_VERSION):
     """Lossless presentation-only children for fields the API parses as JSON.
 
     Original execution spans and results remain unchanged. These children record
     saved metadata, never Agent operations, Judge calls, scores, or new trials.
     """
+    if version not in EVIDENCE_VERSIONS:
+        raise ValueError(f"Unsupported supplemental evidence version: {version!r}")
     evidence = []
     for span in spans:
         attrs = {a.key: a.value.string_value for a in span.attributes}
@@ -644,9 +665,10 @@ def build_evidence_payload(spans, source_hash):
         raw = json.dumps(
             affected, sort_keys=True, ensure_ascii=False, separators=(",", ":")
         ).encode("utf-8")
+        target_id = _evidence_target_id(span.span_id, version)
         proof = _span(
             span.trace_id,
-            stable_id(EVIDENCE_VERSION, source_hash, span.span_id, length=16),
+            stable_id(version, source_hash, span.span_id, length=16),
             "saved-exact-metadata",
             "1970-01-01T00:00:00Z",
             "1970-01-01T00:00:00Z",
@@ -654,9 +676,11 @@ def build_evidence_payload(spans, source_hash):
                 "langfuse.environment": "benchmark",
                 "langfuse.observation.type": "span",
                 "langfuse.observation.metadata": {
-                    "evidence_export_version": EVIDENCE_VERSION,
-                    "evidence_source_sha256": source_hash,
-                    "evidence_for_observation_id": span.span_id,
+                    "evidence_export_version": version,
+                    "evidence_source_sha256": _evidence_source_id(
+                        source_hash, version
+                    ),
+                    "evidence_for_observation_id": target_id,
                     "is_export_evidence": True,
                     "exact_metadata_base64": "base64:"
                     + base64.b64encode(raw).decode("ascii"),
@@ -687,20 +711,28 @@ def export_metadata_evidence(run_dir: Path, dataset_path: Path, *, client=None):
         or original["status"] not in ("ACCEPTED", "VERIFIED")
     ):
         raise ValueError("Original export must be accepted with matching identity")
+    path = run_dir / EVIDENCE_RECEIPT
+    receipt = json.loads(path.read_text()) if path.exists() else None
+    evidence_version = (
+        receipt.get("version") if receipt is not None else EVIDENCE_VERSION
+    )
+    if evidence_version not in EVIDENCE_VERSIONS:
+        raise ValueError(
+            f"Unsupported supplemental evidence version: {evidence_version!r}"
+        )
     spans, _, _ = build_payload(run, tasks, original["dataset_id"], source_hash)
-    evidence = build_evidence_payload(spans, source_hash)
+    evidence = build_evidence_payload(spans, source_hash, version=evidence_version)
     identity = {
-        "version": EVIDENCE_VERSION,
+        "version": evidence_version,
         "source_hash": source_hash,
         "destination": destination,
         "dataset_id": original["dataset_id"],
         "evidence_observation_ids": [span.span_id for span in evidence],
         "target_observation_ids": [span.parent_span_id for span in evidence],
     }
-    path = run_dir / EVIDENCE_RECEIPT
     receipt = (
-        json.loads(path.read_text())
-        if path.exists()
+        receipt
+        if receipt is not None
         else {
             **identity,
             "status": "PENDING",
@@ -933,11 +965,15 @@ def verify_run(run_dir: Path, dataset_path: Path, *, client=None) -> dict:
     evidence = []
     if evidence_path.exists():
         evidence_receipt = json.loads(evidence_path.read_text())
-        evidence = build_evidence_payload(spans, source_hash)
+        evidence_version = evidence_receipt.get("version")
+        if evidence_version not in EVIDENCE_VERSIONS:
+            raise ValueError(
+                f"Unsupported supplemental evidence version: {evidence_version!r}"
+            )
+        evidence = build_evidence_payload(spans, source_hash, version=evidence_version)
         ids = [span.span_id for span in evidence]
         if (
-            evidence_receipt.get("version") != EVIDENCE_VERSION
-            or evidence_receipt.get("source_hash") != source_hash
+            evidence_receipt.get("source_hash") != source_hash
             or evidence_receipt.get("destination") != destination_fingerprint()
             or evidence_receipt.get("dataset_id") != receipt["dataset_id"]
             or evidence_receipt.get("status") not in ("ACCEPTED", "VERIFIED")
@@ -1115,7 +1151,7 @@ def verify_run(run_dir: Path, dataset_path: Path, *, client=None) -> dict:
     }
     if evidence_receipt is not None:
         result["supplemental_evidence"] = {
-            "version": EVIDENCE_VERSION,
+            "version": evidence_receipt["version"],
             "source_hash": source_hash,
             "receipt_path": str(evidence_path),
             "observations": len(evidence),
