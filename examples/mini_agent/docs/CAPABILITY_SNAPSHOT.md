@@ -1,4 +1,4 @@
-# Capability Snapshot Protocol
+# Capability Snapshot 能力快照协议
 
 通用 Collector、LLM 候选导入、来源核验和独立安装入口见
 [通用 Agent 能力快照接入](PLUGGABLE_CAPABILITY_SNAPSHOT.md)。最终交付继续使用本页的 Snapshot 3.0。
@@ -125,20 +125,20 @@ Builder 应先用 Validator 校验根文件，然后从所选 Scope/Chain 和 In
 5 Evidence 和 7 Boundary。导出及验证：
 
 ```bash
-PYTHONPATH=src .venv/bin/python -m minimal_agent.capabilities.cli \
+PYTHONPATH=src ../../.venvs/evaluator/bin/python -m minimal_agent.capabilities.cli \
   export --output capabilities
-PYTHONPATH=src .venv/bin/python -m minimal_agent.capabilities.cli \
+PYTHONPATH=src ../../.venvs/evaluator/bin/python -m minimal_agent.capabilities.cli \
   export --spec-root capability_specs --output capabilities
-PYTHONPATH=src .venv/bin/python -m minimal_agent.capabilities.cli \
+PYTHONPATH=src ../../.venvs/evaluator/bin/python -m minimal_agent.capabilities.cli \
   validate --input capabilities
 ```
 
 解析与差异检查：
 
 ```bash
-PYTHONPATH=src .venv/bin/python -m minimal_agent.capabilities.cli \
+PYTHONPATH=src ../../.venvs/evaluator/bin/python -m minimal_agent.capabilities.cli \
   resolve --input capabilities --selection selection.json
-PYTHONPATH=src .venv/bin/python -m minimal_agent.capabilities.cli \
+PYTHONPATH=src ../../.venvs/evaluator/bin/python -m minimal_agent.capabilities.cli \
   diff --old previous-capabilities --new capabilities
 ```
 

@@ -1,27 +1,27 @@
-# Minimal Agent Project Specification
+# Minimal Agent 项目规范
 
 ## 1. 目标
 
-本仓库实现一个小型但真实可执行的 Agent。它拥有自己的意图契约、模型适配、规划/
+本示例包实现一个小型但真实可执行的 Agent。它拥有自己的意图契约、模型适配、规划/
 工具循环、工具注册、Trace 和能力快照，并通过稳定协议与外部 Builder/Evaluator 对接。
 
-本仓库不是评测框架。用例生成、expected、评分规则、Judge、重试策略和报告不得进入
+本示例包不承担评测框架职责。用例生成、expected、评分规则、Judge、重试策略和报告不得进入
 Agent Prompt、工具参数、Trace 或生产分支。
 
 ## 2. 三域架构
 
-### Contracts
+### Contracts：正式协议
 
 `minimal_agent.contracts` 定义 `IntentResult`、`AgentResult`、`IntentRegistry`、
 `ToolContract` 和 `ToolResult`。模型输出只是候选结果；IntentRegistry 负责参数归一化、
 Schema 校验、语义约束和最终状态判定。
 
-### Runtime
+### Runtime：运行时
 
 `minimal_agent.runtime` 包含 `MinimalAgent`、IntentRouter、模型适配器、ToolRegistry 和
 Trace。运行时只执行显式注册的 Tool，不自带业务工具或状态数据库。
 
-### Capabilities
+### Capabilities：能力快照
 
 `minimal_agent.capabilities` 从一个具体的 IntentRegistry 和 ToolRegistry 构建快照。
 快照描述实际配置，而不是潜在能力或测试替身。
@@ -75,11 +75,7 @@ ToolContract 描述版本、读写类型、权限、确认要求、风险、幂�
 
 ## 6. 能力快照
 
-`build_capability_bundle(intent_registry, tool_registry)` 是唯一构建入口。默认 bundle：
-
-```text
-1 Agent + 7 Module + 7 Intent + 0 Tool + 5 Schema = 20 artifacts
-```
+`build_capability_bundle(intent_registry, tool_registry)` 是唯一构建入口。默认 Bundle 注册 7 个 Intent、0 个 Tool；具体 Scope、Chain、Evidence、Boundary 和 Schema 清单以导出制品为准。
 
 固定 Module 为：agent_orchestrator、model_gateway、intent_router、tool_loop、
 tool_registry、execution_guard、observability。工具为空时，工具执行相关层在快照中明确
@@ -105,12 +101,12 @@ tool_registry、execution_guard、observability。工具为空时，工具执行
 
 ## 9. 验收
 
-每次变更至少通过：
+在 `examples/mini_agent` 目录执行适用检查：
 
 ```bash
-.venv/bin/python -m pytest -q
-.venv/bin/ruff check .
-.venv/bin/python -m minimal_agent.capabilities.cli validate --input capabilities
+../../.venvs/evaluator/bin/python -m pytest -q
+../../.venvs/evaluator/bin/ruff check .
+../../.venvs/evaluator/bin/python -m minimal_agent.capabilities.cli validate --input capabilities
 ```
 
 默认测试离线运行；付费 OpenAI 冒烟测试保持显式 opt-in。

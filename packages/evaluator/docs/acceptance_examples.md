@@ -1,5 +1,7 @@
 # Evaluator 能力验收与示例手册
 
+> 本文属于旧 Suite／Provider 兼容路径；其中 Inspect 评分、指标和产物约定不适用于当前任务基准。新基准由 Inspect 执行与记录、DeepEval 正式评分，入口见[包说明](../README.md)。以下包内命令在 `packages/evaluator` 目录执行。
+
 2026-10-20 更新：Inspect 负责正式调度、判分和指标；Evaluator 保留业务扩展；Langfuse 接管展示和人工标注。旧 DeepEval Runner/G-Eval 路径已删除；2026-10-28 起可选接入 [Conversation Completeness](conversation_completeness.md)，仍由 Inspect 执行。最新单一职责、权威数据与验收限制见 [接入说明](langfuse.md)。
 
 本文给出了解和验证当前框架的离线路径。核对日期：2026-10-13；范围是当前工作区实现，不是对某个发布版本的认证。先看[能力清单](capabilities.md)了解限制，再按本文执行；内部流程见[架构说明](architecture.md)。
@@ -15,7 +17,7 @@
 ## 2. 首先运行一个完整示例
 
 ```bash
-.venv/bin/python examples/stateful_gift.py --output-dir artifacts
+../../.venvs/evaluator/bin/python examples/stateful_gift.py --output-dir artifacts
 ```
 
 脚本在 artifacts 下创建新的 stateful-gift-* 目录，导出匹配当前环境的能力包，生成 Suite 和四个 Case，再经编译、真实 mini_agent 运行时、本地 SQLite 环境、取证、评分与报告走完流程。模型响应是脚本化的，运行模式为 framework_self_test，每个 Case 执行两次。
@@ -34,7 +36,7 @@
 这些预期由[示例测试](../tests/test_stateful_example.py)直接核验：
 
 ```bash
-.venv/bin/python -m pytest -q tests/test_stateful_example.py
+../../.venvs/evaluator/bin/python -m pytest -q tests/test_stateful_example.py
 ```
 
 示例的脚本模型工厂通过 Python 注入，单独对生成的 Suite 执行 CLI run 不会自动恢复这套脚本响应。离线复现应再次执行示例脚本或使用同一工厂的 Python 路径。
@@ -59,7 +61,7 @@
 运行模块、链路及端到端的离线隔离测试：
 
 ```bash
-.venv/bin/python -m pytest -q \
+../../.venvs/evaluator/bin/python -m pytest -q \
   tests/test_execution_scoring.py::test_module_link_e2e_all_run_offline_and_are_isolated
 ```
 
@@ -68,7 +70,7 @@
 ### 4.2 已知错误：FAIL
 
 ```bash
-.venv/bin/python -m pytest -q \
+../../.venvs/evaluator/bin/python -m pytest -q \
   tests/test_execution_scoring.py::test_wrong_module_answer_is_stable_fail \
   tests/test_multiturn_execution.py::test_turn_checks_reject_bad_intermediate_behavior_despite_correct_final_state
 ```
@@ -78,7 +80,7 @@
 ### 4.3 缺失或不可信证据：不能误判通过
 
 ```bash
-.venv/bin/python -m pytest -q \
+../../.venvs/evaluator/bin/python -m pytest -q \
   tests/test_multiturn_execution.py::test_missing_turn_state_is_inconclusive_and_does_not_hide_known_failure \
   tests/test_evidence_boundaries.py::test_tampered_association_cannot_prove_a_violation
 ```
@@ -88,7 +90,7 @@
 ### 4.4 评测器异常：保留业务观察并记录 INVALID
 
 ```bash
-.venv/bin/python -m pytest -q \
+../../.venvs/evaluator/bin/python -m pytest -q \
   tests/test_execution_scoring.py::test_assertion_failure_invalidates_evaluation_not_agent \
   tests/test_evidence_boundaries.py::test_cleanup_failure_preserves_execution_and_observed_violation \
   tests/test_evidence_boundaries.py::test_later_trial_runs_after_reader_failure
@@ -101,7 +103,7 @@
 下面覆盖 Suite、编译执行、多轮、状态、证据和运行后决策。各文件中测试数量可能随项目变化，不将固定数量作为长期验收标准。
 
 ```bash
-.venv/bin/python -m pytest -q \
+../../.venvs/evaluator/bin/python -m pytest -q \
   tests/test_suite_contracts.py \
   tests/test_compiled_execution.py \
   tests/test_multiturn_execution.py \
@@ -120,7 +122,7 @@
 | Provider / Loader 可扩展性 | [test_provider_architecture.py](../tests/test_provider_architecture.py)、[test_dataset_loader_plugins.py](../tests/test_dataset_loader_plugins.py) |
 | Judge 阈值与失败处理 | [test_judge.py](../tests/test_judge.py)、[test_inspect_judge.py](../tests/test_inspect_judge.py) |
 | 基线可比性与门禁 | [test_comparison.py](../tests/test_comparison.py)、[test_gating.py](../tests/test_gating.py) |
-| 人工复核审计 | [test_adjudication.py](../tests/test_adjudication.py) |
+| 人工复核审计 | [test_langfuse_reviews.py](../tests/test_langfuse_reviews.py) |
 
 第二阶段端到端测试使用构造结果验证分析、比较和门禁产物，不代表它运行了一个完整的真实模型基准。真实模型与 Judge 需另用明确正确、明确错误和模糊样本进行校准，并记录人工分歧。
 
@@ -129,11 +131,11 @@
 以下是操作模板，需将路径替换为已有运行产物；比较双方应具有满足规则的相同评测条件。不要为了让门禁通过而把 framework_self_test 示例冒充正式 Benchmark。
 
 ```bash
-.venv/bin/python -m eval_framework.cli analyze --run-dir artifacts/RUN
-.venv/bin/python -m eval_framework.cli compare \
+../../.venvs/evaluator/bin/python -m eval_framework.cli analyze --run-dir artifacts/RUN
+../../.venvs/evaluator/bin/python -m eval_framework.cli compare \
   --baseline artifacts/BASELINE --candidate artifacts/CANDIDATE \
   --output-dir artifacts/comparison
-.venv/bin/python -m eval_framework.cli gate \
+../../.venvs/evaluator/bin/python -m eval_framework.cli gate \
   --candidate artifacts/CANDIDATE --comparison artifacts/comparison \
   --policy policies/release_gate.example.json --output-dir artifacts/gate
 ```

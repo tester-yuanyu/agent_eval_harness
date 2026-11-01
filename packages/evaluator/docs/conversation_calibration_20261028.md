@@ -1,12 +1,16 @@
 # Conversation Completeness 真实试验记录
 
+> 本文属于旧 Suite／Provider 兼容路径；其中 Inspect 评分、指标和产物约定不适用于当前任务基准。新基准由 Inspect 执行与记录、DeepEval 正式评分，入口见[包说明](../README.md)。以下包内命令在 `packages/evaluator` 目录执行。
+
+原试验的 `artifacts/conversation_calibration_20261028/` 未随仓库导入；下文保存当时的结果、产物相对目录与待审队列地址，不代表这些本地服务或文件当前仍可访问。
+
 日期：2026-10-28。结论：真实模型调用、原生 Inspect 重复评判及 Langfuse 待审交付已跑通；**目前保留诊断用途，不能据此启用发布阈值**。取消语义有可复现的不稳定判分，对话高分也不能证明业务动作已完成。
 
 ## 样本与证据边界
 
 - Agent 试跑：3 条礼物业务对话，真实 mini_agent／DeepSeek，Evaluator 隔离 SQLite 环境；沿用 stateful_gift 框架验收契约。结果不代表生产 Agent 基准。
 - Judge 校准：24 条预先编写的中文固定对话，包括满足、遗漏、取消、变更、业务证据反例、提示注入和不可评分状态；每条 3 个 Inspect epochs。
-- 24 条都是 assistant-authored synthetic fixtures，参考状态全部 `PENDING_HUMAN_REVIEW`；人工批准数量 **0**。没有把草稿与 Judge 一致率称为准确率。
+- 24 条都是 由助手编写的合成测试夹具，参考状态全部 `PENDING_HUMAN_REVIEW`；人工批准数量 **0**。没有把草稿与 Judge 一致率称为准确率。
 - Judge 使用 DeepEval 4.2.9 ConversationCompleteness 公共算法与 Inspect transport，模型 `openai-api/deepseek/deepseek-flash`，temperature=0。Agent 与 Judge 分别读取环境变量；这次按授权复用同一 DeepSeek 账户，不代表两个独立账户或独立模型家族。
 - 先固定语料，再执行评判；未根据结果改写标签。语料 SHA256：`24d3483c36e00a38c62dd450765f62063d99e5ed525aca53647f502f39c84b42`。
 
@@ -60,8 +64,8 @@ Inspect run：`UdxvVxV6qz55nJczuTWa8F`。下列总数与均值直接摘录原生
 
 ## 实现与验证
 
-真实预检发现并修复了 mock 未覆盖的两处配置问题：OpenAI SDK 2.54.0 不满足当前 Inspect 的 ≥3.4 要求，以及 OpenAI-compatible 模型名称缺少服务前缀。本轮使用 SDK 3.40.0，拓宽 sibling mini_agent 的依赖上界；未修改 Agent 运行逻辑。更早的 42 条基线仍保留原样，不能自动视为本轮新依赖与新 fingerprint 的可比基线。
+真实预检发现并修复了 mock 未覆盖的两处配置问题：OpenAI SDK 2.54.0 不满足当前 Inspect 的 ≥3.4 要求，以及 OpenAI-compatible 模型名称缺少服务前缀。本轮使用 SDK 3.40.0，拓宽 相邻项目 mini_agent 的依赖上界；未修改 Agent 运行逻辑。更早的 42 条基线仍保留原样，不能自动视为本轮新依赖与新 fingerprint 的可比基线。
 
 Langfuse 首次分数请求返回的 SDK 类型只有 `message=Accepted`，修正适配后从已确认观察记录的分数检查点恢复。恢复过程只按稳定 ID 写入分数，未重复发送观察记录，最终逐条回读核对。默认本地配置的正文开关保持原样，此次仅通过显式 `--include-content` 交付固定合成语料。
 
-自动验证包括实际 Inspect Task／Epochs、缺重复拒绝、Oracle 隔离、未知值保留、原生日志／语料／投影校验、零分导出、错误恢复边界、真实 transport 构建。最终 Evaluator 全套回归 **607 passed / 2 skipped**，sibling mini_agent **321 passed / 1 skipped**；跳过项都是未显式开启的付费 smoke tests，与本轮另行授权并实际执行的试跑分开。执行日志保存在同一 artifacts 目录；Ruff 与依赖一致性检查通过。独立只读审查未发现阻塞项，之后的分数恢复修复也单独复核通过。
+自动验证包括实际 Inspect Task／Epochs、缺重复拒绝、Oracle 隔离、未知值保留、原生日志／语料／投影校验、零分导出、错误恢复边界、真实 transport 构建。最终 Evaluator 全套回归 **607 项通过／2 项跳过**，相邻项目 mini_agent **321 项通过／1 项跳过**；跳过项都是未显式开启的付费冒烟测试，与本轮另行授权并实际执行的试跑分开。执行日志保存在同一 artifacts 目录；Ruff 与依赖一致性检查通过。独立只读审查未发现阻塞项，之后的分数恢复修复也单独复核通过。

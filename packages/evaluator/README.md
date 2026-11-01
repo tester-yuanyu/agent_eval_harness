@@ -1,8 +1,8 @@
-# Agent Evaluator
+# Agent Evaluator 评测入口
 
 本包提供工具型 Agent 的 **任务数据集 + Harness** 主入口：Inspect 执行与记录，DeepEval 计算新基准正式分数，Langfuse 接收保存的结果。首个真实 Agent 接入为独立进程中的 nanobot，任务覆盖文件读取、修改、多文件流程、多轮变更和异常处理。
 
-仓库总入口见 [Agent Eval Suite](../../README.md)，真实实验与作品集见 [portfolio](../../docs/benchmark/portfolio.md)。以下命令均在仓库根目录运行。
+仓库总入口见 [Agent Eval Suite](../../README.md)，真实实验与作品集见 [实验记录与作品集](../../docs/benchmark/portfolio.md)。以下命令均在仓库根目录运行。
 
 ## 快速使用
 
@@ -59,7 +59,7 @@ make demo
 
 `eval_framework.cli`、历史 Suite / Provider、mini_agent 示例及旧 Inspect Scorer 仍用于兼容和回归；主基准入口为 `eval_framework.benchmark.cli`。旧结果不得改标为 DeepEval 结果，也不与新基准进行直接分数对比。
 
-原有包内技术设计、指标字典、Inspect 迁移、状态型礼物示例和 SDK 文档保留为历史实现说明。它们描述的“Inspect 正式评分”“第二阶段默认入口”不适用于新基准。保留边界与原文索引见[兼容说明](../../docs/benchmark/legacy.md)。
+旧 Suite 的架构、指标字典、状态型礼物示例和证据 SDK 文档保留为兼容实现说明；已完成或被取代的设计、实施计划和阶段报告已合并清理。其“Inspect 正式评分”不适用于新基准。阅读入口见[兼容架构](docs/architecture.md)与[兼容说明](../../docs/benchmark/legacy.md)。
 
 ## 验证
 

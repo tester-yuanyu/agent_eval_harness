@@ -1,4 +1,4 @@
-# Minimal Agent
+# Minimal Agent 示例运行时
 
 一个精简、可执行、可观测的 Agent 运行时。它只负责自身能力：意图识别、规划/工具
 循环、显式注册工具以及能力快照；评测用例、评分、Judge、Mock 业务数据和报告均由外部
@@ -12,7 +12,7 @@
 - `minimal_agent.contracts`：Agent、Intent、Tool 的正式协议；
 - `minimal_agent.runtime`：意图路由、模型适配、工具注册与执行、Trace；
 - `minimal_agent.capability_facts`：把运行时事实转换为 Kit 的结构化 Fact；
-- `minimal_agent.capabilities`：面向调用方的稳定、无版本 API 与 CLI facade。
+- `minimal_agent.capabilities`：面向调用方的稳定、无版本 API 与 CLI 门面。
 
 通用接入入口为 `python -m capability_snapshot_kit`：支持显式 Collector 插件、LLM
 请求包和候选导入、来源核验、独立 wheel，以及无需工具的 conversation 评测配置。
@@ -29,14 +29,13 @@ Front Matter 的结构化字段，自然语言正文用于人工审阅，不会�
 
 ## 安装与验证
 
-需要 Python 3.11 或更高版本：
+需要 Python 3.11 或更高版本。从仓库根目录安装，再进入示例包目录运行后续命令：
 
 ```bash
-python3.11 -m venv .venv
-.venv/bin/python -m pip install -e ../agent_evaluator/packages/agent_trace_sdk
-.venv/bin/python -m pip install -e '.[dev]'
-.venv/bin/python -m pytest -q
-.venv/bin/python -m ruff check .
+python3.11 scripts/setup.py --only evaluator
+cd examples/mini_agent
+../../.venvs/evaluator/bin/python -m pytest -q
+../../.venvs/evaluator/bin/python -m ruff check .
 ```
 
 OpenAI 适配器只从环境读取配置：
@@ -104,13 +103,13 @@ finally:
 最后一次执行后才 finish。序号跨轮递增；事件字段校验、脱敏、截断和写入错误会
 进入采集状态，不改变 Agent 决策和工具重试行为。未知或缺少必需字段的事件保留
 但不能作为严格检查的有效证据。`trace_id` 为不透明标识，不应编码案例编号。
-完整接入、状态优先级与异常评测规则见评测仓库的 `docs/TRACE_PHASE1.md`。
+完整接入、状态优先级与异常评测规则见[证据协议](../../packages/evaluator/docs/TRACE_PHASE1.md)。
 
 `capabilities/` 是现有 Builder Suite 按哈希绑定的旧快照，保持不变。新采集声明
 由当前导出器生成到独立目录，新 Suite 应显式绑定新目录及其 hash：
 
 ```bash
-.venv/bin/python -m minimal_agent.capabilities.cli export --output exports/trace_v1
+../../.venvs/evaluator/bin/python -m minimal_agent.capabilities.cli export --output exports/trace_v1
 ```
 
 `exports/` 为可重新生成的本地产物，不纳入版本控制；不要覆盖已被 Suite 固定引用
@@ -201,10 +200,10 @@ python -m minimal_agent.cli run "帮我查询测试信息" --max-steps 4
 ## 给 Builder 的文件
 
 包含全部 6 个业务工具的可执行评测配置现已提供，详见
-[完整工具能力快照](docs/FULL_TOOL_CAPABILITY_BUNDLE.md)。在仓库根目录运行：
+[完整工具能力快照](docs/FULL_TOOL_CAPABILITY_BUNDLE.md)。在 `examples/mini_agent` 目录运行：
 
 ```bash
-.venv/bin/python -m examples.full_tool_fixture.export \
+../../.venvs/evaluator/bin/python -m examples.full_tool_fixture.export \
   --output exports/full_tools_fixture_v1
 ```
 
@@ -235,11 +234,11 @@ Schema、格式版本、Hash 和 DAG 后递归闭包引用，将 Agent、Scope�
 Source Pack。Builder 不得导入 `minimal_agent`、调用其 CLI 或补写快照未声明的业务规则。
 
 ```bash
-.venv/bin/python -m minimal_agent.capabilities.cli export --output capabilities
-.venv/bin/python -m minimal_agent.capabilities.cli export \
+../../.venvs/evaluator/bin/python -m minimal_agent.capabilities.cli export --output capabilities
+../../.venvs/evaluator/bin/python -m minimal_agent.capabilities.cli export \
   --spec-root capability_specs --output capabilities
-.venv/bin/python -m minimal_agent.capabilities.cli validate --input capabilities
-.venv/bin/python -m minimal_agent.capabilities.cli \
+../../.venvs/evaluator/bin/python -m minimal_agent.capabilities.cli validate --input capabilities
+../../.venvs/evaluator/bin/python -m minimal_agent.capabilities.cli \
   resolve --input capabilities --selection selection.json
 ```
 

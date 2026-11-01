@@ -1,13 +1,12 @@
 # 业务证据协议与 Inspect 原生 Trace
 
-采集包位于 `packages/agent_trace_sdk`，由评测体系维护，独立发布为
-`agent-trace-sdk`。当前包是业务适配层：通用采集与存储由 Inspect 原生实现；包依赖固定版本 `inspect_ai==0.3.280`，无 Agent、数据集、评分和报告依赖。先安装仓库固定的 Inspect，再安装适配包：
+> 本文属于旧 Suite／Provider 兼容路径；其中 Inspect 评分、指标和产物约定不适用于当前任务基准。新基准由 Inspect 执行与记录、DeepEval 正式评分，入口见[包说明](../README.md)。以下包内命令在 `packages/evaluator` 目录执行。
+
+采集包位于仓库根目录的 `packages/agent-trace-sdk`，由评测体系维护，独立发布为
+`agent-trace-sdk`。当前包是业务适配层：通用采集与存储由 Inspect 原生实现；包依赖固定版本 `inspect_ai==0.3.280`，无 Agent、数据集、评分和报告依赖。在仓库根目录安装所需的独立环境：
 
 ```sh
-python -m pip install -e ../agent_evaluator/third_party/inspect_ai
-python -m pip install -e ../agent_evaluator/packages/agent_trace_sdk
-python -m pip install -e ../mini_agent
-python -m pip install -e ../agent_evaluator
+python3.11 scripts/setup.py --only evaluator
 ```
 
 `MiniAgentProvider` 默认使用独立通道。其他 Provider 通过可选方法
@@ -65,7 +64,7 @@ Evaluator 的 `validate_dataset` 对带新声明的契约检查断言所需证�
 已冻结的数据集。证据声明和实际运行完整性由不同阶段分别检查。
 
 mini_agent 的 `capabilities/` 被现有 Builder Suite 按哈希引用，因此保留原冻结
-内容。新快照已导出到 `mini_agent/exports/trace_v1`，可通过能力 CLI 重新生成；
+内容。新快照保存在 `examples/mini_agent/exports/trace_v1`，可通过能力 CLI 重新生成；
 新建 Suite 时显式绑定该目录与新 hash，避免旧 Suite 因源快照被覆盖而失效。
 
 第一阶段不包含 Span、OTLP、远程接收服务、自动插桩或新增业务恢复逻辑。
@@ -112,4 +111,4 @@ payload 字段。模块结果检查继续读取返回的 IntentResult，不要�
   小规模业务评测；长轨迹吞吐未验收，不宣称已采用原生增量流。以后优化应使用 Inspect
   的原生增量机制，不恢复自研 JSONL 引擎。
 
-验收：Evaluator 全量测试 378 passed、2 个付费测试跳过，Ruff 通过；独立 Agent 自有虚拟环境已补齐本地 Inspect 依赖，全量测试 321 passed、1 个付费测试跳过。未执行云端上传。
+2026-10-21 历史验收：Evaluator 全量测试 378 项通过、2 项付费测试跳过，Ruff 通过；独立 Agent 全量测试 321 项通过、1 项付费测试跳过。未执行云端上传；本次文档整理未重跑这些历史验收。

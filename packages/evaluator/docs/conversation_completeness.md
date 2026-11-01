@@ -1,4 +1,6 @@
-# Conversation Completeness
+# Conversation Completeness 对话完整性评测
+
+> 本文属于旧 Suite／Provider 兼容路径；其中 Inspect 评分、指标和产物约定不适用于当前任务基准。新基准由 Inspect 执行与记录、DeepEval 正式评分，入口见[包说明](../README.md)。以下包内命令在 `packages/evaluator` 目录执行。
 
 2026-10-28：首个 DeepEval 专项指标已通过 Inspect Scorer 接入。它是可选的正式诊断结果，默认关闭；没有业务校准前不改变断言、质量结论或发布 Gate。Knowledge Retention 与 RAG 指标仍为候选。
 
@@ -7,7 +9,7 @@
 在现有项目环境安装可选依赖（必须保留 Inspect 与业务 SDK 的现有安装方式）：
 
 ```sh
-python -m pip install 'deepeval==4.2.9'
+../../.venvs/evaluator/bin/python -m pip install 'deepeval==4.2.9'
 ```
 
 标准安装可选 extra 为 `agent-evaluator[conversation]`。依赖版本必须为 4.2.9；不支持静默升级。项目 pytest 配置禁用 DeepEval 自动插件，避免引入第二套测试运行流程。
@@ -63,7 +65,7 @@ Inspect Solver 执行 Provider → 现有 Inspect Scorer 评业务断言与专�
 复现实验（会调用付费 Judge，须显式提供独立环境文件；输出目录须不存在）：
 
 ```sh
-python examples/conversation_calibration.py \
+../../.venvs/evaluator/bin/python examples/conversation_calibration.py \
   --corpus datasets/calibration/conversation_v1.json \
   --judge-env .env.deepseek_judge \
   --epochs 3 --output-dir artifacts/my_calibration
@@ -74,7 +76,7 @@ python examples/conversation_calibration.py \
 明确把本次合成正文交付给已启用的本地 Langfuse：
 
 ```sh
-python examples/conversation_calibration_review.py \
+../../.venvs/evaluator/bin/python examples/conversation_calibration_review.py \
   --run-dir artifacts/my_calibration \
   --corpus datasets/calibration/conversation_v1.json \
   --local-config .env.langfuse.local.json --include-content

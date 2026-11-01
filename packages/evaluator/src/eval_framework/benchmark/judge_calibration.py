@@ -15,6 +15,46 @@ from typing import Any
 from .judging import DIMENSIONS, JUDGE_VERSION, RUBRICS
 
 CALIBRATION_VERSION = "judge-calibration-v1"
+RUBRIC_READING_ZH = {
+    "action_appropriateness": {
+        "criteria": (
+            "仅依据动作发生前已有的证据，评价该可观察动作与当前请求的相关性、工具及参数选择的依据，"
+            "以及是否遵守已知约束。允许等价的有效路径；不推测隐藏推理，也不因决策时尚不可知的后续结果扣分。"
+        ),
+        "anchors": [
+            [0, 2, "动作违背请求或明确约束；选择缺乏依据或会造成损害。"],
+            [3, 5, "部分相关，但忽略了重要的已有证据或前置条件。"],
+            [6, 8, "动作合理，但存在有限且可避免的不足或低效。"],
+            [9, 10, "依据充分，在已知约束内推进请求或准确结束任务。"],
+        ],
+    },
+    "recovery_appropriateness": {
+        "criteria": (
+            "结合记录中的工具或 Provider 失败及随后可观察的动作或回复，"
+            "评价 Agent 是否依据错误证据修正方案、请求必要澄清或如实报告阻碍。"
+            "未经合理调整而重复失败动作不属于成功恢复；评价恢复决策，不评价尚未观察到的后续结果。"
+        ),
+        "anchors": [
+            [0, 2, "忽略失败、虚假宣称成功，或无正当理由重复同一失败动作。"],
+            [3, 5, "承认失败，但下一动作没有处理已说明的原因。"],
+            [6, 8, "修正动作合理或如实停止，但仍有有限遗漏。"],
+            [9, 10, "处理可观察到的原因，或清楚说明必要阻碍，且没有无依据的断言。"],
+        ],
+    },
+    "response_groundedness": {
+        "criteria": (
+            "将本轮公开回复与本轮工具结果及轮次结束时的工作区快照比较，评价检索、修改和完成声明是否有事实支持，"
+            "以及是否如实说明限制。不使用未来轮次证据，也不要求特定写作风格；"
+            "即使任务失败，如实报告失败仍可具有充分事实依据。"
+        ),
+        "anchors": [
+            [0, 2, "核心事实或完成声明与记录证据冲突，或完全缺乏依据。"],
+            [3, 5, "部分声明有依据，但重要声明缺乏支持，或隐瞒失败。"],
+            [6, 8, "主要声明有依据，但仍有有限的不精确表述或未说明的限制。"],
+            [9, 10, "所有重要声明均有依据，并准确说明失败或限制。"],
+        ],
+    },
+}
 
 
 def _rows(source: dict | list[dict]) -> list[dict]:
@@ -94,6 +134,7 @@ def create_calibration_worksheet(source: dict | list[dict]) -> dict[str, Any]:
                     )
                 },
                 "rubric": RUBRICS[record["name"]],
+                "rubric_zh": RUBRIC_READING_ZH[record["name"]],
                 "evidence_prompts": [
                     event["input"]
                     for event in record.get("events", [])
@@ -110,12 +151,14 @@ def create_calibration_worksheet(source: dict | list[dict]) -> dict[str, Any]:
         "version": CALIBRATION_VERSION,
         "judge_version": JUDGE_VERSION,
         "status": "awaiting_independent_human_labels",
-        "instructions": "An independent human reviewer must inspect source "
-        "evidence and rubric before entering a normalized 0..1 "
-        "score, reason, annotator identity and "
-        "independent=true. Do not copy model predictions. Leave "
-        "unavailable evidence unlabelled. A completed worksheet "
-        "alone does not validate a threshold.",
+        "instructions": "请由独立人工评审先阅读原始证据和评分规则，再填写 0～1 分数、"
+        "评分理由、标注者身份，并将 independent 设为 true。不要抄录模型预测；"
+        "证据不足时保留空白。完成标注表本身不代表通过阈值已验证。"
+        "原始评分规则与证据保留评测时的语言，中文对照仅辅助阅读。",
+        "rubric_reading_note": (
+            "rubric_zh 为原始 rubric 的中文阅读对照，不进入 Judge 调用。"
+            "锚点使用 0～10 描述，人工分数填写为对应的 0～1 尺度。"
+        ),
         "rows": rows,
     }
 
@@ -239,10 +282,8 @@ def compare_human_labels(
             for group in [[pair for pair in pairs if pair["name"] == name]]
         },
         "limitations": [
-            "Self-declared human provenance requires reviewer audit.",
-            "These labels describe agreement; threshold validation "
-            "needs a separate held-out human-labeled sample.",
-            "Missing Judge scores and missing human labels are not "
-            "agreement or disagreement.",
+            "人工标注来源由填写者声明，仍需审核标注者身份与独立性。",
+            "这些标签用于描述一致性；阈值验证还需另设独立留出的人工标注样本。",
+            "缺失的 Judge 分数或人工标签均不计为一致或不一致。",
         ],
     }

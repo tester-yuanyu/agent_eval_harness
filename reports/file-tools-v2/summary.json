@@ -99,7 +99,7 @@
     },
     {
       "file": "file-tools-v2/calibration-sample.json",
-      "sha256": "52b9ff43e80ad49be9ebe7e6582648bb45ae59a81e577fcd39a58964963d7fd4"
+      "sha256": "8ea5ccaf86e5e35b9437b6044a2d850ab3dde4149051091081de7b3a5769d761"
     },
     {
       "file": "file-tools-v2/langfuse-step-scores.png",
@@ -1588,7 +1588,7 @@
   ],
   "calibration_starter": {
     "file": "calibration-sample.json",
-    "sha256": "52b9ff43e80ad49be9ebe7e6582648bb45ae59a81e577fcd39a58964963d7fd4"
+    "sha256": "8ea5ccaf86e5e35b9437b6044a2d850ab3dde4149051091081de7b3a5769d761"
   },
   "langfuse_screenshot": {
     "file": "langfuse-step-scores.png",
@@ -1600,7 +1600,7 @@
       "id": 1,
       "question": "模块、关键链路、端到端覆盖",
       "status": "已执行三层",
-      "evidence": "程序模块 · 直接调用：60 实例 / 60 trials；模型决策模块 · 隔离输入：24 实例 / 72 trials；关键链路 · 真实 Agent：60 实例 / 180 trials；端到端 · 文件工具 Agent：300 实例 / 300 trials",
+      "evidence": "程序模块 · 直接调用：60 实例 / 60 次执行；模型决策模块 · 隔离输入：24 实例 / 72 次执行；关键链路 · 真实 Agent：60 实例 / 180 次执行；端到端 · 文件工具 Agent：300 实例 / 300 次执行",
       "remaining": "限定已声明任务族；业务域、复杂动态交互与更多模块仍需扩展。"
     },
     {
@@ -1614,14 +1614,14 @@
       "id": 3,
       "question": "Inspect 是否支持逐步评分",
       "status": "已接入",
-      "evidence": "Inspect 组织执行，自研采证/检查点通过 DeepEval 评分；已记录范围：chain、generation、task、tool、turn",
+      "evidence": "Inspect 组织执行，自研采证/检查点通过 DeepEval 评分；已记录范围：关键链路、模型决策、任务、工具调用、对话轮次",
       "remaining": "并非所有步骤均有完整语义判分；顺序检查不证明数据流正确。"
     },
     {
       "id": 4,
       "question": "是否接入 τ-bench",
-      "status": "pilot_executed",
-      "evidence": "已记录奖励 1 / 计划 1 trials；有效奖励均值 1.0。Langfuse VERIFIED；展示状态绑定官方摘要与标准化结果的来源 Hash。不是官方排行榜成绩。",
+      "status": "试点已执行",
+      "evidence": "已记录奖励 1 / 计划 1 次执行；有效奖励均值 1.0。Langfuse 已验证（VERIFIED）；展示状态绑定官方摘要与标准化结果的来源 Hash。不是官方排行榜成绩。",
       "remaining": "领域试点不等于完整官方基准或排行榜成绩；仍需扩大覆盖并固定官方运行条件。"
     },
     {

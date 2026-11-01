@@ -1,56 +1,28 @@
-# Official τ-bench pilot with nanobot
+# 真实 nanobot 的官方 τ 领域试点
 
-This is a separate English retail suite. It uses the official tasks, domain policy,
-database, tools, dynamic user simulator, orchestrator and `EvaluationType.ALL`
-reward calculation. The participant is the actual nanobot `AgentLoop`, with its
-session and tool loop; it is not a model-only reference renamed as nanobot.
+这是独立的**英语零售领域套件**，保留官方任务、领域策略、数据库、工具、动态用户模拟器、编排器及 `EvaluationType.ALL` 奖励计算。被测参与者是实际 nanobot `AgentLoop`，包括其会话与工具循环。
 
-The delivered pilot completed **retail task `0`, one trial, official reward
-`1.0` (PASS)** using the pinned v1.0.1 release. The Agent model was
-`deepseek-flash`; the official user simulator used `openai/deepseek-flash`.
-Termination was `user_stop`, and evidence verification was complete: 13 generation,
-5 tool and 4 turn events. This is a bounded integration result, reported separately
-from the file/decision suite's 444 instances and 612 execution trials; it is not a
-full-domain reproduction or an official leaderboard result. The
-[portfolio report](../../reports/file-tools-v2/index.html) includes the saved
-official summary and its source hash.
+已完成固定 v1.0.1 版本的 **retail 任务 `0`、1 次执行，官方 reward 为 `1.0`（PASS）**。Agent 模型是 `deepseek-flash`，官方用户模拟器使用 `openai/deepseek-flash`。终止原因为 `user_stop`；证据校验完整，包含 13 个 generation、5 个 tool 和 4 个 turn 事件。这是有界集成试点，与文件及决策套件的 444 个实例、612 次执行分开统计，不代表全领域复现或官方排行榜成绩。[作品集报告](../../reports/file-tools-v2/index.html)保留了官方摘要和来源 Hash。
 
-## Version and attribution
+## 版本与来源
 
-- Source: <https://github.com/sierra-research/tau2-bench>
-- Release: `v1.0.1`; resolved commit `fc0055dc4e0a316c3f83133267fbd6faaa770992`.
-- License: upstream MIT, retained in the downloaded checkout's `LICENSE`.
-- Current upstream 2.0 changes English tasks, prompts and grading. The upstream
-  README explicitly retains v1.0.1 as the reproducible 1.x comparison release.
-  This adapter deliberately pins that release and does not imply a 2.0 result.
-- Upstream code/data are downloaded to ignored `.sources/tau2-bench`; large task
-  contents are not copied into this repository or modified.
+- 上游：[sierra-research/tau2-bench](https://github.com/sierra-research/tau2-bench)。
+- 固定发行版：`v1.0.1`；解析后的 commit 为 `fc0055dc4e0a316c3f83133267fbd6faaa770992`。
+- 许可证：上游 MIT，保存在下载源码的 `LICENSE` 中。
+- 适配时核对的上游 2.0 已变更英语任务、提示词与评分；当时的上游 README 将 v1.0.1 保留为可复现的 1.x 比较版本。本适配明确固定该版本，结果不属于 2.0。
+- 上游代码与数据下载到 Git 忽略的 `.sources/tau2-bench`；本仓库不复制或改写其大量任务原文。
 
-## Execution boundary
+## 执行边界
 
-Nanobot receives only the public domain policy, tool schemas and conversational
-messages. It does not receive the private τ Task, expected actions, evaluator
-criteria or simulated user's private scenario. The official user simulator alone
-receives the user scenario.
+nanobot 只接收公开领域策略、工具 Schema 与对话消息，不接收私有 τ Task、预期动作、评测条件或模拟用户的私有场景。用户场景仅提供给官方用户模拟器。
 
-Each nanobot tool proxy yields a tool call to the official orchestrator. The
-official environment executes it, records a `ToolMessage`, and that result
-resumes the original pending nanobot call. Both official conversation JSON and
-nanobot generation/tool JSONL evidence are retained. Nanobot's default shell,
-filesystem, MCP, plugin discovery and messaging tools are disabled for this
-domain; only the official retail tool definitions are registered.
+每次 nanobot 工具代理调用都会交给官方编排器。官方环境执行工具并记录 `ToolMessage`，结果随后返回原来等待中的 nanobot 调用。运行同时保留官方对话 JSON 和 nanobot generation/tool JSONL 证据。此领域禁用 nanobot 默认的 shell、文件系统、MCP、插件发现与消息工具，只注册官方零售工具定义。
 
-Inspect orchestrates the outer selected batch; the official orchestrator still
-owns its inner simulation and reward calculation. DeepEval's
-`OfficialTauRewardMetric` exposes the saved official reward unchanged through the
-shared result format. The pilot reports that reward separately from the
-file-tools metrics. It does not replace official reward with GEval, reinterpret
-database success, or present a small subset as an official leaderboard result.
+Inspect 编排外层任务批次，官方编排器负责内部模拟及奖励计算。DeepEval 的 `OfficialTauRewardMetric` 通过共享结果格式原样呈现保存的官方 reward，并与文件工具指标分开报告。GEval 不替代官方奖励，也不改写官方数据库成功条件。
 
-## Setup and run
+## 准备与运行
 
-Copy `configs/benchmark/tau.example.json` to a local ignored configuration and
-set `nanobot_root`. Use Python 3.12 or 3.13 for the separate τ environment.
+复制 [`tau.example.json`](../../configs/benchmark/tau.example.json) 为 Git 忽略的本地配置，填写 `nanobot_root`。独立 τ 环境使用 Python 3.12 或 3.13。
 
 ```bash
 .venvs/evaluator/bin/python -m eval_framework.benchmark.tau_adapter prepare \
@@ -64,53 +36,16 @@ set `nanobot_root`. Use Python 3.12 or 3.13 for the separate τ environment.
   --output artifacts/my-tau-retail-pilot
 ```
 
-`prepare` downloads/installs dependencies in `.venvs/tau`, leaving the evaluator
-environment unchanged. `validate` checks the pinned source and selected official
-tasks without model calls. `tau_harness` makes live Agent and user-simulator calls
-using credentials from the specified environment names; `--env-file` loads a
-local environment file without writing its values into configuration. Existing
-nonempty result directories are rejected to preserve run evidence. The lower-level
-`tau_adapter run` remains available when only official adapter outputs are needed.
+`prepare` 在 `.venvs/tau` 下载并安装依赖，保留 Evaluator 的独立环境。`validate` 检查固定源码与所选官方任务，不调用模型。`tau_harness` 使用指定环境变量中的凭据，真实调用 Agent 与用户模拟器；`--env-file` 显式读取本地环境文件，不把值写入配置。已有非空结果目录会被拒绝，以保留运行证据。只需要官方适配器输出时，也可使用底层 `tau_adapter run`。
 
-The default explicit one-task subset uses retail task `0`, whose pinned task has
-no nonempty natural-language assertions. Other tasks can require the upstream
-NL-assertion model when their official `reward_basis` includes `NL_ASSERTION`.
-They fail validation unless `allow_official_judge` is enabled;
-the adapter does not silently skip those assertions or substitute another judge.
-When enabled, the pinned upstream judge uses `gpt-4.1-2025-04-14` and its selected
-`official_judge_api_key_env` (default `OPENAI_API_KEY`). The worker inherits only
-explicitly selected provider credentials and basic platform variables.
+默认明确选择 retail 任务 `0`，该固定任务没有非空自然语言断言。其他任务若在官方 `reward_basis` 中包含 `NL_ASSERTION`，可能需要上游自然语言断言模型；未启用 `allow_official_judge` 时会校验失败，适配器不会静默跳过断言或换用其他 Judge。启用后，固定上游 Judge 使用 `gpt-4.1-2025-04-14`，凭据取自 `official_judge_api_key_env` 指定的变量（默认 `OPENAI_API_KEY`）。执行进程只继承明确选择的 Provider 凭据和基本平台变量。
 
-## Outputs and limits
+## 输出与限制
 
-Under the Harness output, `official/summary.json` records source and task hashes, public policy hash, runtime package
-versions, actual τ import path, nanobot working-tree identity, models, trial
-rewards and experiment limits. Each task/trial retains `official-result.json`,
-`nanobot-events.jsonl`, `user-simulator-events.jsonl`, a normalized
-`benchmark-observation.json` and an isolated session directory. The adapter
-validates source commit, tracked-file cleanliness and actual imported source.
+Harness 输出下的 `official/summary.json` 记录源码与任务 Hash、公开策略 Hash、运行包版本、实际 τ 导入路径、nanobot 工作树身份、模型、各次奖励与实验限制。每个任务及执行序号保留 `official-result.json`、`nanobot-events.jsonl`、`user-simulator-events.jsonl`、标准化的 `benchmark-observation.json` 及独立会话目录。适配器校验源码 commit、已跟踪文件清洁状态和实际导入的源码位置。
 
-The delivered run is `artifacts/benchmark-v2/tau-retail-pilot`; its root
-`results.json` contains the normalized Inspect/DeepEval result. For the public
-report generator, pass
-`--tau-run artifacts/benchmark-v2/tau-retail-pilot/official/summary.json`.
-Langfuse accepted its upload, and full service-side readback verified the trial,
-23 observations and 2 scores, including their content and node associations.
-The source-bound verification receipt remains in the local run directory.
+已交付运行位于 `artifacts/benchmark-v2/tau-retail-pilot`，根 `results.json` 保存标准化的 Inspect/DeepEval 结果。公开报告生成器使用 `--tau-run artifacts/benchmark-v2/tau-retail-pilot/official/summary.json` 读取官方摘要。该运行已完成 Langfuse 上传与服务端完整回读：1 次执行、23 个观测、2 条评分的内容与节点关联均已核对；绑定结果来源的验收回执保留在本地运行目录。
 
-`COMPLETED` means every planned trial has an official numeric reward, including
-zero; it does not mean the Agent passed. `PARTIAL` and `FAILED` retain missing
-rewards as null. Each recorded result separately reports `evidence_complete`;
-empty journals, missing participants and unfinished calls cannot pass evidence
-verification. Premature official termination is recorded explicitly while its
-official reward remains unchanged. A tool result received exactly at a step
-limit is retained before nanobot is cancelled.
+`COMPLETED` 表示每次计划执行都有官方数值奖励，数值可以是零；它不表示 Agent 通过。`PARTIAL` 与 `FAILED` 将缺失奖励保留为 null。每条结果另行记录 `evidence_complete`；空日志、参与者缺失或未结束的调用不能通过证据校验。官方提前终止会被明确记录，官方奖励仍保持原值。恰好在步数上限收到的工具结果会在取消 nanobot 前保存。
 
-Current coverage is a bounded English retail text integration. Full-domain
-repeated trials, τ 2.0 multilingual/voice domains, independently calibrated
-judges are additional work; none is claimed by this adapter. The
-`eval_framework.benchmark.tau_harness` provides Inspect orchestration and a
-DeepEval wrapper of the unchanged official reward, producing the shared trace
-export format. A successful local run is separate from verified Langfuse upload.
-User model, custom nanobot scaffolding and runtime
-dependencies are experimental controls and must be disclosed with any results.
+当前范围是有界的英语零售文本集成。全领域重复执行、τ 2.0 多语言或语音领域、独立校准的 Judge 都尚未完成。`eval_framework.benchmark.tau_harness` 提供 Inspect 外层编排、原样包装官方 reward 的 DeepEval 指标和共享轨迹导出格式；本地执行成功与 Langfuse 交付验证分别验收。公布结果时必须同时披露用户模拟模型、nanobot 适配方式和运行依赖等实验控制项。

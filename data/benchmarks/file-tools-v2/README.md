@@ -1,71 +1,55 @@
-# File Tools v2: modules, critical chains, end-to-end
+# File Tools v2：程序模块、关键链路与端到端任务
 
-This immutable dataset extends v1 without editing its bytes or historical results.
-It has 420 instances in 104 families, with family-disjoint 340 dev / 80 holdout
-splits. Instances within a family are parameterized variants, not independent
-problem families. The authoring is AI-assisted and has not received independent
-human review.
+本数据集在 v1 基础上扩展，原 v1 文件字节和历史结果保持不变。共 **420 个实例、104 个任务族**，按任务族隔离为 340 个开发集实例与 80 个留出集实例。同族实例是参数变体，不能当作独立问题族。数据由 AI 辅助编写，尚未完成独立人工审核。
 
-| Layer | Instances | Families | Dev | Holdout | Actual execution |
+| 评测层级 | 实例数 | 任务族 | 开发集（dev） | 留出集（holdout） | 实际执行方式 |
 | --- | ---: | ---: | ---: | ---: | --- |
-| Module | 60 | 12 | 50 | 10 | Real nanobot ToolRegistry and file tools, no LLM |
-| Critical chain | 60 | 12 | 50 | 10 | Real Agent with private step/turn checkpoints |
-| End-to-end | 300 | 80 | 240 | 60 | Real Agent, inherited v1 tasks and independent final-state checks |
+| 程序模块（module） | 60 | 12 | 50 | 10 | 真实 nanobot ToolRegistry 与文件工具，不调用 LLM |
+| 关键链路（chain） | 60 | 12 | 50 | 10 | 真实 Agent，评测侧保留步骤与轮次检查点 |
+| 端到端（e2e） | 300 | 80 | 240 | 60 | 真实 Agent，继承 v1 任务并独立核验文件终态 |
 
-Module results must be reported separately from Agent success rates. Modules do
-not measure LLM tool selection, planning, session management, memory, or MCP.
+程序模块成绩必须与 Agent 成功率分开报告。模块测试不衡量 LLM 的工具选择、规划、会话管理、记忆或 MCP 能力。
 
-## Module families
+## 程序模块任务族
 
-Read complete text, read a slice, missing-file error, create, overwrite, nested
-write, exact edit, select one repeated occurrence, replacement-count guard,
-missing required parameter, invalid integer parameter type, and recursive listing.
+覆盖全文读取、指定行读取、文件缺失错误、新建文件、覆盖文件、嵌套目录写入、精确文本替换、选择重复文本中的指定位置、替换次数保护、必填参数缺失、整数参数类型错误和递归列目录。
 
-The subprocess invokes the upstream ToolRegistry and actual file implementations
-in the configured nanobot interpreter. A workspace containment wrapper is retained.
-There is no mocked provider, LLM request, or deterministic reference impersonating
-an Agent. Negative cases assert actual ToolResult error status and message evidence;
-correctly rejecting invalid inputs is a passing module outcome. Private
-`oracle.module_results` checks each 1-based call and never crosses the process
-boundary. The public `module_calls` is the fixed module input, not an expected answer.
+子进程使用配置的 nanobot Python 解释器，调用其真实 ToolRegistry 和文件工具实现，并保留工作区边界检查。该路径不使用模拟 Provider、不请求 LLM，也不以确定性参考执行器冒充 Agent。负向案例核验真实 ToolResult 的错误状态和消息证据；正确拒绝非法输入属于模块测试通过。
 
-## Critical-chain families
+私有 `oracle.module_results` 按从 1 开始的调用序号逐次检查，始终留在评分进程。公开的 `module_calls` 是固定模块输入，不是参考答案。
 
-Read then report, read two sources then join, discover then copy, draft then
-finalize, replace then append, copy then revise, staged JSON updates, staged CSV
-report, missing-primary fallback, ask to resolve conflict, preserve source while
-transforming, and revise while retaining previous constraints.
+## 关键链路任务族
 
-Three checkpoint kinds are versioned and validated:
+覆盖读取后汇报、双源读取后合并、发现文件后复制、草稿后定稿、替换后追加、复制后修订、分阶段 JSON 更新、分阶段 CSV 报告、主文件缺失后的备用方案、冲突澄清、转换时保留源文件，以及修订时继续遵守之前的约束。
 
-- `turn_files`: exact selected file states after a declared 1-based conversation turn.
-- `tool_args`: a specified tool call with an argument subset; unrelated arguments
-  and alternative permitted actions remain allowed.
-- `tool_order`: a necessary pairwise order only where the task explicitly requests
-  those tools. This does not mandate one complete golden trajectory.
+三类检查点均有版本约束并接受结构校验：
 
-Every checkpoint has a unique ID and explicit `required` flag. None enters the
-Agent execution projection. Missing required evidence is not a passing check.
-The runner records actual tool inputs/outputs and before/after snapshots; scoring
-is separate from execution. Fixed follow-ups are not a dynamic user simulator.
+- `turn_files`：核验指定对话轮次结束后的文件精确内容，轮次从 1 开始。
+- `tool_args`：核验某次指定工具调用中的参数子集；允许其他无关参数以及其他合法操作。
+- `tool_order`：只在任务明确要求特定工具时检查必要的两两先后关系，不强制整条轨迹等同于唯一标准轨迹。
 
-## v1 provenance and errata
+每个检查点有唯一 ID 和明确的 `required` 标志，均不会进入 Agent 执行输入。缺少必需证据不能判为通过。运行器记录实际工具输入、输出及前后文件快照，执行和评分分开进行。固定后续指令不等同于动态用户模拟器。
 
-The 300 E2E instances preserve v1 fixtures, oracles, reference recipes, family IDs,
-and splits, with `source_task_id` linking each old record. Only the three
-`read_search/markdown_heading` prompts clarify that the leading Markdown marker
-and separator space should be removed while spaces within the title are retained.
-The original expected answers are unchanged. Original v1 task bytes and results
-remain untouched; v2 scores must not be silently substituted into v1 comparisons.
+## v1 来源与勘误
 
-## Generation and evidence
+300 个端到端实例保留 v1 的初始文件、评分规则、参考变换步骤、任务族及切分，并通过 `source_task_id` 关联原记录。只有 `read_search/markdown_heading` 的 3 条任务指令澄清了空格处理：去除开头的 Markdown 标记及其分隔空格，保留标题内部空格；预期答案不变。
 
-Run `python data/benchmarks/file-tools-v2/build_dataset.py` from the repository.
-Generation is deterministic and refuses to overwrite differing frozen task or
-manifest bytes. `tasks_sha256` is validated by the loader. Module solvability is
-checked using actual module execution, not `reference_observation`.
+原 v1 的任务字节和历史结果均保留。不得把 v2 成绩直接替换到 v1 的历史比较中。
 
-The dataset card describes capability and scope, not completed run results.
-Execution and scoring records are stored independently under the versioned run
-artifacts by the Harness. This suite remains UTF-8 filesystem-only; it does not
-cover every nanobot subsystem or provide a τ-bench score.
+## 语言与中文阅读入口
+
+关键链路和端到端层的 **360 条 `prompt`、75 条 `followups` 均为中文**。程序模块层有 60 条英文 `prompt`，用于说明固定 ToolRegistry 测试；实际执行依据 `module_calls`，不向模型请求决策。全部 420 条英文 `description`、60 条英文参考说明和 3 条英文勘误说明均属于冻结元数据。
+
+[中文逐条阅读页](../../../docs/dataset-reading.html)提供上述字段的中文对照，并按真实工具参数解释每个程序模块案例；[逐条中文对照文件](reading.zh-CN.jsonl)绑定来源任务 ID 和原始 SHA-256。原始任务、Manifest 与质量报告不变。文件名、工具名、匹配标记、文件内容等精确字面量继续保留原文，不能作为普通说明文字翻译。规则与审计统计见[评测集语言说明](../../../docs/dataset-language.md)。
+
+## 生成、冻结与证据
+
+在仓库根目录执行：
+
+```bash
+python data/benchmarks/file-tools-v2/build_dataset.py
+```
+
+生成过程确定性复现相同字节；如果生成内容与现有冻结任务或 Manifest 不同，会拒绝覆盖。加载器核验 `tasks_sha256`。程序模块是否可执行，须通过真实模块执行验证，不能用 `reference_observation` 代替。
+
+本说明描述数据集能力和适用范围，不代表已经完成评测。Harness 将执行与评分记录独立存入有版本标识的运行产物。本集仍只覆盖 UTF-8 文件系统任务，不覆盖 nanobot 的所有子系统，也不提供 τ-bench 官方成绩。

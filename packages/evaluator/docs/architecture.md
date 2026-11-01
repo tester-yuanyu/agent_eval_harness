@@ -1,8 +1,10 @@
 # Evaluator 架构与运行流程
 
-2026-10-20 更新：Inspect 是唯一执行与正式判分底座；Evaluator 在其扩展点提供业务政策与适配；Langfuse Cloud 负责在线展示和人工标注。每项能力一个主要负责方，每个正式指标只计算一次，每类数据一个权威来源。总体决策见[技术方案](evaluator_technical_design.md)，接入细节见[Langfuse 说明](langfuse.md)。
+> 本文属于旧 Suite／Provider 兼容路径；其中 Inspect 评分、指标和产物约定不适用于当前任务基准。新基准由 Inspect 执行与记录、DeepEval 正式评分，入口见[包说明](../README.md)。以下包内命令在 `packages/evaluator` 目录执行。
 
-本文描述截至 2026-10-20 当前工作区的实现结构，包括尚未提交的实现。它补充技术方案中的设计理由，不把目标架构当作已经完成的代码结构。能力范围见[能力清单](capabilities.md)，接口细节见[接入规范](integration_contracts.md)。
+2026-10-20 的旧 Suite 实现以 Inspect 为执行与正式判分底座；Evaluator 在其扩展点提供业务政策与适配；Langfuse Cloud 负责在线展示和人工标注。每项能力一个主要负责方，每个正式指标只计算一次，每类数据一个权威来源。兼容引擎边界见[Inspect 说明](inspect_engine.md)，接入细节见[Langfuse 说明](langfuse.md)。
+
+本文保留旧 Suite 路径的职责与数据流，历史版本事实按原日期理解。能力范围见[能力清单](capabilities.md)，接口细节见[接入规范](integration_contracts.md)。
 
 ## 1. 核心设计
 
@@ -22,7 +24,7 @@
 | Trial 生命周期 | [runner.py](../src/eval_framework/runner.py) | 编排隔离运行、证据收尾、观测快照和清理；由 Inspect Solver 调用，未评分 Trial 交给 Scorer |
 | 评测主引擎 | [inspect_engine.py](../src/eval_framework/inspect_engine.py)、[evaluation_policy.py](../src/eval_framework/evaluation_policy.py) | Inspect Task/Sample、Solver、Scorer、Epochs 与原生 EvalLog |
 | Agent 接入 | [provider.py](../src/eval_framework/provider.py)、[providers/mini_agent/](../src/eval_framework/providers/mini_agent/) | 运行时构建、工具环境、异常映射和 Agent 特有规则 |
-| 独立取证 | [agent_trace_sdk](../packages/agent_trace_sdk/)、[evidence.py](../src/eval_framework/evidence.py) | Inspect Transcript / EvalLog 采集与持久化；适配层校验业务字段、完整性和 Trial 关联 |
+| 独立取证 | [agent_trace_sdk](../../agent-trace-sdk/)、[evidence.py](../src/eval_framework/evidence.py) | Inspect Transcript / EvalLog 采集与持久化；适配层校验业务字段、完整性和 Trial 关联 |
 | 断言与评分 | [assertions.py](../src/eval_framework/assertions.py)、[turn_assertions.py](../src/eval_framework/turn_assertions.py)、[scoring.py](../src/eval_framework/scoring.py) | 确定性检查、逐轮匹配、权重及关键失败规则 |
 | 语义和观察分析 | [judge.py](../src/eval_framework/judge.py)、[trace_analysis.py](../src/eval_framework/trace_analysis.py)、[diagnostics.py](../src/eval_framework/diagnostics.py) | Judge 评价声明维度；Trace 和诊断提供调查线索 |
 | 正式指标扩展 | [inspect_metrics.py](../src/eval_framework/inspect_metrics.py)、[stability.py](../src/eval_framework/stability.py) | 在 Inspect Metric 中执行；保留业务分母、无效证据及稳定性语义，完成后缓存 |
@@ -49,7 +51,7 @@ flowchart TD
     L --> M[分析、可比性与 Eval Gate]
     L --> N[显式 SDK 导出 Trace 与 Scores]
     N --> O[Langfuse 原生展示与 Annotation]
-    O --> P[归因校验与追加来源修订快照]
+    O --> R[归因校验与追加来源修订快照]
 ```
 
 这是职责层级的数据流；图中 Judge 是已有可选评分能力，不表示 Suite 的 Judge Profile 已完成迁移。
@@ -91,9 +93,9 @@ Runner 收尾过程中尽可能保留原始执行结果和可用证据，并尝�
 
 导出回执绑定源 Hash、项目、内容模式和稳定 ID。Langfuse v4 observation 不可变且不能依赖服务端去重：已确认批次保存检查点，不重传；不确定批次保存 inflight ID，先核对后恢复。首次成功导出后再导出只 upsert Scores；`context.scenario_type` 是场景标签，不参与判分。导出失败不会触发模型重跑或改变正式结果。
 
-当前 Cloud 配置为一个原生看板（9 组件）、42 行 Trial 保存视图、限定本轮范围的 Scores Analytics 和原生 Experiments。旧失败页、空工具页及 7 个组件已删除。每个 Trial 一条根记录，汇总 Trace 和子事件不计入案例数；只有真实采集的工具、模型和评分数据才进入图表。没有 Judge 对照数据时不构造一致性矩阵。
+2026-10-20 验收时的 Cloud 配置为一个原生看板（9 组件）、42 行 Trial 保存视图、限定本轮范围的 Scores Analytics 和原生 Experiments。旧失败页、空工具页及 7 个组件已删除。每个 Trial 一条根记录，汇总 Trace 和子事件不计入案例数；只有真实采集的工具、模型和评分数据才进入图表。没有 Judge 对照数据时不构造一致性矩阵。
 
-本次回读验证 42 个唯一 Trial、293 条唯一 observation、520 条 Score，其中 42 条为场景分类；数据来源及验收边界见[运行说明](/Users/yuanyu/Documents/ChatGPT/agent_evaluator/artifacts/langfuse_full_20261020_154130/README.md)。这属于查询用户意图模块验收，不代表完整客服 Agent 或多 Trial 稳定性验证。
+2026-10-20 回读验证了 42 个唯一 Trial、293 条唯一 observation、520 条 Score，其中 42 条为场景分类。原始记录位于原项目 `artifacts/langfuse_full_20261020_154130/`，未随本仓库导入；此处保留历史验收事实，不提供不存在的本仓库链接。这属于查询用户意图模块验收，不代表完整客服 Agent 或多 Trial 稳定性验证。
 
 ## 4. 必须维持的架构约束
 
@@ -115,7 +117,7 @@ Runner 收尾过程中尽可能保留原始执行结果和可用证据，并尝�
 | 断言、Trace 词汇、报告标签和 Gate 检查仍有固定实现 | 版本化 Profile 引用注册规则 |
 | Suite 模型存在多个 Profile 引用字段 | 对每类 Profile 实现完整的编译、执行与一致性验收 |
 
-尤其是文件形式的 Suite 当前不能启用 judge_profile 或 run_config.judge，编译器会报 PROFILE_STAGE_NOT_MIGRATED。字段存在不等于能力已经接通。目标设计见[插件架构方案](superpowers/specs/2026-10-08-contract-driven-plugin-architecture-design.md)，阶段范围见[阶段报告](../PHASE_END_REPORT.md)。
+尤其是文件形式的 Suite 当前不能启用 judge_profile 或 run_config.judge，编译器会报 PROFILE_STAGE_NOT_MIGRATED。字段存在不等于能力已经接通。已完成的插件基础包括严格 Suite 协议、精确版本解析、路径与 Hash 校验、两阶段编译、Loader／Provider 注册和来源绑定；其余 Profile 字段不能当作已实现的执行能力。
 
 ## 6. 阅读源码的建议顺序
 

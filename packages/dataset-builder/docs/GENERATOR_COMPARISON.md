@@ -2,6 +2,8 @@
 
 2026-10-28 · mini_agent query_user v3 · 两轮交换顺序 · AI 初审完成，未人工批准或冻结
 
+这是迁移前的生成实验记录，不是当前任务基准的 Agent 成绩。原始 `workspaces/generator_comparison_20261028_184105/` 未导入本仓库；下文保留相对该历史工作区的文件名用于溯源，不将其表示为本仓库可用文件。
+
 **建议：当前契约驱动的槽位生成，优先采用自有框架直接调用模型；保留 DeepEval 为可选生成后端。** 直接路径每组平均49.2秒，DeepEval为183.2秒，效率差距明确。质量不能只看程序通过率：AI初审在直接路径发现2条需重写的输入，DeepEval为0条；两边各有8条场景区分不足等警告。这个小样本不足以认定任何一方整体质量更好。
 
 这里比较的是两个生成后端。能力快照加载、来源绑定、覆盖计划、契约校验、去重、人工审核和冻结仍由自有框架管理。没有运行被测Agent，也没有测Agent的业务成功率；下表是**候选生成程序验收结果**。
@@ -57,8 +59,8 @@ DeepEval在本次配置下，耗时约为Direct的3.72倍，调用量3.64倍，�
 
 每组独立保存，未合并到历史评测集：
 
-- Direct：[第1轮候选](/Users/yuanyu/Documents/ChatGPT/agent_dataset_builder/workspaces/generator_comparison_20261028_184105/round_1_direct/supported_candidates.json)、[第2轮候选](/Users/yuanyu/Documents/ChatGPT/agent_dataset_builder/workspaces/generator_comparison_20261028_184105/round_2_direct/supported_candidates.json)；[第1轮仅输入](/Users/yuanyu/Documents/ChatGPT/agent_dataset_builder/workspaces/generator_comparison_20261028_184105/round_1_direct/blocked_inputs.json)、[第2轮仅输入](/Users/yuanyu/Documents/ChatGPT/agent_dataset_builder/workspaces/generator_comparison_20261028_184105/round_2_direct/blocked_inputs.json)。
-- DeepEval：[第1轮候选](/Users/yuanyu/Documents/ChatGPT/agent_dataset_builder/workspaces/generator_comparison_20261028_184105/round_1_deepeval/supported_candidates.json)、[第2轮候选](/Users/yuanyu/Documents/ChatGPT/agent_dataset_builder/workspaces/generator_comparison_20261028_184105/round_2_deepeval/supported_candidates.json)；[第1轮仅输入](/Users/yuanyu/Documents/ChatGPT/agent_dataset_builder/workspaces/generator_comparison_20261028_184105/round_1_deepeval/blocked_inputs.json)、[第2轮仅输入](/Users/yuanyu/Documents/ChatGPT/agent_dataset_builder/workspaces/generator_comparison_20261028_184105/round_2_deepeval/blocked_inputs.json)。
+- Direct：第1轮候选（`round_1_direct/supported_candidates.json`）、第2轮候选（`round_2_direct/supported_candidates.json`）；第1轮仅输入（`round_1_direct/blocked_inputs.json`）、第2轮仅输入（`round_2_direct/blocked_inputs.json`）。
+- DeepEval：第1轮候选（`round_1_deepeval/supported_candidates.json`）、第2轮候选（`round_2_deepeval/supported_candidates.json`）；第1轮仅输入（`round_1_deepeval/blocked_inputs.json`）、第2轮仅输入（`round_2_deepeval/blocked_inputs.json`）。
 
 各目录还包含编译后的 `diagnostic_supported_cases.jsonl` 和 `subset_validation.json`。四组已接受的带预期子集均通过现有格式、契约、场景、质量、泄漏和去重检查。这是子集诊断通过，不代表全计划可发布。17个契约缺口在每轮保留，未补写预期。
 
@@ -88,7 +90,7 @@ DeepEval在本次配置下，耗时约为Direct的3.72倍，调用量3.64倍，�
 
 其余合理拒绝包含DeepEval反复生成12位手机号、重复输入、正式表达未匹配指定email参数，以及Direct在裸数字场景中加入用户绑定。原始程序指标保留；没有事后更换统计口径把误拒改成通过。
 
-[第一轮逐条初审](/Users/yuanyu/Documents/ChatGPT/agent_dataset_builder/workspaces/generator_comparison_20261028_184105/semantic_review_part1.json) · [第二轮逐条初审](/Users/yuanyu/Documents/ChatGPT/agent_dataset_builder/workspaces/generator_comparison_20261028_184105/semantic_review_part2.json) · [解盲汇总及问题定位](/Users/yuanyu/Documents/ChatGPT/agent_dataset_builder/workspaces/generator_comparison_20261028_184105/comparison_analysis.json)
+第一轮逐条初审（`semantic_review_part1.json`） · 第二轮逐条初审（`semantic_review_part2.json`） · 解盲汇总及问题定位（`comparison_analysis.json`）
 
 **工程建议与边界**
 
@@ -100,10 +102,10 @@ DeepEval在本次配置下，耗时约为Direct的3.72倍，调用量3.64倍，�
 
 **可复现与完整性**
 
-- [对照入口](/Users/yuanyu/Documents/ChatGPT/agent_dataset_builder/scripts/compare_generators.py)：`PYTHONPATH=src .venv/bin/python scripts/compare_generators.py`，读取本地.env并创建新的工作区；会产生真实API调用。
-- [Direct与共用验收循环](/Users/yuanyu/Documents/ChatGPT/agent_dataset_builder/src/dataset_builder/generation_comparison.py) · [受控Provider](/Users/yuanyu/Documents/ChatGPT/agent_dataset_builder/src/dataset_builder/comparison_provider.py)。
-- [实验协议](/Users/yuanyu/Documents/ChatGPT/agent_dataset_builder/workspaces/generator_comparison_20261028_184105/protocol.json) · [原始分组汇总](/Users/yuanyu/Documents/ChatGPT/agent_dataset_builder/workspaces/generator_comparison_20261028_184105/summary.json) · [分析重算脚本](/Users/yuanyu/Documents/ChatGPT/agent_dataset_builder/workspaces/generator_comparison_20261028_184105/analyze_results.py)。重算分析不调用模型。
-- [测试记录](/Users/yuanyu/Documents/ChatGPT/agent_dataset_builder/workspaces/generator_comparison_20261028_184105/offline_tests.log)：332项通过；相关代码ruff检查通过。独立代码审查发现的SDK额外字段丢弃、完整性状态、重复统计问题均已修复并复核。
-- [完整性报告](/Users/yuanyu/Documents/ChatGPT/agent_dataset_builder/workspaces/generator_comparison_20261028_184105/integrity_report.json)：1801个历史文件哈希不变，实验产物未检出配置密钥；418次请求参数和正文哈希、四组来源绑定均经复核。
+- [对照入口](../scripts/compare_generators.py)：在 `packages/dataset-builder` 执行 `PYTHONPATH=src ../../.venvs/builder/bin/python scripts/compare_generators.py`，读取本地.env并创建新的工作区；会产生真实API调用。
+- [Direct与共用验收循环](../src/dataset_builder/generation_comparison.py) · [受控Provider](../src/dataset_builder/comparison_provider.py)。
+- 实验协议（`protocol.json`） · 原始分组汇总（`summary.json`） · 分析重算脚本（`analyze_results.py`）。重算分析不调用模型。
+- 测试记录（`offline_tests.log`）：332项通过；相关代码ruff检查通过。独立代码审查发现的SDK额外字段丢弃、完整性状态、重复统计问题均已修复并复核。
+- 完整性报告（`integrity_report.json`）：1801个历史文件哈希不变，实验产物未检出配置密钥；418次请求参数和正文哈希、四组来源绑定均经复核。
 
-全部实验产物位于 [generator_comparison_20261028_184105](/Users/yuanyu/Documents/ChatGPT/agent_dataset_builder/workspaces/generator_comparison_20261028_184105)。原始输出保留，人工审核状态为PENDING，未冻结、未发布，未修改mini_agent或nanobot历史版本。
+全部实验产物当时保存在原项目工作区 `workspaces/generator_comparison_20261028_184105/`，未随本仓库导入。原始输出保留，人工审核状态为PENDING，未冻结、未发布，未修改mini_agent或nanobot历史版本。

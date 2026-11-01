@@ -1,15 +1,16 @@
-# Agent Eval Suite
+# Agent Eval Suite 协作约定
 
-The user authorized the monorepo migration on 2026-10-28. Work only in this new repository. The original three projects under the parent directory are read-only references. Their current working trees, not just committed HEADs, were imported.
+用户于 2026-10-28 授权 monorepo 迁移。只在本仓库工作；父目录下的三个原项目仅供只读参考。导入来源是当时的实际工作树，包括未提交修改，不只是各仓库的 HEAD。
 
-- The user authorized the task-dataset + Harness implementation on 2026-11-01. The benchmark entry point uses Inspect for execution/logging and DeepEval for formal scoring. Previous Inspect scoring is historical compatibility only. Langfuse displays saved results; no automatic hosted uploads or paid model calls in tests/demo. Explicit live benchmark experiments and Langfuse delivery are authorized for this implementation.
-- Preserve Python API/CLI compatibility where feasible, frozen JSON content and historical Hash semantics. Do not edit frozen datasets to make tests pass.
-- The shared contracts package owns common capability/evaluation structures. Builder's generation IR stays internal. Keep the trace SDK independent.
-- Agent adapters are optional. A missing mini_agent must not prevent importing core evaluator or using an external Provider.
-- Keep Oracle/expected answers out of execution inputs and model messages. A process returning successfully does not mean the Agent passed.
-- Keep reference capability identity separate from current runtime capability identity. Comparison pins the reference dataset/contracts and controls; new runtime identity may be a supported experimental variable.
-- Each package has its own environment/lock. The root CLI uses subprocesses, not direct runtime imports. Builder must not require the whole evaluator merely for common dataset validation.
-- New asset registration is immutable, version-to-Hash binding is verified, and mutable aliases are resolved before formal use. Preserve v3 agent.json; no extra JSON manifest inside a v3 bundle.
-- Retain source provenance in docs/migration and private baseline records in .migration. Do not copy credentials or nested Git histories into tracked files.
-- Tests must not call live model APIs or hosted services. Run focused checks during development, package regressions after integration, then clean-clone installation/demo verification.
-- Subagents have explicit file ownership. Do not commit or stage another agent's changes; the coordinator integrates and commits.
+- 用户于 2026-11-01 授权任务数据集与 Harness 实现。当前 benchmark 主入口由 Inspect 负责执行与日志，DeepEval 负责正式评分；旧 Inspect 评分仅供历史兼容。Langfuse 展示保存结果。测试和演示不得自动上传托管服务或调用付费模型；当次实现明确授权的真实评测与 Langfuse 交付按其任务范围执行。
+- 尽可能保留 Python API 与 CLI 兼容性、冻结 JSON 字节及历史 Hash 语义。不得为通过测试而修改冻结数据集。
+- 共享 contracts 包负责通用能力与评测结构；Builder 的生成 IR 留在内部。轨迹 SDK 保持独立。
+- Agent 适配器为可选项。缺少 mini_agent 不得影响核心 Evaluator 导入或外部 Provider 使用。
+- Oracle 与期望答案不得进入执行输入和模型消息。进程执行成功不等于 Agent 通过评测。
+- 参考能力身份与当前运行能力身份分开记录。比较时固定参考数据集、契约和控制项；新的运行身份可以是兼容规则允许的实验变量。
+- 每个包使用独立环境与依赖约束。根 CLI 通过子进程调度，不直接导入运行时。Builder 不得仅为通用数据校验而依赖整个 Evaluator。
+- 新资产登记不可变，必须校验版本与 Hash 的绑定；正式使用前解析可变别名。保留 v3 `agent.json` 结构，不在 v3 bundle 内增加 JSON 清单。
+- 来源与验收记录保存在 `docs/migration/`，私有基线保存在 `.migration/`。不得将凭据或嵌套 Git 历史复制进跟踪文件。
+- 测试不得调用真实模型 API 或托管服务。开发时运行相关检查，集成后运行包回归，再进行全新克隆的安装与演示验收。
+- 各子代理遵守明确的文件所有权，不暂存或提交其他代理的改动；由协调者整合与提交。
+- 使用中文维护说明文档，保留专业术语、代码、标识符和必须逐字保存的证据原文。语言整理不得改变冻结任务、参考答案或历史结果；边界见[文档导航](docs/README.md)。

@@ -1,5 +1,7 @@
 # 本地 Langfuse 与自动评测交付
 
+> 本文属于旧 Suite／Provider 兼容路径；其中 Inspect 评分、指标和产物约定不适用于当前任务基准。新基准由 Inspect 执行与记录、DeepEval 正式评分，入口见[包说明](../README.md)。以下包内命令在 `packages/evaluator` 目录执行。
+
 Langfuse 可以部署在自己的电脑上。本项目使用官方 Compose 和原生看板 API；Inspect 继续负责执行与正式评分，Evaluator 只把保存的结果交给 Langfuse 展示，不重算通过率。
 
 ## 一次性部署
@@ -7,10 +9,10 @@ Langfuse 可以部署在自己的电脑上。本项目使用官方 Compose 和�
 安装并启动适合本机的 Docker Desktop。首次协议和系统授权由用户完成。项目 Python 环境需要已有的 PyYAML。以下命令从仓库根目录运行：
 
 ```bash
-.venv/bin/python scripts/local_langfuse.py init --port 3300
-.venv/bin/python scripts/local_langfuse.py up
-.venv/bin/python scripts/local_langfuse.py lock
-.venv/bin/python scripts/local_langfuse.py status
+../../.venvs/evaluator/bin/python scripts/local_langfuse.py init --port 3300
+../../.venvs/evaluator/bin/python scripts/local_langfuse.py up
+../../.venvs/evaluator/bin/python scripts/local_langfuse.py lock
+../../.venvs/evaluator/bin/python scripts/local_langfuse.py status
 ```
 
 `init` 生成 `.env.langfuse.local.json` 与 `artifacts/local_langfuse/`。随机 API 密钥、管理员登录信息和服务配置只写入权限为 0600 的本地文件；目录为 0700，均被 Git 忽略。管理员信息在 `artifacts/local_langfuse/login.json`，不要把它贴进报告或提交仓库。重复 `init` 保留原凭据；更改已有端口会被拒绝，避免破坏持久化实例。
@@ -24,7 +26,7 @@ Langfuse 可以部署在自己的电脑上。本项目使用官方 Compose 和�
 在仓库根目录完成上述初始化后，原来的 `run` 命令会在保存正式结果后自动同步本地 Langfuse，并在 CLI JSON 中返回 `delivery`。候选 ZIP 会等待全部分区处理完成、保存最终接入账本后统一生成看板。
 
 ```bash
-.venv/bin/python -m eval_framework.cli run \
+../../.venvs/evaluator/bin/python -m eval_framework.cli run \
   --input /path/to/agent-dataset.zip --agent-root /path/to/agent \
   --output-dir artifacts/evaluation
 ```
@@ -40,7 +42,7 @@ Langfuse 可以部署在自己的电脑上。本项目使用官方 Compose 和�
 Langfuse 不可用时，正式评测结果和原退出码不变，投递为 `PENDING`。后续成功投递时会有限量补处理待同步记录；也可直接同步已有结果，不再调用 Agent：
 
 ```bash
-.venv/bin/python -m eval_framework.cli sync-local \
+../../.venvs/evaluator/bin/python -m eval_framework.cli sync-local \
   --source /absolute/path/to/intake.json \
   --local-langfuse-config .env.langfuse.local.json
 

@@ -1,5 +1,7 @@
 # Mini Agent 项目架构与 Builder Evaluator 接入总结
 
+> 本文说明示例 Agent 与旧 Suite／Provider 的接入边界；当前任务基准入口见 [Evaluator README](../../../packages/evaluator/README.md)。命令在 `examples/mini_agent` 目录执行。
+
 更新时间：2026 年 10 月 13 日。本文以当前工作区代码为准，包含尚未提交的独立证据通道改动；历史设计稿不等于当前已实现能力。
 
 mini_agent 的核心交付有两项：一个可调用、可观察的 Agent 运行时，以及一份描述该运行时能力和边界的 Capability Bundle。Builder 根据 Bundle 生产评测集；Evaluator 根据冻结评测集和能力契约创建运行环境、调用 Agent、采集证据并判定结果。
@@ -48,7 +50,7 @@ Builder 在生成时不运行 Agent，也不读取 Agent 实际回答来反推�
 | `src/minimal_agent/capability_facts/` | Module、Intent、Tool、Evidence 的事实转换 | 从当前实现和注册配置导出事实 |
 | `src/minimal_agent/capability_adapter.py` | MiniAgentCapabilityAdapter | 为通用 Kit 提供五组 Facts 和运行时绑定 |
 | `src/minimal_agent/capabilities/` | 稳定 API、CLI facade | 对外提供 build、export、validate、resolve、diff |
-| `src/capability_snapshot_kit/` | 协议模型、编译器、校验器、解析器、Hash | 生成和消费可重复的机器制品 |
+| `packages/contracts/src/capability_snapshot_kit/`（仓库根目录） | 协议模型、编译器、校验器、解析器、Hash | 生成和消费可重复的机器制品 |
 | `capability_specs/` | YAML Front Matter 加自然语言正文 | 定义 Scope、Chain、Boundary、Evidence 等通用要求 |
 | `src/minimal_agent/testing/` | QueryUser 评测工具契约适配器 | 接受 Evaluator 注入的 handler，不持有业务 fixture |
 
@@ -283,7 +285,7 @@ Adapter 不接收整份 EvalCase，不把 case_id、expected 或评分规则传�
 
 ### 7.1 Provider 和 Adapter 分工
 
-实际桥接代码位于 agent_evaluator：
+兼容桥接代码位于 `packages/evaluator`：
 
 ```text
 Runner
@@ -354,7 +356,7 @@ QueryUser 使用 `query_user_evaluation_definition(handler)` 将外部 handler �
 
 它声明 OK、EMPTY、BUSINESS_FAILURE、RATE_LIMITED 结果，以及 success、empty_result、business_failure、timeout、rate_limit、execution_failure 模拟能力。具体返回内容和触发条件属于注入 handler；Agent 包里没有对应用户数据库或固定响应。
 
-Evaluator 的 MiniAgentRuntimeBindingFactory 为每个运行环境创建 Registry；默认能绑定 QueryUser，其默认 handler 返回 EMPTY。要评测真实匹配结果，需要提供 evaluator-owned handler factory；其他原生工具需要显式实现绑定。
+Evaluator 的 MiniAgentRuntimeBindingFactory 为每个运行环境创建 Registry；默认能绑定 QueryUser，其默认 handler 返回 EMPTY。要评测真实匹配结果，需要提供 由 Evaluator 管理的 handler 工厂；其他原生工具需要显式实现绑定。
 
 同一份 Registry 应同时用于导出能力包和创建 Agent。典型步骤是：注册工具 → 导出独立 Bundle → Builder 绑定该 Bundle → Evaluator 注入同契约 handler → 执行和观测。
 
@@ -465,8 +467,8 @@ Builder 通过 evaluator_gate 复用这些预检规则，提前判断断言是�
 可在项目根目录使用以下命令导出和校验一个新的独立目录；不要用它覆盖已被 Suite 引用的旧目录：
 
 ```bash
-.venv/bin/python -m minimal_agent.capabilities.cli export --output exports/integration_snapshot
-.venv/bin/python -m minimal_agent.capabilities.cli validate --input exports/integration_snapshot
+../../.venvs/evaluator/bin/python -m minimal_agent.capabilities.cli export --output exports/integration_snapshot
+../../.venvs/evaluator/bin/python -m minimal_agent.capabilities.cli validate --input exports/integration_snapshot
 ```
 
 本次核对运行了 Builder 契约、组合解析、QueryUser adapter、Trace 通道和 Agent runtime 共 25 项已有测试，结果为 **24 passed，1 failed**。失败项是 `test_checked_in_bundle_equals_a_fresh_default_export`：它要求当前重新导出与仓库旧快照逐字节相同，与保留旧冻结包的现行策略冲突。新旧能力包均能正常加载校验；差异包括新证据交付注解、Agent 输出 Schema 和派生 Hash。
@@ -477,17 +479,17 @@ Builder 通过 evaluator_gate 复用这些预检规则，提前判断断言是�
 
 | 想了解的内容 | 入口 |
 | --- | --- |
-| Agent 主链路 | [runtime/agent.py](/Users/yuanyu/Documents/ChatGPT/mini_agent/src/minimal_agent/runtime/agent.py) |
-| 输入输出协议 | [contracts/agent.py](/Users/yuanyu/Documents/ChatGPT/mini_agent/src/minimal_agent/contracts/agent.py) |
-| 意图参数与决策 | [contracts/intents.py](/Users/yuanyu/Documents/ChatGPT/mini_agent/src/minimal_agent/contracts/intents.py) |
-| 工具执行与契约 | [tool_registry.py](/Users/yuanyu/Documents/ChatGPT/mini_agent/src/minimal_agent/runtime/tool_registry.py)、[contracts/tools.py](/Users/yuanyu/Documents/ChatGPT/mini_agent/src/minimal_agent/contracts/tools.py) |
-| Builder 交付协议 | [CAPABILITY_SNAPSHOT.md](/Users/yuanyu/Documents/ChatGPT/mini_agent/docs/CAPABILITY_SNAPSHOT.md) |
-| 机器协议模型与解析 | [Kit models.py](/Users/yuanyu/Documents/ChatGPT/mini_agent/src/capability_snapshot_kit/models.py)、[resolution.py](/Users/yuanyu/Documents/ChatGPT/mini_agent/src/capability_snapshot_kit/resolution.py) |
-| 运行时事实转换 | [capability_adapter.py](/Users/yuanyu/Documents/ChatGPT/mini_agent/src/minimal_agent/capability_adapter.py)、[Evidence Facts](/Users/yuanyu/Documents/ChatGPT/mini_agent/src/minimal_agent/capability_facts/evidence.py) |
-| QueryUser 工具适配器 | [query_user_tool.py](/Users/yuanyu/Documents/ChatGPT/mini_agent/src/minimal_agent/testing/query_user_tool.py) |
-| Builder 侧读取与冻结 | [Builder README](/Users/yuanyu/Documents/ChatGPT/agent_dataset_builder/README.md)、[validation.py](/Users/yuanyu/Documents/ChatGPT/agent_dataset_builder/src/dataset_builder/validation.py)、[freezing.py](/Users/yuanyu/Documents/ChatGPT/agent_dataset_builder/src/dataset_builder/freezing.py) |
-| Evaluator 中立接口与调用桥 | [provider.py](/Users/yuanyu/Documents/ChatGPT/agent_evaluator/src/eval_framework/provider.py)、[mini_agent_adapter.py](/Users/yuanyu/Documents/ChatGPT/agent_evaluator/src/eval_framework/mini_agent_adapter.py) |
-| MiniAgent Provider 与运行配置 | [MiniAgentProvider](/Users/yuanyu/Documents/ChatGPT/agent_evaluator/src/eval_framework/providers/mini_agent/provider.py)、[runtime_binding.py](/Users/yuanyu/Documents/ChatGPT/agent_evaluator/src/eval_framework/providers/mini_agent/runtime_binding.py) |
-| 独立证据协议 | [TRACE_PHASE1.md](/Users/yuanyu/Documents/ChatGPT/agent_evaluator/docs/TRACE_PHASE1.md)、[SDK local.py](/Users/yuanyu/Documents/ChatGPT/agent_evaluator/packages/agent_trace_sdk/src/agent_trace_sdk/local.py) |
+| Agent 主链路 | [runtime/agent.py](../src/minimal_agent/runtime/agent.py) |
+| 输入输出协议 | [contracts/agent.py](../src/minimal_agent/contracts/agent.py) |
+| 意图参数与决策 | [contracts/intents.py](../src/minimal_agent/contracts/intents.py) |
+| 工具执行与契约 | [tool_registry.py](../src/minimal_agent/runtime/tool_registry.py)、[contracts/tools.py](../src/minimal_agent/contracts/tools.py) |
+| Builder 交付协议 | [CAPABILITY_SNAPSHOT.md](CAPABILITY_SNAPSHOT.md) |
+| 机器协议模型与解析 | [Kit models.py](../../../packages/contracts/src/capability_snapshot_kit/models.py)、[resolution.py](../../../packages/contracts/src/capability_snapshot_kit/resolution.py) |
+| 运行时事实转换 | [capability_adapter.py](../src/minimal_agent/capability_adapter.py)、[Evidence Facts](../src/minimal_agent/capability_facts/evidence.py) |
+| QueryUser 工具适配器 | [query_user_tool.py](../src/minimal_agent/testing/query_user_tool.py) |
+| Builder 侧读取与冻结 | [Builder README](../../../packages/dataset-builder/README.md)、[validation.py](../../../packages/dataset-builder/src/dataset_builder/validation.py)、[freezing.py](../../../packages/dataset-builder/src/dataset_builder/freezing.py) |
+| Evaluator 中立接口与调用桥 | [provider.py](../../../packages/evaluator/src/eval_framework/provider.py)、[mini_agent_adapter.py](../../../packages/evaluator/src/eval_framework/mini_agent_adapter.py) |
+| MiniAgent Provider 与运行配置 | [MiniAgentProvider](../../../packages/evaluator/src/eval_framework/providers/mini_agent/provider.py)、[runtime_binding.py](../../../packages/evaluator/src/eval_framework/providers/mini_agent/runtime_binding.py) |
+| 独立证据协议 | [TRACE_PHASE1.md](../../../packages/evaluator/docs/TRACE_PHASE1.md)、[SDK local.py](../../../packages/agent-trace-sdk/src/agent_trace_sdk/local.py) |
 
 这些链接对应当前本机工作区。Builder、Evaluator 的代码由相邻仓库维护，mini_agent 不应复制它们的 fixture、Oracle 或判定逻辑。

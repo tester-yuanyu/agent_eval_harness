@@ -1,5 +1,7 @@
 # 新 Agent 评测交付接入
 
+> 本文属于旧 Suite／Provider 兼容路径；其中 Inspect 评分、指标和产物约定不适用于当前任务基准。新基准由 Inspect 执行与记录、DeepEval 正式评分，入口见[包说明](../README.md)。以下包内命令在 `packages/evaluator` 目录执行。
+
 Evaluator 接收本地交付目录或 ZIP，校验来源和契约，将能够确定转换的候选记录编译为现有 Suite，再交给 Inspect 执行、评分和聚合。原始交付和候选状态保留；缺失执行绑定、参考答案或独立证据的记录进入导入账本，不能以推测补齐。
 
 ## 命令
@@ -7,7 +9,7 @@ Evaluator 接收本地交付目录或 ZIP，校验来源和契约，将能够确
 先校验并查看哪些记录可以执行：
 
 ```bash
-agent-evaluator validate \
+../../.venvs/evaluator/bin/agent-evaluator validate \
   --input /path/to/delivery.zip \
   --output-dir artifacts/new-agent-intake
 ```
@@ -17,7 +19,7 @@ agent-evaluator validate \
 已注册的 Nanobot 本地 SDK 适配器可以用 Agent 项目路径选择：
 
 ```bash
-agent-evaluator run \
+../../.venvs/evaluator/bin/agent-evaluator run \
   --input /path/to/delivery \
   --agent-root /path/to/nanobot \
   --output-dir artifacts/nanobot-evaluation
@@ -26,7 +28,7 @@ agent-evaluator run \
 其他 Agent 使用显式提供的受信执行绑定：
 
 ```bash
-agent-evaluator run \
+../../.venvs/evaluator/bin/agent-evaluator run \
   --input /path/to/delivery.zip \
   --binding /path/to/trusted-binding.json \
   --output-dir artifacts/new-agent-evaluation

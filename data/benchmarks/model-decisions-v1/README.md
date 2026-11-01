@@ -1,58 +1,44 @@
-# Isolated model decisions v1
+# Model Decisions v1：独立模型决策评测集
 
-This separate module suite contains **24 instances in eight families**, with three
-parameter variants per family. The split is family-disjoint: 18 operation-selection
-instances in dev, six abstention instances in holdout. It does not replace or alter
-the frozen 420-instance file-tools-v2 dataset.
+本集单独评测模型的一次行动决策，共 **24 个实例、8 个任务族**，每族 3 个参数变体。按任务族隔离切分：开发集包含 18 个操作选择实例，留出集包含 6 个放弃工具调用实例。本集不会替换或修改已冻结的 420 条 File Tools v2 任务。
 
-| Family | Decision being measured | Instances |
+| 任务族 | 测量的决策 | 实例数 |
 | --- | --- | ---: |
-| read_named | Select read_file and the requested relative path | 3 |
-| read_range | Select read_file with exact offset and limit | 3 |
-| list_recursive | Select list_dir and enable recursive listing | 3 |
-| write_exact | Select whole-file writing and preserve exact content/newlines | 3 |
-| edit_unique | Select narrow text editing with correct old/new values | 3 |
-| edit_occurrence | Select one occurrence and provide replacement-count guard | 3 |
-| abstain_ambiguous | Ask for missing target/content without guessing or file access | 3 |
-| abstain_noop | Follow an explicit instruction to avoid all tools | 3 |
+| `read_named` | 选择 `read_file` 和指定相对路径 | 3 |
+| `read_range` | 选择 `read_file`，准确填写 `offset` 与 `limit` | 3 |
+| `list_recursive` | 选择 `list_dir` 并启用递归列目录 | 3 |
+| `write_exact` | 选择整文件写入，保留精确内容与换行 | 3 |
+| `edit_unique` | 选择局部文本替换，准确填写原值和新值 | 3 |
+| `edit_occurrence` | 选择指定出现位置，并提供替换次数保护 | 3 |
+| `abstain_ambiguous` | 缺少目标或内容时先询问，不猜测、不访问文件 | 3 |
+| `abstain_noop` | 遵守明确禁止调用任何工具的指令 | 3 |
 
-## Actual execution boundary
+## 实际执行边界
 
-The subprocess uses the configured nanobot source/interpreter and its real
-`OpenAICompatProvider.chat(messages, tools)` method. Tool definitions come from
-nanobot's actual ToolRegistry/file-tool classes. Each task makes one provider
-`chat` invocation and stops after the model returns; **no AgentLoop runs and no
-returned tool call is executed**. Provider transport may internally retry, so a
-single decision does not guarantee exactly one HTTP attempt.
+子进程使用指定 nanobot 源码和解释器中的真实 `OpenAICompatProvider.chat(messages, tools)`；工具定义来自 nanobot 的真实 ToolRegistry 与文件工具类。每个任务调用一次 Provider 的 `chat` 方法，收到模型返回后即停止。**不运行 AgentLoop，也不执行模型返回的工具调用。** Provider 的传输层可能内部重试，因此一次决策不保证只有一次 HTTP 请求。
 
-`decision_context` is fixed user-provided text. Where content is supplied to make
-an edit decision possible, it is explicitly described as user-provided content;
-it is not represented as a previously observed tool execution. The Harness sends
-only public task fields and tool schemas. Private `oracle.decision` remains in
-the scoring process and checks tool selection, argument subsets, and abstention.
-Abstention uses an empty acceptable-tool list and `max_calls=0`. Normal cases
-permit exactly one appropriate call; extra arguments are not treated as wrong
-unless another explicit contract forbids them. Whole-file vs edit and occurrence
-vs line-hint ambiguities are resolved by explicit user constraints in the task.
+`decision_context` 是固定的用户提供文本。为了支持编辑决策而附带的内容，明确标注为用户提供，不能冒充前一次工具执行的观测。Harness 只发送公开任务字段与工具 Schema。私有 `oracle.decision` 留在评分进程，核验工具选择、参数子集和放弃调用行为。
 
-Generation events preserve the actual model content, returned tool call arguments,
-usage, timings, and response model when available. The top-level `decision` is a
-copy for convenience, not separate evidence. Initial/final file snapshots should
-remain identical. Tests use an explicitly labeled `offline_decision_test` injected
-transport; those records are not real model evaluation results.
+放弃调用案例使用空的可接受工具列表及 `max_calls=0`。普通案例允许且要求一次合适调用；没有其他显式约束时，不因额外参数而判错。任务通过明确用户约束，消除整文件写入与局部编辑、指定出现位置与行提示之间的歧义。
 
-## Interpretation and limitations
+模型生成事件保留实际回复、返回的工具调用参数，以及可获取的用量、时间和模型名称。顶层 `decision` 只是便于使用的副本，不构成另一份独立证据。初始和最终文件快照应保持一致。测试使用明确标注的 `offline_decision_test` 注入传输层，其记录不能当作真实模型评测成绩。
 
-Report this population separately from program-module tests and full-Agent tasks.
-It evaluates local tool selection, argument generation, and tool abstention under
-controlled public context. It does not establish long-horizon planning, recovery
-execution, session isolation, memory, MCP, or dynamic user-interaction quality.
-The holdout contains different families from dev rather than a balanced repeat
-of the same operation classes. Counts are parameterized instances, not 24
-independent problem families. Authoring is AI-assisted; independent human review
-has not been completed.
+## 语言与中文阅读入口
 
-Run `python data/benchmarks/model-decisions-v1/build_dataset.py` to regenerate the
-same bytes. Generation refuses to overwrite different frozen task/manifest bytes.
-Model results must be recorded separately by the Harness; this dataset card is
-not evidence of completed paid evaluation.
+24 条任务指令（`prompt`）和 24 条公开上下文（`decision_context`）均为中文自然语言。24 条英文 `description` 和 24 条英文 `reference.description` 是说明文字，不进入模型执行输入。
+
+[中文逐条阅读页](../../../docs/dataset-reading.html)展示每个实例的具体任务、上下文及中文说明；[逐条中文对照文件](reading.zh-CN.jsonl)逐条记录来源任务 ID 与原始 SHA-256。对照不替换任务、不重新评分，也不改变英文文件名、参数名和要求精确保留的文本内容。完整统计见[评测集语言说明](../../../docs/dataset-language.md)。
+
+## 结果解读与限制
+
+本组结果必须与纯程序模块测试和完整 Agent 任务分开报告。它衡量受控公开上下文中的局部工具选择、参数生成和放弃调用，不证明长程规划、恢复执行、会话隔离、记忆、MCP 或动态用户交互质量。
+
+留出集与开发集包含不同任务族，并非对同一操作类别作均衡重复。24 是参数化实例数，不是 24 种独立问题。数据由 AI 辅助编写，尚未完成独立人工审核。
+
+在仓库根目录执行以下命令，可复现相同冻结字节；生成器拒绝覆盖不同的任务或 Manifest：
+
+```bash
+python data/benchmarks/model-decisions-v1/build_dataset.py
+```
+
+模型结果须由 Harness 单独记录；本数据集说明不证明已经完成付费模型评测。

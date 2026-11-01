@@ -1,5 +1,7 @@
 # Evaluator 契约与接入规范
 
+> 本文属于旧 Suite／Provider 兼容路径；其中 Inspect 评分、指标和产物约定不适用于当前任务基准。新基准由 Inspect 执行与记录、DeepEval 正式评分，入口见[包说明](../README.md)。以下包内命令在 `packages/evaluator` 目录执行。
+
 2026-10-20 更新：Inspect 负责正式调度、判分和指标；Evaluator 保留业务扩展；Langfuse 接管展示和人工标注。旧 DeepEval Runner/G-Eval 路径已删除；2026-10-28 起可选接入 [Conversation Completeness](conversation_completeness.md)，仍由 Inspect 执行。最新单一职责、权威数据与验收限制见 [接入说明](langfuse.md)。
 
 本文面向需要接入新 Agent、数据集格式或测试环境的开发者。依据为 2026-10-13 当前工作区，包含尚未提交的实现。能力边界见[能力清单](capabilities.md)，执行顺序见[架构说明](architecture.md)。

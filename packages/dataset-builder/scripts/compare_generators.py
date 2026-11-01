@@ -145,7 +145,7 @@ def main():
         raise ValueError("local DeepSeek credentials and model are required")
     workspace.mkdir(parents=True)
     save(workspace / "history_hashes.json", history)
-    spec = ROOT / "docs/superpowers/specs/2026-10-28-generator-comparison-design.md"
+    spec = ROOT / "docs/GENERATOR_COMPARISON.md"
     suite = load_suite("mini_agent_query_user_intent_v3")
     schedule = [(1, "direct"), (1, "deepeval"), (2, "deepeval"), (2, "direct")]
     protocol = {

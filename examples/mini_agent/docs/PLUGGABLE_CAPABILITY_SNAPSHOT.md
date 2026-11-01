@@ -19,10 +19,10 @@ Fact 方法不变，可通过 `AdapterCollector(adapter)` 接入。
 
 ## 安装为独立组件
 
-在本仓库构建只包含 Kit 的 wheel：
+在 `examples/mini_agent` 目录构建只包含 Kit 的 wheel。Kit 的权威源码位于 [contracts 包](../../../packages/contracts/src/capability_snapshot_kit/)：
 
 ```bash
-.venv/bin/python scripts/build_snapshot_kit.py --output exports/standalone_dist
+../../.venvs/evaluator/bin/python scripts/build_snapshot_kit.py --output exports/standalone_dist
 ```
 
 在另一个 Agent 的虚拟环境中安装生成的 wheel：
@@ -161,15 +161,15 @@ python -m capability_snapshot_kit resolve \
 在仓库根目录运行，确保 examples 可以被 Python 导入：
 
 ```bash
-.venv/bin/python -m capability_snapshot_kit export \
+../../.venvs/evaluator/bin/python -m capability_snapshot_kit export \
   --collector examples.customer_service.collector:create \
   --profile conversation --output exports/customer_service_v1
 
-.venv/bin/python -m capability_snapshot_kit export \
+../../.venvs/evaluator/bin/python -m capability_snapshot_kit export \
   --collector examples.full_tool_fixture.collector:create \
   --spec-root capability_specs --output exports/mini_agent_portable_v1
 
-.venv/bin/python -m examples.customer_service --input '退款政策是什么'
+../../.venvs/evaluator/bin/python -m examples.customer_service --input '退款政策是什么'
 ```
 
 客服示例不依赖 minimal_agent，没有 Tool，提供示例政策回答、空输入追问和转人工建议；

@@ -19,7 +19,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "capability-snapshot-kit"
 version = "0.1.0"
-description = "Pluggable, source-backed Agent capability snapshots for evaluation"
+description = "用于评测的 Agent 能力快照，支持可插拔接入并保留源码依据"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = ["pydantic>=2.6,<3", "PyYAML>=6.0,<7"]
@@ -48,12 +48,12 @@ def stage_project(repository: Path, destination: Path) -> None:
     (destination / "pyproject.toml").write_text(METADATA, encoding="utf-8")
     (destination / "README.md").write_text(
         "# Capability Snapshot Kit\n\n"
-        "Independent Snapshot 3.0 compiler and pluggable fact ingestion.\n\n"
-        "Run `capability-snapshot --help` or "
+        "独立的 Snapshot 3.0 编译器，支持可插拔的事实接入。\n\n"
+        "运行 `capability-snapshot --help` 或 "
         "`python -m capability_snapshot_kit --help`.\n"
-        "Includes extraction instructions and a zero-tool conversation profile.\n"
-        "No Agent runtime or model provider is installed. "
-        "Plugins are explicitly selected trusted local Python factories.\n",
+        "包含提取说明和不使用工具的对话配置。\n"
+        "安装时不引入 Agent 运行时或模型 Provider。"
+        "插件由使用者显式选择，必须是可信的本地 Python 工厂。\n",
         encoding="utf-8",
     )
 

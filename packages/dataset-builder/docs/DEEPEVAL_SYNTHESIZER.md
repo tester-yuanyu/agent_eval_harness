@@ -44,10 +44,10 @@ Python API 可设 `DeepEvalGenerationClient(suite=suite, model=model, max_slot_a
 
 ## 安装与运行
 
-在已满足本项目及相邻 `agent_evaluator` 依赖的环境中安装可选依赖：
+以下命令在 `packages/dataset-builder` 目录及 Builder 独立环境中执行。共享契约依赖由根目录安装脚本准备，无需安装 evaluator：
 
 ```bash
-python -m pip install -e '.[deepeval]'
+../../.venvs/builder/bin/python -m pip install -e '.[deepeval]'
 ```
 
 固定 SDK 为 `deepeval==4.3.2`，其他版本明确拒绝，升级需要重新验证 SDK 契约。默认后端不导入 DeepEval。
@@ -55,20 +55,20 @@ python -m pip install -e '.[deepeval]'
 显式设置 `OPENAI_API_KEY` 与 `DATASET_GENERATOR_MODEL`。CLI 使用 DeepEval 的 `OpenAIModel`，不隐式选择默认模型。密钥不写入生成清单。Python API 也接受 `DeepEvalBaseLLM` 自定义模型。
 
 ```bash
-python -m dataset_builder.cli prepare \
+../../.venvs/builder/bin/python -m dataset_builder.cli prepare \
   --suite mini_agent_query_user_intent_v3 \
   --workspace workspaces/query_user_deepeval_run_01
 
-python -m dataset_builder.cli generate \
+../../.venvs/builder/bin/python -m dataset_builder.cli generate \
   --backend deepeval \
   --request workspaces/query_user_deepeval_run_01/generation_request.json \
   --workspace workspaces/query_user_deepeval_run_01
 
-python -m dataset_builder.cli validate \
+../../.venvs/builder/bin/python -m dataset_builder.cli validate \
   --suite mini_agent_query_user_intent_v3 \
   --draft workspaces/query_user_deepeval_run_01/draft.jsonl
 
-python -m dataset_builder.cli review \
+../../.venvs/builder/bin/python -m dataset_builder.cli review \
   --suite mini_agent_query_user_intent_v3 \
   --draft workspaces/query_user_deepeval_run_01/draft.jsonl \
   --output workspaces/query_user_deepeval_run_01/review.md
@@ -106,11 +106,11 @@ python -m dataset_builder.cli review \
 `tests/test_deepeval_generation.py` 包括坏格式/数量/槽位/规则漂移、过期请求、缺少依赖或模型配置、CLI、编译与门禁，以及**真实 Synthesizer + 离线 DeepEvalBaseLLM**的 42 槽位契约测试。真实 SDK 测试禁止网络连接，输入和预期使用固定测试 fixture，仅用于验证接口而非展示生成质量；未安装可选依赖时该测试跳过，其余后端单元测试仍可运行。
 
 ```bash
-DEEPEVAL_TELEMETRY_OPT_OUT=1 PYTHONPATH=src python -m pytest \
+DEEPEVAL_TELEMETRY_OPT_OUT=1 PYTHONPATH=src ../../.venvs/builder/bin/python -m pytest \
   -p no:rerunfailures tests/test_deepeval_generation.py -q
 ```
 
-实际模型的自然语言质量、审核通过率、成本与耗时，需要后续真实生成实验测量，此次不作效果提升承诺。
+离线接入测试不证明实际生成质量。后续 2026-10-28 的模型实验见[实测记录](GENERATOR_COMPARISON.md)，结论限于该小样本与配置。
 
 2026-10-28 接入验证：项目 `.venv` 已安装 SDK 4.3.2，新增 24 项测试通过；安装 SDK 的全仓回归 270 项通过，Ruff 与 `pip check` 通过。独立审查提出的配置哈希和原始 Golden 证据绑定缺口已修复并复核通过。对 mini_agent、nanobot v2/v3 历史交付的 806 个文件核对 SHA-256，无新增、删除或内容变更。以上均为离线工程验证，没有运行付费生成或被测 Agent。
 

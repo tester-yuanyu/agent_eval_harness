@@ -438,8 +438,8 @@ def test_tau_verification_is_bound_to_official_summary_and_not_counted_as_file_t
         text = (output / filename).read_text()
         assert "DO_NOT_PUBLISH" not in text
         assert str(tmp_path) not in text
-    assert "Langfuse VERIFIED" in (output / "index.html").read_text()
-    assert "Langfuse VERIFIED" in (output / "README.md").read_text()
+    assert "Langfuse 已验证（VERIFIED）" in (output / "index.html").read_text()
+    assert "Langfuse 已验证（VERIFIED）" in (output / "README.md").read_text()
 
 
 @pytest.mark.parametrize("changed", ["summary", "receipt", "verification"])
@@ -514,7 +514,7 @@ def test_readback_supersedes_display_status_and_preserves_immutable_receipts(tmp
         "chains/langfuse_exact_metadata_export.json",
     }
     assert result["executions"]["trials"] == 1
-    assert "Langfuse VERIFIED" in (output / "index.html").read_text()
+    assert "Langfuse 已验证（VERIFIED）" in (output / "index.html").read_text()
     assert str(tmp_path) not in (output / "summary.json").read_text()
     assert all(p.read_bytes() == raw for p, raw in before.items())
 

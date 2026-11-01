@@ -4,7 +4,7 @@
 
 当前主线覆盖**程序模块、模型决策模块、关键链路与端到端**四类执行方式。**Inspect 负责执行调度和原生日志；DeepEval 负责文件与决策基准的正式评分；GEval 提供未完成人工校准的 LLM Judge 诊断；Langfuse 展示已保存的轨迹和分数。**
 
-[三层评测使用指南](docs/benchmark/v2-usage.md) · [七项问题与未解决清单](docs/benchmark/status-v2.md) · [v2 作品集输出](reports/file-tools-v2/index.html) · [真实失败案例](docs/benchmark/failure-case-v2.md) · [历史 v1 实验](docs/benchmark/portfolio.md)
+[文档导航](docs/README.md) · [分层评测使用指南](docs/benchmark/v2-usage.md) · [七项问题与未解决清单](docs/benchmark/status-v2.md) · [v2 作品集输出](reports/file-tools-v2/index.html) · [真实失败案例](docs/benchmark/failure-case-v2.md) · [历史 v1 实验](docs/benchmark/portfolio.md)
 
 v2 已完成 **444 个任务实例、112 个任务族、612 次真实执行**及评分 v2.1 复评：程序模块 60/60、模型决策 72/72、关键链路 151/180、端到端 273/300 通过。不同执行方式分别报告，不能把模块通过率混成模型成功率，也不能把重评分算作新执行。
 
@@ -21,7 +21,7 @@ v2 已完成 **444 个任务实例、112 个任务族、612 次真实执行**及
 
 任务实例包含同族参数变体；重复执行不增加任务数。程序单元测试通过率、模型决策正确率和完整 Agent 成功率分别报告，pytest 框架回归数量不计入 Benchmark 样本量。
 
-冻结资产见 [File Tools v2 数据集卡](data/benchmarks/file-tools-v2/README.md)和 [Model Decisions v1 数据集卡](data/benchmarks/model-decisions-v1/README.md)。文件套件采用固定追问，尚不代表动态用户模拟或完整 nanobot 产品覆盖。数据为 AI 辅助编写，尚无独立逐条人工审核。
+冻结资产见 [File Tools v2 数据集卡](data/benchmarks/file-tools-v2/README.md)和 [Model Decisions v1 数据集卡](data/benchmarks/model-decisions-v1/README.md)。文件套件采用固定追问，尚不代表动态用户模拟或完整 nanobot 产品覆盖。数据为 AI 辅助编写，尚无独立逐条人工审核。说明文档使用中文；冻结任务、第三方官方任务及原始证据保留原文，可按[中文逐条阅读页](docs/dataset-reading.html)查看任务；阅读页跨版本收录 744 条记录，其中包含 v1/v2 继承任务，不代表 744 个唯一任务。详见[语言与冻结边界](docs/dataset-language.md)。
 
 ## 从安装到真实评测
 

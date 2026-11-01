@@ -1,6 +1,8 @@
 # Evaluator 能力清单与边界
 
-2026-10-28 更新：Inspect 负责正式调度、判分和聚合；Evaluator 保留业务扩展；Langfuse 接管展示和人工标注。旧 DeepEval G-Eval 路径及依赖已删除；现已选定 5 个 DeepEval 专项指标待接入 Inspect Scorer，尚未成为运行能力。最新单一职责、权威数据与验收限制见 [接入说明](langfuse.md)。
+> 本文属于旧 Suite／Provider 兼容路径；其中 Inspect 评分、指标和产物约定不适用于当前任务基准。新基准由 Inspect 执行与记录、DeepEval 正式评分，入口见[包说明](../README.md)。以下包内命令在 `packages/evaluator` 目录执行。
+
+2026-10-28 更新：Inspect 负责正式调度、判分和聚合；Evaluator 保留业务扩展；Langfuse 接管展示和人工标注。旧 DeepEval G-Eval 路径已删除；专项指标中 Conversation Completeness 已接入为可选诊断，其余选型与状态见[指标字典](metric_dictionary.md)。最新单一职责、权威数据与验收限制见 [接入说明](langfuse.md)。
 
 本文帮助使用者判断当前 Evaluator 能否满足自己的评测需求。核对日期：2026-10-13；依据为当前工作区代码、接口及测试，包含尚未提交的实现，不等同于某个已发布版本的承诺。
 
@@ -40,7 +42,7 @@ Evaluator 不负责生成或改写正式 Benchmark，也不替 Agent 实现业�
 | 本地发布门禁 | 已实现 | 版本化策略检查通过率、回归、稳定性、证据等；可产生 PASS、FAIL、REVIEW_REQUIRED 或无效结果 | [策略示例](../policies/release_gate.example.json)、[测试](../tests/test_gating.py) |
 | 人工复核 | 离线接入已验收，Cloud 待验收 | Langfuse 是唯一编辑入口；本地导入来源、修订、归因、结果 Hash，不覆盖自动结果或门禁 | [复核测试](../tests/test_langfuse_reviews.py) |
 | 超时控制 | 有限支持 | 当前 mini_agent 同步调用返回后识别超时；不提供抢占式强制取消 | [运行说明](../README.md#当前超时机制的限制) |
-| 全流程 Profile / Pipeline 插件化 | 规划中 | Loader/Provider 基础已落地；Judge、Trace、Assertion、Report 和 Gate 尚未完成统一声明式扩展 | [阶段报告](../PHASE_END_REPORT.md) |
+| 全流程 Profile / Pipeline 插件化 | 规划中 | Loader/Provider 基础已落地；Judge、Trace、Assertion、Report 和 Gate 尚未完成统一声明式扩展 | [兼容架构](architecture.md) |
 
 ## 3. 使用前必须理解的边界
 

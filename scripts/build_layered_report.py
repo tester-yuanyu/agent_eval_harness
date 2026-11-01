@@ -1,7 +1,7 @@
-"""Build a standalone portfolio from saved layered executions and Judge annotations.
+"""根据已保存的分层执行和 Judge 评审记录生成离线作品集。
 
-No model/network/Agent imports. Run only after the supplied experiments finish.
-Public artifacts omit raw prompts, replies, file contents, config and credentials.
+仅在实验完成后运行；不导入 Agent、不调用模型或网络。
+公开产物不复制原始提示词、回复、文件内容、运行配置或凭据。
 """
 
 # ruff: noqa: E501
@@ -30,6 +30,61 @@ JUDGE_NAMES = {
     "recovery_appropriateness",
     "response_groundedness",
 }
+DISPLAY_NAMES = {
+    "PASS": "通过（PASS）",
+    "FAIL": "失败（FAIL）",
+    "INVALID": "执行无效（INVALID）",
+    "INCONCLUSIVE": "证据不足（INCONCLUSIVE）",
+    "SCORED": "已评分",
+    "NOT_APPLICABLE": "不适用",
+    "ERROR": "评分错误",
+    "MISSING": "缺失",
+    "UNSCORED": "未评分",
+    "VERIFIED": "已验证（VERIFIED）",
+    "ACCEPTED": "已接受上传（ACCEPTED）",
+    "MISMATCH": "核对不一致（MISMATCH）",
+    "not_supplied": "未提供",
+    "unknown": "未知",
+    "not_exported": "未导出",
+    "execution": "原始执行／确定性复评",
+    "judge_annotation": "Judge 事后评审",
+    "task": "任务",
+    "generation": "模型决策",
+    "tool": "工具调用",
+    "turn": "对话轮次",
+    "chain": "关键链路",
+    "pilot_executed": "试点已执行",
+    "pilot_partial": "试点部分完成",
+    "pending_or_unverified": "待执行或待验证",
+    **POPULATIONS,
+}
+METRIC_NAMES = {
+    "action_appropriateness": "动作合理性",
+    "recovery_appropriateness": "错误恢复合理性",
+    "response_groundedness": "回复事实依据",
+    "decision_arguments": "决策参数正确性",
+    "decision_call_policy": "调用／弃权策略",
+    "decision_schema": "决策参数结构",
+    "decision_tool_selection": "工具选择",
+    "interactive_evidence": "交互证据完整性",
+    "task_success": "任务完成",
+    "tool_allowed": "工具允许性",
+    "tool_correctness": "工具调用正确性",
+    "tool_schema": "工具参数结构",
+    "workspace_policy": "工作区约束",
+}
+
+
+def _display(value):
+    return DISPLAY_NAMES.get(value, value) if isinstance(value, str) else value
+
+
+def _metric_name(value):
+    if value in METRIC_NAMES:
+        return f"{METRIC_NAMES[value]}（{value}）"
+    return f"检查点（{value}）" if value.startswith("checkpoint:") else value
+
+
 LIMITATIONS = [
     "程序模块、隔离模型决策、关键链路与端到端分开统计；不把模块通过率当作模型成功率。",
     "任务实例包含同族参数变体；实例数、任务族数与重复执行次数分别报告。",
@@ -136,12 +191,16 @@ def _receipt(path, source_hash):
     if not receipt_path.is_file():
         if verification_path.is_file():
             raise ValueError("Langfuse verification requires its export receipt")
-        return {
-            "status": "not_supplied",
-            "export_status": "not_supplied",
-            "verification_status": "not_supplied",
-            "counts": {},
-        }, {}, []
+        return (
+            {
+                "status": "not_supplied",
+                "export_status": "not_supplied",
+                "verification_status": "not_supplied",
+                "counts": {},
+            },
+            {},
+            [],
+        )
     _, receipt, identity = _read(receipt_path)
     if receipt.get("source_hash") != source_hash:
         raise ValueError("Langfuse receipt does not match saved results")
@@ -187,7 +246,9 @@ def _receipt(path, source_hash):
                 or supplement.get("status") != "VERIFIED"
                 or saved.get("status") != "VERIFIED"
             ):
-                raise ValueError("Langfuse supplemental receipt is not source-bound and VERIFIED")
+                raise ValueError(
+                    "Langfuse supplemental receipt is not source-bound and VERIFIED"
+                )
             result["supplemental_evidence"] = {
                 "status": "VERIFIED",
                 "source_hash": source_hash,
@@ -484,7 +545,7 @@ def _questions(summary):
             "question": "模块、关键链路、端到端覆盖",
             "status": "已执行三层" if layered else "部分覆盖",
             "evidence": "；".join(
-                f"{POPULATIONS[key]}：{value['instances']} 实例 / {value['trials']} trials"
+                f"{POPULATIONS[key]}：{value['instances']} 实例 / {value['trials']} 次执行"
                 for key, value in pops.items()
             ),
             "remaining": "限定已声明任务族；业务域、复杂动态交互与更多模块仍需扩展。",
@@ -501,18 +562,18 @@ def _questions(summary):
             "question": "Inspect 是否支持逐步评分",
             "status": "已接入" if scopes - {"task"} else "待接入",
             "evidence": "Inspect 组织执行，自研采证/检查点通过 DeepEval 评分；已记录范围："
-            + "、".join(sorted(scopes)),
+            + "、".join(_display(scope) for scope in sorted(scopes)),
             "remaining": "并非所有步骤均有完整语义判分；顺序检查不证明数据流正确。",
         },
         {
             "id": 4,
             "question": "是否接入 τ-bench",
-            "status": tau["status"],
+            "status": _display(tau["status"]),
             "evidence": (
                 f"已记录奖励 {tau.get('valid_reward_trials', 0)} / "
-                f"计划 {tau.get('planned_trials', '未提供')} trials；"
+                f"计划 {tau.get('planned_trials', '未提供')} 次执行；"
                 f"有效奖励均值 {tau.get('mean_official_reward', '未提供')}。"
-                f"Langfuse {tau['langfuse']['status']}；"
+                f"Langfuse {_display(tau['langfuse']['status'])}；"
                 + (
                     "展示状态绑定官方摘要与标准化结果的来源 Hash。"
                     if tau["langfuse"].get("source_hash")
@@ -547,7 +608,7 @@ def _questions(summary):
 
 
 def _escape(value):
-    return html.escape(str(value), quote=True)
+    return html.escape("未提供" if value is None else str(value), quote=True)
 
 
 def _percent(value):
@@ -589,7 +650,7 @@ def _html(summary, rows):
         f'<div class="card"><span>{_escape(label)}</span><strong>{_escape(value)}</strong></div>'
         for label, value in [
             ("任务实例", summary["executions"]["instances"]),
-            ("真实执行 trials（分层）", summary["executions"]["trials"]),
+            ("真实执行次数（分层）", summary["executions"]["trials"]),
             ("Judge 有效分数（含重复评审）", summary["judge"]["scored"]),
             ("Judge 适用项覆盖率", _percent(summary["judge"]["coverage"])),
         ]
@@ -597,13 +658,15 @@ def _html(summary, rows):
     metrics = summary["execution_metrics"] + summary["judge"]["by_scope_and_metric"]
     metric_table = [
         [
-            item["scope"],
-            item["name"],
+            _display(item["scope"]),
+            _metric_name(item["name"]),
             item["version"],
             item["count"],
             item["scored"],
             "—" if item["mean"] is None else f"{item['mean']:.3f}",
-            json.dumps(item["statuses"], ensure_ascii=False),
+            "、".join(
+                f"{_display(key)}：{value}" for key, value in item["statuses"].items()
+            ),
         ]
         for item in metrics
     ]
@@ -618,7 +681,7 @@ def _html(summary, rows):
         for item in summary["questions"]
     ]
     run_links = "".join(
-        f"<li>{_escape(run['run_id'])}：{_escape(run['kind'])} · Langfuse {_escape(run['langfuse']['status'])}"
+        f"<li>{_escape(run['run_id'])}：{_escape(_display(run['kind']))} · Langfuse {_escape(_display(run['langfuse']['status']))}"
         + (
             f' · <a href="{_escape(run["local_report"])}">本地完整报告</a>'
             if run.get("local_report")
@@ -630,7 +693,7 @@ def _html(summary, rows):
     trace_rows = "".join(
         "<tr>"
         + "".join(
-            f"<td>{_escape(row.get(key, ''))}</td>"
+            f"<td>{_escape(_display(row.get(key, '')))}</td>"
             for key in ("kind", "run_id", "case_id", "trial", "population", "verdict")
         )
         + "<td>"
@@ -650,7 +713,7 @@ def _html(summary, rows):
         else ""
     )
     screenshot = (
-        '<section><h2>Langfuse 节点评分示例</h2><p>已保存的界面抽查展示模型决策节点上的结构、参数、工具选择与 GEval 分数，以及对应 Judge 子节点。界面抽查与服务端回读分别说明各自覆盖范围；服务端状态以各运行的来源绑定记录为准。</p>'
+        "<section><h2>Langfuse 节点评分示例</h2><p>已保存的界面抽查展示模型决策节点上的结构、参数、工具选择与 GEval 分数，以及对应 Judge 子节点。界面抽查与服务端回读分别说明各自覆盖范围；服务端状态以各运行的来源绑定记录为准。</p>"
         '<figure style="margin:0"><a href="langfuse-step-scores.png"><img src="langfuse-step-scores.png" alt="Langfuse 模型决策节点分数与 Judge 子节点示例" style="display:block;width:100%;height:auto" loading="lazy"></a>'
         '<figcaption class="muted">原始截图；点击查看完整图片。</figcaption></figure></section>'
         if summary.get("langfuse_screenshot")
@@ -674,7 +737,7 @@ def _html(summary, rows):
     return (
         '<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Agent Eval Suite · 三层评测作品集</title><style>'
         + STYLE
-        + '</style></head><body><header><div class="eyebrow">AGENT EVAL SUITE / EVIDENCE PORTFOLIO</div><h1>工具型 Agent 三层评测</h1><span class="badge">Inspect · DeepEval / GEval · Langfuse</span><p class="lead">从模块边界、关键链路到端到端交付。此页只展示已保存的真实运行证据；Judge 重评分单独统计。文件工具任务的结果不外推为通用 Agent 能力。</p></header><main><div class="cards">'
+        + '</style></head><body><header><div class="eyebrow">Agent Eval Suite / 评测证据作品集</div><h1>工具型 Agent 三层评测</h1><span class="badge">Inspect · DeepEval / GEval · Langfuse</span><p><a href="../../docs/dataset-reading.html">数据集中文逐条阅读</a> · <a href="../../docs/dataset-language.md">语言与冻结规则</a></p><p class="lead">从模块边界、关键链路到端到端交付。此页只展示已保存的真实运行证据；Judge 重评分单独统计。文件工具任务的结果不外推为通用 Agent 能力。</p></header><main><div class="cards">'
         + cards
         + '</div><section><h2>三层覆盖，四类执行方式</h2><p class="muted">程序模块与模型决策模块分开；重复全通过率仅统计计划重复 ≥ 2 次的任务实验。</p>'
         + _table(
@@ -682,8 +745,8 @@ def _html(summary, rows):
                 "范围",
                 "实例",
                 "任务族",
-                "Trials",
-                *VERDICTS,
+                "执行次数",
+                *[_display(verdict) for verdict in VERDICTS],
                 "本组通过率",
                 "重复全通过率",
             ],
@@ -693,7 +756,7 @@ def _html(summary, rows):
         + _table(["#", "问题", "当前状态", "实际证据", "尚未解决 / 边界"], questions)
         + "</section><section><h2>轨迹与评分指标</h2><p>tool_schema 是结构检查，tool_order 是顺序检查；不能据此宣称参数语义与数据流全部正确。</p>"
         + _table(
-            ["Scope", "指标", "版本", "记录数", "已评分", "均分", "状态计数"],
+            ["评分范围", "指标", "版本", "记录数", "已评分", "均分", "状态计数"],
             metric_table,
         )
         + "</section><section><h2>Judge 的量化与限制</h2><p>适用 "
@@ -737,7 +800,7 @@ def _html(summary, rows):
         + screenshot
         + "<section><h2>运行与原始证据入口</h2><ul>"
         + run_links
-        + '</ul><p>本页表格离线可读；本地完整报告链接依赖仓库目录。<a href="summary.json">汇总 JSON</a> · <a href="results.jsonl">公开逐 trial 摘要</a></p><details><summary>所有 trial / annotation 摘要</summary><div class="table"><table><thead><tr><th>类型</th><th>运行</th><th>Case</th><th>Trial</th><th>范围</th><th>判定</th><th>Trace</th></tr></thead><tbody>'
+        + '</ul><p>本页表格离线可读；本地完整报告链接依赖仓库目录。<a href="summary.json">汇总 JSON</a> · <a href="results.jsonl">公开逐次执行摘要</a></p><details><summary>所有执行与事后评审摘要</summary><div class="table"><table><thead><tr><th>类型</th><th>运行</th><th>用例</th><th>执行序号</th><th>范围</th><th>判定</th><th>Trace</th></tr></thead><tbody>'
         + trace_rows
         + "</tbody></table></div></details><details><summary>来源文件校验值</summary>"
         + _table(
@@ -896,11 +959,11 @@ def build_report(
     markdown = [
         "# 工具型 Agent 三层评测作品集",
         "",
-        "[打开离线报告](index.html) · [汇总数据](summary.json) · [逐 trial 摘要](results.jsonl)",
+        "[打开离线报告](index.html) · [汇总数据](summary.json) · [逐次执行摘要](results.jsonl)",
         "",
-        f"真实执行：{totals['instances']} 个任务实例、{totals['families']} 个任务族、{totals['trials']} 次 trials。Judge 重评分另计，不构成新 Agent 执行。",
+        f"真实执行：{totals['instances']} 个任务实例、{totals['families']} 个任务族、{totals['trials']} 次执行。Judge 重评分另计，不构成新 Agent 执行。",
         "",
-        "| 范围 | 实例 | 任务族 | Trials | PASS | FAIL | INVALID | INCONCLUSIVE |",
+        "| 范围 | 实例 | 任务族 | 执行次数 | 通过（PASS） | 失败（FAIL） | 执行无效（INVALID） | 证据不足（INCONCLUSIVE） |",
         "|---|---:|---:|---:|---:|---:|---:|---:|",
     ]
     for key, value in populations.items():

@@ -1,5 +1,7 @@
 # Agent 自动化评测报告规范
 
+> 本文属于旧 Suite／Provider 兼容路径；其中 Inspect 评分、指标和产物约定不适用于当前任务基准。新基准由 Inspect 执行与记录、DeepEval 正式评分，入口见[包说明](../README.md)。以下包内命令在 `packages/evaluator` 目录执行。
+
 2026-10-20 更新：Inspect 负责正式调度、判分和指标；Evaluator 保留业务扩展；Langfuse 接管展示和人工标注。DeepEval 已删除。最新单一职责、权威数据与验收限制见 [接入说明](langfuse.md)。
 
 ## 1. 文档目的

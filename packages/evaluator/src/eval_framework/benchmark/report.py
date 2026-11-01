@@ -137,17 +137,17 @@ def evidence_summary(run: dict) -> dict:
 
 def _mode(run: dict) -> tuple[str, str]:
     if run.get("mode") == "real_module":
-        return "real", "REAL MODULE · 真实模块调用，不计作模型决策成绩"
+        return "real", "程序模块 · 真实模块调用，不计作模型决策成绩"
     if run.get("mode") == "real_model_decision":
-        return "real", "MODEL DECISION · 真实单次模型决策，未执行工具"
+        return "real", "模型决策 · 真实单次模型决策，未执行工具"
     if run.get("mode") == "mixed_real_execution":
-        return "real", "MIXED · 模块与 Agent 分层统计，不混作模型成功率"
+        return "real", "分层执行 · 模块与 Agent 分层统计，不混作模型成功率"
     if run.get("mode") == "real_agent" and not run.get("identity", {}).get("offline"):
-        return "real", "REAL AGENT · 真实模型调用"
+        return "real", "真实 Agent · 真实模型调用"
     if run.get("mode") == "offline_reference_smoke" or run.get("identity", {}).get(
         "offline"
     ):
-        return "offline", "OFFLINE REFERENCE SMOKE · 离线参考执行，非真实 Agent 成绩"
+        return "offline", "离线参考验证 · 非真实 Agent 成绩"
     return "unknown", "未声明执行模式 · 不能认定为真实 Agent 成绩"
 
 
@@ -165,7 +165,7 @@ def _group_table(groups: dict) -> str:
         )
     return (
         '<div class="table-wrap"><table><thead><tr><th>分组</th><th>任务</th>'
-        "<th>Trials</th><th>PASS</th><th>FAIL</th><th>无效</th>"
+        "<th>执行次数</th><th>通过（PASS）</th><th>失败（FAIL）</th><th>无效</th>"
         "<th>证据不足</th><th>通过率</th></tr></thead><tbody>"
         + "".join(rows)
         + "</tbody></table></div>"
@@ -211,8 +211,8 @@ def _event_html(event: dict, metrics: list[dict] | None = None) -> str:
     model = ""
     if event.get("type") == "generation":
         model = (
-            f" · requested={_escape(event.get('model', event.get('name', '未知')))}"
-            f" · resolved={_escape(event.get('response_model') or '未知')}"
+            f" · 请求模型={_escape(event.get('model', event.get('name', '未知')))}"
+            f" · 响应模型={_escape(event.get('response_model') or '未知')}"
         )
     scoped = "".join(
         f"<li>{_escape(m['name'])}: {_escape(m.get('score'))} · "
@@ -258,7 +258,7 @@ def _trial_html(row: dict, *, detail_url: str | None = None) -> str:
         )
     else:
         turns = "".join(
-            f"<details><summary>Turn {index + 1} · 用户请求与 Agent 回复</summary>"
+            f"<details><summary>第 {index + 1} 轮 · 用户请求与 Agent 回复</summary>"
             f"<h4>输入</h4><pre>{_escape(turn.get('input', ''))}</pre>"
             f"<h4>输出</h4><pre>{_escape(turn.get('output', ''))}</pre></details>"
             for index, turn in enumerate(observation.get("turns", []))
@@ -281,11 +281,11 @@ def _trial_html(row: dict, *, detail_url: str | None = None) -> str:
         f'data-search="{_escape(row["case_id"].lower())}">'
         f'<div class="trial-heading"><span class="badge {_escape(verdict.lower())}">'
         f"{_escape(verdict)}</span><h3>{_escape(row['case_id'])}</h3>"
-        f"<span>Trial {row['trial']}</span></div>"
+        f"<span>第 {row['trial']} 次执行</span></div>"
         f'<p class="muted">{_escape(row.get("split", "unknown"))} · '
-        f"validity={_escape(assessment.get('validity', '未知'))} · "
-        f"status={_escape(observation.get('status', '未知'))} · "
-        f"stop={_escape(observation.get('stop_reason', '未知'))} · "
+        f"有效性={_escape(assessment.get('validity', '未知'))} · "
+        f"状态={_escape(observation.get('status', '未知'))} · "
+        f"停止原因={_escape(observation.get('stop_reason', '未知'))} · "
         f"{_number(row.get('latency_seconds'))}s</p>"
         + (
             f'<p class="failure-reason">{_escape("; ".join(reasons))}</p>'
@@ -343,7 +343,7 @@ function filter(){let shown=0;document.querySelectorAll('.trial').forEach(row=>{
  (!verdict.value||row.dataset.verdict===verdict.value)&&
  (!category.value||row.dataset.category===category.value);
  row.hidden=!match;if(match)shown++;
-});document.getElementById('visible').textContent=shown+' 个 trial';}
+});document.getElementById('visible').textContent=shown+' 条执行结果';}
 [search,verdict,category].forEach(el=>el.addEventListener('input',filter));filter();
 """
 
@@ -363,13 +363,13 @@ def _write_trial_page(run_dir: Path, run: dict, row: dict) -> str:
         '<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">'
         '<meta name="viewport" content="width=device-width,initial-scale=1">'
         '<meta name="referrer" content="no-referrer">'
-        f"<title>{_escape(row['case_id'])} · Trial {row['trial']}</title>"
+        f"<title>{_escape(row['case_id'])} · 第 {row['trial']} 次执行</title>"
         f"<style>{_STYLE}</style></head><body><header>"
         '<a href="../report.html">← 返回报告与筛选</a>'
-        "<h1>单次 Trial 完整证据</h1>"
+        "<h1>单次执行完整证据</h1><p>说明文字使用中文；原始输入、输出、评分规则和工具证据保留执行时的原文。</p>"
         f'<span class="badge {mode}">{_escape(label)}</span>'
         f"<p>{_escape(run.get('run_id', ''))}<br>"
-        f"Identity: {_escape(run.get('identity_hash', '未知'))}</p></header><main>"
+        f"运行身份 Hash：{_escape(run.get('identity_hash', '未知'))}</p></header><main>"
         + _trial_html(row)
         + "<footer>此页包含保存的完整公开轨迹，不调用网络或重新评分。"
         '<a href="../results.json">原始 results.json</a> · '
@@ -404,17 +404,17 @@ def write_report(run_dir: Path | str) -> Path:
         (
             "实际执行",
             f"{summary['completed_trials']} / {planned}",
-            f"{summary['observed_unique_tasks']} 个已执行任务 · {summary['missing_trials']} 个缺失 trial",
+            f"{summary['observed_unique_tasks']} 个已执行任务 · {summary['missing_trials']} 次执行缺失",
         ),
         (
-            "计划 trial 通过率",
+            "按计划执行次数计算的通过率",
             _percent(pass_count, planned),
             f"{pass_count} PASS · {counts.get('FAIL', 0)} FAIL · {counts.get('INVALID', 0)} INVALID",
         ),
         (
             "Agent 总 Token",
             _number(usage["total_tokens"]["total"]),
-            f"用量已知 {usage['total_tokens']['known_trials']}/{len(rows)} trials",
+            f"用量已知 {usage['total_tokens']['known_trials']}/{len(rows)} 次执行",
         ),
         (
             "延迟 P50 / P95",
@@ -470,8 +470,8 @@ def write_report(run_dir: Path | str) -> Path:
         trial_fragments.append(_trial_html(row, detail_url=detail_url))
     trials_html = "".join(trial_fragments)
     detail_notice = (
-        '<p class="muted">本次运行超过 100 个 trial。主报告保留筛选和评分理由，'
-        "完整轨迹按 trial 拆为离线详情页；分享时请将 report-trials/ 目录一并保留。</p>"
+        '<p class="muted">本次运行超过 100 次执行。主报告保留筛选和评分理由，'
+        "完整轨迹按单次执行拆为离线详情页；分享时请将 report-trials/ 目录一并保留。</p>"
         if split_details
         else ""
     )
@@ -483,16 +483,16 @@ def write_report(run_dir: Path | str) -> Path:
         '<header><div class="eyebrow">AGENT EVAL SUITE / SAVED EVIDENCE REPORT</div>'
         f'<h1>工具型 Agent 评测</h1><span class="badge {mode}">{_escape(mode_label)}</span>'
         f"<p>{_escape(title)} · {_escape(runtime.get('agent', 'reference'))} · "
-        f"requested model: {_escape(runtime.get('model', '未知'))}<br>"
-        f"Dataset: {_escape(dataset.get('dataset_id', '未知'))} · "
-        f"Inspect execution → DeepEval scoring → 本地证据报告</p></header><main>"
+        f"请求模型：{_escape(runtime.get('model', '未知'))}<br>"
+        f"数据集：{_escape(dataset.get('dataset_id', '未知'))} · "
+        f"Inspect 执行 → DeepEval 评分 → 本地证据报告</p></header><main>"
         f'<div class="cards">{cards_html}</div>'
         '<p class="muted">报告只展示已保存结果，不调用模型、不重新评分。'
         "PASS 同时要求任务结果与正式约束通过；INVALID / INCONCLUSIVE 与 FAIL 分开统计。</p>"
-        f"<p>有效 trial 通过率：{_percent(pass_count, summary['valid_trials'])}；"
-        f"每个任务全部 {summary['trials_per_case']} 次计划 trial 通过："
+        f"<p>有效执行通过率：{_percent(pass_count, summary['valid_trials'])}；"
+        f"每个任务全部 {summary['trials_per_case']} 次计划执行通过："
         f"{summary['all_trials_pass_tasks']}/{summary['unique_tasks']}。"
-        "缺失或无效 trial 不能证明全部通过。</p>"
+        "缺失或无效执行不能证明全部通过。</p>"
         '<div class="grid"><section><h2>按任务类别</h2>'
         + _group_table(summary["by_category"])
         + "</section><section><h2>按数据划分</h2>"
@@ -510,7 +510,7 @@ def write_report(run_dir: Path | str) -> Path:
         f"输出 Token：{_number(usage['output_tokens']['total'])} · "
         f"缓存命中 Token：{_number(usage['cached_tokens']['total'])}。"
         "prompt_tokens / completion_tokens 仅按字段别名展示，不重复累加。</p>"
-        f"<p>响应实际 model：{_escape(', '.join(models) or '未知')}。"
+        f"<p>响应实际模型：{_escape(', '.join(models) or '未知')}。"
         "字节估算 tokenizer 仅用于 Agent 上下文预算，以上用量来自模型响应。</p>"
         "<details><summary>数据集、Agent、评分与运行配置</summary>"
         f"<pre>{_escape(_pretty(identity_display))}</pre></details>"
@@ -519,7 +519,7 @@ def write_report(run_dir: Path | str) -> Path:
         f"<details><summary>数据集限制与来源</summary><ul>{limitations}</ul>"
         f"<pre>{_escape(_pretty(dataset.get('provenance', {})))}</pre></details></section>"
         "<h2>逐条结果与完整 Trace</h2>" + detail_notice + '<div class="controls">'
-        '<input id="search" aria-label="搜索任务" placeholder="搜索 task ID">'
+        '<input id="search" aria-label="搜索任务" placeholder="搜索任务 ID">'
         f'<select id="verdict" aria-label="结果筛选"><option value="">全部结果</option>{verdict_options}</select>'
         f'<select id="category" aria-label="类别筛选"><option value="">全部类别</option>{categories}</select>'
         '<span id="visible"></span></div>'
@@ -547,7 +547,7 @@ def write_report(run_dir: Path | str) -> Path:
         "",
         "## 分组",
         "",
-        "| 维度 | 分组 | 任务 | Trials | PASS | FAIL | INVALID | INCONCLUSIVE |",
+        "| 维度 | 分组 | 任务 | 执行次数 | 通过（PASS） | 失败（FAIL） | 执行无效（INVALID） | 证据不足（INCONCLUSIVE） |",
         "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |",
     ]
     for dimension in ("split", "category"):
@@ -565,7 +565,7 @@ def write_report(run_dir: Path | str) -> Path:
         if assessment["verdict"] != "PASS":
             markdown.extend(
                 [
-                    f"### {_escape(row['case_id'])} · Trial {row['trial']}",
+                    f"### {_escape(row['case_id'])} · 第 {row['trial']} 次执行",
                     "",
                     f"{_escape(assessment['verdict'])} / {_escape(assessment.get('validity', '未知'))}",
                     "",
@@ -580,7 +580,7 @@ def write_report(run_dir: Path | str) -> Path:
             "<pre>" + _escape(_pretty(identity_display)) + "</pre>",
             "",
             "完整模型请求/响应、工具参数/结果、逐轮输出和文件快照见 [本地 HTML](report.html)。",
-            "超过 100 个 trial 时，完整轨迹拆分到 report-trials/；请连同主报告一起保留。",
+            "超过 100 次执行 时，完整轨迹拆分到 report-trials/；请连同主报告一起保留。",
             "来源：[保存结果](results.json)。报告仅聚合已保存 verdict，不重新评分或调用网络。",
             "",
         ]

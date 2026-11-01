@@ -1,4 +1,4 @@
-# 三层评测与轨迹评分
+# 分层评测与轨迹评分
 
 此版本沿用 Inspect 调度与日志、DeepEval 正式评分和 Langfuse 展示。GEval 是显式事后调用的 LLM Judge，当前只作未完成人工校准的诊断。历史 file-tools-v1 数据与 1,800 次执行保持不变。新资产是 file-tools-v2（程序模块 60、关键链路 60、E2E 300）及 model-decisions-v1（独立模型决策 24）；参数变体和任务族分别报告。
 
@@ -63,7 +63,7 @@ GEval 主评审 3,274 个适用项中 3,273 项已评分，1 项因 ValidationEr
 
 复制 [judge.example.json](../../configs/benchmark/judge.example.json) 为本地 Judge 配置，并设置其 `api_key_env` 指定的环境变量。Judge 的 `dimensions` 配置可选择 `action_appropriateness`、`recovery_appropriateness`、`response_groundedness`。模型决策专项建议仅选择动作合理性。`--repeats` 重新评价同一执行证据，用于测量 Judge 波动；它不增加 Agent 执行次数。每个评分包含版本、范围、对应事件ID、分数、依据及真实Judge调用。失败/证据不足记录为空分，恢复不适用需有完整证据支持。
 
-## 评分与Trace
+## 评分与轨迹
 
 确定性检查使用 DeepEval BaseMetric：任务终态、工作区策略、模块结果、模型决策工具/参数/Schema、工具允许性/Schema、逐轮状态和指定调用检查点。GEval 评价可观察动作、恢复片段和回复事实依据，分数为0–1评价尺度，不是正确概率，也不读取隐藏思维链。
 
@@ -90,7 +90,7 @@ Langfuse 的 V2 读接口可能将文件正文中的 JSON 字符串解析为对�
 
 复评不重跑 Agent。后续 Judge 的 `--source` 可使用完成的 `chains-scored`，但不能使用已经附加 Judge 输出的另一份 Judge 运行。输出目录不得放在来源运行目录内；恢复时要求来源、配置和代码身份一致。`.running` 表示运行锁，不能在未确认进程结束时删除。
 
-## Judge量化与独立人工校准
+## Judge 量化与独立人工校准
 
 输出适用数、已评分数、缺失/错误数、覆盖率、分布、各维度均值、相同证据重复评分范围和独立Judge用量。事实正确和硬约束由确定性Oracle决定；未经人工校准的GEval分数只作诊断。
 

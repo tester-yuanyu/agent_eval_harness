@@ -1,5 +1,7 @@
 # Inspect、DeepEval、Evaluator 与 Langfuse 的职责和接入
 
+> 本文属于旧 Suite／Provider 兼容路径；其中 Inspect 评分、指标和产物约定不适用于当前任务基准。新基准由 Inspect 执行与记录、DeepEval 正式评分，入口见[包说明](../README.md)。以下包内命令在 `packages/evaluator` 目录执行。
+
 2026-10-28 指标去重已实施：分组与分类计数复用 Inspect grouped/frequency；通过率统一适用性规则，P50/P95 和 Judge Token 汇总保存在正式结果，由比较与 Gate 消费。新口径标识 business-metrics-v2，跨口径比较需重跑基线。Judge 保留整次多维尝试重试，原生请求重试关闭。
 
 2026-10-28 选型更新：Inspect 保持唯一执行和正式评分入口；DeepEval 可作为其 Scorer 内的专项算法库，选定复用 3 个 RAG 指标和 2 个多轮指标。当前仅完成[逐项选型与接入验收清单](metric_dictionary.md)，适配代码、依赖和生产接入尚未实施。此前删除的是已由 Inspect 覆盖的 G-Eval 客户端及重复执行路径，不构成对专项算法复用的限制。
@@ -52,12 +54,12 @@ source .env.langfuse
 set +a
 
 # 显式 Cloud 导出；普通 run 仅按独立本机配置同步本地 Langfuse。
-.venv/bin/python -m eval_framework.cli export-langfuse \
+../../.venvs/evaluator/bin/python -m eval_framework.cli export-langfuse \
   --run-dir artifacts/eval_run_ACTUAL
 
 # 已确认需要上传用户输入与最终输出时，首次导出加 --include-content。
 # 在 Langfuse Annotation 完成复核后：
-.venv/bin/python -m eval_framework.cli import-reviews \
+../../.venvs/evaluator/bin/python -m eval_framework.cli import-reviews \
   --run-dir artifacts/eval_run_ACTUAL
 ```
 

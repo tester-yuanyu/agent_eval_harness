@@ -1,4 +1,4 @@
-# Agent Dataset Builder
+# Agent Dataset Builder 数据集生成
 
 Monorepo 安装、环境和离线演示请先阅读 [根目录 README](../../README.md)。
 下方历史 Suite 内的项目相对地址由兼容解析器映射到当前仓库目录；无需恢复旧同级项目布局。
@@ -51,7 +51,7 @@ prepare → generate/ingest → compile → validate → review → approve → 
 ```
 
 自动流程最多推进到 `VALIDATED`。能力包、Profile、Schema、Adapter、Capability IR、
-Suite 或 Policy 任一绑定变化，草案进入 `STALE`。冻结要求：
+Suite 或 Policy 变化后都应重新准备草稿；当前自动 `STALE` 检测主要覆盖能力与实现绑定，尚未逐项重算全部策略和来源，详见[实现边界](AGENT_DATASET_CONSTRAINTS.md#11-需要明确保留的实现边界)。冻结要求：
 
 - 全部 Gate 通过；
 - 审核清单逐条勾选；
@@ -71,7 +71,7 @@ Suite 或 Policy 任一绑定变化，草案进入 `STALE`。冻结要求：
 
 六类 JSON Policy 分别是 Source、Coverage、Generation、Validation、Review、Freeze。
 候选枚举、编译规则、断言、校验 Gate 和覆盖统计均来自 Schema 校验后的 Policy；
-Markdown 只用于说明，不参与执行。
+说明性 Markdown 不指定可执行代码；Suite 显式列入来源包的约束文本仍属于需绑定 Hash 的生成输入。
 
 ## 开发与校验
 
@@ -157,8 +157,8 @@ Adapter 实现、Bundle、Agent 根快照、Capability IR、Suite、Policy、Cov
 
 ```bash
 ../../.venvs/builder/bin/python -m dataset_builder.cli generate-full \
-  --bundle ../mini_agent/exports/full_tools_fixture_v1/bundle \
-  --delivery-root ../mini_agent/exports/full_tools_fixture_v1 \
+  --bundle ../../examples/mini_agent/exports/full_tools_fixture_v1/bundle \
+  --delivery-root ../../examples/mini_agent/exports/full_tools_fixture_v1 \
   --expected-bundle-hash 215a9a3a445c8857f3bdd8dbecba935ce646bd8c784f16ecfc4a5da6042cce3c \
   --workspace workspaces/full_tools_fixture_v1_full_eval_20261020
 
@@ -180,9 +180,9 @@ unknown 状态；不会套用 mini_agent 的业务意图、错误码或 fixture�
 
 ```bash
 ../../.venvs/builder/bin/python -m dataset_builder.cli generate-nanobot \
-  --delivery-root /Users/yuanyu/Desktop/nanobot/exports/nanobot_snapshot_v3 \
+  --delivery-root tests/fixtures/nanobot_snapshot_v3 \
   --expected-bundle-hash 8462eaa3c43061cc6e9f5eefaee216f9fed12e2513d86b3f7efbd476e1d06adb \
-  --previous workspaces/nanobot_full_eval_20261023 \
+  --previous tests/fixtures/nanobot_full_eval_20261023 \
   --workspace workspaces/nanobot_full_eval_v3_20261024
 
 ../../.venvs/builder/bin/python -m dataset_builder.cli validate-nanobot \
@@ -207,3 +207,5 @@ unknown 状态；不会套用 mini_agent 的业务意图、错误码或 fixture�
 原有编译、契约校验、人工审核和冻结；默认后端与历史数据集不变。
 模型生成的预期是待审草稿，缺失预期不会通过复制种子或猜测补齐。
 安装、运行、适用范围及追溯信息见 [DeepEval 接入说明](docs/DEEPEVAL_SYNTHESIZER.md)。
+
+架构与扩展边界见[项目概览](PROJECT_OVERVIEW.md)，硬约束见[生成约束](AGENT_DATASET_CONSTRAINTS.md)，历史双后端实验见[实测记录](docs/GENERATOR_COMPARISON.md)。

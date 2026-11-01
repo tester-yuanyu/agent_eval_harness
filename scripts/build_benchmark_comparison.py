@@ -1,10 +1,7 @@
-"""Build a compact, entirely offline comparison from immutable saved evidence.
+"""根据不可变的历史证据生成离线对比报告。
 
-Usage (repository root):
-    python scripts/build_benchmark_comparison.py
-    python scripts/build_benchmark_comparison.py --public-evidence-dir reports/file-tools-v1
-
-This script never imports an Agent, calls a model, or computes a new verdict.
+读取保存的比较结果与两组运行，核验统计口径并输出可阅读的 HTML。
+不导入 Agent、不调用模型，也不重新计算任何判定。
 """
 
 # Preserve readable HTML/CSS template literals without wrapping their markup.
@@ -337,43 +334,43 @@ def build(
         '<meta name="viewport" content="width=device-width,initial-scale=1">'
         '<meta name="referrer" content="no-referrer">'
         f"<title>工具型 Agent 对比实验 · {esc(dataset['dataset_id'])}</title><style>{STYLE}</style></head><body>"
-        '<div class="topline"><span>AGENT EVAL SUITE / BENCHMARK EVIDENCE</span><span>INSPECT EXECUTION · DEEPEVAL SCORING</span></div>'
+        '<div class="topline"><span>Agent Eval Suite / 评测证据</span><span>Inspect 执行 · DeepEval 评分</span></div>'
         '<main><div class="hero"><div><div class="eyebrow">工具型 AGENT · 真实执行对比</div>'
         f"<h1>工具提示实验：整体通过率{direction} {abs(change) * 100:.2f} 个百分点</h1>"
         f'<p class="subtitle">{left["unique_tasks"]} 条冻结任务 × {left["trials_per_case"]} 次重复 × 2 种配置 · '
         f"{total:,} 次真实执行 · 相同数据集、评分与 Harness 版本</p></div>"
-        '<div class="chips"><span class="chip live">REAL AGENT · 非离线模拟</span>'
+        '<div class="chips"><span class="chip live">真实 Agent 执行</span>'
         f'<span class="chip">nanobot / {esc(runtime["model"])}</span>'
         '<span class="chip">四种文件工具 · 受限 SDK</span>'
         f'<span class="chip">{esc(dataset["dataset_id"])} · {dataset["family_count"]} 个任务族</span></div></div>'
-        '<div class="kpis"><div class="card baseline"><div class="label">基线配置<b>BASELINE</b></div>'
-        f'<div class="big">{percent(left["pass_rate_planned"])}</div><div class="foot">{left_pass} / {left["planned_trials"]} trials 通过 · {left["verdicts"].get("FAIL", 0)} 次失败</div></div>'
-        '<div class="card candidate"><div class="label">工具范围提示<b>TOOL-AWARE</b></div>'
-        f'<div class="big">{percent(right["pass_rate_planned"])}</div><div class="foot">{right_pass} / {right["planned_trials"]} trials 通过 · {right["verdicts"].get("FAIL", 0)} 次失败</div></div>'
-        '<div class="card change"><div class="label">总体变化<b>CANDIDATE − BASELINE</b></div>'
+        '<div class="kpis"><div class="card baseline"><div class="label">基线配置<b>基线</b></div>'
+        f'<div class="big">{percent(left["pass_rate_planned"])}</div><div class="foot">{left_pass} / {left["planned_trials"]} 次执行通过 · {left["verdicts"].get("FAIL", 0)} 次失败</div></div>'
+        '<div class="card candidate"><div class="label">工具范围提示<b>工具范围提示</b></div>'
+        f'<div class="big">{percent(right["pass_rate_planned"])}</div><div class="foot">{right_pass} / {right["planned_trials"]} 次执行通过 · {right["verdicts"].get("FAIL", 0)} 次失败</div></div>'
+        '<div class="card change"><div class="label">总体变化<b>候选 − 基线</b></div>'
         f'<div class="big">{change * 100:+.2f}<small> pp</small></div>'
         f'<div class="foot">通过次数变化 {right_pass - left_pass:+d} · 不做显著性结论</div></div>'
-        f'<div class="card"><div class="label">全部重复均通过的任务<b>ALL {left["trials_per_case"]} TRIALS PASS</b></div>'
+        f'<div class="card"><div class="label">全部重复均通过的任务<b>{left["trials_per_case"]} 次执行全部通过</b></div>'
         f'<div class="big repeat">{percent(left["all_trials_pass_rate"])}<span class="arrow">→</span>{percent(right["all_trials_pass_rate"])}</div>'
         f'<div class="foot">{baseline["all_pass"]}/{left["unique_tasks"]} → {candidate["all_pass"]}/{right["unique_tasks"]} 个任务 · 不是 pass@k</div></div></div>'
         '<div class="body-grid"><section class="panel"><div class="section-title"><h2>各类任务表现</h2>'
-        '<div class="legend"><span><i class="dot blue"></i>Baseline</span><span><i class="dot amber"></i>Tool-aware</span></div></div>'
+        '<div class="legend"><span><i class="dot blue"></i>基线</span><span><i class="dot amber"></i>工具范围提示</span></div></div>'
         "<table><thead><tr><th>任务类别</th><th>基线通过率</th><th>候选通过率</th><th>变化</th></tr></thead><tbody>"
         + "".join(rows)
         + '</tbody></table></section><section class="panel"><div class="section-title"><h2>数据划分与配对变化</h2>'
         '<span class="hint">按完整任务族划分</span></div>'
         + "".join(split_cards)
-        + '<div class="paired"><span>相同 case / trial<br><small>仅描述结果转移</small></span>'
+        + '<div class="paired"><span>相同用例与执行序号<br><small>仅描述结果转移</small></span>'
         f'<span class="positive"><b>{improved}</b> 次转好</span><span class="negative"><b>{regressed}</b> 次回退</span></div></section></div>'
         f'<div class="reading"><strong>{conclusion}</strong>'
         + reading
-        + "任务实例存在族内相关性，重复 trial 也不能视为完全独立样本。"
-        "所有比较均来自保存的正式 verdict，没有用 Judge 诊断分替代成功率。</div>"
+        + "任务实例存在族内相关性，重复执行也不能视为完全独立样本。"
+        "所有比较均来自保存的正式判定，没有用 Judge 诊断分替代成功率。</div>"
         '<div class="bottom"><div class="links">'
         f'<a class="button primary" href="{baseline_link}">{baseline_label} →</a>'
         f'<a class="button" href="{candidate_link}">{candidate_label} →</a>'
         f'<a class="button" href="{comparison_link}">原始对比 JSON ↗</a></div>'
-        f'<div class="audit-label">有效 trials {left["valid_trials"]} + {right["valid_trials"]} · 缺失 {left["missing_trials"] + right["missing_trials"]}<br>'
+        f'<div class="audit-label">有效执行 {left["valid_trials"]} + {right["valid_trials"]} · 缺失 {left["missing_trials"] + right["missing_trials"]}<br>'
         "相同任务与评分 Hash · 仅修改候选 instructions / variant</div></div>"
         '<div class="more"><section class="panel"><div class="section-title"><h2>实验控制与证据身份</h2>'
         '<span class="hint">可展开完整摘要</span></div>'
@@ -389,10 +386,10 @@ def build(
         '<section class="panel"><h2>结论适用范围</h2><ul class="limits">'
         "<li>仅四种本地文件工具；是真实 nanobot SDK 的受限配置，不代表原生全工具能力或生产安全性。</li>"
         f"<li>{dataset['case_count']} 条合成实例来自 {dataset['family_count']} 个任务族，未经过用户逐条人工审核；不能称为官方 τ-bench / BFCL / SWE-bench 成绩。</li>"
-        "<li>正式评分是 DeepEval 确定性终态、工作区约束与交互证据检查；工具覆盖和 G-Eval 是诊断，不决定正式 verdict。</li>"
+        "<li>正式评分是 DeepEval 确定性终态、工作区约束与交互证据检查；工具覆盖和 G-Eval 是诊断，不决定正式判定。</li>"
         "<li>这是描述性配对实验，不声称统计显著或跨领域泛化。文件格式误差、被拒绝的工具尝试与真正副作用应分别解释。</li>"
         "</ul></section></div>"
-        '<p class="meta-foot">页面根据 comparison.json 与两份真实 results.json 生成，并核对 trial 数、分组与汇总一致性。'
+        '<p class="meta-foot">页面根据 comparison.json 与两份真实 results.json 生成，并核对执行次数、分组与汇总一致性。'
         f"页面自包含，无网络资源、外部字体或模型调用；{evidence_note}</p></main></body></html>"
     )
     if len(document.encode("utf-8")) >= 100_000:
@@ -420,12 +417,12 @@ def main() -> None:
     parser.add_argument(
         "--output",
         type=Path,
-        help="Output HTML; defaults to the public evidence directory when supplied, otherwise artifacts/benchmark.",
+        help="输出 HTML；指定公开证据目录时默认输出到该目录，否则输出到 artifacts/benchmark。",
     )
     parser.add_argument(
         "--public-evidence-dir",
         type=Path,
-        help="Link to existing public scoring JSONL exports and comparison.json instead of full local reports; never publishes or uploads.",
+        help="链接现有公开评分 JSONL 和 comparison.json，不链接本地完整报告；不会发布或上传。",
     )
     args = parser.parse_args()
     output = args.output or (

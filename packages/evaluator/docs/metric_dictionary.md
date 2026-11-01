@@ -1,5 +1,7 @@
 # Agent 评测指标字典
 
+> 本文属于旧 Suite／Provider 兼容路径；其中 Inspect 评分、指标和产物约定不适用于当前任务基准。新基准由 Inspect 执行与记录、DeepEval 正式评分，入口见[包说明](../README.md)。以下包内命令在 `packages/evaluator` 目录执行。
+
 核对日期：2026-10-28。本文定义各指标的唯一实现归属、评测对象、必要证据、计算口径、缺证据处理及 Gate 用途，并确定 DeepEval 专项指标的接入清单。选型与实现状态分开：“候选”项尚未注册、没有正式结果，也不参与发布门禁。
 
 Inspect 负责正式执行、Scorer 和 Metric 聚合；DeepEval 定位为由 Inspect Scorer 调用的专项指标算法库；Evaluator 提供业务契约、独立证据、适配、判定政策和 Gate；Langfuse 消费已保存结果。Conversation Completeness 已作为可选诊断接入（DeepEval 4.2.9）；其余专项算法仍为候选。本轮保留指标汇总单一权威，不改变冻结样本契约。报告字段与产物见[报告规范](evaluation_report_spec.md)，证据协议见[独立证据规范](TRACE_PHASE1.md)。

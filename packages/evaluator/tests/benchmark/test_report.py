@@ -85,7 +85,7 @@ def test_report_escapes_all_agent_content_and_marks_offline(tmp_path):
     rendered = write_report(tmp_path).read_text()
     assert attack not in rendered
     assert "&lt;/script&gt;&lt;img" in rendered
-    assert "OFFLINE REFERENCE SMOKE" in rendered
+    assert "离线参考验证 · 非真实 Agent 成绩" in rendered
     assert "非真实 Agent 成绩" in rendered
     assert "调用被拒绝，未执行" in rendered
     assert rendered.count("<script>") == 1

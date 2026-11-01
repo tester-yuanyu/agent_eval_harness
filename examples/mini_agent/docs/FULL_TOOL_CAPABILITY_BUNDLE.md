@@ -6,10 +6,10 @@
 
 ## 位置与重新生成
 
-在仓库根目录运行；`examples` 是仓库内的示例集成，不随 minimal-agent 安装包分发。
+在 `examples/mini_agent` 目录运行；`examples` 是仓库内的示例集成，不随 minimal-agent 安装包分发。
 
 ```bash
-.venv/bin/python -m examples.full_tool_fixture.export \
+../../.venvs/evaluator/bin/python -m examples.full_tool_fixture.export \
   --output exports/full_tools_fixture_v1
 ```
 
@@ -49,19 +49,19 @@ exports/full_tools_fixture_v1/
 ## 运行和导出使用同一工厂
 
 ```bash
-.venv/bin/python -m minimal_agent.capabilities.cli export \
+../../.venvs/evaluator/bin/python -m minimal_agent.capabilities.cli export \
   --tool-registry-factory examples.full_tool_fixture:create_registry \
   --require-complete-tools \
   --output exports/full_tools_raw
 
-.venv/bin/python -m minimal_agent.capabilities.cli validate \
+../../.venvs/evaluator/bin/python -m minimal_agent.capabilities.cli validate \
   --input exports/full_tools_raw
 ```
 
 运行 CLI 使用同一个显式工厂：
 
 ```bash
-.venv/bin/python -m minimal_agent.cli run "查询用户 ID 10001" \
+../../.venvs/evaluator/bin/python -m minimal_agent.cli run "查询用户 ID 10001" \
   --tool-registry-factory examples.full_tool_fixture:create_registry
 ```
 
@@ -80,6 +80,6 @@ exports/full_tools_fixture_v1/
 - 上下文继承、状态覆盖、取消和会话清理未实现，context 仍为 unsupported。
 - `prepare_resource` 现有 Intent 使用 read policy，而本 fixture 创建资源；生产语义和确认策略需另行确定。
 - 礼物 Intent 要求 environment，但原工具参数模型无该字段；当前仅允许隔离 fixture，真实写入前需明确环境绑定。
-- LangGraph 编排迁移、各层 JSONL、能力—案例覆盖矩阵和人工审核不由本次快照导出完成。
+- 各层 JSONL、能力—案例覆盖矩阵和人工审核不由快照导出完成。
 
 这些限制记录在 `capability_contract_gaps.json`。组合解析为 supported 只代表声明的 requirement 和证据满足，不能替代实际执行验收。

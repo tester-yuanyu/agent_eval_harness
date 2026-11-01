@@ -1,6 +1,6 @@
 # Agent 能力快照读取与评测集生成约束
 
-整理日期：2026-10-13。依据：本项目当前工作区代码、JSON Policy、Coverage Plan，以及 v2 Suite 绑定的能力快照。包含尚未提交的实现，不以 Git 历史版本为准。
+本文保留 2026-10-13 整理的 v2 意图 Suite 生产约束；共享契约路径按当前仓库更新。规则以对应能力快照、Suite JSON、Policy 和 Coverage Plan 为准；v3 和独立全量生成入口的差异见 [README](README.md)。
 
 本文用于指导能力包接入、候选生成、校验、审核和交付。**能力事实由快照确定，评测组织规则由 Suite 与 Policy 确定；模型生成候选，代码编译为评测案例，人工确认语义后才可冻结。**
 
@@ -118,7 +118,7 @@ Source Pack 实际内容为：**Capability IR + Suite 显式列出的来源文�
 
 ## 6. 编译与 Oracle 约束
 
-编译器按 Coverage Plan 的 Slot 顺序生成案例；输入候选数组顺序不决定案例编号。案例固定使用 EvalCase Schema `1.0`，由 evaluator 的 `EvalCase` 模型校验。
+编译器按 Coverage Plan 的 Slot 顺序生成案例；输入候选数组顺序不决定案例编号。案例固定使用 EvalCase Schema `1.0`，由共享契约包 `eval_contracts` 的 `EvalCase` 模型校验。
 
 编译器注入：案例编号、任务 ID、评测目标、场景映射、标签、执行 Profile、工具许可、故障注入、步数与超时、预置回复、cleanup、固定 reason 和断言配置。
 
@@ -149,19 +149,19 @@ Oracle 的 `expected_module_output` 包含 `intent`、`status`、`next_action`�
 
 专用 Suite 覆盖正常表达、表达变体、有效边界、非法参数、缺参和多条件；QueryUser 另覆盖语义歧义、纠正冲突和不支持的批量请求。分布应以对应 `coverage_plan.json` 为准。
 
-### QueryUser
+### QueryUser 用户查询
 
 - `user_id`、`room_id` 为正整数；邮箱恰好一个 `@` 且两边非空；手机号为恰好 11 位 ASCII 数字字符串。
 - 明确字段优先于值形态；裸整数不能直接猜作用户 ID。不同字段组合表示 AND。
 - 明确纠正采用最终唯一值。当前快照将批量、OR、同字段多值定义为追问并清空参数；重复裸整数仍需消歧。
 - 专用 v2 Policy 要求未提供字段省略，不允许用 `null` 占位；READY 至少有一个参数且无缺参。
 
-### QueryGift
+### QueryGift 礼物查询
 
 - `gift_id`、`gift_ids`、`gift_name` 三种模式恰好选择一种；`limit` 是可选正整数。
 - ID 为正整数，`gift_ids` 非空，名称非空；完整请求 CALL_TOOL，缺失、非法或模式冲突应追问。
 
-### AddBackpackGift
+### AddBackpackGift 赠礼
 
 - 用户模式 `user_id/user_ids` 恰好一种；礼物模式 `gift_id/gift_ids/gift_nums` 恰好一种；必须明确 `environment`。
 - 数量和天数范围为 1–1000；快照声明默认数量 1、默认天数 7，1000 天表示永久。
@@ -175,7 +175,7 @@ Oracle 的 `expected_module_output` 包含 `intent`、`status`、`next_action`�
 
 | Gate | 实际自动检查 |
 |---|---|
-| `evaluator` | 加载 JSONL、调用 evaluator 的数据集校验、数量与 Schema 版本；并非运行被测 Agent |
+| `evaluator` | 加载 JSONL、调用共享契约包的数据集校验、数量与 Schema 版本；并非运行被测 Agent |
 | `capability_snapshot` | 生成时绑定、工作区能力包、当前能力包及 IR 等的一致性 |
 | `contract` | 参数 Schema、缺参词表、状态／动作、状态规则、Slot 标签、配置要求的场景与 rule_refs 对齐 |
 | `coverage` | 总数和 Policy 配置的分布精确匹配 Plan，检查禁用意图 |
@@ -249,4 +249,4 @@ CLI `validate` 当前将结果输出到标准输出，未传入工作区参数�
 | 审核与冻结 | `pipeline.py`：`approval_from_review`、`freeze_dataset`；`freezing.py`：`freeze` |
 | CLI 行为 | `cli.py`：`main` |
 
-覆盖与业务配置位于 `suites/<suite_id>/suite.json`、`policies/*.json` 和 `coverage_plan.json`。v2 Suite 的当前能力来源为相邻项目 `mini_agent/exports/trace_v1/`；历史 v1 Suite 保留旧能力包绑定。
+覆盖与业务配置位于 `suites/<suite_id>/suite.json`、`policies/*.json` 和 `coverage_plan.json`。v2 Suite 的能力来源映射到本仓库 `examples/mini_agent/exports/trace_v1/`；历史 v1 Suite 保留旧能力包绑定。
