@@ -89,6 +89,8 @@ flowchart LR
 
 GEval 输出 0～1 评价尺度，不是正确概率。报告区分适用、已评分、缺失、错误与不适用，统计同一证据重复评分波动及 Judge 用量。**人工标签、一致性验收和阈值留出验证尚未完成。**已准备 [36 条空白校准样本](reports/file-tools-v2/calibration-sample.json)，从 chain-judge 按稳定 Hash 抽取三个维度各 12 条；这是标注起点，不是已经完成的人工审核。
 
+当前代码的评分 v2.2 另增加重复调用候选诊断，保留同状态重复、错误重试和缺失证据的区别；不以候选诊断否决正式结果。[统一指标规格](docs/benchmark/metric-specification.md)列出公式、粒度、分母与范围；[离线质量报告](reports/evaluation-quality-v1/README.md)复用保存轨迹，不增加执行数。可直接使用[36 条盲标页](reports/evaluation-quality-v1/annotation.html)填写和导出人工标签，规则与分档说明见[标注指南](docs/benchmark/judge-annotation-guide.md)。
+
 ## Langfuse 与作品集
 
 导出、服务端回读和界面检查分别验收；API 接收成功不等于全链路展示验证完成。每次导出显式指定对应数据集：

@@ -1,0 +1,1070 @@
+{
+  "version": "benchmark-quality-audit-v1",
+  "diagnostic_version": "file-tools-repetition-v1",
+  "diagnostic_source_sha256": "e2fe4163200b1a29f3ae90c0ab2e030fe67ca33183a8e73f1efd7c67f3b9a2b2",
+  "new_agent_executions": 0,
+  "new_model_requests": 0,
+  "sources": [
+    {
+      "file": "chains60x3-scored/results.json",
+      "sha256": "769dcc543feb5ab2decc4043aa49a65e417ae570a0ed8ff9299548bf0f0201e3"
+    },
+    {
+      "file": "e2e300-scored/results.json",
+      "sha256": "6f95ca77865b0e0473cd3c82c33b08dd7a85d4e415dc1c3d920f72203e00dc3a"
+    },
+    {
+      "file": "baseline300x3/results.json",
+      "sha256": "edda7834859907a80339ebeef043c306601e1bf906c91b14253b52506af4f722"
+    },
+    {
+      "file": "tool-aware300x3/results.json",
+      "sha256": "2b6f3d220e3565efff37c27122b80e6aefd4055e56ff8dc163cdf16d20bbe7ad"
+    }
+  ],
+  "runs": [
+    {
+      "run_id": "chains60x3-scored-regrade-f0242ffc",
+      "execution_run_id": "chains60x3-022a609a39304c8e",
+      "saved_trials": 180,
+      "saved_verdicts": {
+        "PASS": 151,
+        "FAIL": 29
+      },
+      "saved_assessments_sha256": "a4256da7c198f75cefd615f550dabfee014052bc7e93a3095a4c4d111bdb4115",
+      "repetition": {
+        "total": 923,
+        "applicable": 911,
+        "scored": 909,
+        "missing": 2,
+        "unscorable_traces": 0,
+        "not_applicable": 12,
+        "coverage": 0.9978046103183315,
+        "candidates": 1,
+        "candidate_rate_scored": 0.0011001100110011,
+        "classifications": {
+          "first_call": 886,
+          "state_changed": 22,
+          "unsupported_tool": 12,
+          "missing_evidence": 2,
+          "repeated_same_state": 1
+        }
+      }
+    },
+    {
+      "run_id": "e2e300-scored-regrade-823fe3e8",
+      "execution_run_id": "e2e300-ecc32da8a7aa4194",
+      "saved_trials": 300,
+      "saved_verdicts": {
+        "PASS": 273,
+        "FAIL": 27
+      },
+      "saved_assessments_sha256": "815ac10c44774307e70174820a472469b0bba1c239b9962938208deb6535383b",
+      "repetition": {
+        "total": 1272,
+        "applicable": 1258,
+        "scored": 1257,
+        "missing": 1,
+        "unscorable_traces": 0,
+        "not_applicable": 14,
+        "coverage": 0.9992050874403816,
+        "candidates": 0,
+        "candidate_rate_scored": 0.0,
+        "classifications": {
+          "first_call": 1257,
+          "unsupported_tool": 14,
+          "missing_evidence": 1
+        }
+      }
+    }
+  ],
+  "repetition": {
+    "total": 2195,
+    "applicable": 2169,
+    "scored": 2166,
+    "missing": 3,
+    "unscorable_traces": 0,
+    "not_applicable": 26,
+    "coverage": 0.9986168741355463,
+    "candidates": 1,
+    "candidate_rate_scored": 0.0004616805170821791,
+    "classifications": {
+      "first_call": 2143,
+      "state_changed": 22,
+      "unsupported_tool": 26,
+      "missing_evidence": 3,
+      "repeated_same_state": 1
+    }
+  },
+  "comparison": {
+    "status": "saved_same_policy_comparison",
+    "dataset_id": "file-tools-v1",
+    "scoring_version": "file-tools-deepeval-v1.1",
+    "baseline_run_id": "baseline300x3-1c31c79890394464",
+    "candidate_run_id": "tool-aware300x3-6db1d4b91d38473b",
+    "baseline": {
+      "unique_tasks": 300,
+      "trials_per_case": 3,
+      "planned_trials": 900,
+      "completed_trials": 900,
+      "missing_trials": 0,
+      "valid_trials": 900,
+      "verdicts": {
+        "PASS": 820,
+        "FAIL": 80
+      },
+      "pass_rate_planned": 0.9111111111111111,
+      "pass_rate_valid": 0.9111111111111111,
+      "all_trials_pass_rate": 0.8666666666666667,
+      "all_trials_pass_definition": "All k planned real trials passed; missing and invalid trials cannot prove success.",
+      "latency_seconds_median": 9.890725562523585,
+      "latency_seconds_p95": 15.149422207963653,
+      "usage": {
+        "input_tokens": 14632153,
+        "input_tokens_known_subtotal": 14632153,
+        "input_tokens_known_trials": 900,
+        "output_tokens": 394085,
+        "output_tokens_known_subtotal": 394085,
+        "output_tokens_known_trials": 900,
+        "total_tokens": 15026238,
+        "total_tokens_known_subtotal": 15026238,
+        "total_tokens_known_trials": 900,
+        "cost_usd": null,
+        "cost_usd_known_subtotal": null,
+        "cost_usd_known_trials": 0
+      },
+      "mixed_execution_populations": false,
+      "by_split": {
+        "dev": {
+          "trials": 720,
+          "unique_tasks": 240,
+          "verdicts": {
+            "PASS": 649,
+            "FAIL": 71
+          },
+          "pass_rate_observed": 0.9013888888888889
+        },
+        "holdout": {
+          "trials": 180,
+          "unique_tasks": 60,
+          "verdicts": {
+            "PASS": 171,
+            "FAIL": 9
+          },
+          "pass_rate_observed": 0.95
+        }
+      },
+      "by_category": {
+        "create_edit": {
+          "trials": 300,
+          "unique_tasks": 100,
+          "verdicts": {
+            "PASS": 257,
+            "FAIL": 43
+          },
+          "pass_rate_observed": 0.8566666666666667
+        },
+        "missing_error": {
+          "trials": 60,
+          "unique_tasks": 20,
+          "verdicts": {
+            "PASS": 60
+          },
+          "pass_rate_observed": 1.0
+        },
+        "multi_file": {
+          "trials": 240,
+          "unique_tasks": 80,
+          "verdicts": {
+            "PASS": 205,
+            "FAIL": 35
+          },
+          "pass_rate_observed": 0.8541666666666666
+        },
+        "multi_turn": {
+          "trials": 120,
+          "unique_tasks": 40,
+          "verdicts": {
+            "PASS": 119,
+            "FAIL": 1
+          },
+          "pass_rate_observed": 0.9916666666666667
+        },
+        "read_search": {
+          "trials": 180,
+          "unique_tasks": 60,
+          "verdicts": {
+            "PASS": 179,
+            "FAIL": 1
+          },
+          "pass_rate_observed": 0.9944444444444445
+        }
+      },
+      "by_evaluation_level": {
+        "e2e": {
+          "trials": 900,
+          "unique_tasks": 300,
+          "verdicts": {
+            "PASS": 820,
+            "FAIL": 80
+          },
+          "pass_rate_observed": 0.9111111111111111
+        }
+      },
+      "by_execution_mode": {
+        "agent": {
+          "trials": 900,
+          "unique_tasks": 300,
+          "verdicts": {
+            "PASS": 820,
+            "FAIL": 80
+          },
+          "pass_rate_observed": 0.9111111111111111
+        }
+      }
+    },
+    "candidate": {
+      "unique_tasks": 300,
+      "trials_per_case": 3,
+      "planned_trials": 900,
+      "completed_trials": 900,
+      "missing_trials": 0,
+      "valid_trials": 900,
+      "verdicts": {
+        "PASS": 799,
+        "FAIL": 101
+      },
+      "pass_rate_planned": 0.8877777777777778,
+      "pass_rate_valid": 0.8877777777777778,
+      "all_trials_pass_rate": 0.84,
+      "all_trials_pass_definition": "All k planned real trials passed; missing and invalid trials cannot prove success.",
+      "latency_seconds_median": 9.79400535399327,
+      "latency_seconds_p95": 14.926158667076379,
+      "usage": {
+        "input_tokens": 14529923,
+        "input_tokens_known_subtotal": 14529923,
+        "input_tokens_known_trials": 900,
+        "output_tokens": 378069,
+        "output_tokens_known_subtotal": 378069,
+        "output_tokens_known_trials": 900,
+        "total_tokens": 14907992,
+        "total_tokens_known_subtotal": 14907992,
+        "total_tokens_known_trials": 900,
+        "cost_usd": null,
+        "cost_usd_known_subtotal": null,
+        "cost_usd_known_trials": 0
+      },
+      "mixed_execution_populations": false,
+      "by_split": {
+        "dev": {
+          "trials": 720,
+          "unique_tasks": 240,
+          "verdicts": {
+            "PASS": 624,
+            "FAIL": 96
+          },
+          "pass_rate_observed": 0.8666666666666667
+        },
+        "holdout": {
+          "trials": 180,
+          "unique_tasks": 60,
+          "verdicts": {
+            "PASS": 175,
+            "FAIL": 5
+          },
+          "pass_rate_observed": 0.9722222222222222
+        }
+      },
+      "by_category": {
+        "create_edit": {
+          "trials": 300,
+          "unique_tasks": 100,
+          "verdicts": {
+            "PASS": 244,
+            "FAIL": 56
+          },
+          "pass_rate_observed": 0.8133333333333334
+        },
+        "missing_error": {
+          "trials": 60,
+          "unique_tasks": 20,
+          "verdicts": {
+            "PASS": 60
+          },
+          "pass_rate_observed": 1.0
+        },
+        "multi_file": {
+          "trials": 240,
+          "unique_tasks": 80,
+          "verdicts": {
+            "PASS": 205,
+            "FAIL": 35
+          },
+          "pass_rate_observed": 0.8541666666666666
+        },
+        "multi_turn": {
+          "trials": 120,
+          "unique_tasks": 40,
+          "verdicts": {
+            "PASS": 112,
+            "FAIL": 8
+          },
+          "pass_rate_observed": 0.9333333333333333
+        },
+        "read_search": {
+          "trials": 180,
+          "unique_tasks": 60,
+          "verdicts": {
+            "PASS": 178,
+            "FAIL": 2
+          },
+          "pass_rate_observed": 0.9888888888888889
+        }
+      },
+      "by_evaluation_level": {
+        "e2e": {
+          "trials": 900,
+          "unique_tasks": 300,
+          "verdicts": {
+            "PASS": 799,
+            "FAIL": 101
+          },
+          "pass_rate_observed": 0.8877777777777778
+        }
+      },
+      "by_execution_mode": {
+        "agent": {
+          "trials": 900,
+          "unique_tasks": 300,
+          "verdicts": {
+            "PASS": 799,
+            "FAIL": 101
+          },
+          "pass_rate_observed": 0.8877777777777778
+        }
+      }
+    },
+    "pass_rate_delta": -0.023333333333333317,
+    "changed_configuration_fields": [
+      "instructions",
+      "variant"
+    ],
+    "improvements": 29,
+    "regressions": 50,
+    "changed_trials": [
+      {
+        "case_id": "file-tools-v1/create_edit/csv_filter_active/001",
+        "trial": 1,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/create_edit/csv_filter_active/002",
+        "trial": 1,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/create_edit/csv_filter_active/002",
+        "trial": 2,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/create_edit/csv_filter_active/003",
+        "trial": 2,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/create_edit/csv_filter_active/003",
+        "trial": 3,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/create_edit/csv_filter_active/004",
+        "trial": 2,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/create_edit/csv_filter_active/005",
+        "trial": 1,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/create_edit/csv_update_region/002",
+        "trial": 3,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/create_edit/csv_update_region/005",
+        "trial": 3,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/create_edit/dedupe_tags/002",
+        "trial": 3,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/create_edit/dedupe_tags/003",
+        "trial": 2,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/create_edit/dedupe_tags/003",
+        "trial": 3,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/create_edit/dedupe_tags/004",
+        "trial": 3,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/create_edit/dedupe_tags/005",
+        "trial": 2,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/create_edit/lowercase_keys/004",
+        "trial": 3,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/create_edit/number_steps/004",
+        "trial": 3,
+        "baseline": "FAIL",
+        "candidate": "PASS",
+        "candidate_failed_metrics": []
+      },
+      {
+        "case_id": "file-tools-v1/create_edit/prefix_tasks/004",
+        "trial": 2,
+        "baseline": "FAIL",
+        "candidate": "PASS",
+        "candidate_failed_metrics": []
+      },
+      {
+        "case_id": "file-tools-v1/create_edit/prepend_header/002",
+        "trial": 1,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/create_edit/replace_setting/003",
+        "trial": 1,
+        "baseline": "FAIL",
+        "candidate": "PASS",
+        "candidate_failed_metrics": []
+      },
+      {
+        "case_id": "file-tools-v1/create_edit/replace_setting/004",
+        "trial": 3,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/create_edit/sort_records/002",
+        "trial": 3,
+        "baseline": "FAIL",
+        "candidate": "PASS",
+        "candidate_failed_metrics": []
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/archive_report/001",
+        "trial": 1,
+        "baseline": "FAIL",
+        "candidate": "PASS",
+        "candidate_failed_metrics": []
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/archive_report/002",
+        "trial": 1,
+        "baseline": "FAIL",
+        "candidate": "PASS",
+        "candidate_failed_metrics": []
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/archive_report/002",
+        "trial": 2,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/archive_report/004",
+        "trial": 3,
+        "baseline": "FAIL",
+        "candidate": "PASS",
+        "candidate_failed_metrics": []
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/build_index/001",
+        "trial": 1,
+        "baseline": "FAIL",
+        "candidate": "PASS",
+        "candidate_failed_metrics": []
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/build_index/001",
+        "trial": 2,
+        "baseline": "FAIL",
+        "candidate": "PASS",
+        "candidate_failed_metrics": []
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/build_index/001",
+        "trial": 3,
+        "baseline": "FAIL",
+        "candidate": "PASS",
+        "candidate_failed_metrics": []
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/join_csv/001",
+        "trial": 1,
+        "baseline": "FAIL",
+        "candidate": "PASS",
+        "candidate_failed_metrics": []
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/join_csv/001",
+        "trial": 2,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/join_csv/001",
+        "trial": 3,
+        "baseline": "FAIL",
+        "candidate": "PASS",
+        "candidate_failed_metrics": []
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/join_csv/004",
+        "trial": 1,
+        "baseline": "FAIL",
+        "candidate": "PASS",
+        "candidate_failed_metrics": []
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/join_csv/004",
+        "trial": 2,
+        "baseline": "FAIL",
+        "candidate": "PASS",
+        "candidate_failed_metrics": []
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/manifest_from_json/001",
+        "trial": 2,
+        "baseline": "FAIL",
+        "candidate": "PASS",
+        "candidate_failed_metrics": []
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/manifest_from_json/001",
+        "trial": 3,
+        "baseline": "FAIL",
+        "candidate": "PASS",
+        "candidate_failed_metrics": []
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/manifest_from_json/002",
+        "trial": 1,
+        "baseline": "FAIL",
+        "candidate": "PASS",
+        "candidate_failed_metrics": []
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/manifest_from_json/002",
+        "trial": 3,
+        "baseline": "FAIL",
+        "candidate": "PASS",
+        "candidate_failed_metrics": []
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/manifest_from_json/003",
+        "trial": 1,
+        "baseline": "FAIL",
+        "candidate": "PASS",
+        "candidate_failed_metrics": []
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/manifest_from_json/003",
+        "trial": 2,
+        "baseline": "FAIL",
+        "candidate": "PASS",
+        "candidate_failed_metrics": []
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/manifest_from_json/003",
+        "trial": 3,
+        "baseline": "FAIL",
+        "candidate": "PASS",
+        "candidate_failed_metrics": []
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/manifest_from_json/004",
+        "trial": 1,
+        "baseline": "FAIL",
+        "candidate": "PASS",
+        "candidate_failed_metrics": []
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/manifest_from_json/004",
+        "trial": 2,
+        "baseline": "FAIL",
+        "candidate": "PASS",
+        "candidate_failed_metrics": []
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/merge_fragments/001",
+        "trial": 1,
+        "baseline": "FAIL",
+        "candidate": "PASS",
+        "candidate_failed_metrics": []
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/merge_fragments/001",
+        "trial": 2,
+        "baseline": "FAIL",
+        "candidate": "PASS",
+        "candidate_failed_metrics": []
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/merge_fragments/001",
+        "trial": 3,
+        "baseline": "FAIL",
+        "candidate": "PASS",
+        "candidate_failed_metrics": []
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/merge_fragments/003",
+        "trial": 1,
+        "baseline": "FAIL",
+        "candidate": "PASS",
+        "candidate_failed_metrics": []
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/merge_fragments/004",
+        "trial": 2,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/merge_fragments/004",
+        "trial": 3,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/reconcile_inventory/002",
+        "trial": 1,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/reconcile_inventory/002",
+        "trial": 3,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/redact_multi/001",
+        "trial": 2,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/redact_multi/001",
+        "trial": 3,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/redact_multi/002",
+        "trial": 2,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/redact_multi/002",
+        "trial": 3,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/redact_multi/004",
+        "trial": 2,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/route_records/001",
+        "trial": 2,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/route_records/001",
+        "trial": 3,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/route_records/002",
+        "trial": 1,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/route_records/002",
+        "trial": 3,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/route_records/003",
+        "trial": 3,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/route_records/004",
+        "trial": 1,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/route_records/004",
+        "trial": 2,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/route_records/004",
+        "trial": 3,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/sync_versions/003",
+        "trial": 2,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/sync_versions/003",
+        "trial": 3,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/sync_versions/004",
+        "trial": 2,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/sync_versions/004",
+        "trial": 3,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/multi_turn/append_then_correct/003",
+        "trial": 1,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/multi_turn/change_mode/001",
+        "trial": 2,
+        "baseline": "FAIL",
+        "candidate": "PASS",
+        "candidate_failed_metrics": []
+      },
+      {
+        "case_id": "file-tools-v1/multi_turn/change_region/002",
+        "trial": 3,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/multi_turn/filter_then_expand/002",
+        "trial": 1,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/multi_turn/filter_then_expand/002",
+        "trial": 2,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/multi_turn/filter_then_expand/003",
+        "trial": 2,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/multi_turn/filter_then_expand/003",
+        "trial": 3,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/multi_turn/filter_then_expand/004",
+        "trial": 1,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/multi_turn/filter_then_expand/004",
+        "trial": 3,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/read_search/common_values/001",
+        "trial": 2,
+        "baseline": "FAIL",
+        "candidate": "PASS",
+        "candidate_failed_metrics": []
+      },
+      {
+        "case_id": "file-tools-v1/read_search/markdown_heading/001",
+        "trial": 3,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/read_search/markdown_heading/002",
+        "trial": 2,
+        "baseline": "PASS",
+        "candidate": "FAIL",
+        "candidate_failed_metrics": [
+          "task_success"
+        ]
+      }
+    ],
+    "failure_examples": [
+      {
+        "case_id": "file-tools-v1/create_edit/csv_filter_active/001",
+        "trial": 1,
+        "failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/create_edit/dedupe_tags/001",
+        "trial": 1,
+        "failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/create_edit/dedupe_tags/001",
+        "trial": 2,
+        "failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/create_edit/dedupe_tags/001",
+        "trial": 3,
+        "failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/multi_file/join_csv/001",
+        "trial": 2,
+        "failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/read_search/markdown_heading/001",
+        "trial": 3,
+        "failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/create_edit/lowercase_keys/001",
+        "trial": 1,
+        "failed_metrics": [
+          "task_success"
+        ]
+      },
+      {
+        "case_id": "file-tools-v1/create_edit/lowercase_keys/001",
+        "trial": 2,
+        "failed_metrics": [
+          "task_success"
+        ]
+      }
+    ],
+    "interpretation": "历史同口径配置对比；非 v1/v2 能力提升，非新增执行或显著性结论。"
+  },
+  "human_calibration": "pending_independent_labels"
+}

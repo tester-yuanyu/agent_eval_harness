@@ -1,0 +1,37 @@
+{
+  "version": "quality-delivery-evidence-v1",
+  "sources": [
+    {
+      "file": "reports/file-tools-v2/calibration-sample.json",
+      "sha256": "8ea5ccaf86e5e35b9437b6044a2d850ab3dde4149051091081de7b3a5769d761"
+    },
+    {
+      "file": "artifacts/benchmark-v2/chain-judge/results.json",
+      "sha256": "0aef74f00158d10758fbb99cb81093e121e33e4c18b0d25338a9f0a123e66542"
+    },
+    {
+      "file": "reports/file-tools-v2/summary.json",
+      "sha256": "66f20b7a42551f5bb8ed1d3048fd521ce942e2bbca93931cc417bae2c08a6e36"
+    }
+  ],
+  "calibration": {
+    "sample_rows": 36,
+    "completed_human_labels": 0,
+    "status": "awaiting_independent_human_labels",
+    "threshold_status": "requires_independent_validation",
+    "split": "development_only"
+  },
+  "saved_judge_stability": {
+    "matched_metrics": 69,
+    "mean_range": 0.03188405797101449,
+    "max_range": 0.4
+  },
+  "saved_judge_coverage": {
+    "applicable": 3412,
+    "scored": 3411,
+    "errors": 1,
+    "missing": 0
+  },
+  "new_agent_executions": 0,
+  "new_model_requests": 0
+}

@@ -3,6 +3,7 @@
 from copy import deepcopy
 
 import pytest
+
 from eval_framework.benchmark import judge_calibration as calibration
 
 
@@ -163,3 +164,93 @@ def test_agreement_is_also_reported_per_dimension():
     assert result["by_dimension"]["response_groundedness"]["agreement"] == 1
     assert result["by_dimension"]["action_appropriateness"]["paired"] == 0
     assert result["by_dimension"]["action_appropriateness"]["agreement"] is None
+
+
+def test_dimension_denominators_and_confusion_do_not_use_population_as_rate_base():
+    rows = records() + [
+        {**records()[0], "record_id": "d", "score": 0.2},
+        {**records()[0], "record_id": "e", "score": 0.9},
+    ]
+    result = calibration.compare_human_labels(
+        rows,
+        [label("a", 0.1), label("b", 0.8), label("c", 0.2), label("d", 0.9)],
+        threshold=0.7,
+        threshold_version="candidate-v1",
+    )
+    group = result["by_dimension"]["response_groundedness"]
+    assert (group["total"], group["labeled"], group["paired"]) == (4, 3, 3)
+    assert group["label_coverage"] == 0.75
+    assert group["human_negative"] == 2
+    assert group["human_positive"] == 1
+    assert group["false_accept_rate"] == 0.5
+    assert group["false_reject_rate"] == 1
+    assert group["confusion_matrix"] == {
+        "true_accept": 0,
+        "false_accept": 1,
+        "true_reject": 1,
+        "false_reject": 1,
+    }
+    assert group["missing_label_ids"] == ["e"]
+    missing = result["by_dimension"]["action_appropriateness"]
+    assert (missing["total"], missing["labeled"], missing["paired"]) == (1, 1, 0)
+    assert missing["judge_unscored_ids"] == ["b"]
+    assert missing["false_accept_rate"] is None
+    assert {case["record_id"] for case in result["disagreements"]} == {"a", "d"}
+    assert {case["classification"] for case in result["disagreements"]} == {
+        "false_accept",
+        "false_reject",
+    }
+    assert result["disagreements"][0]["evidence_ids"] == ["t1"]
+
+
+def test_blank_labels_preserve_all_dimensions_and_machine_verifiable_inputs():
+    import hashlib
+    import json
+
+    rows, labels = records(), [label("a", None)]
+    result = calibration.compare_human_labels(
+        rows,
+        labels,
+        threshold=0.7,
+        threshold_version="candidate-v1",
+    )
+    assert result["by_dimension"]["action_appropriateness"]["total"] == 1
+    assert result["by_dimension"]["response_groundedness"]["labeled"] == 0
+    assert result["disagreements"] == []
+    for key, value in (("source_summary", rows), ("labels_summary", labels)):
+        expected = hashlib.sha256(
+            json.dumps(
+                value,
+                ensure_ascii=False,
+                sort_keys=True,
+                separators=(",", ":"),
+                allow_nan=False,
+            ).encode("utf-8")
+        ).hexdigest()
+        assert result[key]["sha256"] == expected
+    assert result["labels_summary"]["completed_count"] == 0
+    assert result["labels_summary"]["submitted_count"] == 1
+
+
+def test_completed_labels_with_no_judge_scores_remain_diagnostic_not_unlabeled():
+    result = calibration.compare_human_labels(
+        records(),
+        [label("b", 0)],
+        threshold=0.7,
+        threshold_version="candidate-v1",
+    )
+    assert result["status"] == "diagnostic_agreement_only"
+    assert result["agreement"] is None
+    assert result["threshold_status"] == "requires_independent_validation"
+
+
+@pytest.mark.parametrize("score", [float("nan"), float("inf"), float("-inf")])
+def test_nonfinite_judge_score_remains_unscored_when_hashing_source(score):
+    rows = [{**records()[0], "score": score}]
+    result = calibration.compare_human_labels(
+        rows, [label("a", 0.5)], threshold=0.7, threshold_version="candidate-v1"
+    )
+    assert result["judge_unscored_ids"] == ["a"]
+    assert result["paired"] == 0
+    assert result["agreement"] is None
+    assert len(result["source_summary"]["sha256"]) == 64

@@ -35,3 +35,9 @@
 事后 Judge 关联到原 Trace 时，根 Span 的起止跨度包含执行结束至评审发生之间的间隔；实际 Agent latency 保留原执行时长，不能把这个跨度称为 Agent 耗时。
 
 上述“待完成”会随新的可检查证据更新。执行命令见 [v2 使用指南](v2-usage.md)，公开报告使用 [作品集生成器](../../scripts/build_layered_report.py)。
+
+## 2026-11-01 质量补齐
+
+已增加 `tool_nonrepetition` 确定性诊断，区分同状态重复候选、错误后重试、状态变化及缺证据；候选不自动判定失败。新运行使用评分 v2.2，新诊断源码纳入身份。对既有 480 次 chain / E2E 证据单独做离线检查，原评分 v2.1 及判定保留。报告见[质量检查](../../reports/evaluation-quality-v1/README.md)。
+
+已补[当前指标规格](metric-specification.md)、[12 个分档说明示例与标注指南](judge-annotation-guide.md)、[36 条离线盲标页](../../reports/evaluation-quality-v1/annotation.html)，校准比较新增分维度混淆矩阵、分母、差异证据和来源 Hash。示例是机器编写的解释材料，标签仍为空；这次工程补齐没有完成人工校准、阈值留出验证或新的 v2 配置 A/B，也没有新增模型调用或 Langfuse 导出。

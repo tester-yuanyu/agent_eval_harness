@@ -46,6 +46,7 @@ def scoring_identity() -> dict:
                 "trajectory.py",
                 "module_oracle.py",
                 "recovery_scoring.py",
+                "repetition.py",
             ]
         ),
     }

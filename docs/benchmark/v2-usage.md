@@ -108,6 +108,44 @@ Langfuse 的 V2 读接口可能将文件正文中的 JSON 字符串解析为对�
 
 已提供 [calibration-sample.json](../../reports/file-tools-v2/calibration-sample.json)：从 chain-judge 按稳定 Hash 抽取动作、恢复、回复依据三个维度各 12 条，共 36 条空白标注。所有 human_score 均未填写，不能视为人工校准结果。完成独立标签后仍需在另外的留出样本上验证阈值。
 
+当前指标的公式、分母和缺失处理见[统一规格](metric-specification.md)；分档说明示例、盲标、分歧复核和独立留出规则见[标注指南](judge-annotation-guide.md)。说明示例为机器编写，尚未获人工审定。
+
+### 离线盲标与校准报告
+
+已生成[36 条离线盲标页](../../reports/evaluation-quality-v1/annotation.html)。下载后可直接在浏览器打开，逐条填写分数、理由和身份，独立性须由本人勾选；关闭前导出标签 JSON。页面不自动保存、不上传、不展示 Judge 预测。
+
+```bash
+.venvs/evaluator/bin/python -m eval_framework.benchmark.cli calibration-page \
+  --worksheet reports/file-tools-v2/calibration-sample.json \
+  --output artifacts/human-review/annotation.html
+
+# 人工完成后：source 必须是该 worksheet 所对应的原 Judge 运行。
+.venvs/evaluator/bin/python -m eval_framework.benchmark.cli calibration-check \
+  --run artifacts/benchmark-v2/chain-judge --labels /path/to/human-labels.json \
+  --threshold 0.8 --threshold-version exploratory-example \
+  --output artifacts/human-review/agreement.json \
+  --report artifacts/human-review/agreement.md
+```
+
+比较完整来源时，`total` 包含全部适用 Judge 证据；只标注 36 条必须如实保留低标签覆盖率。新的输出增加按维度统计、混淆矩阵、误放/误杀分母、分歧引用和输入 Hash。即使有标签，结果也仍是诊断；独立性字段是自我声明，需审核，示例阈值 0.8 未经过验证。
+
+### 重复调用候选与保存证据审计
+
+评分 v2.2 对有 `evaluation_level` 或 checkpoint 的主线任务增加 `tool_nonrepetition`，并将新实现纳入评分源码 Hash；正式判定规则沿用 v2.1。重复候选仅作诊断；缺证据为空，诊断执行异常记录 `ERROR`，不清空正式评分。不具备独立快照的旧记录不会因此被补造分数。
+
+```bash
+# 只读已保存轨迹。每次使用新输出目录，不重新执行 Agent/Judge。
+.venvs/evaluator/bin/python -m eval_framework.benchmark.cli quality-audit \
+  --run artifacts/benchmark-v2/chains60x3-scored \
+  --run artifacts/benchmark-v2/e2e300-scored \
+  --dataset data/benchmarks/file-tools-v2 \
+  --baseline artifacts/benchmark/baseline300x3 \
+  --candidate artifacts/benchmark/tool-aware300x3 \
+  --output artifacts/my-quality-audit
+```
+
+`--baseline/--candidate` 可同时省略。提供时仅允许提示词与 variant 变化，并校验相同数据集、评分、Harness、真实 Agent 身份、任务和重复次数；输出改善、退化与失败指标引用。这组既有对比属于 v1，不能解释为 v2 改善。实际离线诊断见[质量检查](../../reports/evaluation-quality-v1/README.md)，人工校准仍待完成。
+
 
 ## 生成公开作品集
 

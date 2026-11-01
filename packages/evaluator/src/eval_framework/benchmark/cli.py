@@ -46,12 +46,28 @@ def main(argv=None):
     calibration = sub.add_parser("calibration-sheet")
     calibration.add_argument("--run", type=Path, required=True)
     calibration.add_argument("--output", type=Path, required=True)
+    annotation = sub.add_parser(
+        "calibration-page", help="Render a blank offline annotation page"
+    )
+    annotation.add_argument("--worksheet", type=Path, required=True)
+    annotation.add_argument("--output", type=Path, required=True)
     calibrate = sub.add_parser("calibration-check")
     calibrate.add_argument("--run", type=Path, required=True)
     calibrate.add_argument("--labels", type=Path, required=True)
     calibrate.add_argument("--threshold", type=float, required=True)
     calibrate.add_argument("--threshold-version", required=True)
     calibrate.add_argument("--output", type=Path, required=True)
+    calibrate.add_argument(
+        "--report", type=Path, help="Optional Markdown diagnostic report"
+    )
+    audit = sub.add_parser(
+        "quality-audit", help="Diagnose saved file-tool evidence offline"
+    )
+    audit.add_argument("--run", type=Path, action="append", required=True)
+    audit.add_argument("--dataset", type=Path, required=True)
+    audit.add_argument("--output", type=Path, required=True)
+    audit.add_argument("--baseline", type=Path)
+    audit.add_argument("--candidate", type=Path)
     compare = sub.add_parser("compare")
     compare.add_argument("--baseline", type=Path, required=True)
     compare.add_argument("--candidate", type=Path, required=True)
@@ -170,8 +186,22 @@ def main(argv=None):
         if args.output.exists():
             parser.error("calibration output already exists")
         save_json(args.output, result)
+    elif args.command == "calibration-page":
+        from .calibration_reporting import render_annotation_html
+
+        if args.output.exists():
+            parser.error("annotation output already exists")
+        page = render_annotation_html(json.loads(args.worksheet.read_text()))
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        args.output.write_text(page)
     elif args.command == "calibration-check":
+        from .calibration_reporting import render_calibration_report
         from .judge_calibration import compare_human_labels
+
+        if args.output.exists() or (args.report and args.report.exists()):
+            parser.error("calibration output already exists")
+        if args.report and args.report.resolve() == args.output.resolve():
+            parser.error("calibration JSON and Markdown output must be different")
 
         result = compare_human_labels(
             json.loads((args.run / "results.json").read_text()),
@@ -179,10 +209,23 @@ def main(argv=None):
             threshold=args.threshold,
             threshold_version=args.threshold_version,
         )
-        if args.output.exists():
-            parser.error("calibration output already exists")
+        report = render_calibration_report(result) if args.report else None
         save_json(args.output, result)
+        if args.report:
+            args.report.parent.mkdir(parents=True, exist_ok=True)
+            args.report.write_text(report)
         print(json.dumps(result, ensure_ascii=False, indent=2))
+    elif args.command == "quality-audit":
+        from .quality_audit import build_quality_audit
+
+        result = build_quality_audit(
+            args.run,
+            args.dataset,
+            args.output,
+            baseline=args.baseline,
+            candidate=args.candidate,
+        )
+        print(json.dumps(result["repetition"], ensure_ascii=False, indent=2))
     elif args.command == "compare":
         result = compare_runs(
             json.loads((args.baseline / "results.json").read_text()),

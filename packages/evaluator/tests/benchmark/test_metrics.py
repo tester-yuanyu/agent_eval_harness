@@ -7,6 +7,7 @@ from importlib.metadata import version
 import httpx
 import openai
 import pytest
+
 from eval_framework.benchmark.metrics import METRICS_VERSION, score_response, score_task
 
 
@@ -68,6 +69,38 @@ def by_name(result):
     return {metric["name"]: metric for metric in result["metrics"]}
 
 
+def test_repetition_diagnostic_is_attached_without_overriding_formal_pass(
+    task, observation
+):
+    task["evaluation_level"] = "chain"
+    first = observation["events"][0]
+    first.update(
+        id="read-1",
+        turn=1,
+        execution_started=True,
+        is_error=False,
+        normalized_input=deepcopy(first["input"]),
+        before_files=deepcopy(task["fixtures"]),
+        after_files=deepcopy(task["fixtures"]),
+        start_time="2026-11-01T00:00:00Z",
+        end_time="2026-11-01T00:00:01Z",
+    )
+    second = {
+        **deepcopy(first),
+        "id": "read-2",
+        "start_time": "2026-11-01T00:00:02Z",
+        "end_time": "2026-11-01T00:00:03Z",
+    }
+    observation["events"] = [first, second]
+
+    result = score_task(task, observation)
+
+    diagnostics = [m for m in result["metrics"] if m["name"] == "tool_nonrepetition"]
+    assert [m["score"] for m in diagnostics] == [1.0, 0.0]
+    assert all(m["formal"] is False for m in diagnostics)
+    assert result["verdict"] == "PASS"
+
+
 def test_actual_correct_state_passes_with_versioned_deepeval_metrics(task, observation):
     result = score_task(task, observation)
 
@@ -85,6 +118,25 @@ def test_actual_correct_state_passes_with_versioned_deepeval_metrics(task, obser
     assert all(
         metric["library_version"] == version("deepeval") for metric in result["metrics"]
     )
+
+
+def test_repetition_diagnostic_error_cannot_erase_formal_result(
+    task, observation, monkeypatch
+):
+    from eval_framework.benchmark import repetition
+
+    task["evaluation_level"] = "e2e"
+
+    def fail(*_args):
+        raise ValueError("diagnostic failure")
+
+    monkeypatch.setattr(repetition, "score_repetition", fail)
+    result = score_task(task, observation)
+    assert result["verdict"] == "PASS"
+    assert by_name(result)["task_success"]["score"] == 1
+    diagnostic = by_name(result)["tool_nonrepetition"]
+    assert diagnostic["formal"] is False and diagnostic["status"] == "ERROR"
+    assert diagnostic["score"] is None
 
 
 def test_correct_claim_cannot_hide_wrong_final_state(task, observation):

@@ -230,56 +230,123 @@ def compare_human_labels(
                 "absolute_error": abs(human - judge),
             }
         )
-    human_negative = [pair for pair in pairs if not pair["human_accept"]]
-    human_positive = [pair for pair in pairs if pair["human_accept"]]
-    false_accept = sum(pair["judge_accept"] for pair in human_negative)
-    false_reject = sum(not pair["judge_accept"] for pair in human_positive)
+
+    def statistics(group_rows: list[dict], group_pairs: list[dict]) -> dict:
+        identities = {row["record_id"] for row in group_rows}
+        labeled = identities & completed.keys()
+        negative = [pair for pair in group_pairs if not pair["human_accept"]]
+        positive = [pair for pair in group_pairs if pair["human_accept"]]
+        false_accept = sum(pair["judge_accept"] for pair in negative)
+        false_reject = sum(not pair["judge_accept"] for pair in positive)
+        return {
+            "total": len(group_rows),
+            "labeled": len(labeled),
+            "paired": len(group_pairs),
+            "label_coverage": len(labeled) / len(group_rows) if group_rows else None,
+            "paired_coverage": len(group_pairs) / len(group_rows)
+            if group_rows
+            else None,
+            "missing_label_ids": sorted(identities - completed.keys()),
+            "judge_unscored_ids": sorted(identities & set(unscored)),
+            "human_negative": len(negative),
+            "human_positive": len(positive),
+            "agreement": mean(
+                pair["human_accept"] == pair["judge_accept"] for pair in group_pairs
+            )
+            if group_pairs
+            else None,
+            "mean_absolute_error": mean(pair["absolute_error"] for pair in group_pairs)
+            if group_pairs
+            else None,
+            "false_accept_count": false_accept,
+            "false_reject_count": false_reject,
+            "false_accept_rate": false_accept / len(negative) if negative else None,
+            "false_reject_rate": false_reject / len(positive) if positive else None,
+            "confusion_matrix": {
+                "true_accept": len(positive) - false_reject,
+                "false_accept": false_accept,
+                "true_reject": len(negative) - false_accept,
+                "false_reject": false_reject,
+            },
+        }
+
+    def digest(value: Any) -> str:
+        return hashlib.sha256(
+            json.dumps(
+                value,
+                ensure_ascii=False,
+                sort_keys=True,
+                separators=(",", ":"),
+                # Preserve legacy unscored handling for nonfinite Judge values.
+                allow_nan=True,
+            ).encode("utf-8")
+        ).hexdigest()
+
+    disagreements = []
+    for pair in pairs:
+        if pair["human_accept"] == pair["judge_accept"]:
+            continue
+        record = lookup[pair["record_id"]]
+        disagreements.append(
+            {
+                **pair,
+                "classification": "false_accept"
+                if pair["judge_accept"]
+                else "false_reject",
+                **{
+                    key: record.get(key)
+                    for key in (
+                        "metric_id",
+                        "run_id",
+                        "case_id",
+                        "trial",
+                        "event_id",
+                        "evidence_ids",
+                    )
+                },
+                "human_reason": completed[pair["record_id"]].get("human_reason"),
+                "judge_reason": record.get("reason"),
+            }
+        )
     return {
         "version": CALIBRATION_VERSION,
         "status": "diagnostic_agreement_only"
-        if pairs
+        if completed
         else "awaiting_independent_human_labels",
         "threshold": threshold,
         "threshold_version": threshold_version,
         "threshold_status": "requires_independent_validation",
-        "total": len(rows),
-        "labeled": len(completed),
-        "paired": len(pairs),
-        "label_coverage": len(completed) / len(rows) if rows else None,
-        "paired_coverage": len(pairs) / len(rows) if rows else None,
-        "missing_label_ids": sorted(set(lookup) - set(completed)),
-        "judge_unscored_ids": sorted(unscored),
-        "agreement": mean(
-            pair["human_accept"] == pair["judge_accept"] for pair in pairs
-        )
-        if pairs
-        else None,
-        "mean_absolute_error": mean(pair["absolute_error"] for pair in pairs)
-        if pairs
-        else None,
-        "false_accept_count": false_accept,
-        "false_reject_count": false_reject,
-        "false_accept_rate": false_accept / len(human_negative)
-        if human_negative
-        else None,
-        "false_reject_rate": false_reject / len(human_positive)
-        if human_positive
-        else None,
+        **statistics(rows, pairs),
         "pairs": pairs,
         "by_dimension": {
-            name: {
-                "paired": len(group),
-                "agreement": mean(
-                    item["human_accept"] == item["judge_accept"] for item in group
-                )
-                if group
-                else None,
-                "mean_absolute_error": mean(item["absolute_error"] for item in group)
-                if group
-                else None,
-            }
+            name: statistics(
+                [record for record in rows if record["name"] == name],
+                [pair for pair in pairs if pair["name"] == name],
+            )
             for name in sorted({record["name"] for record in rows})
-            for group in [[pair for pair in pairs if pair["name"] == name]]
+        },
+        "disagreements": disagreements,
+        "source_summary": {
+            "sha256": digest(source),
+            "hash_encoding": (
+                "utf-8 Python JSON; ensure_ascii=false; sort_keys=true; "
+                "compact; allow_nan=true"
+            ),
+            "population_count": len(rows),
+            "record_ids": sorted(lookup),
+            "run_id": source.get("run_id") if isinstance(source, dict) else None,
+        },
+        "labels_summary": {
+            "sha256": digest(labels),
+            "hash_encoding": (
+                "utf-8 Python JSON; ensure_ascii=false; sort_keys=true; "
+                "compact; allow_nan=true"
+            ),
+            "submitted_count": len(annotations),
+            "completed_count": len(completed),
+            "completed_record_ids": sorted(completed),
+            "annotators": sorted({row["annotator"] for row in completed.values()}),
+            "provenance_status": "self_declared_requires_review",
         },
         "limitations": [
             "人工标注来源由填写者声明，仍需审核标注者身份与独立性。",

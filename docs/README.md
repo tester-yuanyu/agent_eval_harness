@@ -6,6 +6,8 @@
 | --- | --- |
 | 运行模块、模型决策、关键链路或端到端评测 | [分层评测指南](benchmark/v2-usage.md) |
 | 核对本轮结果与尚未完成的工作 | [七项问题清单](benchmark/status-v2.md) · [v2 作品集](../reports/file-tools-v2/index.html) |
+| 查阅当前指标公式、分母与轨迹诊断 | [当前指标规格](benchmark/metric-specification.md) · [质量检查报告](../reports/evaluation-quality-v1/README.md) |
+| 独立人工标注与 Judge 校准 | [标注指南](benchmark/judge-annotation-guide.md) · [36 条离线盲标页](../reports/evaluation-quality-v1/annotation.html) |
 | 理解一次真实失败及正式判定 | [失败案例](benchmark/failure-case-v2.md) |
 | 运行独立官方 τ 领域试点 | [τ 适配说明](benchmark/tau.md) |
 | 了解包边界、参考身份与运行身份 | [仓库架构](architecture.md) · [显式配置](../configs/README.md) |
