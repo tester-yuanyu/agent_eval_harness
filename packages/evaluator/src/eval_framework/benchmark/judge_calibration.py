@@ -12,7 +12,7 @@ import math
 from statistics import mean
 from typing import Any
 
-from .judging import DIMENSIONS, JUDGE_VERSION, RUBRICS
+from .judging import GEVAL_DIMENSIONS, JUDGE_VERSION, RUBRICS
 
 CALIBRATION_VERSION = "judge-calibration-v1"
 RUBRIC_READING_ZH = {
@@ -64,7 +64,7 @@ def _rows(source: dict | list[dict]) -> list[dict]:
         candidates = []
         for trial in source["trials"]:
             for metric in trial.get("assessment", {}).get("metrics", []):
-                if metric.get("name") in DIMENSIONS:
+                if metric.get("name") in GEVAL_DIMENSIONS:
                     candidates.append(
                         {
                             **metric,
@@ -82,7 +82,7 @@ def _rows(source: dict | list[dict]) -> list[dict]:
         if record.get("judge_repeat", 1) != 1:
             continue
         if (
-            record.get("name") not in DIMENSIONS
+            record.get("name") not in GEVAL_DIMENSIONS
             or record.get("status") == "NOT_APPLICABLE"
         ):
             continue

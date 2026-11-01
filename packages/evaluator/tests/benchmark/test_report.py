@@ -4,6 +4,7 @@ import json
 from html.parser import HTMLParser
 
 import pytest
+
 from eval_framework.benchmark.report import evidence_summary, write_report
 
 

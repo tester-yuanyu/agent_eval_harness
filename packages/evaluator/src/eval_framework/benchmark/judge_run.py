@@ -1,4 +1,4 @@
-"""Explicit, resumable GEval annotation of immutable saved executions."""
+"""Explicit, resumable semantic annotation of immutable saved executions."""
 
 from __future__ import annotations
 
@@ -14,6 +14,14 @@ from uuid import uuid4
 from .regrade import _validate_source
 from .runner import code_identity, digest, now, save_json, summarize, validate_config
 from .tasks import dataset_identity, load_tasks
+
+JUDGE_SOURCE_FILES = [
+    "judging.py",
+    "agentic_metrics.py",
+    "agentic_metrics_worker.py",
+    "metrics.py",
+    "judge_run.py",
+]
 
 
 def _judge_run_locked(
@@ -86,7 +94,7 @@ def _judge_run_locked(
     identity.update(
         judge_config=config,
         judge_repeats=repeats,
-        judge_source=code_identity(["judging.py", "metrics.py", "judge_run.py"]),
+        judge_source=code_identity(JUDGE_SOURCE_FILES),
         source_results_sha256=provenance["source_results_sha256"],
         case_ids=selected,
     )
@@ -223,22 +231,36 @@ def _judge_run_locked(
     ]
     result["judge_stability"] = summarize_repeated_judgments(repeated)
     calls = [call for metric in metrics for call in metric.get("events", [])]
-    result["judge_usage"] = {"model_requests": len(calls)}
+    requests_unknown = any(
+        metric.get("model_requests_unknown") is True for metric in metrics
+    )
+    result["judge_usage"] = {
+        "model_requests": None if requests_unknown else len(calls),
+        "model_requests_known_subtotal": len(calls),
+        "model_requests_unknown": requests_unknown,
+    }
     for field in ("input_tokens", "output_tokens", "cost_usd"):
         values = [call.get("usage", {}).get(field) for call in calls]
         known = [value for value in values if type(value) in (int, float)]
         result["judge_usage"][field] = (
-            sum(known) if known and len(known) == len(values) else None
+            sum(known)
+            if not requests_unknown and known and len(known) == len(values)
+            else None
         )
         result["judge_usage"][field + "_known_subtotal"] = sum(known) if known else None
         result["judge_usage"][field + "_known_calls"] = len(known)
     result["summary"] = summarize(annotated, selected, source["trials_per_case"])
-    result["provenance"]["new_judge_model_requests"] = sum(
-        len(m.get("events", [])) for m in metrics
+    known_judge_requests = sum(len(m.get("events", [])) for m in metrics)
+    result["provenance"]["new_judge_model_requests"] = (
+        None if requests_unknown else known_judge_requests
     )
+    result["provenance"][
+        "new_judge_model_requests_known_subtotal"
+    ] = known_judge_requests
+    result["provenance"]["new_judge_model_requests_unknown"] = requests_unknown
     result["provenance"]["graded_at"] = now()
     if (source_dir / "results.json").read_bytes() != raw or code_identity(
-        ["judging.py", "metrics.py", "judge_run.py"]
+        JUDGE_SOURCE_FILES
     ) != identity["judge_source"]:
         raise ValueError(
             "Source evidence or Judge implementation changed while judging"

@@ -5,6 +5,7 @@ from copy import deepcopy
 from pathlib import Path
 
 import pytest
+
 from eval_framework.benchmark.judge_calibration import create_calibration_worksheet
 from eval_framework.benchmark.judge_run import judge_run
 from eval_framework.benchmark.runner import digest, save_json
@@ -141,6 +142,41 @@ def test_source_formal_verdict_and_agent_usage_are_preserved(
     assert result["judge_usage"]["cost_usd"] is None
     assert result["provenance"]["new_agent_executions"] == 0
     assert stub_judge == [original["trials"][0]["observation"]]
+
+
+def test_unknown_worker_requests_remain_unknown_in_run_usage(
+    saved_run, tmp_path, monkeypatch
+):
+    def judge(_task, _observation, _config):
+        return [
+            {
+                "metric_id": "native-worker-failure",
+                "name": "step_efficiency",
+                "version": "trajectory-native-v1",
+                "scope": "chain",
+                "event_id": None,
+                "evidence_ids": [],
+                "status": "ERROR",
+                "formal": False,
+                "score": None,
+                "reason": "Worker exited without a final audit record.",
+                "events": [],
+                "model_requests": None,
+                "model_requests_known_subtotal": 0,
+                "model_requests_unknown": True,
+            }
+        ]
+
+    monkeypatch.setattr("eval_framework.benchmark.judging.judge_observation", judge)
+    result = judge_run(saved_run[0], DATASET, tmp_path / "graded", CONFIG)
+
+    assert result["judge_usage"]["model_requests"] is None
+    assert result["judge_usage"]["model_requests_known_subtotal"] == 0
+    assert result["judge_usage"]["model_requests_unknown"] is True
+    assert result["judge_usage"]["input_tokens"] is None
+    assert result["provenance"]["new_judge_model_requests"] is None
+    assert result["provenance"]["new_judge_model_requests_known_subtotal"] == 0
+    assert result["provenance"]["new_judge_model_requests_unknown"] is True
 
 
 def test_repeats_have_distinct_export_events_stability_and_one_label_per_evidence(

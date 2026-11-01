@@ -2,7 +2,7 @@
 
 用于工具型 Agent 的 **任务数据集 + Harness**：冻结任务与预期条件，运行真实 nanobot，保存可观察执行轨迹，再依据独立证据评分。
 
-当前主线覆盖**程序模块、模型决策模块、关键链路与端到端**四类执行方式。**Inspect 负责执行调度和原生日志；DeepEval 负责文件与决策基准的正式评分；GEval 提供未完成人工校准的 LLM Judge 诊断；Langfuse 展示已保存的轨迹和分数。**
+当前主线覆盖**程序模块、模型决策模块、关键链路与端到端**四类执行方式。**Inspect 负责沙箱执行、预算、重复与恢复、原生日志和查看器；DeepEval 负责正式业务评分，以及原生 Agent 指标和 GEval 诊断；Langfuse 展示已保存的轨迹、分数和实验。**职责与保留的必要适配见[框架复用说明](docs/benchmark/framework-reuse.md)。
 
 [文档导航](docs/README.md) · [分层评测使用指南](docs/benchmark/v2-usage.md) · [七项问题与未解决清单](docs/benchmark/status-v2.md) · [v2 作品集输出](reports/file-tools-v2/index.html) · [真实失败案例](docs/benchmark/failure-case-v2.md) · [历史 v1 实验](docs/benchmark/portfolio.md)
 
@@ -32,9 +32,9 @@ python3.11 scripts/setup.py --only evaluator
 make demo
 ```
 
-`make demo` 运行 5 条历史 v1 离线参考任务，生成 `artifacts/benchmark-demo/report.html` 和 Inspect 日志。它不调用模型或 Langfuse，**用于验证评测闭环，不能作为真实 Agent 成绩**。无 Make 时，使用根 CLI 的 `benchmark demo` 与 `benchmark report`。
+`make demo` 运行 5 条历史 v1 离线参考任务，生成 `artifacts/benchmark-demo/inspect-view/index.html`、来源清单和 Inspect 日志。静态查看器需通过本地 HTTP 服务打开，也可用 `inspect view --log-dir artifacts/benchmark-demo/inspect`。它不调用模型或 Langfuse，**用于验证评测闭环，不能作为真实 Agent 成绩**。无 Make 时，使用根 CLI 的 `benchmark demo` 与 `benchmark report`。
 
-真实评测需要复制 [nanobot.example.json](configs/benchmark/nanobot.example.json) 为本地配置，填写 nanobot 源码、解释器、模型和地址。密钥通过 `api_key_env` 读取，不写入配置或 Git。执行不会自动拉取最新 Agent 代码。
+真实评测需要复制 [nanobot.example.json](configs/benchmark/nanobot.example.json) 为本地配置，填写 nanobot 源码、解释器、模型和地址。模型执行默认使用 Inspect Docker sandbox，需要可用 Docker；模块可显式选择 `sandbox: "local"`。首次镜像构建下载基础镜像与 Agent 依赖。密钥通过 `api_key_env` 由 Inspect 读取，Agent 只访问本地 bridge。执行不会自动拉取最新 Agent 代码。
 
 ```bash
 # 校验冻结任务；不调用模型，也不冒充模块实跑。
@@ -63,22 +63,22 @@ make demo
 ```mermaid
 flowchart LR
   G[专用任务生成与冻结] --> D[任务 JSONL + Manifest]
-  D --> I[Inspect 调度与日志]
-  I --> A[自研模块 / 决策 / Agent 适配]
+  D --> I[Inspect 沙箱 / Bridge / Epochs / 日志]
+  I --> A[模块 / 决策 / Agent 边界适配]
   A --> N[真实 nanobot 边界]
   N --> E[公开轨迹与独立状态证据]
   D -->|私有 Oracle / 检查点| S[DeepEval 正式确定性评分]
   E --> S
-  E --> J[GEval 事后诊断]
-  S --> R[版本化结果与报告]
+  E --> J[DeepEval 原生指标 / GEval]
+  S --> R[版本化结果 / Inspect View]
   J --> R
   R --> L[Langfuse Trace / Score / Experiment]
 ```
 
 - **任务生成**：当前数据由各数据集目录的 `build_dataset.py` 确定性构建并冻结；通用 `dataset-builder` 保留，但不是本轮主数据集的必经入口。
-- **自研 Harness 扩展**：隔离工作区、适配真实执行边界、Oracle 与检查点、证据采集、版本绑定、恢复与汇总。Harness 包含 Inspect、适配器及评分编排，不是另一套模型指标库。
-- **Inspect**：执行任务、运行 Solver/Scorer 生命周期并保存日志。新文件与决策主线的指标判定归 DeepEval；旧 `eval` 兼容路径仍存在历史 Inspect 评分。
-- **DeepEval / GEval**：确定性 `BaseMetric` 处理正式结果与硬约束；GEval 是 LLM Judge，评价可观察动作、恢复片段及回复依据。未经人工校准的 Judge 分数不覆盖正式 verdict。
+- **业务扩展**：真实执行边界适配、Oracle 与检查点、独立文件快照、版本绑定、四层分母与旧结果兼容。通用沙箱、进程管理、模型日志和重复恢复由 Inspect 负责。
+- **Inspect**：执行任务、Agent Bridge、预算控制、原生模型/沙箱事件、epochs 与 eval_set 恢复、通用结果查看器。新文件与决策主线的指标判定归 DeepEval；旧 `eval` 兼容路径仍存在历史 Inspect 评分。
+- **DeepEval / GEval**：确定性 `BaseMetric` 处理正式结果与硬约束；原生 TaskCompletion、ArgumentCorrectness、StepEfficiency 与 GEval 评价保存轨迹。未经人工校准的语义分数不覆盖正式 verdict。
 - **Langfuse**：关联任务、模型、工具、轮次与相应分数；接收保存结果，不产生第二套正式判定。
 
 ## 轨迹评分的能力与边界
@@ -89,7 +89,7 @@ flowchart LR
 
 GEval 输出 0～1 评价尺度，不是正确概率。报告区分适用、已评分、缺失、错误与不适用，统计同一证据重复评分波动及 Judge 用量。**人工标签、一致性验收和阈值留出验证尚未完成。**已准备 [36 条空白校准样本](reports/file-tools-v2/calibration-sample.json)，从 chain-judge 按稳定 Hash 抽取三个维度各 12 条；这是标注起点，不是已经完成的人工审核。
 
-当前代码的评分 v2.2 另增加重复调用候选诊断，保留同状态重复、错误重试和缺失证据的区别；不以候选诊断否决正式结果。[统一指标规格](docs/benchmark/metric-specification.md)列出公式、粒度、分母与范围；[离线质量报告](reports/evaluation-quality-v1/README.md)复用保存轨迹，不增加执行数。可直接使用[36 条盲标页](reports/evaluation-quality-v1/annotation.html)填写和导出人工标签，规则与分档说明见[标注指南](docs/benchmark/judge-annotation-guide.md)。
+当前评分 v2.3 将通用效率诊断交给 DeepEval StepEfficiency；v2.2 的同状态重复、错误重试分类保留为显式 `quality-audit`，不默认加入正式评分。[统一指标规格](docs/benchmark/metric-specification.md)列出公式、粒度、分母与范围；[离线质量报告](reports/evaluation-quality-v1/README.md)保留历史审计结果，不增加执行数。可使用[36 条盲标页](reports/evaluation-quality-v1/annotation.html)填写和导出人工标签，规则与分档说明见[标注指南](docs/benchmark/judge-annotation-guide.md)。
 
 ## Langfuse 与作品集
 

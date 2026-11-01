@@ -23,27 +23,15 @@ from nanobot_runtime import (  # noqa: E402
 )
 
 
-def public_messages(messages: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    """Keep API conversation data; omit provider-private continuation/reasoning."""
-    keys = {"role", "content", "tool_calls", "tool_call_id", "name"}
-    return [
-        {key: deepcopy(value) for key, value in message.items() if key in keys}
-        for message in messages
-    ]
-
-
-class Journal:
-    def __init__(self, path: Path, secret: str = "") -> None:
+class FileEvidence:
+    def __init__(self, path: Path) -> None:
         self.path = path
-        self.secret = secret
         self.events: list[dict[str, Any]] = []
         self.turn_id: str | None = None
         self.turn_index: int | None = None
 
     def write(self, event: dict[str, Any]) -> None:
         text = json.dumps(event, ensure_ascii=False, default=str)
-        if self.secret:
-            text = text.replace(self.secret, "[REDACTED]")
         with self.path.open("a", encoding="utf-8") as stream:
             stream.write(text + "\n")
             stream.flush()
@@ -51,6 +39,10 @@ class Journal:
     def start(
         self, kind: str, name: str, input_value: Any, **extra: Any
     ) -> dict[str, Any]:
+        if kind not in {"turn", "tool"}:
+            raise ValueError(
+                "file evidence only records turn snapshots and tool effects"
+            )
         event = {
             "id": uuid4().hex,
             "type": kind,
@@ -74,7 +66,6 @@ class Journal:
 
 
 def strict_tools(workspace: Path, allowed: list[str]) -> list[Any]:
-    from nanobot.agent.tools.base import ToolResult
     from nanobot.agent.tools.filesystem import (
         EditFileTool,
         ListDirTool,
@@ -82,27 +73,19 @@ def strict_tools(workspace: Path, allowed: list[str]) -> list[Any]:
         WriteFileTool,
     )
 
-    class StrictPath:
+    class WorkspacePaths:
         async def execute(self, **kwargs: Any) -> Any:
-            try:
-                value = kwargs.get("path")
-                if value is None and self.name == "list_dir":
-                    value = "."
-                if value is None:
-                    return ToolResult.error("Error: path is required")
-                path = safe_path(workspace, str(value))
-                # Absolutizing also prevents nanobot's missing-file fallback to
-                # bundled skills/<name> from reading outside the benchmark.
-                kwargs["path"] = str(path)
-                return await super().execute(**kwargs)
-            except (OSError, ValueError) as exc:
-                return ToolResult.error(f"Error: workspace policy: {exc}")
-
-        def _resolve_read(self, path: str) -> Path:
-            return safe_path(workspace, path)
-
-        def _resolve_write(self, path: str) -> Path:
-            return safe_path(workspace, path)
+            # The benchmark file domain excludes nanobot's media/skills escape
+            # hatches. Native tools still own execution and error semantics.
+            value = kwargs.get("path")
+            if value is None and self.name == "list_dir":
+                value = "."
+            if value is not None:
+                try:
+                    kwargs["path"] = str(safe_path(workspace, str(value)))
+                except ValueError as exc:
+                    return self.error(f"Error: {exc}")
+            return await super().execute(**kwargs)
 
     classes = {
         "read_file": ReadFileTool,
@@ -113,7 +96,7 @@ def strict_tools(workspace: Path, allowed: list[str]) -> list[Any]:
     result = []
     for name in allowed:
         tool_class = type(
-            f"Benchmark{classes[name].__name__}", (StrictPath, classes[name]), {}
+            f"Benchmark{classes[name].__name__}", (WorkspacePaths, classes[name]), {}
         )
         result.append(
             tool_class(
@@ -147,7 +130,7 @@ async def run_task(payload: dict[str, Any], *, provider: Any = None) -> dict[str
     private_workspace.mkdir(exist_ok=True)
     set_config_path(private / "config.json")
     secret = os.environ.get(config.get("api_key_env", "DEEPSEEK_API_KEY"), "")
-    journal = Journal(private / "events.jsonl", secret)
+    journal = FileEvidence(private / "events.jsonl")
     if config.get("tokenizer_mode", "cl100k_base") == "byte_fallback":
         import nanobot.utils.helpers as helpers
 
@@ -173,55 +156,6 @@ async def run_task(payload: dict[str, Any], *, provider: Any = None) -> dict[str
                 "or select byte_fallback"
             )
         os.environ["TIKTOKEN_CACHE_DIR"] = str(cache)
-
-    class InstrumentedProvider(OpenAICompatProvider):
-        def _parse(self, response: Any) -> Any:
-            self.response_model = getattr(response, "model", None)
-            return super()._parse(response)
-
-        async def chat(self, messages: list[dict[str, Any]], **kwargs: Any) -> Any:
-            public = {
-                key: deepcopy(value)
-                for key, value in kwargs.items()
-                if key
-                in {
-                    "tools",
-                    "model",
-                    "max_tokens",
-                    "temperature",
-                    "reasoning_effort",
-                    "tool_choice",
-                }
-            }
-            event = journal.start(
-                "generation",
-                str(kwargs.get("model") or config["model"]),
-                {"messages": public_messages(messages), **public},
-            )
-            try:
-                response = await super().chat(messages, **kwargs)
-                output = {
-                    "content": response.content,
-                    "finish_reason": response.finish_reason,
-                    "tool_calls": [
-                        {"id": call.id, "name": call.name, "arguments": call.arguments}
-                        for call in response.tool_calls
-                    ],
-                }
-                extra: dict[str, Any] = {
-                    "usage": dict(response.usage),
-                    "model": config["model"],
-                    "response_model": getattr(self, "response_model", None),
-                }
-                if response.finish_reason == "error":
-                    extra["error"] = (
-                        response.content or response.error_kind or "provider error"
-                    )
-                journal.finish(event, output, **extra)
-                return response
-            except BaseException as exc:
-                journal.finish(event, None, error=type(exc).__name__)
-                raise
 
     class EvidenceHook(AgentHook):
         def __init__(self) -> None:
@@ -337,14 +271,8 @@ async def run_task(payload: dict[str, Any], *, provider: Any = None) -> dict[str
                         **self.snapshot("after"),
                     )
 
-    class FileOnlyAgentLoop(AgentLoop):
-        def _register_default_tools(self, **_kwargs: Any) -> None:
-            # Deliberately disable plugin discovery, MCP, shell, channels and
-            # messaging before any default tool can be instantiated.
-            return None
-
     if provider is None:
-        provider = InstrumentedProvider(
+        provider = OpenAICompatProvider(
             api_key=secret,
             api_base=config.get("base_url"),
             default_model=config["model"],
@@ -369,7 +297,7 @@ async def run_task(payload: dict[str, Any], *, provider: Any = None) -> dict[str
     sessions = SessionManager(
         private_workspace, store=session_store, sessions_root=private / "sessions"
     )
-    loop = FileOnlyAgentLoop(
+    loop = AgentLoop(
         bus=MessageBus(),
         provider=provider,
         workspace=private_workspace,
@@ -392,6 +320,11 @@ async def run_task(payload: dict[str, Any], *, provider: Any = None) -> dict[str
         ],
         tools_config=ToolsConfig(restrict_to_workspace=True),
     )
+    # Registry composition uses native registration APIs; AgentLoop is unchanged.
+    for name in list(registry.tool_names):
+        registry.unregister(name)
+    for tool in strict_tools(workspace, allowed):
+        registry.register(tool)
     # The SDK's own memory/session files stay private. Its turn workspace is
     # the fixture directory, so model-facing paths and real tools agree.
     loop.workspace_scopes = WorkspaceScopeResolver(
@@ -438,18 +371,12 @@ async def run_task(payload: dict[str, Any], *, provider: Any = None) -> dict[str
             )
             stop_reason = response.stop_reason or "stop"
             if response.error:
-                provider_errors = [
-                    item
-                    for item in journal.events
-                    if item["type"] == "generation" and item.get("error")
-                ]
-                kind = "provider" if provider_errors else "agent"
+                kind = "provider" if stop_reason == "error" else "agent"
                 errors.append(
                     {"kind": kind, "code": "run_error", "message": response.error}
                 )
-                if kind == "provider":
-                    status = "error"
-                    break
+                status = "error"
+                break
             if "max" in stop_reason or "budget" in stop_reason:
                 stop_reason = "max_steps"
                 break
@@ -457,6 +384,7 @@ async def run_task(payload: dict[str, Any], *, provider: Any = None) -> dict[str
     finally:
         await loop.aclose()
     return {
+        "events": journal.events,
         "status": status,
         "turns": turns,
         "stop_reason": stop_reason,

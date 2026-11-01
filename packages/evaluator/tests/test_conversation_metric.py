@@ -9,6 +9,8 @@ import sys
 from types import SimpleNamespace
 
 import pytest
+from inspect_ai.model import ModelOutput, ModelUsage, get_model
+
 from eval_framework.diagnostic_metrics import (
     METRIC_ID,
     ConversationMetricConfig,
@@ -16,7 +18,6 @@ from eval_framework.diagnostic_metrics import (
     conversation_input,
 )
 from eval_framework.judges.conversation import ConversationMetricClient
-from inspect_ai.model import ModelOutput, ModelUsage, get_model
 
 
 def dialogue():

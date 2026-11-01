@@ -19,14 +19,26 @@ from deepeval.metrics import GEval
 from deepeval.metrics.g_eval import Rubric
 from deepeval.test_case import LLMTestCase, SingleTurnParams
 
+from .agentic_metrics import (
+    NATIVE_DIMENSIONS,
+    run_agentic_metrics_worker,
+    unscored_agentic_metric_records,
+)
 from .metrics import OpenAICompatibleJudge
 
-JUDGE_VERSION = "trajectory-geval-v1"
-DIMENSIONS = (
+JUDGE_VERSION = "trajectory-judge-v2"
+GEVAL_DIMENSIONS = (
     "action_appropriateness",
     "recovery_appropriateness",
     "response_groundedness",
 )
+DIMENSIONS = (*NATIVE_DIMENSIONS, *GEVAL_DIMENSIONS)
+IMPLEMENTATIONS = {
+    "step_efficiency": "StepEfficiencyMetric",
+    "task_completion": "TaskCompletionMetric",
+    "argument_correctness": "ArgumentCorrectnessMetric",
+    **{name: "GEval" for name in GEVAL_DIMENSIONS},
+}
 # Frozen, code-shipped rubric data; any change requires a new JUDGE_VERSION.
 RUBRICS = {
     "action_appropriateness": {
@@ -465,11 +477,7 @@ def judge_observation(
     dimensions: list[str] | None = None,
     max_evaluations: int | None = None,
 ) -> list[dict[str, Any]]:
-    """Opt-in paid post-execution diagnostics, bounded without hiding unscored items.
-
-    ``max_evaluations`` bounds metric evaluations (one model request each with this
-    frozen rubric and adapter). Missing credentials/errors never become score 0.
-    """
+    """Opt-in diagnostics over saved evidence, bounded by actual model requests."""
     config = dict(model_config)
     configured_dimensions = config.pop("dimensions", None)
     configured_maximum = config.pop("max_evaluations", None)
@@ -487,20 +495,83 @@ def judge_observation(
         )
     if maximum is not None and (type(maximum) is not int or maximum < 0):
         raise ValueError("max_evaluations must be a nonnegative integer or null")
-    candidates = _candidates(task, observation, dimensions)
-    judge, attempted = None, 0
+    native_dimensions = [name for name in NATIVE_DIMENSIONS if name in dimensions]
+    geval_dimensions = [name for name in GEVAL_DIMENSIONS if name in dimensions]
+    native_records: list[dict[str, Any]] = []
+    native_calls = 0
+    native_call_count_unknown = False
+    if native_dimensions:
+        if observation.get("execution_kind") in {
+            "real_module",
+            "deterministic_reference_not_agent",
+        }:
+            native_records = unscored_agentic_metric_records(
+                task,
+                observation,
+                native_dimensions,
+                status="NOT_APPLICABLE",
+                reason="No real Agent execution exists in this execution mode.",
+            )
+        elif maximum is not None and maximum < 2:
+            native_records = unscored_agentic_metric_records(
+                task,
+                observation,
+                native_dimensions,
+                status="MISSING",
+                reason=(
+                    "Judge request budget cannot start a two-request native metric."
+                ),
+            )
+        else:
+            try:
+                native_records = run_agentic_metrics_worker(
+                    task,
+                    observation,
+                    config,
+                    dimensions=native_dimensions,
+                    max_model_requests=maximum,
+                )
+            except Exception as exc:
+                native_call_count_unknown = True
+                native_records = unscored_agentic_metric_records(
+                    task,
+                    observation,
+                    native_dimensions,
+                    status="ERROR",
+                    reason=f"Native metric worker failed: {type(exc).__name__}",
+                )
+        for record in native_records:
+            record["model"] = config.get("model")
+            native_calls += len(record.get("events", []))
+        if native_call_count_unknown and maximum is not None:
+            # The subprocess can fail after issuing requests but before returning
+            # its audit records. A finite global cap must fail closed rather than
+            # treating unknown consumption as zero and starting more GEval calls.
+            native_calls = maximum
+        if native_call_count_unknown:
+            for record in native_records:
+                record.update(
+                    model_requests=None,
+                    model_requests_known_subtotal=len(record.get("events", [])),
+                    model_requests_unknown=True,
+                )
+
+    candidates = _candidates(task, observation, geval_dimensions)
+    judge = None
     try:
         for record, evidence in candidates:
             record["model"] = config.get("model")
             if evidence is None:
                 continue
-            if maximum is not None and attempted >= maximum:
+            used_requests = native_calls + (
+                len(judge.calls) if judge is not None else 0
+            )
+            if maximum is not None and used_requests >= maximum:
                 record["reason"] = (
-                    "Configured evaluation budget reached; this applicable "
-                    "item is unscored."
+                    "Configured model request budget reached; this applicable item "
+                    "is unscored."
                 )
                 continue
-            attempted += 1
             start = len(judge.calls) if judge is not None else 0
             try:
                 if judge is None:
@@ -567,7 +638,16 @@ def judge_observation(
     finally:
         if judge is not None:
             judge.client.close()
-    return [record for record, _ in candidates]
+    records = [*native_records, *[record for record, _ in candidates]]
+    for record in records:
+        if "model_requests_unknown" not in record:
+            known_requests = len(record.get("events", []))
+            record.update(
+                model_requests=known_requests,
+                model_requests_known_subtotal=known_requests,
+                model_requests_unknown=False,
+            )
+    return records
 
 
 def summarize_judgments(records: list[dict]) -> dict:

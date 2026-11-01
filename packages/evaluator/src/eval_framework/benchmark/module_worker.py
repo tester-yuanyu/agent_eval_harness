@@ -11,7 +11,7 @@ from typing import Any
 
 sys.path.insert(0, str(Path(__file__).parent))
 from nanobot_runtime import snapshot_files  # noqa: E402
-from nanobot_worker import Journal, strict_tools  # noqa: E402
+from nanobot_worker import FileEvidence, strict_tools  # noqa: E402
 
 
 async def run_module_task(payload: dict[str, Any]) -> dict[str, Any]:
@@ -24,7 +24,7 @@ async def run_module_task(payload: dict[str, Any]) -> dict[str, Any]:
     registry = ToolRegistry()
     for tool in strict_tools(workspace, task["allowed_tools"]):
         registry.register(tool)
-    journal = Journal(Path(payload["runtime_dir"]) / "events.jsonl")
+    journal = FileEvidence(Path(payload["runtime_dir"]) / "events.jsonl")
     turn = journal.start("turn", "module-boundary", task["prompt"], turn=1)
     journal.turn_id = turn["id"]
     outputs = []

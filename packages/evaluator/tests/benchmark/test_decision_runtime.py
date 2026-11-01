@@ -9,6 +9,7 @@ from collections import Counter
 from pathlib import Path
 
 import pytest
+
 from eval_framework.benchmark.decision_runtime import (
     decision_execution_projection,
     execute_decision_task,
@@ -158,7 +159,8 @@ asyncio.run(main())
     assert result["transport_calls"] == 1
     assert result["execution_kind"] == "offline_decision_test"
     assert result["status"] == "completed"
-    assert len([e for e in result["events"] if e["type"] == "generation"]) == 1
+    assert not [e for e in result["events"] if e["type"] == "generation"]
+    # The native Inspect bridge, tested separately, owns generation events.
     assert not [e for e in result["events"] if e["type"] == "tool"]
     assert result["decision"]["tool_calls"][0]["name"] == "write_file"
     assert not (workspace / "output.txt").exists()

@@ -1,11 +1,13 @@
 """Real GEval translation with an HTTP-only stub; no model services are called."""
 
 import json
+import subprocess
 from copy import deepcopy
 
 import httpx
 import openai
 import pytest
+
 from eval_framework.benchmark import judging
 
 
@@ -148,7 +150,9 @@ def test_real_geval_scopes_normalization_and_private_data_exclusion(
     task, observation = evidence
     requests, config = judge_transport
     original = deepcopy((task, observation))
-    records = judging.judge_observation(task, observation, config)
+    records = judging.judge_observation(
+        task, observation, config, dimensions=list(judging.GEVAL_DIMENSIONS)
+    )
     assert len(requests) == 6  # 3 decisions + 1 recovery + 2 responses
     assert len(records) == 6
     assert all(
@@ -227,6 +231,115 @@ def test_call_budget_preserves_unscored_population(evidence, judge_transport):
     assert len(requests) == 1
     assert [r["status"] for r in records] == ["SCORED", "MISSING", "MISSING"]
     assert judging.summarize_judgments(records)["coverage"] == pytest.approx(1 / 3)
+
+
+def test_native_calls_share_actual_request_budget_with_geval(
+    evidence, judge_transport, monkeypatch
+):
+    requests, config = judge_transport
+    seen = {}
+
+    def native(task, observation, model_config, *, dimensions, max_model_requests):
+        seen.update(
+            dimensions=dimensions,
+            maximum=max_model_requests,
+            config=model_config,
+        )
+        return [
+            {
+                "metric_id": "native-step",
+                "name": "step_efficiency",
+                "backend": "deepeval",
+                "implementation": "StepEfficiencyMetric",
+                "version": "trajectory-native-v1",
+                "scope": "chain",
+                "event_id": None,
+                "evidence_ids": ["t1"],
+                "status": "SCORED",
+                "formal": False,
+                "calibration": "not_calibrated",
+                "score": 0.8,
+                "success": None,
+                "threshold": None,
+                "reason": "Efficient enough.",
+                "errors": [],
+                "events": [
+                    {"input": "derive task", "output": {}, "usage": {}},
+                    {"input": "score steps", "output": {}, "usage": {}},
+                ],
+            }
+        ]
+
+    monkeypatch.setattr(judging, "run_agentic_metrics_worker", native)
+    records = judging.judge_observation(
+        *evidence,
+        config,
+        dimensions=["step_efficiency", "action_appropriateness"],
+        max_evaluations=3,
+    )
+
+    assert seen["dimensions"] == ["step_efficiency"]
+    assert seen["maximum"] == 3
+    assert len(requests) == 1
+    assert [record["status"] for record in records] == [
+        "SCORED",
+        "SCORED",
+        "MISSING",
+        "MISSING",
+    ]
+    assert all(record["model"] == "test-judge" for record in records)
+
+
+def test_native_worker_failure_is_empty_error_score(evidence, monkeypatch):
+    monkeypatch.setattr(
+        judging,
+        "run_agentic_metrics_worker",
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(RuntimeError("worker died")),
+    )
+    records = judging.judge_observation(
+        *evidence,
+        {"model": "judge", "api_key": "SECRET"},
+        dimensions=["task_completion"],
+        max_evaluations=2,
+    )
+
+    assert len(records) == 1
+    assert records[0]["status"] == "ERROR"
+    assert records[0]["score"] is None
+    assert records[0]["success"] is None
+    assert "RuntimeError" in records[0]["reason"]
+
+
+def test_native_worker_failure_exhausts_unknown_finite_budget_before_geval(
+    evidence, judge_transport, monkeypatch
+):
+    requests, config = judge_transport
+    monkeypatch.setattr(
+        judging,
+        "run_agentic_metrics_worker",
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(
+            subprocess.TimeoutExpired("native-worker", 1)
+        ),
+    )
+
+    records = judging.judge_observation(
+        *evidence,
+        config,
+        dimensions=["task_completion", "action_appropriateness"],
+        max_evaluations=3,
+    )
+
+    assert requests == []
+    assert records[0]["name"] == "task_completion"
+    assert records[0]["status"] == "ERROR"
+    assert records[0]["model_requests"] is None
+    assert records[0]["model_requests_known_subtotal"] == 0
+    assert records[0]["model_requests_unknown"] is True
+    assert [record["status"] for record in records[1:]] == [
+        "MISSING",
+        "MISSING",
+        "MISSING",
+    ]
 
 
 def test_missing_credentials_are_error_records_not_zero(evidence, monkeypatch):

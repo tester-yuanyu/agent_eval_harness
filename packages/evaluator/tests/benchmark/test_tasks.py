@@ -2,6 +2,7 @@ import copy
 from pathlib import Path
 
 import pytest
+
 from eval_framework.benchmark.tasks import (
     dataset_identity,
     execution_task,

@@ -153,6 +153,19 @@ def test_not_applicable_metrics_are_excluded_from_calibration_population():
     assert {row["record_id"] for row in worksheet["rows"]} == {"a", "b", "c"}
 
 
+def test_geval_worksheet_ignores_native_metrics_with_different_internal_rubrics():
+    rows = records() + [
+        {
+            **records()[0],
+            "record_id": "native",
+            "name": "step_efficiency",
+            "implementation": "StepEfficiencyMetric",
+        }
+    ]
+    worksheet = calibration.create_calibration_worksheet(rows)
+    assert {row["record_id"] for row in worksheet["rows"]} == {"a", "b", "c"}
+
+
 def test_agreement_is_also_reported_per_dimension():
     result = calibration.compare_human_labels(
         records(),

@@ -379,7 +379,21 @@ def _write_trial_page(run_dir: Path, run: dict, row: dict) -> str:
     return relative
 
 
-def write_report(run_dir: Path | str) -> Path:
+def write_report(run_dir: Path | str, *, format: str = "auto") -> Path:
+    """Prefer Inspect View; keep explicit domain/legacy report compatibility."""
+    if format not in {"auto", "inspect", "domain"}:
+        raise ValueError("report format must be auto, inspect or domain")
+    run_dir = Path(run_dir)
+    if format != "domain":
+        from .native_reporting import native_logs, write_native_report
+
+        if format == "inspect" or native_logs(run_dir):
+            run = json.loads((run_dir / "results.json").read_text(encoding="utf-8"))
+            return write_native_report(run_dir, summary=evidence_summary(run))
+    return write_domain_report(run_dir)
+
+
+def write_domain_report(run_dir: Path | str) -> Path:
     """Write report.html/report.md beside immutable results; return HTML path."""
     run_dir = Path(run_dir)
     run = json.loads((run_dir / "results.json").read_text(encoding="utf-8"))

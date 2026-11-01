@@ -41,3 +41,9 @@
 已增加 `tool_nonrepetition` 确定性诊断，区分同状态重复候选、错误后重试、状态变化及缺证据；候选不自动判定失败。新运行使用评分 v2.2，新诊断源码纳入身份。对既有 480 次 chain / E2E 证据单独做离线检查，原评分 v2.1 及判定保留。报告见[质量检查](../../reports/evaluation-quality-v1/README.md)。
 
 已补[当前指标规格](metric-specification.md)、[12 个分档说明示例与标注指南](judge-annotation-guide.md)、[36 条离线盲标页](../../reports/evaluation-quality-v1/annotation.html)，校准比较新增分维度混淆矩阵、分母、差异证据和来源 Hash。示例是机器编写的解释材料，标签仍为空；这次工程补齐没有完成人工校准、阈值留出验证或新的 v2 配置 A/B，也没有新增模型调用或 Langfuse 导出。
+
+## 框架复用后的代码状态
+
+上述 v2.1 成绩和 v2.2 审计结果保留原义。后续代码改造将沙箱、模型桥接、预算、重复恢复、原生日志和通用查看器交给 Inspect；将参数、完成度、效率语义诊断交给 DeepEval 原生指标，GEval 继续处理业务 rubric；Langfuse 复用官方 API/OTel，保留必要的身份、证据与读回适配。新默认评分版本为 v2.3，精确重复候选只在显式 `quality-audit` 中计算。配置与分工见[框架复用说明](framework-reuse.md)。
+
+这次改造没有扩充冻结任务、改写历史成绩、完成独立人工校准或新增付费模型评测。代码回归、真实 Agent + mock 模型的 Docker 集成和干净安装验收属于工程证据，不计入 612 次历史真实模型执行。

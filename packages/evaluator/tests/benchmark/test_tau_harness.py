@@ -8,6 +8,7 @@ from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
+
 from eval_framework.benchmark.tau_adapter import TAU_COMMIT
 
 MODULE = "eval_framework.benchmark.tau_harness"
@@ -421,6 +422,79 @@ def test_tau_export_and_readback_use_official_descriptors_and_provenance(
         item["metadata"]["official_summary_sha256"] == result["official_summary_sha256"]
         for item in client.items
     )
+    assert (
+        langfuse_export.verify_run(output, summary, client=client)["status"]
+        == "VERIFIED"
+    )
+
+
+def test_native_whole_trace_scores_and_missing_records_export_and_read_back(
+    config, official_transport, tmp_path, monkeypatch
+):
+    from eval_framework.benchmark import langfuse_export
+    from eval_framework.benchmark.agentic_metrics import (
+        _record_specs,
+        unscored_agentic_metric_records,
+    )
+
+    config["task_ids"] = ["0", "1"]
+    output = tmp_path / "native-chain-export"
+    result = harness().run_tau_harness(config, output)
+    scored_row, missing_row = result["trials"]
+    scored_task = result["task_descriptors"][scored_row["case_id"]]
+    missing_task = result["task_descriptors"][missing_row["case_id"]]
+    scored_record, target = _record_specs(
+        scored_task, scored_row["observation"], ["step_efficiency"]
+    )[0]
+    assert target is None
+    scored_record.update(
+        score=0.75,
+        status="SCORED",
+        reason="Recorded trace is efficient.",
+    )
+    missing_record = unscored_agentic_metric_records(
+        missing_task,
+        missing_row["observation"],
+        ["step_efficiency"],
+        status="MISSING",
+        reason="Judge request budget was unavailable.",
+    )[0]
+    scored_row["assessment"]["metrics"].append(scored_record)
+    missing_row["assessment"]["metrics"].append(missing_record)
+    (output / "results.json").write_text(json.dumps(result))
+
+    client = SavedLangfuse()
+    monkeypatch.setattr(
+        langfuse_export, "destination_fingerprint", lambda: "offline-destination"
+    )
+    summary = Path(result["official_summary_path"])
+    receipt = langfuse_export.export_run(output, summary, client=client)
+    assert receipt["status"] == "ACCEPTED"
+
+    native_scores = [
+        score for score in client.saved_scores if score.name == "step_efficiency"
+    ]
+    assert len(native_scores) == 1
+    root_spans = [
+        span
+        for span in client.spans
+        if SavedLangfuse.attrs(span).get(
+            "langfuse.experiment.item.root_observation_id"
+        )
+        == span.span_id
+    ]
+    roots_by_case = {
+        SavedLangfuse.attrs(span)["langfuse.observation.metadata"]["case_id"]: span
+        for span in root_spans
+    }
+    scored_root = roots_by_case[scored_row["case_id"]]
+    missing_root = roots_by_case[missing_row["case_id"]]
+    assert native_scores[0].observation_id == scored_root.span_id
+    assert missing_record["status"] == "MISSING" and missing_record["score"] is None
+    missing_metadata = SavedLangfuse.attrs(missing_root)[
+        "langfuse.observation.metadata"
+    ]
+    assert missing_metadata["assessment"]["metrics"][-1] == missing_record
     assert (
         langfuse_export.verify_run(output, summary, client=client)["status"]
         == "VERIFIED"

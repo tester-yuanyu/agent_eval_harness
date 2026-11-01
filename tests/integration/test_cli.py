@@ -101,6 +101,25 @@ class CLITest(unittest.TestCase):
             ],
         )
 
+    def test_benchmark_analysis_commands_keep_the_runtime_boundary(self):
+        for command, flags in (
+            ("judge", ["--source", "saved", "--config", "judge.json"]),
+            ("calibration-sheet", ["--run", "saved"]),
+            ("calibration-page", ["--worksheet", "labels.json"]),
+            ("calibration-check", ["--labels", "labels.json"]),
+            ("quality-audit", ["--run", "saved"]),
+            ("export-langfuse-evidence", ["--run", "saved"]),
+            ("report", ["--run", "saved", "--format", "inspect"]),
+            ("compare", ["--baseline", "a", "--candidate", "b", "--view-dir", "v"]),
+        ):
+            with self.subTest(command=command):
+                result = self.cli("benchmark", command, *flags)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual(
+                    json.loads(result.stdout)["argv"],
+                    ["-m", "eval_framework.benchmark.cli", command, *flags],
+                )
+
     def test_baseline_run_is_explicit_compare_alias(self):
         result = self.cli(
             "eval",

@@ -6,6 +6,7 @@ from copy import deepcopy
 from pathlib import Path
 
 import pytest
+
 from eval_framework.benchmark.metrics import METRICS_VERSION
 from eval_framework.benchmark.oracle import reference_observation
 from eval_framework.benchmark.regrade import regrade_run

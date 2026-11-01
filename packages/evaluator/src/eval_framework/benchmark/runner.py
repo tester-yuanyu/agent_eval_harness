@@ -5,9 +5,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
-import shutil
 import statistics
-import tempfile
 import time
 import uuid
 from collections import Counter, defaultdict
@@ -16,7 +14,7 @@ from importlib.metadata import version
 from pathlib import Path
 from typing import Any
 
-HARNESS_VERSION = "file-harness-v2"
+HARNESS_VERSION = "file-harness-inspect-v3"
 
 
 class RuntimeIdentityChanged(RuntimeError):
@@ -47,6 +45,8 @@ def scoring_identity() -> dict:
                 "module_oracle.py",
                 "recovery_scoring.py",
                 "repetition.py",
+                "agentic_metrics.py",
+                "agentic_metrics_worker.py",
             ]
         ),
     }
@@ -172,11 +172,41 @@ def summarize(records: list[dict], case_ids: list[str], repeats: int) -> dict:
 
 
 def compare_runs(baseline: dict, candidate: dict) -> dict:
+    for run in (baseline, candidate):
+        count = run["trials_per_case"]
+        cases = run["planned_case_ids"]
+        if type(count) is not int or count < 1 or len(set(cases)) != len(cases):
+            raise ValueError("comparison requires valid planned cases and trials")
+        seen = set()
+        for row in run["trials"]:
+            key = (row["case_id"], row["trial"])
+            if (
+                type(row["trial"]) is not int
+                or not 1 <= row["trial"] <= count
+                or row["case_id"] not in cases
+            ):
+                raise ValueError("comparison contains invalid trial identifiers")
+            if key in seen:
+                raise ValueError("comparison contains duplicate case/trial rows")
+            seen.add(key)
+            if row.get("identity_hash") != run.get("identity_hash"):
+                raise ValueError("trial identity_hash differs from its run")
+        if "identity_hash" in run and run["identity_hash"] != digest(run["identity"]):
+            raise ValueError("run identity_hash does not match identity")
     for field in ("dataset", "scoring_version"):
         if baseline["identity"][field] != candidate["identity"][field]:
             raise ValueError(f"comparison requires identical {field}")
-    for field in ("harness_version", "harness_source", "scoring_identity", "offline"):
+    for field in (
+        "harness_version",
+        "harness_source",
+        "scoring_identity",
+        "offline",
+        "inspect_ai",
+    ):
         if baseline["identity"].get(field) != candidate["identity"].get(field):
+            raise ValueError(f"comparison requires identical {field}")
+    for field in ("execution_backend", "scoring_backend"):
+        if baseline.get(field) != candidate.get(field):
             raise ValueError(f"comparison requires identical {field}")
     if baseline.get("mode") != candidate.get("mode"):
         raise ValueError("cannot compare offline reference with real Agent results")
@@ -246,7 +276,7 @@ def run_benchmark(
 ) -> dict:
     import anyio
     from inspect_ai import Task
-    from inspect_ai import eval as inspect_eval
+    from inspect_ai import eval_set as inspect_eval
     from inspect_ai.dataset import Sample
     from inspect_ai.log import transcript
     from inspect_ai.scorer import Score, scorer
@@ -277,6 +307,8 @@ def run_benchmark(
                 "module_worker.py",
                 "decision_runtime.py",
                 "decision_worker.py",
+                "inspect_runtime.py",
+                "inspect_docker.py",
             ]
         ),
         "inspect_ai": version("inspect_ai"),
@@ -349,6 +381,18 @@ def _run(
     transcript,
     anyio,
 ):
+    from inspect_ai import Epochs
+    from inspect_ai.util import LimitExceededError
+
+    from .inspect_docker import SandboxEnvironmentChanged
+    from .inspect_runtime import (
+        apply_native_limits,
+        inspect_model,
+        sample_files,
+        sandbox_spec,
+    )
+    from .nanobot_runtime import runtime_identity
+
     meta_path = output / "run.json"
     if meta_path.exists():
         meta = json.loads(meta_path.read_text())
@@ -363,112 +407,109 @@ def _run(
                 raise ValueError("completed results identity mismatch")
             return existing
     else:
+        modes = {task.get("execution_mode", "agent") for task in tasks}
         meta = {
             "run_id": output.name + "-" + uuid.uuid4().hex[:16],
             "identity_hash": identity_hash,
             "identity": identity,
             "config": config,
             "started_at": now(),
-            "planned_case_ids": [t["id"] for t in tasks],
+            "planned_case_ids": [task["id"] for task in tasks],
             "trials_per_case": repeats,
             "execution_backend": "inspect_ai",
             "scoring_backend": "deepeval",
+            "inspect_log_dir": "inspect",
             "mode": "offline_reference_smoke"
             if offline
             else (
                 "real_module"
-                if all(t.get("execution_mode") == "module" for t in tasks)
+                if modes == {"module"}
                 else "real_model_decision"
-                if all(t.get("execution_mode") == "decision" for t in tasks)
-                else "mixed_real_execution"
-                if any(t.get("execution_mode") == "module" for t in tasks)
+                if modes == {"decision"}
                 else "real_agent"
+                if modes == {"agent"}
+                else "mixed_real_execution"
             ),
         }
         save_json(meta_path, meta)
-    jobs = {
-        f"{index + 1:04d}-t{trial}": (task, trial)
-        for index, task in enumerate(tasks)
-        for trial in range(1, repeats + 1)
-    }
-    records = {}
-    for key in jobs:
-        path = output / "trials" / f"{key}.json"
-        if path.exists():
-            row = json.loads(path.read_text())
-            if row.get("identity_hash") != identity_hash:
-                raise ValueError("trial journal belongs to another run")
-            records[key] = row
+    by_id = {task["id"]: task for task in tasks}
+    if len(by_id) != len(tasks):
+        raise ValueError("task identifiers must be unique")
+    indices = {task["id"]: index + 1 for index, task in enumerate(tasks)}
     pending = {}
+    records = {}
+    needs_model = not offline and any(
+        task.get("execution_mode") != "module" for task in tasks
+    )
+    model = inspect_model(config) if needs_model else "mockllm/model"
+    shared_sandbox = (
+        sandbox_spec(config, output / "sandbox-build", needs_model=True)
+        if needs_model
+        else "local"
+    )
+    module_sandbox = (
+        sandbox_spec(config, output / "sandbox-build", needs_model=False)
+        if not offline and any(task.get("execution_mode") == "module" for task in tasks)
+        else "local"
+    )
+
+    def key_for(case_id, epoch):
+        return f"{indices[case_id]:04d}-t{epoch}"
 
     @solver
     def agent_execution():
         async def solve(state, generate):
-            key = str(state.sample_id)
-            task, trial = jobs[key]
-            started = now()
-            monotonic = time.monotonic()
-            workspace = Path(tempfile.mkdtemp(prefix="agent-benchmark-")) / "workspace"
+            task = by_id[str(state.sample_id)]
+            trial = state.epoch
+            key = key_for(task["id"], trial)
+            started, monotonic = now(), time.monotonic()
+            pending_error = None
+            mode = task.get("execution_mode", "agent")
             try:
-                workspace.mkdir()
-                from .nanobot_runtime import runtime_identity, safe_path
-
-                for name, content in task["fixtures"].items():
-                    path = safe_path(workspace, name)
-                    path.parent.mkdir(parents=True, exist_ok=True)
-                    path.write_text(content, encoding="utf-8")
                 if offline:
                     observation = reference_observation(task)
                     observation["runtime_identity"] = source
                 else:
                     require_runtime_identity(source, runtime_identity(config))
                     executor = execute_task
-                    if task.get("execution_mode") == "module":
-                        from .module_runtime import execute_module_task
+                    expected_source = source
+                    if mode == "module":
+                        from .module_runtime import execute_module_task, module_identity
 
-                        executor = execute_module_task
-                    elif task.get("execution_mode") == "decision":
-                        from .decision_runtime import execute_decision_task
+                        executor, expected_source = (
+                            execute_module_task,
+                            module_identity(config),
+                        )
+                    elif mode == "decision":
+                        from .decision_runtime import (
+                            decision_identity,
+                            execute_decision_task,
+                        )
 
-                        executor = execute_decision_task
+                        executor, expected_source = (
+                            execute_decision_task,
+                            decision_identity(config),
+                        )
+                    selected_sandbox = (
+                        module_sandbox if mode == "module" else shared_sandbox
+                    )
+                    effective = {
+                        **config,
+                        "sandbox": "docker"
+                        if isinstance(selected_sandbox, tuple)
+                        else selected_sandbox,
+                    }
+                    if isinstance(selected_sandbox, tuple):
+                        effective["_inspect_docker_compose"] = selected_sandbox[1]
                     observation = await executor(
-                        execution_task(task), config=config, workspace=workspace
+                        execution_task(task), config=effective, workspace=None
                     )
-                    try:
-                        observed_source = source
-                        if task.get("execution_mode") == "module":
-                            from .module_runtime import module_identity
-
-                            observed_source = module_identity(config)
-                        elif task.get("execution_mode") == "decision":
-                            from .decision_runtime import decision_identity
-
-                            observed_source = decision_identity(config)
-                        require_runtime_identity(
-                            observed_source, observation["runtime_identity"]
-                        )
-                        require_runtime_identity(source, runtime_identity(config))
-                    except RuntimeIdentityChanged:
-                        observation["status"] = "error"
-                        observation["errors"].append(
-                            {
-                                "kind": "harness",
-                                "code": "runtime_identity_changed",
-                                "message": "Agent source changed during experiment",
-                            }
-                        )
-                observation["execution_kind"] = (
-                    "deterministic_reference_not_agent"
-                    if offline
-                    else (
-                        {
-                            "module": "real_module",
-                            "decision": "real_model_decision",
-                        }.get(task.get("execution_mode"), "real_agent")
+                    require_runtime_identity(
+                        expected_source, observation["runtime_identity"]
                     )
-                )
-            except Exception as exc:
-                observation = {
+                    require_runtime_identity(source, runtime_identity(config))
+            except BaseException as exc:
+                observation = getattr(exc, "benchmark_observation", None) or {
                     "status": "error",
                     "turns": [],
                     "events": [],
@@ -478,18 +519,31 @@ def _run(
                             "kind": "harness",
                             "code": "runtime_identity_changed"
                             if isinstance(exc, RuntimeIdentityChanged)
+                            else "sandbox_environment_changed"
+                            if isinstance(exc, SandboxEnvironmentChanged)
                             else type(exc).__name__,
-                            "message": type(exc).__name__,
+                            "message": str(exc),
                         }
                     ],
                     "runtime_identity": source,
+                    "evidence_complete": False,
                 }
-            finally:
-                try:
-                    shutil.rmtree(workspace.parent)
-                    cleanup = "complete"
-                except OSError:
-                    cleanup = "failed"
+                if isinstance(
+                    exc,
+                    (
+                        LimitExceededError,
+                        RuntimeIdentityChanged,
+                        SandboxEnvironmentChanged,
+                    ),
+                ) or not isinstance(exc, Exception):
+                    pending_error = exc
+            observation["execution_kind"] = (
+                "deterministic_reference_not_agent"
+                if offline
+                else {"module": "real_module", "decision": "real_model_decision"}.get(
+                    mode, "real_agent"
+                )
+            )
             row = {
                 "identity_hash": identity_hash,
                 "case_id": task["id"],
@@ -498,27 +552,28 @@ def _run(
                 "split": task["split"],
                 "family": task["family"],
                 "evaluation_level": task.get("evaluation_level", "e2e"),
-                "execution_mode": task.get("execution_mode", "agent"),
+                "execution_mode": mode,
                 "started_at": started,
                 "finished_at": now(),
                 "latency_seconds": time.monotonic() - monotonic,
-                "cleanup_status": cleanup,
+                "cleanup_status": "inspect_managed",
                 "observation": observation,
             }
             pending[key] = row
             transcript().info(
                 {
                     "evidence_file": f"trials/{key}.json",
-                    "status": observation["status"],
                     "case_id": task["id"],
                     "trial": trial,
                 },
-                source="benchmark_evidence",
+                source="benchmark_export",
             )
             state.output.completion = "\n".join(
-                t.get("output", "") for t in observation.get("turns", [])
+                turn.get("output", "") for turn in observation.get("turns", [])
             )
             state.completed = True
+            if pending_error:
+                raise pending_error
             return state
 
         return solve
@@ -526,9 +581,10 @@ def _run(
     @scorer(metrics=[])
     def deepeval_bridge():
         async def score(state, target):
-            key = str(state.sample_id)
+            key = key_for(str(state.sample_id), state.epoch)
             row = pending.pop(key)
-            task, _ = jobs[key]
+            apply_native_limits(row["observation"], transcript().events)
+            task = by_id[str(state.sample_id)]
             try:
                 assessment = await anyio.to_thread.run_sync(
                     lambda: score_task(task, row["observation"])
@@ -541,87 +597,100 @@ def _run(
                     "errors": ["scorer_exception:" + type(exc).__name__],
                     "scoring_backend": "deepeval",
                 }
-            if row["cleanup_status"] != "complete":
-                assessment = {
-                    **assessment,
-                    "verdict": "INVALID",
-                    "validity": "INVALID",
-                    "errors": assessment.get("errors", []) + ["cleanup_failed"],
-                }
             row["assessment"] = assessment
             save_json(output / "trials" / f"{key}.json", row)
             records[key] = row
-            if any(
-                isinstance(error, dict)
-                and error.get("code") == "runtime_identity_changed"
-                for error in row["observation"].get("errors", [])
-            ):
-                raise RuntimeError("runtime identity changed; stop this experiment")
-            print(
-                json.dumps(
-                    {
-                        "completed": len(records),
-                        "planned": len(jobs),
-                        "case": row["case_id"],
-                        "trial": row["trial"],
-                        "verdict": assessment["verdict"],
-                    },
-                    ensure_ascii=False,
-                ),
-                flush=True,
-            )
-            # Inspect persists the DeepEval result without a second metric.
             return Score(
                 value=assessment["verdict"],
                 explanation=json.dumps(assessment, ensure_ascii=False),
+                metadata={"benchmark_record": row},
             )
 
         return score
 
-    remaining = [
+    dataset = [
         Sample(
-            id=key,
+            id=task["id"],
             input=task["prompt"],
             target="",
-            metadata={"case_id": task["id"], "trial": trial},
+            files=sample_files(task["fixtures"]),
+            metadata={"case_id": task["id"]},
+            sandbox="local"
+            if offline
+            else module_sandbox
+            if task.get("execution_mode") == "module"
+            else shared_sandbox,
         )
-        for key, (task, trial) in jobs.items()
-        if key not in records
+        for task in tasks
     ]
-    if remaining:
-        task = Task(
-            name="file_tool_benchmark",
-            version=HARNESS_VERSION,
-            dataset=remaining,
-            solver=agent_execution(),
-            scorer=deepeval_bridge(),
-            metadata={
-                "identity_hash": identity_hash,
-                "scoring_backend": "deepeval",
-                "model_owner": "nanobot",
-            },
+    task = Task(
+        name="file_tool_benchmark",
+        version=HARNESS_VERSION,
+        dataset=dataset,
+        solver=agent_execution(),
+        scorer=deepeval_bridge(),
+        epochs=Epochs(repeats, reducer="mode"),
+        token_limit=config.get("token_limit"),
+        message_limit=config.get("message_limit"),
+        time_limit=int(config.get("timeout_seconds", 180)),
+        score_on_error=True,
+        metadata={
+            "identity_hash": identity_hash,
+            "scoring_backend": "deepeval",
+            "model_owner": "inspect_ai",
+        },
+    )
+    success, logs = inspect_eval(
+        task,
+        model=model,
+        display="none",
+        ctl_server=False,
+        notification=False,
+        log_dir=str(output / "inspect"),
+        max_samples=concurrency,
+        retry_attempts=1,
+        retry_on_error=0,
+        fail_on_error=False,
+        score_on_error=True,
+        log_realtime=False,
+        log_samples=True,
+    )
+    # Reconstruct exports from authoritative native logs, including eval_set reuse.
+    for log in logs:
+        if log.samples is None and log.location:
+            from inspect_ai.log import read_eval_log
+
+            log = read_eval_log(log.location)
+        for sample in log.samples or []:
+            for score_value in (sample.scores or {}).values():
+                row = (score_value.metadata or {}).get("benchmark_record")
+                if row:
+                    if row["identity_hash"] != identity_hash:
+                        raise ValueError("Inspect sample belongs to another run")
+                    key = key_for(row["case_id"], row["trial"])
+                    records[key] = row
+                    save_json(output / "trials" / f"{key}.json", row)
+    expected = [
+        key_for(task["id"], trial) for task in tasks for trial in range(1, repeats + 1)
+    ]
+    if any(
+        error.get("code") in {"runtime_identity_changed", "sandbox_environment_changed"}
+        for row in records.values()
+        for error in row["observation"].get("errors", [])
+        if isinstance(error, dict)
+    ):
+        raise RuntimeIdentityChanged(
+            "runtime or sandbox identity changed; Inspect evidence preserved, "
+            "use a new run directory"
         )
-        logs = inspect_eval(
-            task,
-            model="mockllm/model",
-            display="none",
-            ctl_server=False,
-            notification=False,
-            log_dir=str(output / "inspect"),
-            max_samples=concurrency,
-            retry_on_error=0,
-            fail_on_error=True,
-            log_realtime=False,
-            log_samples=True,
+    if not success or any(key not in records for key in expected):
+        raise RuntimeError(
+            "Inspect execution incomplete; rerun with identical identity to resume"
         )
-        if not logs or logs[0].status != "success":
-            raise RuntimeError(
-                "Inspect execution incomplete; completed trial journals can be resumed"
-            )
     result = {
         **meta,
         "finished_at": now(),
-        "trials": [records[key] for key in jobs],
+        "trials": [records[key] for key in expected],
         "summary": summarize(list(records.values()), meta["planned_case_ids"], repeats),
     }
     save_json(output / "results.json", result)

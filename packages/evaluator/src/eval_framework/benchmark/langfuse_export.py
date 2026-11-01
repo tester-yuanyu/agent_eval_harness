@@ -51,6 +51,27 @@ VERIFIED_METADATA_FIELDS = (
     "turn",
 ) + EVIDENCE_FIELDS
 
+# DeepEval's native StepEfficiencyMetric evaluates the complete saved trace.
+# Keep this an exact contract allowlist: other chain metrics still identify the
+# child observation they score, and a missing event ID remains invalid.
+_ROOT_CHAIN_METRIC_IDENTITIES = {
+    (
+        "deepeval",
+        "StepEfficiencyMetric",
+        "step_efficiency",
+        "trajectory-native-v1",
+    )
+}
+
+
+def _is_root_chain_metric(metric: dict) -> bool:
+    return metric.get("scope") == "chain" and (
+        metric.get("backend"),
+        metric.get("implementation"),
+        metric.get("name"),
+        metric.get("version"),
+    ) in _ROOT_CHAIN_METRIC_IDENTITIES
+
 
 def _connect_retry(method, **kwargs):
     """Only retry transport failures known to precede request delivery."""
@@ -248,7 +269,11 @@ def build_payload(run: dict, tasks: dict, dataset_id: str, source_hash: str):
                 raise ValueError(f"unsupported metric scope: {scope}")
             if event_id is not None and event_id not in ids:
                 raise ValueError(f"metric references unknown event: {event_id}")
-            if scope != "task" and event_id is None:
+            if (
+                scope != "task"
+                and event_id is None
+                and not _is_root_chain_metric(metric)
+            ):
                 raise ValueError(f"{scope} metric requires an event ID")
             if scope == "task" and event_id is not None:
                 raise ValueError("task metric cannot reference a child event")
@@ -406,6 +431,7 @@ def export_run(run_dir: Path, dataset_path: Path, *, client=None) -> dict:
                 "DeepEval scoring."
             ),
             metadata=run["identity"]["dataset"],
+            request_options={"max_retries": 0},
         )
         receipt.update(dataset_id=dataset.id, dataset_name=name, registered_cases=[])
         save_json(receipt_path, receipt)
@@ -448,6 +474,7 @@ def export_run(run_dir: Path, dataset_path: Path, *, client=None) -> dict:
             },
             expected_output=task["oracle"],
             metadata=metadata,
+            request_options={"max_retries": 0},
         )
         return case
 

@@ -61,7 +61,7 @@ GEval 主评审 3,274 个适用项中 3,273 项已评分，1 项因 ValidationEr
   --run artifacts/decision-judge --dataset data/benchmarks/model-decisions-v1
 ```
 
-复制 [judge.example.json](../../configs/benchmark/judge.example.json) 为本地 Judge 配置，并设置其 `api_key_env` 指定的环境变量。Judge 的 `dimensions` 配置可选择 `action_appropriateness`、`recovery_appropriateness`、`response_groundedness`。模型决策专项建议仅选择动作合理性。`--repeats` 重新评价同一执行证据，用于测量 Judge 波动；它不增加 Agent 执行次数。每个评分包含版本、范围、对应事件ID、分数、依据及真实Judge调用。失败/证据不足记录为空分，恢复不适用需有完整证据支持。
+复制 [judge.example.json](../../configs/benchmark/judge.example.json) 为本地 Judge 配置，并设置其 `api_key_env` 指定的环境变量。Judge 的 `dimensions` 支持 GEval 的 `action_appropriateness`、`recovery_appropriateness`、`response_groundedness`，以及 DeepEval 原生 `argument_correctness`、`task_completion`、`step_efficiency`。模型决策专项建议仅选择动作合理性。`max_evaluations` 是每个 trial / Judge repeat 的实际请求预算；原生指标每项需要两次调用。`--repeats` 重新评价同一执行证据，用于测量 Judge 波动，不增加 Agent 执行次数。每项保存版本、范围、事件 ID、分数、依据和真实 Judge 调用。失败/证据不足记录为空分，恢复不适用需有完整证据支持。当前执行与展示的变化见[框架复用说明](framework-reuse.md)。
 
 ## 评分与轨迹
 

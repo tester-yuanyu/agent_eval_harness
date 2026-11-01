@@ -6,11 +6,8 @@ application policy, not an operating-system sandbox.
 
 from __future__ import annotations
 
-import asyncio
 import hashlib
 import json
-import os
-import signal
 import subprocess
 import sys
 import tempfile
@@ -100,9 +97,8 @@ def snapshot_files(workspace: Path) -> dict[str, str]:
         if path.is_file():
             if path.stat().st_size > 2_000_000:
                 raise ValueError("task file exceeds the 2 MB evidence limit")
-            result[path.relative_to(workspace).as_posix()] = path.read_text(
-                encoding="utf-8"
-            )
+            with path.open(encoding="utf-8", newline="") as stream:
+                result[path.relative_to(workspace).as_posix()] = stream.read()
     return result
 
 
@@ -125,45 +121,13 @@ def runtime_identity(config: dict[str, Any]) -> dict[str, Any]:
         ["git", "-C", str(root), "rev-parse", "HEAD"],
         text=True,
     ).strip()
-    paths = subprocess.check_output(
-        [
-            "git",
-            "-C",
-            str(root),
-            "ls-files",
-            "-z",
-            "--cached",
-            "--others",
-            "--exclude-standard",
-        ],
-    ).split(b"\0")
-    digest = hashlib.sha256()
-    for raw in sorted(set(paths)):
-        if not raw:
-            continue
-        name = os.fsdecode(raw)
-        path = root / name
-        if not path.is_file() or path.is_symlink():
-            continue
-        # Runtime code/config templates only, not user logs, credentials or media.
-        if not (name.startswith("nanobot/") or name in {"pyproject.toml", "uv.lock"}):
-            continue
-        if path.suffix not in {
-            ".py",
-            ".md",
-            ".json",
-            ".toml",
-            ".lock",
-            ".yaml",
-            ".yml",
-            ".j2",
-        }:
-            continue
-        digest.update(raw + b"\0" + path.read_bytes() + b"\0")
+    from .inspect_docker import source_digest, source_files
+
+    source_hash = source_digest(source_files(root))
     return {
         "agent": "nanobot",
         "source_commit": commit,
-        "working_tree_sha256": digest.hexdigest(),
+        "working_tree_sha256": source_hash,
         "source_dirty": bool(
             subprocess.check_output(
                 ["git", "-C", str(root), "status", "--porcelain"],
@@ -176,8 +140,10 @@ def runtime_identity(config: dict[str, Any]) -> dict[str, Any]:
         "max_tokens": config.get("max_tokens", 2048),
         "max_steps": config.get("max_steps", 12),
         "variant": config.get("variant", "baseline"),
-        "adapter_version": "nanobot-file-sdk-v1",
-        "isolation": "application-path-policy",
+        "adapter_version": "nanobot-inspect-bridge-v2",
+        "isolation": "docker"
+        if config.get("sandbox", "docker") == "docker"
+        else "local-no-os-isolation",
         "tokenizer_mode": config.get("tokenizer_mode", "cl100k_base"),
         "tokenizer_sha256": TOKENIZER_SHA256
         if config.get("tokenizer_mode", "cl100k_base") == "cl100k_base"
@@ -186,187 +152,16 @@ def runtime_identity(config: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def _journal_events(path: Path) -> list[dict[str, Any]]:
-    events: dict[str, dict[str, Any]] = {}
-    if path.exists():
-        for line in path.read_text(encoding="utf-8").splitlines():
-            try:
-                event = json.loads(line)
-                events[event["id"]] = event
-            except (ValueError, KeyError):
-                continue  # A process can die during the final append.
-    return list(events.values())
-
-
-def _redact(value: Any, secret: str) -> Any:
-    if isinstance(value, str):
-        return value.replace(secret, "[REDACTED]") if secret else value
-    if isinstance(value, list):
-        return [_redact(item, secret) for item in value]
-    if isinstance(value, dict):
-        return {key: _redact(item, secret) for key, item in value.items()}
-    return value
-
-
-async def _terminate(process: asyncio.subprocess.Process) -> None:
-    if process.returncode is not None:
-        return
-    try:
-        os.killpg(process.pid, signal.SIGTERM)
-    except ProcessLookupError:
-        return
-    try:
-        await asyncio.wait_for(process.wait(), timeout=2)
-    except TimeoutError:
-        try:
-            os.killpg(process.pid, signal.SIGKILL)
-        except ProcessLookupError:
-            pass
-        await process.wait()
-
-
 async def execute_task(
-    task: dict[str, Any],
-    *,
-    config: dict[str, Any],
-    workspace: Path,
+    task: dict[str, Any], *, config: dict[str, Any], workspace: Path | None = None
 ) -> dict[str, Any]:
-    task = execution_projection(task)
-    workspace = workspace.resolve(strict=True)
-    before = snapshot_files(workspace)
-    identity = runtime_identity(config)
-    root = Path(config["nanobot_root"]).expanduser().resolve(strict=True)
-    python = str(config.get("python") or root / ".venv" / "bin" / "python")
-    api_key_env = str(config.get("api_key_env", "DEEPSEEK_API_KEY"))
-    secret = os.environ.get(api_key_env, "")
-    result: dict[str, Any] = {
-        "status": "error",
-        "turns": [],
-        "before_files": before,
-        "final_files": {},
-        "events": [],
-        "usage": {},
-        "errors": [],
-        "runtime_identity": identity,
-        "evidence_complete": False,
-    }
-    if not secret:
-        result["errors"] = [
-            {
-                "kind": "environment",
-                "code": "missing_api_key",
-                "message": f"missing {api_key_env}",
-            }
-        ]
-        return result
-    with tempfile.TemporaryDirectory(
-        prefix="nanobot-runtime-", dir=workspace.parent
-    ) as private:
-        runtime_dir = Path(private)
-        payload = {
-            "task": task,
-            "config": config,
-            "workspace": str(workspace),
-            "runtime_dir": private,
-        }
-        # Do not inherit ambient provider keys, nanobot configuration, Python
-        # startup injection or unrelated connected-service credentials.
-        env = {
-            key: value
-            for key, value in os.environ.items()
-            if key
-            in {
-                "PATH",
-                "LANG",
-                "LC_ALL",
-                "SYSTEMROOT",
-                "TMPDIR",
-                "SSL_CERT_FILE",
-                "SSL_CERT_DIR",
-            }
-        }
-        env[api_key_env] = secret
-        env["PYTHONPATH"] = str(root)
-        env["PYTHONUNBUFFERED"] = "1"
-        if config.get("tokenizer_cache_dir"):
-            env["TIKTOKEN_CACHE_DIR"] = str(config["tokenizer_cache_dir"])
-        env["NANOBOT_LLM_TIMEOUT_S"] = str(
-            min(float(config.get("timeout_seconds", 180)), 120)
-        )
-        process = await asyncio.create_subprocess_exec(
-            python,
-            str(Path(__file__).with_name("nanobot_worker.py")),
-            stdin=asyncio.subprocess.PIPE,
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE,
-            cwd=runtime_dir,
-            env=env,
-            start_new_session=True,
-        )
-        try:
-            stdout, _stderr = await asyncio.wait_for(
-                process.communicate(json.dumps(payload).encode()),
-                timeout=float(config.get("timeout_seconds", 180)),
-            )
-            if process.returncode == 0:
-                result.update(json.loads(stdout))
-            else:
-                result["errors"].append(
-                    {
-                        "kind": "environment",
-                        "code": "worker_exit",
-                        "message": f"nanobot worker exited {process.returncode}",
-                    }
-                )
-        except TimeoutError:
-            await _terminate(process)
-            result["status"] = "timeout"
-            result["stop_reason"] = "timeout"
-            result["errors"].append(
-                {
-                    "kind": "agent",
-                    "code": "task_timeout",
-                    "message": "task deadline exceeded",
-                }
-            )
-        except asyncio.CancelledError:
-            await _terminate(process)
-            raise
-        except (ValueError, OSError) as exc:
-            await _terminate(process)
-            result["errors"].append(
-                {"kind": "environment", "code": type(exc).__name__, "message": str(exc)}
-            )
-        result["events"] = _journal_events(runtime_dir / "events.jsonl")
-        for event in result["events"]:
-            if not event.get("end_time"):
-                event.update(
-                    end_time=utc_now(), error="execution interrupted", incomplete=True
-                )
-        if not result["turns"]:
-            result["turns"] = [
-                {
-                    "input": event["input"],
-                    "output": event.get("output", ""),
-                    "snapshot": event.get("snapshot"),
-                }
-                for event in result["events"]
-                if event["type"] == "turn"
-            ]
-        try:
-            result["final_files"] = snapshot_files(workspace)
-            result["evidence_complete"] = bool(result["events"])
-        except (OSError, ValueError, UnicodeError) as exc:
-            result["errors"].append(
-                {"kind": "environment", "code": "snapshot_failed", "message": str(exc)}
-            )
-        result["before_files"] = before
-        result["runtime_identity"] = identity
-        usage: dict[str, int] = {}
-        for event in result["events"]:
-            if event["type"] == "generation":
-                for key, count in event.get("usage", {}).items():
-                    if isinstance(count, (int, float)):
-                        usage[key] = usage.get(key, 0) + count
-        result["usage"] = usage
-    return _redact(result, secret)
+    """Execute through Inspect; standalone callers retain their workspace API."""
+    from .inspect_runtime import execute_boundary
+
+    return await execute_boundary(
+        execution_projection(task),
+        config=config,
+        workspace=workspace,
+        mode="agent",
+        identity=runtime_identity(config),
+    )

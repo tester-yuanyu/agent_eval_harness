@@ -6,6 +6,7 @@ import hashlib
 import json
 
 import pytest
+
 from eval_framework.benchmark import langfuse_export
 from eval_framework.observability import _span
 

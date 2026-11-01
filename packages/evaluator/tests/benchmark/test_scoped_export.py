@@ -1,6 +1,8 @@
 import json
 
 import pytest
+
+from eval_framework.benchmark.agentic_metrics import _record_specs
 from eval_framework.benchmark.langfuse_export import build_payload
 
 
@@ -107,6 +109,58 @@ def test_scoped_scores_cannot_silently_fall_back_to_root(event_id):
     )
     with pytest.raises(ValueError, match="event"):
         build_payload(run, tasks, "data", "hash")
+
+
+def test_arbitrary_chain_metric_cannot_silently_fall_back_to_root():
+    run, tasks = fixture(
+        [
+            {
+                "name": "damaged_chain_metric",
+                "score": 1.0,
+                "backend": "deepeval",
+                "implementation": "UnknownChainMetric",
+                "scope": "chain",
+                "event_id": None,
+            }
+        ]
+    )
+    with pytest.raises(ValueError, match="event"):
+        build_payload(run, tasks, "data", "hash")
+
+
+def test_node_chain_metric_keeps_its_explicit_observation_binding():
+    run, tasks = fixture(
+        [
+            {
+                "name": "node_chain_metric",
+                "score": 0.5,
+                "scope": "chain",
+                "event_id": "tool1",
+            }
+        ]
+    )
+
+    spans, scores, _ = build_payload(run, tasks, "data", "hash")
+
+    assert scores[1].name == "node_chain_metric"
+    assert scores[1].observation_id == spans[2].span_id
+
+
+def test_native_step_efficiency_whole_trace_score_binds_to_root():
+    run, tasks = fixture([])
+    observation = run["trials"][0]["observation"]
+    record, target = _record_specs(
+        tasks["c"], observation, ["step_efficiency"]
+    )[0]
+    assert target is None
+    record.update(score=0.75, status="SCORED", reason="Recorded trace is efficient.")
+    run["trials"][0]["assessment"]["metrics"] = [record]
+
+    spans, scores, traces = build_payload(run, tasks, "data", "hash")
+
+    score = next(item for item in scores if item.name == "step_efficiency")
+    assert score.observation_id == spans[0].span_id == traces[0]["root_id"]
+    assert score.metadata["metric"] == record
 
 
 def test_duplicate_event_ids_and_unknown_parents_are_rejected():

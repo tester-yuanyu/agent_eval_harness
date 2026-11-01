@@ -5,6 +5,7 @@ import os
 from pathlib import Path
 
 import pytest
+
 from eval_framework.benchmark.module_runtime import (
     execute_module_task,
     module_execution_projection,
@@ -54,6 +55,8 @@ def test_all_real_module_cases_have_independent_state_and_expected_error_evidenc
             )
         )
         assert observed["status"] == "completed", observed
+        assert observed["execution_backend"] == "inspect_ai"
+        assert observed["native_events"]["sandbox"] > 0
         assert observed["execution_kind"] == "real_module"
         assert observed["evidence_complete"] is True
         assert observed["usage"] == {}

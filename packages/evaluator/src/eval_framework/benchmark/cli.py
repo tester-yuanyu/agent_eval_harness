@@ -34,7 +34,7 @@ def main(argv=None):
             child.add_argument("--concurrency", type=int, default=4)
             child.add_argument("--config", type=Path)
     judge = sub.add_parser(
-        "judge", help="GEval diagnostics on saved real execution evidence"
+        "judge", help="DeepEval native metrics and GEval on saved execution evidence"
     )
     judge.add_argument("--source", type=Path, required=True)
     judge.add_argument("--dataset", type=Path, required=True)
@@ -72,6 +72,10 @@ def main(argv=None):
     compare.add_argument("--baseline", type=Path, required=True)
     compare.add_argument("--candidate", type=Path, required=True)
     compare.add_argument("--output", type=Path, required=True)
+    compare.add_argument(
+        "--view-dir", type=Path,
+        help="Also bundle both saved runs in the native Inspect comparison viewer",
+    )
     regrade = sub.add_parser("regrade")
     regrade.add_argument("--source", type=Path, required=True)
     regrade.add_argument("--output", type=Path, required=True)
@@ -90,6 +94,10 @@ def main(argv=None):
         )
     report = sub.add_parser("report")
     report.add_argument("--run", type=Path, required=True)
+    report.add_argument(
+        "--format", choices=["auto", "inspect", "domain"], default="auto",
+        help="Prefer native Inspect View; domain retains the historical report",
+    )
     for child in sub.choices.values():
         child.add_argument(
             "--env-file",
@@ -231,6 +239,12 @@ def main(argv=None):
             json.loads((args.baseline / "results.json").read_text()),
             json.loads((args.candidate / "results.json").read_text()),
         )
+        if args.view_dir:
+            from .native_reporting import write_comparison_report
+
+            result["inspect_view"] = str(
+                write_comparison_report(args.baseline, args.candidate, args.view_dir)
+            )
         save_json(args.output, result)
         print(json.dumps(result, ensure_ascii=False, indent=2))
     elif args.command == "regrade":
@@ -257,7 +271,7 @@ def main(argv=None):
     elif args.command == "report":
         from .report import write_report
 
-        print(write_report(args.run))
+        print(write_report(args.run, format=args.format))
     return 0
 
 

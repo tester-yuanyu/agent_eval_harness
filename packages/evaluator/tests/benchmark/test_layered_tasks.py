@@ -5,6 +5,7 @@ from collections import Counter
 from pathlib import Path
 
 import pytest
+
 from eval_framework.benchmark.tasks import execution_task, load_tasks, validate_task
 
 ROOT = Path(__file__).resolve().parents[4]

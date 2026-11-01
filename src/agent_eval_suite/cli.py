@@ -33,6 +33,11 @@ EVAL_COMMANDS = (
     "sync-local",
     "import-reviews",
 )
+BENCHMARK_COMMANDS = (
+    "validate", "demo", "run", "compare", "report", "regrade", "judge",
+    "calibration-sheet", "calibration-page", "calibration-check", "quality-audit",
+    "export-langfuse", "export-langfuse-evidence", "verify-langfuse",
+)
 
 
 def discover_root() -> Path:
@@ -97,7 +102,7 @@ def parser() -> argparse.ArgumentParser:
     for name, aliases, commands, description in (
         (
             "benchmark", [],
-            ("validate", "demo", "run", "compare", "report", "regrade", "export-langfuse", "verify-langfuse"),
+            BENCHMARK_COMMANDS,
             "Fixed task datasets + Inspect Harness + DeepEval scoring. Live calls and Langfuse exports are explicit.",
         ),
         (

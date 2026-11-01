@@ -225,6 +225,7 @@ def test_missing_recorded_schema_is_explicit_unscored_diagnostic():
 
 def test_real_worker_captures_each_tool_before_and_after_state(tmp_path):
     import pytest
+
     from eval_framework.benchmark import nanobot_runtime
 
     root = Path(os.environ.get("NANOBOT_TEST_ROOT", "/Users/yuanyu/Desktop/nanobot"))
@@ -284,7 +285,13 @@ print(json.dumps(asyncio.run(run_task(json.loads(sys.argv[2])))))
         timeout=60,
     )
     assert completed.returncode == 0, completed.stderr
-    events = nanobot_runtime._journal_events(private / "events.jsonl")
+    by_id = {
+        event["id"]: event
+        for event in map(
+            json.loads, (private / "events.jsonl").read_text().splitlines()
+        )
+    }
+    events = list(by_id.values())
     write, read = [event for event in events if event["type"] == "tool"]
     assert write["before_files"] == {"input.txt": "original"}
     assert write["after_files"] == {"input.txt": "original", "result.txt": "saved"}

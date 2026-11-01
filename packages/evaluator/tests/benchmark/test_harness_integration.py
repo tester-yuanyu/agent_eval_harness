@@ -10,6 +10,7 @@ import sys
 from pathlib import Path
 
 import pytest
+
 from eval_framework.benchmark.runner import (
     RuntimeIdentityChanged,
     require_runtime_identity,
@@ -160,7 +161,7 @@ def test_inspect_deepeval_offline_execution_and_completed_resume_are_immutable(
         assert observation["execution_kind"] == "deterministic_reference_not_agent"
         assert observation["events"] == []
         assert observation["usage"] == {}
-        assert row["cleanup_status"] == "complete"
+        assert row["cleanup_status"] == "inspect_managed"
         assert assessment["scoring_backend"] == "deepeval"
         assert any(metric["formal"] for metric in assessment["metrics"])
         assert all(metric["backend"] == "deepeval" for metric in assessment["metrics"])
@@ -189,7 +190,7 @@ def test_inspect_deepeval_offline_execution_and_completed_resume_are_immutable(
     def must_not_execute(*args, **kwargs):
         raise AssertionError("completed immutable run must not schedule execution")
 
-    monkeypatch.setattr("inspect_ai.eval", must_not_execute)
+    monkeypatch.setattr("inspect_ai.eval_set", must_not_execute)
     again = _offline_run(frozen_dataset, output)
     assert again == result
     after = {

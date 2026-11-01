@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 
 import pytest
+
 from eval_framework.benchmark.module_oracle import evaluate_module_calls
 from eval_framework.benchmark.tasks import load_tasks
 

@@ -2,6 +2,8 @@
 
 本文定义 `file-tools-v2` 当前主链路的指标与汇总口径。Inspect 负责执行调度和日志，DeepEval 承载正式确定性评分与诊断指标，Langfuse 只展示保存结果。`packages/evaluator/docs/metric_dictionary.md` 描述旧 Suite 的历史语义，不能用于解释本文指标、版本或 verdict。
 
+2026-11-01 框架复用后，正式评分版本为 `file-tools-deepeval-v2.3`。下文 v2.2 确定性公式保持不变；`tool_nonrepetition` 从默认评分移至显式 `quality-audit`。新 `trajectory-judge-v2` 增加 DeepEval 原生 `task_completion`（task）、`argument_correctness`（turn）和 `step_efficiency`（chain），均为未校准诊断，`threshold/success=None`、`formal=false`；三项原生实现分别调用 TaskCompletionMetric、ArgumentCorrectnessMetric、StepEfficiencyMetric，不自研语义评分算法。GEval 三维度保持，完整职责与请求预算见[框架复用说明](framework-reuse.md)。历史评分按保存版本解释，不重写已有结果。
+
 ## 1. 角色、记录与缺失值
 
 一次 Trial 由 `(case_id, trial)` 唯一标识；任务级指标每次 Trial 一条，`generation`、`tool`、`turn`、`chain` 指标按对应事件或检查点各记一条。指标记录至少保留 `name`、`score`、`threshold`、`success`、`formal`、`version`、`reason`；节点级记录还保留 `scope`、`event_id`，需要多条证据时保留 `evidence_ids`。
@@ -134,7 +136,7 @@ Judge 汇总公式如下。设总记录数为 `N`，`NA` 为 `NOT_APPLICABLE` �
 
 ### 延迟
 
-`latency_seconds` 从 Harness 创建工作区之前的 `time.monotonic()` 开始，到 Agent/模块/决策执行、运行身份复核、异常封装和临时工作区清理之后结束；它不包含后续 DeepEval 评分或事后 Judge。事后 Judge Trace 根跨度可能跨过两阶段间隔，不能当作 Agent latency。
+当前 Harness v3 的 `latency_seconds` 从 Inspect solver 开始测量，到 Agent/模块/决策边界返回、身份复核和异常封装之后结束；不包含 Inspect 初始化/清理 sandbox、DeepEval 评分或事后 Judge。历史 Harness 的计时包含工作区创建与清理，不能静默混成同一耗时口径。事后 Judge Trace 根跨度可能跨过两阶段间隔，不能当作 Agent latency。
 
 设已保存延迟升序为 `x[0]...x[n-1]`：
 
@@ -157,7 +159,7 @@ Judge 汇总公式如下。设总记录数为 `N`，`NA` 为 `NOT_APPLICABLE` �
 
 每次运行应保存数据集 Hash、任务契约与 Oracle 版本、Harness 版本及源码 Hash、评分版本、DeepEval 库版本、配置和来源结果 Hash。评分源码身份当前覆盖 `metrics.py`、`oracle.py`、`tasks.py`、`trajectory.py`、`module_oracle.py`、`recovery_scoring.py`、`repetition.py`。v2.2 增加重复候选诊断，正式规则沿用 v2.1；新执行或复评使用新身份，不改写旧结果。
 
-常规 `report` 命令只聚合保存的 `results.json`，不重新执行 Agent 或指标。新增 `quality-audit` 会对保存轨迹计算重复候选诊断，输出到新目录，不执行 Agent、不调用模型、不改写原始评分。分数必须能通过 `event_id`/`evidence_ids` 回到原事件；Judge 还保存 `metric_id`、rubric Hash、Judge 版本、模型调用事件和来源运行 Hash。可变别名必须在正式使用前解析为固定资产身份。
+常规 `report` 命令读取保存的 `results.json` 与 Inspect 日志，默认用官方 bundle API 生成原生查看器；没有日志的历史/事后评分目录保持 domain 报告兼容，不重新执行 Agent 或指标。`quality-audit` 会对保存轨迹计算重复候选诊断，输出到新目录，不执行 Agent、不调用模型、不改写原始评分。分数必须能通过 `event_id`/`evidence_ids` 回到原事件；Judge 还保存 `metric_id`、rubric Hash、Judge 版本、模型调用事件和来源运行 Hash。可变别名必须在正式使用前解析为固定资产身份。
 
 ## 9. 已有结果只能证明什么
 

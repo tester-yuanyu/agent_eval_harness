@@ -1,7 +1,53 @@
 import json
+from pathlib import Path
 
+import httpx
 import pytest
+from langfuse.api.client import LangfuseAPI
+from langfuse.api.core.api_error import ApiError
+
 from eval_framework.benchmark.langfuse_export import build_payload
+from eval_framework.benchmark.tasks import dataset_identity, load_tasks
+
+DATASET = (
+    Path(__file__).resolve().parents[4]
+    / "data/benchmarks/file-tools-v1/tasks.jsonl"
+)
+
+
+def _saved_export_source(tmp_path):
+    case_id = load_tasks(DATASET)[0]["id"]
+    run = {
+        "run_id": "transport-safety",
+        "identity": {"dataset": dataset_identity(DATASET)},
+        "mode": "real_agent",
+        "planned_case_ids": [case_id],
+        "trials": [],
+    }
+    (tmp_path / "results.json").write_text(json.dumps(run))
+    return tmp_path
+
+
+def _sdk(handler):
+    return LangfuseAPI(
+        base_url="https://langfuse.example",
+        username="test-public",
+        password="test-secret",
+        headers={"x-langfuse-ingestion-version": "4"},
+        httpx_client=httpx.Client(transport=httpx.MockTransport(handler)),
+    )
+
+
+def _dataset_response():
+    return {
+        "id": "dataset-id",
+        "name": "transport-safety",
+        "description": None,
+        "metadata": {},
+        "projectId": "project-id",
+        "createdAt": "2026-11-01T00:00:00Z",
+        "updatedAt": "2026-11-01T00:00:00Z",
+    }
 
 
 def test_real_children_keep_timing_io_and_experiment_identity():
@@ -93,6 +139,40 @@ def test_real_children_keep_timing_io_and_experiment_identity():
     assert spans[2].parent_span_id == spans[0].span_id
 
 
+def test_dataset_creation_never_retries_an_ambiguous_http_failure(tmp_path):
+    from eval_framework.benchmark.langfuse_export import export_run
+
+    requests = []
+
+    def unavailable(request):
+        requests.append(request)
+        return httpx.Response(503, json={"message": "unavailable"})
+
+    with pytest.raises(ApiError):
+        export_run(
+            _saved_export_source(tmp_path), DATASET, client=_sdk(unavailable)
+        )
+    assert len(requests) == 1
+
+
+def test_dataset_item_creation_never_retries_an_ambiguous_http_failure(tmp_path):
+    from eval_framework.benchmark.langfuse_export import export_run
+
+    item_requests = []
+
+    def unavailable_item(request):
+        if request.url.path == "/api/public/v2/datasets":
+            return httpx.Response(200, json=_dataset_response())
+        item_requests.append(request)
+        return httpx.Response(503, json={"message": "unavailable"})
+
+    with pytest.raises(ApiError):
+        export_run(
+            _saved_export_source(tmp_path), DATASET, client=_sdk(unavailable_item)
+        )
+    assert len(item_requests) == 1
+
+
 @pytest.mark.parametrize("status, expected_exit", [("VERIFIED", 0), ("MISMATCH", 1)])
 def test_verify_cli_exit_status_reflects_remote_evidence(
     status, expected_exit, tmp_path, monkeypatch, capsys
@@ -110,6 +190,7 @@ def test_verify_cli_exit_status_reflects_remote_evidence(
 def test_connection_retry_never_replays_an_uncertain_delivered_request(monkeypatch):
     import httpx
     import pytest
+
     from eval_framework.benchmark.langfuse_export import _connect_retry
 
     monkeypatch.setattr(

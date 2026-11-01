@@ -7,6 +7,7 @@ from importlib.util import find_spec
 from pathlib import Path
 
 import pytest
+
 from eval_framework.benchmark.tasks import load_tasks
 
 ROOT = Path(__file__).resolve().parents[4]

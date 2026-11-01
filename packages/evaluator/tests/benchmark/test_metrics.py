@@ -1,8 +1,12 @@
 """Formal scores must come from actual state and complete execution evidence."""
 
 import json
+import os
+import subprocess
+import sys
 from copy import deepcopy
 from importlib.metadata import version
+from pathlib import Path
 
 import httpx
 import openai
@@ -69,9 +73,123 @@ def by_name(result):
     return {metric["name"]: metric for metric in result["metrics"]}
 
 
-def test_repetition_diagnostic_is_attached_without_overriding_formal_pass(
-    task, observation
-):
+def test_python_benchmark_import_disables_implicit_deepeval_network(tmp_path):
+    socket_log = tmp_path / "sockets.log"
+    guard = tmp_path / "guard"
+    guard.mkdir()
+    (guard / "sitecustomize.py").write_text(
+        """
+import os
+import socket
+
+_original_connect = socket.socket.connect
+open(os.environ["BENCHMARK_IMPORT_SOCKET_LOG"], "w").close()
+
+def _guarded_connect(sock, address):
+    if isinstance(address, tuple):
+        path = os.environ["BENCHMARK_IMPORT_SOCKET_LOG"]
+        with open(path, "a", encoding="utf-8") as log:
+            log.write(repr(address) + "\\n")
+        raise RuntimeError("network disabled in benchmark import test")
+    return _original_connect(sock, address)
+
+socket.socket.connect = _guarded_connect
+""".lstrip()
+    )
+    script = """
+import json
+import os
+from eval_framework.benchmark.metrics import score_task
+from deepeval.config.settings import get_settings
+
+task = {
+    "id": "offline-import",
+    "prompt": "Keep a unchanged.",
+    "followups": [],
+    "fixtures": {"a": "same"},
+    "oracle": {
+        "expected_files": {"a": "same"},
+        "absent_files": [],
+        "response_contains": [],
+        "preserve_other_files": True,
+        "forbid_extra_files": True,
+    },
+    "required_tools": [],
+    "allowed_tools": [],
+}
+observation = {
+    "status": "completed",
+    "evidence_complete": True,
+    "turns": [{"input": task["prompt"], "output": "Unchanged."}],
+    "before_files": {"a": "same"},
+    "final_files": {"a": "same"},
+    "events": [],
+    "errors": [],
+}
+result = score_task(task, observation)
+settings = get_settings()
+print(json.dumps({
+    "verdict": result["verdict"],
+    "confident_key": os.environ.get("CONFIDENT_API_KEY"),
+    "telemetry": os.environ.get("DEEPEVAL_TELEMETRY_OPT_OUT"),
+    "dotenv": os.environ.get("DEEPEVAL_DISABLE_DOTENV"),
+    "legacy_keyfile": os.environ.get("DEEPEVAL_DISABLE_LEGACY_KEYFILE"),
+    "trace_internal": os.environ.get("CONFIDENT_TRACE_INTERNAL"),
+    "trace_sample_rate": os.environ.get("CONFIDENT_TRACE_SAMPLE_RATE"),
+    "tracing": os.environ.get("CONFIDENT_TRACING_ENABLED"),
+    "settings_telemetry": settings.DEEPEVAL_TELEMETRY_OPT_OUT,
+    "settings_trace_internal": settings.CONFIDENT_TRACE_INTERNAL,
+    "settings_trace_sample_rate": settings.CONFIDENT_TRACE_SAMPLE_RATE,
+}))
+"""
+    packages = Path(__file__).resolve().parents[3]
+    pythonpath = [
+        guard,
+        packages / "evaluator/src",
+        packages / "contracts/src",
+        packages / "trace-sdk/src",
+    ]
+    env = dict(os.environ)
+    env.update(
+        PYTHONPATH=os.pathsep.join(str(path) for path in pythonpath),
+        BENCHMARK_IMPORT_SOCKET_LOG=str(socket_log),
+        CONFIDENT_API_KEY="FAKE_CONFIDENT_KEY",
+        DEEPEVAL_TELEMETRY_OPT_OUT="0",
+        DEEPEVAL_DISABLE_DOTENV="0",
+        DEEPEVAL_DISABLE_LEGACY_KEYFILE="0",
+        CONFIDENT_TRACE_INTERNAL="1",
+        CONFIDENT_TRACE_SAMPLE_RATE="1",
+        CONFIDENT_TRACING_ENABLED="YES",
+    )
+    completed = subprocess.run(
+        [sys.executable, "-c", script],
+        env=env,
+        text=True,
+        capture_output=True,
+        timeout=30,
+        check=False,
+    )
+
+    assert completed.returncode == 0, completed.stderr
+    result = json.loads(completed.stdout.splitlines()[-1])
+    assert result == {
+        "verdict": "PASS",
+        "confident_key": "",
+        "telemetry": "1",
+        "dotenv": "1",
+        "legacy_keyfile": "1",
+        "trace_internal": "0",
+        "trace_sample_rate": "0",
+        "tracing": "NO",
+        "settings_telemetry": True,
+        "settings_trace_internal": False,
+        "settings_trace_sample_rate": 0.0,
+    }
+    assert socket_log.exists()
+    assert socket_log.read_text() == ""
+
+
+def test_default_scoring_leaves_repetition_to_explicit_quality_audit(task, observation):
     task["evaluation_level"] = "chain"
     first = observation["events"][0]
     first.update(
@@ -95,9 +213,7 @@ def test_repetition_diagnostic_is_attached_without_overriding_formal_pass(
 
     result = score_task(task, observation)
 
-    diagnostics = [m for m in result["metrics"] if m["name"] == "tool_nonrepetition"]
-    assert [m["score"] for m in diagnostics] == [1.0, 0.0]
-    assert all(m["formal"] is False for m in diagnostics)
+    assert "tool_nonrepetition" not in by_name(result)
     assert result["verdict"] == "PASS"
 
 
@@ -118,25 +234,6 @@ def test_actual_correct_state_passes_with_versioned_deepeval_metrics(task, obser
     assert all(
         metric["library_version"] == version("deepeval") for metric in result["metrics"]
     )
-
-
-def test_repetition_diagnostic_error_cannot_erase_formal_result(
-    task, observation, monkeypatch
-):
-    from eval_framework.benchmark import repetition
-
-    task["evaluation_level"] = "e2e"
-
-    def fail(*_args):
-        raise ValueError("diagnostic failure")
-
-    monkeypatch.setattr(repetition, "score_repetition", fail)
-    result = score_task(task, observation)
-    assert result["verdict"] == "PASS"
-    assert by_name(result)["task_success"]["score"] == 1
-    diagnostic = by_name(result)["tool_nonrepetition"]
-    assert diagnostic["formal"] is False and diagnostic["status"] == "ERROR"
-    assert diagnostic["score"] is None
 
 
 def test_correct_claim_cannot_hide_wrong_final_state(task, observation):

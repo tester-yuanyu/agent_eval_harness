@@ -20,7 +20,7 @@ from deepeval.test_case import LLMTestCase, SingleTurnParams, ToolCall
 
 from .oracle import evaluate_oracle
 
-METRICS_VERSION = "file-tools-deepeval-v2.2"
+METRICS_VERSION = "file-tools-deepeval-v2.3"
 RESPONSE_RUBRIC_VERSION = "file-tools-response-diagnostic-v1"
 
 
@@ -396,31 +396,6 @@ def score_task(task: dict[str, Any], observation: dict[str, Any]) -> dict[str, A
             from .recovery_scoring import score_recovery_policy
 
             result["metrics"].extend(score_recovery_policy(task, observation))
-            from .repetition import REPETITION_VERSION, score_repetition
-
-            try:
-                result["metrics"].extend(score_repetition(task, observation))
-            except Exception as exc:
-                # A supplemental diagnostic cannot erase the formal evidence.
-                result["metrics"].append(
-                    {
-                        "name": "tool_nonrepetition",
-                        "backend": "deepeval",
-                        "version": REPETITION_VERSION,
-                        "library_version": version("deepeval"),
-                        "implementation": "RepetitionMetric",
-                        "formal": False,
-                        "scope": "task",
-                        "event_id": None,
-                        "evidence_ids": [],
-                        "status": "ERROR",
-                        "score": None,
-                        "success": None,
-                        "threshold": 1.0,
-                        "classification": "diagnostic_error",
-                        "reason": f"Repetition diagnostic failed: {type(exc).__name__}",
-                    }
-                )
     except Exception as exc:
         result.update(verdict="INVALID", validity="INVALID", metrics=[])
         result["errors"].append(
