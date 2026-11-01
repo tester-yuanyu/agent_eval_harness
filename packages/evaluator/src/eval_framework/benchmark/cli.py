@@ -25,6 +25,7 @@ def main(argv=None):
             type=Path,
             default=Path("data/benchmarks/file-tools-v1/tasks.jsonl"),
         )
+        child.add_argument("--level", choices=["module", "chain", "e2e"])
         if name != "validate":
             child.add_argument("--output", type=Path, required=True)
             child.add_argument("--limit", type=int)
@@ -32,6 +33,25 @@ def main(argv=None):
             child.add_argument("--repeats", type=int, default=1)
             child.add_argument("--concurrency", type=int, default=4)
             child.add_argument("--config", type=Path)
+    judge = sub.add_parser(
+        "judge", help="GEval diagnostics on saved real execution evidence"
+    )
+    judge.add_argument("--source", type=Path, required=True)
+    judge.add_argument("--dataset", type=Path, required=True)
+    judge.add_argument("--output", type=Path, required=True)
+    judge.add_argument("--config", type=Path, required=True)
+    judge.add_argument("--repeats", type=int, default=1)
+    judge.add_argument("--concurrency", type=int, default=2)
+    judge.add_argument("--limit", type=int)
+    calibration = sub.add_parser("calibration-sheet")
+    calibration.add_argument("--run", type=Path, required=True)
+    calibration.add_argument("--output", type=Path, required=True)
+    calibrate = sub.add_parser("calibration-check")
+    calibrate.add_argument("--run", type=Path, required=True)
+    calibrate.add_argument("--labels", type=Path, required=True)
+    calibrate.add_argument("--threshold", type=float, required=True)
+    calibrate.add_argument("--threshold-version", required=True)
+    calibrate.add_argument("--output", type=Path, required=True)
     compare = sub.add_parser("compare")
     compare.add_argument("--baseline", type=Path, required=True)
     compare.add_argument("--candidate", type=Path, required=True)
@@ -44,7 +64,7 @@ def main(argv=None):
         type=Path,
         default=Path("data/benchmarks/file-tools-v1/tasks.jsonl"),
     )
-    for name in ("export-langfuse", "verify-langfuse"):
+    for name in ("export-langfuse", "export-langfuse-evidence", "verify-langfuse"):
         child = sub.add_parser(name)
         child.add_argument("--run", type=Path, required=True)
         child.add_argument(
@@ -77,19 +97,25 @@ def main(argv=None):
 
     if args.command in ("validate", "demo", "run"):
         tasks = load_tasks(args.dataset)
+        if args.level:
+            tasks = [t for t in tasks if t.get("evaluation_level", "e2e") == args.level]
         if args.command == "validate":
             from .oracle import evaluate_oracle, reference_observation
 
             bad = [
                 t["id"]
                 for t in tasks
-                if not evaluate_oracle(t, reference_observation(t))["success"]
+                if t.get("execution_mode", "agent") == "agent"
+                and not evaluate_oracle(t, reference_observation(t))["success"]
             ]
             result = {
                 "tasks": len(tasks),
                 "categories": dict(Counter(t["category"] for t in tasks)),
                 "splits": dict(Counter(t["split"] for t in tasks)),
                 "reference_failures": bad,
+                "module_execution_not_performed": sum(
+                    t.get("execution_mode") in ("module", "decision") for t in tasks
+                ),
                 "identity": dataset_identity(args.dataset),
             }
             print(json.dumps(result, ensure_ascii=False, indent=2))
@@ -97,7 +123,21 @@ def main(argv=None):
         if args.command == "run" and args.config is None:
             parser.error("run requires --config; demo is the offline reference smoke")
         config = json.loads(args.config.read_text()) if args.config else {}
-        selected = select_tasks(tasks, limit=args.limit, split=args.split)
+        if args.command == "demo" and any(
+            t.get("execution_mode", "agent") != "agent" for t in tasks
+        ):
+            parser.error(
+                "reference demo supports Agent tasks; select --level chain or e2e"
+            )
+        selected = select_tasks(
+            [
+                t
+                for t in tasks
+                if not args.level or t.get("evaluation_level", "e2e") == args.level
+            ],
+            limit=args.limit,
+            split=args.split,
+        )
         result = run_benchmark(
             selected,
             dataset=dataset_identity(args.dataset),
@@ -108,6 +148,41 @@ def main(argv=None):
             offline=args.command == "demo",
         )
         print(json.dumps(result["summary"], ensure_ascii=False, indent=2))
+    elif args.command == "judge":
+        from .judge_run import judge_run
+
+        result = judge_run(
+            args.source,
+            args.dataset,
+            args.output,
+            json.loads(args.config.read_text()),
+            repeats=args.repeats,
+            concurrency=args.concurrency,
+            limit=args.limit,
+        )
+        print(json.dumps(result["judge_summary"], ensure_ascii=False, indent=2))
+    elif args.command == "calibration-sheet":
+        from .judge_calibration import create_calibration_worksheet
+
+        result = create_calibration_worksheet(
+            json.loads((args.run / "results.json").read_text())
+        )
+        if args.output.exists():
+            parser.error("calibration output already exists")
+        save_json(args.output, result)
+    elif args.command == "calibration-check":
+        from .judge_calibration import compare_human_labels
+
+        result = compare_human_labels(
+            json.loads((args.run / "results.json").read_text()),
+            json.loads(args.labels.read_text()),
+            threshold=args.threshold,
+            threshold_version=args.threshold_version,
+        )
+        if args.output.exists():
+            parser.error("calibration output already exists")
+        save_json(args.output, result)
+        print(json.dumps(result, ensure_ascii=False, indent=2))
     elif args.command == "compare":
         result = compare_runs(
             json.loads((args.baseline / "results.json").read_text()),
@@ -120,12 +195,19 @@ def main(argv=None):
 
         result = regrade_run(args.source, args.dataset, args.output)
         print(json.dumps(result["summary"], ensure_ascii=False, indent=2))
-    elif args.command in ("export-langfuse", "verify-langfuse"):
-        from .langfuse_export import export_run, verify_run
+    elif args.command in (
+        "export-langfuse",
+        "export-langfuse-evidence",
+        "verify-langfuse",
+    ):
+        from .langfuse_export import export_metadata_evidence, export_run, verify_run
 
-        result = (export_run if args.command == "export-langfuse" else verify_run)(
-            args.run, args.dataset
-        )
+        operation = {
+            "export-langfuse": export_run,
+            "export-langfuse-evidence": export_metadata_evidence,
+            "verify-langfuse": verify_run,
+        }[args.command]
+        result = operation(args.run, args.dataset)
         print(json.dumps(result, ensure_ascii=False, indent=2))
         if args.command == "verify-langfuse":
             return 0 if result["status"] == "VERIFIED" else 1

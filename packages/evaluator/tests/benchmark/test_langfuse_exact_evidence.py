@@ -1,0 +1,229 @@
+"""Exact saved metadata must survive the API's JSON-string normalization."""
+
+import base64
+import copy
+import hashlib
+import json
+
+import pytest
+from eval_framework.benchmark import langfuse_export
+from eval_framework.observability import _span
+
+SOURCE_HASH = "a" * 64
+
+
+def saved_span(span_id: str, metadata: dict, *, kind: str = "tool"):
+    return _span(
+        "1" * 32,
+        span_id,
+        "recorded-operation",
+        "2026-11-01T00:00:01Z",
+        "2026-11-01T00:00:02Z",
+        {
+            "langfuse.observation.type": kind,
+            "langfuse.observation.metadata": metadata,
+            "langfuse.observation.input": {"saved": "input"},
+            "langfuse.observation.output": "saved output",
+            "langfuse.environment": "benchmark",
+        },
+    )
+
+
+def metadata_of(span):
+    attributes = {item.key: item.value.string_value for item in span.attributes}
+    return json.loads(attributes["langfuse.observation.metadata"])
+
+
+def decode_evidence(span):
+    metadata = metadata_of(span)
+    assert metadata["exact_metadata_base64"].startswith("base64:")
+    raw = base64.b64decode(
+        metadata["exact_metadata_base64"].removeprefix("base64:"), validate=True
+    )
+    assert metadata["exact_metadata_sha256"] == (
+        "sha256:" + hashlib.sha256(raw).hexdigest()
+    )
+    return json.loads(raw), metadata
+
+
+@pytest.mark.parametrize(
+    "content",
+    [
+        ' { "status" : "ready", "count": 1 } \n',
+        '[ 1, "二", {"nested": "{ \\"x\\": 2 }"} ]',
+        "\n true \t",
+        " 1.00 \n",
+        " null\n",
+        ' "a string" ',
+        '{"long": "' + "x" * 400 + '"}\n',
+    ],
+)
+def test_evidence_preserves_json_text_bytes_and_source_binding(content):
+    # These strings are file contents, not the decoded values the API exposes.
+    json.loads(content)
+    original = saved_span("2" * 16, {"before_files": {"docs/a.v1.json": content}})
+
+    evidence = langfuse_export.build_evidence_payload([original], SOURCE_HASH)
+
+    assert len(evidence) == 1
+    restored, metadata = decode_evidence(evidence[0])
+    assert restored == {"before_files": {"docs/a.v1.json": content}}
+    assert restored["before_files"]["docs/a.v1.json"].encode() == content.encode()
+    assert metadata["evidence_source_sha256"] == SOURCE_HASH
+    assert metadata["evidence_for_observation_id"] == original.span_id
+    assert metadata["is_export_evidence"] is True
+    assert isinstance(metadata["evidence_export_version"], str)
+    assert metadata["evidence_export_version"]
+    assert evidence[0].parent_span_id == original.span_id
+    assert evidence[0].trace_id == original.trace_id
+    assert evidence[0].name == "saved-exact-metadata"
+
+
+def test_only_affected_verified_fields_and_observations_get_evidence():
+    affected = saved_span(
+        "2" * 16,
+        {
+            "before_files": {"settings.json": ' { "enabled": true } '},
+            "normalized_input": {"path": "settings.json", "content": "null\n"},
+            "after_files": {"note.txt": "ordinary text"},
+            "unverified_extra": {"text": '{"ignored": true}'},
+        },
+    )
+    plain = saved_span("3" * 16, {"snapshot": {"note.txt": "ordinary text"}})
+    unverified = saved_span("4" * 16, {"unverified_extra": '{"ignored": true}'})
+    typed = saved_span(
+        "5" * 16,
+        {"tool_schema": {"additionalProperties": False}, "turn": 1, "is_error": False},
+    )
+
+    evidence = langfuse_export.build_evidence_payload(
+        [affected, plain, unverified, typed], SOURCE_HASH
+    )
+
+    assert len(evidence) == 1
+    restored, _ = decode_evidence(evidence[0])
+    assert restored == {
+        "before_files": {"settings.json": ' { "enabled": true } '},
+        "normalized_input": {"path": "settings.json", "content": "null\n"},
+    }
+    assert evidence[0].parent_span_id == affected.span_id
+    assert langfuse_export.build_evidence_payload([], SOURCE_HASH) == []
+
+
+def test_nested_lists_and_json_strings_remain_exact_without_mutating_spans():
+    metadata = {
+        "normalized_input": {
+            "payload": [
+                {"content": ' { "inner": "[ 1, 2 ]", "label": "二" } \n'},
+                [" true ", "ordinary text", {"number": " 3.0 "}],
+            ],
+        },
+        "is_error": False,
+    }
+    original = saved_span("2" * 16, metadata)
+    original_dump = copy.deepcopy(original.model_dump())
+    original_metadata = copy.deepcopy(metadata)
+
+    evidence = langfuse_export.build_evidence_payload([original], SOURCE_HASH)
+
+    restored, _ = decode_evidence(evidence[0])
+    assert restored == {"normalized_input": metadata["normalized_input"]}
+    assert original.model_dump() == original_dump
+    assert metadata == original_metadata
+
+
+def test_evidence_ids_are_stable_unique_and_bound_to_the_saved_source():
+    originals = [
+        saved_span("2" * 16, {"snapshot": {"a.json": "{}"}}),
+        saved_span("3" * 16, {"snapshot": {"a.json": "{}"}}),
+    ]
+
+    first = langfuse_export.build_evidence_payload(originals, SOURCE_HASH)
+    replay = langfuse_export.build_evidence_payload(originals, SOURCE_HASH)
+    changed_source = langfuse_export.build_evidence_payload(originals, "b" * 64)
+
+    assert [span.model_dump() for span in first] == [
+        span.model_dump() for span in replay
+    ]
+    assert len({span.span_id for span in first}) == len(originals)
+    assert not ({span.span_id for span in first} & {span.span_id for span in originals})
+    assert not (
+        {span.span_id for span in first} & {span.span_id for span in changed_source}
+    )
+    assert [metadata_of(span)["evidence_source_sha256"] for span in changed_source] == [
+        "b" * 64,
+        "b" * 64,
+    ]
+
+
+def test_supplemental_evidence_is_not_a_model_tool_or_score_event():
+    original = saved_span("2" * 16, {"normalized_input": {"content": "[1, 2]"}})
+
+    evidence = langfuse_export.build_evidence_payload([original], SOURCE_HASH)
+
+    assert len(evidence) == 1
+    attributes = {item.key: item.value.string_value for item in evidence[0].attributes}
+    assert attributes["langfuse.observation.type"] == "span"
+    assert not any(
+        key.startswith("langfuse.observation.model")
+        or key.startswith("langfuse.observation.usage")
+        or key.startswith("langfuse.score")
+        for key in attributes
+    )
+    assert not metadata_of(evidence[0]).get("is_judge", False)
+    assert "tool_call_id" not in metadata_of(evidence[0])
+
+
+def test_semantic_metadata_conversion_recurses_without_mutating_saved_evidence():
+    original = {
+        "before_files": {"null.json": " null\n", "text.txt": "ordinary text"},
+        "normalized_input": {
+            "nested": [
+                " true ",
+                {"json": ' { "items": "[ 1, 2 ]", "nested": {"flag": "false"} } '},
+            ],
+            "encoded_boolean": '" true "',
+            "count": 1,
+        },
+    }
+    saved = copy.deepcopy(original)
+
+    parsed = langfuse_export._metadata_with_json_values(original)
+
+    assert parsed == {
+        "before_files": {"null.json": None, "text.txt": "ordinary text"},
+        "normalized_input": {
+            "nested": [True, {"json": {"items": [1, 2], "nested": {"flag": False}}}],
+            "encoded_boolean": True,
+            "count": 1,
+        },
+    }
+    assert original == saved
+
+
+def test_semantically_equal_json_strings_need_distinct_exact_evidence():
+    first = {"snapshot": {"config.json": '{"enabled": true}\n'}}
+    second = {"snapshot": {"config.json": '  { "enabled" : true }  '}}
+    assert langfuse_export._metadata_with_json_values(
+        first
+    ) == langfuse_export._metadata_with_json_values(second)
+
+    first_evidence = langfuse_export.build_evidence_payload(
+        [saved_span("2" * 16, first)], SOURCE_HASH
+    )[0]
+    second_evidence = langfuse_export.build_evidence_payload(
+        [saved_span("2" * 16, second)], SOURCE_HASH
+    )[0]
+
+    restored_first, metadata_first = decode_evidence(first_evidence)
+    restored_second, metadata_second = decode_evidence(second_evidence)
+    assert restored_first == first
+    assert restored_second == second
+    assert (
+        metadata_first["exact_metadata_sha256"]
+        != metadata_second["exact_metadata_sha256"]
+    )
+    assert (
+        metadata_first["exact_metadata_base64"]
+        != metadata_second["exact_metadata_base64"]
+    )

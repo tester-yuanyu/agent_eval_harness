@@ -118,7 +118,7 @@ def evidence_summary(run: dict) -> dict:
     ):
         if field in recorded_summary and recorded_summary[field] != summary[field]:
             raise ValueError(f"saved summary disagrees with trial evidence: {field}")
-    for dimension in ("split", "category"):
+    for dimension in ("split", "category", "evaluation_level", "execution_mode"):
         groups: dict[str, list[dict]] = defaultdict(list)
         for row in rows:
             groups[str(row.get(dimension, "unknown"))].append(row)
@@ -136,6 +136,12 @@ def evidence_summary(run: dict) -> dict:
 
 
 def _mode(run: dict) -> tuple[str, str]:
+    if run.get("mode") == "real_module":
+        return "real", "REAL MODULE · 真实模块调用，不计作模型决策成绩"
+    if run.get("mode") == "real_model_decision":
+        return "real", "MODEL DECISION · 真实单次模型决策，未执行工具"
+    if run.get("mode") == "mixed_real_execution":
+        return "real", "MIXED · 模块与 Agent 分层统计，不混作模型成功率"
     if run.get("mode") == "real_agent" and not run.get("identity", {}).get("offline"):
         return "real", "REAL AGENT · 真实模型调用"
     if run.get("mode") == "offline_reference_smoke" or run.get("identity", {}).get(
@@ -186,7 +192,7 @@ def _file_diff(observation: dict) -> str:
     return "".join(chunks) or "无文件变更。"
 
 
-def _event_html(event: dict) -> str:
+def _event_html(event: dict, metrics: list[dict] | None = None) -> str:
     duration = "未知时长"
     if event.get("start_time") and event.get("end_time"):
         try:
@@ -208,12 +214,17 @@ def _event_html(event: dict) -> str:
             f" · requested={_escape(event.get('model', event.get('name', '未知')))}"
             f" · resolved={_escape(event.get('response_model') or '未知')}"
         )
+    scoped = "".join(
+        f"<li>{_escape(m['name'])}: {_escape(m.get('score'))} · "
+        f"{_escape(m.get('status', 'SCORED'))} · {_escape(m.get('reason', ''))}</li>"
+        for m in (metrics or []) if m.get("event_id") == event.get("id")
+    )
     return (
         '<details class="event">'
         f"<summary>{_escape(event.get('type', 'event'))} · "
         f"{_escape(event.get('name', ''))} <small>{duration} "
         f"{_escape(state)}{model}</small></summary>"
-        f"<pre>{_escape(_pretty(event))}</pre></details>"
+        f"<ul>{scoped}</ul><pre>{_escape(_pretty(event))}</pre></details>"
     )
 
 
@@ -228,7 +239,8 @@ def _trial_html(row: dict, *, detail_url: str | None = None) -> str:
             f"<td>{_escape(metric.get('threshold'))}</td>"
             f"<td>{_escape(metric.get('reason', ''))}</td>"
             f"<td>{'正式' if metric.get('formal', True) else '诊断（不决定 verdict）'}</td>"
-            f"<td>{_escape(metric.get('version', ''))}</td></tr>"
+            f"<td>{_escape(metric.get('version', ''))}<br>"
+            f"{_escape(metric.get('scope', 'task'))} / {_escape(metric.get('event_id') or 'root')}</td></tr>"
         )
     reasons = [
         metric.get("reason", "")
@@ -251,7 +263,7 @@ def _trial_html(row: dict, *, detail_url: str | None = None) -> str:
             f"<h4>输出</h4><pre>{_escape(turn.get('output', ''))}</pre></details>"
             for index, turn in enumerate(observation.get("turns", []))
         )
-        trace = "".join(_event_html(event) for event in observation.get("events", []))
+        trace = "".join(_event_html(event, assessment.get("metrics", [])) for event in observation.get("events", []))
         details = (
             turns
             + "<details><summary>独立文件证据：初态 → 终态</summary>"
@@ -486,6 +498,13 @@ def write_report(run_dir: Path | str) -> Path:
         + "</section><section><h2>按数据划分</h2>"
         + _group_table(summary["by_split"])
         + "</section></div>"
+        "<section><h2>评测层次</h2>"
+        + _group_table(summary["by_evaluation_level"])
+        + "<p>模块直接执行与真实模型任务分开统计；总体数量不代表单一模型成功率。</p></section>"
+        + ("<section><h2>LLM Judge 量化（未完成人工校准）</h2><pre>"
+           + _escape(_pretty({"summary": run["judge_summary"], "stability": run.get("judge_stability"),
+                             "judge_usage": run.get("judge_usage")})) + "</pre></section>" if "judge_summary" in run else "")
+        +
         "<h2>用量与身份</h2><section>"
         f"<p>输入 Token：{_number(usage['input_tokens']['total'])} · "
         f"输出 Token：{_number(usage['output_tokens']['total'])} · "

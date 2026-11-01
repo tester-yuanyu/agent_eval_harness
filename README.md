@@ -1,122 +1,130 @@
 # Agent Eval Suite
 
-用于工具型 Agent 的 **固定任务数据集 + Harness**。当前主基准以 nanobot 为被测 Agent，在独立文件工作区完成读取、编辑、多步骤与多轮任务；**Inspect 负责执行调度和原生日志，DeepEval 是新基准唯一正式评分后端**，Langfuse 展示已保存的轨迹、评分与实验结果。
+用于工具型 Agent 的 **任务数据集 + Harness**：冻结任务与预期条件，运行真实 nanobot，保存可观察执行轨迹，再依据独立证据评分。
 
-[作品集与真实实验结果](docs/benchmark/portfolio.md) · [数据集卡](data/benchmarks/file-tools-v1/README.md) · [旧项目兼容范围](docs/benchmark/legacy.md)
+当前主线覆盖**程序模块、模型决策模块、关键链路与端到端**四类执行方式。**Inspect 负责执行调度和原生日志；DeepEval 负责文件与决策基准的正式评分；GEval 提供未完成人工校准的 LLM Judge 诊断；Langfuse 展示已保存的轨迹和分数。**
 
-已完成 300 个任务 × 3 次重复 × 2 组配置，共 **1,800 次真实 nanobot 执行**。基线 91.11%，工具说明候选 88.78%；保留真实回退结果、失败归因及[数据集勘误](docs/benchmark/dataset-errata.md)，不将离线 Demo 当成模型成绩。
+[三层评测使用指南](docs/benchmark/v2-usage.md) · [七项问题与未解决清单](docs/benchmark/status-v2.md) · [v2 作品集输出](reports/file-tools-v2/index.html) · [真实失败案例](docs/benchmark/failure-case-v2.md) · [历史 v1 实验](docs/benchmark/portfolio.md)
 
-## 一条命令跑通离线 Demo
+v2 已完成 **444 个任务实例、112 个任务族、612 次真实执行**及评分 v2.1 复评：程序模块 60/60、模型决策 72/72、关键链路 151/180、端到端 273/300 通过。不同执行方式分别报告，不能把模块通过率混成模型成功率，也不能把重评分算作新执行。
 
-需要 Python 3.11+。首次安装需要访问 Python 包源；当前约束在 macOS / Python 3.11 解析。进入本地仓库后执行：
+真实 GEval 主评审有 **3,274 个适用项，3,273 项获得分数，1 项 ValidationError 保持未评分**。另对 69 个证据项各评 2 次，获得 138 条稳定性评分，平均极差 0.031884，最大极差 0.4。作品集总计包含两部分，共 3,411 条有效 Judge 分数。**人工校准尚未完成；六组已导出的 Langfuse 运行均通过服务端完整回读验证。**详见[实际报告](reports/file-tools-v2/index.html)。
+
+## 评测覆盖与口径
+
+| 范围 | 实例 / 任务族 | 本轮 PASS / Trials | 实际执行边界 |
+| --- | ---: | ---: | --- |
+| 程序模块 | 60 / 12 | 60 / 60 | 调用真实 nanobot ToolRegistry 与文件工具，不调用模型 |
+| 模型决策模块 | 24 / 8 | 72 / 72 | 固定上下文 + 真实工具 Schema，真实 Provider 模型调用；不运行工具 |
+| 关键链路 | 60 / 12 | 151 / 180 | 真实 AgentLoop，检查声明的步骤参数、轮次状态、顺序与恢复条件 |
+| 端到端 | 300 / 80 | 273 / 300 | 用户请求 → 真实 Agent/工具 → 回复与独立文件终态 |
+
+任务实例包含同族参数变体；重复执行不增加任务数。程序单元测试通过率、模型决策正确率和完整 Agent 成功率分别报告，pytest 框架回归数量不计入 Benchmark 样本量。
+
+冻结资产见 [File Tools v2 数据集卡](data/benchmarks/file-tools-v2/README.md)和 [Model Decisions v1 数据集卡](data/benchmarks/model-decisions-v1/README.md)。文件套件采用固定追问，尚不代表动态用户模拟或完整 nanobot 产品覆盖。数据为 AI 辅助编写，尚无独立逐条人工审核。
+
+## 从安装到真实评测
+
+需要 Python 3.11+。首次安装访问 Python 包源；Agent 使用自己的源码与解释器，Evaluator 保持独立环境。
 
 ```bash
 python3.11 scripts/setup.py --only evaluator
 make demo
 ```
 
-`make demo` 执行 5 条离线参考任务，并生成 `artifacts/benchmark-demo/report.html`、`report.md`、`results.json` 与 Inspect 日志。它不调用模型或 Langfuse，**只能验证评测闭环，不能作为真实 Agent 成绩**。同一目录与身份相同的重复运行复用已保存结果；需要新运行时指定 `BENCHMARK_OUTPUT=artifacts/my-demo`。
+`make demo` 运行 5 条历史 v1 离线参考任务，生成 `artifacts/benchmark-demo/report.html` 和 Inspect 日志。它不调用模型或 Langfuse，**用于验证评测闭环，不能作为真实 Agent 成绩**。无 Make 时，使用根 CLI 的 `benchmark demo` 与 `benchmark report`。
 
-没有可用 Make 时，等价命令为：
-
-```bash
-.venvs/evaluator/bin/python -m agent_eval_suite.cli benchmark demo \
-  --limit 5 --split dev --output artifacts/benchmark-demo
-.venvs/evaluator/bin/python -m agent_eval_suite.cli benchmark report \
-  --run artifacts/benchmark-demo
-```
-
-只需要核心 Harness、不安装内置 mini_agent 时，使用 `python3.11 scripts/setup.py --only core`，并在根 CLI 前加 `--evaluator-python .venvs/core/bin/python`。DeepEval 在两种环境中都是必需依赖。
-
-## 数据集与评测边界
-
-File Tools v1 包含 **300 个可执行实例、80 个任务族**，分为 **240 dev / 60 holdout**；同一任务族不会跨切分。参数变体不是 300 种独立能力，完整来源与限制见[数据集卡](data/benchmarks/file-tools-v1/README.md)。
-
-| 类别 | 实例数 | 验证内容 |
-| --- | ---: | --- |
-| 读取与搜索 | 60 | 文件查找、字段提取、结构化数据统计 |
-| 创建与编辑 | 100 | 文本、JSON、CSV 的确定性转换 |
-| 多文件、多步骤 | 80 | 备份、合并、拆分、汇总与交叉更新 |
-| 多轮任务 | 40 | 同一会话中的需求变更与结果修订 |
-| 缺失资源与异常输入 | 20 | 缺失文件、无效数据、冲突与重复标识 |
-
-每次 Trial 使用固定初始文件和独立工作区。Agent 仅接收任务输入，不接收 Oracle、预期文件或参考操作。终态证据来自工作区采集，不以工具自报“成功”代替文件验证。
-
-DeepEval 自定义指标检查任务终态和工作区约束；工具正确性作为诊断，避免把合法的替代调用方式判错。缺失证据与环境异常分别保留 `INCONCLUSIVE`、`INVALID`。正式结果记录任务 Hash、评分版本、Harness 与运行时身份；同一固定任务集上重复执行后才能报告稳定性。实时实验是否完成、样本量、失败和限制以[作品集记录](docs/benchmark/portfolio.md)中的证据为准。
-
-本集针对 UTF-8 文件工具，不覆盖 shell、浏览器、数据库或生产系统写入。当前多轮任务验证最终状态与轮次，不代表动态用户模拟或每一轮中间状态均已验收。
-
-## 运行真实 nanobot
-
-先准备兼容的 nanobot 源码与其独立 Python 环境，复制 [nanobot.example.json](configs/benchmark/nanobot.example.json) 为本地配置，填写源码路径、解释器、模型和服务地址。密钥通过配置中的 `api_key_env` 指定环境变量读取，不写进配置、报告或版本库。执行不会自动拉取最新 Agent 代码。
+真实评测需要复制 [nanobot.example.json](configs/benchmark/nanobot.example.json) 为本地配置，填写 nanobot 源码、解释器、模型和地址。密钥通过 `api_key_env` 读取，不写入配置或 Git。执行不会自动拉取最新 Agent 代码。
 
 ```bash
-# 无模型调用：校验冻结 Hash、契约与全部参考任务
-.venvs/evaluator/bin/python -m agent_eval_suite.cli benchmark validate
+# 校验冻结任务；不调用模型，也不冒充模块实跑。
+.venvs/evaluator/bin/python -m eval_framework.benchmark.cli validate \
+  --dataset data/benchmarks/file-tools-v2
 
-# 小批量真实模型调用；先检查配置、费用和真实轨迹
-make benchmark-live BENCHMARK_CONFIG=configs/benchmark/nanobot.local.json \
-  ARGS="--limit 20 --split dev --output artifacts/nanobot-pilot"
+# 程序模块实际执行，无模型调用。
+.venvs/evaluator/bin/python -m eval_framework.benchmark.cli run \
+  --dataset data/benchmarks/file-tools-v2 --level module \
+  --config configs/benchmark/nanobot.local.json --output artifacts/my-modules
 
-# 查看保存的结果，不重新调用 Agent 或计算分数
-.venvs/evaluator/bin/python -m agent_eval_suite.cli benchmark report \
-  --run artifacts/nanobot-pilot
+# 关键链路小批量实跑；会调用配置中的真实模型。
+.venvs/evaluator/bin/python -m eval_framework.benchmark.cli run \
+  --dataset data/benchmarks/file-tools-v2 --level chain --limit 5 \
+  --config configs/benchmark/nanobot.local.json --output artifacts/my-chain-pilot
+
+# 从已有证据生成报告，不再次执行 Agent。
+.venvs/evaluator/bin/python -m eval_framework.benchmark.cli report \
+  --run artifacts/my-chain-pilot
 ```
 
-`benchmark-live` 会真实调用配置中的模型。建议先跑 20 条，再扩大到 60 条与全量；`--repeats 3` 表示每条任务执行 3 次，因此 300 条任务对应 900 个 Trials。失败和未完成 Trials 不得从计划分母中悄悄移除。
+同一身份的运行可以恢复；任务、源码、配置或评分身份发生变化时使用新目录。完整分层运行、重新评分、Judge、人工校准及 Langfuse 命令见[使用指南](docs/benchmark/v2-usage.md)。
 
-比较两个完整运行时，固定数据集、评分规则、Harness、任务选择与重复次数，仅改变事先声明的实验变量：
+## 架构：各部分实际做什么
+
+```mermaid
+flowchart LR
+  G[专用任务生成与冻结] --> D[任务 JSONL + Manifest]
+  D --> I[Inspect 调度与日志]
+  I --> A[自研模块 / 决策 / Agent 适配]
+  A --> N[真实 nanobot 边界]
+  N --> E[公开轨迹与独立状态证据]
+  D -->|私有 Oracle / 检查点| S[DeepEval 正式确定性评分]
+  E --> S
+  E --> J[GEval 事后诊断]
+  S --> R[版本化结果与报告]
+  J --> R
+  R --> L[Langfuse Trace / Score / Experiment]
+```
+
+- **任务生成**：当前数据由各数据集目录的 `build_dataset.py` 确定性构建并冻结；通用 `dataset-builder` 保留，但不是本轮主数据集的必经入口。
+- **自研 Harness 扩展**：隔离工作区、适配真实执行边界、Oracle 与检查点、证据采集、版本绑定、恢复与汇总。Harness 包含 Inspect、适配器及评分编排，不是另一套模型指标库。
+- **Inspect**：执行任务、运行 Solver/Scorer 生命周期并保存日志。新文件与决策主线的指标判定归 DeepEval；旧 `eval` 兼容路径仍存在历史 Inspect 评分。
+- **DeepEval / GEval**：确定性 `BaseMetric` 处理正式结果与硬约束；GEval 是 LLM Judge，评价可观察动作、恢复片段及回复依据。未经人工校准的 Judge 分数不覆盖正式 verdict。
+- **Langfuse**：关联任务、模型、工具、轮次与相应分数；接收保存结果，不产生第二套正式判定。
+
+## 轨迹评分的能力与边界
+
+任务、generation、tool、turn、chain 范围的指标通过 `scope` 与 `event_id` 关联实际证据节点。轨迹记录公开模型输入/输出、工具参数/结果、每次工具前后状态和每轮快照，不收集隐藏思维链。
+
+`tool_schema` 只代表参数结构正确，不代表参数语义正确；`tool_order` 只证明声明的先后关系，不证明完整数据流正确。参数语义、轮次状态和恢复检查仅对已声明的预期成立，不能写成“任意链路每一步都已完整验收”。缺失证据保留未评分或 INCONCLUSIVE，环境或执行基础设施问题保留 INVALID。
+
+GEval 输出 0～1 评价尺度，不是正确概率。报告区分适用、已评分、缺失、错误与不适用，统计同一证据重复评分波动及 Judge 用量。**人工标签、一致性验收和阈值留出验证尚未完成。**已准备 [36 条空白校准样本](reports/file-tools-v2/calibration-sample.json)，从 chain-judge 按稳定 Hash 抽取三个维度各 12 条；这是标注起点，不是已经完成的人工审核。
+
+## Langfuse 与作品集
+
+导出、服务端回读和界面检查分别验收；API 接收成功不等于全链路展示验证完成。每次导出显式指定对应数据集：
 
 ```bash
-.venvs/evaluator/bin/python -m agent_eval_suite.cli benchmark compare \
-  --baseline artifacts/baseline --candidate artifacts/candidate \
-  --output artifacts/comparison.json
+.venvs/evaluator/bin/python -m eval_framework.benchmark.cli export-langfuse \
+  --run artifacts/my-chain-pilot --dataset data/benchmarks/file-tools-v2
+.venvs/evaluator/bin/python -m eval_framework.benchmark.cli verify-langfuse \
+  --run artifacts/my-chain-pilot --dataset data/benchmarks/file-tools-v2
 ```
 
-当 Agent 工作区含未提交修改时，仅记录 Git commit 不足以复现。本地可使用 `scripts/package_nanobot_snapshot.py` 保存与运行中 `working_tree_sha256` 一致的运行源码、逐文件 Hash 清单和归档校验值：
+作品集生成器 `scripts/build_layered_report.py` 只读取已完成运行，不调用模型或网络。它生成独立离线 HTML、公开逐 trial 摘要和七项问题状态表；公开摘要不复制原始提示词、文件内容、凭据或绝对路径。原始详细轨迹保存在本地运行目录；有有效 Langfuse 回执时关联其 Trace ID 和可用链接。事后 Judge 关联到原执行 Trace 时，根 Span 的起止跨度会包含执行结束到评审发生之间的间隔；这不是 Agent 耗时，实际 Agent latency 沿用原执行记录，Judge 用量单列。
 
-```bash
-.venvs/evaluator/bin/python scripts/package_nanobot_snapshot.py \
-  --source /path/to/nanobot --output artifacts/benchmark/nanobot-source.tar.gz \
-  --expected-hash <运行记录中的working_tree_sha256> --scan-only
-# 检查仅输出文件名的扫描结果；移除 --scan-only 才会写入本地归档。
-```
+已完成一次 Langfuse 界面抽查：[节点评分截图](reports/file-tools-v2/langfuse-step-scores.png)展示模型决策节点上的 Schema、参数、工具选择与 GEval 分数，以及对应 Judge 子节点。界面抽查与服务端回读分别验收：模块、模型决策、链路、端到端、Judge 稳定性及 τ 试点六组导出均已 VERIFIED。链路与端到端另外保存了 179 / 479 个原文证据子节点，不增加执行或评分次数。
 
-归档仅保存在被 Git 忽略的 `artifacts/`，不包含 Git 历史、dotenv、符号链接或非运行资产，不自动上传。它用于恢复本次实际源码；固定模型别名仍不能冻结服务商远端权重，因此源码可复现不等于模型输出逐字可复现。
+τ 系列是[独立领域适配](docs/benchmark/tau.md)。已使用固定官方 **τ²-bench v1.0.1 retail 任务 0，执行 1 次并得到官方 reward 1.0（PASS）**；实际参与者为 nanobot AgentLoop，Agent 使用 `deepseek-flash`，用户模拟器使用 `openai/deepseek-flash`。Inspect 编排外层批次，DeepEval 的 `OfficialTauRewardMetric` 原样呈现官方奖励。这一有界试点单列，不计入上面的 444 个实例 / 612 次执行，不代表全量复现或官方排行榜成绩。
 
-## Langfuse 与作品集证据
+## 历史、仓库结构与复现
 
-配置自己的 Langfuse 环境变量后，显式导出并回读验证：
-
-```bash
-.venvs/evaluator/bin/python -m agent_eval_suite.cli benchmark export-langfuse \
-  --run artifacts/nanobot-pilot
-.venvs/evaluator/bin/python -m agent_eval_suite.cli benchmark verify-langfuse \
-  --run artifacts/nanobot-pilot
-```
-
-导出使用保存的结果，不重跑 Agent、不在 Langfuse 重新判分。展示内容包括任务与 Trial 关联、模型请求/响应、工具参数/结果、可用的时长和用量、文件状态与 DeepEval 分数。未知费用保持未知；API 接收成功与回读验证是不同阶段。截图、链接和验收范围见[作品集记录](docs/benchmark/portfolio.md)。
-
-## 仓库结构
+历史 File Tools v1 的 300 个任务 × 3 次重复 × 2 组配置，共 1,800 次真实 nanobot 执行保持不变：基线 91.11%，工具说明候选 88.78%。详见[历史作品集](docs/benchmark/portfolio.md)及[勘误](docs/benchmark/dataset-errata.md)。v2 提示、任务与评分版本存在变化，其结果不能直接解释为相对 v1 的模型提升。
 
 ```text
-data/benchmarks/file-tools-v1/   固定任务、Manifest、生成器与数据集卡
+data/benchmarks/file-tools-v2/     程序模块、关键链路、端到端冻结任务
+data/benchmarks/model-decisions-v1/ 独立模型决策冻结任务
 packages/evaluator/src/eval_framework/benchmark/
-                               Harness、nanobot 适配、DeepEval 指标、报告与导出
-configs/benchmark/             显式运行配置示例
-packages/contracts/            共用契约与能力快照校验
-packages/dataset-builder/      候选生成、编译、审核与冻结工具
-packages/agent-trace-sdk/       历史独立取证 SDK
-examples/mini_agent/            可选参考 Agent 与历史回归
-src/agent_eval_suite/           统一 CLI 与资产登记
-scripts/                       安装与离线验证
-environments/                  分环境第三方版本约束
-docs/benchmark/                作品集及兼容边界说明
+                                  Inspect 编排、执行适配、DeepEval/GEval、报告
+packages/contracts/               共用契约与能力快照校验
+packages/dataset-builder/         保留的通用生成、审核和冻结工具
+packages/agent-trace-sdk/          历史独立取证 SDK
+examples/mini_agent/               可选参考 Agent 与历史回归
+configs/benchmark/                无凭据配置示例
+reports/                          可公开的结果摘要
+artifacts/                        本地原始运行与详细证据，Git 忽略
 ```
 
-当前展示主线使用 `benchmark` 命令。原 `dataset`、`bundle`、`agent` 资产工具和 `eval` 兼容命令仍保留；**历史 `eval` 路径包含 Inspect 评分，不能与新基准 DeepEval 成绩混合**。已从主 Demo 与快速开始移除旧评分入口，保留原因和命令见[兼容说明](docs/benchmark/legacy.md)。
-
-## 本地验证
+旧资产工具和兼容入口未全部删除，原因见[兼容范围](docs/benchmark/legacy.md)。源码 commit、工作树 Hash、任务 Hash 和评分版本共同约束复现；模型服务的远端权重仍可能变化，不承诺逐字重现。费用缺少可靠证据时保留未知，不按零展示。
 
 ```bash
 .venvs/evaluator/bin/python -m pytest -q -c packages/evaluator/pyproject.toml \
@@ -125,4 +133,4 @@ python3 scripts/test_all.py
 python3 scripts/verify_assets.py
 ```
 
-默认测试不调用真实模型或托管服务。Builder 的 OpenAI 约束与 Evaluator 不同，仍使用独立环境；`make setup` 安装两者。Evaluator 的旧 `--optional-metrics` 安装选项仅保留兼容，已与默认 DeepEval 约束合并，无须为了主基准再创建一套 optional 环境。
+默认测试不调用真实模型或托管服务。Builder 与 Evaluator 使用各自依赖环境；纯核心安装可使用 `scripts/setup.py --only core`，再给根 CLI 指定对应 `--evaluator-python`。

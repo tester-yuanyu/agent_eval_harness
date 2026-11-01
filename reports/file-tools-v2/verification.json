@@ -1,0 +1,160 @@
+{
+  "checked_at": "2026-11-01T08:54:12.577388+00:00",
+  "evaluator_tests": {
+    "passed": 864,
+    "skipped": 2,
+    "skip_reason": "Explicit live model smoke tests disabled; live benchmark experiments verified separately",
+    "log": "artifacts/benchmark-v2/final-evaluator-tests.log"
+  },
+  "integration_tests": {
+    "passed": 56,
+    "command": ".venvs/evaluator/bin/python -m pytest -q tests/integration",
+    "log": "artifacts/benchmark-v2/final-integration-tests.log"
+  },
+  "ruff": {
+    "status": "passed",
+    "config": "packages/evaluator/pyproject.toml",
+    "scope": [
+      "packages/evaluator/src/eval_framework/benchmark",
+      "packages/evaluator/tests/benchmark",
+      "scripts/build_layered_report.py",
+      "tests/integration/test_layered_report.py"
+    ]
+  },
+  "core_demo": {
+    "path": "artifacts/benchmark-v2/clean-core-demo",
+    "kind": "pre-existing isolated minimal core environment; optional mini_agent absent",
+    "trials": 5,
+    "verdicts": {
+      "PASS": 5
+    },
+    "not_agent_performance": true
+  },
+  "tau_offline": {
+    "tests": 11,
+    "validation": "artifacts/tau-validation/validation.json"
+  },
+  "ui": {
+    "langfuse_decision_trace": "6b5894fd0cc4a791737cb33f11f10076",
+    "observed": [
+      "decision_call_policy",
+      "decision_schema",
+      "decision_tool_selection",
+      "decision_arguments",
+      "action_appropriateness",
+      "Judge generation"
+    ],
+    "local_report_preview": "browser URL policy blocked; static HTML/JSON/link checks completed"
+  },
+  "wheel_build": {
+    "status": "passed",
+    "new_modules_verified": 10,
+    "log": "artifacts/benchmark-v2/wheel-build-final.log",
+    "sha256": "8babecc25d6f4ed4c349aeb085b984013d2b4263de8f175e589d033f56104750",
+    "exact_metadata_cli_included": true
+  },
+  "final_export_regressions": {
+    "passed": 33,
+    "log": "artifacts/benchmark-v2/final-export-tests.log"
+  },
+  "historical_asset_verification": {
+    "status": "passed",
+    "imported_artifacts": 1172
+  },
+  "final_readback_regressions": {
+    "passed": 17,
+    "log": "artifacts/benchmark-v2/final-readback-tests.log"
+  },
+  "calibration_public_copy": {
+    "rows": 36,
+    "human_labels": 0,
+    "machine_path_prefix_redactions": 873,
+    "immutable_original_evidence_preserved": true
+  },
+  "final_exact_evidence_regressions": {
+    "passed": 28,
+    "log": "artifacts/benchmark-v2/final-exact-evidence-tests.log"
+  },
+  "wheel_installation": {
+    "status": "passed",
+    "environment": "isolated minimal core environment without mini_agent",
+    "method": "offline wheel install, no dependencies downloaded",
+    "imports_from": "installed site-packages",
+    "dependency_check": "passed",
+    "offline_demo": {
+      "trials": 5,
+      "verdicts": {
+        "PASS": 5
+      },
+      "path": "artifacts/benchmark-v2/clean-wheel-demo",
+      "not_agent_performance": true
+    },
+    "final_numeric_metadata_binding_check": "passed: exact parent identity and reversible redundant numeric-ID normalization"
+  },
+  "credential_scan": {
+    "files_checked": 2020,
+    "credential_matches": 0,
+    "method": "Compare tracked and candidate file bytes with locally configured secret values; values never printed"
+  },
+  "langfuse": {
+    "modules60-scored": {
+      "status": "VERIFIED",
+      "trials_checked": 60,
+      "verification_sha256": "3a4c47be27d939b6583ebec85b090cf899daa9b40e76291a559a1d0e9f488476",
+      "supplemental_evidence": null
+    },
+    "decision-judge": {
+      "status": "VERIFIED",
+      "trials_checked": 72,
+      "verification_sha256": "a0842085bfe462ecef6847861dd0a352d4e98115d40c27785a890c2132062665",
+      "supplemental_evidence": null
+    },
+    "chain-judge": {
+      "status": "VERIFIED",
+      "trials_checked": 180,
+      "verification_sha256": "91f3aee9592cf93e2d23e1e8549480f5ad2d4a1ce4665212f178ee9e2918f21b",
+      "supplemental_evidence": {
+        "version": "langfuse-exact-metadata-v1",
+        "source_hash": "0aef74f00158d10758fbb99cb81093e121e33e4c18b0d25338a9f0a123e66542",
+        "receipt_path": "artifacts/benchmark-v2/chain-judge/langfuse_exact_metadata_export.json",
+        "observations": 179,
+        "status": "VERIFIED",
+        "purpose": "Lossless saved metadata presentation; no new trials or calls",
+        "receipt_sha256": "dd4c449b27ef560aee2cf38f2501cbf100818e0f6639d2dbe35e37bf0d3121df"
+      }
+    },
+    "e2e-judge": {
+      "status": "VERIFIED",
+      "trials_checked": 300,
+      "verification_sha256": "2f25754999db664311baf64ca78b55170c25b28e4cbacd6b1e7132506941dde7",
+      "supplemental_evidence": {
+        "version": "langfuse-exact-metadata-v1",
+        "source_hash": "751047f50ce3ea76fe19b96977c8956c17c11f4e3423d69e58435733dc1a423f",
+        "receipt_path": "artifacts/benchmark-v2/e2e-judge/langfuse_exact_metadata_export.json",
+        "observations": 479,
+        "status": "VERIFIED",
+        "purpose": "Lossless saved metadata presentation; no new trials or calls",
+        "receipt_sha256": "a0daa636ebb7b89faf2079c71d3a5c0c2126825bdaf94d54268c01abe58dee54"
+      }
+    },
+    "judge-stability": {
+      "status": "VERIFIED",
+      "trials_checked": 9,
+      "verification_sha256": "96639b7042f909c93684c3a3730bf85030046b8b6387e7c8b3112ae50babb6d6",
+      "supplemental_evidence": null
+    },
+    "tau-retail-pilot": {
+      "status": "VERIFIED",
+      "trials_checked": 1,
+      "verification_sha256": "2a732a16cea6142e814179e9abc060f569276967776fdcf5b0e223aead34e714",
+      "supplemental_evidence": null
+    }
+  },
+  "final_static_report_checks": {
+    "local_links_checked": 5,
+    "missing_links": 0,
+    "blank_calibration_rows": 36,
+    "machine_paths": 0,
+    "exported_runs_shown_verified": 6
+  }
+}

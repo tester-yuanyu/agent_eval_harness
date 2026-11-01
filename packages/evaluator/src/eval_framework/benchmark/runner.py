@@ -16,7 +16,7 @@ from importlib.metadata import version
 from pathlib import Path
 from typing import Any
 
-HARNESS_VERSION = "file-harness-v1"
+HARNESS_VERSION = "file-harness-v2"
 
 
 class RuntimeIdentityChanged(RuntimeError):
@@ -38,7 +38,16 @@ def scoring_identity() -> dict:
         "version": METRICS_VERSION,
         "deepeval": version("deepeval"),
         "oracle": GRADER_VERSION,
-        "source_sha256": code_identity(["metrics.py", "oracle.py", "tasks.py"]),
+        "source_sha256": code_identity(
+            [
+                "metrics.py",
+                "oracle.py",
+                "tasks.py",
+                "trajectory.py",
+                "module_oracle.py",
+                "recovery_scoring.py",
+            ]
+        ),
     }
 
 
@@ -138,10 +147,14 @@ def summarize(records: list[dict], case_ids: list[str], repeats: int) -> dict:
         else None,
         "usage": usage,
     }
-    for dimension in ("split", "category"):
+    result["mixed_execution_populations"] = (
+        len({r.get("execution_mode", "agent") for r in records}) > 1
+    )
+    for dimension in ("split", "category", "evaluation_level", "execution_mode"):
         groups = defaultdict(list)
         for record in records:
-            groups[record[dimension]].append(record)
+            fallback = "e2e" if dimension == "evaluation_level" else "agent"
+            groups[record.get(dimension, fallback)].append(record)
         result["by_" + dimension] = {
             name: {
                 "trials": len(rows),
@@ -255,7 +268,15 @@ def run_benchmark(
         "scoring_version": scoring["version"],
         "scoring_identity": scoring,
         "harness_source": code_identity(
-            ["runner.py", "nanobot_runtime.py", "nanobot_worker.py"]
+            [
+                "runner.py",
+                "nanobot_runtime.py",
+                "nanobot_worker.py",
+                "module_runtime.py",
+                "module_worker.py",
+                "decision_runtime.py",
+                "decision_worker.py",
+            ]
         ),
         "inspect_ai": version("inspect_ai"),
         "harness_version": HARNESS_VERSION,
@@ -351,7 +372,17 @@ def _run(
             "trials_per_case": repeats,
             "execution_backend": "inspect_ai",
             "scoring_backend": "deepeval",
-            "mode": "offline_reference_smoke" if offline else "real_agent",
+            "mode": "offline_reference_smoke"
+            if offline
+            else (
+                "real_module"
+                if all(t.get("execution_mode") == "module" for t in tasks)
+                else "real_model_decision"
+                if all(t.get("execution_mode") == "decision" for t in tasks)
+                else "mixed_real_execution"
+                if any(t.get("execution_mode") == "module" for t in tasks)
+                else "real_agent"
+            ),
         }
         save_json(meta_path, meta)
     jobs = {
@@ -390,12 +421,30 @@ def _run(
                     observation["runtime_identity"] = source
                 else:
                     require_runtime_identity(source, runtime_identity(config))
-                    observation = await execute_task(
+                    executor = execute_task
+                    if task.get("execution_mode") == "module":
+                        from .module_runtime import execute_module_task
+
+                        executor = execute_module_task
+                    elif task.get("execution_mode") == "decision":
+                        from .decision_runtime import execute_decision_task
+
+                        executor = execute_decision_task
+                    observation = await executor(
                         execution_task(task), config=config, workspace=workspace
                     )
                     try:
+                        observed_source = source
+                        if task.get("execution_mode") == "module":
+                            from .module_runtime import module_identity
+
+                            observed_source = module_identity(config)
+                        elif task.get("execution_mode") == "decision":
+                            from .decision_runtime import decision_identity
+
+                            observed_source = decision_identity(config)
                         require_runtime_identity(
-                            source, observation["runtime_identity"]
+                            observed_source, observation["runtime_identity"]
                         )
                         require_runtime_identity(source, runtime_identity(config))
                     except RuntimeIdentityChanged:
@@ -404,11 +453,18 @@ def _run(
                             {
                                 "kind": "harness",
                                 "code": "runtime_identity_changed",
-                                "message": "Agent source changed during this experiment",
+                                "message": "Agent source changed during experiment",
                             }
                         )
                 observation["execution_kind"] = (
-                    "deterministic_reference_not_agent" if offline else "real_agent"
+                    "deterministic_reference_not_agent"
+                    if offline
+                    else (
+                        {
+                            "module": "real_module",
+                            "decision": "real_model_decision",
+                        }.get(task.get("execution_mode"), "real_agent")
+                    )
                 )
             except Exception as exc:
                 observation = {
@@ -440,6 +496,8 @@ def _run(
                 "category": task["category"],
                 "split": task["split"],
                 "family": task["family"],
+                "evaluation_level": task.get("evaluation_level", "e2e"),
+                "execution_mode": task.get("execution_mode", "agent"),
                 "started_at": started,
                 "finished_at": now(),
                 "latency_seconds": time.monotonic() - monotonic,

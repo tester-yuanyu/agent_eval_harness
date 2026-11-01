@@ -1,0 +1,26 @@
+{
+  "dataset_sha256": "fbaa09dbfc4d820dc1fea379f24bca6d50e518213c109ef3721777d3ad5d4edb",
+  "contract_valid_instances": 420,
+  "reference_final_state_checks": 360,
+  "reference_final_state_passed": 360,
+  "reference_is_agent_result": false,
+  "module_reference_execution": "not applicable; only real module execution establishes module outcomes",
+  "real_module_family_representatives_executed_in_tests": 12,
+  "real_module_family_representatives_passed_authored_assertions": 12,
+  "layer_family_counts": {
+    "module": 12,
+    "chain": 12,
+    "e2e": 80
+  },
+  "checkpoints_by_kind": {
+    "turn_files": 95,
+    "tool_args": 45,
+    "tool_order": 10
+  },
+  "independent_human_review": false,
+  "authoring_review": [
+    "v1 markdown-heading wording clarified in v2 only; expected answers unchanged",
+    "conflict resolution has WAITING sentinel and first-turn source reads to detect premature resolution",
+    "invalid-type module uses noncoercible integer offset; nanobot intentionally casts path input to string"
+  ]
+}

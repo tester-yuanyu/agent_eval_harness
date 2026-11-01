@@ -1,0 +1,36 @@
+{
+  "dataset_id": "model-decisions-v1",
+  "version": "1.0.0",
+  "contract_version": "model-decisions-task-v1",
+  "grader_version": "file-tools-oracle-v1",
+  "tasks_file": "tasks.jsonl",
+  "tasks_sha256": "54850e53fdc9600b4e4e86650f5ec216d72994c2cd96d6955c67fbf9922382f3",
+  "case_count": 24,
+  "level_counts": {
+    "module": 24
+  },
+  "category_counts": {
+    "missing_error": 6,
+    "create_edit": 9,
+    "read_search": 9
+  },
+  "split_counts": {
+    "holdout": 6,
+    "dev": 18
+  },
+  "family_count": 8,
+  "split_strategy": "Family-disjoint: six operation families dev; two abstention families holdout.",
+  "provenance": {
+    "source": "AI-assisted authored isolated decision contexts",
+    "human_reviewed": false,
+    "runtime": "Real nanobot OpenAICompatProvider with real file-tool schemas; one provider.chat invocation."
+  },
+  "limitations": [
+    "24 instances are three parameter variants in eight families.",
+    "Public context is user-supplied static input, not a prior observed tool execution.",
+    "Explicit method constraints disambiguate write vs edit and occurrence vs line-hint alternatives.",
+    "This measures local tool selection/arguments/abstention, not full planning, memory, or session management.",
+    "Tool calls returned by the model are saved but never executed.",
+    "Provider transport may internally retry; one decision is not a guarantee of one HTTP attempt."
+  ]
+}

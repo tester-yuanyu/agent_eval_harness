@@ -134,3 +134,28 @@ def test_connection_retry_never_replays_an_uncertain_delivered_request(monkeypat
     with pytest.raises(httpx.ReadTimeout):
         _connect_retry(uncertain_delivery)
     assert len(attempts) == 1
+
+
+def test_evidence_export_has_explicit_cli_dispatch(tmp_path, monkeypatch, capsys):
+    from eval_framework.benchmark.cli import main
+
+    def export(run, dataset):
+        assert run == tmp_path and dataset == tmp_path / "tasks.jsonl"
+        return {"status": "ACCEPTED", "observations": 3}
+
+    monkeypatch.setattr(
+        "eval_framework.benchmark.langfuse_export.export_metadata_evidence", export
+    )
+    assert (
+        main(
+            [
+                "export-langfuse-evidence",
+                "--run",
+                str(tmp_path),
+                "--dataset",
+                str(tmp_path / "tasks.jsonl"),
+            ]
+        )
+        == 0
+    )
+    assert json.loads(capsys.readouterr().out)["observations"] == 3

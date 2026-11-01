@@ -1,0 +1,1649 @@
+{
+  "version": "layered-portfolio-v1",
+  "sources": [
+    {
+      "file": "modules60-scored/results.json",
+      "sha256": "425c9318ee06a276c08a1fe2792b2a73a727d22942a666a518a66b473fe1f39a"
+    },
+    {
+      "file": "modules60-scored/langfuse_export.json",
+      "sha256": "795085121b1ebe80f6f4647db01eb5c2fb7433a7e39ad40040169eafaadf21d4"
+    },
+    {
+      "file": "modules60-scored/langfuse_verification.json",
+      "sha256": "3a4c47be27d939b6583ebec85b090cf899daa9b40e76291a559a1d0e9f488476"
+    },
+    {
+      "file": "decisions24x3-scored/results.json",
+      "sha256": "c318221f60571709e5843b7cbcc5b23e58d51eaa71dd2a7668fdaf2a26bb6507"
+    },
+    {
+      "file": "chains60x3-scored/results.json",
+      "sha256": "769dcc543feb5ab2decc4043aa49a65e417ae570a0ed8ff9299548bf0f0201e3"
+    },
+    {
+      "file": "e2e300-scored/results.json",
+      "sha256": "6f95ca77865b0e0473cd3c82c33b08dd7a85d4e415dc1c3d920f72203e00dc3a"
+    },
+    {
+      "file": "decision-judge/results.json",
+      "sha256": "8527e1d57a5cc40dc6ae24f6d36cadabd055497017e31acbd519e49870f1ae11"
+    },
+    {
+      "file": "decision-judge/langfuse_export.json",
+      "sha256": "09d8e3a58ce7cb9688a2f620a7a61ca83174a94d40ac70e52c91bb8e071e4e50"
+    },
+    {
+      "file": "decision-judge/langfuse_verification.json",
+      "sha256": "a0842085bfe462ecef6847861dd0a352d4e98115d40c27785a890c2132062665"
+    },
+    {
+      "file": "chain-judge/results.json",
+      "sha256": "0aef74f00158d10758fbb99cb81093e121e33e4c18b0d25338a9f0a123e66542"
+    },
+    {
+      "file": "chain-judge/langfuse_export.json",
+      "sha256": "653294e73514c216f8ed816c7aa331b8eeef75af22637334b5dc2ed053ec667d"
+    },
+    {
+      "file": "chain-judge/langfuse_verification.json",
+      "sha256": "91f3aee9592cf93e2d23e1e8549480f5ad2d4a1ce4665212f178ee9e2918f21b"
+    },
+    {
+      "file": "chain-judge/langfuse_exact_metadata_export.json",
+      "sha256": "dd4c449b27ef560aee2cf38f2501cbf100818e0f6639d2dbe35e37bf0d3121df"
+    },
+    {
+      "file": "e2e-judge/results.json",
+      "sha256": "751047f50ce3ea76fe19b96977c8956c17c11f4e3423d69e58435733dc1a423f"
+    },
+    {
+      "file": "e2e-judge/langfuse_export.json",
+      "sha256": "34c706cea17b5841a5a835da25017e72828a75f0617fe6d66ef67732bcd576a5"
+    },
+    {
+      "file": "e2e-judge/langfuse_verification.json",
+      "sha256": "2f25754999db664311baf64ca78b55170c25b28e4cbacd6b1e7132506941dde7"
+    },
+    {
+      "file": "e2e-judge/langfuse_exact_metadata_export.json",
+      "sha256": "a0daa636ebb7b89faf2079c71d3a5c0c2126825bdaf94d54268c01abe58dee54"
+    },
+    {
+      "file": "judge-stability/results.json",
+      "sha256": "c3e1b33adf003267ad93dfb4fa1490a7d57098545063bbd4a8d1b2160ceea0d2"
+    },
+    {
+      "file": "judge-stability/langfuse_export.json",
+      "sha256": "76816a266c95b84d70c3649172c93110f9d2d21d4a7d4a23a9d258ece8883c8b"
+    },
+    {
+      "file": "judge-stability/langfuse_verification.json",
+      "sha256": "96639b7042f909c93684c3a3730bf85030046b8b6387e7c8b3112ae50babb6d6"
+    },
+    {
+      "file": "official/summary.json",
+      "sha256": "9a4d535158db709099760b712104e74b0ba8620f25f2cccc549581e174e2f79c"
+    },
+    {
+      "file": "tau-retail-pilot/results.json",
+      "sha256": "4189c580495202dbd5f3b030328d433be748d077664901c2cbfe747a0abe3284"
+    },
+    {
+      "file": "tau-retail-pilot/langfuse_export.json",
+      "sha256": "e548c140e7c96ebd111b8b6c18b14f7d4f7fdd9186ad11408ca1c9f7fd635538"
+    },
+    {
+      "file": "tau-retail-pilot/langfuse_verification.json",
+      "sha256": "2a732a16cea6142e814179e9abc060f569276967776fdcf5b0e223aead34e714"
+    },
+    {
+      "file": "file-tools-v2/calibration-sample.json",
+      "sha256": "52b9ff43e80ad49be9ebe7e6582648bb45ae59a81e577fcd39a58964963d7fd4"
+    },
+    {
+      "file": "file-tools-v2/langfuse-step-scores.png",
+      "sha256": "8677017b243ab28b6f3c4894d6ed6bd641c05a8cc35cfb255bd24b860653b477"
+    }
+  ],
+  "runs": [
+    {
+      "run_id": "modules60-scored-regrade-4bd78c93",
+      "kind": "execution",
+      "source_sha256": "425c9318ee06a276c08a1fe2792b2a73a727d22942a666a518a66b473fe1f39a",
+      "langfuse": {
+        "status": "VERIFIED",
+        "export_status": "VERIFIED",
+        "verification_status": "VERIFIED",
+        "source_hash": "425c9318ee06a276c08a1fe2792b2a73a727d22942a666a518a66b473fe1f39a",
+        "counts": {
+          "observations": 195,
+          "scores": 450,
+          "trials": 60
+        }
+      }
+    },
+    {
+      "run_id": "decisions24x3-scored-regrade-016e7219",
+      "kind": "execution",
+      "source_sha256": "c318221f60571709e5843b7cbcc5b23e58d51eaa71dd2a7668fdaf2a26bb6507",
+      "langfuse": {
+        "status": "not_supplied",
+        "export_status": "not_supplied",
+        "verification_status": "not_supplied",
+        "counts": {}
+      }
+    },
+    {
+      "run_id": "chains60x3-scored-regrade-f0242ffc",
+      "kind": "execution",
+      "source_sha256": "769dcc543feb5ab2decc4043aa49a65e417ae570a0ed8ff9299548bf0f0201e3",
+      "langfuse": {
+        "status": "not_supplied",
+        "export_status": "not_supplied",
+        "verification_status": "not_supplied",
+        "counts": {}
+      }
+    },
+    {
+      "run_id": "e2e300-scored-regrade-823fe3e8",
+      "kind": "execution",
+      "source_sha256": "6f95ca77865b0e0473cd3c82c33b08dd7a85d4e415dc1c3d920f72203e00dc3a",
+      "langfuse": {
+        "status": "not_supplied",
+        "export_status": "not_supplied",
+        "verification_status": "not_supplied",
+        "counts": {}
+      }
+    },
+    {
+      "run_id": "decision-judge-judge-3800f74a",
+      "kind": "judge_annotation",
+      "source_sha256": "8527e1d57a5cc40dc6ae24f6d36cadabd055497017e31acbd519e49870f1ae11",
+      "langfuse": {
+        "status": "VERIFIED",
+        "export_status": "VERIFIED",
+        "verification_status": "VERIFIED",
+        "source_hash": "8527e1d57a5cc40dc6ae24f6d36cadabd055497017e31acbd519e49870f1ae11",
+        "counts": {
+          "observations": 288,
+          "scores": 522,
+          "trials": 72
+        }
+      }
+    },
+    {
+      "run_id": "chain-judge-judge-c5f3601f",
+      "kind": "judge_annotation",
+      "source_sha256": "0aef74f00158d10758fbb99cb81093e121e33e4c18b0d25338a9f0a123e66542",
+      "langfuse": {
+        "status": "VERIFIED",
+        "export_status": "ACCEPTED",
+        "verification_status": "VERIFIED",
+        "source_hash": "0aef74f00158d10758fbb99cb81093e121e33e4c18b0d25338a9f0a123e66542",
+        "counts": {
+          "observations": 3960,
+          "scores": 4641,
+          "trials": 180
+        },
+        "supplemental_evidence": {
+          "status": "VERIFIED",
+          "source_hash": "0aef74f00158d10758fbb99cb81093e121e33e4c18b0d25338a9f0a123e66542",
+          "file": "chain-judge/langfuse_exact_metadata_export.json",
+          "receipt_sha256": "dd4c449b27ef560aee2cf38f2501cbf100818e0f6639d2dbe35e37bf0d3121df",
+          "observations": 179
+        }
+      }
+    },
+    {
+      "run_id": "e2e-judge-judge-1d6d8b0b",
+      "kind": "judge_annotation",
+      "source_sha256": "751047f50ce3ea76fe19b96977c8956c17c11f4e3423d69e58435733dc1a423f",
+      "langfuse": {
+        "status": "VERIFIED",
+        "export_status": "ACCEPTED",
+        "verification_status": "VERIFIED",
+        "source_hash": "751047f50ce3ea76fe19b96977c8956c17c11f4e3423d69e58435733dc1a423f",
+        "counts": {
+          "observations": 5072,
+          "scores": 5789,
+          "trials": 300
+        },
+        "supplemental_evidence": {
+          "status": "VERIFIED",
+          "source_hash": "751047f50ce3ea76fe19b96977c8956c17c11f4e3423d69e58435733dc1a423f",
+          "file": "e2e-judge/langfuse_exact_metadata_export.json",
+          "receipt_sha256": "a0daa636ebb7b89faf2079c71d3a5c0c2126825bdaf94d54268c01abe58dee54",
+          "observations": 479
+        }
+      }
+    },
+    {
+      "run_id": "judge-stability-judge-403b0539",
+      "kind": "judge_annotation",
+      "source_sha256": "c3e1b33adf003267ad93dfb4fa1490a7d57098545063bbd4a8d1b2160ceea0d2",
+      "langfuse": {
+        "status": "VERIFIED",
+        "export_status": "VERIFIED",
+        "verification_status": "VERIFIED",
+        "source_hash": "c3e1b33adf003267ad93dfb4fa1490a7d57098545063bbd4a8d1b2160ceea0d2",
+        "counts": {
+          "observations": 257,
+          "scores": 298,
+          "trials": 9
+        }
+      }
+    }
+  ],
+  "executions": {
+    "instances": 444,
+    "families": 112,
+    "task_experiments": 444,
+    "trials": 612,
+    "verdicts": {
+      "PASS": 556,
+      "FAIL": 56,
+      "INVALID": 0,
+      "INCONCLUSIVE": 0
+    },
+    "repeated_task_experiments": 84,
+    "all_repeats_pass_tasks": 67
+  },
+  "populations": {
+    "program_module": {
+      "instances": 60,
+      "families": 12,
+      "task_experiments": 60,
+      "trials": 60,
+      "verdicts": {
+        "PASS": 60,
+        "FAIL": 0,
+        "INVALID": 0,
+        "INCONCLUSIVE": 0
+      },
+      "pass_rate": 1.0,
+      "repeated_task_experiments": 0,
+      "all_repeats_pass_tasks": null,
+      "all_repeats_pass_rate": null,
+      "model_success_rate": null
+    },
+    "model_decision": {
+      "instances": 24,
+      "families": 8,
+      "task_experiments": 24,
+      "trials": 72,
+      "verdicts": {
+        "PASS": 72,
+        "FAIL": 0,
+        "INVALID": 0,
+        "INCONCLUSIVE": 0
+      },
+      "pass_rate": 1.0,
+      "repeated_task_experiments": 24,
+      "all_repeats_pass_tasks": 24,
+      "all_repeats_pass_rate": 1.0,
+      "model_success_rate": 1.0
+    },
+    "critical_chain": {
+      "instances": 60,
+      "families": 12,
+      "task_experiments": 60,
+      "trials": 180,
+      "verdicts": {
+        "PASS": 151,
+        "FAIL": 29,
+        "INVALID": 0,
+        "INCONCLUSIVE": 0
+      },
+      "pass_rate": 0.8388888888888889,
+      "repeated_task_experiments": 60,
+      "all_repeats_pass_tasks": 43,
+      "all_repeats_pass_rate": 0.7166666666666667,
+      "model_success_rate": 0.8388888888888889
+    },
+    "end_to_end": {
+      "instances": 300,
+      "families": 80,
+      "task_experiments": 300,
+      "trials": 300,
+      "verdicts": {
+        "PASS": 273,
+        "FAIL": 27,
+        "INVALID": 0,
+        "INCONCLUSIVE": 0
+      },
+      "pass_rate": 0.91,
+      "repeated_task_experiments": 0,
+      "all_repeats_pass_tasks": null,
+      "all_repeats_pass_rate": null,
+      "model_success_rate": 0.91
+    }
+  },
+  "execution_metrics": [
+    {
+      "scope": "chain",
+      "name": "checkpoint:discover-before-read",
+      "version": "file-tools-trajectory-v1",
+      "count": 15,
+      "scored": 15,
+      "statuses": {
+        "SCORED": 15
+      },
+      "mean": 1.0
+    },
+    {
+      "scope": "chain",
+      "name": "checkpoint:missing-primary-recovery",
+      "version": "file-tools-recovery-policy-v2.1",
+      "count": 15,
+      "scored": 15,
+      "statuses": {
+        "SCORED": 15
+      },
+      "mean": 1.0
+    },
+    {
+      "scope": "chain",
+      "name": "checkpoint:read-before-write",
+      "version": "file-tools-trajectory-v1",
+      "count": 15,
+      "scored": 15,
+      "statuses": {
+        "SCORED": 15
+      },
+      "mean": 1.0
+    },
+    {
+      "scope": "generation",
+      "name": "decision_arguments",
+      "version": "file-tools-deepeval-v2.1",
+      "count": 54,
+      "scored": 54,
+      "statuses": {
+        "SCORED": 54
+      },
+      "mean": 1.0
+    },
+    {
+      "scope": "generation",
+      "name": "decision_call_policy",
+      "version": "file-tools-deepeval-v2.1",
+      "count": 72,
+      "scored": 72,
+      "statuses": {
+        "SCORED": 72
+      },
+      "mean": 1.0
+    },
+    {
+      "scope": "generation",
+      "name": "decision_schema",
+      "version": "file-tools-deepeval-v2.1",
+      "count": 54,
+      "scored": 54,
+      "statuses": {
+        "SCORED": 54
+      },
+      "mean": 1.0
+    },
+    {
+      "scope": "generation",
+      "name": "decision_tool_selection",
+      "version": "file-tools-deepeval-v2.1",
+      "count": 54,
+      "scored": 54,
+      "statuses": {
+        "SCORED": 54
+      },
+      "mean": 1.0
+    },
+    {
+      "scope": "task",
+      "name": "interactive_evidence",
+      "version": "file-tools-deepeval-v2.1",
+      "count": 540,
+      "scored": 540,
+      "statuses": {
+        "SCORED": 540
+      },
+      "mean": 1.0
+    },
+    {
+      "scope": "task",
+      "name": "task_success",
+      "version": "file-tools-deepeval-v2.1",
+      "count": 612,
+      "scored": 612,
+      "statuses": {
+        "SCORED": 612
+      },
+      "mean": 0.9444444444444444
+    },
+    {
+      "scope": "task",
+      "name": "tool_correctness",
+      "version": "file-tools-deepeval-v2.1",
+      "count": 540,
+      "scored": 540,
+      "statuses": {
+        "SCORED": 540
+      },
+      "mean": 0.9907407407407407
+    },
+    {
+      "scope": "task",
+      "name": "workspace_policy",
+      "version": "file-tools-deepeval-v2.1",
+      "count": 612,
+      "scored": 612,
+      "statuses": {
+        "SCORED": 612
+      },
+      "mean": 0.9575163398692811
+    },
+    {
+      "scope": "tool",
+      "name": "checkpoint:attempt-primary",
+      "version": "file-tools-trajectory-v1",
+      "count": 15,
+      "scored": 15,
+      "statuses": {
+        "SCORED": 15
+      },
+      "mean": 1.0
+    },
+    {
+      "scope": "tool",
+      "name": "checkpoint:discovery",
+      "version": "file-tools-trajectory-v1",
+      "count": 15,
+      "scored": 15,
+      "statuses": {
+        "SCORED": 15
+      },
+      "mean": 1.0
+    },
+    {
+      "scope": "tool",
+      "name": "checkpoint:first-source",
+      "version": "file-tools-trajectory-v1",
+      "count": 15,
+      "scored": 15,
+      "statuses": {
+        "SCORED": 15
+      },
+      "mean": 1.0
+    },
+    {
+      "scope": "tool",
+      "name": "checkpoint:read-left",
+      "version": "file-tools-trajectory-v1",
+      "count": 15,
+      "scored": 15,
+      "statuses": {
+        "SCORED": 15
+      },
+      "mean": 1.0
+    },
+    {
+      "scope": "tool",
+      "name": "checkpoint:read-right",
+      "version": "file-tools-trajectory-v1",
+      "count": 15,
+      "scored": 15,
+      "statuses": {
+        "SCORED": 15
+      },
+      "mean": 1.0
+    },
+    {
+      "scope": "tool",
+      "name": "checkpoint:read-source",
+      "version": "file-tools-trajectory-v1",
+      "count": 15,
+      "scored": 15,
+      "statuses": {
+        "SCORED": 15
+      },
+      "mean": 1.0
+    },
+    {
+      "scope": "tool",
+      "name": "checkpoint:second-source",
+      "version": "file-tools-trajectory-v1",
+      "count": 15,
+      "scored": 15,
+      "statuses": {
+        "SCORED": 15
+      },
+      "mean": 1.0
+    },
+    {
+      "scope": "tool",
+      "name": "checkpoint:source-read",
+      "version": "file-tools-trajectory-v1",
+      "count": 15,
+      "scored": 15,
+      "statuses": {
+        "SCORED": 15
+      },
+      "mean": 1.0
+    },
+    {
+      "scope": "tool",
+      "name": "checkpoint:use-fallback",
+      "version": "file-tools-trajectory-v1",
+      "count": 15,
+      "scored": 15,
+      "statuses": {
+        "SCORED": 15
+      },
+      "mean": 1.0
+    },
+    {
+      "scope": "tool",
+      "name": "tool_allowed",
+      "version": "file-tools-trajectory-v1",
+      "count": 2270,
+      "scored": 2270,
+      "statuses": {
+        "SCORED": 2270
+      },
+      "mean": 0.9885462555066079
+    },
+    {
+      "scope": "tool",
+      "name": "tool_schema",
+      "version": "file-tools-trajectory-v1",
+      "count": 2270,
+      "scored": 2244,
+      "statuses": {
+        "SCORED": 2244,
+        "MISSING": 26
+      },
+      "mean": 0.9955436720142602
+    },
+    {
+      "scope": "turn",
+      "name": "checkpoint:conflict-no-change",
+      "version": "file-tools-trajectory-v1",
+      "count": 15,
+      "scored": 15,
+      "statuses": {
+        "SCORED": 15
+      },
+      "mean": 1.0
+    },
+    {
+      "scope": "turn",
+      "name": "checkpoint:copy-state",
+      "version": "file-tools-trajectory-v1",
+      "count": 15,
+      "scored": 15,
+      "statuses": {
+        "SCORED": 15
+      },
+      "mean": 1.0
+    },
+    {
+      "scope": "turn",
+      "name": "checkpoint:draft-state",
+      "version": "file-tools-trajectory-v1",
+      "count": 15,
+      "scored": 15,
+      "statuses": {
+        "SCORED": 15
+      },
+      "mean": 1.0
+    },
+    {
+      "scope": "turn",
+      "name": "checkpoint:final-turn-state",
+      "version": "file-tools-trajectory-v1",
+      "count": 180,
+      "scored": 180,
+      "statuses": {
+        "SCORED": 180
+      },
+      "mean": 0.8888888888888888
+    },
+    {
+      "scope": "turn",
+      "name": "checkpoint:initial-constraints",
+      "version": "file-tools-trajectory-v1",
+      "count": 15,
+      "scored": 15,
+      "statuses": {
+        "SCORED": 15
+      },
+      "mean": 0.9333333333333333
+    },
+    {
+      "scope": "turn",
+      "name": "checkpoint:replacement-state",
+      "version": "file-tools-trajectory-v1",
+      "count": 15,
+      "scored": 15,
+      "statuses": {
+        "SCORED": 15
+      },
+      "mean": 0.8666666666666667
+    },
+    {
+      "scope": "turn",
+      "name": "checkpoint:review-state",
+      "version": "file-tools-trajectory-v1",
+      "count": 15,
+      "scored": 15,
+      "statuses": {
+        "SCORED": 15
+      },
+      "mean": 1.0
+    },
+    {
+      "scope": "turn",
+      "name": "checkpoint:sum-state",
+      "version": "file-tools-trajectory-v1",
+      "count": 15,
+      "scored": 15,
+      "statuses": {
+        "SCORED": 15
+      },
+      "mean": 1.0
+    }
+  ],
+  "agent_and_module_usage": {
+    "records": 612,
+    "input_tokens": null,
+    "input_tokens_known_subtotal": 9013862,
+    "input_tokens_known_records": 552,
+    "output_tokens": null,
+    "output_tokens_known_subtotal": 237476,
+    "output_tokens_known_records": 552,
+    "cost_usd": null,
+    "cost_usd_known_subtotal": null,
+    "cost_usd_known_records": 0
+  },
+  "judge": {
+    "annotation_trials": 561,
+    "by_run": [
+      {
+        "run_id": "chain-judge-judge-c5f3601f",
+        "configured_repeats": 1,
+        "applicable": 1442,
+        "scored": 1442,
+        "errors": 0,
+        "missing": 0,
+        "not_applicable": 155
+      },
+      {
+        "run_id": "decision-judge-judge-3800f74a",
+        "configured_repeats": 1,
+        "applicable": 72,
+        "scored": 72,
+        "errors": 0,
+        "missing": 0,
+        "not_applicable": 0
+      },
+      {
+        "run_id": "e2e-judge-judge-1d6d8b0b",
+        "configured_repeats": 1,
+        "applicable": 1760,
+        "scored": 1759,
+        "errors": 1,
+        "missing": 0,
+        "not_applicable": 280
+      },
+      {
+        "run_id": "judge-stability-judge-403b0539",
+        "configured_repeats": 2,
+        "applicable": 138,
+        "scored": 138,
+        "errors": 0,
+        "missing": 0,
+        "not_applicable": 12
+      }
+    ],
+    "new_agent_executions": 0,
+    "total": 3859,
+    "applicable": 3412,
+    "scored": 3411,
+    "not_applicable": 447,
+    "missing": 0,
+    "errors": 1,
+    "coverage": 0.9997069167643611,
+    "by_scope_and_metric": [
+      {
+        "scope": "generation",
+        "name": "action_appropriateness",
+        "version": "trajectory-geval-v1",
+        "count": 2710,
+        "scored": 2709,
+        "statuses": {
+          "SCORED": 2709,
+          "ERROR": 1
+        },
+        "mean": 0.8224437061646364
+      },
+      {
+        "scope": "generation",
+        "name": "recovery_appropriateness",
+        "version": "trajectory-geval-v1",
+        "count": 53,
+        "scored": 53,
+        "statuses": {
+          "SCORED": 53
+        },
+        "mean": 0.769811320754717
+      },
+      {
+        "scope": "task",
+        "name": "recovery_appropriateness",
+        "version": "trajectory-geval-v1",
+        "count": 447,
+        "scored": 0,
+        "statuses": {
+          "NOT_APPLICABLE": 447
+        },
+        "mean": null
+      },
+      {
+        "scope": "turn",
+        "name": "response_groundedness",
+        "version": "trajectory-geval-v1",
+        "count": 649,
+        "scored": 649,
+        "statuses": {
+          "SCORED": 649
+        },
+        "mean": 0.9870570107858243
+      }
+    ],
+    "stability": {
+      "matched_metrics": 69,
+      "mean_range": 0.03188405797101449,
+      "max_range": 0.4,
+      "items": [
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/discover_and_copy/001",
+          "trial": 1,
+          "metric_id": "4ed9ba1f9d9c9774303e3796",
+          "repetitions": 2,
+          "mean": 0.95,
+          "range": 0.09999999999999998,
+          "stddev": 0.04999999999999999,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/discover_and_copy/001",
+          "trial": 1,
+          "metric_id": "03359fa997e27e00dd33c742",
+          "repetitions": 2,
+          "mean": 0.9,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/discover_and_copy/001",
+          "trial": 1,
+          "metric_id": "e526944b884abad714ee60c3",
+          "repetitions": 2,
+          "mean": 0.9,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/discover_and_copy/001",
+          "trial": 1,
+          "metric_id": "63aa7326f51c8cbfae9ac9d5",
+          "repetitions": 2,
+          "mean": 0.30000000000000004,
+          "range": 0.2,
+          "stddev": 0.1,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/discover_and_copy/001",
+          "trial": 1,
+          "metric_id": "8274035a82c1e520067fd95c",
+          "repetitions": 2,
+          "mean": 1.0,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/discover_and_copy/001",
+          "trial": 1,
+          "metric_id": "9bd579c20326acff3f61303a",
+          "repetitions": 2,
+          "mean": 1.0,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/discover_and_copy/001",
+          "trial": 2,
+          "metric_id": "c1f595d358cfd3c4d02a5c13",
+          "repetitions": 2,
+          "mean": 0.9,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/discover_and_copy/001",
+          "trial": 2,
+          "metric_id": "905ddd17b239dc167d2ecdb3",
+          "repetitions": 2,
+          "mean": 0.9,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/discover_and_copy/001",
+          "trial": 2,
+          "metric_id": "71b06fa9d5a2b0e563ee9ff8",
+          "repetitions": 2,
+          "mean": 0.9,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/discover_and_copy/001",
+          "trial": 2,
+          "metric_id": "929b9748c74b598b0ad11eda",
+          "repetitions": 2,
+          "mean": 0.7,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/discover_and_copy/001",
+          "trial": 2,
+          "metric_id": "d009bfe741ed9e0833b51cee",
+          "repetitions": 2,
+          "mean": 1.0,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/discover_and_copy/001",
+          "trial": 2,
+          "metric_id": "323bee127502867553976880",
+          "repetitions": 2,
+          "mean": 1.0,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/discover_and_copy/001",
+          "trial": 3,
+          "metric_id": "ce47a2bb5f3da94192d572cd",
+          "repetitions": 2,
+          "mean": 0.9,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/discover_and_copy/001",
+          "trial": 3,
+          "metric_id": "f4d85537009fcd0d2e2c7bae",
+          "repetitions": 2,
+          "mean": 0.9,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/discover_and_copy/001",
+          "trial": 3,
+          "metric_id": "3b048960ef20e96e84c08a9a",
+          "repetitions": 2,
+          "mean": 0.9,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/discover_and_copy/001",
+          "trial": 3,
+          "metric_id": "ed48810d4bb0c280a9cb9908",
+          "repetitions": 2,
+          "mean": 0.6000000000000001,
+          "range": 0.4,
+          "stddev": 0.2,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/discover_and_copy/001",
+          "trial": 3,
+          "metric_id": "63c9ac255e03ef815fede076",
+          "repetitions": 2,
+          "mean": 1.0,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/discover_and_copy/001",
+          "trial": 3,
+          "metric_id": "76960d29412fa064670b00c6",
+          "repetitions": 2,
+          "mean": 1.0,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/copy_then_update/001",
+          "trial": 1,
+          "metric_id": "88d8b41500734ba08fa83bc6",
+          "repetitions": 2,
+          "mean": 0.8,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/copy_then_update/001",
+          "trial": 1,
+          "metric_id": "794f4806d1ac461c44771b85",
+          "repetitions": 2,
+          "mean": 0.9,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/copy_then_update/001",
+          "trial": 1,
+          "metric_id": "823e90097deac998df440150",
+          "repetitions": 2,
+          "mean": 0.35,
+          "range": 0.10000000000000003,
+          "stddev": 0.05000000000000002,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/copy_then_update/001",
+          "trial": 1,
+          "metric_id": "fa8c99e6d1c382fbe8132e70",
+          "repetitions": 2,
+          "mean": 1.0,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/copy_then_update/001",
+          "trial": 1,
+          "metric_id": "694afcb74bcb574d44733b51",
+          "repetitions": 2,
+          "mean": 0.45,
+          "range": 0.09999999999999998,
+          "stddev": 0.04999999999999999,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/copy_then_update/001",
+          "trial": 1,
+          "metric_id": "cf774e19e997d04f498d8b8f",
+          "repetitions": 2,
+          "mean": 0.9,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/copy_then_update/001",
+          "trial": 1,
+          "metric_id": "dd512cd40fe1653ce7829b69",
+          "repetitions": 2,
+          "mean": 0.7,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/copy_then_update/001",
+          "trial": 1,
+          "metric_id": "1fce42a3eb7ff8866ce1eb6c",
+          "repetitions": 2,
+          "mean": 0.9,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/copy_then_update/001",
+          "trial": 1,
+          "metric_id": "47a4ed173a6c5b954377e835",
+          "repetitions": 2,
+          "mean": 1.0,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/copy_then_update/001",
+          "trial": 1,
+          "metric_id": "1e242b3c2a753496bbd87b7b",
+          "repetitions": 2,
+          "mean": 1.0,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/copy_then_update/001",
+          "trial": 2,
+          "metric_id": "387d1ba18558096bebcb3c0e",
+          "repetitions": 2,
+          "mean": 0.75,
+          "range": 0.10000000000000009,
+          "stddev": 0.050000000000000044,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/copy_then_update/001",
+          "trial": 2,
+          "metric_id": "b5c076df46340789f3356a64",
+          "repetitions": 2,
+          "mean": 0.9,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/copy_then_update/001",
+          "trial": 2,
+          "metric_id": "d1ed1e97a5bd63a78a2f79ac",
+          "repetitions": 2,
+          "mean": 0.4,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/copy_then_update/001",
+          "trial": 2,
+          "metric_id": "c2bc4ac3f89e751db4aeb632",
+          "repetitions": 2,
+          "mean": 0.95,
+          "range": 0.09999999999999998,
+          "stddev": 0.04999999999999999,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/copy_then_update/001",
+          "trial": 2,
+          "metric_id": "da9af98fac51aef3fd87264a",
+          "repetitions": 2,
+          "mean": 0.4,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/copy_then_update/001",
+          "trial": 2,
+          "metric_id": "57f3e7f6db4b908a5df9575a",
+          "repetitions": 2,
+          "mean": 0.8500000000000001,
+          "range": 0.09999999999999998,
+          "stddev": 0.04999999999999999,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/copy_then_update/001",
+          "trial": 2,
+          "metric_id": "a952fec6bdfab788310004f5",
+          "repetitions": 2,
+          "mean": 0.8,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/copy_then_update/001",
+          "trial": 2,
+          "metric_id": "c06445d0b9a75c166752c35f",
+          "repetitions": 2,
+          "mean": 0.75,
+          "range": 0.10000000000000009,
+          "stddev": 0.050000000000000044,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/copy_then_update/001",
+          "trial": 2,
+          "metric_id": "94aa8a66201d906937e8ae72",
+          "repetitions": 2,
+          "mean": 0.9,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/copy_then_update/001",
+          "trial": 2,
+          "metric_id": "e90ab6594caae0d8d7924fad",
+          "repetitions": 2,
+          "mean": 1.0,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/copy_then_update/001",
+          "trial": 2,
+          "metric_id": "c8b7c9736d77d2cf81dc27a9",
+          "repetitions": 2,
+          "mean": 1.0,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/copy_then_update/001",
+          "trial": 3,
+          "metric_id": "41be9635e0a0d7c3f47504cb",
+          "repetitions": 2,
+          "mean": 0.8,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/copy_then_update/001",
+          "trial": 3,
+          "metric_id": "caf45bd5a6a4a6549568135d",
+          "repetitions": 2,
+          "mean": 0.9,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/copy_then_update/001",
+          "trial": 3,
+          "metric_id": "3adef904ffa99ce8aa9dcb99",
+          "repetitions": 2,
+          "mean": 0.44999999999999996,
+          "range": 0.3,
+          "stddev": 0.15,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/copy_then_update/001",
+          "trial": 3,
+          "metric_id": "89a8798a4915444c33d9130d",
+          "repetitions": 2,
+          "mean": 1.0,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/copy_then_update/001",
+          "trial": 3,
+          "metric_id": "24db62d4285b10b2edb4ce32",
+          "repetitions": 2,
+          "mean": 0.9,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/copy_then_update/001",
+          "trial": 3,
+          "metric_id": "f5485422073c24ae8f716978",
+          "repetitions": 2,
+          "mean": 0.8,
+          "range": 0.20000000000000007,
+          "stddev": 0.10000000000000003,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/copy_then_update/001",
+          "trial": 3,
+          "metric_id": "f399beef46e0beb2d3c3da9c",
+          "repetitions": 2,
+          "mean": 1.0,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/copy_then_update/001",
+          "trial": 3,
+          "metric_id": "48577d0a2a496de309909041",
+          "repetitions": 2,
+          "mean": 1.0,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/copy_then_update/001",
+          "trial": 3,
+          "metric_id": "628303f3e0f68c0d173bd4c1",
+          "repetitions": 2,
+          "mean": 1.0,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/recover_missing/001",
+          "trial": 1,
+          "metric_id": "f553896eca22521113021acc",
+          "repetitions": 2,
+          "mean": 0.9,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/recover_missing/001",
+          "trial": 1,
+          "metric_id": "ad710ceac9d441033791e950",
+          "repetitions": 2,
+          "mean": 0.9,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/recover_missing/001",
+          "trial": 1,
+          "metric_id": "27ff66ad1adcd7a349db3068",
+          "repetitions": 2,
+          "mean": 0.9,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/recover_missing/001",
+          "trial": 1,
+          "metric_id": "8421fd4c6a6421a116003823",
+          "repetitions": 2,
+          "mean": 0.3,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/recover_missing/001",
+          "trial": 1,
+          "metric_id": "80be49b8d8ae033bd3de622e",
+          "repetitions": 2,
+          "mean": 1.0,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/recover_missing/001",
+          "trial": 1,
+          "metric_id": "a396145e140372f137e442d5",
+          "repetitions": 2,
+          "mean": 0.8,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/recover_missing/001",
+          "trial": 1,
+          "metric_id": "0d09bfa18b4d0c8570a121f3",
+          "repetitions": 2,
+          "mean": 1.0,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/recover_missing/001",
+          "trial": 2,
+          "metric_id": "ac71ae6286b6e1b25b9feab6",
+          "repetitions": 2,
+          "mean": 0.9,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/recover_missing/001",
+          "trial": 2,
+          "metric_id": "1c90e3efc47e102087ec3435",
+          "repetitions": 2,
+          "mean": 0.9,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/recover_missing/001",
+          "trial": 2,
+          "metric_id": "b0de346ff8472bc726c3088e",
+          "repetitions": 2,
+          "mean": 0.9,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/recover_missing/001",
+          "trial": 2,
+          "metric_id": "43b0a03ac6d858d6bfe309f5",
+          "repetitions": 2,
+          "mean": 0.3,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/recover_missing/001",
+          "trial": 2,
+          "metric_id": "3a33a804707c53e960f293aa",
+          "repetitions": 2,
+          "mean": 1.0,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/recover_missing/001",
+          "trial": 2,
+          "metric_id": "baf7272fdda8e250e36161d3",
+          "repetitions": 2,
+          "mean": 0.8500000000000001,
+          "range": 0.09999999999999998,
+          "stddev": 0.04999999999999999,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/recover_missing/001",
+          "trial": 2,
+          "metric_id": "1224c577bd9d64d759543d2d",
+          "repetitions": 2,
+          "mean": 1.0,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/recover_missing/001",
+          "trial": 3,
+          "metric_id": "f1972ad6fde6c06cf6e4ed5b",
+          "repetitions": 2,
+          "mean": 0.9,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/recover_missing/001",
+          "trial": 3,
+          "metric_id": "38526049f645e322710986fc",
+          "repetitions": 2,
+          "mean": 0.9,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/recover_missing/001",
+          "trial": 3,
+          "metric_id": "1bb882868d24af59f2ea92b8",
+          "repetitions": 2,
+          "mean": 0.95,
+          "range": 0.09999999999999998,
+          "stddev": 0.04999999999999999,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/recover_missing/001",
+          "trial": 3,
+          "metric_id": "e0c6ff06a9bea054dfb964be",
+          "repetitions": 2,
+          "mean": 0.25,
+          "range": 0.09999999999999998,
+          "stddev": 0.04999999999999999,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/recover_missing/001",
+          "trial": 3,
+          "metric_id": "9fdb04c9c46801c23dab6d44",
+          "repetitions": 2,
+          "mean": 1.0,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/recover_missing/001",
+          "trial": 3,
+          "metric_id": "21a330d5b85d1c01a81121cf",
+          "repetitions": 2,
+          "mean": 0.8500000000000001,
+          "range": 0.09999999999999998,
+          "stddev": 0.04999999999999999,
+          "complete_repetitions": true
+        },
+        {
+          "run_id": "judge-stability-judge-403b0539",
+          "case_id": "file-tools-v2/chain/recover_missing/001",
+          "trial": 3,
+          "metric_id": "4ea11eb028b41f330a3c34ee",
+          "repetitions": 2,
+          "mean": 1.0,
+          "range": 0.0,
+          "stddev": 0.0,
+          "complete_repetitions": true
+        }
+      ]
+    },
+    "usage": {
+      "records": 3412,
+      "input_tokens": 38434922,
+      "input_tokens_known_subtotal": 38434922,
+      "input_tokens_known_records": 3412,
+      "output_tokens": 369821,
+      "output_tokens_known_subtotal": 369821,
+      "output_tokens_known_records": 3412,
+      "cost_usd": null,
+      "cost_usd_known_subtotal": null,
+      "cost_usd_known_records": 0
+    },
+    "human_calibration": "pending_independent_labels",
+    "threshold_validation": "pending_independent_holdout",
+    "formal": false
+  },
+  "tau": {
+    "status": "pilot_executed",
+    "attempted_trials": 1,
+    "planned_trials": 1,
+    "valid_reward_trials": 1,
+    "missing_or_invalid_rewards": 0,
+    "mean_official_reward": 1.0,
+    "source": {
+      "repository": "https://github.com/sierra-research/tau2-bench.git",
+      "commit": "fc0055dc4e0a316c3f83133267fbd6faaa770992"
+    },
+    "official_leaderboard_result": false,
+    "langfuse": {
+      "status": "VERIFIED",
+      "export_status": "VERIFIED",
+      "verification_status": "VERIFIED",
+      "source_hash": "4189c580495202dbd5f3b030328d433be748d077664901c2cbfe747a0abe3284",
+      "counts": {
+        "observations": 23,
+        "scores": 2,
+        "trials": 1
+      },
+      "official_summary_sha256": "9a4d535158db709099760b712104e74b0ba8620f25f2cccc549581e174e2f79c",
+      "traces": [
+        {
+          "case_id": "tau-retail-v1.0.1/0",
+          "trial": 1,
+          "trace_id": "d71621d7c88343ffa787aedfafa4b60c",
+          "url": null
+        }
+      ]
+    },
+    "remaining": "领域试点不等于完整官方基准或排行榜成绩；仍需扩大覆盖并固定官方运行条件。"
+  },
+  "limitations": [
+    "程序模块、隔离模型决策、关键链路与端到端分开统计；不把模块通过率当作模型成功率。",
+    "任务实例包含同族参数变体；实例数、任务族数与重复执行次数分别报告。",
+    "tool_schema 只检查参数结构，不等于参数语义正确；tool_order 只检查顺序，不证明数据流正确。",
+    "关键链路使用显式检查点；尚未证明任意工作流每一步都有完整语义评分。",
+    "GEval 分数是 0～1 的规则尺度，不是正确概率；缺失、错误与不适用不记为成功。",
+    "Judge 重评分复用已有执行证据，不增加 Agent 执行次数；成本与用量单独统计。",
+    "事后 Judge 所在 Trace 根 Span 跨度包含执行至评审的间隔，不等于 Agent 耗时；Agent latency 沿用原记录。",
+    "独立人工校准与阈值验证尚未完成；Judge 保持诊断用途，不覆盖正式终态判定。",
+    "当前主结果仅代表已记录的文件工具任务；不宣称覆盖所有业务领域、插件、MCP 或生产系统。"
+  ],
+  "calibration_starter": {
+    "file": "calibration-sample.json",
+    "sha256": "52b9ff43e80ad49be9ebe7e6582648bb45ae59a81e577fcd39a58964963d7fd4"
+  },
+  "langfuse_screenshot": {
+    "file": "langfuse-step-scores.png",
+    "sha256": "8677017b243ab28b6f3c4894d6ed6bd641c05a8cc35cfb255bd24b860653b477",
+    "scope": "single_ui_example"
+  },
+  "questions": [
+    {
+      "id": 1,
+      "question": "模块、关键链路、端到端覆盖",
+      "status": "已执行三层",
+      "evidence": "程序模块 · 直接调用：60 实例 / 60 trials；模型决策模块 · 隔离输入：24 实例 / 72 trials；关键链路 · 真实 Agent：60 实例 / 180 trials；端到端 · 文件工具 Agent：300 实例 / 300 trials",
+      "remaining": "限定已声明任务族；业务域、复杂动态交互与更多模块仍需扩展。"
+    },
+    {
+      "id": 2,
+      "question": "GEval 是否为 LLM Judge",
+      "status": "已运行",
+      "evidence": "GEval 使用评审模型；本报告 3411 条有效诊断分。",
+      "remaining": "评分不是概率，不替代确定性终态与硬约束。"
+    },
+    {
+      "id": 3,
+      "question": "Inspect 是否支持逐步评分",
+      "status": "已接入",
+      "evidence": "Inspect 组织执行，自研采证/检查点通过 DeepEval 评分；已记录范围：chain、generation、task、tool、turn",
+      "remaining": "并非所有步骤均有完整语义判分；顺序检查不证明数据流正确。"
+    },
+    {
+      "id": 4,
+      "question": "是否接入 τ-bench",
+      "status": "pilot_executed",
+      "evidence": "已记录奖励 1 / 计划 1 trials；有效奖励均值 1.0。Langfuse VERIFIED；展示状态绑定官方摘要与标准化结果的来源 Hash。不是官方排行榜成绩。",
+      "remaining": "领域试点不等于完整官方基准或排行榜成绩；仍需扩大覆盖并固定官方运行条件。"
+    },
+    {
+      "id": 5,
+      "question": "框架分为哪些部分",
+      "status": "职责明确",
+      "evidence": "专用任务生成/冻结 → Inspect → 自研环境与适配/Oracle/轨迹检查点 → DeepEval/GEval → 报告与 Langfuse。",
+      "remaining": "原通用 dataset-builder、能力协议与旧兼容代码仍为保留能力；并非此次主链路每步都调用。"
+    },
+    {
+      "id": 6,
+      "question": "Trace 轨迹打分",
+      "status": "有节点级分数",
+      "evidence": "执行指标 7543 条；Judge 指标 3859 条，节点 ID 随摘要保存。",
+      "remaining": "Langfuse 上传与读回状态逐运行列出；缺证据节点不能补造分数。"
+    },
+    {
+      "id": 7,
+      "question": "LLM Judge 与指标量化",
+      "status": "已量化、未人工校准",
+      "evidence": "适用 3412 条、已评分 3411 条、错误 1 条、缺失 0 条；另有重复波动和用量。",
+      "remaining": "独立人工标签、一致性验收、误放/误杀评估及阈值留出验证仍未完成。"
+    }
+  ]
+}

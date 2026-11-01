@@ -38,6 +38,7 @@ class Journal:
         self.secret = secret
         self.events: list[dict[str, Any]] = []
         self.turn_id: str | None = None
+        self.turn_index: int | None = None
 
     def write(self, event: dict[str, Any]) -> None:
         text = json.dumps(event, ensure_ascii=False, default=str)
@@ -60,6 +61,7 @@ class Journal:
             "output": None,
             "usage": {},
             "parent_id": self.turn_id,
+            "turn": self.turn_index,
             **extra,
         }
         self.events.append(event)
@@ -226,17 +228,58 @@ async def run_task(payload: dict[str, Any], *, provider: Any = None) -> dict[str
             super().__init__(reraise=True)
             self.calls: dict[str, dict[str, Any]] = {}
 
+        def snapshot(self, prefix: str) -> dict[str, Any]:
+            try:
+                return {f"{prefix}_files": snapshot_files(workspace)}
+            except (OSError, ValueError, UnicodeError) as exc:
+                # Preserve the failed measurement. A later final snapshot must
+                # never silently fill in the missing intermediate state.
+                return {
+                    f"{prefix}_files": None,
+                    f"{prefix}_snapshot_errors": [
+                        {"code": type(exc).__name__, "message": str(exc)}
+                    ],
+                }
+
+        def normalized_input(self, params: Any) -> Any:
+            normalized = deepcopy(params)
+            if isinstance(normalized, dict) and isinstance(normalized.get("path"), str):
+                try:
+                    normalized["path"] = (
+                        safe_path(workspace, normalized["path"])
+                        .relative_to(workspace.resolve())
+                        .as_posix()
+                    )
+                except (OSError, ValueError):
+                    pass
+            return normalized
+
         async def before_execute_tool(
             self, context: Any, tool_call: Any, tool: Any, params: Any
         ) -> None:
             self.calls[tool_call.id] = journal.start(
-                "tool", tool_call.name, params, tool_call_id=tool_call.id
+                "tool",
+                tool_call.name,
+                params,
+                tool_call_id=tool_call.id,
+                execution_started=True,
+                tool_schema=deepcopy(tool.parameters),
+                normalized_input=self.normalized_input(params),
+                snapshot_timing="immediately_before_and_after_execution",
+                **self.snapshot("before"),
             )
 
         async def after_execute_tool(
             self, context: Any, tool_call: Any, tool: Any, params: Any, result: Any
         ) -> None:
-            journal.finish(self.calls.pop(tool_call.id), str(result))
+            is_error = bool(getattr(result, "is_error", False))
+            journal.finish(
+                self.calls.pop(tool_call.id),
+                str(result),
+                is_error=is_error,
+                tool_error=is_error,
+                **self.snapshot("after"),
+            )
 
         async def on_execute_tool_error(
             self, context: Any, tool_call: Any, tool: Any, params: Any, error: Any
@@ -244,9 +287,22 @@ async def run_task(payload: dict[str, Any], *, provider: Any = None) -> dict[str
             event = self.calls.pop(tool_call.id, None)
             if event is None:
                 event = journal.start(
-                    "tool", tool_call.name, params, tool_call_id=tool_call.id
+                    "tool",
+                    tool_call.name,
+                    params,
+                    tool_call_id=tool_call.id,
+                    tool_schema=deepcopy(tool.parameters) if tool else None,
+                    normalized_input=self.normalized_input(params),
+                    before_files=None,
                 )
-            journal.finish(event, str(error), error=str(error))
+            journal.finish(
+                event,
+                str(error),
+                error=str(error),
+                is_error=True,
+                tool_error=True,
+                **self.snapshot("after"),
+            )
 
         async def after_iteration(self, context: Any) -> None:
             # nanobot's pre-validation rejection bypasses tool execution hooks.
@@ -260,15 +316,25 @@ async def run_task(payload: dict[str, Any], *, provider: Any = None) -> dict[str
                 context.tool_calls, context.tool_events, strict=False
             ):
                 if call.id not in captured:
+                    tool = registry.get(call.name)
                     event = journal.start(
                         "tool",
                         call.name,
                         call.arguments,
                         tool_call_id=call.id,
                         execution_started=False,
+                        tool_schema=deepcopy(tool.parameters) if tool else None,
+                        normalized_input=self.normalized_input(call.arguments),
+                        snapshot_timing="after_iteration_rejection_record",
+                        before_files=None,
                     )
                     journal.finish(
-                        event, detail.get("detail"), error=detail.get("detail")
+                        event,
+                        detail.get("detail"),
+                        error=detail.get("detail"),
+                        is_error=True,
+                        tool_error=True,
+                        **self.snapshot("after"),
                     )
 
     class FileOnlyAgentLoop(AgentLoop):
@@ -339,6 +405,7 @@ async def run_task(payload: dict[str, Any], *, provider: Any = None) -> dict[str
         raise ValueError("followups must be user-message strings")
     try:
         for index, prompt in enumerate(prompts):
+            journal.turn_index = index + 1
             event = journal.start("turn", f"turn-{index + 1}", prompt)
             journal.turn_id = event["id"]
             instruction = config.get("instructions", "")

@@ -54,4 +54,4 @@ python3 scripts/test_all.py
 - [旧 Langfuse 接入](../../packages/evaluator/docs/langfuse.md)：原结果导出和人工复核流程。
 - [monorepo 迁移来源](../migration/provenance.md)：原三个项目的合并来源；保留原项目为只读参考。
 
-当前实现和真实运行证据以[根 README](../../README.md)、[数据集卡](../../data/benchmarks/file-tools-v1/README.md)和[作品集](portfolio.md)为准。
+当前实现和真实运行证据以[根 README](../../README.md)、[v2 数据集卡](../../data/benchmarks/file-tools-v2/README.md)和[v2 作品集](../../reports/file-tools-v2/index.html)为准；[v1 作品集](portfolio.md)保留历史实验口径。

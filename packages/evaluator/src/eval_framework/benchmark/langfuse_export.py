@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import base64
 import hashlib
 import json
 import time
@@ -9,15 +10,46 @@ from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from pathlib import Path
+from urllib.parse import quote
 
 import httpx
 from langfuse.api import CreateScoreRequest, OtelResourceSpan, OtelScope, OtelScopeSpan
 
 from ..observability import _span, client_from_env, destination_fingerprint, stable_id
-from .runner import now, save_json
+from .runner import digest, now, save_json
 from .tasks import dataset_identity, load_tasks
 
 VERSION = "file-benchmark-langfuse-v1"
+EVIDENCE_VERSION = "langfuse-exact-metadata-v1"
+EVIDENCE_RECEIPT = "langfuse_exact_metadata_export.json"
+EVIDENCE_FIELDS = (
+    "exact_metadata_base64",
+    "exact_metadata_sha256",
+    "evidence_source_sha256",
+    "evidence_for_observation_id",
+    "evidence_export_version",
+    "is_export_evidence",
+)
+VERIFIED_METADATA_FIELDS = (
+    "requested_model",
+    "response_model",
+    "tool_call_id",
+    "execution_started",
+    "before_files",
+    "after_files",
+    "before_snapshot_errors",
+    "after_snapshot_errors",
+    "snapshot",
+    "snapshot_timing",
+    "tool_schema",
+    "normalized_input",
+    "is_error",
+    "tool_error",
+    "is_judge",
+    "judge_repeat",
+    "metric_id",
+    "turn",
+) + EVIDENCE_FIELDS
 
 
 def _connect_retry(method, **kwargs):
@@ -49,6 +81,8 @@ def build_payload(run: dict, tasks: dict, dataset_id: str, source_hash: str):
             "trial": row["trial"],
             "category": row["category"],
             "split": row["split"],
+            "evaluation_level": task.get("evaluation_level", "e2e"),
+            "execution_mode": task.get("execution_mode", "agent"),
             "results_sha256": source_hash,
             "execution_backend": "inspect_ai",
             "formal_score_owner": "deepeval",
@@ -57,6 +91,17 @@ def build_payload(run: dict, tasks: dict, dataset_id: str, source_hash: str):
             "evidence_complete": observation.get("evidence_complete"),
             "verdict": row["assessment"]["verdict"],
         }
+        if run["mode"] == "real_agent_official_tau":
+            metadata.update(
+                official_task_id=row["official_task_id"],
+                official_reward_owner=run["official_reward_owner"],
+                official_summary_sha256=run["official_summary_sha256"],
+                official_summary_path=run["official_summary_path"],
+                official_observation_path=row.get("official_observation_path"),
+                official_result_path=row.get("official_result_path"),
+                official_leaderboard_result=False,
+                synthetic_presentation_descriptor_only=True,
+            )
         context = {
             "langfuse.experiment.id": experiment,
             "langfuse.experiment.name": (run["run_id"] + "-trial-" + str(row["trial"])),
@@ -94,11 +139,29 @@ def build_payload(run: dict, tasks: dict, dataset_id: str, source_hash: str):
                 attrs,
             )
         )
+        events = observation.get("events", [])
+        event_names = [event.get("id") for event in events]
+        if any(not isinstance(value, str) or not value for value in event_names):
+            raise ValueError("export event IDs must be nonempty strings")
+        if len(set(event_names)) != len(event_names):
+            raise ValueError("duplicate event IDs cannot be exported")
+        for event in events:
+            parent = event.get("parent_id")
+            if parent is not None and parent not in event_names:
+                raise ValueError(f"unknown event parent: {parent}")
+        parents = {event["id"]: event.get("parent_id") for event in events}
+        for event in events:
+            seen = {event["id"]}
+            parent = event.get("parent_id")
+            while parent is not None:
+                if parent in seen:
+                    raise ValueError("event parent cycle cannot be exported")
+                seen.add(parent)
+                parent = parents[parent]
         ids = {
-            event["id"]: stable_id(trace, event["id"], length=16)
-            for event in observation.get("events", [])
+            event["id"]: stable_id(trace, event["id"], length=16) for event in events
         }
-        for event in observation.get("events", []):
+        for event in events:
             if not event.get("end_time"):
                 # Unfinished operations are points with explicit incomplete metadata.
                 end = event["start_time"]
@@ -123,6 +186,20 @@ def build_payload(run: dict, tasks: dict, dataset_id: str, source_hash: str):
                             "response_model",
                             "tool_call_id",
                             "execution_started",
+                            "before_files",
+                            "after_files",
+                            "before_snapshot_errors",
+                            "after_snapshot_errors",
+                            "snapshot",
+                            "snapshot_timing",
+                            "tool_schema",
+                            "normalized_input",
+                            "is_error",
+                            "tool_error",
+                            "is_judge",
+                            "judge_repeat",
+                            "metric_id",
+                            "turn",
                         )
                         if key in event
                     },
@@ -161,18 +238,50 @@ def build_payload(run: dict, tasks: dict, dataset_id: str, source_hash: str):
                     ids.get(event.get("parent_id"), root),
                 )
             )
+        # Validate links even for unscored metrics. Missing evidence is retained
+        # in assessment metadata, never silently exported as a numeric zero.
+        metrics = row["assessment"]["metrics"]
+        for metric in metrics:
+            scope = metric.get("scope", "task")
+            event_id = metric.get("event_id")
+            if scope not in {"task", "tool", "turn", "chain", "generation", "event"}:
+                raise ValueError(f"unsupported metric scope: {scope}")
+            if event_id is not None and event_id not in ids:
+                raise ValueError(f"metric references unknown event: {event_id}")
+            if scope != "task" and event_id is None:
+                raise ValueError(f"{scope} metric requires an event ID")
+            if scope == "task" and event_id is not None:
+                raise ValueError("task metric cannot reference a child event")
         entries = [("verdict", row["assessment"]["verdict"], "CATEGORICAL", {})]
         entries += [
             (metric["name"], metric["score"], "NUMERIC", metric)
-            for metric in row["assessment"]["metrics"]
+            for metric in metrics
             if metric.get("score") is not None
         ]
+        score_ids = set()
         for name, value, dtype, metric in entries:
+            # Preserve immutable v1 identities. Scoped metrics need the target
+            # node and repeat in their IDs so repeated names never overwrite.
+            if "scope" in metric:
+                score_id = stable_id(
+                    trace,
+                    name,
+                    metric["scope"],
+                    metric.get("event_id") or "root",
+                    str(metric.get("version", "")),
+                    str(metric.get("metric_id", "")),
+                    str(metric.get("judge_repeat", "")),
+                )
+            else:
+                score_id = stable_id(trace, name)
+            if score_id in score_ids:
+                raise ValueError(f"duplicate score identity: {name}")
+            score_ids.add(score_id)
             scores.append(
                 CreateScoreRequest(
-                    id=stable_id(trace, name),
+                    id=score_id,
                     trace_id=trace,
-                    observation_id=root,
+                    observation_id=ids.get(metric.get("event_id"), root),
                     name=name,
                     value=value,
                     data_type=dtype,
@@ -200,6 +309,48 @@ def build_payload(run: dict, tasks: dict, dataset_id: str, source_hash: str):
 def _source(run_dir: Path, dataset_path: Path):
     raw = (run_dir / "results.json").read_bytes()
     run = json.loads(raw)
+    if run.get("mode") == "real_agent_official_tau":
+        summary_raw = Path(dataset_path).read_bytes()
+        summary_hash = hashlib.sha256(summary_raw).hexdigest()
+        identity = run["identity"]
+        if summary_hash != identity.get(
+            "official_summary_sha256"
+        ) or summary_hash != run.get("official_summary_sha256"):
+            raise ValueError("Official summary SHA256 does not match run identity")
+        if digest(identity) != run.get("identity_hash"):
+            raise ValueError("Official task selection identity hash changed")
+        summary = json.loads(summary_raw)
+        selected = summary.get("task_ids", [])
+        cases = ["tau-retail-v1.0.1/" + task_id for task_id in selected]
+        tasks = run.get("task_descriptors", {})
+        if (
+            summary.get("domain") != "retail"
+            or not selected
+            or len(set(selected)) != len(selected)
+            or identity["config"]["task_ids"] != selected
+            or identity.get("case_ids") != cases
+            or run.get("planned_case_ids") != cases
+            or set(tasks) != set(cases)
+        ):
+            raise ValueError("Official task selection or descriptors do not match")
+        for key in ("source_identity", "task_sha256", "policy_sha256"):
+            if identity["dataset"].get(key) != summary.get(key):
+                raise ValueError("Official dataset provenance does not match summary")
+        for case, task_id in zip(cases, selected, strict=True):
+            task = tasks[case]
+            if (
+                task.get("id") != case
+                or task.get("official_task_id") != task_id
+                or task.get("synthetic_presentation_descriptor_only") is not True
+            ):
+                raise ValueError("Official task descriptor does not match selection")
+        if any(
+            row["case_id"] not in tasks
+            or row.get("official_task_id") != tasks[row["case_id"]]["official_task_id"]
+            for row in run["trials"]
+        ):
+            raise ValueError("Official trial task ID does not match descriptor")
+        return run, tasks, hashlib.sha256(raw).hexdigest()
     if run["identity"]["dataset"] != dataset_identity(dataset_path):
         raise ValueError("export dataset does not match run identity")
     return (
@@ -238,7 +389,8 @@ def export_run(run_dir: Path, dataset_path: Path, *, client=None) -> dict:
     if receipt["status"] in ("ACCEPTED", "VERIFIED"):
         return receipt
     name = (
-        "file-tools-v1-"
+        run["identity"]["dataset"].get("dataset_id", "file-tools-v1")
+        + "-"
         + hashlib.sha256(
             json.dumps(run["identity"]["dataset"], sort_keys=True).encode()
         ).hexdigest()[:12]
@@ -247,7 +399,10 @@ def export_run(run_dir: Path, dataset_path: Path, *, client=None) -> dict:
         dataset = client.datasets.create(
             name=name,
             description=(
-                "Frozen file-tool benchmark; AI-assisted synthetic fixtures; "
+                "Selected official τ retail tasks; official reward preserved by "
+                "DeepEval; Inspect orchestration; not an official leaderboard result."
+                if run["mode"] == "real_agent_official_tau"
+                else "Frozen file-tool benchmark; AI-assisted synthetic fixtures; "
                 "DeepEval scoring."
             ),
             metadata=run["identity"]["dataset"],
@@ -263,6 +418,25 @@ def export_run(run_dir: Path, dataset_path: Path, *, client=None) -> dict:
 
     def register(case):
         task = tasks[case]
+        official = run["mode"] == "real_agent_official_tau"
+        metadata = {
+            "case_id": case,
+            "family": task["family"],
+            "split": task["split"],
+            "category": task["category"],
+        }
+        if official:
+            metadata.update(
+                official_task_id=task["official_task_id"],
+                official_summary_sha256=run["official_summary_sha256"],
+                source_identity=run["identity"]["dataset"]["source_identity"],
+                task_sha256=run["identity"]["dataset"]["task_sha256"].get(
+                    task["official_task_id"]
+                ),
+                policy_sha256=run["identity"]["dataset"]["policy_sha256"],
+                synthetic_presentation_descriptor_only=True,
+                environment_state_owner="official_tau",
+            )
         _connect_retry(
             client.dataset_items.create,
             dataset_name=name,
@@ -270,15 +444,10 @@ def export_run(run_dir: Path, dataset_path: Path, *, client=None) -> dict:
             input={
                 "prompt": task["prompt"],
                 "followups": task.get("followups", []),
-                "fixtures": task["fixtures"],
+                "fixtures": {} if official else task["fixtures"],
             },
             expected_output=task["oracle"],
-            metadata={
-                "case_id": case,
-                "family": task["family"],
-                "split": task["split"],
-                "category": task["category"],
-            },
+            metadata=metadata,
         )
         return case
 
@@ -382,6 +551,342 @@ def _paginate(method, *, page_size=100, **kwargs):
         seen.add(cursor)
 
 
+def _flatten_metadata(metadata: dict) -> dict:
+    """Match the API's dotted leaf keys without splitting literal filename dots."""
+    leaves = {}
+
+    def visit(value, path):
+        if isinstance(value, dict) and value:
+            for key, child in value.items():
+                visit(child, path + "." + key if path else key)
+        else:
+            if path in leaves:
+                raise ValueError("Metadata has ambiguous flattened paths: " + path)
+            leaves[path] = value
+
+    for key, value in metadata.items():
+        visit(value, key)
+    return leaves
+
+
+def _metadata_with_json_values(value):
+    """Model the API's lossy JSON parsing; never sufficient evidence by itself."""
+    if isinstance(value, str):
+        try:
+            return _metadata_with_json_values(json.loads(value))
+        except ValueError:
+            return value
+    if isinstance(value, dict):
+        return {key: _metadata_with_json_values(child) for key, child in value.items()}
+    if isinstance(value, list):
+        return [_metadata_with_json_values(child) for child in value]
+    return value
+
+
+def _contains_json_string(value):
+    if isinstance(value, str):
+        try:
+            json.loads(value)
+            return True
+        except ValueError:
+            return False
+    if isinstance(value, dict):
+        return any(_contains_json_string(child) for child in value.values())
+    if isinstance(value, list):
+        return any(_contains_json_string(child) for child in value)
+    return False
+
+
+def build_evidence_payload(spans, source_hash):
+    """Lossless presentation-only children for fields the API parses as JSON.
+
+    Original execution spans and results remain unchanged. These children record
+    saved metadata, never Agent operations, Judge calls, scores, or new trials.
+    """
+    evidence = []
+    for span in spans:
+        attrs = {a.key: a.value.string_value for a in span.attributes}
+        metadata = json.loads(attrs.get("langfuse.observation.metadata", "{}"))
+        affected = {
+            key: metadata[key]
+            for key in VERIFIED_METADATA_FIELDS
+            if key in metadata and _contains_json_string(metadata[key])
+        }
+        if not affected:
+            continue
+        raw = json.dumps(
+            affected, sort_keys=True, ensure_ascii=False, separators=(",", ":")
+        ).encode("utf-8")
+        proof = _span(
+            span.trace_id,
+            stable_id(EVIDENCE_VERSION, source_hash, span.span_id, length=16),
+            "saved-exact-metadata",
+            "1970-01-01T00:00:00Z",
+            "1970-01-01T00:00:00Z",
+            {
+                "langfuse.environment": "benchmark",
+                "langfuse.observation.type": "span",
+                "langfuse.observation.metadata": {
+                    "evidence_export_version": EVIDENCE_VERSION,
+                    "evidence_source_sha256": source_hash,
+                    "evidence_for_observation_id": span.span_id,
+                    "is_export_evidence": True,
+                    "exact_metadata_base64": "base64:"
+                    + base64.b64encode(raw).decode("ascii"),
+                    "exact_metadata_sha256": "sha256:"
+                    + hashlib.sha256(raw).hexdigest(),
+                },
+            },
+            span.span_id,
+        ).model_copy(
+            update={
+                "start_time_unix_nano": span.start_time_unix_nano,
+                "end_time_unix_nano": span.end_time_unix_nano,
+            }
+        )
+        evidence.append(proof)
+    return evidence
+
+
+def export_metadata_evidence(run_dir: Path, dataset_path: Path, *, client=None):
+    """Append separately receipted lossless evidence, without replaying old spans."""
+    run_dir = Path(run_dir)
+    run, tasks, source_hash = _source(run_dir, dataset_path)
+    original = json.loads((run_dir / "langfuse_export.json").read_text())
+    destination = destination_fingerprint()
+    if (
+        original["source_hash"] != source_hash
+        or original["destination"] != destination
+        or original["status"] not in ("ACCEPTED", "VERIFIED")
+    ):
+        raise ValueError("Original export must be accepted with matching identity")
+    spans, _, _ = build_payload(run, tasks, original["dataset_id"], source_hash)
+    evidence = build_evidence_payload(spans, source_hash)
+    identity = {
+        "version": EVIDENCE_VERSION,
+        "source_hash": source_hash,
+        "destination": destination,
+        "dataset_id": original["dataset_id"],
+        "evidence_observation_ids": [span.span_id for span in evidence],
+        "target_observation_ids": [span.parent_span_id for span in evidence],
+    }
+    path = run_dir / EVIDENCE_RECEIPT
+    receipt = (
+        json.loads(path.read_text())
+        if path.exists()
+        else {
+            **identity,
+            "status": "PENDING",
+            "accepted_observation_ids": [],
+            "inflight": [],
+            "purpose": "Lossless saved metadata presentation; no execution or scoring",
+        }
+    )
+    if any(receipt.get(key) != value for key, value in identity.items()):
+        raise ValueError("Immutable supplemental evidence identity changed")
+    if receipt["inflight"]:
+        raise ValueError("Uncertain evidence batch: reconcile IDs before retry")
+    if receipt["status"] in ("ACCEPTED", "VERIFIED"):
+        return receipt
+    client = client or client_from_env()
+    accepted = set(receipt["accepted_observation_ids"])
+    pending = [span for span in evidence if span.span_id not in accepted]
+    for start in range(0, len(pending), 75):
+        batch = pending[start : start + 75]
+        receipt["inflight"] = [span.span_id for span in batch]
+        save_json(path, receipt)
+        try:
+            response = _connect_retry(
+                client.opentelemetry.export_traces,
+                resource_spans=[
+                    OtelResourceSpan(
+                        scope_spans=[
+                            OtelScopeSpan(
+                                scope=OtelScope(name="agent-eval-suite-saved-evidence"),
+                                spans=batch,
+                            )
+                        ]
+                    )
+                ],
+                request_options={"max_retries": 0},
+            )
+        except (httpx.ConnectError, httpx.ConnectTimeout):
+            receipt["inflight"] = []
+            save_json(path, receipt)
+            raise
+        partial = response.model_dump(by_alias=True).get("partialSuccess")
+        if partial and (partial.get("rejectedSpans") or partial.get("errorMessage")):
+            raise ValueError("Langfuse partial evidence rejection; reconcile batch")
+        receipt["accepted_observation_ids"].extend(receipt["inflight"])
+        receipt["inflight"] = []
+        save_json(path, receipt)
+    receipt.update(status="ACCEPTED", accepted_at=now(), observations=len(evidence))
+    save_json(path, receipt)
+    return receipt
+
+
+def _json_equal(expected, actual):
+    if isinstance(expected, dict):
+        return (
+            isinstance(actual, dict)
+            and set(expected) == set(actual)
+            and all(_json_equal(value, actual[key]) for key, value in expected.items())
+        )
+    if isinstance(expected, list):
+        return (
+            isinstance(actual, list)
+            and len(expected) == len(actual)
+            and all(
+                _json_equal(left, right)
+                for left, right in zip(expected, actual, strict=True)
+            )
+        )
+    return isinstance(expected, bool) == isinstance(actual, bool) and expected == actual
+
+
+def _metadata_matches(expected: dict, actual: dict, field: str) -> bool:
+    expected_leaves = _flatten_metadata({field: expected[field]})
+    actual_leaves = {
+        key: value
+        for key, value in _flatten_metadata(actual).items()
+        if key == field or key.startswith(field + ".")
+    }
+    if set(expected_leaves) != set(actual_leaves):
+        return False
+    for key, value in expected_leaves.items():
+        observed = actual_leaves[key]
+        # Object arrays are exposed as JSON strings by the metadata API. Only
+        # decode structured expected values: a file containing "null" is text.
+        if isinstance(value, (list, dict)) and isinstance(observed, str):
+            try:
+                observed = json.loads(observed)
+            except ValueError:
+                return False
+        # Langfuse's flattened metadata represents an explicit null as "".
+        if value is None and observed == "":
+            observed = None
+        # This duplicate binding is also checked against the exact core parent
+        # ID. The API parses all-decimal strings; accept only a reversible int
+        # representation here, never floats or coercion of other metadata.
+        if (
+            field == "evidence_for_observation_id"
+            and isinstance(value, str)
+            and type(observed) is int
+            and str(observed) == value
+        ):
+            observed = value
+        if not _json_equal(value, observed):
+            return False
+    return True
+
+
+def _expand_metadata(method, rows: list[dict], long_keys: dict, **kwargs):
+    """Fetch exact long values; bound query size and never accept API previews."""
+    chunks, current = [], []
+    for key in sorted(long_keys):
+        if "," in key or len(quote(key, safe="")) > 2500:
+            raise ValueError("Metadata key cannot be expanded exactly: " + key)
+        if current and len(quote(",".join([*current, key]), safe="")) > 2500:
+            chunks.append(current)
+            current = []
+        current.append(key)
+    if current:
+        chunks.append(current)
+    by_id = {row["id"]: row for row in rows}
+    for keys in chunks:
+        expanded = _paginate(
+            method,
+            page_size=1000,
+            fields="core,metadata",
+            expand_metadata=",".join(keys),
+            **kwargs,
+        )
+        for row in expanded:
+            if row["id"] not in by_id:
+                continue
+            original = by_id[row["id"]]
+            metadata = _flatten_metadata(original.get("metadata") or {})
+            full = _flatten_metadata(row.get("metadata") or {})
+            for key in keys:
+                metadata.pop(key, None)
+            # Preserve prior expanded values, while retaining new unexpected
+            # leaves so exact comparison still rejects added evidence.
+            metadata.update(
+                {
+                    key: value
+                    for key, value in full.items()
+                    if key in keys
+                    or key not in metadata
+                    or any(key.startswith(parent + ".") for parent in keys)
+                }
+            )
+            original["metadata"] = metadata
+
+
+def _read_remote_evidence(client, spans, traces):
+    """Read only this run's trace IDs, including every cursor page per batch."""
+    by_trace = defaultdict(list)
+    for span in spans:
+        by_trace[span.trace_id].append(span)
+    identities = list(dict.fromkeys(trace["trace_id"] for trace in traces))
+    observation_rows, score_rows = [], []
+    # IDs are stable 32-character hashes. Fifty keep the encoded trace filter
+    # below 3 KB, including when full metadata keys need a second query.
+    for start in range(0, len(identities), 50):
+        selected = identities[start : start + 50]
+        trace_filter = json.dumps(
+            [
+                {
+                    "type": "stringOptions",
+                    "column": "traceId",
+                    "operator": "any of",
+                    "value": selected,
+                }
+            ],
+            separators=(",", ":"),
+        )
+        if len(quote(trace_filter, safe="")) > 3000:
+            raise ValueError("Trace filter exceeds bounded readback query size")
+        observations = _paginate(
+            client.observations.get_many,
+            page_size=1000,
+            filter=trace_filter,
+            fields="core,basic,io,metadata,model,usage",
+        )
+        long_keys = {}
+        for identity in selected:
+            for span in by_trace[identity]:
+                attrs = {a.key: a.value.string_value for a in span.attributes}
+                metadata = json.loads(attrs.get("langfuse.observation.metadata", "{}"))
+                required = {
+                    key: metadata[key]
+                    for key in VERIFIED_METADATA_FIELDS
+                    if key in metadata
+                }
+                for key, value in _flatten_metadata(required).items():
+                    serialized = value if isinstance(value, str) else json.dumps(value)
+                    if len(serialized) > 200:
+                        long_keys[key] = True
+        _expand_metadata(
+            client.observations.get_many,
+            observations,
+            long_keys,
+            filter=trace_filter,
+        )
+        observation_rows.extend(observations)
+        score_rows.extend(
+            _paginate(
+                client.scores.get_many,
+                page_size=100,
+                trace_id=",".join(selected),
+                # Numeric values are core fields. Scope validation needs the
+                # subject, not another copy of prompts in score metadata.
+                fields="subject",
+            )
+        )
+    return observation_rows, score_rows
+
+
 def verify_run(run_dir: Path, dataset_path: Path, *, client=None) -> dict:
     run_dir = Path(run_dir)
     run, tasks, source_hash = _source(run_dir, dataset_path)
@@ -396,25 +901,35 @@ def verify_run(run_dir: Path, dataset_path: Path, *, client=None) -> dict:
     spans, scores, traces = build_payload(
         run, tasks, receipt["dataset_id"], source_hash
     )
+    evidence_path = run_dir / EVIDENCE_RECEIPT
+    evidence_receipt = None
+    evidence = []
+    if evidence_path.exists():
+        evidence_receipt = json.loads(evidence_path.read_text())
+        evidence = build_evidence_payload(spans, source_hash)
+        ids = [span.span_id for span in evidence]
+        if (
+            evidence_receipt.get("version") != EVIDENCE_VERSION
+            or evidence_receipt.get("source_hash") != source_hash
+            or evidence_receipt.get("destination") != destination_fingerprint()
+            or evidence_receipt.get("dataset_id") != receipt["dataset_id"]
+            or evidence_receipt.get("status") not in ("ACCEPTED", "VERIFIED")
+            or evidence_receipt.get("inflight")
+            or evidence_receipt.get("evidence_observation_ids") != ids
+            or evidence_receipt.get("target_observation_ids")
+            != [span.parent_span_id for span in evidence]
+            or set(evidence_receipt.get("accepted_observation_ids", [])) != set(ids)
+        ):
+            raise ValueError("Supplemental evidence receipt identity is invalid")
+        for trace in traces:
+            trace["observation_ids"].extend(
+                span.span_id for span in evidence if span.trace_id == trace["trace_id"]
+            )
+        spans.extend(evidence)
+    evidence_by_target = {span.parent_span_id: span for span in evidence}
     expected_scores = {s.id: s for s in scores}
     expected_spans = {s.span_id: s for s in spans}
-    since = datetime.fromisoformat(run["started_at"])
-    until = datetime.fromisoformat(run["finished_at"])
-    observation_rows = _paginate(
-        client.observations.get_many,
-        page_size=1000,
-        from_start_time=since,
-        to_start_time=until,
-        environment="benchmark",
-        fields="core,basic,io,metadata,model,usage",
-    )
-    score_rows = _paginate(
-        client.scores.get_many,
-        page_size=100,
-        from_timestamp=since,
-        to_timestamp=until,
-        fields="subject,details",
-    )
+    observation_rows, score_rows = _read_remote_evidence(client, spans, traces)
     observations_by_trace, scores_by_trace = defaultdict(list), defaultdict(list)
     for record in observation_rows:
         observations_by_trace[record["trace_id"]].append(record)
@@ -443,18 +958,45 @@ def verify_run(run_dir: Path, dataset_path: Path, *, client=None) -> dict:
             expected_metadata = json.loads(
                 attrs.get("langfuse.observation.metadata", "{}")
             )
-            for field in (
-                "requested_model",
-                "response_model",
-                "tool_call_id",
-                "execution_started",
-            ):
-                if (
-                    field in expected_metadata
-                    and (actual.get("metadata") or {}).get(field)
-                    != expected_metadata[field]
+            proof = evidence_by_target.get(identity)
+            proof_actual = by_id.get(proof.span_id) if proof is not None else None
+            proof_valid = False
+            if proof_actual is not None:
+                proof_metadata = json.loads(
+                    next(
+                        a.value.string_value
+                        for a in proof.attributes
+                        if a.key == "langfuse.observation.metadata"
+                    )
+                )
+                proof_valid = (
+                    proof_actual.get("parent_observation_id") == identity
+                    and proof_actual.get("type", "").lower() == "span"
+                    and all(
+                        _metadata_matches(
+                            proof_metadata, proof_actual.get("metadata") or {}, field
+                        )
+                        for field in EVIDENCE_FIELDS
+                    )
+                )
+            for field in VERIFIED_METADATA_FIELDS:
+                if field in expected_metadata and not _metadata_matches(
+                    expected_metadata, actual.get("metadata") or {}, field
                 ):
-                    errors.append(identity + ":metadata_" + field + "_mismatch")
+                    # The original flattened value and the separately saved
+                    # lossless bytes must BOTH agree. A missing or altered proof
+                    # never authorizes semantic-only comparison.
+                    restored = (
+                        proof_valid
+                        and _contains_json_string(expected_metadata[field])
+                        and _metadata_matches(
+                            _metadata_with_json_values(expected_metadata),
+                            actual.get("metadata") or {},
+                            field,
+                        )
+                    )
+                    if not restored:
+                        errors.append(identity + ":metadata_" + field + "_mismatch")
             if actual.get("parent_observation_id") != expected.parent_span_id:
                 errors.append(identity + ":parent_mismatch")
             if actual.get("type", "").lower() != attrs["langfuse.observation.type"]:
@@ -544,8 +1086,23 @@ def verify_run(run_dir: Path, dataset_path: Path, *, client=None) -> dict:
             "usage, scores and experiment counts. UI verification is separate."
         ),
     }
+    if evidence_receipt is not None:
+        result["supplemental_evidence"] = {
+            "version": EVIDENCE_VERSION,
+            "source_hash": source_hash,
+            "receipt_path": str(evidence_path),
+            "observations": len(evidence),
+            "status": "VERIFIED" if passed else "MISMATCH",
+            "purpose": "Lossless saved metadata presentation; no new trials or calls",
+        }
+        if passed:
+            evidence_receipt.update(status="VERIFIED", verified_at=now())
+            save_json(evidence_path, evidence_receipt)
+        result["supplemental_evidence"]["receipt_sha256"] = hashlib.sha256(
+            evidence_path.read_bytes()
+        ).hexdigest()
     save_json(run_dir / "langfuse_verification.json", result)
-    if passed:
+    if passed and evidence_receipt is None:
         receipt["status"] = "VERIFIED"
         save_json(receipt_path, receipt)
     return {

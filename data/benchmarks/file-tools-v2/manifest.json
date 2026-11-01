@@ -1,0 +1,40 @@
+{
+  "dataset_id": "file-tools-v2",
+  "version": "2.0.0",
+  "contract_version": "file-tools-task-v2",
+  "grader_version": "file-tools-oracle-v1",
+  "tasks_file": "tasks.jsonl",
+  "tasks_sha256": "fbaa09dbfc4d820dc1fea379f24bca6d50e518213c109ef3721777d3ad5d4edb",
+  "case_count": 420,
+  "level_counts": {
+    "chain": 60,
+    "e2e": 300,
+    "module": 60
+  },
+  "category_counts": {
+    "multi_turn": 75,
+    "multi_file": 100,
+    "missing_error": 45,
+    "create_edit": 125,
+    "read_search": 75
+  },
+  "split_counts": {
+    "dev": 340,
+    "holdout": 80
+  },
+  "family_count": 104,
+  "split_strategy": "Family-disjoint; inherited v1 splits; last two of twelve new families per layer held out.",
+  "source_v1_sha256": "5b3a4feb3f82ba9a6b2c2eeebc9904f0fbb19069cdf46087bfbaa4fb35fe666f",
+  "provenance": {
+    "source": "AI-assisted authored synthetic fixtures and private checkpoint contracts",
+    "human_reviewed": false,
+    "module_execution": "Real nanobot ToolRegistry and filesystem implementations, no model provider"
+  },
+  "limitations": [
+    "300 E2E instances reuse 80 v1 families; three Markdown prompts clarified without oracle changes.",
+    "60 module and 60 chain instances are five parameter variants in each of 12 families.",
+    "Module population measures program boundaries, not LLM tool selection/planning/session management.",
+    "Chains use fixed follow-ups; no dynamic user simulator. Filesystem only.",
+    "Checkpoint presence is not completed execution; result evidence is produced separately."
+  ]
+}

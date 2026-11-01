@@ -20,7 +20,7 @@ from deepeval.test_case import LLMTestCase, SingleTurnParams, ToolCall
 
 from .oracle import evaluate_oracle
 
-METRICS_VERSION = "file-tools-deepeval-v1.1"
+METRICS_VERSION = "file-tools-deepeval-v2.1"
 RESPONSE_RUBRIC_VERSION = "file-tools-response-diagnostic-v1"
 
 
@@ -91,6 +91,25 @@ class TaskSuccessMetric(_BenchmarkMetric):
         return float(result["success"] and completed), "; ".join(
             failed
         ) or "All independent task checks passed"
+
+
+class DecisionMetric(_BenchmarkMetric):
+    def __init__(self, name: str, prefix: str):
+        self.name, self.prefix = name, prefix
+
+    @property
+    def __name__(self) -> str:
+        return self.name
+
+    def evaluate(self, task, observation) -> tuple[float, str]:
+        checks = [
+            c
+            for c in evaluate_oracle(task, observation)["checks"]
+            if c["name"].startswith(self.prefix)
+        ]
+        return float(bool(checks) and all(c["passed"] for c in checks)), "; ".join(
+            c["reason"] for c in checks
+        )
 
 
 class WorkspacePolicyMetric(_BenchmarkMetric):
@@ -222,6 +241,25 @@ def _evidence_problem(
         return "INCONCLUSIVE", "Missing or malformed turns evidence"
     if not turns and observation["status"] == "completed":
         return "INCONCLUSIVE", "Completed execution has no response evidence"
+    if task.get("execution_mode") == "decision":
+        generations = [
+            e for e in events if e.get("type") == "generation" and not e.get("is_judge")
+        ]
+        if len(generations) != 1 or not isinstance(generations[0].get("output"), dict):
+            return "INCONCLUSIVE", "Isolated model decision evidence is missing"
+        if not isinstance(generations[0]["output"].get("tool_calls"), list):
+            return "INCONCLUSIVE", "Model tool-call decision evidence is missing"
+        tools = generations[0].get("input", {}).get("tools")
+        if (
+            not isinstance(tools, list)
+            or not tools
+            or not all(
+                isinstance(t, dict)
+                and isinstance(t.get("function", {}).get("parameters"), dict)
+                for t in tools
+            )
+        ):
+            return "INCONCLUSIVE", "Recorded model decision tool schemas are missing"
     expected_inputs = [task["prompt"], *task.get("followups", [])]
     for index, turn in enumerate(turns):
         if index >= len(expected_inputs) or turn.get("input") != expected_inputs[index]:
@@ -299,7 +337,23 @@ def score_task(task: dict[str, Any], observation: dict[str, Any]) -> dict[str, A
     try:
         test_case = _test_case(task, observation)
         metrics: list[BaseMetric] = [TaskSuccessMetric(), WorkspacePolicyMetric()]
-        if task.get("required_tools"):
+        decision_event = None
+        if task.get("execution_mode") == "decision":
+            decision_event = next(
+                e for e in observation["events"] if e["type"] == "generation"
+            )
+            metrics.append(
+                DecisionMetric("decision_call_policy", "decision_call_count")
+            )
+            if decision_event["output"].get("tool_calls"):
+                metrics.extend(
+                    [
+                        DecisionMetric("decision_tool_selection", "decision_tool:"),
+                        DecisionMetric("decision_arguments", "decision_arguments:"),
+                        DecisionMetric("decision_schema", "decision_schema:"),
+                    ]
+                )
+        if task.get("required_tools") and task.get("execution_mode") != "decision":
             if observation.get("execution_kind") != "deterministic_reference_not_agent":
                 metrics.append(InteractiveEvidenceMetric())
             metrics.append(
@@ -321,6 +375,10 @@ def score_task(task: dict[str, Any], observation: dict[str, Any]) -> dict[str, A
                 else None
             )
             record = _metric_record(metric, name=name)
+            if isinstance(metric, DecisionMetric):
+                record.update(
+                    scope="generation", event_id=decision_event["id"], status="SCORED"
+                )
             if isinstance(metric, ToolCorrectnessMetric):
                 record["semantics"] = (
                     "Reference tool-name coverage; not a unique required execution path"
@@ -331,6 +389,13 @@ def score_task(task: dict[str, Any], observation: dict[str, Any]) -> dict[str, A
                     "allow_extra_calls": True,
                 }
             result["metrics"].append(record)
+        if task.get("evaluation_level") or task.get("checkpoints"):
+            from .trajectory import score_trajectory
+
+            result["metrics"].extend(score_trajectory(task, observation))
+            from .recovery_scoring import score_recovery_policy
+
+            result["metrics"].extend(score_recovery_policy(task, observation))
     except Exception as exc:
         result.update(verdict="INVALID", validity="INVALID", metrics=[])
         result["errors"].append(
@@ -339,11 +404,16 @@ def score_task(task: dict[str, Any], observation: dict[str, Any]) -> dict[str, A
             )
         )
         return result
-    result["verdict"] = (
-        "PASS"
-        if all(metric["success"] for metric in result["metrics"] if metric["formal"])
-        else "FAIL"
-    )
+    formal = [metric for metric in result["metrics"] if metric["formal"]]
+    if any(metric.get("success") is False for metric in formal):
+        result["verdict"] = "FAIL"
+    elif any(
+        metric.get("score") is None or metric.get("success") is None
+        for metric in formal
+    ):
+        result["verdict"] = "INCONCLUSIVE"
+    else:
+        result["verdict"] = "PASS"
     return result
 
 
@@ -355,6 +425,7 @@ class OpenAICompatibleJudge(DeepEvalBaseLLM):
 
         self.model_name = config["model"]
         self.max_tokens = int(config.get("max_tokens", 1000))
+        self.extra_body = dict(config.get("extra_body", {}))
         key = config.get("api_key") or os.environ.get(
             config.get("api_key_env", "OPENAI_API_KEY")
         )
@@ -392,6 +463,7 @@ class OpenAICompatibleJudge(DeepEvalBaseLLM):
             temperature=0,
             max_tokens=self.max_tokens,
             response_format={"type": "json_object"},
+            extra_body=self.extra_body,
         )
         output = response.choices[0].message.content or ""
         usage = response.usage
@@ -400,6 +472,7 @@ class OpenAICompatibleJudge(DeepEvalBaseLLM):
                 "type": "generation",
                 "name": "deepeval_response_judge",
                 "model": self.model_name,
+                "response_model": getattr(response, "model", None),
                 "start_time": started,
                 "end_time": datetime.now(UTC).isoformat(),
                 "input": content,

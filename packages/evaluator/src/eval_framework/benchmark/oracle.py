@@ -96,6 +96,83 @@ def evaluate_oracle(
             re.search(token_pattern, output) is not None,
             f"Final response must contain the requested literal token {token!r}",
         )
+    tool_events = [e for e in observation.get("events", []) if e.get("type") == "tool"]
+    for expectation in oracle.get("module_results", []):
+        index = expectation["call"] - 1
+        event = tool_events[index] if 0 <= index < len(tool_events) else None
+        actual_error = event.get("is_error", event.get("tool_error")) if event else None
+        check(
+            f"module_result:{expectation['call']}",
+            event is not None
+            and isinstance(actual_error, bool)
+            and actual_error == expectation["error"]
+            and all(
+                token in str(event.get("output", ""))
+                for token in expectation.get("output_contains", [])
+            ),
+            "Real module result must match the declared error and output assertions",
+        )
+    if "decision" in oracle:
+        expectation = oracle["decision"]
+        generations = [
+            e
+            for e in observation.get("events", [])
+            if e.get("type") == "generation" and not e.get("is_judge")
+        ]
+        output = generations[0].get("output") if len(generations) == 1 else None
+        calls = output.get("tool_calls") if isinstance(output, dict) else None
+        valid_calls = isinstance(calls, list) and all(
+            isinstance(c, dict) for c in calls
+        )
+        check(
+            "decision_evidence",
+            valid_calls,
+            "One actual model decision with tool call evidence is required",
+        )
+        if valid_calls:
+            from jsonschema import Draft202012Validator
+
+            definitions = generations[0].get("input", {}).get("tools", [])
+            schemas = {
+                definition.get("function", {}).get("name"): definition.get(
+                    "function", {}
+                ).get("parameters")
+                for definition in definitions
+                if isinstance(definition, dict)
+            }
+            check(
+                "decision_call_count",
+                len(calls) <= expectation["max_calls"]
+                and (bool(calls) or expectation["allow_no_tool"]),
+                "Model must respect the expected call or abstention boundary",
+            )
+            for index, call in enumerate(calls):
+                arguments = call.get("arguments")
+                schema = schemas.get(call.get("name"))
+                check(
+                    f"decision_schema:{index}",
+                    isinstance(schema, dict)
+                    and Draft202012Validator(schema).is_valid(arguments),
+                    "Model-generated arguments must satisfy the recorded tool schema",
+                )
+                check(
+                    f"decision_tool:{index}",
+                    call.get("name") in expectation["acceptable_tools"],
+                    "Selected tool must belong to the private acceptable set",
+                )
+                check(
+                    f"decision_arguments:{index}",
+                    isinstance(arguments, dict)
+                    and all(
+                        type(arguments.get(k)) is type(v) and arguments.get(k) == v
+                        for k, v in expectation.get("arguments", {}).items()
+                    ),
+                    "Actual model arguments must match required semantic values",
+                )
+    if task.get("execution_mode") == "module":
+        from .module_oracle import evaluate_module_calls
+
+        checks.extend(evaluate_module_calls(task, observation))
     return {
         "success": all(check["passed"] for check in checks),
         "checks": checks,
