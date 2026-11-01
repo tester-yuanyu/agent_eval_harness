@@ -68,7 +68,7 @@ Agent 自身的 `timeout` 或已归类的 Agent error 在终态证据可用时�
 | `missing_evidence` | 空 | 当前或此前同轮证据不完整、冲突，或时间顺序不能证明；未知不能记为“无重复”。 |
 | `no_tool_calls` / `unsupported_tool` | 空 | 分别为完整轨迹没有工具调用，或工具超出四个本地文件工具；状态为 `NOT_APPLICABLE`。 |
 
-该诊断不判断调用是否必要，不自动判定 Agent 失败，也不应把 `score=1` 命名为“效率通过”。具体分类规则仍须在协调者集成时与最终实现及测试逐项校对；在新诊断对既有 chain / E2E 保存证据的离线验收见[质量检查报告](../../reports/evaluation-quality-v1/README.md)，不增加原始执行次数。完整轨迹中逐工具统计；全轨迹证据无效时产生一条任务级 MISSING，另计 `unscorable_traces`，不能据此声称已知完整工具调用数。
+该诊断不判断调用是否必要，不自动判定 Agent 失败，也不应把 `score=1` 命名为“效率通过”。分类规则已与实现和测试核对；对既有 chain / E2E 保存证据的离线验收见[质量检查报告](../../reports/evaluation-quality-v1/README.md)，不增加原始执行次数。完整轨迹中逐工具统计；全轨迹证据无效时产生一条任务级 MISSING，另计 `unscorable_traces`，不能据此声称已知完整工具调用数。
 
 ## 5. LLM Judge 诊断
 
@@ -157,7 +157,7 @@ Judge 汇总公式如下。设总记录数为 `N`，`NA` 为 `NOT_APPLICABLE` �
 
 每次运行应保存数据集 Hash、任务契约与 Oracle 版本、Harness 版本及源码 Hash、评分版本、DeepEval 库版本、配置和来源结果 Hash。评分源码身份当前覆盖 `metrics.py`、`oracle.py`、`tasks.py`、`trajectory.py`、`module_oracle.py`、`recovery_scoring.py`、`repetition.py`。v2.2 增加重复候选诊断，正式规则沿用 v2.1；新执行或复评使用新身份，不改写旧结果。
 
-报告只聚合保存的 `results.json`，不重新执行 Agent 或指标。分数必须能通过 `event_id`/`evidence_ids` 回到原事件；Judge 还保存 `metric_id`、rubric Hash、Judge 版本、模型调用事件和来源运行 Hash。可变别名必须在正式使用前解析为固定资产身份。
+常规 `report` 命令只聚合保存的 `results.json`，不重新执行 Agent 或指标。新增 `quality-audit` 会对保存轨迹计算重复候选诊断，输出到新目录，不执行 Agent、不调用模型、不改写原始评分。分数必须能通过 `event_id`/`evidence_ids` 回到原事件；Judge 还保存 `metric_id`、rubric Hash、Judge 版本、模型调用事件和来源运行 Hash。可变别名必须在正式使用前解析为固定资产身份。
 
 ## 9. 已有结果只能证明什么
 

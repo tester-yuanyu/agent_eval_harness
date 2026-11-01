@@ -35,3 +35,5 @@
 [校准状态报告](calibration-status.md)逐维度保留分母、混淆矩阵及缺失项；目前人工标签为 0，一致性与误判率未知。[证据清单](evidence.json)绑定来源 Hash，并保留已有重复评分稳定性。已有 69 个指标各复评 2 次，平均极差约 0.0319、最大极差 0.4；这不能替代人工一致性验证。
 
 执行说明见[人工标注指南](../../docs/benchmark/judge-annotation-guide.md)，口径见[指标规格](../../docs/benchmark/metric-specification.md)。
+
+[验收记录](../../docs/migration/evaluation-quality-acceptance-2026-11-01.md)与[机器验证记录](verification.json)列出测试、安装演示、来源不变性及尚未完成人工验收的边界。

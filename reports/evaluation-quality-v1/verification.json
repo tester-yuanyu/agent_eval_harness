@@ -1,0 +1,350 @@
+{
+  "version": "evaluation-quality-verification-v1",
+  "date": "2026-11-01",
+  "implementation_commit": "b4ca725e9a67963f908dbc9596bc57e24bb8b29d",
+  "repository_regression": {
+    "command": "python3 scripts/test_all.py",
+    "exit_code": 0,
+    "passed": 1689,
+    "skipped": 8,
+    "groups": [
+      {
+        "group": "contracts",
+        "passed": 1,
+        "skipped": 0,
+        "exit_code": 0,
+        "log": "artifacts/verification/contracts.log",
+        "log_sha256": "781d8adb85d573445f0a3aa93007fd37217a9bd16cb36bbbb550e5b91756898b"
+      },
+      {
+        "group": "builder",
+        "passed": 353,
+        "skipped": 5,
+        "exit_code": 0,
+        "log": "artifacts/verification/builder.log",
+        "log_sha256": "31b6022e56fc48cfbb348587e0578588808d3c5aa39fefb6c7a204e3e78e7545"
+      },
+      {
+        "group": "agent",
+        "passed": 323,
+        "skipped": 1,
+        "exit_code": 0,
+        "log": "artifacts/verification/agent.log",
+        "log_sha256": "ab6e649a387f2d8a4d76830e200a0d559788ec6aeca9a027d5949fee7caaa32c"
+      },
+      {
+        "group": "evaluator",
+        "passed": 956,
+        "skipped": 2,
+        "exit_code": 0,
+        "log": "artifacts/verification/evaluator.log",
+        "log_sha256": "dd2980b468b67e20e1f8025fcd17a9232b5294ab6d3306b48046eea7c3b5579f"
+      },
+      {
+        "group": "integration",
+        "passed": 56,
+        "skipped": 0,
+        "exit_code": 0,
+        "log": "artifacts/verification/integration.log",
+        "log_sha256": "1c18cc2c1198c45bf90640f54de5b72053c0273ac374000cf4a8ff7beb9c5b5f"
+      }
+    ],
+    "sdk": "validated_by_consumers",
+    "skip_reasons": {
+      "optional_deepeval_dependency": 5,
+      "paid_model_smoke_opt_in_disabled": 3
+    }
+  },
+  "frozen_assets": {
+    "command": "python3 scripts/verify_assets.py",
+    "exit_code": 0,
+    "verified": 1172
+  },
+  "lint": {
+    "changed_files_exit": 0,
+    "full_lint_exit": 1,
+    "full_lint_findings": 22,
+    "baseline_findings_in_same_files": 22,
+    "codes": [
+      "I001"
+    ],
+    "files": [
+      "packages/evaluator/tests/benchmark/test_decision_runtime.py",
+      "packages/evaluator/tests/benchmark/test_harness_integration.py",
+      "packages/evaluator/tests/benchmark/test_judge_run.py",
+      "packages/evaluator/tests/benchmark/test_judging.py",
+      "packages/evaluator/tests/benchmark/test_langfuse_exact_evidence.py",
+      "packages/evaluator/tests/benchmark/test_langfuse_export.py",
+      "packages/evaluator/tests/benchmark/test_langfuse_metadata.py",
+      "packages/evaluator/tests/benchmark/test_layered_tasks.py",
+      "packages/evaluator/tests/benchmark/test_module_oracle.py",
+      "packages/evaluator/tests/benchmark/test_module_runtime.py",
+      "packages/evaluator/tests/benchmark/test_nanobot_runtime.py",
+      "packages/evaluator/tests/benchmark/test_recovery_scoring.py",
+      "packages/evaluator/tests/benchmark/test_regrade.py",
+      "packages/evaluator/tests/benchmark/test_report.py",
+      "packages/evaluator/tests/benchmark/test_runner.py",
+      "packages/evaluator/tests/benchmark/test_scoped_export.py",
+      "packages/evaluator/tests/benchmark/test_tasks.py",
+      "packages/evaluator/tests/benchmark/test_tau_adapter.py",
+      "packages/evaluator/tests/benchmark/test_tau_harness.py",
+      "packages/evaluator/tests/benchmark/test_trajectory.py",
+      "packages/evaluator/tests/test_conversation_metric.py"
+    ]
+  },
+  "ui_verification": {
+    "surface": "local_browser",
+    "screenshot_reviewed": true,
+    "cards": 36,
+    "nonempty_scores": 0,
+    "checked_independence": 0,
+    "nonempty_annotators": 0,
+    "export_javascript": "validated_by_Node_in_unit_tests"
+  },
+  "independent_review": {
+    "implementation": "approved_after_source_identity_and_diagnostic_failure_isolation_fixes",
+    "documentation": "no_blocking_inconsistency"
+  },
+  "saved_sources": [
+    {
+      "file": "artifacts/benchmark-v2/chains60x3-scored/results.json",
+      "sha256": "769dcc543feb5ab2decc4043aa49a65e417ae570a0ed8ff9299548bf0f0201e3",
+      "unchanged": true
+    },
+    {
+      "file": "artifacts/benchmark-v2/e2e300-scored/results.json",
+      "sha256": "6f95ca77865b0e0473cd3c82c33b08dd7a85d4e415dc1c3d920f72203e00dc3a",
+      "unchanged": true
+    },
+    {
+      "file": "artifacts/benchmark/baseline300x3/results.json",
+      "sha256": "edda7834859907a80339ebeef043c306601e1bf906c91b14253b52506af4f722",
+      "unchanged": true
+    },
+    {
+      "file": "artifacts/benchmark/tool-aware300x3/results.json",
+      "sha256": "2b6f3d220e3565efff37c27122b80e6aefd4055e56ff8dc163cdf16d20bbe7ad",
+      "unchanged": true
+    },
+    {
+      "file": "reports/file-tools-v2/calibration-sample.json",
+      "sha256": "8ea5ccaf86e5e35b9437b6044a2d850ab3dde4149051091081de7b3a5769d761",
+      "unchanged": true
+    },
+    {
+      "file": "artifacts/benchmark-v2/chain-judge/results.json",
+      "sha256": "0aef74f00158d10758fbb99cb81093e121e33e4c18b0d25338a9f0a123e66542",
+      "unchanged": true
+    },
+    {
+      "file": "reports/file-tools-v2/summary.json",
+      "sha256": "66f20b7a42551f5bb8ed1d3048fd521ce942e2bbca93931cc417bae2c08a6e36",
+      "unchanged": true
+    }
+  ],
+  "offline_audit_reproduction": {
+    "command": ".venvs/evaluator/bin/python -m eval_framework.benchmark.cli quality-audit --run artifacts/benchmark-v2/chains60x3-scored --run artifacts/benchmark-v2/e2e300-scored --dataset data/benchmarks/file-tools-v2 --baseline artifacts/benchmark/baseline300x3 --candidate artifacts/benchmark/tool-aware300x3 --output artifacts/evaluation-quality-v1/audit-final",
+    "exit_code": 0,
+    "summary_and_records_identical_to_delivered": true
+  },
+  "limits": {
+    "new_model_requests": 0,
+    "hosted_uploads": 0,
+    "independent_human_labels": 0,
+    "threshold_validation": "pending",
+    "new_v2_ab_comparison": "not_run"
+  },
+  "clean_clone": {
+    "status": "passed",
+    "commit": "b4ca725e9a67963f908dbc9596bc57e24bb8b29d",
+    "full_record": "artifacts/evaluation-quality-v1/clean-clone-verification.json",
+    "full_record_sha256": "2c95cf923baf540d19a2395cd7c066752704e6571d03fb5ea4319a20feefe9aa",
+    "environment_directory": "artifacts/evaluation-quality-v1/clean-clone/.venvs/core",
+    "environment_policy": {
+      "removed_name_substrings": [
+        "API_KEY",
+        "SECRET",
+        "TOKEN",
+        "LANGFUSE",
+        "SMOKE",
+        "PYTHONPATH"
+      ],
+      "DEEPEVAL_TELEMETRY_OPT_OUT": "YES",
+      "PYTHONNOUSERSITE": "1",
+      "copied_virtual_environment": false,
+      "real_model_calls": 0,
+      "hosted_uploads": 0
+    },
+    "environment_lock_hashes": {
+      "environments/core.txt": "09f304f67cd059255538c52239ecc0342d3216e17f90dcbd3476e017ef47f0c7",
+      "environments/evaluator.txt": "3ee9ec5642ec30df7c7aef9121ed74390494876fb7a4ece6ed37c290ae5ed93b"
+    },
+    "python_version": "3.11.4",
+    "mini_agent_present": false,
+    "core_import": "passed",
+    "artifact_verification": {
+      "demo_trials": 5,
+      "demo_mode": "offline_reference_smoke",
+      "demo_passes": 5,
+      "blank_annotation_rows": 36,
+      "blank_controls": 144
+    },
+    "targeted_smoke": {
+      "passed": 94,
+      "failed": 0,
+      "duration_seconds": 2.56
+    },
+    "tracked_clone_clean": true,
+    "initial_attempts": [
+      {
+        "name": "install-core",
+        "result": "failed",
+        "cause": "System proxy TLS handshake timeout while retrieving setuptools build dependency"
+      },
+      {
+        "name": "install-core-cached",
+        "result": "failed",
+        "cause": "Available pip wheel cache lacks locked pydantic==2.14.1; constraints were preserved"
+      }
+    ],
+    "successful_installation": "Official PyPI direct, NO_PROXY=*, original constraints, fresh venv",
+    "commands": [
+      {
+        "name": "clone",
+        "cwd": ".",
+        "log": "artifacts/evaluation-quality-v1/clean-clone-logs/clone.log",
+        "exit_code": 0,
+        "log_sha256": "8d1e14eba747862ede4ebb967a4243b77b3db87d0eb84278909abff5ba9a5565"
+      },
+      {
+        "name": "commit",
+        "cwd": "artifacts/evaluation-quality-v1/clean-clone",
+        "log": "artifacts/evaluation-quality-v1/clean-clone-logs/commit.log",
+        "exit_code": 0,
+        "log_sha256": "0678cad7c602c47ee985e2e08074b07014d4e1ff674daa4284fc4e9ea87eb6cf"
+      },
+      {
+        "name": "install-core",
+        "cwd": "artifacts/evaluation-quality-v1/clean-clone",
+        "log": "artifacts/evaluation-quality-v1/clean-clone-logs/install-core.log",
+        "exit_code": 1,
+        "log_sha256": "a241d378fe481070dfe3c5afa22a0e8bbf6b65fdee0e572e3876003b5d23919f"
+      },
+      {
+        "name": "commit",
+        "cwd": "artifacts/evaluation-quality-v1/clean-clone",
+        "log": "artifacts/evaluation-quality-v1/clean-clone-logs/commit.log",
+        "exit_code": 0,
+        "log_sha256": "0678cad7c602c47ee985e2e08074b07014d4e1ff674daa4284fc4e9ea87eb6cf"
+      },
+      {
+        "name": "install-core-cached",
+        "cwd": "artifacts/evaluation-quality-v1/clean-clone",
+        "log": "artifacts/evaluation-quality-v1/clean-clone-logs/install-core-cached.log",
+        "exit_code": 1,
+        "log_sha256": "7068df67490015742636a330346a4035b06aca65e5845358feba403a54d273c6"
+      },
+      {
+        "name": "commit",
+        "cwd": "artifacts/evaluation-quality-v1/clean-clone",
+        "log": "artifacts/evaluation-quality-v1/clean-clone-logs/commit.log",
+        "exit_code": 0,
+        "log_sha256": "0678cad7c602c47ee985e2e08074b07014d4e1ff674daa4284fc4e9ea87eb6cf"
+      },
+      {
+        "name": "install-core-direct",
+        "cwd": "artifacts/evaluation-quality-v1/clean-clone",
+        "log": "artifacts/evaluation-quality-v1/clean-clone-logs/install-core-direct.log",
+        "exit_code": 0,
+        "log_sha256": "821397a12f81f3a2c4616c7aab227c6a346f37673709fc0d3783b2590d974169"
+      },
+      {
+        "name": "pip-check",
+        "cwd": "artifacts/evaluation-quality-v1/clean-clone",
+        "log": "artifacts/evaluation-quality-v1/clean-clone-logs/pip-check.log",
+        "exit_code": 0,
+        "log_sha256": "9261363b733079a641c2e4cc9bc46ffa1d8336945a87f807b6cf68847dbc9b09"
+      },
+      {
+        "name": "core-import-no-mini-agent",
+        "cwd": "artifacts/evaluation-quality-v1/clean-clone",
+        "log": "artifacts/evaluation-quality-v1/clean-clone-logs/core-import-no-mini-agent.log",
+        "exit_code": 0,
+        "log_sha256": "799f71160623bb28e02dd1ad2e604b7bf580fda34ebeb908dbf1833bc921116f"
+      },
+      {
+        "name": "cli-help",
+        "cwd": "artifacts/evaluation-quality-v1/clean-clone",
+        "log": "artifacts/evaluation-quality-v1/clean-clone-logs/cli-help.log",
+        "exit_code": 0,
+        "log_sha256": "819b56aaec57ee5c6e36138b5efe3adb87a12249547656bb9d762c6a49f6a6a2"
+      },
+      {
+        "name": "calibration-page-help",
+        "cwd": "artifacts/evaluation-quality-v1/clean-clone",
+        "log": "artifacts/evaluation-quality-v1/clean-clone-logs/calibration-page-help.log",
+        "exit_code": 0,
+        "log_sha256": "ead5fefe835d0fc758da74d04f74633691928cd69eb69655ff81c916ceb25bd9"
+      },
+      {
+        "name": "demo-v1-five",
+        "cwd": "artifacts/evaluation-quality-v1/clean-clone",
+        "log": "artifacts/evaluation-quality-v1/clean-clone-logs/demo-v1-five.log",
+        "exit_code": 0,
+        "log_sha256": "a3f4ecab8b0c5f8e41441e6d9020de08ac5143704cf6159d9a3790df598e0751"
+      },
+      {
+        "name": "demo-report",
+        "cwd": "artifacts/evaluation-quality-v1/clean-clone",
+        "log": "artifacts/evaluation-quality-v1/clean-clone-logs/demo-report.log",
+        "exit_code": 0,
+        "log_sha256": "56a5d3fc864c639b4efa7a5547606fd5399b86b9c640a7961cb3e81c57af5df6"
+      },
+      {
+        "name": "calibration-page-36",
+        "cwd": "artifacts/evaluation-quality-v1/clean-clone",
+        "log": "artifacts/evaluation-quality-v1/clean-clone-logs/calibration-page-36.log",
+        "exit_code": 0,
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "name": "new-cli-core-smoke",
+        "cwd": "artifacts/evaluation-quality-v1/clean-clone",
+        "log": "artifacts/evaluation-quality-v1/clean-clone-logs/new-cli-core-smoke.log",
+        "exit_code": 0,
+        "log_sha256": "f71cafe52ca010b56463a4a6083d004c7613ff2640157976ad6a828fb8f3cc10"
+      },
+      {
+        "name": "artifact-verification",
+        "cwd": "artifacts/evaluation-quality-v1/clean-clone",
+        "log": "artifacts/evaluation-quality-v1/clean-clone-logs/artifact-verification.log",
+        "exit_code": 0,
+        "log_sha256": "30ac94651a9c4212faa7628c73ffee6e3b3d058339860fbf783fded12ed78eda"
+      },
+      {
+        "name": "tracked-status",
+        "cwd": "artifacts/evaluation-quality-v1/clean-clone",
+        "log": "artifacts/evaluation-quality-v1/clean-clone-logs/tracked-status.log",
+        "exit_code": 0,
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ],
+    "generated_artifacts": [
+      {
+        "path": "artifacts/evaluation-quality-v1/clean-clone/artifacts/clean-verification/demo-v1-five/results.json",
+        "sha256": "85fcbaee378c50101c2341106e10284747fab5ab89b81d30e63b9815c73ad213",
+        "bytes": 23625
+      },
+      {
+        "path": "artifacts/evaluation-quality-v1/clean-clone/artifacts/clean-verification/demo-v1-five/report.html",
+        "sha256": "a93ce7a268d97364db5f5bde90ba7604cf612c9abe65d0574ab1023ea7e58438",
+        "bytes": 25646
+      },
+      {
+        "path": "artifacts/evaluation-quality-v1/clean-clone/artifacts/clean-verification/annotation-36.html",
+        "sha256": "745686ad76e9b95d565c944be87668fc19226e3f0cdb119c2bd1aee708e2e6d9",
+        "bytes": 1359822
+      }
+    ]
+  }
+}
