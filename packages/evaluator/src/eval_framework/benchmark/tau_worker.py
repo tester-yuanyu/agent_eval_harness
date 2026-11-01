@@ -15,6 +15,7 @@ import sys
 from concurrent.futures import CancelledError
 from contextvars import ContextVar
 from copy import deepcopy
+from datetime import UTC, datetime
 from pathlib import Path
 from queue import Queue
 from threading import Thread
@@ -25,6 +26,90 @@ try:
     from .tau_adapter import redact_secrets, verify_imported_tau
 except ImportError:  # The isolated subprocess executes this file directly.
     from tau_adapter import redact_secrets, verify_imported_tau
+
+
+def public_tau_messages(messages: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Copy public τ participant messages without provider-private state."""
+    keys = {"role", "content", "tool_calls", "tool_call_id", "name"}
+    return [
+        {key: deepcopy(value) for key, value in message.items() if key in keys}
+        for message in messages
+    ]
+
+
+class TauEvidence:
+    """τ rendezvous evidence, independent of the file-tool Inspect bridge.
+
+    The official orchestrator owns domain execution and reward. These records
+    retain public agent/user interactions and pending tool handoffs only.
+    """
+
+    def __init__(self, path: Path, secret: str = "") -> None:
+        self.path = path
+        self.secret = secret
+        self.events: list[dict[str, Any]] = []
+        self.turn_id: str | None = None
+        self.turn_index: int | None = None
+
+    def write(self, event: dict[str, Any]) -> None:
+        # Redact before JSON escaping so credentials containing quotes are
+        # protected as well. In-memory native messages remain untouched.
+        def clean(value: Any) -> Any:
+            if isinstance(value, str):
+                return (
+                    value.replace(self.secret, "[REDACTED]") if self.secret else value
+                )
+            if isinstance(value, list):
+                return [clean(item) for item in value]
+            if isinstance(value, dict):
+                return {clean(key): clean(item) for key, item in value.items()}
+            return value
+
+        with self.path.open("a", encoding="utf-8") as stream:
+            stream.write(
+                json.dumps(clean(event), ensure_ascii=False, default=str) + "\n"
+            )
+            stream.flush()
+
+    def start(
+        self, kind: str, name: str, input_value: Any, **extra: Any
+    ) -> dict[str, Any]:
+        event = {
+            "id": uuid4().hex,
+            "type": kind,
+            "name": name,
+            "start_time": datetime.now(UTC).isoformat(),
+            "end_time": None,
+            "input": deepcopy(input_value),
+            "output": None,
+            "usage": {},
+            "parent_id": self.turn_id,
+            "turn": self.turn_index,
+            **extra,
+        }
+        self.events.append(event)
+        self.write(event)
+        return event
+
+    def finish(self, event: dict[str, Any], output: Any, **extra: Any) -> None:
+        event.update(
+            end_time=datetime.now(UTC).isoformat(), output=deepcopy(output), **extra
+        )
+        self.write(event)
+
+
+def load_tau_evidence(path: Path) -> list[dict[str, Any]]:
+    """Merge append updates; a truncated final write retains the pending event."""
+    events = {}
+    if path.exists():
+        for line in path.read_text(encoding="utf-8").splitlines():
+            try:
+                event = json.loads(line)
+                if isinstance(event, dict) and isinstance(event.get("id"), str):
+                    events[event["id"]] = event
+            except ValueError:
+                continue
+    return list(events.values())
 
 
 def evidence_issues(events: list[dict], termination_reason: str) -> list[dict]:
@@ -76,7 +161,6 @@ def make_nanobot_agent(
     from nanobot.providers.base import GenerationSettings
     from nanobot.providers.openai_compat_provider import OpenAICompatProvider
     from nanobot.session.manager import JsonlSessionStore, SessionManager
-    from nanobot_worker import Journal, public_messages
     from tau2.agent.base_agent import HalfDuplexAgent
     from tau2.agent.llm_agent import AGENT_INSTRUCTION
     from tau2.data_model.message import (
@@ -104,7 +188,7 @@ def make_nanobot_agent(
         AGENT_INSTRUCTION + "\n\n<policy>\n" + domain_policy + "\n</policy>\n"
     )
     set_config_path(directory / "isolated-config.json")
-    journal = Journal(
+    journal = TauEvidence(
         directory / "nanobot-events.jsonl",
         os.environ.get(config.get("agent_api_key_env", "DEEPSEEK_API_KEY"), ""),
     )
@@ -151,7 +235,7 @@ def make_nanobot_agent(
                 "generation",
                 config["agent_model"],
                 {
-                    "messages": public_messages(messages),
+                    "messages": public_tau_messages(messages),
                     "tools": deepcopy(kwargs.get("tools")),
                     "model": kwargs.get("model"),
                 },
@@ -447,8 +531,7 @@ def execute(payload: dict[str, Any]) -> dict[str, Any]:
     import tau2
 
     actual_tau_module = verify_imported_tau(tau2.__file__, config["source_root"])
-    from nanobot_runtime import _journal_events, runtime_identity, utc_now
-    from nanobot_worker import Journal
+    from nanobot_runtime import runtime_identity, utc_now
     from tau2.data_model.tasks import RewardType
     from tau2.evaluator.evaluator import EvaluationType
     from tau2.evaluator.evaluator_nl_assertions import DEFAULT_LLM_NL_ASSERTIONS
@@ -548,7 +631,7 @@ def execute(payload: dict[str, Any]) -> dict[str, Any]:
                     "timeout": float(config.get("provider_timeout_seconds", 60)),
                 },
             )
-            user_journal = Journal(
+            user_journal = TauEvidence(
                 directory / "user-simulator-events.jsonl",
                 os.environ.get(config.get("user_api_key_env", "DEEPSEEK_API_KEY"), ""),
             )
@@ -606,8 +689,8 @@ def execute(payload: dict[str, Any]) -> dict[str, Any]:
                     )
                 )
                 events = sorted(
-                    _journal_events(directory / "nanobot-events.jsonl")
-                    + _journal_events(directory / "user-simulator-events.jsonl"),
+                    load_tau_evidence(directory / "nanobot-events.jsonl")
+                    + load_tau_evidence(directory / "user-simulator-events.jsonl"),
                     key=lambda event: event["start_time"],
                 )
                 turns = [event for event in events if event["type"] == "turn"]

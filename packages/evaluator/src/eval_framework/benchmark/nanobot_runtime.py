@@ -121,7 +121,10 @@ def runtime_identity(config: dict[str, Any]) -> dict[str, Any]:
         ["git", "-C", str(root), "rev-parse", "HEAD"],
         text=True,
     ).strip()
-    from .inspect_docker import source_digest, source_files
+    if __package__:
+        from .inspect_docker import source_digest, source_files
+    else:  # Optional workers import this module under their own interpreter.
+        from inspect_docker import source_digest, source_files
 
     source_hash = source_digest(source_files(root))
     return {

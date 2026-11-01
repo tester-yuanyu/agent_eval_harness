@@ -360,3 +360,68 @@ print(json.dumps(execute({"config":cfg,"output":sys.argv[3]})))
     assert any(
         e["name"] == "exchange_delivered_order_items" for e in observed["events"]
     )
+
+
+def test_tau_evidence_preserves_updates_truncation_and_public_messages(tmp_path):
+    from eval_framework.benchmark.tau_worker import (
+        TauEvidence,
+        load_tau_evidence,
+        public_tau_messages,
+    )
+
+    path = tmp_path / "tau-events.jsonl"
+    secret = 'private-key-"quoted"'
+    journal = TauEvidence(path, secret)
+    journal.turn_index = 1
+    turn = journal.start("turn", "tau-turn", "public request")
+    journal.turn_id = turn["id"]
+    messages = [
+        {
+            "role": "assistant",
+            "content": secret,
+            "reasoning_content": "private reasoning",
+            "provider_continuation": "opaque",
+            "tool_calls": [],
+        }
+    ]
+    public = public_tau_messages(messages)
+    event = journal.start("generation", "model", {"messages": public})
+    journal.finish(
+        event, {"content": secret, secret: "value"}, usage={"total_tokens": 4}
+    )
+    pending = journal.start("tool", "lookup", {"value": "abc"})
+    with path.open("a") as stream:
+        stream.write('{"id":')
+    loaded = load_tau_evidence(path)
+    assert [item["id"] for item in loaded] == [turn["id"], event["id"], pending["id"]]
+    assert loaded[1]["parent_id"] == turn["id"]
+    assert loaded[1]["turn"] == 1
+    assert loaded[1]["output"] == {"content": "[REDACTED]", "[REDACTED]": "value"}
+    assert loaded[1]["usage"] == {"total_tokens": 4}
+    assert loaded[-1]["end_time"] is None
+    assert public == [{"role": "assistant", "content": secret, "tool_calls": []}]
+    public[0]["tool_calls"].append({"id": "copy"})
+    assert messages[0]["tool_calls"] == []
+    assert "private reasoning" not in path.read_text()
+    assert load_tau_evidence(tmp_path / "absent") == []
+
+
+def test_tau_worker_internal_imports_reference_existing_exports():
+    """Audit deferred SDK functions even without the optional τ interpreter."""
+    import ast
+    import importlib
+
+    from eval_framework.benchmark import tau_worker
+
+    path = Path(tau_worker.__file__)
+    checked = []
+    for node in ast.walk(ast.parse(path.read_text())):
+        if not isinstance(node, ast.ImportFrom) or not node.module:
+            continue
+        if not path.with_name(node.module + ".py").exists():
+            continue
+        module = importlib.import_module("eval_framework.benchmark." + node.module)
+        for name in node.names:
+            assert hasattr(module, name.name), (node.module, name.name)
+            checked.append((node.module, name.name))
+    assert ("nanobot_runtime", "runtime_identity") in checked

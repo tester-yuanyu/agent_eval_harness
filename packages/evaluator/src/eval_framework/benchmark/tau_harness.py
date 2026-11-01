@@ -26,6 +26,13 @@ from deepeval.test_case import LLMTestCase
 from .runner import code_identity, digest, now, save_json, summarize
 
 TAU_HARNESS_VERSION = "tau-inspect-official-reward-v1"
+TAU_SOURCE_FILES = [
+    "tau_harness.py",
+    "tau_adapter.py",
+    "tau_worker.py",
+    "nanobot_runtime.py",
+    "inspect_docker.py",
+]
 
 
 class OfficialTauRewardMetric(BaseMetric):
@@ -379,7 +386,7 @@ def run_tau_harness(config: dict[str, Any], output: Path) -> dict[str, Any]:
         )
     output.mkdir(parents=True, exist_ok=False)
     config = copy.deepcopy(config)
-    sources = code_identity(["tau_harness.py", "tau_adapter.py", "tau_worker.py"])
+    sources = code_identity(TAU_SOURCE_FILES)
     pending: dict[str, Any] = {}
     started = now()
 
@@ -482,7 +489,7 @@ def run_tau_harness(config: dict[str, Any], output: Path) -> dict[str, Any]:
             "Inspect τ orchestration failed; "
             "retained official artifacts must be inspected"
         )
-    if sources != code_identity(["tau_harness.py", "tau_adapter.py", "tau_worker.py"]):
+    if sources != code_identity(TAU_SOURCE_FILES):
         raise ValueError("τ Harness implementation changed during execution")
     result = pending["result"]
     result["inspect_logs"] = [str(log.location) for log in logs]

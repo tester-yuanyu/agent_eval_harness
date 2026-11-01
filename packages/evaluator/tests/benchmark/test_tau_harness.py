@@ -478,9 +478,7 @@ def test_native_whole_trace_scores_and_missing_records_export_and_read_back(
     root_spans = [
         span
         for span in client.spans
-        if SavedLangfuse.attrs(span).get(
-            "langfuse.experiment.item.root_observation_id"
-        )
+        if SavedLangfuse.attrs(span).get("langfuse.experiment.item.root_observation_id")
         == span.span_id
     ]
     roots_by_case = {
@@ -653,3 +651,40 @@ def test_lossless_supplement_requires_exact_proof_and_original_values(
     saved = json.loads((output / "langfuse_verification.json").read_text())
     assert saved["supplemental_evidence"]["status"] == verification["status"]
     assert saved["supplemental_evidence"]["observations"] == 1
+
+
+def test_tau_identity_covers_runtime_source_hash_implementation(
+    config, official_transport, tmp_path
+):
+    from eval_framework.benchmark.runner import code_identity
+
+    result = harness().run_tau_harness(config, tmp_path / "bound-source")
+    assert result["identity"]["harness_source"] == code_identity(
+        [
+            "tau_harness.py",
+            "tau_adapter.py",
+            "tau_worker.py",
+            "nanobot_runtime.py",
+            "inspect_docker.py",
+        ]
+    )
+
+
+@pytest.mark.parametrize("changed_file", ["nanobot_runtime.py", "inspect_docker.py"])
+def test_tau_source_hash_dependency_drift_aborts_export(
+    config, official_transport, tmp_path, monkeypatch, changed_file
+):
+    module = harness()
+    calls = 0
+
+    def identity(names):
+        nonlocal calls
+        calls += 1
+        return "changed" if calls > 1 and changed_file in names else "initial"
+
+    monkeypatch.setattr(module, "code_identity", identity)
+    output = tmp_path / "source-drift"
+    with pytest.raises(ValueError, match="implementation changed"):
+        module.run_tau_harness(config, output)
+    assert not (output / "results.json").exists()
+    assert (output / "official/summary.json").exists()

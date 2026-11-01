@@ -353,3 +353,57 @@ asyncio.run(main())
     assert "Error" in observed["media"]
     assert "PRIVATE-MEDIA-SENTINEL" not in observed["symlink"]
     assert "Error" in observed["symlink"]
+
+
+def test_runtime_identity_matches_package_and_standalone_import(tmp_path):
+    source = tmp_path / "source"
+    (source / "nanobot").mkdir(parents=True)
+    code = source / "nanobot/__init__.py"
+    code.write_text("VALUE = 1\n")
+    subprocess.run(["git", "init", str(source)], check=True, capture_output=True)
+    subprocess.run(["git", "-C", str(source), "add", "."], check=True)
+    subprocess.run(
+        [
+            "git",
+            "-C",
+            str(source),
+            "-c",
+            "user.name=Fixture",
+            "-c",
+            "user.email=fixture@example.test",
+            "-c",
+            "commit.gpgsign=false",
+            "commit",
+            "-qm",
+            "fixture",
+        ],
+        check=True,
+    )
+    config = {"nanobot_root": str(source), "model": "offline"}
+    packaged = runtime.runtime_identity(config)
+    script = (
+        "import sys,json; sys.path.insert(0,sys.argv[1]); "
+        "from nanobot_runtime import runtime_identity; "
+        "print(json.dumps(runtime_identity(json.loads(sys.argv[2]))))"
+    )
+
+    def direct():
+        result = subprocess.run(
+            [
+                sys.executable,
+                "-c",
+                script,
+                str(Path(runtime.__file__).parent),
+                json.dumps(config),
+            ],
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+        return json.loads(result.stdout)
+
+    assert direct() == packaged
+    code.write_text("VALUE = 2\n")
+    changed = direct()
+    assert changed["working_tree_sha256"] != packaged["working_tree_sha256"]
+    assert changed["source_dirty"] is True
