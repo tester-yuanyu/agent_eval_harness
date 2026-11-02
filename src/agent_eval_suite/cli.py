@@ -34,6 +34,7 @@ EVAL_COMMANDS = (
     "import-reviews",
 )
 BENCHMARK_COMMANDS = (
+    "core-validate", "core-run", "coverage",
     "validate", "demo", "run", "compare", "report", "regrade", "judge",
     "calibration-sheet", "calibration-page", "calibration-check", "quality-audit",
     "export-langfuse", "export-langfuse-evidence", "verify-langfuse",

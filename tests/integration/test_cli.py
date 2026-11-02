@@ -103,6 +103,15 @@ class CLITest(unittest.TestCase):
 
     def test_benchmark_analysis_commands_keep_the_runtime_boundary(self):
         for command, flags in (
+            ("core-validate", ["--dataset", "core-v1"]),
+            (
+                "core-run",
+                ["--config", "local.json", "--output", "run", "--repeats", "3"],
+            ),
+            (
+                "coverage",
+                ["--core-dataset", "core-v1", "--run", "saved", "--output", "matrix"],
+            ),
             ("judge", ["--source", "saved", "--config", "judge.json"]),
             ("calibration-sheet", ["--run", "saved"]),
             ("calibration-page", ["--worksheet", "labels.json"]),
