@@ -33,6 +33,10 @@
 
 ## 回归与安装
 
-旧导入资产校验：1,172 项保持一致。分包离线回归与全新克隆安装记录在完成后补于本节；真实模型与可选 Docker 检查未由本次自动开启。
+旧导入资产校验：1,172 项保持一致。新增定向测试 96 passed；按 Evaluator 配置执行 Ruff 与 `git diff --check` 均通过。分包离线回归共 1,850 passed、15 skipped：Contracts 1、Builder 353、mini_agent 323、Evaluator 1,116、根集成 57。SDK 由消费者测试覆盖，没有独立测试组。Evaluator 在最终源码冻结后单独复跑，仍为 1,116 passed、9 skipped；其余跳过为 Builder 的可选依赖及真实模型开关。真实模型与可选 Docker 检查未由本次自动开启。
+
+全新克隆 `74563ac` 后，`scripts/setup.py` 完成 Builder/Evaluator 两个独立环境安装及 `pip check`；新 `core-validate` 返回 32 条、24 dev/8 holdout、`executed=false`。本机 `make` 因缺少 Xcode Command Line Tools 无法启动，未安装系统开发工具，直接按 Makefile 运行同等 Python 根 CLI：5 条离线参考 Demo 全部通过、Inspect 静态查看器生成，1,172 项资产再次验证一致，克隆工作树干净。该 Demo 是评测框架参考验收，不增加真实 Agent 或本轮 core 执行数。
+
+根 CLI 的三个新命令转发另经红绿测试补齐，并重跑 57 项集成回归通过。干净克隆更新到 `8c08a4b` 后，根 `benchmark core-validate` 及 `core-run/coverage --help` 均成功，工作树仍干净。安装与 Demo 日志保留在本次工作树 `artifacts/nanobot-coverage/clean-clone.log`、`clean-demo-cli.log`、`clean-root-cli.log`；没有再次调用模型或执行核心 holdout。
 
 使用方法见[覆盖指南](../benchmark/nanobot-coverage.md)，实际结果见[公开报告](../../reports/nanobot-coverage-v1/README.md)。Shell、Web、MCP、子代理、渠道/定时等仍需各自任务与执行证据；本次不构成完整 nanobot 产品验收。
