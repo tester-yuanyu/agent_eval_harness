@@ -18,6 +18,28 @@ def main(argv=None):
         help="Explicit dotenv path; secrets stay in process environment",
     )
     sub = parser.add_subparsers(dest="command", required=True)
+    for name in ("core-validate", "core-run"):
+        child = sub.add_parser(name, help="离线 nanobot 核心组件基准（不调用模型）")
+        child.add_argument(
+            "--dataset", type=Path, default=Path("data/benchmarks/nanobot-core-v1")
+        )
+        if name == "core-run":
+            child.add_argument("--config", type=Path, required=True)
+            child.add_argument("--output", type=Path, required=True)
+            child.add_argument("--repeats", type=int, default=3)
+            child.add_argument("--concurrency", type=int, default=4)
+    coverage = sub.add_parser(
+        "coverage", help="按源码、profile、冻结数据和执行证据生成覆盖矩阵"
+    )
+    coverage.add_argument("--config", type=Path, required=True)
+    coverage.add_argument(
+        "--catalog", type=Path, default=Path("data/coverage/nanobot-v1/catalog.json")
+    )
+    coverage.add_argument("--core-dataset", type=Path, action="append", default=[])
+    coverage.add_argument("--file-dataset", type=Path, action="append", default=[])
+    coverage.add_argument("--run", type=Path, action="append", default=[])
+    coverage.add_argument("--legacy-run", type=Path, action="append", default=[])
+    coverage.add_argument("--output", type=Path, required=True)
     for name in ("validate", "demo", "run"):
         child = sub.add_parser(name)
         child.add_argument(
@@ -73,7 +95,8 @@ def main(argv=None):
     compare.add_argument("--candidate", type=Path, required=True)
     compare.add_argument("--output", type=Path, required=True)
     compare.add_argument(
-        "--view-dir", type=Path,
+        "--view-dir",
+        type=Path,
         help="Also bundle both saved runs in the native Inspect comparison viewer",
     )
     regrade = sub.add_parser("regrade")
@@ -95,7 +118,9 @@ def main(argv=None):
     report = sub.add_parser("report")
     report.add_argument("--run", type=Path, required=True)
     report.add_argument(
-        "--format", choices=["auto", "inspect", "domain"], default="auto",
+        "--format",
+        choices=["auto", "inspect", "domain"],
+        default="auto",
         help="Prefer native Inspect View; domain retains the historical report",
     )
     for child in sub.choices.values():
@@ -119,7 +144,80 @@ def main(argv=None):
     from .runner import compare_runs, run_benchmark, save_json
     from .tasks import dataset_identity, load_tasks, select_tasks
 
-    if args.command in ("validate", "demo", "run"):
+    if args.command in ("core-validate", "core-run"):
+        from .core_tasks import core_dataset_identity, load_core_tasks
+
+        if args.command == "core-validate":
+            tasks = load_core_tasks(args.dataset)
+            result = {
+                "tasks": len(tasks),
+                "splits": dict(Counter(t["split"] for t in tasks)),
+                "components": dict(Counter(t["component"] for t in tasks)),
+                "executed": False,
+                "identity": core_dataset_identity(args.dataset),
+            }
+        else:
+            from .core_runner import run_core_benchmark
+
+            result = run_core_benchmark(
+                args.dataset,
+                json.loads(args.config.read_text()),
+                args.output,
+                repeats=args.repeats,
+                concurrency=args.concurrency,
+            )["summary"]
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+    elif args.command == "coverage":
+        import hashlib
+        from .capability_coverage import build_coverage_report, snapshot_nanobot
+        from .core_tasks import core_dataset_identity
+        from .runner import digest
+
+        if args.output.exists():
+            parser.error("coverage output already exists")
+        datasets = []
+        for kind, paths, identity_fn, profile in (
+            ("core", args.core_dataset, core_dataset_identity, "core_modules"),
+            ("file_tools", args.file_dataset, dataset_identity, "file_tools"),
+        ):
+            for path in paths:
+                identity = identity_fn(path)
+                datasets.append(
+                    {
+                        "path": path,
+                        "kind": kind,
+                        "identity": identity,
+                        "identity_hash": digest(identity),
+                        "profile": profile,
+                    }
+                )
+        runs = []
+        for kind, paths in (("current", args.run), ("legacy", args.legacy_run)):
+            for path in paths:
+                source = path / "results.json" if path.is_dir() else path
+                runs.append(
+                    {
+                        "path": source,
+                        "kind": kind,
+                        "sha256": hashlib.sha256(source.read_bytes()).hexdigest(),
+                    }
+                )
+        snapshot = snapshot_nanobot(json.loads(args.config.read_text()))
+        result = build_coverage_report(
+            snapshot, json.loads(args.catalog.read_text()), datasets, runs
+        )
+        save_json(args.output / "snapshot.json", snapshot)
+        save_json(args.output / "coverage.json", result)
+        print(
+            json.dumps(
+                {
+                    "output": str(args.output),
+                    "snapshot_hash": snapshot["snapshot_hash"],
+                },
+                ensure_ascii=False,
+            )
+        )
+    elif args.command in ("validate", "demo", "run"):
         tasks = load_tasks(args.dataset)
         if args.level:
             tasks = [t for t in tasks if t.get("evaluation_level", "e2e") == args.level]

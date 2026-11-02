@@ -1,0 +1,4 @@
+{
+  "nanobot_root": "/absolute/path/to/nanobot",
+  "python": "/absolute/path/to/nanobot/.venv/bin/python"
+}

@@ -1,0 +1,14 @@
+{
+  "contract_version": "nanobot-core-task-v1",
+  "dataset_id": "nanobot-core-v1",
+  "family_count": 12,
+  "holdout_status": "reserved_schema_validated_only",
+  "human_reviewed": false,
+  "oracle_provenance": "explicit_source_contract_expectations_not_runtime_outputs",
+  "sha256": "3718d896425366db7388fcd9c17e4f8d8d2433ec57fd37f80331ef816992c94c",
+  "split_counts": {
+    "dev": 24,
+    "holdout": 8
+  },
+  "task_count": 32
+}

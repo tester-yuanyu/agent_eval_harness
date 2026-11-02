@@ -23,6 +23,8 @@ v2 已完成 **444 个任务实例、112 个任务族、612 次真实执行**及
 
 冻结资产见 [File Tools v2 数据集卡](data/benchmarks/file-tools-v2/README.md)和 [Model Decisions v1 数据集卡](data/benchmarks/model-decisions-v1/README.md)。文件套件采用固定追问，尚不代表动态用户模拟或完整 nanobot 产品覆盖。数据为 AI 辅助编写，尚无独立逐条人工审核。说明文档使用中文；冻结任务、第三方官方任务及原始证据保留原文，可按[中文逐条阅读页](docs/dataset-reading.html)查看任务；阅读页跨版本收录 744 条记录，其中包含 v1/v2 继承任务，不代表 744 个唯一任务。详见[语言与冻结边界](docs/dataset-language.md)。
 
+新增 [nanobot Core v1](data/benchmarks/nanobot-core-v1/README.md)：32 条 Memory / Session / Context / Skills 组件任务，24 条 dev 与 8 条按家族留出的 reserved holdout。独立 [覆盖矩阵与运行报告](reports/nanobot-coverage-v1/README.md)区分源码存在、能力启用、任务定义、实际执行、评分与人工审核。组件重复不计入 LLM 或完整 Agent 成功率；Shell、Web、MCP 等仍有明确缺口。运行方式见[覆盖指南](docs/benchmark/nanobot-coverage.md)。
+
 ## 从安装到真实评测
 
 需要 Python 3.11+。首次安装访问 Python 包源；Agent 使用自己的源码与解释器，Evaluator 保持独立环境。

@@ -1,0 +1,2687 @@
+{
+  "catalog_sha256": "649335cab65038c88e613261ca1dd4e99106fa00b5a58deaf2ed1c634cdcc11a",
+  "catalog_version": "nanobot-coverage-catalog-v1",
+  "current_runs": [
+    {
+      "dataset_identity_hash": "a4eb6b7e7d2a500c1b224bc4de0411931fe833e405bfad5831b62aeef58bdd84",
+      "identity_hash": "223e95dad503e737d51b057ba736edb11ac7ea55ced5aac7714781165764e2dc",
+      "observed_trials": 72,
+      "planned_trials": 72,
+      "profile": "core_modules",
+      "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+      "saved_verdicts": {
+        "FAIL": 3,
+        "PASS": 69
+      },
+      "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098"
+    }
+  ],
+  "legacy_runs": [
+    {
+      "dataset_identity_hash": "22d271abadf87c38a8abcc62b31e702def107c96f3565d789b198aaa36ee7d7a",
+      "identity_hash": "4bd78c93b5019b32a7f3b92af152e512284dc40a72bdca52499245020b3ec38e",
+      "not_bound_to_current_profile": true,
+      "observed_trials": 60,
+      "planned_trials": 60,
+      "run_id": "modules60-scored-regrade-4bd78c93",
+      "runtime_identity_hash": "cac7fb91cae7349f73453eff4cae4ccfc0dc17f9205175b1baadc8d4e8dcffe7",
+      "saved_verdicts": {
+        "PASS": 60
+      },
+      "scoring_version": "file-tools-deepeval-v2.1",
+      "source_sha256": "425c9318ee06a276c08a1fe2792b2a73a727d22942a666a518a66b473fe1f39a"
+    },
+    {
+      "dataset_identity_hash": "2f20720abb8ee05e40dfded353f3f1ab299383bbf607a75ab7d9bf2b877c984b",
+      "identity_hash": "016e72191b782f629000524565f7e33a9be5e6bbf19becc609eb358d92ae9b0f",
+      "not_bound_to_current_profile": true,
+      "observed_trials": 72,
+      "planned_trials": 72,
+      "run_id": "decisions24x3-scored-regrade-016e7219",
+      "runtime_identity_hash": "cac7fb91cae7349f73453eff4cae4ccfc0dc17f9205175b1baadc8d4e8dcffe7",
+      "saved_verdicts": {
+        "PASS": 72
+      },
+      "scoring_version": "file-tools-deepeval-v2.1",
+      "source_sha256": "c318221f60571709e5843b7cbcc5b23e58d51eaa71dd2a7668fdaf2a26bb6507"
+    },
+    {
+      "dataset_identity_hash": "22d271abadf87c38a8abcc62b31e702def107c96f3565d789b198aaa36ee7d7a",
+      "identity_hash": "f0242ffcce50920fb8a8ba0513d7399721d8069723343bfe4fea4fc2b5e878d1",
+      "not_bound_to_current_profile": true,
+      "observed_trials": 180,
+      "planned_trials": 180,
+      "run_id": "chains60x3-scored-regrade-f0242ffc",
+      "runtime_identity_hash": "cac7fb91cae7349f73453eff4cae4ccfc0dc17f9205175b1baadc8d4e8dcffe7",
+      "saved_verdicts": {
+        "FAIL": 29,
+        "PASS": 151
+      },
+      "scoring_version": "file-tools-deepeval-v2.1",
+      "source_sha256": "769dcc543feb5ab2decc4043aa49a65e417ae570a0ed8ff9299548bf0f0201e3"
+    },
+    {
+      "dataset_identity_hash": "22d271abadf87c38a8abcc62b31e702def107c96f3565d789b198aaa36ee7d7a",
+      "identity_hash": "823fe3e86e13850cb311f6bfd22401f3b52bdbec4491e511cb67a870958851a6",
+      "not_bound_to_current_profile": true,
+      "observed_trials": 300,
+      "planned_trials": 300,
+      "run_id": "e2e300-scored-regrade-823fe3e8",
+      "runtime_identity_hash": "cac7fb91cae7349f73453eff4cae4ccfc0dc17f9205175b1baadc8d4e8dcffe7",
+      "saved_verdicts": {
+        "FAIL": 27,
+        "PASS": 273
+      },
+      "scoring_version": "file-tools-deepeval-v2.1",
+      "source_sha256": "6f95ca77865b0e0473cd3c82c33b08dd7a85d4e415dc1c3d920f72203e00dc3a"
+    }
+  ],
+  "limitations": [
+    "清单为本版显式边界，不是 nanobot 整体能力穷举；不计算整体覆盖率。",
+    "passed仅指已观测完整执行，不能升级为所有场景或holdout均通过。",
+    "组件运行不是LLM或完整Agent成绩；机器评分不构成人工审核。"
+  ],
+  "matrix": [
+    {
+      "capability": "file_tools",
+      "dataset_defined": true,
+      "enabled_in_profile": true,
+      "evidence_requirements": [
+        "真实工具事件",
+        "执行前后文件快照",
+        "输入与参数Schema"
+      ],
+      "executed": false,
+      "execution_evidence": [],
+      "gaps": [
+        "当前 profile 尚无完整执行证据",
+        "holdout 尚未执行，不能称独立验收",
+        "独立人工审核待完成"
+      ],
+      "human_review_status": "pending_independent_review",
+      "human_reviewed": false,
+      "passed": false,
+      "passed_scope": "observed_complete_trials_only; not all scenarios or all defined cases",
+      "priority": "P0",
+      "profile": "file_tools",
+      "scenarios": [
+        "read/write/edit/list正常与边界",
+        "越界、符号链接、编辑冲突和错误返回"
+      ],
+      "source_evidence": [
+        {
+          "path": "nanobot/agent/tools/filesystem.py",
+          "sha256": "61eede2b802c30e77ba1b02de8fc48ba9c10f56166025b6f0bcb1c4c7dfad1bf"
+        }
+      ],
+      "source_present": true,
+      "splits": {
+        "dev": {
+          "defined_cases": 358,
+          "executed_case_ids": [],
+          "executed_trials": 0,
+          "families": [
+            "chain/copy_then_update",
+            "chain/csv_stages",
+            "chain/discover_and_copy",
+            "chain/draft_then_finalize",
+            "chain/json_stages",
+            "chain/read_then_report",
+            "chain/recover_missing",
+            "chain/replace_then_append",
+            "chain/resolve_conflict",
+            "chain/two_source_join",
+            "create_edit/append_release",
+            "create_edit/csv_filter_active",
+            "create_edit/csv_sort_price",
+            "create_edit/dedupe_tags",
+            "create_edit/filter_comments",
+            "create_edit/json_increment_quota",
+            "create_edit/json_remove_legacy",
+            "create_edit/json_rename_key",
+            "create_edit/json_set_status",
+            "create_edit/lowercase_keys",
+            "create_edit/number_steps",
+            "create_edit/prefix_tasks",
+            "create_edit/prepend_header",
+            "create_edit/replace_setting",
+            "create_edit/sort_records",
+            "create_edit/uppercase_codes",
+            "missing_error/absent_input",
+            "missing_error/conflicting_sources",
+            "missing_error/duplicate_identifier",
+            "missing_error/empty_source",
+            "missing_error/invalid_json",
+            "missing_error/missing_csv_column",
+            "missing_error/missing_json_key",
+            "missing_error/missing_nested",
+            "model_decision/edit_occurrence",
+            "model_decision/edit_unique",
+            "model_decision/list_recursive",
+            "model_decision/read_named",
+            "model_decision/read_range",
+            "model_decision/write_exact",
+            "module/edit_exact",
+            "module/edit_occurrence",
+            "module/edit_replacement_guard",
+            "module/read_missing",
+            "module/read_slice",
+            "module/read_text",
+            "module/reject_missing_parameter",
+            "module/write_create",
+            "module/write_nested",
+            "module/write_overwrite",
+            "multi_file/aggregate_csv",
+            "multi_file/archive_report",
+            "multi_file/build_index",
+            "multi_file/copy_config",
+            "multi_file/distribute_template",
+            "multi_file/filter_then_count",
+            "multi_file/join_csv",
+            "multi_file/json_extract",
+            "multi_file/json_merge",
+            "multi_file/merge_fragments",
+            "multi_file/reconcile_inventory",
+            "multi_file/redact_multi",
+            "multi_file/route_records",
+            "multi_file/split_payload",
+            "multi_file/sync_versions",
+            "multi_file/update_crossref",
+            "multi_turn/append_then_correct",
+            "multi_turn/change_mode",
+            "multi_turn/filter_then_expand",
+            "multi_turn/json_change_request",
+            "multi_turn/rename_reference",
+            "multi_turn/revise_budget",
+            "multi_turn/revise_sort",
+            "multi_turn/template_revision",
+            "read_search/active_count",
+            "read_search/common_values",
+            "read_search/csv_argmax",
+            "read_search/csv_lookup",
+            "read_search/csv_total",
+            "read_search/env_lookup",
+            "read_search/find_marker",
+            "read_search/first_line",
+            "read_search/json_nested",
+            "read_search/last_line",
+            "read_search/missing_values",
+            "read_search/nonempty_count",
+            "read_search/recursive_inventory",
+            "read_search/regex_ticket",
+            "read_search/unique_count",
+            "read_search/word_count"
+          ],
+          "observed_trials": 0,
+          "passed_trials": 0,
+          "planned_trials": 0,
+          "status": "not_executed"
+        },
+        "holdout": {
+          "defined_cases": 86,
+          "executed_case_ids": [],
+          "executed_trials": 0,
+          "families": [
+            "chain/protect_source",
+            "chain/revision_constraints",
+            "create_edit/csv_project_names",
+            "create_edit/csv_update_region",
+            "create_edit/extract_section",
+            "create_edit/template_render",
+            "missing_error/absent_second_source",
+            "missing_error/absent_template",
+            "model_decision/abstain_ambiguous",
+            "model_decision/abstain_noop",
+            "module/list_nested",
+            "module/reject_parameter_type",
+            "multi_file/compare_snapshots",
+            "multi_file/group_csv",
+            "multi_file/manifest_from_json",
+            "multi_file/release_notes",
+            "multi_turn/change_region",
+            "multi_turn/revise_numbering",
+            "read_search/json_array_index",
+            "read_search/markdown_heading",
+            "read_search/nth_line",
+            "read_search/quoted_value"
+          ],
+          "observed_trials": 0,
+          "passed_trials": 0,
+          "planned_trials": 0,
+          "status": "not_executed"
+        }
+      },
+      "success_conditions": [
+        "输出与独立文件状态一致",
+        "未授权路径与额外副作用被拒绝"
+      ],
+      "title": "文件工具"
+    },
+    {
+      "capability": "session",
+      "dataset_defined": false,
+      "enabled_in_profile": true,
+      "evidence_requirements": [
+        "JSONL与session文件独立快照",
+        "保存/重载/查询事件",
+        "任务专属sessions_root"
+      ],
+      "executed": false,
+      "execution_evidence": [],
+      "gaps": [
+        "尚无绑定数据集场景",
+        "当前 profile 尚无完整执行证据",
+        "独立人工审核待完成"
+      ],
+      "human_review_status": "pending_independent_review",
+      "human_reviewed": false,
+      "passed": false,
+      "passed_scope": "observed_complete_trials_only; not all scenarios or all defined cases",
+      "priority": "P0",
+      "profile": "file_tools",
+      "scenarios": [
+        "保存后重载和不同session隔离",
+        "删除重建、历史合法后缀与损坏文件"
+      ],
+      "source_evidence": [
+        {
+          "path": "nanobot/session/manager.py",
+          "sha256": "aba72e5826006a0e0ca0f3ad7ddf184afd55c1cfdbd135d57920348a4b929bd6"
+        }
+      ],
+      "source_present": true,
+      "splits": {},
+      "success_conditions": [
+        "真实Session API恢复预期历史",
+        "不同session或trial没有串扰"
+      ],
+      "title": "会话持久化与隔离"
+    },
+    {
+      "capability": "memory",
+      "dataset_defined": false,
+      "enabled_in_profile": true,
+      "evidence_requirements": [
+        "MemoryStore实际API事件",
+        "外部读取的memory文件",
+        "来源与迁移前后状态"
+      ],
+      "executed": false,
+      "execution_evidence": [],
+      "gaps": [
+        "尚无绑定数据集场景",
+        "当前 profile 尚无完整执行证据",
+        "独立人工审核待完成"
+      ],
+      "human_review_status": "pending_independent_review",
+      "human_reviewed": false,
+      "passed": false,
+      "passed_scope": "observed_complete_trials_only; not all scenarios or all defined cases",
+      "priority": "P0",
+      "profile": "file_tools",
+      "scenarios": [
+        "历史追加、游标、会话过滤",
+        "未消费历史保留与旧格式迁移"
+      ],
+      "source_evidence": [
+        {
+          "path": "nanobot/agent/memory.py",
+          "sha256": "28cfe513cebcfdbee15304897cdd634baaa6569ed9e9bcb01fc726ebbb469945"
+        }
+      ],
+      "source_present": true,
+      "splits": {},
+      "success_conditions": [
+        "历史与游标符合明确预期",
+        "重载与压缩不丢失未消费记录"
+      ],
+      "title": "长期记忆与历史存储"
+    },
+    {
+      "capability": "context",
+      "dataset_defined": false,
+      "enabled_in_profile": true,
+      "evidence_requirements": [
+        "真实ContextBuilder输出",
+        "隔离workspace输入Hash",
+        "上下文边界断言"
+      ],
+      "executed": false,
+      "execution_evidence": [],
+      "gaps": [
+        "尚无绑定数据集场景",
+        "当前 profile 尚无完整执行证据",
+        "独立人工审核待完成"
+      ],
+      "human_review_status": "pending_independent_review",
+      "human_reviewed": false,
+      "passed": false,
+      "passed_scope": "observed_complete_trials_only; not all scenarios or all defined cases",
+      "priority": "P0",
+      "profile": "file_tools",
+      "scenarios": [
+        "记忆可见性开关与会话过滤",
+        "历史消息组装、bootstrap与预算裁剪"
+      ],
+      "source_evidence": [
+        {
+          "path": "nanobot/agent/context.py",
+          "sha256": "9e87348a8678d225d12ae7a074038de3cd9095899e64726eda83b5b02f735128"
+        },
+        {
+          "path": "nanobot/agent/context_governance.py",
+          "sha256": "466ee64c2f92a29cd6be0e6bcf7088dce7f4520f031f1ab676abcfea44368d50"
+        }
+      ],
+      "source_present": true,
+      "splits": {},
+      "success_conditions": [
+        "上下文只包含当前允许的证据",
+        "消息顺序与角色和工具调用配对正确"
+      ],
+      "title": "上下文组装与边界"
+    },
+    {
+      "capability": "skills",
+      "dataset_defined": false,
+      "enabled_in_profile": false,
+      "evidence_requirements": [
+        "任务技能目录快照",
+        "SkillsLoader事件",
+        "实际禁用与依赖配置"
+      ],
+      "executed": false,
+      "execution_evidence": [],
+      "gaps": [
+        "当前 profile 未启用",
+        "尚无绑定数据集场景",
+        "当前 profile 尚无完整执行证据",
+        "独立人工审核待完成"
+      ],
+      "human_review_status": "pending_independent_review",
+      "human_reviewed": false,
+      "passed": false,
+      "passed_scope": "observed_complete_trials_only; not all scenarios or all defined cases",
+      "priority": "P0",
+      "profile": "file_tools",
+      "scenarios": [
+        "工作区/内置优先级及禁用",
+        "显式调用、依赖缺失和畸形元数据"
+      ],
+      "source_evidence": [
+        {
+          "path": "nanobot/agent/skills.py",
+          "sha256": "4de29a393a6d933d1f8edb16a5f62c20f43b2109bd111157c18efa2162a0ae8f"
+        }
+      ],
+      "source_present": true,
+      "splits": {},
+      "success_conditions": [
+        "只加载可用且未禁用的技能",
+        "显式调用与内容来源正确"
+      ],
+      "title": "技能发现与调用"
+    },
+    {
+      "capability": "shell",
+      "dataset_defined": false,
+      "enabled_in_profile": false,
+      "evidence_requirements": [
+        "隔离临时目录",
+        "进程生命周期事件",
+        "独立退出状态与副作用快照"
+      ],
+      "executed": false,
+      "execution_evidence": [],
+      "gaps": [
+        "当前 profile 未启用",
+        "尚无绑定数据集场景",
+        "当前 profile 尚无完整执行证据",
+        "独立人工审核待完成"
+      ],
+      "human_review_status": "pending_independent_review",
+      "human_reviewed": false,
+      "passed": false,
+      "passed_scope": "observed_complete_trials_only; not all scenarios or all defined cases",
+      "priority": "P1",
+      "profile": "file_tools",
+      "scenarios": [
+        "工作区进程执行、输出截断和退出码",
+        "超时取消、残留进程与会话隔离"
+      ],
+      "source_evidence": [
+        {
+          "path": "nanobot/agent/tools/shell.py",
+          "sha256": "5b5fcf0f4129c91c131a4a4d9fc2d1b5f66110dadaff2aad5d0266b4fb1e5fca"
+        }
+      ],
+      "source_present": true,
+      "splits": {},
+      "success_conditions": [
+        "超时取消可观察且无残留副作用",
+        "工作区限制与执行结果一致"
+      ],
+      "title": "Shell与进程管理"
+    },
+    {
+      "capability": "web",
+      "dataset_defined": false,
+      "enabled_in_profile": false,
+      "evidence_requirements": [
+        "固定HTTP响应/本地测试服务",
+        "请求和重定向日志",
+        "网络策略断言"
+      ],
+      "executed": false,
+      "execution_evidence": [],
+      "gaps": [
+        "当前 profile 未启用",
+        "尚无绑定数据集场景",
+        "当前 profile 尚无完整执行证据",
+        "独立人工审核待完成"
+      ],
+      "human_review_status": "pending_independent_review",
+      "human_reviewed": false,
+      "passed": false,
+      "passed_scope": "observed_complete_trials_only; not all scenarios or all defined cases",
+      "priority": "P1",
+      "profile": "file_tools",
+      "scenarios": [
+        "本地固定响应解析与失败",
+        "SSRF、重定向和请求预算"
+      ],
+      "source_evidence": [
+        {
+          "path": "nanobot/agent/tools/web.py",
+          "sha256": "ace67dafbe44a1dc8400c0e0d09c51b08db8c29eb98a5a1e736731cb5e1801d2"
+        }
+      ],
+      "source_present": true,
+      "splits": {},
+      "success_conditions": [
+        "只访问明确允许目标",
+        "错误与缺失结果不冒充成功"
+      ],
+      "title": "Web检索与抓取"
+    },
+    {
+      "capability": "mcp",
+      "dataset_defined": false,
+      "enabled_in_profile": false,
+      "evidence_requirements": [
+        "本地受控MCP服务",
+        "连接/调用/取消事件",
+        "有效allowlist与SchemaHash"
+      ],
+      "executed": false,
+      "execution_evidence": [],
+      "gaps": [
+        "当前 profile 未启用",
+        "尚无绑定数据集场景",
+        "当前 profile 尚无完整执行证据",
+        "独立人工审核待完成"
+      ],
+      "human_review_status": "pending_independent_review",
+      "human_reviewed": false,
+      "passed": false,
+      "passed_scope": "observed_complete_trials_only; not all scenarios or all defined cases",
+      "priority": "P1",
+      "profile": "file_tools",
+      "scenarios": [
+        "本地stdio发现与Schema映射",
+        "工具白名单、超时、断开重连"
+      ],
+      "source_evidence": [
+        {
+          "path": "nanobot/agent/tools/mcp.py",
+          "sha256": "1b7804ac2b294a7c78fe37cd6a06b0c88c18fc1faeeaf49ef5bf91c9b5b61f67"
+        }
+      ],
+      "source_present": true,
+      "splits": {},
+      "success_conditions": [
+        "工具/资源/提示词注册遵守配置",
+        "错误传播与清理可核验"
+      ],
+      "title": "MCP协议与生命周期"
+    },
+    {
+      "capability": "channels",
+      "dataset_defined": false,
+      "enabled_in_profile": false,
+      "evidence_requirements": [
+        "伪渠道收发记录",
+        "启用配置的非秘密投影",
+        "投递/重试/失败事件"
+      ],
+      "executed": false,
+      "execution_evidence": [],
+      "gaps": [
+        "当前 profile 未启用",
+        "尚无绑定数据集场景",
+        "当前 profile 尚无完整执行证据",
+        "独立人工审核待完成"
+      ],
+      "human_review_status": "pending_independent_review",
+      "human_reviewed": false,
+      "passed": false,
+      "passed_scope": "observed_complete_trials_only; not all scenarios or all defined cases",
+      "priority": "P2",
+      "profile": "file_tools",
+      "scenarios": [
+        "伪渠道路由与事件顺序",
+        "重连、限流、失败状态和去重"
+      ],
+      "source_evidence": [
+        {
+          "path": "nanobot/channels/manager.py",
+          "sha256": "0270ed0b26c96fefa37beb8f547040f1f4433e2666b8a9ae00b58dc334ac1c21"
+        }
+      ],
+      "source_present": true,
+      "splits": {},
+      "success_conditions": [
+        "启用状态与实际运行状态分开",
+        "本地伪传输正确且不发送真实消息"
+      ],
+      "title": "渠道与消息投递"
+    },
+    {
+      "capability": "cron",
+      "dataset_defined": false,
+      "enabled_in_profile": false,
+      "evidence_requirements": [
+        "受控时钟",
+        "调度存储独立快照",
+        "任务生命周期事件"
+      ],
+      "executed": false,
+      "execution_evidence": [],
+      "gaps": [
+        "当前 profile 未启用",
+        "尚无绑定数据集场景",
+        "当前 profile 尚无完整执行证据",
+        "独立人工审核待完成"
+      ],
+      "human_review_status": "pending_independent_review",
+      "human_reviewed": false,
+      "passed": false,
+      "passed_scope": "observed_complete_trials_only; not all scenarios or all defined cases",
+      "priority": "P2",
+      "profile": "file_tools",
+      "scenarios": [
+        "假时钟触发、取消与持久化",
+        "重启、重复触发、Heartbeat空任务"
+      ],
+      "source_evidence": [
+        {
+          "path": "nanobot/cron/service.py",
+          "sha256": "19ac2754f8863feef4cac571c3a9ba182ffd265371bc33ac9b55fb3a5337be87"
+        },
+        {
+          "path": "nanobot/cli/gateway_runtime.py",
+          "sha256": "d532c1b9f3457e9ed55da6701199d8a1ddcabdde125c24ee956c1c4e274c1b52"
+        }
+      ],
+      "source_present": true,
+      "splits": {},
+      "success_conditions": [
+        "任务触发和取消符合计划",
+        "重复触发与重启状态可追溯"
+      ],
+      "title": "定时与Heartbeat/Dream"
+    },
+    {
+      "capability": "subagent",
+      "dataset_defined": false,
+      "enabled_in_profile": false,
+      "evidence_requirements": [
+        "脚本化Provider请求序列",
+        "父子任务/会话ID",
+        "取消和结果回流事件"
+      ],
+      "executed": false,
+      "execution_evidence": [],
+      "gaps": [
+        "当前 profile 未启用",
+        "尚无绑定数据集场景",
+        "当前 profile 尚无完整执行证据",
+        "独立人工审核待完成"
+      ],
+      "human_review_status": "pending_independent_review",
+      "human_reviewed": false,
+      "passed": false,
+      "passed_scope": "observed_complete_trials_only; not all scenarios or all defined cases",
+      "priority": "P1",
+      "profile": "file_tools",
+      "scenarios": [
+        "脚本化Provider并发上限与取消",
+        "阻塞/后台结果回流、隔离与去重"
+      ],
+      "source_evidence": [
+        {
+          "path": "nanobot/agent/subagent.py",
+          "sha256": "35766f9582b1b7dcdea246d19784f064c2b0ab037144804941cca0c22d4e7787"
+        },
+        {
+          "path": "nanobot/agent/tools/spawn.py",
+          "sha256": "850df9890cfde092f2d63dea4686f3b5551dc0b88dbf440b6ab48a38a3799ec4"
+        }
+      ],
+      "source_present": true,
+      "splits": {},
+      "success_conditions": [
+        "任务数与并发限制一致",
+        "结果正确归属原会话且取消无泄漏"
+      ],
+      "title": "子代理调度与结果回流"
+    },
+    {
+      "capability": "plugins",
+      "dataset_defined": false,
+      "enabled_in_profile": false,
+      "evidence_requirements": [
+        "隔离插件fixture",
+        "实际工具名单及SchemaHash",
+        "注册/失败日志"
+      ],
+      "executed": false,
+      "execution_evidence": [],
+      "gaps": [
+        "当前 profile 未启用",
+        "尚无绑定数据集场景",
+        "当前 profile 尚无完整执行证据",
+        "独立人工审核待完成"
+      ],
+      "human_review_status": "pending_independent_review",
+      "human_reviewed": false,
+      "passed": false,
+      "passed_scope": "observed_complete_trials_only; not all scenarios or all defined cases",
+      "priority": "P1",
+      "profile": "file_tools",
+      "scenarios": [
+        "entry-point插件发现与重复工具名",
+        "加载失败、旧错误接口适配"
+      ],
+      "source_evidence": [
+        {
+          "path": "nanobot/agent/tools/loader.py",
+          "sha256": "049b80e70fe8b5c860b90641ca997ac6dcf5de885c0023a3becb5ec7bf8a26bc"
+        }
+      ],
+      "source_present": true,
+      "splits": {},
+      "success_conditions": [
+        "有效注册集合与策略一致",
+        "失败不造成隐式能力升级"
+      ],
+      "title": "工具插件发现与注册"
+    },
+    {
+      "capability": "provider",
+      "dataset_defined": false,
+      "enabled_in_profile": false,
+      "evidence_requirements": [
+        "脱敏请求元信息",
+        "实际参数投影",
+        "预算与错误事件"
+      ],
+      "executed": false,
+      "execution_evidence": [],
+      "gaps": [
+        "当前 profile 未启用",
+        "尚无绑定数据集场景",
+        "当前 profile 尚无完整执行证据",
+        "独立人工审核待完成"
+      ],
+      "human_review_status": "pending_independent_review",
+      "human_reviewed": false,
+      "passed": false,
+      "passed_scope": "observed_complete_trials_only; not all scenarios or all defined cases",
+      "priority": "P1",
+      "profile": "file_tools",
+      "scenarios": [
+        "脚本化Provider错误、重试和预算",
+        "模型切换与generation参数投影"
+      ],
+      "source_evidence": [
+        {
+          "path": "nanobot/providers/base.py",
+          "sha256": "7938c11fdcbf7036ceb0c70a7544932755c629a2f81d428023b6b2b511c135ba"
+        },
+        {
+          "path": "nanobot/agent/model_runtime.py",
+          "sha256": "8b190ce2f80ec13e8bcd5260d6e8d180a21ab1c1977c77bacc3df815fba1328c"
+        }
+      ],
+      "source_present": true,
+      "splits": {},
+      "success_conditions": [
+        "请求预算与有效配置保持一致",
+        "Provider失败不冒充Agent通过"
+      ],
+      "title": "模型Provider与配置路由"
+    },
+    {
+      "capability": "workspace_security",
+      "dataset_defined": false,
+      "enabled_in_profile": false,
+      "evidence_requirements": [
+        "独立目录快照",
+        "路径策略配置",
+        "拒绝与清理事件"
+      ],
+      "executed": false,
+      "execution_evidence": [],
+      "gaps": [
+        "当前 profile 未启用",
+        "尚无绑定数据集场景",
+        "当前 profile 尚无完整执行证据",
+        "独立人工审核待完成"
+      ],
+      "human_review_status": "pending_independent_review",
+      "human_reviewed": false,
+      "passed": false,
+      "passed_scope": "observed_complete_trials_only; not all scenarios or all defined cases",
+      "priority": "P0",
+      "profile": "file_tools",
+      "scenarios": [
+        "路径范围与只读/写入边界",
+        "符号链接与越界尝试"
+      ],
+      "source_evidence": [
+        {
+          "path": "nanobot/security/workspace_access.py",
+          "sha256": "72eb229628ead42ef233ba33ae25667237653219be3902b96df1e8ede8669023"
+        },
+        {
+          "path": "nanobot/security/workspace_policy.py",
+          "sha256": "d7d20f243a80015735120548378a0652b318852d156f7b5782b5db627a80d598"
+        }
+      ],
+      "source_present": true,
+      "splits": {},
+      "success_conditions": [
+        "策略拒绝有证据且无额外写入",
+        "明确应用策略与操作系统沙箱差别"
+      ],
+      "title": "工作区策略"
+    },
+    {
+      "capability": "api_gateway",
+      "dataset_defined": false,
+      "enabled_in_profile": false,
+      "evidence_requirements": [
+        "本地假服务或离线适配器",
+        "生命周期事件",
+        "不包含凭据的配置Hash"
+      ],
+      "executed": false,
+      "execution_evidence": [],
+      "gaps": [
+        "当前 profile 未启用",
+        "尚无绑定数据集场景",
+        "当前 profile 尚无完整执行证据",
+        "独立人工审核待完成"
+      ],
+      "human_review_status": "pending_independent_review",
+      "human_reviewed": false,
+      "passed": false,
+      "passed_scope": "observed_complete_trials_only; not all scenarios or all defined cases",
+      "priority": "P2",
+      "profile": "file_tools",
+      "scenarios": [
+        "离线生命周期和受控请求",
+        "启动失败、重载与关闭清理"
+      ],
+      "source_evidence": [
+        {
+          "path": "nanobot/api/server.py",
+          "sha256": "25b41268fb532a2ba32569767da1c2b79e9d3dc6e888532014615a2f3ad59387"
+        },
+        {
+          "path": "nanobot/cli/gateway_runtime.py",
+          "sha256": "d532c1b9f3457e9ed55da6701199d8a1ddcabdde125c24ee956c1c4e274c1b52"
+        }
+      ],
+      "source_present": true,
+      "splits": {},
+      "success_conditions": [
+        "配置与实际服务状态区分",
+        "失败与清理可复核"
+      ],
+      "title": "Gateway与API生命周期"
+    },
+    {
+      "capability": "file_tools",
+      "dataset_defined": false,
+      "enabled_in_profile": false,
+      "evidence_requirements": [
+        "真实工具事件",
+        "执行前后文件快照",
+        "输入与参数Schema"
+      ],
+      "executed": false,
+      "execution_evidence": [],
+      "gaps": [
+        "当前 profile 未启用",
+        "尚无绑定数据集场景",
+        "当前 profile 尚无完整执行证据",
+        "独立人工审核待完成"
+      ],
+      "human_review_status": "pending_independent_review",
+      "human_reviewed": false,
+      "passed": false,
+      "passed_scope": "observed_complete_trials_only; not all scenarios or all defined cases",
+      "priority": "P0",
+      "profile": "core_modules",
+      "scenarios": [
+        "read/write/edit/list正常与边界",
+        "越界、符号链接、编辑冲突和错误返回"
+      ],
+      "source_evidence": [
+        {
+          "path": "nanobot/agent/tools/filesystem.py",
+          "sha256": "61eede2b802c30e77ba1b02de8fc48ba9c10f56166025b6f0bcb1c4c7dfad1bf"
+        }
+      ],
+      "source_present": true,
+      "splits": {},
+      "success_conditions": [
+        "输出与独立文件状态一致",
+        "未授权路径与额外副作用被拒绝"
+      ],
+      "title": "文件工具"
+    },
+    {
+      "capability": "session",
+      "dataset_defined": true,
+      "enabled_in_profile": true,
+      "evidence_requirements": [
+        "JSONL与session文件独立快照",
+        "保存/重载/查询事件",
+        "任务专属sessions_root"
+      ],
+      "executed": true,
+      "execution_evidence": [
+        {
+          "case_id": "core-session_persistence_isolation-roundtrip",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2",
+            "s3",
+            "s4"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 1,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-session_persistence_isolation-roundtrip",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2",
+            "s3",
+            "s4"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 2,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-session_persistence_isolation-roundtrip",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2",
+            "s3",
+            "s4"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 3,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-session_persistence_isolation-key-collision",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2",
+            "s3",
+            "s4",
+            "s5",
+            "s6",
+            "s7"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 1,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-session_persistence_isolation-key-collision",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2",
+            "s3",
+            "s4",
+            "s5",
+            "s6",
+            "s7"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 2,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-session_persistence_isolation-key-collision",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2",
+            "s3",
+            "s4",
+            "s5",
+            "s6",
+            "s7"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 3,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-session_persistence_isolation-unsaved",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2",
+            "s3",
+            "s4",
+            "s5",
+            "s6"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 1,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-session_persistence_isolation-unsaved",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2",
+            "s3",
+            "s4",
+            "s5",
+            "s6"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 2,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-session_persistence_isolation-unsaved",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2",
+            "s3",
+            "s4",
+            "s5",
+            "s6"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 3,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-session_legal_replay-normal",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 1,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-session_legal_replay-normal",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 2,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-session_legal_replay-normal",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 3,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-session_legal_replay-orphan",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 1,
+          "verdict": "FAIL"
+        },
+        {
+          "case_id": "core-session_legal_replay-orphan",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 2,
+          "verdict": "FAIL"
+        },
+        {
+          "case_id": "core-session_legal_replay-orphan",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 3,
+          "verdict": "FAIL"
+        },
+        {
+          "case_id": "core-session_legal_replay-clear-recovery",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2",
+            "s3",
+            "s4",
+            "s5",
+            "s6",
+            "s7"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 1,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-session_legal_replay-clear-recovery",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2",
+            "s3",
+            "s4",
+            "s5",
+            "s6",
+            "s7"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 2,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-session_legal_replay-clear-recovery",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2",
+            "s3",
+            "s4",
+            "s5",
+            "s6",
+            "s7"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 3,
+          "verdict": "PASS"
+        }
+      ],
+      "gaps": [
+        "holdout 尚未执行，不能称独立验收",
+        "独立人工审核待完成"
+      ],
+      "human_review_status": "pending_independent_review",
+      "human_reviewed": false,
+      "passed": false,
+      "passed_scope": "observed_complete_trials_only; not all scenarios or all defined cases",
+      "priority": "P0",
+      "profile": "core_modules",
+      "scenarios": [
+        "保存后重载和不同session隔离",
+        "删除重建、历史合法后缀与损坏文件"
+      ],
+      "source_evidence": [
+        {
+          "path": "nanobot/session/manager.py",
+          "sha256": "aba72e5826006a0e0ca0f3ad7ddf184afd55c1cfdbd135d57920348a4b929bd6"
+        }
+      ],
+      "source_present": true,
+      "splits": {
+        "dev": {
+          "defined_cases": 6,
+          "executed_case_ids": [
+            "core-session_legal_replay-clear-recovery",
+            "core-session_legal_replay-normal",
+            "core-session_legal_replay-orphan",
+            "core-session_persistence_isolation-key-collision",
+            "core-session_persistence_isolation-roundtrip",
+            "core-session_persistence_isolation-unsaved"
+          ],
+          "executed_trials": 18,
+          "families": [
+            "session_legal_replay",
+            "session_persistence_isolation"
+          ],
+          "observed_trials": 18,
+          "passed_trials": 15,
+          "planned_trials": 18,
+          "status": "planned_execution_complete"
+        },
+        "holdout": {
+          "defined_cases": 2,
+          "executed_case_ids": [],
+          "executed_trials": 0,
+          "families": [
+            "session_delete_recreate"
+          ],
+          "observed_trials": 0,
+          "passed_trials": 0,
+          "planned_trials": 0,
+          "status": "not_executed"
+        }
+      },
+      "success_conditions": [
+        "真实Session API恢复预期历史",
+        "不同session或trial没有串扰"
+      ],
+      "title": "会话持久化与隔离"
+    },
+    {
+      "capability": "memory",
+      "dataset_defined": true,
+      "enabled_in_profile": true,
+      "evidence_requirements": [
+        "MemoryStore实际API事件",
+        "外部读取的memory文件",
+        "来源与迁移前后状态"
+      ],
+      "executed": true,
+      "execution_evidence": [
+        {
+          "case_id": "core-memory_history_integrity-restart",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2",
+            "s3",
+            "s4"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 1,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-memory_history_integrity-restart",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2",
+            "s3",
+            "s4"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 2,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-memory_history_integrity-restart",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2",
+            "s3",
+            "s4"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 3,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-memory_history_integrity-empty",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2",
+            "s3",
+            "s4"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 1,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-memory_history_integrity-empty",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2",
+            "s3",
+            "s4"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 2,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-memory_history_integrity-empty",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2",
+            "s3",
+            "s4"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 3,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-memory_history_integrity-corrupt-recovery",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2",
+            "s3",
+            "s4"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 1,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-memory_history_integrity-corrupt-recovery",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2",
+            "s3",
+            "s4"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 2,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-memory_history_integrity-corrupt-recovery",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2",
+            "s3",
+            "s4"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 3,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-memory_pending_retention-pending",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 1,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-memory_pending_retention-pending",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 2,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-memory_pending_retention-pending",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 3,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-memory_pending_retention-processed",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 1,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-memory_pending_retention-processed",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 2,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-memory_pending_retention-processed",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 3,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-memory_pending_retention-advance",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2",
+            "s3",
+            "s4",
+            "s5"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 1,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-memory_pending_retention-advance",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2",
+            "s3",
+            "s4",
+            "s5"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 2,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-memory_pending_retention-advance",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2",
+            "s3",
+            "s4",
+            "s5"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 3,
+          "verdict": "PASS"
+        }
+      ],
+      "gaps": [
+        "holdout 尚未执行，不能称独立验收",
+        "独立人工审核待完成"
+      ],
+      "human_review_status": "pending_independent_review",
+      "human_reviewed": false,
+      "passed": true,
+      "passed_scope": "observed_complete_trials_only; not all scenarios or all defined cases",
+      "priority": "P0",
+      "profile": "core_modules",
+      "scenarios": [
+        "历史追加、游标、会话过滤",
+        "未消费历史保留与旧格式迁移"
+      ],
+      "source_evidence": [
+        {
+          "path": "nanobot/agent/memory.py",
+          "sha256": "28cfe513cebcfdbee15304897cdd634baaa6569ed9e9bcb01fc726ebbb469945"
+        }
+      ],
+      "source_present": true,
+      "splits": {
+        "dev": {
+          "defined_cases": 6,
+          "executed_case_ids": [
+            "core-memory_history_integrity-corrupt-recovery",
+            "core-memory_history_integrity-empty",
+            "core-memory_history_integrity-restart",
+            "core-memory_pending_retention-advance",
+            "core-memory_pending_retention-pending",
+            "core-memory_pending_retention-processed"
+          ],
+          "executed_trials": 18,
+          "families": [
+            "memory_history_integrity",
+            "memory_pending_retention"
+          ],
+          "observed_trials": 18,
+          "passed_trials": 18,
+          "planned_trials": 18,
+          "status": "planned_execution_complete"
+        },
+        "holdout": {
+          "defined_cases": 2,
+          "executed_case_ids": [],
+          "executed_trials": 0,
+          "families": [
+            "memory_legacy_migration"
+          ],
+          "observed_trials": 0,
+          "passed_trials": 0,
+          "planned_trials": 0,
+          "status": "not_executed"
+        }
+      },
+      "success_conditions": [
+        "历史与游标符合明确预期",
+        "重载与压缩不丢失未消费记录"
+      ],
+      "title": "长期记忆与历史存储"
+    },
+    {
+      "capability": "context",
+      "dataset_defined": true,
+      "enabled_in_profile": true,
+      "evidence_requirements": [
+        "真实ContextBuilder输出",
+        "隔离workspace输入Hash",
+        "上下文边界断言"
+      ],
+      "executed": true,
+      "execution_evidence": [
+        {
+          "case_id": "core-context_memory_visibility-session",
+          "complete_execution": true,
+          "event_ids": [
+            "s1"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 1,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-context_memory_visibility-session",
+          "complete_execution": true,
+          "event_ids": [
+            "s1"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 2,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-context_memory_visibility-session",
+          "complete_execution": true,
+          "event_ids": [
+            "s1"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 3,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-context_memory_visibility-independent-toggles",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 1,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-context_memory_visibility-independent-toggles",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 2,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-context_memory_visibility-independent-toggles",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 3,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-context_memory_visibility-unified",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 1,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-context_memory_visibility-unified",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 2,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-context_memory_visibility-unified",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 3,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-context_message_assembly-empty",
+          "complete_execution": true,
+          "event_ids": [
+            "s1"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 1,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-context_message_assembly-empty",
+          "complete_execution": true,
+          "event_ids": [
+            "s1"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 2,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-context_message_assembly-empty",
+          "complete_execution": true,
+          "event_ids": [
+            "s1"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 3,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-context_message_assembly-merge",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 1,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-context_message_assembly-merge",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 2,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-context_message_assembly-merge",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 3,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-context_message_assembly-assistant",
+          "complete_execution": true,
+          "event_ids": [
+            "s1"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 1,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-context_message_assembly-assistant",
+          "complete_execution": true,
+          "event_ids": [
+            "s1"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 2,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-context_message_assembly-assistant",
+          "complete_execution": true,
+          "event_ids": [
+            "s1"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 3,
+          "verdict": "PASS"
+        }
+      ],
+      "gaps": [
+        "holdout 尚未执行，不能称独立验收",
+        "独立人工审核待完成"
+      ],
+      "human_review_status": "pending_independent_review",
+      "human_reviewed": false,
+      "passed": true,
+      "passed_scope": "observed_complete_trials_only; not all scenarios or all defined cases",
+      "priority": "P0",
+      "profile": "core_modules",
+      "scenarios": [
+        "记忆可见性开关与会话过滤",
+        "历史消息组装、bootstrap与预算裁剪"
+      ],
+      "source_evidence": [
+        {
+          "path": "nanobot/agent/context.py",
+          "sha256": "9e87348a8678d225d12ae7a074038de3cd9095899e64726eda83b5b02f735128"
+        },
+        {
+          "path": "nanobot/agent/context_governance.py",
+          "sha256": "466ee64c2f92a29cd6be0e6bcf7088dce7f4520f031f1ab676abcfea44368d50"
+        }
+      ],
+      "source_present": true,
+      "splits": {
+        "dev": {
+          "defined_cases": 6,
+          "executed_case_ids": [
+            "core-context_memory_visibility-independent-toggles",
+            "core-context_memory_visibility-session",
+            "core-context_memory_visibility-unified",
+            "core-context_message_assembly-assistant",
+            "core-context_message_assembly-empty",
+            "core-context_message_assembly-merge"
+          ],
+          "executed_trials": 18,
+          "families": [
+            "context_memory_visibility",
+            "context_message_assembly"
+          ],
+          "observed_trials": 18,
+          "passed_trials": 18,
+          "planned_trials": 18,
+          "status": "planned_execution_complete"
+        },
+        "holdout": {
+          "defined_cases": 2,
+          "executed_case_ids": [],
+          "executed_trials": 0,
+          "families": [
+            "context_bootstrap_visibility"
+          ],
+          "observed_trials": 0,
+          "passed_trials": 0,
+          "planned_trials": 0,
+          "status": "not_executed"
+        }
+      },
+      "success_conditions": [
+        "上下文只包含当前允许的证据",
+        "消息顺序与角色和工具调用配对正确"
+      ],
+      "title": "上下文组装与边界"
+    },
+    {
+      "capability": "skills",
+      "dataset_defined": true,
+      "enabled_in_profile": true,
+      "evidence_requirements": [
+        "任务技能目录快照",
+        "SkillsLoader事件",
+        "实际禁用与依赖配置"
+      ],
+      "executed": true,
+      "execution_evidence": [
+        {
+          "case_id": "core-skills_resolution-priority",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 1,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-skills_resolution-priority",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 2,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-skills_resolution-priority",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 3,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-skills_resolution-builtin",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 1,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-skills_resolution-builtin",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 2,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-skills_resolution-builtin",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 3,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-skills_resolution-disabled",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 1,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-skills_resolution-disabled",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 2,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-skills_resolution-disabled",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2",
+            "s3"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 3,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-skills_invocation_availability-deduplicate",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 1,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-skills_invocation_availability-deduplicate",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 2,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-skills_invocation_availability-deduplicate",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 3,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-skills_invocation_availability-unavailable",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2",
+            "s3",
+            "s4"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 1,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-skills_invocation_availability-unavailable",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2",
+            "s3",
+            "s4"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 2,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-skills_invocation_availability-unavailable",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2",
+            "s3",
+            "s4"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 3,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-skills_invocation_availability-always",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 1,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-skills_invocation_availability-always",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 2,
+          "verdict": "PASS"
+        },
+        {
+          "case_id": "core-skills_invocation_availability-always",
+          "complete_execution": true,
+          "event_ids": [
+            "s1",
+            "s2"
+          ],
+          "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+          "source_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+          "split": "dev",
+          "trial": 3,
+          "verdict": "PASS"
+        }
+      ],
+      "gaps": [
+        "holdout 尚未执行，不能称独立验收",
+        "独立人工审核待完成"
+      ],
+      "human_review_status": "pending_independent_review",
+      "human_reviewed": false,
+      "passed": true,
+      "passed_scope": "observed_complete_trials_only; not all scenarios or all defined cases",
+      "priority": "P0",
+      "profile": "core_modules",
+      "scenarios": [
+        "工作区/内置优先级及禁用",
+        "显式调用、依赖缺失和畸形元数据"
+      ],
+      "source_evidence": [
+        {
+          "path": "nanobot/agent/skills.py",
+          "sha256": "4de29a393a6d933d1f8edb16a5f62c20f43b2109bd111157c18efa2162a0ae8f"
+        }
+      ],
+      "source_present": true,
+      "splits": {
+        "dev": {
+          "defined_cases": 6,
+          "executed_case_ids": [
+            "core-skills_invocation_availability-always",
+            "core-skills_invocation_availability-deduplicate",
+            "core-skills_invocation_availability-unavailable",
+            "core-skills_resolution-builtin",
+            "core-skills_resolution-disabled",
+            "core-skills_resolution-priority"
+          ],
+          "executed_trials": 18,
+          "families": [
+            "skills_invocation_availability",
+            "skills_resolution"
+          ],
+          "observed_trials": 18,
+          "passed_trials": 18,
+          "planned_trials": 18,
+          "status": "planned_execution_complete"
+        },
+        "holdout": {
+          "defined_cases": 2,
+          "executed_case_ids": [],
+          "executed_trials": 0,
+          "families": [
+            "skills_malformed_metadata"
+          ],
+          "observed_trials": 0,
+          "passed_trials": 0,
+          "planned_trials": 0,
+          "status": "not_executed"
+        }
+      },
+      "success_conditions": [
+        "只加载可用且未禁用的技能",
+        "显式调用与内容来源正确"
+      ],
+      "title": "技能发现与调用"
+    },
+    {
+      "capability": "shell",
+      "dataset_defined": false,
+      "enabled_in_profile": false,
+      "evidence_requirements": [
+        "隔离临时目录",
+        "进程生命周期事件",
+        "独立退出状态与副作用快照"
+      ],
+      "executed": false,
+      "execution_evidence": [],
+      "gaps": [
+        "当前 profile 未启用",
+        "尚无绑定数据集场景",
+        "当前 profile 尚无完整执行证据",
+        "独立人工审核待完成"
+      ],
+      "human_review_status": "pending_independent_review",
+      "human_reviewed": false,
+      "passed": false,
+      "passed_scope": "observed_complete_trials_only; not all scenarios or all defined cases",
+      "priority": "P1",
+      "profile": "core_modules",
+      "scenarios": [
+        "工作区进程执行、输出截断和退出码",
+        "超时取消、残留进程与会话隔离"
+      ],
+      "source_evidence": [
+        {
+          "path": "nanobot/agent/tools/shell.py",
+          "sha256": "5b5fcf0f4129c91c131a4a4d9fc2d1b5f66110dadaff2aad5d0266b4fb1e5fca"
+        }
+      ],
+      "source_present": true,
+      "splits": {},
+      "success_conditions": [
+        "超时取消可观察且无残留副作用",
+        "工作区限制与执行结果一致"
+      ],
+      "title": "Shell与进程管理"
+    },
+    {
+      "capability": "web",
+      "dataset_defined": false,
+      "enabled_in_profile": false,
+      "evidence_requirements": [
+        "固定HTTP响应/本地测试服务",
+        "请求和重定向日志",
+        "网络策略断言"
+      ],
+      "executed": false,
+      "execution_evidence": [],
+      "gaps": [
+        "当前 profile 未启用",
+        "尚无绑定数据集场景",
+        "当前 profile 尚无完整执行证据",
+        "独立人工审核待完成"
+      ],
+      "human_review_status": "pending_independent_review",
+      "human_reviewed": false,
+      "passed": false,
+      "passed_scope": "observed_complete_trials_only; not all scenarios or all defined cases",
+      "priority": "P1",
+      "profile": "core_modules",
+      "scenarios": [
+        "本地固定响应解析与失败",
+        "SSRF、重定向和请求预算"
+      ],
+      "source_evidence": [
+        {
+          "path": "nanobot/agent/tools/web.py",
+          "sha256": "ace67dafbe44a1dc8400c0e0d09c51b08db8c29eb98a5a1e736731cb5e1801d2"
+        }
+      ],
+      "source_present": true,
+      "splits": {},
+      "success_conditions": [
+        "只访问明确允许目标",
+        "错误与缺失结果不冒充成功"
+      ],
+      "title": "Web检索与抓取"
+    },
+    {
+      "capability": "mcp",
+      "dataset_defined": false,
+      "enabled_in_profile": false,
+      "evidence_requirements": [
+        "本地受控MCP服务",
+        "连接/调用/取消事件",
+        "有效allowlist与SchemaHash"
+      ],
+      "executed": false,
+      "execution_evidence": [],
+      "gaps": [
+        "当前 profile 未启用",
+        "尚无绑定数据集场景",
+        "当前 profile 尚无完整执行证据",
+        "独立人工审核待完成"
+      ],
+      "human_review_status": "pending_independent_review",
+      "human_reviewed": false,
+      "passed": false,
+      "passed_scope": "observed_complete_trials_only; not all scenarios or all defined cases",
+      "priority": "P1",
+      "profile": "core_modules",
+      "scenarios": [
+        "本地stdio发现与Schema映射",
+        "工具白名单、超时、断开重连"
+      ],
+      "source_evidence": [
+        {
+          "path": "nanobot/agent/tools/mcp.py",
+          "sha256": "1b7804ac2b294a7c78fe37cd6a06b0c88c18fc1faeeaf49ef5bf91c9b5b61f67"
+        }
+      ],
+      "source_present": true,
+      "splits": {},
+      "success_conditions": [
+        "工具/资源/提示词注册遵守配置",
+        "错误传播与清理可核验"
+      ],
+      "title": "MCP协议与生命周期"
+    },
+    {
+      "capability": "channels",
+      "dataset_defined": false,
+      "enabled_in_profile": false,
+      "evidence_requirements": [
+        "伪渠道收发记录",
+        "启用配置的非秘密投影",
+        "投递/重试/失败事件"
+      ],
+      "executed": false,
+      "execution_evidence": [],
+      "gaps": [
+        "当前 profile 未启用",
+        "尚无绑定数据集场景",
+        "当前 profile 尚无完整执行证据",
+        "独立人工审核待完成"
+      ],
+      "human_review_status": "pending_independent_review",
+      "human_reviewed": false,
+      "passed": false,
+      "passed_scope": "observed_complete_trials_only; not all scenarios or all defined cases",
+      "priority": "P2",
+      "profile": "core_modules",
+      "scenarios": [
+        "伪渠道路由与事件顺序",
+        "重连、限流、失败状态和去重"
+      ],
+      "source_evidence": [
+        {
+          "path": "nanobot/channels/manager.py",
+          "sha256": "0270ed0b26c96fefa37beb8f547040f1f4433e2666b8a9ae00b58dc334ac1c21"
+        }
+      ],
+      "source_present": true,
+      "splits": {},
+      "success_conditions": [
+        "启用状态与实际运行状态分开",
+        "本地伪传输正确且不发送真实消息"
+      ],
+      "title": "渠道与消息投递"
+    },
+    {
+      "capability": "cron",
+      "dataset_defined": false,
+      "enabled_in_profile": false,
+      "evidence_requirements": [
+        "受控时钟",
+        "调度存储独立快照",
+        "任务生命周期事件"
+      ],
+      "executed": false,
+      "execution_evidence": [],
+      "gaps": [
+        "当前 profile 未启用",
+        "尚无绑定数据集场景",
+        "当前 profile 尚无完整执行证据",
+        "独立人工审核待完成"
+      ],
+      "human_review_status": "pending_independent_review",
+      "human_reviewed": false,
+      "passed": false,
+      "passed_scope": "observed_complete_trials_only; not all scenarios or all defined cases",
+      "priority": "P2",
+      "profile": "core_modules",
+      "scenarios": [
+        "假时钟触发、取消与持久化",
+        "重启、重复触发、Heartbeat空任务"
+      ],
+      "source_evidence": [
+        {
+          "path": "nanobot/cron/service.py",
+          "sha256": "19ac2754f8863feef4cac571c3a9ba182ffd265371bc33ac9b55fb3a5337be87"
+        },
+        {
+          "path": "nanobot/cli/gateway_runtime.py",
+          "sha256": "d532c1b9f3457e9ed55da6701199d8a1ddcabdde125c24ee956c1c4e274c1b52"
+        }
+      ],
+      "source_present": true,
+      "splits": {},
+      "success_conditions": [
+        "任务触发和取消符合计划",
+        "重复触发与重启状态可追溯"
+      ],
+      "title": "定时与Heartbeat/Dream"
+    },
+    {
+      "capability": "subagent",
+      "dataset_defined": false,
+      "enabled_in_profile": false,
+      "evidence_requirements": [
+        "脚本化Provider请求序列",
+        "父子任务/会话ID",
+        "取消和结果回流事件"
+      ],
+      "executed": false,
+      "execution_evidence": [],
+      "gaps": [
+        "当前 profile 未启用",
+        "尚无绑定数据集场景",
+        "当前 profile 尚无完整执行证据",
+        "独立人工审核待完成"
+      ],
+      "human_review_status": "pending_independent_review",
+      "human_reviewed": false,
+      "passed": false,
+      "passed_scope": "observed_complete_trials_only; not all scenarios or all defined cases",
+      "priority": "P1",
+      "profile": "core_modules",
+      "scenarios": [
+        "脚本化Provider并发上限与取消",
+        "阻塞/后台结果回流、隔离与去重"
+      ],
+      "source_evidence": [
+        {
+          "path": "nanobot/agent/subagent.py",
+          "sha256": "35766f9582b1b7dcdea246d19784f064c2b0ab037144804941cca0c22d4e7787"
+        },
+        {
+          "path": "nanobot/agent/tools/spawn.py",
+          "sha256": "850df9890cfde092f2d63dea4686f3b5551dc0b88dbf440b6ab48a38a3799ec4"
+        }
+      ],
+      "source_present": true,
+      "splits": {},
+      "success_conditions": [
+        "任务数与并发限制一致",
+        "结果正确归属原会话且取消无泄漏"
+      ],
+      "title": "子代理调度与结果回流"
+    },
+    {
+      "capability": "plugins",
+      "dataset_defined": false,
+      "enabled_in_profile": false,
+      "evidence_requirements": [
+        "隔离插件fixture",
+        "实际工具名单及SchemaHash",
+        "注册/失败日志"
+      ],
+      "executed": false,
+      "execution_evidence": [],
+      "gaps": [
+        "当前 profile 未启用",
+        "尚无绑定数据集场景",
+        "当前 profile 尚无完整执行证据",
+        "独立人工审核待完成"
+      ],
+      "human_review_status": "pending_independent_review",
+      "human_reviewed": false,
+      "passed": false,
+      "passed_scope": "observed_complete_trials_only; not all scenarios or all defined cases",
+      "priority": "P1",
+      "profile": "core_modules",
+      "scenarios": [
+        "entry-point插件发现与重复工具名",
+        "加载失败、旧错误接口适配"
+      ],
+      "source_evidence": [
+        {
+          "path": "nanobot/agent/tools/loader.py",
+          "sha256": "049b80e70fe8b5c860b90641ca997ac6dcf5de885c0023a3becb5ec7bf8a26bc"
+        }
+      ],
+      "source_present": true,
+      "splits": {},
+      "success_conditions": [
+        "有效注册集合与策略一致",
+        "失败不造成隐式能力升级"
+      ],
+      "title": "工具插件发现与注册"
+    },
+    {
+      "capability": "provider",
+      "dataset_defined": false,
+      "enabled_in_profile": false,
+      "evidence_requirements": [
+        "脱敏请求元信息",
+        "实际参数投影",
+        "预算与错误事件"
+      ],
+      "executed": false,
+      "execution_evidence": [],
+      "gaps": [
+        "当前 profile 未启用",
+        "尚无绑定数据集场景",
+        "当前 profile 尚无完整执行证据",
+        "独立人工审核待完成"
+      ],
+      "human_review_status": "pending_independent_review",
+      "human_reviewed": false,
+      "passed": false,
+      "passed_scope": "observed_complete_trials_only; not all scenarios or all defined cases",
+      "priority": "P1",
+      "profile": "core_modules",
+      "scenarios": [
+        "脚本化Provider错误、重试和预算",
+        "模型切换与generation参数投影"
+      ],
+      "source_evidence": [
+        {
+          "path": "nanobot/providers/base.py",
+          "sha256": "7938c11fdcbf7036ceb0c70a7544932755c629a2f81d428023b6b2b511c135ba"
+        },
+        {
+          "path": "nanobot/agent/model_runtime.py",
+          "sha256": "8b190ce2f80ec13e8bcd5260d6e8d180a21ab1c1977c77bacc3df815fba1328c"
+        }
+      ],
+      "source_present": true,
+      "splits": {},
+      "success_conditions": [
+        "请求预算与有效配置保持一致",
+        "Provider失败不冒充Agent通过"
+      ],
+      "title": "模型Provider与配置路由"
+    },
+    {
+      "capability": "workspace_security",
+      "dataset_defined": false,
+      "enabled_in_profile": false,
+      "evidence_requirements": [
+        "独立目录快照",
+        "路径策略配置",
+        "拒绝与清理事件"
+      ],
+      "executed": false,
+      "execution_evidence": [],
+      "gaps": [
+        "当前 profile 未启用",
+        "尚无绑定数据集场景",
+        "当前 profile 尚无完整执行证据",
+        "独立人工审核待完成"
+      ],
+      "human_review_status": "pending_independent_review",
+      "human_reviewed": false,
+      "passed": false,
+      "passed_scope": "observed_complete_trials_only; not all scenarios or all defined cases",
+      "priority": "P0",
+      "profile": "core_modules",
+      "scenarios": [
+        "路径范围与只读/写入边界",
+        "符号链接与越界尝试"
+      ],
+      "source_evidence": [
+        {
+          "path": "nanobot/security/workspace_access.py",
+          "sha256": "72eb229628ead42ef233ba33ae25667237653219be3902b96df1e8ede8669023"
+        },
+        {
+          "path": "nanobot/security/workspace_policy.py",
+          "sha256": "d7d20f243a80015735120548378a0652b318852d156f7b5782b5db627a80d598"
+        }
+      ],
+      "source_present": true,
+      "splits": {},
+      "success_conditions": [
+        "策略拒绝有证据且无额外写入",
+        "明确应用策略与操作系统沙箱差别"
+      ],
+      "title": "工作区策略"
+    },
+    {
+      "capability": "api_gateway",
+      "dataset_defined": false,
+      "enabled_in_profile": false,
+      "evidence_requirements": [
+        "本地假服务或离线适配器",
+        "生命周期事件",
+        "不包含凭据的配置Hash"
+      ],
+      "executed": false,
+      "execution_evidence": [],
+      "gaps": [
+        "当前 profile 未启用",
+        "尚无绑定数据集场景",
+        "当前 profile 尚无完整执行证据",
+        "独立人工审核待完成"
+      ],
+      "human_review_status": "pending_independent_review",
+      "human_reviewed": false,
+      "passed": false,
+      "passed_scope": "observed_complete_trials_only; not all scenarios or all defined cases",
+      "priority": "P2",
+      "profile": "core_modules",
+      "scenarios": [
+        "离线生命周期和受控请求",
+        "启动失败、重载与关闭清理"
+      ],
+      "source_evidence": [
+        {
+          "path": "nanobot/api/server.py",
+          "sha256": "25b41268fb532a2ba32569767da1c2b79e9d3dc6e888532014615a2f3ad59387"
+        },
+        {
+          "path": "nanobot/cli/gateway_runtime.py",
+          "sha256": "d532c1b9f3457e9ed55da6701199d8a1ddcabdde125c24ee956c1c4e274c1b52"
+        }
+      ],
+      "source_present": true,
+      "splits": {},
+      "success_conditions": [
+        "配置与实际服务状态区分",
+        "失败与清理可复核"
+      ],
+      "title": "Gateway与API生命周期"
+    }
+  ],
+  "snapshot_hash": "5f6ae8d8186a78731b68d96d45351c734bc3971e843e0c404945abd92e34ae5e",
+  "sources": [
+    {
+      "dataset_id": "nanobot-core-v1",
+      "identity_hash": "a4eb6b7e7d2a500c1b224bc4de0411931fe833e405bfad5831b62aeef58bdd84",
+      "kind": "dataset"
+    },
+    {
+      "dataset_id": "file-tools-v2",
+      "identity_hash": "22d271abadf87c38a8abcc62b31e702def107c96f3565d789b198aaa36ee7d7a",
+      "kind": "dataset"
+    },
+    {
+      "dataset_id": "model-decisions-v1",
+      "identity_hash": "2f20720abb8ee05e40dfded353f3f1ab299383bbf607a75ab7d9bf2b877c984b",
+      "kind": "dataset"
+    },
+    {
+      "kind": "current_run",
+      "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+      "sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098"
+    },
+    {
+      "kind": "legacy_run",
+      "run_id": "modules60-scored-regrade-4bd78c93",
+      "sha256": "425c9318ee06a276c08a1fe2792b2a73a727d22942a666a518a66b473fe1f39a"
+    },
+    {
+      "kind": "legacy_run",
+      "run_id": "decisions24x3-scored-regrade-016e7219",
+      "sha256": "c318221f60571709e5843b7cbcc5b23e58d51eaa71dd2a7668fdaf2a26bb6507"
+    },
+    {
+      "kind": "legacy_run",
+      "run_id": "chains60x3-scored-regrade-f0242ffc",
+      "sha256": "769dcc543feb5ab2decc4043aa49a65e417ae570a0ed8ff9299548bf0f0201e3"
+    },
+    {
+      "kind": "legacy_run",
+      "run_id": "e2e300-scored-regrade-823fe3e8",
+      "sha256": "6f95ca77865b0e0473cd3c82c33b08dd7a85d4e415dc1c3d920f72203e00dc3a"
+    }
+  ],
+  "version": "nanobot-capability-coverage-v1"
+}

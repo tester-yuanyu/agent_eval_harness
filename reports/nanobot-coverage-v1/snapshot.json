@@ -1,0 +1,1808 @@
+{
+  "environment": {
+    "dependencies": [
+      {
+        "name": "aiohappyeyeballs",
+        "version": "2.7.1"
+      },
+      {
+        "name": "aiohttp",
+        "version": "3.14.3"
+      },
+      {
+        "name": "aiosignal",
+        "version": "1.4.0"
+      },
+      {
+        "name": "annotated-doc",
+        "version": "0.0.5"
+      },
+      {
+        "name": "annotated-types",
+        "version": "0.8.0"
+      },
+      {
+        "name": "anthropic",
+        "version": "0.125.0"
+      },
+      {
+        "name": "anyio",
+        "version": "4.14.2"
+      },
+      {
+        "name": "attrs",
+        "version": "26.1.0"
+      },
+      {
+        "name": "azure-core",
+        "version": "1.41.0"
+      },
+      {
+        "name": "azure-identity",
+        "version": "1.25.3"
+      },
+      {
+        "name": "backoff",
+        "version": "2.2.1"
+      },
+      {
+        "name": "basedpyright",
+        "version": "1.39.10"
+      },
+      {
+        "name": "bidict",
+        "version": "0.23.1"
+      },
+      {
+        "name": "boto3",
+        "version": "1.43.75"
+      },
+      {
+        "name": "botocore",
+        "version": "1.43.75"
+      },
+      {
+        "name": "brotli",
+        "version": "1.2.0"
+      },
+      {
+        "name": "capability-snapshot-kit",
+        "version": "0.1.0"
+      },
+      {
+        "name": "certifi",
+        "version": "2026.7.22"
+      },
+      {
+        "name": "cffi",
+        "version": "2.1.1"
+      },
+      {
+        "name": "chardet",
+        "version": "5.2.0"
+      },
+      {
+        "name": "charset-normalizer",
+        "version": "3.5.1"
+      },
+      {
+        "name": "click",
+        "version": "8.4.2"
+      },
+      {
+        "name": "coverage",
+        "version": "7.15.4"
+      },
+      {
+        "name": "croniter",
+        "version": "6.2.4"
+      },
+      {
+        "name": "cryptography",
+        "version": "50.0.0"
+      },
+      {
+        "name": "cssselect",
+        "version": "1.5.0"
+      },
+      {
+        "name": "ddgs",
+        "version": "9.15.0"
+      },
+      {
+        "name": "defusedxml",
+        "version": "0.7.1"
+      },
+      {
+        "name": "distro",
+        "version": "1.9.0"
+      },
+      {
+        "name": "docstring_parser",
+        "version": "0.18.0"
+      },
+      {
+        "name": "dulwich",
+        "version": "0.25.2"
+      },
+      {
+        "name": "et_xmlfile",
+        "version": "2.0.0"
+      },
+      {
+        "name": "execnet",
+        "version": "2.1.2"
+      },
+      {
+        "name": "fake-useragent",
+        "version": "2.2.0"
+      },
+      {
+        "name": "filelock",
+        "version": "3.32.3"
+      },
+      {
+        "name": "frozenlist",
+        "version": "1.8.0"
+      },
+      {
+        "name": "googleapis-common-protos",
+        "version": "1.75.1"
+      },
+      {
+        "name": "h11",
+        "version": "0.16.0"
+      },
+      {
+        "name": "h2",
+        "version": "4.4.1"
+      },
+      {
+        "name": "hpack",
+        "version": "4.2.0"
+      },
+      {
+        "name": "httpcore",
+        "version": "1.0.9"
+      },
+      {
+        "name": "httpcore2",
+        "version": "2.12.0"
+      },
+      {
+        "name": "httpx",
+        "version": "0.28.1"
+      },
+      {
+        "name": "httpx-sse",
+        "version": "0.4.3"
+      },
+      {
+        "name": "httpx2",
+        "version": "2.12.0"
+      },
+      {
+        "name": "hyperframe",
+        "version": "6.1.0"
+      },
+      {
+        "name": "idna",
+        "version": "3.19"
+      },
+      {
+        "name": "iniconfig",
+        "version": "2.3.0"
+      },
+      {
+        "name": "Jinja2",
+        "version": "3.1.6"
+      },
+      {
+        "name": "jiter",
+        "version": "0.16.0"
+      },
+      {
+        "name": "jmespath",
+        "version": "1.1.0"
+      },
+      {
+        "name": "json_repair",
+        "version": "0.63.3"
+      },
+      {
+        "name": "jsonschema",
+        "version": "4.26.0"
+      },
+      {
+        "name": "jsonschema-specifications",
+        "version": "2025.9.1"
+      },
+      {
+        "name": "langfuse",
+        "version": "3.15.0"
+      },
+      {
+        "name": "loguru",
+        "version": "0.7.3"
+      },
+      {
+        "name": "lxml",
+        "version": "6.1.2"
+      },
+      {
+        "name": "lxml_html_clean",
+        "version": "0.4.5"
+      },
+      {
+        "name": "markdown-it-py",
+        "version": "4.2.0"
+      },
+      {
+        "name": "MarkupSafe",
+        "version": "3.0.3"
+      },
+      {
+        "name": "mcp",
+        "version": "1.29.0"
+      },
+      {
+        "name": "mdurl",
+        "version": "0.1.2"
+      },
+      {
+        "name": "msal",
+        "version": "1.37.0"
+      },
+      {
+        "name": "msal-extensions",
+        "version": "1.3.1"
+      },
+      {
+        "name": "msgpack",
+        "version": "1.2.1"
+      },
+      {
+        "name": "multidict",
+        "version": "6.7.1"
+      },
+      {
+        "name": "nanobot-ai",
+        "version": "0.3.0"
+      },
+      {
+        "name": "nodejs-wheel-binaries",
+        "version": "24.19.0"
+      },
+      {
+        "name": "oauth-cli-kit",
+        "version": "0.1.6"
+      },
+      {
+        "name": "olostep",
+        "version": "1.2.2"
+      },
+      {
+        "name": "openai",
+        "version": "3.3.1"
+      },
+      {
+        "name": "openpyxl",
+        "version": "3.1.5"
+      },
+      {
+        "name": "opentelemetry-api",
+        "version": "1.44.0"
+      },
+      {
+        "name": "opentelemetry-exporter-otlp-proto-common",
+        "version": "1.44.0"
+      },
+      {
+        "name": "opentelemetry-exporter-otlp-proto-http",
+        "version": "1.44.0"
+      },
+      {
+        "name": "opentelemetry-proto",
+        "version": "1.44.0"
+      },
+      {
+        "name": "opentelemetry-sdk",
+        "version": "1.44.0"
+      },
+      {
+        "name": "opentelemetry-semantic-conventions",
+        "version": "0.65b0"
+      },
+      {
+        "name": "packaging",
+        "version": "25.0"
+      },
+      {
+        "name": "pillow",
+        "version": "12.3.0"
+      },
+      {
+        "name": "pip",
+        "version": "23.2.1"
+      },
+      {
+        "name": "platformdirs",
+        "version": "4.11.3"
+      },
+      {
+        "name": "pluggy",
+        "version": "1.6.0"
+      },
+      {
+        "name": "primp",
+        "version": "1.3.1"
+      },
+      {
+        "name": "prompt_toolkit",
+        "version": "3.0.53"
+      },
+      {
+        "name": "propcache",
+        "version": "0.5.2"
+      },
+      {
+        "name": "protobuf",
+        "version": "7.35.1"
+      },
+      {
+        "name": "pycountry",
+        "version": "24.6.1"
+      },
+      {
+        "name": "pycparser",
+        "version": "3.0"
+      },
+      {
+        "name": "pydantic",
+        "version": "2.13.4"
+      },
+      {
+        "name": "pydantic-settings",
+        "version": "2.15.0"
+      },
+      {
+        "name": "pydantic_core",
+        "version": "2.46.4"
+      },
+      {
+        "name": "Pygments",
+        "version": "2.21.0"
+      },
+      {
+        "name": "PyJWT",
+        "version": "2.13.0"
+      },
+      {
+        "name": "pymupdf",
+        "version": "1.28.2"
+      },
+      {
+        "name": "pypdf",
+        "version": "5.9.0"
+      },
+      {
+        "name": "pytest",
+        "version": "9.1.1"
+      },
+      {
+        "name": "pytest-asyncio",
+        "version": "1.4.0"
+      },
+      {
+        "name": "pytest-cov",
+        "version": "6.3.0"
+      },
+      {
+        "name": "pytest-xdist",
+        "version": "3.8.0"
+      },
+      {
+        "name": "python-dateutil",
+        "version": "2.9.0.post0"
+      },
+      {
+        "name": "python-docx",
+        "version": "1.2.0"
+      },
+      {
+        "name": "python-dotenv",
+        "version": "1.2.3"
+      },
+      {
+        "name": "python-engineio",
+        "version": "4.13.5"
+      },
+      {
+        "name": "python-multipart",
+        "version": "0.0.32"
+      },
+      {
+        "name": "python-pptx",
+        "version": "1.0.2"
+      },
+      {
+        "name": "python-socketio",
+        "version": "5.16.4"
+      },
+      {
+        "name": "PyYAML",
+        "version": "6.0.3"
+      },
+      {
+        "name": "qrcode",
+        "version": "8.2"
+      },
+      {
+        "name": "questionary",
+        "version": "2.1.1"
+      },
+      {
+        "name": "readability-lxml",
+        "version": "0.8.4.1"
+      },
+      {
+        "name": "referencing",
+        "version": "0.37.0"
+      },
+      {
+        "name": "regex",
+        "version": "2026.7.19"
+      },
+      {
+        "name": "requests",
+        "version": "2.34.2"
+      },
+      {
+        "name": "rich",
+        "version": "14.3.4"
+      },
+      {
+        "name": "rpds-py",
+        "version": "2026.6.3"
+      },
+      {
+        "name": "ruff",
+        "version": "0.16.3"
+      },
+      {
+        "name": "s3transfer",
+        "version": "0.19.2"
+      },
+      {
+        "name": "setuptools",
+        "version": "65.5.0"
+      },
+      {
+        "name": "shellingham",
+        "version": "1.5.4"
+      },
+      {
+        "name": "simple-websocket",
+        "version": "1.1.0"
+      },
+      {
+        "name": "six",
+        "version": "1.17.0"
+      },
+      {
+        "name": "sniffio",
+        "version": "1.3.1"
+      },
+      {
+        "name": "socksio",
+        "version": "1.0.0"
+      },
+      {
+        "name": "sse-starlette",
+        "version": "3.4.8"
+      },
+      {
+        "name": "starlette",
+        "version": "1.6.0"
+      },
+      {
+        "name": "tiktoken",
+        "version": "0.14.0"
+      },
+      {
+        "name": "truststore",
+        "version": "0.10.4"
+      },
+      {
+        "name": "typer",
+        "version": "0.27.1"
+      },
+      {
+        "name": "typing-inspection",
+        "version": "0.4.4"
+      },
+      {
+        "name": "typing_extensions",
+        "version": "4.16.0"
+      },
+      {
+        "name": "tzdata",
+        "version": "2026.3"
+      },
+      {
+        "name": "tzlocal",
+        "version": "5.4.4"
+      },
+      {
+        "name": "urllib3",
+        "version": "2.7.0"
+      },
+      {
+        "name": "uvicorn",
+        "version": "0.52.4"
+      },
+      {
+        "name": "watchfiles",
+        "version": "1.2.0"
+      },
+      {
+        "name": "wcwidth",
+        "version": "0.8.2"
+      },
+      {
+        "name": "websocket-client",
+        "version": "1.9.0"
+      },
+      {
+        "name": "websockets",
+        "version": "16.1.1"
+      },
+      {
+        "name": "wrapt",
+        "version": "1.17.3"
+      },
+      {
+        "name": "wsproto",
+        "version": "1.3.2"
+      },
+      {
+        "name": "xlsxwriter",
+        "version": "3.2.9"
+      },
+      {
+        "name": "yarl",
+        "version": "1.24.5"
+      }
+    ],
+    "dependencies_sha256": "53f7aeaa635d901a40c0132a5738afa9d970da534bcc43ef5736e2abc72a8818",
+    "dependency_identity_scope": "installed distribution names and versions; editable dependency contents not hashed",
+    "implementation": "CPython",
+    "python_binary_sha256": "e28ef10fbccfe1a9b3c820b027b65c3e3f10ea5e959d0e5ef50a97ecd810cf93",
+    "python_version": "3.11.7",
+    "source_import_identity": {
+      "relative_path": "nanobot/__init__.py",
+      "resolution": "isolated bootstrap; explicit source root; verified find_spec",
+      "sha256": "00097f56cd8d3e9cf7d6234243e6928c34659825e1d311bd5c05876581f3c9b1"
+    }
+  },
+  "harness_environment": {
+    "dependencies": [
+      {
+        "name": "agent-client-protocol",
+        "version": "0.12.1"
+      },
+      {
+        "name": "agent-eval-contracts",
+        "version": "0.1.0"
+      },
+      {
+        "name": "agent-eval-contracts",
+        "version": "0.1.0"
+      },
+      {
+        "name": "agent-eval-suite",
+        "version": "0.1.0"
+      },
+      {
+        "name": "agent-eval-suite",
+        "version": "0.1.0"
+      },
+      {
+        "name": "agent-evaluator",
+        "version": "0.1.0"
+      },
+      {
+        "name": "agent-evaluator",
+        "version": "0.1.0"
+      },
+      {
+        "name": "agent-trace-sdk",
+        "version": "0.1.0"
+      },
+      {
+        "name": "agent-trace-sdk",
+        "version": "0.1.0"
+      },
+      {
+        "name": "aiobotocore",
+        "version": "3.10.0"
+      },
+      {
+        "name": "aiohappyeyeballs",
+        "version": "2.7.1"
+      },
+      {
+        "name": "aiohttp",
+        "version": "3.14.5"
+      },
+      {
+        "name": "aioitertools",
+        "version": "0.13.0"
+      },
+      {
+        "name": "aiosignal",
+        "version": "1.4.0"
+      },
+      {
+        "name": "annotated-doc",
+        "version": "0.0.5"
+      },
+      {
+        "name": "annotated-types",
+        "version": "0.8.0"
+      },
+      {
+        "name": "anyio",
+        "version": "4.15.1"
+      },
+      {
+        "name": "attrs",
+        "version": "26.1.0"
+      },
+      {
+        "name": "backoff",
+        "version": "2.2.1"
+      },
+      {
+        "name": "beautifulsoup4",
+        "version": "4.15.0"
+      },
+      {
+        "name": "boto3",
+        "version": "1.43.117"
+      },
+      {
+        "name": "botocore",
+        "version": "1.43.117"
+      },
+      {
+        "name": "certifi",
+        "version": "2026.10.23"
+      },
+      {
+        "name": "charset-normalizer",
+        "version": "3.5.2"
+      },
+      {
+        "name": "click",
+        "version": "8.3.3"
+      },
+      {
+        "name": "debugpy",
+        "version": "1.8.22"
+      },
+      {
+        "name": "deepeval",
+        "version": "4.2.9"
+      },
+      {
+        "name": "distro",
+        "version": "1.9.0"
+      },
+      {
+        "name": "docstring_parser",
+        "version": "0.18.0"
+      },
+      {
+        "name": "execnet",
+        "version": "2.1.2"
+      },
+      {
+        "name": "fastapi",
+        "version": "0.162.0"
+      },
+      {
+        "name": "frozenlist",
+        "version": "1.8.0"
+      },
+      {
+        "name": "fsspec",
+        "version": "2026.6.0"
+      },
+      {
+        "name": "googleapis-common-protos",
+        "version": "1.76.0"
+      },
+      {
+        "name": "grpcio",
+        "version": "1.85.1"
+      },
+      {
+        "name": "h11",
+        "version": "0.16.0"
+      },
+      {
+        "name": "httpcore",
+        "version": "1.0.9"
+      },
+      {
+        "name": "httpcore2",
+        "version": "2.16.0"
+      },
+      {
+        "name": "httpx",
+        "version": "0.28.1"
+      },
+      {
+        "name": "httpx2",
+        "version": "2.16.0"
+      },
+      {
+        "name": "idna",
+        "version": "3.20"
+      },
+      {
+        "name": "ijson",
+        "version": "3.6.0"
+      },
+      {
+        "name": "iniconfig",
+        "version": "2.3.1"
+      },
+      {
+        "name": "inspect_ai",
+        "version": "0.3.280"
+      },
+      {
+        "name": "Jinja2",
+        "version": "3.1.6"
+      },
+      {
+        "name": "jiter",
+        "version": "0.18.0"
+      },
+      {
+        "name": "jmespath",
+        "version": "1.1.0"
+      },
+      {
+        "name": "jsonlines",
+        "version": "4.0.0"
+      },
+      {
+        "name": "jsonpatch",
+        "version": "1.38"
+      },
+      {
+        "name": "jsonpath-ng",
+        "version": "1.14.0"
+      },
+      {
+        "name": "jsonpointer",
+        "version": "3.6"
+      },
+      {
+        "name": "jsonref",
+        "version": "1.1.0"
+      },
+      {
+        "name": "jsonschema",
+        "version": "4.26.0"
+      },
+      {
+        "name": "jsonschema-specifications",
+        "version": "2025.9.1"
+      },
+      {
+        "name": "langfuse",
+        "version": "5.0.2"
+      },
+      {
+        "name": "linkify-it-py",
+        "version": "2.2.0"
+      },
+      {
+        "name": "markdown-it-py",
+        "version": "4.2.0"
+      },
+      {
+        "name": "MarkupSafe",
+        "version": "3.0.4"
+      },
+      {
+        "name": "mdit-py-plugins",
+        "version": "0.6.1"
+      },
+      {
+        "name": "mdurl",
+        "version": "0.1.2"
+      },
+      {
+        "name": "minimal-agent",
+        "version": "0.1.0"
+      },
+      {
+        "name": "minimal-agent",
+        "version": "0.1.0"
+      },
+      {
+        "name": "mmh3",
+        "version": "5.3.1"
+      },
+      {
+        "name": "multidict",
+        "version": "7.2.1"
+      },
+      {
+        "name": "nest-asyncio",
+        "version": "1.6.0"
+      },
+      {
+        "name": "nest-asyncio2",
+        "version": "1.7.4"
+      },
+      {
+        "name": "numpy",
+        "version": "2.4.6"
+      },
+      {
+        "name": "openai",
+        "version": "3.40.0"
+      },
+      {
+        "name": "opentelemetry-api",
+        "version": "1.45.1"
+      },
+      {
+        "name": "opentelemetry-exporter-http-transport",
+        "version": "0.66b1"
+      },
+      {
+        "name": "opentelemetry-exporter-otlp-common",
+        "version": "0.66b1"
+      },
+      {
+        "name": "opentelemetry-exporter-otlp-proto-common",
+        "version": "1.45.1"
+      },
+      {
+        "name": "opentelemetry-exporter-otlp-proto-http",
+        "version": "1.45.1"
+      },
+      {
+        "name": "opentelemetry-proto",
+        "version": "1.45.1"
+      },
+      {
+        "name": "opentelemetry-sdk",
+        "version": "1.45.1"
+      },
+      {
+        "name": "opentelemetry-semantic-conventions",
+        "version": "0.66b1"
+      },
+      {
+        "name": "packaging",
+        "version": "26.3"
+      },
+      {
+        "name": "pathlib_abc",
+        "version": "0.5.2"
+      },
+      {
+        "name": "pip",
+        "version": "23.0.1"
+      },
+      {
+        "name": "platformdirs",
+        "version": "4.13.7"
+      },
+      {
+        "name": "pluggy",
+        "version": "1.7.0"
+      },
+      {
+        "name": "portalocker",
+        "version": "4.4.2"
+      },
+      {
+        "name": "posthog",
+        "version": "7.81.1"
+      },
+      {
+        "name": "prompt_toolkit",
+        "version": "3.0.53"
+      },
+      {
+        "name": "propcache",
+        "version": "0.5.4"
+      },
+      {
+        "name": "protobuf",
+        "version": "7.36.2"
+      },
+      {
+        "name": "psutil",
+        "version": "7.2.2"
+      },
+      {
+        "name": "pydantic",
+        "version": "2.14.1"
+      },
+      {
+        "name": "pydantic-settings",
+        "version": "2.16.2"
+      },
+      {
+        "name": "pydantic_core",
+        "version": "2.50.1"
+      },
+      {
+        "name": "pyfiglet",
+        "version": "1.0.4"
+      },
+      {
+        "name": "Pygments",
+        "version": "2.21.0"
+      },
+      {
+        "name": "pytest",
+        "version": "8.4.2"
+      },
+      {
+        "name": "pytest-asyncio",
+        "version": "1.4.1"
+      },
+      {
+        "name": "pytest-repeat",
+        "version": "0.9.4"
+      },
+      {
+        "name": "pytest-rerunfailures",
+        "version": "16.7"
+      },
+      {
+        "name": "pytest-xdist",
+        "version": "3.8.0"
+      },
+      {
+        "name": "python-dateutil",
+        "version": "2.9.0.post0"
+      },
+      {
+        "name": "python-dotenv",
+        "version": "1.2.4"
+      },
+      {
+        "name": "PyYAML",
+        "version": "6.0.3"
+      },
+      {
+        "name": "questionary",
+        "version": "2.1.1"
+      },
+      {
+        "name": "referencing",
+        "version": "0.37.0"
+      },
+      {
+        "name": "regex",
+        "version": "2026.9.29"
+      },
+      {
+        "name": "requests",
+        "version": "2.34.2"
+      },
+      {
+        "name": "rich",
+        "version": "14.3.4"
+      },
+      {
+        "name": "rpds-py",
+        "version": "2026.9.1"
+      },
+      {
+        "name": "ruff",
+        "version": "0.17.3"
+      },
+      {
+        "name": "s3fs",
+        "version": "2026.6.0"
+      },
+      {
+        "name": "s3transfer",
+        "version": "0.19.3"
+      },
+      {
+        "name": "semver",
+        "version": "3.1.0"
+      },
+      {
+        "name": "setuptools",
+        "version": "67.6.1"
+      },
+      {
+        "name": "shellingham",
+        "version": "1.5.4"
+      },
+      {
+        "name": "shortuuid",
+        "version": "1.0.13"
+      },
+      {
+        "name": "six",
+        "version": "1.17.0"
+      },
+      {
+        "name": "sniffio",
+        "version": "1.3.1"
+      },
+      {
+        "name": "soupsieve",
+        "version": "2.10"
+      },
+      {
+        "name": "starlette",
+        "version": "1.10.0"
+      },
+      {
+        "name": "tabulate",
+        "version": "0.9.0"
+      },
+      {
+        "name": "tenacity",
+        "version": "9.2.1"
+      },
+      {
+        "name": "textual",
+        "version": "8.2.8"
+      },
+      {
+        "name": "tiktoken",
+        "version": "0.14.0"
+      },
+      {
+        "name": "tqdm",
+        "version": "4.70.1"
+      },
+      {
+        "name": "truststore",
+        "version": "0.10.5"
+      },
+      {
+        "name": "typer",
+        "version": "0.27.3"
+      },
+      {
+        "name": "typing-inspection",
+        "version": "0.4.4"
+      },
+      {
+        "name": "typing_extensions",
+        "version": "4.16.0"
+      },
+      {
+        "name": "universal_pathlib",
+        "version": "0.3.10"
+      },
+      {
+        "name": "urllib3",
+        "version": "2.8.0"
+      },
+      {
+        "name": "uvicorn",
+        "version": "0.54.0"
+      },
+      {
+        "name": "wcwidth",
+        "version": "0.9.4"
+      },
+      {
+        "name": "wheel",
+        "version": "0.48.0"
+      },
+      {
+        "name": "wrapt",
+        "version": "2.5.1"
+      },
+      {
+        "name": "yarl",
+        "version": "1.25.1"
+      },
+      {
+        "name": "zipfile-zstd",
+        "version": "0.0.4"
+      },
+      {
+        "name": "zipp",
+        "version": "4.1.2"
+      },
+      {
+        "name": "zstandard",
+        "version": "0.25.0"
+      }
+    ],
+    "dependencies_sha256": "5a90eef8fc5546112f1895eec486c399ebd339ab93522a5b434287421628e841",
+    "dependency_identity_scope": "installed distribution names and versions; editable dependency contents not hashed",
+    "implementation": "CPython",
+    "python_binary_sha256": "037b1a4a5447b2267537419d3e5873fc0346f78e4a4b02ef2e879b64e04879f4",
+    "python_version": "3.11.4"
+  },
+  "profiles": {
+    "core_modules": {
+      "adapter_sha256": "4b39973d1d0feed3cd70cc200f2f0bf6c5c1ff530270c8415ec46da420499c5e",
+      "available": true,
+      "code_hashes": {
+        "packages/evaluator/src/eval_framework/benchmark/capability_coverage.py": "4de7e57fd1eb11a55e3fbd3cbef6b3a89a0011ebb57d44aaf41a6c5b3957c078",
+        "packages/evaluator/src/eval_framework/benchmark/core_runner.py": "fafedbe1f452db296ff9627be3e4773095e9f0486113e31a744f61b632b05897",
+        "packages/evaluator/src/eval_framework/benchmark/core_scoring.py": "7bf97209da50f47fc8e97f22116e82106624485e0892c511848f8e0543c83b6e",
+        "packages/evaluator/src/eval_framework/benchmark/core_tasks.py": "e3c4ab35bce7358e743b5cf0abdc169077db84113d6da814ebec95f451f0c900",
+        "packages/evaluator/src/eval_framework/benchmark/core_worker.py": "9b2ce0c907c92e4b438c7e7a7ecb29171495e5ae876547a96825d60c3339b010",
+        "packages/evaluator/src/eval_framework/benchmark/inspect_docker.py": "22ff9d9a535511db9193c8a017a90b9adda08dcc48a7dd09a1b0222aa3d3e835",
+        "packages/evaluator/src/eval_framework/benchmark/inspect_runtime.py": "c55dc13f7fae7176a4de014672f0c8db76bbe2fa7dd68244630137d4bcca6921",
+        "packages/evaluator/src/eval_framework/benchmark/nanobot_runtime.py": "cbb22ab498e65393b8e88a665360d1c2c3b9cb4880dff5fe268d9fbf5148641b",
+        "packages/evaluator/src/eval_framework/benchmark/runner.py": "900723b1ca329330e0bb1e543e595041d2b8bc3122f5b656b215fc865cd295df"
+      },
+      "effective": {
+        "channels": false,
+        "cron": false,
+        "description": "真实 Session/Memory/Context/Skills 组件的离线确定性测试",
+        "enabled_domains": [
+          "session",
+          "memory",
+          "context",
+          "skills"
+        ],
+        "execution_kind": "real_core_module",
+        "mcp": false,
+        "model_provider": false,
+        "network": false,
+        "scope_note": "组件操作结果，不是 LLM 或完整 Agent 成绩；skills 使用任务专属 fixture；可信固定模块实验，非恶意代码安全沙箱",
+        "subagent_tool": false
+      },
+      "missing_code": [],
+      "profile_hash": "4cf14ffeca44685000c7d910c674db9e8b70f205ba5353c3933dc4c3be53b8b7",
+      "scoring_sha256": "5e764a3633e10f18040c0de3da4b321f91eee99e3b45730fcdfa5bc8eb3d9b21"
+    },
+    "file_tools": {
+      "adapter_sha256": "2d01b7bf3ab9ae85677cffb65d898c9da25f36aecde3dcbedc2d47705ac4d694",
+      "available": true,
+      "code_hashes": {
+        "packages/evaluator/src/eval_framework/benchmark/agentic_metrics.py": "ac0cc21aca22066044314974bab09df8318db321aa0fefc8721ce57cd8206e22",
+        "packages/evaluator/src/eval_framework/benchmark/agentic_metrics_worker.py": "69da9db5b4e723ccc0d0bff7e076c39a6fcec3f746232fd86fac56f5106e1e3b",
+        "packages/evaluator/src/eval_framework/benchmark/capability_coverage.py": "4de7e57fd1eb11a55e3fbd3cbef6b3a89a0011ebb57d44aaf41a6c5b3957c078",
+        "packages/evaluator/src/eval_framework/benchmark/inspect_docker.py": "22ff9d9a535511db9193c8a017a90b9adda08dcc48a7dd09a1b0222aa3d3e835",
+        "packages/evaluator/src/eval_framework/benchmark/inspect_runtime.py": "c55dc13f7fae7176a4de014672f0c8db76bbe2fa7dd68244630137d4bcca6921",
+        "packages/evaluator/src/eval_framework/benchmark/metrics.py": "929df59cf773d8eba71b4ad8ad34b6762d5ffd2d883a93b50047159799baaf7d",
+        "packages/evaluator/src/eval_framework/benchmark/module_oracle.py": "e77d4c545cc5ae32fca072bd981e0525b2041bf03c4eb1b371c476b6118f2bdd",
+        "packages/evaluator/src/eval_framework/benchmark/nanobot_runtime.py": "cbb22ab498e65393b8e88a665360d1c2c3b9cb4880dff5fe268d9fbf5148641b",
+        "packages/evaluator/src/eval_framework/benchmark/nanobot_worker.py": "3583c9a2de4cbded1c425444dec291d2f4ce032c184bf19d339f58845009d941",
+        "packages/evaluator/src/eval_framework/benchmark/oracle.py": "1e0887f58fe82090e2210efe287df817b6441f6c42e68221e37ddd4ed45b6cd1",
+        "packages/evaluator/src/eval_framework/benchmark/recovery_scoring.py": "317f6c97f0175cc9affb750009565275fab00edefc5c94885c923ce2b2d66e21",
+        "packages/evaluator/src/eval_framework/benchmark/repetition.py": "e2fe4163200b1a29f3ae90c0ab2e030fe67ca33183a8e73f1efd7c67f3b9a2b2",
+        "packages/evaluator/src/eval_framework/benchmark/runner.py": "900723b1ca329330e0bb1e543e595041d2b8bc3122f5b656b215fc865cd295df",
+        "packages/evaluator/src/eval_framework/benchmark/tasks.py": "4d1485cf03b63c82de2e814f34cb9412b8cb99899c7d1f125d1c91b8ead16b1f",
+        "packages/evaluator/src/eval_framework/benchmark/trajectory.py": "aaa14bf40524a490c78acc162a1bccf8bf1c1400f1bc75298a9a601457b15795"
+      },
+      "effective": {
+        "channels": false,
+        "context_window_tokens": 100000,
+        "cron": false,
+        "description": "当前文件工具适配器；不是历史 nanobot-file-sdk-v1 的运行身份",
+        "enabled_domains": [
+          "file_tools",
+          "session",
+          "memory",
+          "context"
+        ],
+        "execution_kind": "real_agent",
+        "idle_compaction": false,
+        "max_tool_result_chars": 64000,
+        "mcp": false,
+        "scope_note": "Memory/context 实例参与运行不等于其全部行为已测；模型与沙箱参数由运行身份另行固定",
+        "session": "isolated per trial; persistent within followups",
+        "skills": "all_builtin_disabled; private empty workspace",
+        "subagent_tool": false,
+        "tool_allowlist": [
+          "read_file",
+          "write_file",
+          "edit_file",
+          "list_dir"
+        ]
+      },
+      "missing_code": [],
+      "profile_hash": "e659b2134c7b53f976593a9e96ddca96edf3dd408c1021a09860e3da1b4ea780",
+      "scoring_sha256": "829886c2a35f0dc00f2a0085f86be22e4feabc2182f3d5f18d036b7b468530ed"
+    }
+  },
+  "snapshot_hash": "5f6ae8d8186a78731b68d96d45351c734bc3971e843e0c404945abd92e34ae5e",
+  "source": {
+    "commit": "415df576b46464445121fe1bc68d24cd5b649635",
+    "digest_algorithm": "inspect-source-v1: sorted(path + NUL + raw_bytes + NUL)",
+    "dirty": true,
+    "files": {
+      "nanobot/__init__.py": "00097f56cd8d3e9cf7d6234243e6928c34659825e1d311bd5c05876581f3c9b1",
+      "nanobot/__main__.py": "c8e8dce8576f9ea153b5cd2ec5eec8235a1b697cc0c20b58e4ef6e104467946a",
+      "nanobot/agent/__init__.py": "39ea6fbc5e1bf92c73739f04bd984d27cf25255ceca461def194fc758d318af8",
+      "nanobot/agent/autocompact.py": "ba696a4b72378e10f87fa23fe047fa07d636be4e0f3c53b5d98af7b7e183d3f6",
+      "nanobot/agent/automation_turns.py": "6dcc6b941a65c43ea656dc7301d24ac4815333fd5cfb1deb8dd5a51206c6a10d",
+      "nanobot/agent/context.py": "9e87348a8678d225d12ae7a074038de3cd9095899e64726eda83b5b02f735128",
+      "nanobot/agent/context_governance.py": "466ee64c2f92a29cd6be0e6bcf7088dce7f4520f031f1ab676abcfea44368d50",
+      "nanobot/agent/cron_turns.py": "c0800073059a3fb8f09fca389f18821814e4ebad061c2e38b165a6e3a60334b2",
+      "nanobot/agent/goal_permission.py": "67e208c2aa9e53416bda38f839f3c956caf6e3b2ae84994f2a6ad80ec6be2313",
+      "nanobot/agent/hook.py": "4d2ce0b803f0d755716a4e14483c6e79fcf0cd7eb9a423e4564d0650134265fa",
+      "nanobot/agent/hooks/__init__.py": "976f2f05267ae3d5e461aab7fd6aa2b3107b96af28fb14e18b1448d78cd58332",
+      "nanobot/agent/hooks/file_edit_activity.py": "58d9bb20bf61b1e27dd643425cd89e99c385b54cff93defb3b8348285b4f348c",
+      "nanobot/agent/loop.py": "0a470f02806045f211f9101c1033e41dd17feedd6782f34a94cd1b4d120ff11a",
+      "nanobot/agent/memory.py": "28cfe513cebcfdbee15304897cdd634baaa6569ed9e9bcb01fc726ebbb469945",
+      "nanobot/agent/model_presets.py": "ceba310a6b6c4f4ffa3451f2e5efe21eb614312bf3de4a62da76487d21d39a3c",
+      "nanobot/agent/model_runtime.py": "8b190ce2f80ec13e8bcd5260d6e8d180a21ab1c1977c77bacc3df815fba1328c",
+      "nanobot/agent/plugins.py": "1d0a4b45cc33f14f723207fac4d8518aecdf758ff56eb360d2b2914cadeded2e",
+      "nanobot/agent/progress_hook.py": "8bab2f61681279ac3e3b60013e293bff7757fa02d0d8aeb0a10a41abc1a20c95",
+      "nanobot/agent/runner.py": "d89322bcc4291ffa717db879818a1f1ec168aa439a25b1bb52e48d8b1f417d58",
+      "nanobot/agent/skills.py": "4de29a393a6d933d1f8edb16a5f62c20f43b2109bd111157c18efa2162a0ae8f",
+      "nanobot/agent/subagent.py": "35766f9582b1b7dcdea246d19784f064c2b0ab037144804941cca0c22d4e7787",
+      "nanobot/agent/tools/__init__.py": "d099c218edfcdfb2d05267231e1fd8578a036cd12e717a95dcc90f8a8d273a4e",
+      "nanobot/agent/tools/_windows_job.py": "1965c9fcbe7d6fe1626ebbc582c67459598b45af3458e28952ead207e414b990",
+      "nanobot/agent/tools/apply_patch.py": "8fe47fe0b8f805c045f0fc2950b1544d15bb6c57822a1850e51ee1d08fe02bc8",
+      "nanobot/agent/tools/base.py": "69ea21868d3bbda324a5e2c245998b5cc16bbd5819f680aea038370ed08b7488",
+      "nanobot/agent/tools/cli_apps.py": "fd15b3d759f3cae358c88976b3a7d27d8b1834d3fc00f977ee28ddd34b0eae86",
+      "nanobot/agent/tools/context.py": "aee14e0c8f62afff15f18327f6ff69458110ebd687a5cf2839f847930a4afd9e",
+      "nanobot/agent/tools/cron.py": "be3d43a61c55b01c047fce05d219f3767621f8e7aaf4d10f87b89ca37cc5f1b1",
+      "nanobot/agent/tools/exec_session.py": "fdd1351f6dbfdcd923d714487a194d48922abe9d04f801fd6c0961bc9b1d0471",
+      "nanobot/agent/tools/file_state.py": "1a1730a83a555a8d45c0f19c633c519a5176a2150fa264c910b32e414dbce21b",
+      "nanobot/agent/tools/filesystem.py": "61eede2b802c30e77ba1b02de8fc48ba9c10f56166025b6f0bcb1c4c7dfad1bf",
+      "nanobot/agent/tools/image_generation.py": "0a806a085b77f07de65f11cd8689fd55bde5eb3107ffdfb0970aa11781417de3",
+      "nanobot/agent/tools/loader.py": "049b80e70fe8b5c860b90641ca997ac6dcf5de885c0023a3becb5ec7bf8a26bc",
+      "nanobot/agent/tools/long_task.py": "fc0391737caf7824c057e7adef059c6914da0e7d2149577055fbd7a6575b1985",
+      "nanobot/agent/tools/mcp.py": "1b7804ac2b294a7c78fe37cd6a06b0c88c18fc1faeeaf49ef5bf91c9b5b61f67",
+      "nanobot/agent/tools/mcp_oauth.py": "b7f06a4e47a7818dec41502d4b0e1d5ff7b523b761db1590694f3b60e931f8a9",
+      "nanobot/agent/tools/message.py": "b5e3714238861e90c335def3d1298d6c9614d3d819db1da554febc3b7d380058",
+      "nanobot/agent/tools/path_utils.py": "e723d040ab4326dd588b6cf7f9d7660e104765ec584ebf1d240cecd02901beb1",
+      "nanobot/agent/tools/registry.py": "4fdbf80178dc67ef913cc130be2006f29a6f51d565031a2f2b985792589beb3e",
+      "nanobot/agent/tools/runtime_control.py": "6e4d22801beda079704a8d3efe845e8878e215bc2bd5a7e17129d62b3d92c484",
+      "nanobot/agent/tools/sandbox.py": "411ac5413943a6ad003ade8e390f3febfc58cb149bdefcfa54eb3cef8f3ee46a",
+      "nanobot/agent/tools/schema.py": "904d8be55932d01b681681fd21ac2918492391e56c1501de17fa1b5eaa0bd7d7",
+      "nanobot/agent/tools/search.py": "1e06b760dd7f7153be4a5a69886f82d9669846599b372bdf781b963340e0b9f1",
+      "nanobot/agent/tools/self.py": "f057b3a38d4f357afaf1d966bc78acd990880f2c2cd0eff37ce403eeab6864e5",
+      "nanobot/agent/tools/session_messages.py": "e4b2d779e646a9efa81daec1f17a5e993d2c015114cb35d61ebb6f65f227e349",
+      "nanobot/agent/tools/sessions.py": "89bd6b82fd14c63a97cefe431c3ced8083cb269f7ef634c714f6960dba98dc0b",
+      "nanobot/agent/tools/shell.py": "5b5fcf0f4129c91c131a4a4d9fc2d1b5f66110dadaff2aad5d0266b4fb1e5fca",
+      "nanobot/agent/tools/spawn.py": "850df9890cfde092f2d63dea4686f3b5551dc0b88dbf440b6ab48a38a3799ec4",
+      "nanobot/agent/tools/web.py": "ace67dafbe44a1dc8400c0e0d09c51b08db8c29eb98a5a1e736731cb5e1801d2",
+      "nanobot/agent/turn_delivery.py": "c78d068a99b6dac4134e1e6497d43f04e5ec04da935d16ba32e16881a702c50c",
+      "nanobot/agent/turn_hooks.py": "db4017ccae90552d1beceee7b9bba230d0361970249b37984bd3783d4c5ffb34",
+      "nanobot/api/__init__.py": "4bdbea818e02669828bb0ef5f1c9196d690880f937e05894eb79371ffdf4d5f2",
+      "nanobot/api/runtime.py": "ca04f18a9ac8b2c36b78fe93fc5196a742a879082a863a322fe0c49b46de754a",
+      "nanobot/api/server.py": "25b41268fb532a2ba32569767da1c2b79e9d3dc6e888532014615a2f3ad59387",
+      "nanobot/apps/__init__.py": "5d502483d7b5d53c6c597f063aa69c1938efbe65296100c4af041cfe1bf0706f",
+      "nanobot/apps/cli/__init__.py": "e0d9d377a872e97734a036dee2f7cb43b14f7c10942157bbe7a43f8be20ced1a",
+      "nanobot/apps/cli/service.py": "4e111439e2b0464fb6d4b285f9e0d98bcb2bb93b66b5c5c483d1bcac8ad81066",
+      "nanobot/apps/cli/utils.py": "57032aa9a5ba6a31d533519744df1e0677ab278e316c11635c6b061d347dcfb0",
+      "nanobot/apps/protocol.py": "4b68a739092d40bc8b21e0b6ab943c4cf7466be8d198459955d513c414ef2194",
+      "nanobot/audio/__init__.py": "9028e46d0989931b6ec17731ebf17feb09f4ff85e0b5e805cae5888c2651540d",
+      "nanobot/audio/transcription.py": "72f1562090af59fa0cb949e36a18f818a9a064c91a79d7f0a3cc6b2faa50769d",
+      "nanobot/audio/transcription_registry.py": "26a3b7170b3fe76082bef87d8ee757a725e49a1d75170ec5e740389122793a68",
+      "nanobot/bus/__init__.py": "68d0ca509c7becdcc7895b7395b4ae64d2b840ed5d67550684cec16a4406dbd3",
+      "nanobot/bus/events.py": "fe0d107c394e99f0b3a932a3c086c4d15f50df8ddc5df9aa812fb58cbac42cc0",
+      "nanobot/bus/outbound_events.py": "e2c03f6bad85894a2a4618662d3fa2f78b0a5579f6903c643a05210e84d1073e",
+      "nanobot/bus/progress.py": "ecf8e099681ef10ae5c86f3a19b856c6d692c86467a10b4a4a40ed17b5b13eb2",
+      "nanobot/bus/queue.py": "25af7c83f8cedea68ef4bbbbabf1dd5d02746ede7d944ffb699e91ede5b2d20d",
+      "nanobot/bus/runtime_events.py": "034bfd228fdd69e12653ca558a43161e94b46cb1e9855fb1285a16e2cb6d9967",
+      "nanobot/channels/__init__.py": "675314ddea0871a34919d793549b9e15bfae455443e67750c02964b613f34503",
+      "nanobot/channels/_manifest.py": "a8b79e8dbd83824b8c2f0546f58248aef7321347c0ce9df945f1be82959bb267",
+      "nanobot/channels/_setup.py": "78e71246a928a094abcb93db21971e78e0ec5fd802513a97f19f516337474e9a",
+      "nanobot/channels/base.py": "f1335fddc4144fb09f6613ac79063958aca6fdfb992007a8f2fee12cec732eb3",
+      "nanobot/channels/connect.py": "35a45402bba9d6c9a0a3b41ea1095d6fa83be3e5d317c587aa70d65319090d10",
+      "nanobot/channels/contracts.py": "d7bf3335cc5041c7a2b69e5e69f58551bb19cf9bdb8511a602791e5833c4b832",
+      "nanobot/channels/dingtalk/__init__.py": "d777d977130ceba1813155e55a49cf595d412ea0ea4fb03b66c4e1873b4e5893",
+      "nanobot/channels/dingtalk/manifest.py": "9d932e121abc47c6cd3c1508d4795fb93f3dc42bd98e65e01e1f014db79ca184",
+      "nanobot/channels/dingtalk/runtime.py": "28655391145fedcc9fdf484c94784c8a7486a24dcfc5ccfdeffada3e10e0259d",
+      "nanobot/channels/dingtalk/tests/__init__.py": "55146cf2d3beadfd95a37002f5f226cdfae25f765a4d217ea07650313349c4c7",
+      "nanobot/channels/dingtalk/tests/test_dingtalk_channel.py": "20df2480ff77c460e424ed7e48a66d675d28edb60e22069d4231a02d5608fffb",
+      "nanobot/channels/dingtalk/tests/test_validation.py": "c56fa2d29ae66811287570d9e4b63e03d13a5da54359823a6d334f477d35bb0a",
+      "nanobot/channels/dingtalk/webui/locales/en.json": "c4662e7f61e1d3901254c4035f3f48e83e41f5173268555b8a2a2f3465695d87",
+      "nanobot/channels/dingtalk/webui/locales/es.json": "95aca79dfa5abe473611c3e17d1eaf1c44cc0ed926a91432db97c67985fec190",
+      "nanobot/channels/dingtalk/webui/locales/fr.json": "1e335697cc2a086e57ee045eba542273906920212a6750720275bf79f04a28ee",
+      "nanobot/channels/dingtalk/webui/locales/id.json": "a372d67d84c963ddaec083af524ca0fd6e69f367019422be242dd6aab5de302c",
+      "nanobot/channels/dingtalk/webui/locales/ja.json": "3b898f02b87ca795d19f1bed6d46f1d33e3cab755d7fe7cea9c47a13fe2a2800",
+      "nanobot/channels/dingtalk/webui/locales/ko.json": "cb51d5dabb4fe7ce7f010923cfece96ccc412abbc18b84873b1b8ce47e3a592b",
+      "nanobot/channels/dingtalk/webui/locales/pt-BR.json": "0634ecbcb489f70a0bdb3b91c096d4b31604ffe727397b2336683344a85425a8",
+      "nanobot/channels/dingtalk/webui/locales/vi.json": "01d73e29ef7a2291f449280432af5f24eaf1892f1c0401522888ab6259d80a44",
+      "nanobot/channels/dingtalk/webui/locales/zh-CN.json": "102c2efbc00e2c6bfce7eb29fba81b11ad1eb0522e311cef1eed20dd318ce85d",
+      "nanobot/channels/dingtalk/webui/locales/zh-TW.json": "41dfa1417e68ea7fe65c0b081d6b235225a2bbcd911c441280ed4c393bcaae90",
+      "nanobot/channels/discord/__init__.py": "19bf5db981d54160d998f8cf6d5865d42b4a1bfdd902f7949990af32118ce41e",
+      "nanobot/channels/discord/manifest.py": "dcf78ff07e15768d3f0a70c0319d4adb335ea01808167fbea30a0d8fe45be439",
+      "nanobot/channels/discord/runtime.py": "6b5095ff9dfa3587675bc7414406d6c95f56f35afbdc5eefc5d2803c97f36881",
+      "nanobot/channels/discord/tests/__init__.py": "353d956c28807fc4faed19c792e666dc303f7e398e02f79e8dd15bea564e6039",
+      "nanobot/channels/discord/tests/test_discord_channel.py": "ca0fe576b3e1de22e99de8634cda0384a52ad16e681f99e97dea81dae5840934",
+      "nanobot/channels/discord/validation.py": "3daa9eb43acfd77965406c77ea88b553a2cc456d612559386e38114438991133",
+      "nanobot/channels/discord/webui/locales/en.json": "74060fe9c1f3ffbd790a80a8263463ecdee371850da9288023bea99f8c4a0585",
+      "nanobot/channels/discord/webui/locales/es.json": "4667ba4b1d2c53f5baada10be40258f7d94433d82251639094cf30b54ea9f87f",
+      "nanobot/channels/discord/webui/locales/fr.json": "179f9a22cb5101f19091bc7c026d80a8f69750f7bc56b7ac576a26d5bc9bb565",
+      "nanobot/channels/discord/webui/locales/id.json": "98ca969b6ad6eae0c2bd8e91d1c793da0ac81242cd708baa5cdd2caf1b416e76",
+      "nanobot/channels/discord/webui/locales/ja.json": "c7e048139abe73b65af450fb163200d706ca6df412693e0aade551cdaf0695c1",
+      "nanobot/channels/discord/webui/locales/ko.json": "b87bc55113c46dd9805d38e75d144945feb02a8845d867f3a5b3c66a4ba8f6de",
+      "nanobot/channels/discord/webui/locales/pt-BR.json": "90ec86741f664802915e45bf89ee71367858217dc12ac4abe22e22175ee392b1",
+      "nanobot/channels/discord/webui/locales/vi.json": "dd8676b2dfe308f61bdc1ff4234a8643fc289a934e6b11db4a0174fbfe41c748",
+      "nanobot/channels/discord/webui/locales/zh-CN.json": "b6daefe4eb4e214b5fd12a41d45da519263c93ceac98a89c3cebfce59f7809c2",
+      "nanobot/channels/discord/webui/locales/zh-TW.json": "93c4b51249b52e2ed09c49dc371676cda5decc5d4e623e46272ac01bc922230d",
+      "nanobot/channels/email/__init__.py": "e7b7ab78927f430f8f7fba2176ad089d8bb4c769ccef64865e7d01503850f98a",
+      "nanobot/channels/email/manifest.py": "2af47bfab1688179e10df17e0d97184b37e7b8a082ce1729a35f6e3c8078a5f9",
+      "nanobot/channels/email/runtime.py": "1d85ea7517ca9204752319b9bbe16ca5b484aedc97dc5ccfb97c09e475a64107",
+      "nanobot/channels/email/tests/__init__.py": "7830ff2fff47900759c01c69c9bf84bfe9c094a42cb863547453c7c6aae2efa7",
+      "nanobot/channels/email/tests/test_email_channel.py": "8d85446f750b004eb2f77120299517ac8b13ad3e4a6a834fa1dd701bf659ec44",
+      "nanobot/channels/email/tests/test_validation.py": "34eb888aae771e32916520b6f44c10a1bbd1c8b66d342b202fa8e8ca88a5374f",
+      "nanobot/channels/email/validation.py": "01c2f853f202a67a68e3a9e5afc37b8088c747592a250b0a38d9aa92c80a3b20",
+      "nanobot/channels/email/webui/locales/en.json": "98dde73f740890c7bb549e6575591299afa98e4f904dc0f7807feb93228d365c",
+      "nanobot/channels/email/webui/locales/es.json": "4e9e7656cece70ca7b82e450f6016e4cd6d73444a9bdec4ed98b4c4e62fb4a98",
+      "nanobot/channels/email/webui/locales/fr.json": "5a7a4b7f9de2748d60809eb3b05229cf37612c240169fc715052b473729cd959",
+      "nanobot/channels/email/webui/locales/id.json": "daf730736dc836a1dc149c3189c965f6aaa0a780f871466f5246347ff25e65dd",
+      "nanobot/channels/email/webui/locales/ja.json": "b6cae23a3993b4d0a1d431526d6c6844eead5b94e9eb0e0bc06687cab1d9225d",
+      "nanobot/channels/email/webui/locales/ko.json": "4ded6cfeecc2b3685301b31952f090d72f54eb122c2329bcfe16022e0299df3d",
+      "nanobot/channels/email/webui/locales/pt-BR.json": "0f7ffc1155a1e7c5d7176c2177b53499b8cd02ec4e728e5e1265be6fc1ab1068",
+      "nanobot/channels/email/webui/locales/vi.json": "51c66800e40d28c4027bb21f49cedfb551508912a05c313d377872c6ad70a3dd",
+      "nanobot/channels/email/webui/locales/zh-CN.json": "28246520089942ea1874f6134ea6299a60f05eb5e0d52d0e2eff72dd977d732a",
+      "nanobot/channels/email/webui/locales/zh-TW.json": "4d244bec892dd6ccab08abf37c5defb0ddead4315bf12c68c74cc576dfaccee5",
+      "nanobot/channels/feishu/__init__.py": "04d9ee0b3a441f799223c0f9d15a0670bf23c8f6ec659ee3047b7e8947eb526f",
+      "nanobot/channels/feishu/config.py": "e679a010b41125a4d9a7b431db77eb03e475ca1faeebca4ddaafa54d7987961f",
+      "nanobot/channels/feishu/connect.py": "409e530f67e13ee402c944ffd0ecd1626964f74071cbdc2d1ea0c7c5278b6d64",
+      "nanobot/channels/feishu/instances.py": "246e1c3f38b77d8db441ec9d6c309f6196ebb752e3b3d0c826fdae2453ce3dd0",
+      "nanobot/channels/feishu/manifest.py": "a424077927fac68e923bcb63df5cc9e2b42bd236d786a948dbae9874a94cd52f",
+      "nanobot/channels/feishu/runtime.py": "9960365d943d145cfd3985ff74e1efb98b5c0ad38d814a598b4f0f896704c9e9",
+      "nanobot/channels/feishu/tests/__init__.py": "0d4ca0829fd1240687b774e310f97982db0d0ec54046627e1d90dc0624c2e92a",
+      "nanobot/channels/feishu/tests/test_connect.py": "a0e41fc35003b67c02acb62310ea1d198c95ea02de8b61cd532878f6fdefb368",
+      "nanobot/channels/feishu/tests/test_feishu_card_extraction.py": "d5f296fde77a8a1dd827e9933df92c6e2f2d810e5ef430e155ce11928b5b37e6",
+      "nanobot/channels/feishu/tests/test_feishu_domain.py": "f8305595e32f1e52459d3f6e3322128cf7bab3c3e306f0341ca30a70dbdb6f2e",
+      "nanobot/channels/feishu/tests/test_feishu_lazy_import.py": "47eb84605db814c999ec746aeaf148b8a858778f66e3ee90219295c0e3a4c2dd",
+      "nanobot/channels/feishu/tests/test_feishu_login.py": "5a9f06ce98b7e040a40965659054b2a81fb433b78f9a82c6d2302bee9bc5c00c",
+      "nanobot/channels/feishu/tests/test_feishu_markdown_rendering.py": "e8fbd0f606f4f1ed0bbdf0bf895e40edb84c0d2fb380294752b5b53568b24448",
+      "nanobot/channels/feishu/tests/test_feishu_media_filename_security.py": "9d48980c055ea1b933613370f1498dce8d80b49c5501f90755d05fbc38b24193",
+      "nanobot/channels/feishu/tests/test_feishu_mention.py": "25fa5205bbd0092b12d1449820b0075f0224cec0d5737d60672387a55e09b220",
+      "nanobot/channels/feishu/tests/test_feishu_mentions.py": "2358484c1d00041e3c7902133887426cc85b26356ec34e2917d5ae57b252c007",
+      "nanobot/channels/feishu/tests/test_feishu_post_content.py": "42bba16adb37ae0c9cb3f8bc78589eb0c8c4e482322c91245aa64e456e859761",
+      "nanobot/channels/feishu/tests/test_feishu_reaction.py": "ab60aa886ac1a47030695449f29605b0ba8f4e37f2d729c78a77bbd7f4d7e8a0",
+      "nanobot/channels/feishu/tests/test_feishu_reply.py": "11eed4cf5a452dba0aae16a92cde8be59b5984c9a4a01f07b426fac2327e3ce9",
+      "nanobot/channels/feishu/tests/test_feishu_streaming.py": "46798a24bbb28d6790f6195494a6a7cedb7fd250c8fa2c952ebb67657ac544d8",
+      "nanobot/channels/feishu/tests/test_feishu_table_split.py": "99eb6bf590a658402828647fb35e1606a41dc10aaa9614b504ccb6fa2abb9681",
+      "nanobot/channels/feishu/tests/test_feishu_tool_hint_code_block.py": "11f97292437a75d21e00643b467e7a580c41b98d02e775ccf684b2266bbd24ea",
+      "nanobot/channels/feishu/tests/test_feishu_ws.py": "6d94caa8dac5223a741a38e0120decc77297f5718df1d5f994c49d76e16a6d0d",
+      "nanobot/channels/feishu/validation.py": "69ddbb09cf52f5c7e36e83a6911c755f8ae1733de24ac6ff85a8ebc5430b7c86",
+      "nanobot/channels/feishu/websocket.py": "f1f350106282f23c58f7a4fe1caf302dd1775aa3c2178a8d77004dac990d5586",
+      "nanobot/channels/feishu/webui/locales/en.json": "43cf1cc3d68bbabaa4ac4442d373586f7684debeab406d43697020c8f7219945",
+      "nanobot/channels/feishu/webui/locales/es.json": "603877a04145faccad57a8714b3ad26a6711f44eb7bcec5551d1ae3f01e37be5",
+      "nanobot/channels/feishu/webui/locales/fr.json": "32e766d2a9adf2632048f54e7fdb54cbbcf3f0e9c1dd1b5e7d1cec9b6badee0d",
+      "nanobot/channels/feishu/webui/locales/id.json": "d507a749222ef8cde5cf6cec67eda8b6a53a226ec6113c7a691310f10cc6e438",
+      "nanobot/channels/feishu/webui/locales/ja.json": "9c35857395b62ed50a50778312617eba3d07a5e73995d539dc75e51c945a665b",
+      "nanobot/channels/feishu/webui/locales/ko.json": "ba0c6b8006790d0006695a6918eaeb3fc40311a81f11fce40cc2d34ec1310f5f",
+      "nanobot/channels/feishu/webui/locales/pt-BR.json": "add30fb21dc573a6b2d7b1897f8abfbbeb5fdd81e86da2b9e304856a608cc347",
+      "nanobot/channels/feishu/webui/locales/vi.json": "842e47bfb94dabcfadb0ca8b9dc78cea56cb7665096fa96f6a11bd0dc41a25f3",
+      "nanobot/channels/feishu/webui/locales/zh-CN.json": "5830b6a771a15ab623d00397cb56b327f53bbb9204a824e67bec2c9b77362af5",
+      "nanobot/channels/feishu/webui/locales/zh-TW.json": "61a98b864168d106eba7e6da7ba90cc6a27d6101b0e89046839b53ca48967cf8",
+      "nanobot/channels/manager.py": "0270ed0b26c96fefa37beb8f547040f1f4433e2666b8a9ae00b58dc334ac1c21",
+      "nanobot/channels/matrix/__init__.py": "9fd0365c6e45a5123a4565cd75803b25a956989b43b809595e98e53bf62deb32",
+      "nanobot/channels/matrix/manifest.py": "a5be55e225309da775fece94b6d3f6e1f31b04eb9f5ced06824ef7e03a43bc48",
+      "nanobot/channels/matrix/runtime.py": "e20213c03f5b89d87fd19c11aefc615b898d73068743f73533026218754e2760",
+      "nanobot/channels/matrix/tests/__init__.py": "3b64f49844706c830ab644b1fb3ae44e46b7a9643dbd790373d54ed7350886fa",
+      "nanobot/channels/matrix/tests/test_matrix_channel.py": "538def0662007dbb91cf6305cf9011aeda8d01c25f234010ca7e54f6e77bd592",
+      "nanobot/channels/matrix/tests/test_validation.py": "368b84217b5089ab8b5c1521e70e1cbb0652efd31489b0fda7a3799f0a02913a",
+      "nanobot/channels/matrix/validation.py": "8d140d37c86952d2961224810cc4f9e32e9a6bd63bbadeb27bb208b87ca05cc5",
+      "nanobot/channels/matrix/webui/locales/en.json": "71eee1297e821e954ca94c22343c8a27df6f1af41bacf25fc5ec9691fd54822b",
+      "nanobot/channels/matrix/webui/locales/es.json": "6873c51e71f53b27d09a09c72e2d9c4bc8c32fc445b16c0191b8a8998d4859b5",
+      "nanobot/channels/matrix/webui/locales/fr.json": "e1ebefd5fa85955358f7fefe0d1ed53390319f41f13ca9536f2120e5604653cc",
+      "nanobot/channels/matrix/webui/locales/id.json": "a0706b8990ad36470959230c8f49c5cd7ae1e62c438ee6d5d5e4702876da60c1",
+      "nanobot/channels/matrix/webui/locales/ja.json": "98d530fd2c98a81464ab35b399990fecc2eaff160f31e741d8c250b572c7259f",
+      "nanobot/channels/matrix/webui/locales/ko.json": "b6776f399f46c1aa5cc4c8ae876abf392d7f17221eb53f95fa2f63b401753635",
+      "nanobot/channels/matrix/webui/locales/pt-BR.json": "754bdacda13d09a1e7590aac4b6803ff7de85c4238033b92f33002978603d6e3",
+      "nanobot/channels/matrix/webui/locales/vi.json": "38ce8d443f5a1b7439e1a8b7c5f8dbcc320cceff13ae246138eb50cf4c46d706",
+      "nanobot/channels/matrix/webui/locales/zh-CN.json": "cf547382c2dbc7b5f750eed989c3b292c3c6d9f4cd6372e8a742234a915e35c2",
+      "nanobot/channels/matrix/webui/locales/zh-TW.json": "33386cf554d6c549c057c7a7af3e0d6a9155b1af79c0a226ad598c444d166f32",
+      "nanobot/channels/mattermost/__init__.py": "f2bc12ef0fba3ce1d1483b6e089e3613d1469e43e5b4d5bf46556837008ce407",
+      "nanobot/channels/mattermost/manifest.py": "5b9b83276ae645c9693829042eb616450488cdb481e9c61ae37cf33eac5cd1ec",
+      "nanobot/channels/mattermost/runtime.py": "7feeae1197670b645c9857b1b2d301fe894ad34c6c69e80374bb529ec1e8980a",
+      "nanobot/channels/mattermost/tests/__init__.py": "cef2bb93f5c689eefeb2322e97748b6740f4c2781f76262a6f17407c8fe696c2",
+      "nanobot/channels/mattermost/tests/test_mattermost_channel.py": "916e6edab596825550d1511c7b7136fa3ad6dc39be334311b908d82e179dfe97",
+      "nanobot/channels/mattermost/webui/locales/en.json": "d990023a5e2ecf4598849c8adf62e71a67d0ed19c434a733098e51674e8e8fe2",
+      "nanobot/channels/mattermost/webui/locales/es.json": "e1e9ac8ff329fcff36d32ed4d729b08df1a9fa66bfcef67f23e6028336b7cd07",
+      "nanobot/channels/mattermost/webui/locales/fr.json": "94d3e2ff1b34c73ce0cfcfc828db9819937f08748a6b2601ce9fd98ef3a826f9",
+      "nanobot/channels/mattermost/webui/locales/id.json": "7587747362fae7611fbdda6a9626cd23c3a1b3ae060d73606854e5766a0a4c09",
+      "nanobot/channels/mattermost/webui/locales/ja.json": "e1087d1791d817584d7233cbea743eb14810a256a55760a588b2b80030207872",
+      "nanobot/channels/mattermost/webui/locales/ko.json": "39ac876c1515359c26391cdb47c36846e605feeb782597314fce5970e628260a",
+      "nanobot/channels/mattermost/webui/locales/pt-BR.json": "cfdd88d5230fe9e75b92482b7200dd60737ef0628a870207169064bf94df4104",
+      "nanobot/channels/mattermost/webui/locales/vi.json": "9b10925f1119da7cf49bcb577984dd627003eb8e4ec5251b85cba8db2471a96e",
+      "nanobot/channels/mattermost/webui/locales/zh-CN.json": "54f419840fefea5a659fdb3950e8b13cd1cf754f62b65d6e599247a72aaca84e",
+      "nanobot/channels/mattermost/webui/locales/zh-TW.json": "e99504e096e186ff7a2e21e2988a85e2676541d841d541401fe5a5eb14fc2582",
+      "nanobot/channels/mochat/__init__.py": "45142e7b58cd1b020b8c3ff5d1ba1fe7f7b56115a0edbe308fe2e29f8099dcac",
+      "nanobot/channels/mochat/manifest.py": "13ffa798ff110ce6259134e05e7553eeae740d85cbae4c87a9e18e3aa0e6704d",
+      "nanobot/channels/mochat/runtime.py": "5c514a342f212320a47335f7aa135a5ae3d208b58b0d2a2546e79d08c2d19498",
+      "nanobot/channels/msteams/__init__.py": "80476d75391ae6037e744da11e05cf21597f9249235c1ab0d33c4e065229402d",
+      "nanobot/channels/msteams/manifest.py": "9abd01994180b2fd92e5a0854931123f77f2e55b4fe20d71d50b328e59606407",
+      "nanobot/channels/msteams/runtime.py": "c7b74ff2b892c0f324eff6113e20deef26c1fb61ff7b92a13e65b5bca2fd9806",
+      "nanobot/channels/msteams/tests/__init__.py": "71ff6a8c2595496a2df95974d1a5613afa0b2f3dc6c5734f435352722cfbdd22",
+      "nanobot/channels/msteams/tests/test_msteams.py": "eda450e5351a50028fdd46fa07fc079523a56d84b81c8e9945e291bf0f6c7e40",
+      "nanobot/channels/msteams/webui/locales/en.json": "6aaac143ab859c89d0c6e6cbb1379eb1666bfd8189f4604c2753dbd6a1784226",
+      "nanobot/channels/msteams/webui/locales/es.json": "b890cdeaed42728aa793401b9288ecbc14db0bb6aeec16e7cb4bc1099ff7a67c",
+      "nanobot/channels/msteams/webui/locales/fr.json": "fa0993f0fbcb98829aac2739e3690c299ac86c2b2ed7b1032a822c3f3367ae2b",
+      "nanobot/channels/msteams/webui/locales/id.json": "554c2f8cecd495169a910f1eac44eff2edfe0baeacd2d02ec5735843c4fd6734",
+      "nanobot/channels/msteams/webui/locales/ja.json": "7583419c71468a1dc8a9b6db9ed29f4267eca45d2ec7f24b3d118074d09993b7",
+      "nanobot/channels/msteams/webui/locales/ko.json": "a335c34e798e4c86a66881c8bf50d27580770a7c786e584835ecb3f54c7228f7",
+      "nanobot/channels/msteams/webui/locales/pt-BR.json": "01d0aff9bb97529a6458968045a80eca50f3a92be8a7333a251c3229d3f02ba7",
+      "nanobot/channels/msteams/webui/locales/vi.json": "d06cb45b2d8c9d0aca36621ac2611f3f7f19818c4fb563fa743087a63ca1313b",
+      "nanobot/channels/msteams/webui/locales/zh-CN.json": "32eaa67e4a93ce563fd3da9b65148aa438b5bcd3c8ce5fc14803a8616a5c6378",
+      "nanobot/channels/msteams/webui/locales/zh-TW.json": "029c2425b72da2c6aeb73c9cffedff92bf2b9b3d7bb85a237648f092fbddd0a3",
+      "nanobot/channels/napcat/__init__.py": "7d51d75b85cefabeae6410b8087e8a07d7ce5ad3e4cf471c0f4d71799ab8e52f",
+      "nanobot/channels/napcat/manifest.py": "834b69002cb5a95773bb2feea4a0b949428fbfea72bae2d3a4297f99a26744ed",
+      "nanobot/channels/napcat/runtime.py": "49dbe787565acf542911417bc715a6797cbfc30d34327a2e6d6ccf0d3ea4470d",
+      "nanobot/channels/napcat/tests/__init__.py": "a00e7174dcb57f73df17a27a6dbbde4e04c9777022563982461ecd0b44c417ba",
+      "nanobot/channels/napcat/tests/test_napcat_channel.py": "a85c138d32b6e50b5303e5bc693bb65bd8a802918dd0b86ea3e4b5ffa508d37f",
+      "nanobot/channels/napcat/webui/locales/en.json": "44c1b1dcf74bd93889c3177aec034dfdb04ff7a4f1bf817d8c572b942b77e493",
+      "nanobot/channels/napcat/webui/locales/es.json": "6a7ec301a675ea29f2a30952d41b664b376fedbf8c09e6ab429847584592a5b2",
+      "nanobot/channels/napcat/webui/locales/fr.json": "22182888ec5045858cbb851099369ba726344958048163dce24089cf5ee542cf",
+      "nanobot/channels/napcat/webui/locales/id.json": "9fd5f3c80a75dfaabbe8b977cbbbc0d901777b38209ce173740bddd2af9b153a",
+      "nanobot/channels/napcat/webui/locales/ja.json": "023767832f23a4806daf70c805c3dd3ac778c30170042ec844919598a483c82e",
+      "nanobot/channels/napcat/webui/locales/ko.json": "2c094745a2218059f0dd83d341ca1a7cfff2cf7757c92c31c62e792056c1f512",
+      "nanobot/channels/napcat/webui/locales/pt-BR.json": "45c49d222a92a18c591e342b64c5662908b46a8de5dd471718fdccfbb454bb91",
+      "nanobot/channels/napcat/webui/locales/vi.json": "a328e391cb9de0b7544ed7496fc4938233d003544e88f51ef29f5eedab608c92",
+      "nanobot/channels/napcat/webui/locales/zh-CN.json": "8f3ab3b0866293078e8284ab289cd3fd52831d088f78600e5410b4ee86211a89",
+      "nanobot/channels/napcat/webui/locales/zh-TW.json": "8957117eccd5fc4fc3ad17e014537dc7dccfcb2e61c3c04e68f8c7b8af24dd1e",
+      "nanobot/channels/plugin.py": "bd92ed7c406ab75e9d441fd22d6ae92d2d6df0ccd405c8414c12140f3e81a200",
+      "nanobot/channels/qq/__init__.py": "d4a19cb059ce3c53885a09354f30d36a48ab7fdf5c7e3f6d800f55052787a24a",
+      "nanobot/channels/qq/manifest.py": "2fafb8e00c946331d7ac61cbeced800e61abd36efe70428708160820c5070a36",
+      "nanobot/channels/qq/runtime.py": "aa19653e4568ac30e2cab9e43fab5cc935bd4803368225bc323d2799dd906b75",
+      "nanobot/channels/qq/tests/__init__.py": "384b6ad9eb23b81c59be07f3269a173817999f0d7eb6e96d4fce1303c1bce36e",
+      "nanobot/channels/qq/tests/test_qq_ack_message.py": "52fcb710ab7c37e7d50231c09f28adb98fcd205f7b0a4321543d1180738dab3b",
+      "nanobot/channels/qq/tests/test_qq_channel.py": "6245146cbfb1a7762dde7a01cdc40cca74b1c6262a247d1839cae0c0e2c69d5f",
+      "nanobot/channels/qq/tests/test_qq_media.py": "3c23c2063e1c1319dbb126be1ddba4509a2cf7fba51f41d0e8d2ced197548228",
+      "nanobot/channels/qq/webui/locales/en.json": "05bf4e67c49810bc539040582c6e4441763b95ce08393d7385814cfaa09bab8b",
+      "nanobot/channels/qq/webui/locales/es.json": "743c8fc89a60ab591945192bf7fb5ce0e726c357aa0d536d15f463e18f97b1b9",
+      "nanobot/channels/qq/webui/locales/fr.json": "659d3f1c7780a8aa0d5039f9f809f79f2c55b7c386efe6ff0d2c8a1261400a41",
+      "nanobot/channels/qq/webui/locales/id.json": "844af0b96363d7844130145675fa5b5aa63fff9b42df0bb0474b776ed1c3de9a",
+      "nanobot/channels/qq/webui/locales/ja.json": "34eb1aac1b1d08207cf909e875ab61e37c19871285e853a5c4efc9d0b60d89f7",
+      "nanobot/channels/qq/webui/locales/ko.json": "0de03bb9c28ef7bd91494acd1c27e37812ad9b6b42533dfe8a6301bb0715b608",
+      "nanobot/channels/qq/webui/locales/pt-BR.json": "87d7b982de9a903e244c088bd273321bd64e994b38911f9c5194dd5ea424363c",
+      "nanobot/channels/qq/webui/locales/vi.json": "5b59e0dd5c4d42bb415048f591f1fa6856cc966df0cf4c6c55a58522bfcc82e8",
+      "nanobot/channels/qq/webui/locales/zh-CN.json": "ee437e4152bb465c2f715c036e8b5006c6e9f38dc3b2fb71b97d91392d0eab76",
+      "nanobot/channels/qq/webui/locales/zh-TW.json": "fd7c0ec165f2832f63728ef6d58024040541a6e2fd029c0ea3ac7a108000f352",
+      "nanobot/channels/registry.py": "11c252800818d52788a362998afa6974ea4048586bbac43a4b874180f9eb08b9",
+      "nanobot/channels/signal/__init__.py": "b579056dec2cfe54ba84dd0127a92f2767a29c0049af5eb661edf7e2345e6b3e",
+      "nanobot/channels/signal/manifest.py": "a13c0e044ec6ce74e94d4af7b78d766427034323f4bdc00ec5d26462fd34f25e",
+      "nanobot/channels/signal/runtime.py": "2dc160a90c26e22f3b045de4818bdca6524d748c2d88dfe7db4074e213903c58",
+      "nanobot/channels/signal/tests/__init__.py": "c9fea70375d616122c46f582b21219d5a7d9bf1317b754ddd018630447d41e41",
+      "nanobot/channels/signal/tests/test_signal_channel.py": "e890ef0f627224acdbd1002f8a09c19bd64d8bdd019ae29ce01393146ed101e0",
+      "nanobot/channels/signal/tests/test_signal_markdown.py": "59d0bc6507c66e081cba92aa5bcc1470f49fe5d6da88fe6e7f89f5e16d4ce12b",
+      "nanobot/channels/signal/webui/locales/en.json": "0c886f6bd56e7012005cd0bdfa8d7e580a697d047ac43bac2bc6cba09da84d1d",
+      "nanobot/channels/signal/webui/locales/es.json": "6bdf837ab025dc9d69156c12f42a6140c40432e4f87057fa4ee902fb8cb095ce",
+      "nanobot/channels/signal/webui/locales/fr.json": "3b29039705651dd511f82e56ef3536fd2632cc951e105d4544f379add3d8846e",
+      "nanobot/channels/signal/webui/locales/id.json": "4fdf7493680d82255821919f4de5ae2558da598d210e2fae75f9c6f685e0fbb0",
+      "nanobot/channels/signal/webui/locales/ja.json": "c610c3923ebc83bf6eb1dffcd97c1bfd0cf4e0ec602666f5ecca7da3bd4f7b86",
+      "nanobot/channels/signal/webui/locales/ko.json": "51f3c8ece9e6e5e119ab3c250b9640514eefe25c922c6710f39ea721c17bd947",
+      "nanobot/channels/signal/webui/locales/pt-BR.json": "9b6300d302ecb4f7606b84b4c0a05bf10f3f12e225fb10bad9335c20eeca34e3",
+      "nanobot/channels/signal/webui/locales/vi.json": "93ae99ce02c47e5a493f9cd488973f555b895d4da0b31119e35e02da4b12ca5b",
+      "nanobot/channels/signal/webui/locales/zh-CN.json": "aaa2ed65a8b46458ac822305354adcc9bcdcbe145476a96903c31e4400f0f276",
+      "nanobot/channels/signal/webui/locales/zh-TW.json": "bd4933d2f900ea1a7969c3122840f00421e3cd8d690b5a733052a496b08d6216",
+      "nanobot/channels/slack/__init__.py": "2f8a8159a84f65059e5a8eb13d6fe07ce885a2e16e41106aa8d99392259253c7",
+      "nanobot/channels/slack/manifest.py": "113856947fb5955a00be44f57e064e485ea84043d8885188ed752982c888a90d",
+      "nanobot/channels/slack/runtime.py": "bd659f2d39d8259830e6fba4beeda0227b7b4f15a73c1028ee0dca5505c63b8e",
+      "nanobot/channels/slack/tests/__init__.py": "054fceb48a35c273ec3516c2d9698de5977630692d4dbff8158f1ac6f594a10e",
+      "nanobot/channels/slack/tests/test_slack_channel.py": "7e934aa35f471596d89686761ea8e700c3f11df6869a3b87b11817941bcfcb6e",
+      "nanobot/channels/slack/tests/test_validation.py": "224357b2fc63d109f8c2310b496f109e304ca599b9b851e8965637d13d2fa795",
+      "nanobot/channels/slack/validation.py": "f17900bb83a47f4fc37f426d125406d5c16b55593e81c31d416d100dc3caffc0",
+      "nanobot/channels/slack/webui/locales/en.json": "6222babab26820fe92a265da1ba5a60a34fc66202d1e229f6249af499e2a3b65",
+      "nanobot/channels/slack/webui/locales/es.json": "514632d68c760c072e3f81b6c3439bddaf414e863ba014caa83080b750b4eb33",
+      "nanobot/channels/slack/webui/locales/fr.json": "3588f7861d968c79ba827ac4ced1ffc387180af0dfd43b2e58307215e7bdc565",
+      "nanobot/channels/slack/webui/locales/id.json": "b77bb3a3bf07381ae5866e17c7c84b7c8f40fd5a737c97127cd960790c50c52d",
+      "nanobot/channels/slack/webui/locales/ja.json": "7ae54cb3560fc4ac82453e344de0580e9785ea86ae05e71b9248c34dbbbe8573",
+      "nanobot/channels/slack/webui/locales/ko.json": "ef6086ba1c4dd4075152172e31484d51cff9a501d02db62e67a1a7cb086aed7a",
+      "nanobot/channels/slack/webui/locales/pt-BR.json": "127b12d8e4004508b42aa3c4296f24557071c06da84e24a999a03ca3db4f7478",
+      "nanobot/channels/slack/webui/locales/vi.json": "4c70a4a58312a5d657058704f8d68ef72e85a5367de6eae10ab8f7f9ee78155a",
+      "nanobot/channels/slack/webui/locales/zh-CN.json": "279f600381740131a6c94cb955f7c99161ebcc42c4d59c5671a942716dc9f294",
+      "nanobot/channels/slack/webui/locales/zh-TW.json": "ba28a511f241cc4ad301c5b6780cfd1a7fac382a7984be16fa9c7f645fc644d1",
+      "nanobot/channels/telegram/__init__.py": "f2f60dfed980d5cdf20982857bf6fa2f9aa34f3223140c7558e44a9bf0ee678c",
+      "nanobot/channels/telegram/manifest.py": "a8f92f68fb1701dce2120d14b431baa9f716457aef695956c5a70fd9ae5b2248",
+      "nanobot/channels/telegram/runtime.py": "da19fb728401946987b5f3c2249669783a091035401db800a82b44118b99cce0",
+      "nanobot/channels/telegram/tests/__init__.py": "ccfde5b0fe69a6bba206f32a355bf2bbe4dff4a237970d70aa4b1c0c89a0a545",
+      "nanobot/channels/telegram/tests/test_telegram_channel.py": "bb17e4f556836454dbb48bbb1e195a69ab1c67459c905d6209c441d2485cb441",
+      "nanobot/channels/telegram/tests/test_validation.py": "d99a64b5e3bc635cf05e74d4c483180445bf2d3d560786024839553f9b133e18",
+      "nanobot/channels/telegram/validation.py": "9c40849e8730eef651a04e9188805460802a178207ca6e285f7c19c9c754c1a2",
+      "nanobot/channels/telegram/webui/locales/en.json": "b069850625cedc54a44d191a46e9861cda17f2987eed7fdd529856e2465c3dd7",
+      "nanobot/channels/telegram/webui/locales/es.json": "b8121e6294ff703e4796b807251d8e23ad681f1bccaa56603bba29922fa9043a",
+      "nanobot/channels/telegram/webui/locales/fr.json": "9e1a7c8280bc3e31ab88bd3f9b4cff7df7dfd81f606e8b5aa8d6df1995f22fbe",
+      "nanobot/channels/telegram/webui/locales/id.json": "a292a6c5df5ef0cb052ad7e33492a0bf904e48667246ded028c3e10c958ebaae",
+      "nanobot/channels/telegram/webui/locales/ja.json": "cc83f3ccba3686976e2f54e5beabf901d74a27f235cecb97019ff16c73331673",
+      "nanobot/channels/telegram/webui/locales/ko.json": "3e789416c151d940540e1a9de3e84241ffccfd8b938fc637d52f71e5b4f84da9",
+      "nanobot/channels/telegram/webui/locales/pt-BR.json": "04430514ce442fce5aa26fdaed9549b64a4f4efdf1ee45be4721ebc346839164",
+      "nanobot/channels/telegram/webui/locales/vi.json": "5a43936758344652cba2225dbcd0c17aca933d3ad292ef86671932d5b67f647f",
+      "nanobot/channels/telegram/webui/locales/zh-CN.json": "24dba6053523e3fb3a4388a8c253e2b123f4a67c4bbfd9d0432a30494e8bb114",
+      "nanobot/channels/telegram/webui/locales/zh-TW.json": "df7e8521535ae042e93e7741eee8a32a25747b9fa82dc6d0f10f493a8920da38",
+      "nanobot/channels/validation.py": "7cb1fcba65bcf5bf634756a9e4ea3acf0f87691386bc127f21c8984452c1dca5",
+      "nanobot/channels/websocket/__init__.py": "440037ddc480fb2771aaa04dda0eebd8c6cb436d32fc91c73fb82bf1fd39225d",
+      "nanobot/channels/websocket/manifest.py": "1006579664b0dd3095a159ecb31c49ab6d1de93acd5e0559d82c8c30d9dcae14",
+      "nanobot/channels/websocket/runtime.py": "04cf498cbac8408926da1caee7f75cd0b578467ef1f71d994a81a0ea58dd16d4",
+      "nanobot/channels/websocket/tests/__init__.py": "ae4f042483f2273c8381323bb736921d567532377e8844993c625d86c3eb60f6",
+      "nanobot/channels/websocket/tests/conftest.py": "700b909ed55fcc34122f0deb6e52a66abcd0577a96e222664b6698430657ba5e",
+      "nanobot/channels/websocket/tests/test_websocket_channel.py": "2daa644ebf23c7c118427c12ab96cfb6541fcee23c7c3a3ca53916f2b40da78d",
+      "nanobot/channels/websocket/tests/test_websocket_envelope_media.py": "c1790d7716945e944343879e27645322369d23dce5031ed505cbd9145e5a13a5",
+      "nanobot/channels/websocket/tests/test_websocket_http_routes.py": "dc78415561db9546f1f9091338adee8a20a441796970bf97d8b37c7440963e60",
+      "nanobot/channels/websocket/tests/test_websocket_integration.py": "6b0a690e05c07a6020595eac8c337113d4f9ffc92c41ff9510d943139cac45b6",
+      "nanobot/channels/websocket/tests/test_websocket_media_route.py": "03b03449c9981113dcef805c1ec28b38c6c7b4d0ae09b4fc86bfe68a79ebf69a",
+      "nanobot/channels/websocket/tests/test_websocket_protocol_boundaries.py": "8a61db50fb6171efbcfe381ce00dd2816600e008f6a1f137b055d89e0e9427dd",
+      "nanobot/channels/websocket/tests/test_websocket_reconnect_idle.py": "1d4384387b9d10d22e5ec97fccd9b2d009763954eb27285db68c849594d66349",
+      "nanobot/channels/websocket/tests/ws_test_client.py": "b04d84d34042d6fa74d4205b7b83df73eb210f5bd5a403741cf8ff6a77a0e972",
+      "nanobot/channels/websocket/validation.py": "2f07490954b05b0ef358d4b480d4de0153ab98b26c4b9df0fafa1a7fe17aaa81",
+      "nanobot/channels/websocket/webui/locales/en.json": "76c6f17e4020dcd64c0730450910c7eb8a3dd4312b4893e848a8851aebcbc99a",
+      "nanobot/channels/websocket/webui/locales/es.json": "b44705847ecd2842e1c5c3da9edee9929cbbaee441b60bbd93b5015e8b128f8d",
+      "nanobot/channels/websocket/webui/locales/fr.json": "ba75f33a69ef211bcf26db663bfe9715c77a8455f496999a4772d893bef9875d",
+      "nanobot/channels/websocket/webui/locales/id.json": "e85ab2f03ae5604bd2c69fb89e52228bd6e41c18657271195f26f634af9c5113",
+      "nanobot/channels/websocket/webui/locales/ja.json": "d05d71caefcb6eaf039db33ea0aad8e11e45feee413f5d0768a170cde5ef70f8",
+      "nanobot/channels/websocket/webui/locales/ko.json": "ad7e5830ffeefd3e1064f79f04d8f4383147fb45960141f73d479d55af2872c7",
+      "nanobot/channels/websocket/webui/locales/pt-BR.json": "a564537ba524ffe3a4d3081260a90a0634e34fd6bb38f3becd04309d8d10e3db",
+      "nanobot/channels/websocket/webui/locales/vi.json": "ae285fe8b3d9e0ba72541bfe5bdd663acf8b092102ca5c407458f296337c46f0",
+      "nanobot/channels/websocket/webui/locales/zh-CN.json": "c1faaa3775b282b794323b47700b3fde5b8d86400e36b4e136fbb6c132556420",
+      "nanobot/channels/websocket/webui/locales/zh-TW.json": "751ff7d00d5b92d3fb5db6dec06402baa89fd50855e7a1d1e73d3fa69b31de00",
+      "nanobot/channels/wecom/__init__.py": "4b63d2c2af7414a5c72028b9d21706215d5c28cb37183712b46863df33e93e21",
+      "nanobot/channels/wecom/manifest.py": "b38bae186f26aabb0fa2d693c285888129261e3032f700e75d762a05612c93ca",
+      "nanobot/channels/wecom/runtime.py": "f2bf0ef37fe6c6dceee681092eaefee881097fb3488617a26365aa59c0d596e7",
+      "nanobot/channels/wecom/tests/__init__.py": "7bcf3e9ca5ce78aeb54ce37389f0d42b05f6c907f6082c007b3ea4067c80e40c",
+      "nanobot/channels/wecom/tests/test_wecom_channel.py": "db01a9f3fb6a5c024d6711914115bf35974f2f0e0d586fa357ad9a7c3ece0c13",
+      "nanobot/channels/wecom/webui/locales/en.json": "b47ce479a2b8e3899a15a4a766deccd4412bbe6e377de1e596125d8f43bb5cc9",
+      "nanobot/channels/wecom/webui/locales/es.json": "a17eb8a979246696c203c66b7ef88a34c6a19e7246cb87d50075cf7c3d6e13d3",
+      "nanobot/channels/wecom/webui/locales/fr.json": "f4610955f207edfb38f88f8bffcc6baeed5cc532fa8ee894f6e91133acff03a8",
+      "nanobot/channels/wecom/webui/locales/id.json": "876e50afbd3dc04a55cae2b180546f9696fb1cbfb2ea98e142166b0a326178af",
+      "nanobot/channels/wecom/webui/locales/ja.json": "0bb53d128aecd820ccf4d078bdbe2bc10ec2522904487bd9329a773ee7c33a62",
+      "nanobot/channels/wecom/webui/locales/ko.json": "46d4f076e7bf2a7e45239a9db54d0983808244a1f382a1ace590fa659a00431a",
+      "nanobot/channels/wecom/webui/locales/pt-BR.json": "fb5c7859fd03ffbda2d756a56aa129154401d14c25c32b012b49a249dc580ce2",
+      "nanobot/channels/wecom/webui/locales/vi.json": "88b9d2e855b62a3d61b3ef8a7ae6c721de257eb6099281a320db74fe7556aa57",
+      "nanobot/channels/wecom/webui/locales/zh-CN.json": "0d611ae7077d13fc7031c3b79e05d98f12b4d3b4d5f189da6e31803eee03f52b",
+      "nanobot/channels/wecom/webui/locales/zh-TW.json": "fafa412ce8ee1c13b447756ad9df789dc9d1faebcf55a15e50efd93df2709c0d",
+      "nanobot/channels/weixin/__init__.py": "21ef44c4007ca87f4cedc46f732d7c756f22569e7d86dd4ec0efeea43be93e2e",
+      "nanobot/channels/weixin/connect.py": "682bb763535babec85bb23f9c3362b69af4f7aec1d4f4ce1fa7f8fc54d949b7c",
+      "nanobot/channels/weixin/manifest.py": "1a314027404316e28ccbaaa7f65478a6748de6b1a1ef2fc5f8be0efa43703606",
+      "nanobot/channels/weixin/runtime.py": "821eb1c3b6fb5b56aeeb9f5a58fbde6f81e7de58440bc6d38f378a2695996528",
+      "nanobot/channels/weixin/state.py": "ebdad051167c302ef1f426e2e2131ea6ecc036749e76cb2fd294493296d99c7c",
+      "nanobot/channels/weixin/tests/__init__.py": "b18a3432952b98652b1a27068c032c0b8293b0af2ab2333d74413bfa9f4770f6",
+      "nanobot/channels/weixin/tests/test_connect.py": "87e5c44ac0939e4d6147375dff2852527c90f70666b51db32e995a35ea3ae3b8",
+      "nanobot/channels/weixin/tests/test_weixin_channel.py": "9fc2dd7d67c67017d7b8dcc8a15581021551270d917139a607bf5e56957c9027",
+      "nanobot/channels/weixin/tests/test_weixin_hardening.py": "590f03f239254c9ab5feffa104576920d67a3da2976244becd221eba4f1b2770",
+      "nanobot/channels/weixin/validation.py": "eb5811d164f20079c2083d3f897ae8a9fea95f97cfbe3b7dc9875080418874c9",
+      "nanobot/channels/weixin/webui/locales/en.json": "ad13d3700d35af12089804e0ec7d1114282f92208cc2d374671a3da8932ac4a4",
+      "nanobot/channels/weixin/webui/locales/es.json": "1c70529a58d02668bc44a5dc7f93458138c4a2da675ab8f709107a97fae33ca1",
+      "nanobot/channels/weixin/webui/locales/fr.json": "2804c4149b5b63963506ab1b983ade3b3f25353ef9197e6f6ed8a39be0e2e97a",
+      "nanobot/channels/weixin/webui/locales/id.json": "4d22bb10349382dd25add5b87b1496c507b5f9fa6d3ff4eaf8373ca8f12acabe",
+      "nanobot/channels/weixin/webui/locales/ja.json": "fd44d97cd5bbb27675ad557875c070c6e747931f092526d51c6d3d081add1a6f",
+      "nanobot/channels/weixin/webui/locales/ko.json": "e514662095557cce52192fe3aad2182f4272365ef2c7bfeafdbbd9be8fa902fc",
+      "nanobot/channels/weixin/webui/locales/pt-BR.json": "7d6e4a3b40d08c5c6ea55bbec649377497a929d6d2caa59e4bb4b237139ea2f9",
+      "nanobot/channels/weixin/webui/locales/vi.json": "4f62ca485205697d9226c486f7f9c9c533bca7fb60a9576407d804108376e304",
+      "nanobot/channels/weixin/webui/locales/zh-CN.json": "56337ecea5affae8caf5a4b3cd79d313ccf85645c55762385da9a37d0e1a38f4",
+      "nanobot/channels/weixin/webui/locales/zh-TW.json": "50ae4e9bd505485d9ed0d681c14096dd0616a006cbc353614e4d33ad5f73c817",
+      "nanobot/channels/whatsapp/__init__.py": "29f7383afde2cb714828b7103c941c0c9574948b3bd2b9f5a3b77d7514fda8a1",
+      "nanobot/channels/whatsapp/manifest.py": "5c493cce233244c221db49c6120d7f8f22f775f270f4f35d2a1cd2aea868ea46",
+      "nanobot/channels/whatsapp/runtime.py": "7cdc8b4339574cf768fa116fcdc5b772722ed30af96692d88626d8f075fcf077",
+      "nanobot/channels/whatsapp/state.py": "5f2cb95531209c567ee4464c4122f7f07f133eede3e8f6a4c4181bc3ab5c3e17",
+      "nanobot/channels/whatsapp/tests/__init__.py": "195e33d3717e5008f321ad3e724becb1082c1ad41aadb4be93e11ec837e47283",
+      "nanobot/channels/whatsapp/tests/test_whatsapp_channel.py": "a4899e3b67676532bb954e1f0cf71f69993409feefa0628c72e162571599c79f",
+      "nanobot/channels/whatsapp/validation.py": "be83012ebbe3f6a93b8f0a652ed2364b3b75ed60b52691a8721f1c41d94b2e82",
+      "nanobot/channels/whatsapp/webui/locales/en.json": "b03b8ce07ff3245be7b960d295272687e0976d9e7edf47f97d17580094c2df43",
+      "nanobot/channels/whatsapp/webui/locales/es.json": "07ed997ccda5550e35afa2bd2ab48a3876afc1e2f84fae467648ee2a2e857e72",
+      "nanobot/channels/whatsapp/webui/locales/fr.json": "48a08dae3b4d2c65a210b35cb11287a1d634bf313595d1db6453ade16c93d7b9",
+      "nanobot/channels/whatsapp/webui/locales/id.json": "63dee6a5808c64a6c6f6c3d7a39f7b56c9eadaa95a88fe26f7a6cd0aaa1f8777",
+      "nanobot/channels/whatsapp/webui/locales/ja.json": "25cf82d5308981fd174e26ff41261739336f963f3e8310d6b1bc2302a28feb50",
+      "nanobot/channels/whatsapp/webui/locales/ko.json": "307ad621e10a7ea2c1e0661d81129de8ac47a0c32603b8ceab6c0aeceaac39fd",
+      "nanobot/channels/whatsapp/webui/locales/pt-BR.json": "fb16d35ec80a8a875d3507e8c2ff1accdc6f2ffa34beae77f03734945caa9496",
+      "nanobot/channels/whatsapp/webui/locales/vi.json": "a328ceea5d5e04489cb362c37ca6562410fe40061fb2b6a341c4fb300bb7f993",
+      "nanobot/channels/whatsapp/webui/locales/zh-CN.json": "8e5ca451ff34398d23a969a37268b824edc7c01f8cdbcfba390d15f94c611a8e",
+      "nanobot/channels/whatsapp/webui/locales/zh-TW.json": "ec33238af2e69ed08eda0026f136db5757eb7447e8d9454c64100f8963eed135",
+      "nanobot/cli/__init__.py": "133769600c445467bfb772be9f988686fc4dbd880e9a2999094a4648a70641cf",
+      "nanobot/cli/agent.py": "74a1dcf3d814af96b679290e6cbc833bd0af0a63031c0c52153804d6df74ba1c",
+      "nanobot/cli/commands.py": "a68f386c05aca58dbb8bba9744618f426582aa2c7c442a24f2fab4d7163481a7",
+      "nanobot/cli/entry.py": "1fac82bfe7b6b974616777f716e310d30655d02fc3e9631c47e218919bdb354f",
+      "nanobot/cli/gateway.py": "104df95708f92938cd988618a4835d74629fdcfdeec4948b6f2abc9551a71170",
+      "nanobot/cli/gateway_runtime.py": "d532c1b9f3457e9ed55da6701199d8a1ddcabdde125c24ee956c1c4e274c1b52",
+      "nanobot/cli/log_control.py": "ed9e318b9c2f338dba96c2bafb0ff35d44cd1bbdeaaa5659f94a2c3fb903e98b",
+      "nanobot/cli/models.py": "5cd68173729861e7a2b322f15cc426193ef86e496fe5f45273618da2e615e392",
+      "nanobot/cli/onboard.py": "3988fd0a662a380ced15f0eb5683056d0bbead11d60e95136e4648961176fc64",
+      "nanobot/cli/provider.py": "a108d1c4aac44a06680a805e6119ecb8c8185d4a0e4ca485003c2d9ce796e58d",
+      "nanobot/cli/runtime_config.py": "98125a1ac3cac416c1b5eaaa7ef49f4aad474ae603c4f5ebdb17ce42cc024935",
+      "nanobot/cli/stream.py": "d79e2cb5f72513712e8d5cda33783d41a3984fe4139c0e46e19569ab4d791dcd",
+      "nanobot/cli/terminal.py": "ec29803137144e5d6a18cd480b18f3097f813d0dbbd5f1bd0b31135c93d80b90",
+      "nanobot/cli/tui_launcher.py": "17305eb7a64217103b3e824f65c809a635a7b25c061fea10dba8cb22f1aaa22e",
+      "nanobot/cli/webui.py": "6954829fcdba0ce97f52b2f08ccd929b1275bb732fd29dde4a86035842e961d3",
+      "nanobot/cli/webui_support.py": "8070f9a5feb99665de481fe584ed8e363fae622c40752b7c30fd471ba55f7564",
+      "nanobot/command/__init__.py": "1ad0670b918e7999ce60a1752a142fccf4c104eab8c4b11124febd5a1886b9de",
+      "nanobot/command/builtin.py": "aac09a1f2361d5a76dde0172c46e1abb98830bc03e34347864acf10c81025cfe",
+      "nanobot/command/router.py": "6cb069b77d80afc9cc2691363ff396210adf8b8391a537bb669d53bd06653737",
+      "nanobot/config/__init__.py": "34610408d0bc418f70834c2673a9543bc01dc58eb7fb650b178f80944eedf1e2",
+      "nanobot/config/errors.py": "fd2292ef18708d6e30cfc64f0df7d808986cfe605fd5ff9d27e87f7f55f66c3f",
+      "nanobot/config/loader.py": "b7a8470acc521685535a9b49702e266c0a3f18fa236b2684e7e0d1a1c5682cbd",
+      "nanobot/config/paths.py": "a6432705d9d34496fef5c53d8fca558632718046b377e462b36d9dae811d6a3d",
+      "nanobot/config/schema.py": "27c8a367b9191d5926f5b887d040c6174cfcb87ea0fda64f9ad1fe0a1cc280eb",
+      "nanobot/config/timezone.py": "db84bfd2dbce2ed3a1ac2db9f4cd5fff4ef4652b2dd4aecf32b35fdbe107f5f6",
+      "nanobot/config/watcher.py": "54324ad522518f8d007a67a64cd58eee4ba31d319319be36c6329b95b0751f7f",
+      "nanobot/config_base.py": "5579be5ae3020e339a6ad49776912fb41cc32ef6e05134feaf64160aecb56285",
+      "nanobot/cron/__init__.py": "95348a9488a47a2c35a15b2de6153852c6b6d6a547b5a4c4ea9d20adc3ca7483",
+      "nanobot/cron/bound_runner.py": "9ebb9b6a4bb754756e69af5cd092ed34d338c0e0236e215ee831504b95df2eaa",
+      "nanobot/cron/service.py": "19ac2754f8863feef4cac571c3a9ba182ffd265371bc33ac9b55fb3a5337be87",
+      "nanobot/cron/session_delivery.py": "7af15c85378af211b054f4fb0e1f2ff796df5e3b8dc657ae167b15f0cd2a6d1d",
+      "nanobot/cron/session_turns.py": "b9ff2bd292a1930b16d3d23433a53ade9dc5e39c7360948dbb95247a8ce32664",
+      "nanobot/cron/types.py": "4da14944041280a8365c5582a9b8bba5cc8c9060f966d669f972095d2ac37ab9",
+      "nanobot/cron/webui_metadata.py": "e2c9c7cc62cddf7bc2bba93c3f239689847b562c42bacb16f8c1f8ca404a2ea8",
+      "nanobot/gateway/__init__.py": "7a5d23d9ba512f68c32b819d5b421e03155fd0d24df08df026354c9cc988bb7e",
+      "nanobot/gateway/runtime.py": "ffade8cd542206ce1f1bb19f6cd5cd428367860e5ce95a7abe9917ecb72eba77",
+      "nanobot/gateway/service.py": "50c9a22c5d6608d3ae2c27c5e00e4288b5005726803e1aec75626e2fedb154a4",
+      "nanobot/nanobot.py": "2b78b3d1948fa82182e58ddb1645f648723fc98413bb4b93b6006edba40bc732",
+      "nanobot/optional_features.py": "9ef2a87ba8a4552950e0a9b157c75050608b784fa197b21df4cf147005e23981",
+      "nanobot/pairing/__init__.py": "d08cdf2e9ed497db390298f8cef254320b6795a2415cdc9766ed5285f06ca707",
+      "nanobot/pairing/store.py": "0a09527b969ec58c17195751f89b6d10b26deb8b380f3088fa367430b551d55a",
+      "nanobot/process_runtime.py": "9d45ce57baa73b44a9df613334738abb9141bd65eed9093e5fce0d69f4fafd4a",
+      "nanobot/providers/__init__.py": "dfa4c35b5650ba7af0dfb67798670abfe22e2490e872e61199a3f844eff0b321",
+      "nanobot/providers/anthropic_provider.py": "3f3617ac4d33e01dbbeaf32a9a5d72ef10b167f4af9bbdffdae850e5ab6fc368",
+      "nanobot/providers/azure_openai_provider.py": "ed7dcda7e3934e4da5a163625ad975099b0e9375aa37c2d1e571efaf3d1145f0",
+      "nanobot/providers/base.py": "7938c11fdcbf7036ceb0c70a7544932755c629a2f81d428023b6b2b511c135ba",
+      "nanobot/providers/bedrock_provider.py": "cd83f3f9d638885729ae96e24d1498447ffcc3276f4d258d59db907cfda81d5a",
+      "nanobot/providers/conversation_state.py": "07ea0be23747d35b76aa895798944961383f6ebc74202b5730cfd621edb63975",
+      "nanobot/providers/factory.py": "14608450e0d27ba02beecb8fc7b49485c1b6ed200a380975fcdb5a940c770fa6",
+      "nanobot/providers/fallback_provider.py": "c4cba71a03a272b0d4bf0fa38526c2f8671cc5ba689b8261f1bc4c500a0eaffa",
+      "nanobot/providers/github_copilot_provider.py": "eecc942434de3ea2ab7edaeb68d02cc8ada900669e3ef661f62fb443f87be3d4",
+      "nanobot/providers/image_generation.py": "6710741ad856ba552f62369015a9fb405a6f6223dfab04ecb7380a7db243459f",
+      "nanobot/providers/oauth_guidance.py": "476468d32ff4a6065ea0deefb2dd93d515e53a36683e919298c08a0756debe36",
+      "nanobot/providers/openai_codex_oauth.py": "2d008293aea95a262925fd6420310efd864dd7d5fc601d2b4c230ae9fba0af8c",
+      "nanobot/providers/openai_codex_provider.py": "6522b1b56dd6ab142cfa106b457f053138719f45a970f033130bae7906c5da3f",
+      "nanobot/providers/openai_compat_provider.py": "17941dfc829f31cff71aa2a9e2874a910a91fe8bf35c04d8944c0a623ddf60be",
+      "nanobot/providers/openai_responses/__init__.py": "0972b30f9631179d85b32aacc60171517d93d1699d5d7aee0adfe6b5594bc114",
+      "nanobot/providers/openai_responses/converters.py": "226ec16fe47b90d08c600e3e0a8c218d5c2d52864c5b86cf3d6b9bdfdf4191ab",
+      "nanobot/providers/openai_responses/parsing.py": "dbb85a8d8c5fd9ec892c1f2d66734517e5cbb31cc8f6afed90d8274b23873f7f",
+      "nanobot/providers/openai_responses/state.py": "ca048dbc05edce086629d1c6a5ee9d58b87b81127da29c14a981da26425f4fb4",
+      "nanobot/providers/registry.py": "e4defdd46919291cd564d1fd93e9f65f9e01eb266589540d61e8a29f07a3c917",
+      "nanobot/providers/transcription.py": "32838fe6fea56730bbb6ad36c7e3229a5232c95ff6c374e27529753a23adddbd",
+      "nanobot/providers/unconfigured_provider.py": "57ecfa27740ffc7bfaf73117c703dc525935ee804f7f262ab1480958f0316833",
+      "nanobot/providers/xai_grok_provider.py": "e53c406b135f1b14d4916846823dac07afbd7e084941270402010bc3ea088799",
+      "nanobot/providers/xai_oauth.py": "f9e1e68dc68659aeb4017cc492e8d9ae68fa479d53a4ce8d1f5fce87af426fab",
+      "nanobot/runtime_context.py": "e74c50b8d7d68a063721c0aa7ee52af5737e13875d8e88efaa490cc87da026ce",
+      "nanobot/sdk/__init__.py": "85c4b3a7a49d95957c936c88b6425ea151069d535e0021b188008c457731541e",
+      "nanobot/sdk/clients.py": "b8f12f76779e0998901c186b4ee206a9d211003ae3ec5face4209458089ac452",
+      "nanobot/sdk/runtime.py": "a16ad48f030e135f30f1081d1c54fad7806025d68ef8ef4f09e355824ec98211",
+      "nanobot/sdk/streaming.py": "007b2fc326d5c0cc9606c2b87e70e3dc0e0896ab723522563942f5a0405305f7",
+      "nanobot/sdk/types.py": "dd6358126e172d308e1f298fd4a1153354109dbbe7c771a63a82dc56fe438cc3",
+      "nanobot/security/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "nanobot/security/network.py": "ecec72953ba3ed99b4921d2ba0951f0eecdf6297f3e429daa19545276f94aa24",
+      "nanobot/security/workspace_access.py": "72eb229628ead42ef233ba33ae25667237653219be3902b96df1e8ede8669023",
+      "nanobot/security/workspace_policy.py": "d7d20f243a80015735120548378a0652b318852d156f7b5782b5db627a80d598",
+      "nanobot/session/__init__.py": "867f844414a0d934954693e0fe653a14577ca3276684fe0417b85844740ad14f",
+      "nanobot/session/automation_turns.py": "e6cfbf16f79b9bba0d2a89ed613b13f39ff3aa09d3af2edf73792d7c3167ee14",
+      "nanobot/session/goal_state.py": "6ec7802984ac38f84244e29374f3611bfe5076a72ba6a6731225ee378a4fec99",
+      "nanobot/session/history_visibility.py": "479d2b15a8a8718733d148a9442539983ff267bbcdee5123320549c4613814af",
+      "nanobot/session/keys.py": "58a4807948cdabb57b0cd659a7b6bdf62327192fbc4bc457c39f306998e0cee3",
+      "nanobot/session/manager.py": "aba72e5826006a0e0ca0f3ad7ddf184afd55c1cfdbd135d57920348a4b929bd6",
+      "nanobot/session/model_selection.py": "8018531f0fb7df8c6c34e2c5c3d01ba2f8fcfecac32263a17eaad8de43c6f88a",
+      "nanobot/session/session_handles.py": "84e0d194b9874a745198544cf8f71a00ccf0c7f0e4c4d7755cee6945b901235f",
+      "nanobot/session/session_messages.py": "be448d16b7db1860ce7872857bffdaad02dfcb0ccb7550ea500408b671f6125c",
+      "nanobot/session/summary.py": "94a8893e83787a3b71de0dceb4fb95be3ceffe2c33e0d48b3bfb2f5c468f6be9",
+      "nanobot/session/turn_continuation.py": "5dd22646c38d0709d5550f6e48cacbf16f0547158f7b29c121dee7ce98935ca4",
+      "nanobot/session/webui_turns.py": "498f73da13091e9942ac428f8e246ca97b2275c84363c7d4236bbd43bfce78ab",
+      "nanobot/skills/README.md": "f733976d4c7f06c8c72c5ea3740f394bf861102a38dfa9b71f4d013879937745",
+      "nanobot/skills/clawhub/SKILL.md": "623a6e31e97abb358854f08908263709a4a36ff7e643472ccb90ee6a7cc352e7",
+      "nanobot/skills/cron/SKILL.md": "5f050ee98a943a918f8030536677d773fd783c6909a62ae76b463466bd24231a",
+      "nanobot/skills/github/SKILL.md": "bd1c4b4acec5fa7af31c2e26d1d26e5854fd74e53071c9d782edfc011cdcc145",
+      "nanobot/skills/image-generation/SKILL.md": "6b93425db72019649365cce0f1edeab95adbde0610939bf48418a13b9532cec0",
+      "nanobot/skills/memory/SKILL.md": "1c384dd9d304b8f0ea025ff7919f89200310891f43cde7e4f617d34e482b8e0b",
+      "nanobot/skills/my/SKILL.md": "8378b8b079df1dc80377c2afdd797a665130899b172a0e022268e3e4a43c5c94",
+      "nanobot/skills/my/references/examples.md": "15f9b3d180670cb571490f23c35bd580b20a8976128b8fa2a590c59b7775594e",
+      "nanobot/skills/skill-creator/SKILL.md": "0efd563abf220edabe046734a0cf30be72409b443e255619471c4073bd483268",
+      "nanobot/skills/skill-creator/scripts/init_skill.py": "51ca06582b00737a647245796a2f4d9895ac3d9b81d20d00d8fbbbed5cd6b793",
+      "nanobot/skills/skill-creator/scripts/package_skill.py": "6bb0d4390e5d7dc2bc12206b26180acea52f554c6655395568b58698a228e2ec",
+      "nanobot/skills/skill-creator/scripts/quick_validate.py": "99dd4b6972274d65d115aa332d038d9122009d4282c3f485e508ec983f3a3277",
+      "nanobot/skills/summarize/SKILL.md": "6bd7eaac4ddcfab1b23535488229047feff002404b6170ddd5d95d74188919f5",
+      "nanobot/skills/tmux/SKILL.md": "906a130fb461ec9cef36674f17222a8365b0e6aac486768815d708caf7c1ac6e",
+      "nanobot/skills/update-setup/SKILL.md": "6bd9b1f642e8b429b7fae49fcc8b2aae41b0320c15b3aa8e9e3c92dc505d02c8",
+      "nanobot/skills/weather/SKILL.md": "964e97c904e9c16b633127bfcd3567a0c83a320fe85fb4bf5900b181f36eb361",
+      "nanobot/templates/AGENTS.md": "3401603e166d62b42512e96293e07032c8e5e1211fc6518da589b387d9cc4073",
+      "nanobot/templates/HEARTBEAT.md": "86803bd40a5d365821bf27f29762e156674af845d4c99bba23e2a5555d29e0fb",
+      "nanobot/templates/SOUL.md": "d58b7ed68cc05c8aaa1e0b97f6f78411e1959efbebb53f53f047f1a911632151",
+      "nanobot/templates/USER.md": "bfd7f7a5e129a86f1d392374669e5375986b830fce9d0d591de15c296845725e",
+      "nanobot/templates/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "nanobot/templates/agent/_snippets/untrusted_content.md": "04dabbc576fb0d440556e86079e94126ced2fb866df363335c62a8ff87105b4b",
+      "nanobot/templates/agent/consolidator_archive.md": "6960938674400ea05702fd61efd3e55a88e340e7d3e6069fde80b9cb4a14dd3d",
+      "nanobot/templates/agent/cron_reminder.md": "6c7203dabdd598cafe4b81ce48b84695870466c916efec34c14378b99132c700",
+      "nanobot/templates/agent/dream.md": "4834c290db81bc7e4250de620946fe5e5b38b955894d67c9d7e4d6837a8dea0c",
+      "nanobot/templates/agent/evaluator.md": "82a0c48a85072c2435b9dfc1af5fbafb3e7e59c434bd0fbe8c28697f7b4b58eb",
+      "nanobot/templates/agent/goal_runtime.md": "2c2c2db422b3cca5fe473fe6c90c2ac466d074a1e6dcef4b9cd16c304f94f805",
+      "nanobot/templates/agent/identity.md": "4b756b1bb1a32c62a381acb6c8b50111890f0e06ee21733366944664d76b04b9",
+      "nanobot/templates/agent/max_iterations_message.md": "495ad7f175b6f6d437a75ba61dd1a6ed104ed332aba93280ae34f6fbc288f7d1",
+      "nanobot/templates/agent/platform_policy.md": "e81222efad1a878c60438ac4a97643b431cccb40ed532a361937deb3f4ad0dca",
+      "nanobot/templates/agent/skills_section.md": "cf989d612fff0ed8090bc3e2dc2e7944dab2f56ded251f8d805d460701b87f2d",
+      "nanobot/templates/agent/subagent_announce.md": "c31d33e41358d55f98e4ac7196d15c108665321110904acd265ab9f60f1827d6",
+      "nanobot/templates/agent/subagent_system.md": "693efbefa192e3195fb817a040b8f5e2c298196679714b0d0b577461b11e15fb",
+      "nanobot/templates/agent/tool_contract.md": "08f14e6760edd235b723106fe269b53d21ac3b1258d2743a2a1100c8142ec625",
+      "nanobot/templates/legacy/SOUL.md": "271e2dea9556bad270fb66f237ee2f1903d1bf83d89429756d6543fb8a4c4488",
+      "nanobot/templates/memory/MEMORY.md": "a0151a00f64bcf2e42219687341d28097ea669a9f117b0a6e65033897a207a8e",
+      "nanobot/templates/memory/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "nanobot/templates/prompts/README.md": "6754a4c205d99bbb09b054482b642295977ca6c9c31ffba590bb15b2e84fd060",
+      "nanobot/triggers/__init__.py": "9e0703d776fd4d92d7fd371f47c969e018f16956ea00dadd0cda4ba938e080e8",
+      "nanobot/triggers/local_runner.py": "d9653ed6598a6e1ecd65811f23b01f0fb8d4e20e4adce04627c6bd3e5c3c3a14",
+      "nanobot/triggers/local_session_turns.py": "1433dac42de18ecb89e7f8a8a5efa675d77002334f17f55a01260644fc68dbfe",
+      "nanobot/triggers/local_store.py": "5b26ce4bde374af1aa0e0bc0230e4e5256d05bc23857012ca1d7ad0811453331",
+      "nanobot/triggers/local_turns.py": "676e49dc2f2cf7b91632f1f6c897e94fdedfd20931d2ca537c66bf1f69d01fdf",
+      "nanobot/triggers/local_types.py": "fa0d242c632d8c7f48f4f2665c6b8fd9a5fe6898d0e10160cf599ffdafb3df5e",
+      "nanobot/utils/__init__.py": "45750cb00ecb6fa5cd51ef4b555c0da3e7d4bc36ec6e59257aab2952095b230b",
+      "nanobot/utils/artifacts.py": "dbaf92662085fc5c54c9373bd1fe6760cadff3a0acf892fb07685ec751f5d45e",
+      "nanobot/utils/cancellation.py": "926afd4dada35dee33c8b97aad43205520a5466aef54e034b5996cea021ea149",
+      "nanobot/utils/dict_keys.py": "52cb11210a9074db37e5c1c7ae3d5ecd3ffead8ba6765b2e3fc485d01249ad21",
+      "nanobot/utils/document.py": "d547d62f0977233c6c35296430565b4bbd40ec78d05fbd3f7170d1500741c0f9",
+      "nanobot/utils/evaluator.py": "4201658c57a716918bb35cc3a62a01dc25625f99b33f5a5b72c48db1de177524",
+      "nanobot/utils/file_edit_events.py": "fa556eb11f2d9caf30e1c6b3ec7ad38e24927dcf08c1cfa7e6ca1b6ef5f3a07f",
+      "nanobot/utils/gitstore.py": "25ff1e025b1de42c38abb00ef23128be6d2b08554350d31b4e759878e2573bf1",
+      "nanobot/utils/helpers.py": "0c7d0ea507234490c5abca1c3fa01243e44ac85ef9e3768575ec8941948fed32",
+      "nanobot/utils/llm_runtime.py": "5f0f2f6849a39f5f3721ef0c1096da2ea4458d9a68f01625cbfc0b6134690d9c",
+      "nanobot/utils/logging_bridge.py": "84b74f02f4c292674919293f61f7fc1337ea1fe61d2886bd26d34587a432dab4",
+      "nanobot/utils/media_decode.py": "03f52d230258eaf06087105bf5a1ca2ab4129e1b988596ae52b7b1f429000dbf",
+      "nanobot/utils/path.py": "b02f84d40e9e725d33f2bc831c7133488dd853ad414f7cd3ea41439538959e3b",
+      "nanobot/utils/progress_events.py": "2d7aef231233c6c3b2354a684fcd524ea13e7b2d41c34bac8a90e536fcb7f9b2",
+      "nanobot/utils/prompt_templates.py": "6d052c2d5c0c974adb5e46cde2f3e0358f4657d3eb400c757797abd6efe39020",
+      "nanobot/utils/restart.py": "475b892fb8e763689b0fc1c6be3b0ee37132e252a44b4e9ce1b3f62d20ac45f6",
+      "nanobot/utils/run_records.py": "af1b9a74e1a5dfaae0b98706e498ae617b4b3ee57d3c40910e98e868d1cdf7b4",
+      "nanobot/utils/runtime.py": "e3dec9917f8d308e86d5a4ec604ef2fa5e94a6b5e49d97cdcbf8336aa52fc3e6",
+      "nanobot/utils/searchusage.py": "25933741e4318e6918745fb031ce8d44e7cdd4f3458dc6827d5a419f5832cebc",
+      "nanobot/utils/subagent_channel_display.py": "9de04ae84a72ddea4f32d429e89bde079eb9150ca635d4b7f0d26a6de7581afa",
+      "nanobot/utils/tool_hints.py": "235e4856421f801bb0fa86f2cf12c69c7d47464cccef8cbef9d8517c7d74a5db",
+      "nanobot/utils/workspace_prompts.py": "b75c85dd5ddf71a258ec61d9bceee3f43f583a6488e4beccaa33c5a7ed9edc96",
+      "nanobot/web/__init__.py": "2e9a9df019be5248bf7c26cec1c7d9ff65c7b5d6b466398663b705e1a8985d1a",
+      "nanobot/webui/__init__.py": "fdc5bdabc80a24ee7a1428ef089558868ab4ebc67b583757153c1233ade8cc11",
+      "nanobot/webui/attachment_ingress.py": "b00997be8769bbbed15c3b2f4b07512ad5f4df2873bd8dfc8a460c5df217dd31",
+      "nanobot/webui/build.py": "fbce53659d86688d8bf38bae76a0a45f97b29a9454e9c7e2769226b2b7cee5de",
+      "nanobot/webui/cli_apps_api.py": "05180d0be88505734ba197d9402a03851211ecf6dbb4b14556d63a6e3f5e2392",
+      "nanobot/webui/dev.py": "337f9e540cb19be510b91cbf77d2d35f3dd26ee3800fe0f54ccc9f113989aa12",
+      "nanobot/webui/file_preview.py": "c43754f3755cc0f74f5da777a55dc3a09e20d1b280d38f675106c881a0622920",
+      "nanobot/webui/forking.py": "ddde27a286e8ecf1867c8ab767aba28439a569c1946d31c863947a75916a55cd",
+      "nanobot/webui/gateway_services.py": "f1cb26660629a63271fc5e24de9830611089213d34604459f0936e93f14a14d6",
+      "nanobot/webui/gateway_tokens.py": "d4ee1f30a4dc6dfeeb6a1c6649441c8d83616301755666f93d14f0d6222d1ef4",
+      "nanobot/webui/http_utils.py": "776eda59c978b37b3492cd1fd34cb439602dfa6cbbb95c20ebb12fb78a211b45",
+      "nanobot/webui/ingress_policy.py": "e7144fd2d705324362d48c3a39441e3b0be9d7dba790f43df09004ec39e57d9d",
+      "nanobot/webui/mcp_oauth_api.py": "aba6eeca0ad515611d34e103d1f0900b8427cd836f49515dd3fabb55d578785c",
+      "nanobot/webui/mcp_presets_api.py": "d28951b431ce1ce20a16253851c85659599d37408e440f47cff6d394751a69d9",
+      "nanobot/webui/mcp_presets_runtime.py": "cd7f4efb7f79aa9457870388bc64a508d94c25bbe9039d09d40c8bdf66efdcca",
+      "nanobot/webui/media_api.py": "337bfce5fb3511395d6ff84275f31ad08f3ef487f10c24c5e290813aeb0518e6",
+      "nanobot/webui/media_gateway.py": "4b95f56fd8b9c418ac6352452201ae5101422c94d13f0eef94aea02e101a99d2",
+      "nanobot/webui/metadata.py": "5c71786bff0bd90b522a0ea061a3618b8f432b93af04175d6ada58d14444f617",
+      "nanobot/webui/nanobot_features_api.py": "4f2cb4ea1699260dc1a636c77b0bad9ef00d4ccc7d15611f4fc086811ee8fe4f",
+      "nanobot/webui/native_folder_picker.py": "7f74c83b116ade20e02542e05b4c05b15efea7ec2dc114e4f3ccc6fd0fe1718f",
+      "nanobot/webui/session_access.py": "400f11367e4a9c64aac2d387ce4e10ebebf90c401c3abcdae339c65f66ac8835",
+      "nanobot/webui/session_automations.py": "2c3c25f4b146d18a5025632793b63411f870cb7c2be2468afd5d383778776b40",
+      "nanobot/webui/session_context.py": "b7ed2df6f347b50be4d8e0225460f120ebe435fb337e160569bb9232c1401823",
+      "nanobot/webui/session_list_index.py": "86dd30f72d49b795a0d815f1795228e613d4deff62054f94899a358a7b7159f1",
+      "nanobot/webui/settings_api.py": "6642d19d1dc5a4f20583be2f38dc5ff5bfce177df6c6f8803adf96ab068eff83",
+      "nanobot/webui/settings_capabilities.py": "502f7b2767ab0fecd6e8769e9c86cafe018081b524db0f8320ed1f4a8497fd2b",
+      "nanobot/webui/settings_contracts.py": "20b81e7a8716dc8bd9bd6f050b38c1eba09bc7e37fb734f0f554b6262c781ab2",
+      "nanobot/webui/settings_models.py": "b93bf43e8ea60cf7f2094a44f63fda9b9a24a0396ff2eadb4e0a5821599679bc",
+      "nanobot/webui/settings_routes.py": "644538b7b453ef62cab568a1b91ba57dea556449d3042e3b73934582739cbb7d",
+      "nanobot/webui/settings_services.py": "ba73f2cbf4c1b7d0429617633cc3ff5fb8c87d0b1a2929e2dfc4ceb3f3f36827",
+      "nanobot/webui/settings_system.py": "8306e77671c8136be0fdc19542510e3bcb9b6b3186e2c546a63b300f4bb65314",
+      "nanobot/webui/sidebar_state.py": "ae230f9cad36476ab5297cd8229ea91195fa977e9b0b42ce7c6c3062faa66617",
+      "nanobot/webui/skills_api.py": "05d8bcf61212559ce70c39f0d5493f5d70c183fca9b2a65884a5ee230da606f2",
+      "nanobot/webui/skills_marketplace.py": "940de783d183b9607112215fcf0f4ee317fb77beb845b2835f69cbc8d99156c7",
+      "nanobot/webui/temporary_chats.py": "10e4799b45e785628d33a40bde48a575b11eddf1adad61183699b78e20c3c2df",
+      "nanobot/webui/thread_disk.py": "58fe53df0938e9b193a76b52180efbf15e1a666f674112fadb8f770efeb3b5fa",
+      "nanobot/webui/token_usage.py": "436a7fdec999fd970d7f19a6a1c78073e4daef4965e81229e05104041d283344",
+      "nanobot/webui/transcript.py": "a7a77676d2086d1295411b91f432f7ead25de2d3592e8a23bd7aaf21262384d2",
+      "nanobot/webui/transcription_ws.py": "5fad69a2ecc08950971ac1977ff3c8e33867211b0236bf1493e245a2ca21aebe",
+      "nanobot/webui/version_check.py": "792d5ec8c0e08ddd1a3e15e5d211a245bfc695bc2462db454a45f65ab9b7bafa",
+      "nanobot/webui/websocket_logging.py": "c60839824bd32d5f3b929d9d605dc924629dd18c9fc79050561ea3716ac91e7b",
+      "nanobot/webui/workspaces.py": "1234b2b78fd76e88497338be82a54a7d3649b68d84cf8934c6c5d6d8c77d008c",
+      "nanobot/webui/ws_http.py": "8a7d2327b3646fba148e80113bab8c115263c321bb8ca38410a845e1d3bd8685",
+      "pyproject.toml": "cd3316056d36c74b783cdd5bb207605b514f1312692c118fc25f396ba4fb3297"
+    },
+    "import_source_policy": "nanobot/ Python, direct bytecode and native extensions must be nonsymlink manifest members; __pycache__ excluded; other resource types not checked",
+    "manifest_implementation_sha256": "22ff9d9a535511db9193c8a017a90b9adda08dcc48a7dd09a1b0222aa3d3e835",
+    "manifest_scope": "git cached + unignored others; nanobot/ and pyproject.toml/uv.lock; inspect_docker.source_files filters; not a full repository hash",
+    "working_tree_sha256": "5ada630fbf47faae8181732472ffcb392a34e9533c85c36f11c9a60af3c94730"
+  },
+  "version": "nanobot-capability-snapshot-v1"
+}

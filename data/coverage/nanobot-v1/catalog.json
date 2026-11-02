@@ -1,0 +1,435 @@
+{
+  "version": "nanobot-coverage-catalog-v1",
+  "scope": "本版显式整理的有限能力域清单，非nanobot全功能穷举；不输出整体覆盖率。",
+  "review_status": "pending_independent_human_review",
+  "execution_boundary": "core_modules只运行可信固定模块的离线实验，不是恶意代码安全沙箱。",
+  "capabilities": [
+    {
+      "id": "file_tools",
+      "title": "文件工具",
+      "priority": "P0",
+      "source_paths": [
+        "nanobot/agent/tools/filesystem.py"
+      ],
+      "profiles": {
+        "file_tools": true,
+        "core_modules": false
+      },
+      "scenarios": [
+        "read/write/edit/list正常与边界",
+        "越界、符号链接、编辑冲突和错误返回"
+      ],
+      "success_conditions": [
+        "输出与独立文件状态一致",
+        "未授权路径与额外副作用被拒绝"
+      ],
+      "evidence_requirements": [
+        "真实工具事件",
+        "执行前后文件快照",
+        "输入与参数Schema"
+      ],
+      "family_prefixes": [
+        "read_search/",
+        "create_edit/",
+        "multi_file/",
+        "multi_turn/",
+        "missing_error/",
+        "module/",
+        "chain/"
+      ],
+      "human_reviewed": false
+    },
+    {
+      "id": "session",
+      "title": "会话持久化与隔离",
+      "priority": "P0",
+      "source_paths": [
+        "nanobot/session/manager.py"
+      ],
+      "profiles": {
+        "file_tools": true,
+        "core_modules": true
+      },
+      "scenarios": [
+        "保存后重载和不同session隔离",
+        "删除重建、历史合法后缀与损坏文件"
+      ],
+      "success_conditions": [
+        "真实Session API恢复预期历史",
+        "不同session或trial没有串扰"
+      ],
+      "evidence_requirements": [
+        "JSONL与session文件独立快照",
+        "保存/重载/查询事件",
+        "任务专属sessions_root"
+      ],
+      "family_prefixes": [
+        "session_"
+      ],
+      "human_reviewed": false
+    },
+    {
+      "id": "memory",
+      "title": "长期记忆与历史存储",
+      "priority": "P0",
+      "source_paths": [
+        "nanobot/agent/memory.py"
+      ],
+      "profiles": {
+        "file_tools": true,
+        "core_modules": true
+      },
+      "scenarios": [
+        "历史追加、游标、会话过滤",
+        "未消费历史保留与旧格式迁移"
+      ],
+      "success_conditions": [
+        "历史与游标符合明确预期",
+        "重载与压缩不丢失未消费记录"
+      ],
+      "evidence_requirements": [
+        "MemoryStore实际API事件",
+        "外部读取的memory文件",
+        "来源与迁移前后状态"
+      ],
+      "family_prefixes": [
+        "memory_"
+      ],
+      "human_reviewed": false
+    },
+    {
+      "id": "context",
+      "title": "上下文组装与边界",
+      "priority": "P0",
+      "source_paths": [
+        "nanobot/agent/context.py",
+        "nanobot/agent/context_governance.py"
+      ],
+      "profiles": {
+        "file_tools": true,
+        "core_modules": true
+      },
+      "scenarios": [
+        "记忆可见性开关与会话过滤",
+        "历史消息组装、bootstrap与预算裁剪"
+      ],
+      "success_conditions": [
+        "上下文只包含当前允许的证据",
+        "消息顺序与角色和工具调用配对正确"
+      ],
+      "evidence_requirements": [
+        "真实ContextBuilder输出",
+        "隔离workspace输入Hash",
+        "上下文边界断言"
+      ],
+      "family_prefixes": [
+        "context_"
+      ],
+      "human_reviewed": false
+    },
+    {
+      "id": "skills",
+      "title": "技能发现与调用",
+      "priority": "P0",
+      "source_paths": [
+        "nanobot/agent/skills.py"
+      ],
+      "profiles": {
+        "file_tools": false,
+        "core_modules": true
+      },
+      "scenarios": [
+        "工作区/内置优先级及禁用",
+        "显式调用、依赖缺失和畸形元数据"
+      ],
+      "success_conditions": [
+        "只加载可用且未禁用的技能",
+        "显式调用与内容来源正确"
+      ],
+      "evidence_requirements": [
+        "任务技能目录快照",
+        "SkillsLoader事件",
+        "实际禁用与依赖配置"
+      ],
+      "family_prefixes": [
+        "skills_"
+      ],
+      "human_reviewed": false
+    },
+    {
+      "id": "shell",
+      "title": "Shell与进程管理",
+      "priority": "P1",
+      "source_paths": [
+        "nanobot/agent/tools/shell.py"
+      ],
+      "profiles": {
+        "file_tools": false,
+        "core_modules": false
+      },
+      "scenarios": [
+        "工作区进程执行、输出截断和退出码",
+        "超时取消、残留进程与会话隔离"
+      ],
+      "success_conditions": [
+        "超时取消可观察且无残留副作用",
+        "工作区限制与执行结果一致"
+      ],
+      "evidence_requirements": [
+        "隔离临时目录",
+        "进程生命周期事件",
+        "独立退出状态与副作用快照"
+      ],
+      "family_prefixes": [],
+      "human_reviewed": false
+    },
+    {
+      "id": "web",
+      "title": "Web检索与抓取",
+      "priority": "P1",
+      "source_paths": [
+        "nanobot/agent/tools/web.py"
+      ],
+      "profiles": {
+        "file_tools": false,
+        "core_modules": false
+      },
+      "scenarios": [
+        "本地固定响应解析与失败",
+        "SSRF、重定向和请求预算"
+      ],
+      "success_conditions": [
+        "只访问明确允许目标",
+        "错误与缺失结果不冒充成功"
+      ],
+      "evidence_requirements": [
+        "固定HTTP响应/本地测试服务",
+        "请求和重定向日志",
+        "网络策略断言"
+      ],
+      "family_prefixes": [],
+      "human_reviewed": false
+    },
+    {
+      "id": "mcp",
+      "title": "MCP协议与生命周期",
+      "priority": "P1",
+      "source_paths": [
+        "nanobot/agent/tools/mcp.py"
+      ],
+      "profiles": {
+        "file_tools": false,
+        "core_modules": false
+      },
+      "scenarios": [
+        "本地stdio发现与Schema映射",
+        "工具白名单、超时、断开重连"
+      ],
+      "success_conditions": [
+        "工具/资源/提示词注册遵守配置",
+        "错误传播与清理可核验"
+      ],
+      "evidence_requirements": [
+        "本地受控MCP服务",
+        "连接/调用/取消事件",
+        "有效allowlist与SchemaHash"
+      ],
+      "family_prefixes": [],
+      "human_reviewed": false
+    },
+    {
+      "id": "channels",
+      "title": "渠道与消息投递",
+      "priority": "P2",
+      "source_paths": [
+        "nanobot/channels/manager.py"
+      ],
+      "profiles": {
+        "file_tools": false,
+        "core_modules": false
+      },
+      "scenarios": [
+        "伪渠道路由与事件顺序",
+        "重连、限流、失败状态和去重"
+      ],
+      "success_conditions": [
+        "启用状态与实际运行状态分开",
+        "本地伪传输正确且不发送真实消息"
+      ],
+      "evidence_requirements": [
+        "伪渠道收发记录",
+        "启用配置的非秘密投影",
+        "投递/重试/失败事件"
+      ],
+      "family_prefixes": [],
+      "human_reviewed": false
+    },
+    {
+      "id": "cron",
+      "title": "定时与Heartbeat/Dream",
+      "priority": "P2",
+      "source_paths": [
+        "nanobot/cron/service.py",
+        "nanobot/cli/gateway_runtime.py"
+      ],
+      "profiles": {
+        "file_tools": false,
+        "core_modules": false
+      },
+      "scenarios": [
+        "假时钟触发、取消与持久化",
+        "重启、重复触发、Heartbeat空任务"
+      ],
+      "success_conditions": [
+        "任务触发和取消符合计划",
+        "重复触发与重启状态可追溯"
+      ],
+      "evidence_requirements": [
+        "受控时钟",
+        "调度存储独立快照",
+        "任务生命周期事件"
+      ],
+      "family_prefixes": [],
+      "human_reviewed": false
+    },
+    {
+      "id": "subagent",
+      "title": "子代理调度与结果回流",
+      "priority": "P1",
+      "source_paths": [
+        "nanobot/agent/subagent.py",
+        "nanobot/agent/tools/spawn.py"
+      ],
+      "profiles": {
+        "file_tools": false,
+        "core_modules": false
+      },
+      "scenarios": [
+        "脚本化Provider并发上限与取消",
+        "阻塞/后台结果回流、隔离与去重"
+      ],
+      "success_conditions": [
+        "任务数与并发限制一致",
+        "结果正确归属原会话且取消无泄漏"
+      ],
+      "evidence_requirements": [
+        "脚本化Provider请求序列",
+        "父子任务/会话ID",
+        "取消和结果回流事件"
+      ],
+      "family_prefixes": [],
+      "human_reviewed": false
+    },
+    {
+      "id": "plugins",
+      "title": "工具插件发现与注册",
+      "priority": "P1",
+      "source_paths": [
+        "nanobot/agent/tools/loader.py"
+      ],
+      "profiles": {
+        "file_tools": false,
+        "core_modules": false
+      },
+      "scenarios": [
+        "entry-point插件发现与重复工具名",
+        "加载失败、旧错误接口适配"
+      ],
+      "success_conditions": [
+        "有效注册集合与策略一致",
+        "失败不造成隐式能力升级"
+      ],
+      "evidence_requirements": [
+        "隔离插件fixture",
+        "实际工具名单及SchemaHash",
+        "注册/失败日志"
+      ],
+      "family_prefixes": [],
+      "human_reviewed": false
+    },
+    {
+      "id": "provider",
+      "title": "模型Provider与配置路由",
+      "priority": "P1",
+      "source_paths": [
+        "nanobot/providers/base.py",
+        "nanobot/agent/model_runtime.py"
+      ],
+      "profiles": {
+        "file_tools": false,
+        "core_modules": false
+      },
+      "scenarios": [
+        "脚本化Provider错误、重试和预算",
+        "模型切换与generation参数投影"
+      ],
+      "success_conditions": [
+        "请求预算与有效配置保持一致",
+        "Provider失败不冒充Agent通过"
+      ],
+      "evidence_requirements": [
+        "脱敏请求元信息",
+        "实际参数投影",
+        "预算与错误事件"
+      ],
+      "family_prefixes": [],
+      "human_reviewed": false
+    },
+    {
+      "id": "workspace_security",
+      "title": "工作区策略",
+      "priority": "P0",
+      "source_paths": [
+        "nanobot/security/workspace_access.py",
+        "nanobot/security/workspace_policy.py"
+      ],
+      "profiles": {
+        "file_tools": false,
+        "core_modules": false
+      },
+      "scenarios": [
+        "路径范围与只读/写入边界",
+        "符号链接与越界尝试"
+      ],
+      "success_conditions": [
+        "策略拒绝有证据且无额外写入",
+        "明确应用策略与操作系统沙箱差别"
+      ],
+      "evidence_requirements": [
+        "独立目录快照",
+        "路径策略配置",
+        "拒绝与清理事件"
+      ],
+      "family_prefixes": [],
+      "human_reviewed": false
+    },
+    {
+      "id": "api_gateway",
+      "title": "Gateway与API生命周期",
+      "priority": "P2",
+      "source_paths": [
+        "nanobot/api/server.py",
+        "nanobot/cli/gateway_runtime.py"
+      ],
+      "profiles": {
+        "file_tools": false,
+        "core_modules": false
+      },
+      "scenarios": [
+        "离线生命周期和受控请求",
+        "启动失败、重载与关闭清理"
+      ],
+      "success_conditions": [
+        "配置与实际服务状态区分",
+        "失败与清理可复核"
+      ],
+      "evidence_requirements": [
+        "本地假服务或离线适配器",
+        "生命周期事件",
+        "不包含凭据的配置Hash"
+      ],
+      "family_prefixes": [],
+      "human_reviewed": false
+    }
+  ]
+}

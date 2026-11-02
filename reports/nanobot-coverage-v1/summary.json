@@ -1,0 +1,1573 @@
+{
+  "cases": [
+    {
+      "all_trials_passed": true,
+      "all_trials_valid": true,
+      "case_id": "core-memory_history_integrity-restart",
+      "complete": true,
+      "component": "memory",
+      "expected_trials": 3,
+      "observed_trials": 3,
+      "verdict_consistent": true,
+      "verdict_counts": {
+        "PASS": 3
+      }
+    },
+    {
+      "all_trials_passed": true,
+      "all_trials_valid": true,
+      "case_id": "core-memory_history_integrity-empty",
+      "complete": true,
+      "component": "memory",
+      "expected_trials": 3,
+      "observed_trials": 3,
+      "verdict_consistent": true,
+      "verdict_counts": {
+        "PASS": 3
+      }
+    },
+    {
+      "all_trials_passed": true,
+      "all_trials_valid": true,
+      "case_id": "core-memory_history_integrity-corrupt-recovery",
+      "complete": true,
+      "component": "memory",
+      "expected_trials": 3,
+      "observed_trials": 3,
+      "verdict_consistent": true,
+      "verdict_counts": {
+        "PASS": 3
+      }
+    },
+    {
+      "all_trials_passed": true,
+      "all_trials_valid": true,
+      "case_id": "core-memory_pending_retention-pending",
+      "complete": true,
+      "component": "memory",
+      "expected_trials": 3,
+      "observed_trials": 3,
+      "verdict_consistent": true,
+      "verdict_counts": {
+        "PASS": 3
+      }
+    },
+    {
+      "all_trials_passed": true,
+      "all_trials_valid": true,
+      "case_id": "core-memory_pending_retention-processed",
+      "complete": true,
+      "component": "memory",
+      "expected_trials": 3,
+      "observed_trials": 3,
+      "verdict_consistent": true,
+      "verdict_counts": {
+        "PASS": 3
+      }
+    },
+    {
+      "all_trials_passed": true,
+      "all_trials_valid": true,
+      "case_id": "core-memory_pending_retention-advance",
+      "complete": true,
+      "component": "memory",
+      "expected_trials": 3,
+      "observed_trials": 3,
+      "verdict_consistent": true,
+      "verdict_counts": {
+        "PASS": 3
+      }
+    },
+    {
+      "all_trials_passed": true,
+      "all_trials_valid": true,
+      "case_id": "core-session_persistence_isolation-roundtrip",
+      "complete": true,
+      "component": "session",
+      "expected_trials": 3,
+      "observed_trials": 3,
+      "verdict_consistent": true,
+      "verdict_counts": {
+        "PASS": 3
+      }
+    },
+    {
+      "all_trials_passed": true,
+      "all_trials_valid": true,
+      "case_id": "core-session_persistence_isolation-key-collision",
+      "complete": true,
+      "component": "session",
+      "expected_trials": 3,
+      "observed_trials": 3,
+      "verdict_consistent": true,
+      "verdict_counts": {
+        "PASS": 3
+      }
+    },
+    {
+      "all_trials_passed": true,
+      "all_trials_valid": true,
+      "case_id": "core-session_persistence_isolation-unsaved",
+      "complete": true,
+      "component": "session",
+      "expected_trials": 3,
+      "observed_trials": 3,
+      "verdict_consistent": true,
+      "verdict_counts": {
+        "PASS": 3
+      }
+    },
+    {
+      "all_trials_passed": true,
+      "all_trials_valid": true,
+      "case_id": "core-session_legal_replay-normal",
+      "complete": true,
+      "component": "session",
+      "expected_trials": 3,
+      "observed_trials": 3,
+      "verdict_consistent": true,
+      "verdict_counts": {
+        "PASS": 3
+      }
+    },
+    {
+      "all_trials_passed": false,
+      "all_trials_valid": true,
+      "case_id": "core-session_legal_replay-orphan",
+      "complete": true,
+      "component": "session",
+      "expected_trials": 3,
+      "observed_trials": 3,
+      "verdict_consistent": true,
+      "verdict_counts": {
+        "FAIL": 3
+      }
+    },
+    {
+      "all_trials_passed": true,
+      "all_trials_valid": true,
+      "case_id": "core-session_legal_replay-clear-recovery",
+      "complete": true,
+      "component": "session",
+      "expected_trials": 3,
+      "observed_trials": 3,
+      "verdict_consistent": true,
+      "verdict_counts": {
+        "PASS": 3
+      }
+    },
+    {
+      "all_trials_passed": true,
+      "all_trials_valid": true,
+      "case_id": "core-context_memory_visibility-session",
+      "complete": true,
+      "component": "context",
+      "expected_trials": 3,
+      "observed_trials": 3,
+      "verdict_consistent": true,
+      "verdict_counts": {
+        "PASS": 3
+      }
+    },
+    {
+      "all_trials_passed": true,
+      "all_trials_valid": true,
+      "case_id": "core-context_memory_visibility-independent-toggles",
+      "complete": true,
+      "component": "context",
+      "expected_trials": 3,
+      "observed_trials": 3,
+      "verdict_consistent": true,
+      "verdict_counts": {
+        "PASS": 3
+      }
+    },
+    {
+      "all_trials_passed": true,
+      "all_trials_valid": true,
+      "case_id": "core-context_memory_visibility-unified",
+      "complete": true,
+      "component": "context",
+      "expected_trials": 3,
+      "observed_trials": 3,
+      "verdict_consistent": true,
+      "verdict_counts": {
+        "PASS": 3
+      }
+    },
+    {
+      "all_trials_passed": true,
+      "all_trials_valid": true,
+      "case_id": "core-context_message_assembly-empty",
+      "complete": true,
+      "component": "context",
+      "expected_trials": 3,
+      "observed_trials": 3,
+      "verdict_consistent": true,
+      "verdict_counts": {
+        "PASS": 3
+      }
+    },
+    {
+      "all_trials_passed": true,
+      "all_trials_valid": true,
+      "case_id": "core-context_message_assembly-merge",
+      "complete": true,
+      "component": "context",
+      "expected_trials": 3,
+      "observed_trials": 3,
+      "verdict_consistent": true,
+      "verdict_counts": {
+        "PASS": 3
+      }
+    },
+    {
+      "all_trials_passed": true,
+      "all_trials_valid": true,
+      "case_id": "core-context_message_assembly-assistant",
+      "complete": true,
+      "component": "context",
+      "expected_trials": 3,
+      "observed_trials": 3,
+      "verdict_consistent": true,
+      "verdict_counts": {
+        "PASS": 3
+      }
+    },
+    {
+      "all_trials_passed": true,
+      "all_trials_valid": true,
+      "case_id": "core-skills_resolution-priority",
+      "complete": true,
+      "component": "skills",
+      "expected_trials": 3,
+      "observed_trials": 3,
+      "verdict_consistent": true,
+      "verdict_counts": {
+        "PASS": 3
+      }
+    },
+    {
+      "all_trials_passed": true,
+      "all_trials_valid": true,
+      "case_id": "core-skills_resolution-builtin",
+      "complete": true,
+      "component": "skills",
+      "expected_trials": 3,
+      "observed_trials": 3,
+      "verdict_consistent": true,
+      "verdict_counts": {
+        "PASS": 3
+      }
+    },
+    {
+      "all_trials_passed": true,
+      "all_trials_valid": true,
+      "case_id": "core-skills_resolution-disabled",
+      "complete": true,
+      "component": "skills",
+      "expected_trials": 3,
+      "observed_trials": 3,
+      "verdict_consistent": true,
+      "verdict_counts": {
+        "PASS": 3
+      }
+    },
+    {
+      "all_trials_passed": true,
+      "all_trials_valid": true,
+      "case_id": "core-skills_invocation_availability-deduplicate",
+      "complete": true,
+      "component": "skills",
+      "expected_trials": 3,
+      "observed_trials": 3,
+      "verdict_consistent": true,
+      "verdict_counts": {
+        "PASS": 3
+      }
+    },
+    {
+      "all_trials_passed": true,
+      "all_trials_valid": true,
+      "case_id": "core-skills_invocation_availability-unavailable",
+      "complete": true,
+      "component": "skills",
+      "expected_trials": 3,
+      "observed_trials": 3,
+      "verdict_consistent": true,
+      "verdict_counts": {
+        "PASS": 3
+      }
+    },
+    {
+      "all_trials_passed": true,
+      "all_trials_valid": true,
+      "case_id": "core-skills_invocation_availability-always",
+      "complete": true,
+      "component": "skills",
+      "expected_trials": 3,
+      "observed_trials": 3,
+      "verdict_consistent": true,
+      "verdict_counts": {
+        "PASS": 3
+      }
+    }
+  ],
+  "components": {
+    "context": {
+      "all_repeats_passed_cases": 6,
+      "latency_seconds_total": 75.68127379054204,
+      "missing_trials": 0,
+      "observed_trials": 18,
+      "pass_rate_planned": 1.0,
+      "pass_rate_valid": 1.0,
+      "planned_cases": 6,
+      "planned_trials": 18,
+      "trials_per_case": 3,
+      "valid_trials": 18,
+      "verdict_counts": {
+        "FAIL": 0,
+        "INCONCLUSIVE": 0,
+        "INVALID": 0,
+        "PASS": 18
+      }
+    },
+    "memory": {
+      "all_repeats_passed_cases": 6,
+      "latency_seconds_total": 120.00598282902502,
+      "missing_trials": 0,
+      "observed_trials": 18,
+      "pass_rate_planned": 1.0,
+      "pass_rate_valid": 1.0,
+      "planned_cases": 6,
+      "planned_trials": 18,
+      "trials_per_case": 3,
+      "valid_trials": 18,
+      "verdict_counts": {
+        "FAIL": 0,
+        "INCONCLUSIVE": 0,
+        "INVALID": 0,
+        "PASS": 18
+      }
+    },
+    "session": {
+      "all_repeats_passed_cases": 5,
+      "latency_seconds_total": 110.58636008319445,
+      "missing_trials": 0,
+      "observed_trials": 18,
+      "pass_rate_planned": 0.8333333333333334,
+      "pass_rate_valid": 0.8333333333333334,
+      "planned_cases": 6,
+      "planned_trials": 18,
+      "trials_per_case": 3,
+      "valid_trials": 18,
+      "verdict_counts": {
+        "FAIL": 3,
+        "INCONCLUSIVE": 0,
+        "INVALID": 0,
+        "PASS": 15
+      }
+    },
+    "skills": {
+      "all_repeats_passed_cases": 6,
+      "latency_seconds_total": 75.75619870889932,
+      "missing_trials": 0,
+      "observed_trials": 18,
+      "pass_rate_planned": 1.0,
+      "pass_rate_valid": 1.0,
+      "planned_cases": 6,
+      "planned_trials": 18,
+      "trials_per_case": 3,
+      "valid_trials": 18,
+      "verdict_counts": {
+        "FAIL": 0,
+        "INCONCLUSIVE": 0,
+        "INVALID": 0,
+        "PASS": 18
+      }
+    }
+  },
+  "dataset": {
+    "contract_version": "nanobot-core-task-v1",
+    "dataset_id": "nanobot-core-v1",
+    "family_count": 12,
+    "human_reviewed": false,
+    "sha256": "3718d896425366db7388fcd9c17e4f8d8d2433ec57fd37f80331ef816992c94c",
+    "split_counts": {
+      "dev": 24,
+      "holdout": 8
+    },
+    "task_count": 32
+  },
+  "finished_at": "2026-11-02T05:16:30.318662+00:00",
+  "holdout": {
+    "defined_cases": 8,
+    "executed_trials": 0,
+    "independently_human_reviewed": false,
+    "status": "reserved_schema_validated_only"
+  },
+  "human_labels": 0,
+  "human_reviewed_cases": 0,
+  "identity": {
+    "adapter_sha256": "4b39973d1d0feed3cd70cc200f2f0bf6c5c1ff530270c8415ec46da420499c5e",
+    "controls": {
+      "concurrency": 4,
+      "model_calls": 0,
+      "repeats": 3,
+      "split": "dev",
+      "time_limit_seconds": 120
+    },
+    "dataset": {
+      "contract_version": "nanobot-core-task-v1",
+      "dataset_id": "nanobot-core-v1",
+      "family_count": 12,
+      "human_reviewed": false,
+      "sha256": "3718d896425366db7388fcd9c17e4f8d8d2433ec57fd37f80331ef816992c94c",
+      "split_counts": {
+        "dev": 24,
+        "holdout": 8
+      },
+      "task_count": 32
+    },
+    "dependencies_sha256": "53f7aeaa635d901a40c0132a5738afa9d970da534bcc43ef5736e2abc72a8818",
+    "profile": "core_modules",
+    "profile_hash": "4cf14ffeca44685000c7d910c674db9e8b70f205ba5353c3933dc4c3be53b8b7",
+    "scoring_sha256": "5e764a3633e10f18040c0de3da4b321f91eee99e3b45730fcdfa5bc8eb3d9b21",
+    "snapshot": "5f6ae8d8186a78731b68d96d45351c734bc3971e843e0c404945abd92e34ae5e",
+    "source_sha256": "5ada630fbf47faae8181732472ffcb392a34e9533c85c36f11c9a60af3c94730"
+  },
+  "identity_hash": "223e95dad503e737d51b057ba736edb11ac7ea55ced5aac7714781165764e2dc",
+  "legacy": {
+    "binds_current_profile": false,
+    "observed_trials": 612,
+    "runs": [
+      {
+        "dataset_identity_hash": "22d271abadf87c38a8abcc62b31e702def107c96f3565d789b198aaa36ee7d7a",
+        "identity_hash": "4bd78c93b5019b32a7f3b92af152e512284dc40a72bdca52499245020b3ec38e",
+        "not_bound_to_current_profile": true,
+        "observed_trials": 60,
+        "planned_trials": 60,
+        "run_id": "modules60-scored-regrade-4bd78c93",
+        "runtime_identity_hash": "cac7fb91cae7349f73453eff4cae4ccfc0dc17f9205175b1baadc8d4e8dcffe7",
+        "saved_verdicts": {
+          "PASS": 60
+        },
+        "scoring_version": "file-tools-deepeval-v2.1",
+        "source_sha256": "425c9318ee06a276c08a1fe2792b2a73a727d22942a666a518a66b473fe1f39a"
+      },
+      {
+        "dataset_identity_hash": "2f20720abb8ee05e40dfded353f3f1ab299383bbf607a75ab7d9bf2b877c984b",
+        "identity_hash": "016e72191b782f629000524565f7e33a9be5e6bbf19becc609eb358d92ae9b0f",
+        "not_bound_to_current_profile": true,
+        "observed_trials": 72,
+        "planned_trials": 72,
+        "run_id": "decisions24x3-scored-regrade-016e7219",
+        "runtime_identity_hash": "cac7fb91cae7349f73453eff4cae4ccfc0dc17f9205175b1baadc8d4e8dcffe7",
+        "saved_verdicts": {
+          "PASS": 72
+        },
+        "scoring_version": "file-tools-deepeval-v2.1",
+        "source_sha256": "c318221f60571709e5843b7cbcc5b23e58d51eaa71dd2a7668fdaf2a26bb6507"
+      },
+      {
+        "dataset_identity_hash": "22d271abadf87c38a8abcc62b31e702def107c96f3565d789b198aaa36ee7d7a",
+        "identity_hash": "f0242ffcce50920fb8a8ba0513d7399721d8069723343bfe4fea4fc2b5e878d1",
+        "not_bound_to_current_profile": true,
+        "observed_trials": 180,
+        "planned_trials": 180,
+        "run_id": "chains60x3-scored-regrade-f0242ffc",
+        "runtime_identity_hash": "cac7fb91cae7349f73453eff4cae4ccfc0dc17f9205175b1baadc8d4e8dcffe7",
+        "saved_verdicts": {
+          "FAIL": 29,
+          "PASS": 151
+        },
+        "scoring_version": "file-tools-deepeval-v2.1",
+        "source_sha256": "769dcc543feb5ab2decc4043aa49a65e417ae570a0ed8ff9299548bf0f0201e3"
+      },
+      {
+        "dataset_identity_hash": "22d271abadf87c38a8abcc62b31e702def107c96f3565d789b198aaa36ee7d7a",
+        "identity_hash": "823fe3e86e13850cb311f6bfd22401f3b52bdbec4491e511cb67a870958851a6",
+        "not_bound_to_current_profile": true,
+        "observed_trials": 300,
+        "planned_trials": 300,
+        "run_id": "e2e300-scored-regrade-823fe3e8",
+        "runtime_identity_hash": "cac7fb91cae7349f73453eff4cae4ccfc0dc17f9205175b1baadc8d4e8dcffe7",
+        "saved_verdicts": {
+          "FAIL": 27,
+          "PASS": 273
+        },
+        "scoring_version": "file-tools-deepeval-v2.1",
+        "source_sha256": "6f95ca77865b0e0473cd3c82c33b08dd7a85d4e415dc1c3d920f72203e00dc3a"
+      }
+    ],
+    "scoring": "saved_historical_verdicts_not_rescored"
+  },
+  "limitations": [
+    "仅固定配置和源码下的真实组件行为；不代表模型或完整Agent成功率。",
+    "新对象重载不等于进程重启；审计护栏不是OS级恶意代码沙箱。",
+    "当前组件与历史文件/决策任务分开统计，不计算nanobot整体覆盖率。",
+    "holdout未执行，独立人工设计审核与标签均未完成。"
+  ],
+  "model_calls": 0,
+  "oracle_disputes": [
+    {
+      "case_id": "core-session_legal_replay-orphan",
+      "explanation": "冻结Oracle要求保留孤立tool之前的user；当前合法后缀策略丢弃此前缀。原FAIL保留，不能直接归因为产品缺陷。",
+      "status": "requires_requirement_review"
+    }
+  ],
+  "run_id": "nanobot-core-9887d442189d4de681fc390403fb6cbc",
+  "source_state": {
+    "commit": "415df576b46464445121fe1bc68d24cd5b649635",
+    "dirty": true,
+    "working_tree_sha256": "5ada630fbf47faae8181732472ffcb392a34e9533c85c36f11c9a60af3c94730"
+  },
+  "sources": {
+    "catalog_raw_sha256": "2a1cfae504ee6bf0fef729f168a24292bae04bfa6a8463e73d7727b989a7d548",
+    "coverage_raw_sha256": "c0c70f9aeb8e0016ca37e9d2adc68d9fec0333a37aa3fb4a6329fb638a3f8597",
+    "dataset_bytes_sha256": "3718d896425366db7388fcd9c17e4f8d8d2433ec57fd37f80331ef816992c94c",
+    "results_raw_sha256": "92ce64447f70dbe65b09d90cdbbbbc5f2c10f47ed819a60b9a40d1e88b8ff098",
+    "row_hash_algorithm": "SHA256(canonical JSON: UTF-8,ensure_ascii=false,sort_keys=true,separators=(',',':'),allow_nan=false)",
+    "run_metadata_raw_sha256": "2ee32829c4f5c0c6bc72cf571e7b4756e566f4178f176bc7558f2941a4028204",
+    "snapshot_raw_sha256": "ad6d3914712061f10256ecaadba0a9c3443808a32113d4b56d9d752256e9e81b",
+    "trial_file_hash_algorithm": "SHA256(original trial JSON file bytes)"
+  },
+  "started_at": "2026-11-02T05:14:51.141253+00:00",
+  "summary": {
+    "consistency": {
+      "all_repeats_passed_cases": 23,
+      "complete_cases": 24,
+      "consistent_valid_cases": 24,
+      "consistent_verdict_cases": 24,
+      "planned_cases": 24,
+      "repeats": 3,
+      "scope": "相同输入的组件判定重复性；一致失败不等于通过，也不代表LLM稳定性"
+    },
+    "latency_seconds_total": 382.0298154116608,
+    "missing_trials": 0,
+    "observed_trials": 72,
+    "pass_rate_planned": 0.9583333333333334,
+    "pass_rate_valid": 0.9583333333333334,
+    "planned_cases": 24,
+    "planned_trials": 72,
+    "trials_per_case": 3,
+    "valid_trials": 72,
+    "verdict_counts": {
+      "FAIL": 3,
+      "INCONCLUSIVE": 0,
+      "INVALID": 0,
+      "PASS": 69
+    }
+  },
+  "trials": [
+    {
+      "case_id": "core-memory_history_integrity-restart",
+      "component": "memory",
+      "family": "memory_history_integrity",
+      "latency_seconds": 8.72039004205726,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "fac1b6edb36b05f45aa6670edcce0e0cdc97e77b942e09264f10fa13b63a9a9e",
+      "raw_trial_file": "trials/0000-t1.json",
+      "raw_trial_file_sha256": "426047271e12ff54cda011ed12ba7d44ba0798f8d27c9ac70a3e7e4ad9083d3f",
+      "split": "dev",
+      "trial": 1,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-memory_history_integrity-restart",
+      "component": "memory",
+      "family": "memory_history_integrity",
+      "latency_seconds": 4.179639916867018,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "b86e94fe5a5117ca51009513cf3acc9988a55b688737285b6499b698088b7bfb",
+      "raw_trial_file": "trials/0000-t2.json",
+      "raw_trial_file_sha256": "d8547fcb3412afdec39f3b40232b5ba614594c9298954114f4e5a69fff86e8da",
+      "split": "dev",
+      "trial": 2,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-memory_history_integrity-restart",
+      "component": "memory",
+      "family": "memory_history_integrity",
+      "latency_seconds": 4.258297415915877,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "f27fe2f90095d42332c42c423f5ab3225c65e5419ea901de99f6c4a90c958048",
+      "raw_trial_file": "trials/0000-t3.json",
+      "raw_trial_file_sha256": "682e7e0d75e323d96887663fe6c15f65e86448d046eaf6662a931a4e01f14174",
+      "split": "dev",
+      "trial": 3,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-memory_history_integrity-empty",
+      "component": "memory",
+      "family": "memory_history_integrity",
+      "latency_seconds": 8.799478416098282,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "21b17f5d0ebc09942931479d9b98197bb6330b39185e9878e35ce61acdee384f",
+      "raw_trial_file": "trials/0001-t1.json",
+      "raw_trial_file_sha256": "3c4e8faa75c6db83b729abf62878cefd75e9e398b87d3acc907d92db02979c3e",
+      "split": "dev",
+      "trial": 1,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-memory_history_integrity-empty",
+      "component": "memory",
+      "family": "memory_history_integrity",
+      "latency_seconds": 4.677139166044071,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "4e14e6d39f2d981d5e45ea4fcfb347c04f0ca5f502545bb3aec64d66686c0b2a",
+      "raw_trial_file": "trials/0001-t2.json",
+      "raw_trial_file_sha256": "29500aff9b2696891db2e644cf875f54d15e1077f53dcd124614e43aed81474b",
+      "split": "dev",
+      "trial": 2,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-memory_history_integrity-empty",
+      "component": "memory",
+      "family": "memory_history_integrity",
+      "latency_seconds": 4.470233875093982,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "6a842d49d9066ebe9f450007be5d6344078101db8a558300c0a7dc246dd21e48",
+      "raw_trial_file": "trials/0001-t3.json",
+      "raw_trial_file_sha256": "2933c02b04a08a3c1520d6db516299ae1d2139c62454b87af1368e7bcfb6c872",
+      "split": "dev",
+      "trial": 3,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-memory_history_integrity-corrupt-recovery",
+      "component": "memory",
+      "family": "memory_history_integrity",
+      "latency_seconds": 8.389731083065271,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "04e61f1e82c0b1a9201f239d150001b74b92d4a9fcc1a3eb5dfe2bd4e088dac0",
+      "raw_trial_file": "trials/0002-t1.json",
+      "raw_trial_file_sha256": "8a02d4de33496b7a7b860d595a8503146052352ded8b180b1daba5103cca4947",
+      "split": "dev",
+      "trial": 1,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-memory_history_integrity-corrupt-recovery",
+      "component": "memory",
+      "family": "memory_history_integrity",
+      "latency_seconds": 4.599888917058706,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "ae356b38e109d5b11fbd0ffd790d43f86c1fa2cf094646f0a6a381bcd9114f17",
+      "raw_trial_file": "trials/0002-t2.json",
+      "raw_trial_file_sha256": "ba8d80a8a13eda69cbd02810228dc4382cf2ca9e8a5acdf2f9901907f5be0b62",
+      "split": "dev",
+      "trial": 2,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-memory_history_integrity-corrupt-recovery",
+      "component": "memory",
+      "family": "memory_history_integrity",
+      "latency_seconds": 4.326240499969572,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "633d124132138b11e9c31cb074bcda504a6e57a808f38fe51d7df53d31894966",
+      "raw_trial_file": "trials/0002-t3.json",
+      "raw_trial_file_sha256": "653aad887761c5552546ac133378d336ec17ca221c0f7a025e86c704a6ae833f",
+      "split": "dev",
+      "trial": 3,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-memory_pending_retention-pending",
+      "component": "memory",
+      "family": "memory_pending_retention",
+      "latency_seconds": 8.803002875065431,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "fd2263b052f2df521d755504d3b4d8f5f5a497f39edc88f39c8b8984e09b321f",
+      "raw_trial_file": "trials/0003-t1.json",
+      "raw_trial_file_sha256": "266c4a37e0a956d1997e16b785c36f9a76692adb4daefdf6b3aef0c0bbd0509f",
+      "split": "dev",
+      "trial": 1,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-memory_pending_retention-pending",
+      "component": "memory",
+      "family": "memory_pending_retention",
+      "latency_seconds": 4.5751998329069465,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "df5db4c84c8229b8018b8b0c1a18e778ac4350d1394030f537d9be77858d65db",
+      "raw_trial_file": "trials/0003-t2.json",
+      "raw_trial_file_sha256": "3a94fe8fdd4b4f35b7a13d4c8f3bd3ec106b7a76a8d689f903cc2317141985ea",
+      "split": "dev",
+      "trial": 2,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-memory_pending_retention-pending",
+      "component": "memory",
+      "family": "memory_pending_retention",
+      "latency_seconds": 4.555089249974117,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "7bed813ad99c52a00b0be75af303615d08c6343c55f588025f7635435895ba24",
+      "raw_trial_file": "trials/0003-t3.json",
+      "raw_trial_file_sha256": "ca753e73b6e26c5b5a79e8abf893861adf6046e7abff78164a0c6e9f2e3c5b04",
+      "split": "dev",
+      "trial": 3,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-memory_pending_retention-processed",
+      "component": "memory",
+      "family": "memory_pending_retention",
+      "latency_seconds": 16.04718720796518,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "74229ed23c01d5d3ee0f94759339dc055926e6df5b52cceae2fe32e04e12cab2",
+      "raw_trial_file": "trials/0004-t1.json",
+      "raw_trial_file_sha256": "5c11e6f04112c3f50978cd69146470b09aa569f8f3a94b02ba3a8b87ef2b30d1",
+      "split": "dev",
+      "trial": 1,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-memory_pending_retention-processed",
+      "component": "memory",
+      "family": "memory_pending_retention",
+      "latency_seconds": 4.319780291058123,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "815c7ae534a85cd1908bbb944979e4a6d708526482f6f21a70c1df6fd37e6488",
+      "raw_trial_file": "trials/0004-t2.json",
+      "raw_trial_file_sha256": "97c082b6d87b39d75fb3ea275d41f7e7fd1812214cb3a2db11d7593e507e2ac1",
+      "split": "dev",
+      "trial": 2,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-memory_pending_retention-processed",
+      "component": "memory",
+      "family": "memory_pending_retention",
+      "latency_seconds": 4.698411540826783,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "9acaa1f2782e5f354fbc11139e42fa273fcf123880f029fd4fb68c1bf8516368",
+      "raw_trial_file": "trials/0004-t3.json",
+      "raw_trial_file_sha256": "84f669837727322eba6a6f128442b5283b6d52c2a739fb9c18a6b92e656bdd3b",
+      "split": "dev",
+      "trial": 3,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-memory_pending_retention-advance",
+      "component": "memory",
+      "family": "memory_pending_retention",
+      "latency_seconds": 15.756215416127816,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "417370fd9db8fa581617604b98a3251b7e71a8642b083391e0337ed7ee2fd53f",
+      "raw_trial_file": "trials/0005-t1.json",
+      "raw_trial_file_sha256": "ee732d041519044ec54a880b7744cf67199b1eed36f8370e59b3c42e81b17f7c",
+      "split": "dev",
+      "trial": 1,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-memory_pending_retention-advance",
+      "component": "memory",
+      "family": "memory_pending_retention",
+      "latency_seconds": 4.834327957825735,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "6dd244d66123c0fa97cb4f7fc0e28b7fdd29c1c597d8d874ba79f7d88f678e31",
+      "raw_trial_file": "trials/0005-t2.json",
+      "raw_trial_file_sha256": "3211dfe31eeb5b3b20b38bd4286fc92f9f76012d709490bf69daa9cda5fd88d5",
+      "split": "dev",
+      "trial": 2,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-memory_pending_retention-advance",
+      "component": "memory",
+      "family": "memory_pending_retention",
+      "latency_seconds": 3.9957291251048446,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "1e099b074c1add4487a48ff8a08a6ba6ae360a854b3b41bcf1d4e244d800f8c7",
+      "raw_trial_file": "trials/0005-t3.json",
+      "raw_trial_file_sha256": "eb661d5b800770739140b0e0eb37a0f94d2e534c841098d80066ac9304e89eca",
+      "split": "dev",
+      "trial": 3,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-session_persistence_isolation-roundtrip",
+      "component": "session",
+      "family": "session_persistence_isolation",
+      "latency_seconds": 16.026925958925858,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "3e0a857161318d0fc6761451a078e0a3ef633bb991f0732635856ae32ed4f803",
+      "raw_trial_file": "trials/0006-t1.json",
+      "raw_trial_file_sha256": "d32564ce52c4d825285723735f913c34d13db2e133385c08d5e4a912b06f1975",
+      "split": "dev",
+      "trial": 1,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-session_persistence_isolation-roundtrip",
+      "component": "session",
+      "family": "session_persistence_isolation",
+      "latency_seconds": 4.95471362490207,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "2676a1fbe467cd565f8f9171c61ab9aeb0036280f669ea5a443872f15c7be3e2",
+      "raw_trial_file": "trials/0006-t2.json",
+      "raw_trial_file_sha256": "af74f66148a4bf1d592e1e0c69f98bb527b28e10d8db6b38cc57d48711caa39a",
+      "split": "dev",
+      "trial": 2,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-session_persistence_isolation-roundtrip",
+      "component": "session",
+      "family": "session_persistence_isolation",
+      "latency_seconds": 4.112845708150417,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "c5e0358ffd28c84d442d7a3518ff75cd36e08a9fd1145a9ee35e7348d14f1741",
+      "raw_trial_file": "trials/0006-t3.json",
+      "raw_trial_file_sha256": "8c0c62e28ade07229563976a2d417103235a8e289070963b8380d398233dda1a",
+      "split": "dev",
+      "trial": 3,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-session_persistence_isolation-key-collision",
+      "component": "session",
+      "family": "session_persistence_isolation",
+      "latency_seconds": 15.617686499841511,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "4efc6246bae0713621ed9e735054ec8177a57d68573852dffcaeb4b464b9e1b9",
+      "raw_trial_file": "trials/0007-t1.json",
+      "raw_trial_file_sha256": "556490fe0f9b7ad056865ba1be8c3264efea6534940a80bc52bf6c1658451e2e",
+      "split": "dev",
+      "trial": 1,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-session_persistence_isolation-key-collision",
+      "component": "session",
+      "family": "session_persistence_isolation",
+      "latency_seconds": 4.916308332933113,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "d30c2a13affd98bd55a8e213764c9bbce2022f9c216a57a5e9b0b15ffe2f817a",
+      "raw_trial_file": "trials/0007-t2.json",
+      "raw_trial_file_sha256": "1130084ae9b3b6e865592fefd0d44bc3e654047cec47b8098f7c0f230a647a74",
+      "split": "dev",
+      "trial": 2,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-session_persistence_isolation-key-collision",
+      "component": "session",
+      "family": "session_persistence_isolation",
+      "latency_seconds": 4.161218540975824,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "a1320c25b8229087ab1048345c11a3ac30594d33d4a18e492e65c421a088db9d",
+      "raw_trial_file": "trials/0007-t3.json",
+      "raw_trial_file_sha256": "a57429c8a4629578ef82e23210ed3b6e05fd8f8d4dbc6ab8769b93022b4a739e",
+      "split": "dev",
+      "trial": 3,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-session_persistence_isolation-unsaved",
+      "component": "session",
+      "family": "session_persistence_isolation",
+      "latency_seconds": 6.521190416999161,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "9e5cda2023de1eda6f61111120c9bbaccca984efd37337626f57d0c4fdee1f07",
+      "raw_trial_file": "trials/0008-t1.json",
+      "raw_trial_file_sha256": "9f6dcf0494063360a25e86644fe7c5e64e1251283d1aad57120b49d9ce7d0fb6",
+      "split": "dev",
+      "trial": 1,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-session_persistence_isolation-unsaved",
+      "component": "session",
+      "family": "session_persistence_isolation",
+      "latency_seconds": 4.106312999967486,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "3a7d6b2dd91c4291f61772a141479c74a14a8fc911d93c4cd375aa855fc04222",
+      "raw_trial_file": "trials/0008-t2.json",
+      "raw_trial_file_sha256": "bcb791166135f1e477d39a8fc274a4970e7121725d10062dcd2f6afd2d8ce1bd",
+      "split": "dev",
+      "trial": 2,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-session_persistence_isolation-unsaved",
+      "component": "session",
+      "family": "session_persistence_isolation",
+      "latency_seconds": 4.059506040997803,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "dc0e0fc6761d0436d39f66975a9e2d67dc9f63314cded656b82f4d743a9f34ba",
+      "raw_trial_file": "trials/0008-t3.json",
+      "raw_trial_file_sha256": "98cc7e7517606fbebf904cc2006eb625f4b6310e6d60c150d7418265f4a74ad1",
+      "split": "dev",
+      "trial": 3,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-session_legal_replay-normal",
+      "component": "session",
+      "family": "session_legal_replay",
+      "latency_seconds": 6.336131791817024,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "a6cf0c804e5403dfb92f29c1ed51fa0d11b3ffc5bda1a9d637f84e5badc54b9e",
+      "raw_trial_file": "trials/0009-t1.json",
+      "raw_trial_file_sha256": "de37ab4082259eccb8ae93b8a511ce87ddd05f562c8507731da953792ce6cb05",
+      "split": "dev",
+      "trial": 1,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-session_legal_replay-normal",
+      "component": "session",
+      "family": "session_legal_replay",
+      "latency_seconds": 4.877810209058225,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "c0f447a7bb392ae99ada8d7d3548d3bbe2b5865e652898fe53a1fcccac0574e5",
+      "raw_trial_file": "trials/0009-t2.json",
+      "raw_trial_file_sha256": "6da0b61587d7490984f94fde5dbe1039b5900e1c7715697b78b5e685aff9e182",
+      "split": "dev",
+      "trial": 2,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-session_legal_replay-normal",
+      "component": "session",
+      "family": "session_legal_replay",
+      "latency_seconds": 3.87897991691716,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "462fc1a7f4be379db08b6c0834861447106aba7a088ffa938370f507d63f12a0",
+      "raw_trial_file": "trials/0009-t3.json",
+      "raw_trial_file_sha256": "c130e779470f8cbb5bbbc39697bc0838dff31e3cb6c97e239b991da099b70cef",
+      "split": "dev",
+      "trial": 3,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-session_legal_replay-orphan",
+      "component": "session",
+      "family": "session_legal_replay",
+      "latency_seconds": 6.5064359998796135,
+      "oracle_status": "requires_requirement_review",
+      "raw_row_sha256": "575b68c17fe29620f653c80f30530cfa1e2cb9d84cced9f5db238330b8da10ef",
+      "raw_trial_file": "trials/0010-t1.json",
+      "raw_trial_file_sha256": "f64d601e1eff6cfe466954bb94ff190838e71077d221c7b799b0531f4268b1be",
+      "split": "dev",
+      "trial": 1,
+      "validity": "VALID",
+      "verdict": "FAIL"
+    },
+    {
+      "case_id": "core-session_legal_replay-orphan",
+      "component": "session",
+      "family": "session_legal_replay",
+      "latency_seconds": 4.9099988339003175,
+      "oracle_status": "requires_requirement_review",
+      "raw_row_sha256": "8cdc08641d7ee0c401818ef095c3424eb8a712d16c96bd9935ca1d8ae95546a8",
+      "raw_trial_file": "trials/0010-t2.json",
+      "raw_trial_file_sha256": "a9813fe9f65b515df06c6558e9f3134ed27fd5604ec3f5e45b83928c405d9cd8",
+      "split": "dev",
+      "trial": 2,
+      "validity": "VALID",
+      "verdict": "FAIL"
+    },
+    {
+      "case_id": "core-session_legal_replay-orphan",
+      "component": "session",
+      "family": "session_legal_replay",
+      "latency_seconds": 4.2114820829592645,
+      "oracle_status": "requires_requirement_review",
+      "raw_row_sha256": "c71e15f13294aaf454406390629eb99df2a6ebf0600a4e877eeb9f2e9f1b3301",
+      "raw_trial_file": "trials/0010-t3.json",
+      "raw_trial_file_sha256": "0668a49fdeb55b7493a9aa92ad4d9e49e53bafecc0262e8b56993e9be2a406fa",
+      "split": "dev",
+      "trial": 3,
+      "validity": "VALID",
+      "verdict": "FAIL"
+    },
+    {
+      "case_id": "core-session_legal_replay-clear-recovery",
+      "component": "session",
+      "family": "session_legal_replay",
+      "latency_seconds": 6.24715687497519,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "f8b39c1ca913b345aaf41d8a6595b67def02fa2fe7799a09580cc683a6c2f66e",
+      "raw_trial_file": "trials/0011-t1.json",
+      "raw_trial_file_sha256": "b130cc83eb99c256f2f49cad68c02ab9fa27f7d81da2d84f384221ea99f734b0",
+      "split": "dev",
+      "trial": 1,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-session_legal_replay-clear-recovery",
+      "component": "session",
+      "family": "session_legal_replay",
+      "latency_seconds": 4.992135334061459,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "6cad7366aae5fbf34907070238135131d8ed4ae93c5b66660624f8e49b0e0b97",
+      "raw_trial_file": "trials/0011-t2.json",
+      "raw_trial_file_sha256": "a03a36d650fb77a377ae171df4d2b4411b852951659cf610275ae47cb8582287",
+      "split": "dev",
+      "trial": 2,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-session_legal_replay-clear-recovery",
+      "component": "session",
+      "family": "session_legal_replay",
+      "latency_seconds": 4.149520915932953,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "32e9a90cd27b882ff2798ca4397eb3c4389c1a5cfa7fd997b617e6b4bdc43169",
+      "raw_trial_file": "trials/0011-t3.json",
+      "raw_trial_file_sha256": "e69cbc18b3f3d676c7d2a7ae6fb28b48b4d635a9be6bdd7ef89bfda3838b9ffa",
+      "split": "dev",
+      "trial": 3,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-context_memory_visibility-session",
+      "component": "context",
+      "family": "context_memory_visibility",
+      "latency_seconds": 4.505971166072413,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "82bb8d96f990bcb49a809449c99b64db973ebfde6a92a5c0e3a93880edde2589",
+      "raw_trial_file": "trials/0012-t1.json",
+      "raw_trial_file_sha256": "24159b4183649ee5bfc8b0a0b5418e585bc384bf85c4d6d321be17c72c1bc4f6",
+      "split": "dev",
+      "trial": 1,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-context_memory_visibility-session",
+      "component": "context",
+      "family": "context_memory_visibility",
+      "latency_seconds": 4.582531416090205,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "4147fc5b5752e8fbc817cb63e3b117e8420f848b291e33f5d18269dad3d9360d",
+      "raw_trial_file": "trials/0012-t2.json",
+      "raw_trial_file_sha256": "fe44cb8363e18c334fd4a64c372fbbb5a9f797bccf0b7ebc9a8b739bbf7cb182",
+      "split": "dev",
+      "trial": 2,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-context_memory_visibility-session",
+      "component": "context",
+      "family": "context_memory_visibility",
+      "latency_seconds": 4.099236374953762,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "bcb9592929de9ff8d387c63973ee9dbfba302071a4c4051d6acc6c7428e188cb",
+      "raw_trial_file": "trials/0012-t3.json",
+      "raw_trial_file_sha256": "1d3446b652c2423a1857784a3695bb99442f2921649f1f48429d6a6472731379",
+      "split": "dev",
+      "trial": 3,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-context_memory_visibility-independent-toggles",
+      "component": "context",
+      "family": "context_memory_visibility",
+      "latency_seconds": 4.724205249920487,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "67e3059aeb28fb3712cb6e2fde0f22c3e8e9ed40beccc0886beb518f7df163d0",
+      "raw_trial_file": "trials/0013-t1.json",
+      "raw_trial_file_sha256": "06309b10a675f33e0a07d0b039ff4286ee9c7190766ed211cd427921fb528b0d",
+      "split": "dev",
+      "trial": 1,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-context_memory_visibility-independent-toggles",
+      "component": "context",
+      "family": "context_memory_visibility",
+      "latency_seconds": 4.121307499939576,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "de6a08776438915ea03052a2390d42d6f82f4b7ea5eae4daec6a91c25edb2cc1",
+      "raw_trial_file": "trials/0013-t2.json",
+      "raw_trial_file_sha256": "80c9b6f720e384d82b178ce95748a269a3807f806f3f9b55de402f25186c8086",
+      "split": "dev",
+      "trial": 2,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-context_memory_visibility-independent-toggles",
+      "component": "context",
+      "family": "context_memory_visibility",
+      "latency_seconds": 3.71428891713731,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "e1e77fa53e4be61c15e92c78fda687dc9fa1c5a8ec258cf0e053ef896e37ccd9",
+      "raw_trial_file": "trials/0013-t3.json",
+      "raw_trial_file_sha256": "9b27948d99cb5024d42e68f63bae29a432bb3a386c961742ddca042bf34d67db",
+      "split": "dev",
+      "trial": 3,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-context_memory_visibility-unified",
+      "component": "context",
+      "family": "context_memory_visibility",
+      "latency_seconds": 4.673160000005737,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "a6e32e0154f8edd82d869684386f6e34ef3c396bf25dfda97970dd1d4f402b98",
+      "raw_trial_file": "trials/0014-t1.json",
+      "raw_trial_file_sha256": "8845031c4056a16a8a343563b7dd7430520fbf2d6821f1143adc045a31812541",
+      "split": "dev",
+      "trial": 1,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-context_memory_visibility-unified",
+      "component": "context",
+      "family": "context_memory_visibility",
+      "latency_seconds": 4.313904999988154,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "8f1fa132c10701996bdf98f2b14eadfe89d67eaa8b21b4f79fbd4d1f41688fb6",
+      "raw_trial_file": "trials/0014-t2.json",
+      "raw_trial_file_sha256": "707c14b11dc581d060900afe010242366e2681a8f251d726600a48877f52e76f",
+      "split": "dev",
+      "trial": 2,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-context_memory_visibility-unified",
+      "component": "context",
+      "family": "context_memory_visibility",
+      "latency_seconds": 3.650366415968165,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "24a5f7799c655e573b33c58ae822df796f92074ff7c385d68800a6620b840886",
+      "raw_trial_file": "trials/0014-t3.json",
+      "raw_trial_file_sha256": "181affe33c4bb4e75da4ca847923c21633d6330d069546f7b709587370663035",
+      "split": "dev",
+      "trial": 3,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-context_message_assembly-empty",
+      "component": "context",
+      "family": "context_message_assembly",
+      "latency_seconds": 4.743961667176336,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "05e77f39e6868fa1550637b76bbecedb6528f76dd59b46eeef6eff8694a6114b",
+      "raw_trial_file": "trials/0015-t1.json",
+      "raw_trial_file_sha256": "82b9d03a27046f3802e55a3df8abfe71a5640b998e730369e3d4ab00af1c9169",
+      "split": "dev",
+      "trial": 1,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-context_message_assembly-empty",
+      "component": "context",
+      "family": "context_message_assembly",
+      "latency_seconds": 4.284233790822327,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "f85f816565b6a561ca11a73db786c160286ae92ba874e610884f45953c6c8758",
+      "raw_trial_file": "trials/0015-t2.json",
+      "raw_trial_file_sha256": "dcb6cdb773b045434b034612f7368ecada6466c948431a2c4dc23af824777370",
+      "split": "dev",
+      "trial": 2,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-context_message_assembly-empty",
+      "component": "context",
+      "family": "context_message_assembly",
+      "latency_seconds": 4.008061500033364,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "7f22ed72424be75de7d67d1b1f019450b5ce8070adf51ad792cee10ca7de25ec",
+      "raw_trial_file": "trials/0015-t3.json",
+      "raw_trial_file_sha256": "fa4c81599eabea2c7636797cc4842bfab45f99e7d650e41f34cf759070d4aa8b",
+      "split": "dev",
+      "trial": 3,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-context_message_assembly-merge",
+      "component": "context",
+      "family": "context_message_assembly",
+      "latency_seconds": 4.072572459001094,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "2410752298c52990279f32319f97c0bcf87548a4ec89d7bcb78e15f3176661a3",
+      "raw_trial_file": "trials/0016-t1.json",
+      "raw_trial_file_sha256": "05a49dbc27dc3754395f6261a939b3452aa8ef67b7d28eb78a6e37273d5797f6",
+      "split": "dev",
+      "trial": 1,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-context_message_assembly-merge",
+      "component": "context",
+      "family": "context_message_assembly",
+      "latency_seconds": 4.015027457848191,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "331345455ef1842fef67fce43754fb3a16e5b723999340aa12d1964250dc3b61",
+      "raw_trial_file": "trials/0016-t2.json",
+      "raw_trial_file_sha256": "13176735dee97510d34adb418b486e449010662e658d68b1798e6dbb90d974c7",
+      "split": "dev",
+      "trial": 2,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-context_message_assembly-merge",
+      "component": "context",
+      "family": "context_message_assembly",
+      "latency_seconds": 4.024348791921511,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "197fba51126fd3feb76e25c3802f146644db3ab4b7351d0b5f1806d59ab5bc9e",
+      "raw_trial_file": "trials/0016-t3.json",
+      "raw_trial_file_sha256": "2588262bccd23fd26e14fef78843b2165089b861b0f70218a9d66973cbd60dfc",
+      "split": "dev",
+      "trial": 3,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-context_message_assembly-assistant",
+      "component": "context",
+      "family": "context_message_assembly",
+      "latency_seconds": 4.6172893748153,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "613b9475c9c53cd0f19a66647dbb5e57193f0ba17027a091b09440e2f679a8a9",
+      "raw_trial_file": "trials/0017-t1.json",
+      "raw_trial_file_sha256": "803c579d4e6da52460aa5ddb83668bb68ded27bdfffaa02b59faf30a73edcded",
+      "split": "dev",
+      "trial": 1,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-context_message_assembly-assistant",
+      "component": "context",
+      "family": "context_message_assembly",
+      "latency_seconds": 4.087069249944761,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "966adfaf5b20c9f3da36fecc2493523f44f971eb9b13daf4ad6c2b5acaf0d0f0",
+      "raw_trial_file": "trials/0017-t2.json",
+      "raw_trial_file_sha256": "66ea634bd62b09355a8d19572efae91e7b71eb8c9ba1364dabe970cb032ce1a3",
+      "split": "dev",
+      "trial": 2,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-context_message_assembly-assistant",
+      "component": "context",
+      "family": "context_message_assembly",
+      "latency_seconds": 3.4437374589033425,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "e6e694796b48625aea635e17a2ddc1000b9335df476f978bb84a6fe3c513c320",
+      "raw_trial_file": "trials/0017-t3.json",
+      "raw_trial_file_sha256": "8680dae2d3b5166e7e202369b402f69c46fc2996ebd59db4bee01902dd0de75b",
+      "split": "dev",
+      "trial": 3,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-skills_resolution-priority",
+      "component": "skills",
+      "family": "skills_resolution",
+      "latency_seconds": 4.623228916199878,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "929d6de71f79c24bd86c5ddf40af39b05dd1644070daca847d6eb53d988fca25",
+      "raw_trial_file": "trials/0018-t1.json",
+      "raw_trial_file_sha256": "9e11f9ef5e3d15eee42e52cf8a0630caa82a070938674366859977c1026ef869",
+      "split": "dev",
+      "trial": 1,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-skills_resolution-priority",
+      "component": "skills",
+      "family": "skills_resolution",
+      "latency_seconds": 4.370555917033926,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "5182289af3e62097cf2cf230a3e597cecb68ba52fe78a0aca8582b99051afe49",
+      "raw_trial_file": "trials/0018-t2.json",
+      "raw_trial_file_sha256": "9a9c5d3308e7c52829847071352a86da22355f1c5e58137ce37133b2ca32e0d9",
+      "split": "dev",
+      "trial": 2,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-skills_resolution-priority",
+      "component": "skills",
+      "family": "skills_resolution",
+      "latency_seconds": 3.735079542035237,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "2e508f3fc07856f43baba1dc3589c25a7506a2d0da7c3d8e7703bc16e5831ba2",
+      "raw_trial_file": "trials/0018-t3.json",
+      "raw_trial_file_sha256": "f98cdca033fa280d8afbbcc36a3b4ce35be731ff6dbb87680fdf0c3f64243e4e",
+      "split": "dev",
+      "trial": 3,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-skills_resolution-builtin",
+      "component": "skills",
+      "family": "skills_resolution",
+      "latency_seconds": 4.680894625140354,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "0248208b0bae3ad216ece639df774c3a042f19b72e8aaaa6926eb83e9f478b82",
+      "raw_trial_file": "trials/0019-t1.json",
+      "raw_trial_file_sha256": "38f81258ee485ba359d2a6aee53180f7722e99db8b5cffbb6a6990d16b8a6581",
+      "split": "dev",
+      "trial": 1,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-skills_resolution-builtin",
+      "component": "skills",
+      "family": "skills_resolution",
+      "latency_seconds": 4.49864837503992,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "f8c6cdcf00aee0e580f83d9f8a23b8d10bd67f4c030b15c03618f5adebc3e5c3",
+      "raw_trial_file": "trials/0019-t2.json",
+      "raw_trial_file_sha256": "f6c9cc04e00718fbdd9d1a190ce127713f17a5aea36d79d91ec4d013217e4e62",
+      "split": "dev",
+      "trial": 2,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-skills_resolution-builtin",
+      "component": "skills",
+      "family": "skills_resolution",
+      "latency_seconds": 3.715558416908607,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "8fb15f019fed94707f99d6241cebe5a8cdfe72c34bcc32fb5c780333e0f96f3a",
+      "raw_trial_file": "trials/0019-t3.json",
+      "raw_trial_file_sha256": "556c3798cc22073549175a199cfb670aa2034afc506840b568f07df132d83be0",
+      "split": "dev",
+      "trial": 3,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-skills_resolution-disabled",
+      "component": "skills",
+      "family": "skills_resolution",
+      "latency_seconds": 4.187625374877825,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "6aa9564a5a5628fa59d1c8e08cf184cc4cf8e063b439dd7970f56bf8779ee4fa",
+      "raw_trial_file": "trials/0020-t1.json",
+      "raw_trial_file_sha256": "d91388c913586d4df2bd85bd21443e0d836180b4564ef32cebcf4de44dbaae60",
+      "split": "dev",
+      "trial": 1,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-skills_resolution-disabled",
+      "component": "skills",
+      "family": "skills_resolution",
+      "latency_seconds": 4.301853458862752,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "799b311d08cb2f78c46e7adda1479473325dcc13a710f33d361d0f1cc0efb4d7",
+      "raw_trial_file": "trials/0020-t2.json",
+      "raw_trial_file_sha256": "487d7dc2e3bc3f6d2a83d25f81eaadf3ad2bc31619a42ce15316ca26e7538454",
+      "split": "dev",
+      "trial": 2,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-skills_resolution-disabled",
+      "component": "skills",
+      "family": "skills_resolution",
+      "latency_seconds": 3.649336874950677,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "22809805f338f159e66af4fc47355947d1c59613c545bc6528df66fca7d44fe9",
+      "raw_trial_file": "trials/0020-t3.json",
+      "raw_trial_file_sha256": "bbfc4a180d2338123b10b93298ba450c724226b52743bafce6f7daa969b4718e",
+      "split": "dev",
+      "trial": 3,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-skills_invocation_availability-deduplicate",
+      "component": "skills",
+      "family": "skills_invocation_availability",
+      "latency_seconds": 4.9469672499690205,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "f4fcbef79fb018319d5b8346e411de2f88cd319c26ba2b1f116a5cd0fda4e019",
+      "raw_trial_file": "trials/0021-t1.json",
+      "raw_trial_file_sha256": "d094a763e3d99c4694c132cc766e216e821d7e740d1e1f304e78ebde4136fc31",
+      "split": "dev",
+      "trial": 1,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-skills_invocation_availability-deduplicate",
+      "component": "skills",
+      "family": "skills_invocation_availability",
+      "latency_seconds": 4.415976000018418,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "27dc14a4765084fce3bb65a113676f5152e4659037af18b016a366c77906100f",
+      "raw_trial_file": "trials/0021-t2.json",
+      "raw_trial_file_sha256": "8d53ddb27caa5eaee33fe32c63300da7ed8c53a9856125223bc0f4a4b79b8e88",
+      "split": "dev",
+      "trial": 2,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-skills_invocation_availability-deduplicate",
+      "component": "skills",
+      "family": "skills_invocation_availability",
+      "latency_seconds": 3.4279404999688268,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "d070d2e2576773c3fe95c73c60f396b7fcc9ce8f03803ea0b5ac7d8e1e7c80ed",
+      "raw_trial_file": "trials/0021-t3.json",
+      "raw_trial_file_sha256": "1655178d3477d6b80b92244bcce47532eff742247d5d2a6b30f9473a1429dc22",
+      "split": "dev",
+      "trial": 3,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-skills_invocation_availability-unavailable",
+      "component": "skills",
+      "family": "skills_invocation_availability",
+      "latency_seconds": 4.674242249922827,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "8653a21ebf3247a7f00843d8f2031dc60ae5558c48e9f3d4208bb6e3a96a8401",
+      "raw_trial_file": "trials/0022-t1.json",
+      "raw_trial_file_sha256": "c45ea08cb58ffe7958d70bc9792010312d09121f77b6510ec4d13bfd1e455659",
+      "split": "dev",
+      "trial": 1,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-skills_invocation_availability-unavailable",
+      "component": "skills",
+      "family": "skills_invocation_availability",
+      "latency_seconds": 4.498661000048742,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "9b12095d3aec0c9e935fb8ef681af4c6d6edb523fcf81c18e50a38a5c11c9958",
+      "raw_trial_file": "trials/0022-t2.json",
+      "raw_trial_file_sha256": "e402bb12e5c97a02c02013973baa03be2802e57eb8531019e93d71c7d567f6f7",
+      "split": "dev",
+      "trial": 2,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-skills_invocation_availability-unavailable",
+      "component": "skills",
+      "family": "skills_invocation_availability",
+      "latency_seconds": 3.3807617500424385,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "61106aac89b4c661e5780ecdd5f23dca91d0a1a6b36a23d6752a6c2aaaecf5b8",
+      "raw_trial_file": "trials/0022-t3.json",
+      "raw_trial_file_sha256": "b186ab3dc3e424f63ecbf24e193e09a390b37f86ee7e0c1b34e4e5da4730e938",
+      "split": "dev",
+      "trial": 3,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-skills_invocation_availability-always",
+      "component": "skills",
+      "family": "skills_invocation_availability",
+      "latency_seconds": 4.7315031248144805,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "552abc253700293360cdc6629598e46e44fe5207ce682f918fa1d6510fa3e391",
+      "raw_trial_file": "trials/0023-t1.json",
+      "raw_trial_file_sha256": "b897762adb9de5c0463df0786d7dd3ed17dec2407bd93dcc47ac8e21f4d8b0a1",
+      "split": "dev",
+      "trial": 1,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-skills_invocation_availability-always",
+      "component": "skills",
+      "family": "skills_invocation_availability",
+      "latency_seconds": 4.626180250197649,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "422bc2baab983913a0edebcffeaff89d8b88e8347d8e692bcc7d2320ae9e7838",
+      "raw_trial_file": "trials/0023-t2.json",
+      "raw_trial_file_sha256": "4d372464cc4e5db8d6bcaf2bdc199759f60dc66dd77acca42b200a5ab223096e",
+      "split": "dev",
+      "trial": 2,
+      "validity": "VALID",
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "core-skills_invocation_availability-always",
+      "component": "skills",
+      "family": "skills_invocation_availability",
+      "latency_seconds": 3.2911850828677416,
+      "oracle_status": "machine_scored_human_review_pending",
+      "raw_row_sha256": "409e3daf5299d6347d0c70dc2469376f278c8a0fa98ae8846381fe9e6aec2448",
+      "raw_trial_file": "trials/0023-t3.json",
+      "raw_trial_file_sha256": "1ec54f58d42dcc30135ddacad5937308775e6c98136e1635af7ae6eb57d885e4",
+      "split": "dev",
+      "trial": 3,
+      "validity": "VALID",
+      "verdict": "PASS"
+    }
+  ],
+  "version": "nanobot-coverage-public-report-v1"
+}
