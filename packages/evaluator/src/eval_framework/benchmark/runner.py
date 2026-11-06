@@ -17,6 +17,11 @@ from capability_snapshot_kit.hashing import sha256_json as digest
 from ..agent_adapter import adapter_identity
 from ..provider_registry import ProviderRegistry
 from .domain import BenchmarkDomain
+from .domains.presentation import (
+    DomainPresentation,
+    FileToolsPresentation,
+    presentation_identity,
+)
 from .identity import code_identity as code_identity
 from .identity import scoring_identity as scoring_identity
 from .run_context import InspectRuntime, RunContext
@@ -93,6 +98,7 @@ def run_benchmark(
     offline: bool = False,
     provider_registry: ProviderRegistry | None = None,
     domain: BenchmarkDomain | None = None,
+    presentation: DomainPresentation | None = None,
 ) -> dict:
     runtime = InspectRuntime.load()
 
@@ -106,6 +112,11 @@ def run_benchmark(
                 "custom domains require a registered offline adapter for demos"
             )
     selected_domain = domain if domain is not None else FileToolsDomain()
+    selected_presentation = (
+        presentation
+        or getattr(selected_domain, "presentation", None)
+        or FileToolsPresentation()
+    )
     execution_task = selected_domain.execution_task
     score_task = selected_domain.score_task
 
@@ -122,6 +133,7 @@ def run_benchmark(
     scoring = selected_domain.identity()
     identity = {
         "dataset": dataset,
+        "presentation": deepcopy(presentation_identity(selected_presentation)),
         "scoring_version": scoring["version"],
         "scoring_identity": scoring,
         "harness_source": code_identity(
@@ -175,6 +187,7 @@ def run_benchmark(
                 execution_task=execution_task,
                 score_task=score_task,
                 source=source,
+                presentation=selected_presentation,
             ),
             runtime=runtime,
         )
@@ -187,10 +200,7 @@ def _run(tasks: list[dict], *, context: RunContext, runtime: InspectRuntime) -> 
     from inspect_ai.util import LimitExceededError
 
     from .inspect_docker import SandboxEnvironmentChanged
-    from .inspect_runtime import (
-        apply_native_limits,
-        sample_files,
-    )
+    from .inspect_runtime import apply_native_limits
 
     meta_path = context.output / "run.json"
     if meta_path.exists():
@@ -419,19 +429,25 @@ def _run(tasks: list[dict], *, context: RunContext, runtime: InspectRuntime) -> 
 
         return score
 
-    dataset = [
-        runtime.Sample(
-            id=task["id"],
-            input=task["prompt"],
-            target="",
-            files=sample_files(task["fixtures"]),
-            metadata={"case_id": task["id"]},
-            sandbox=sandboxes[task.get("execution_mode", "agent")],
+    dataset = []
+    for task in tasks:
+        public = context.execution_task(deepcopy(task))
+        sample = context.presentation.prepare_sample(public)
+        dataset.append(
+            runtime.Sample(
+                id=task["id"],
+                input=sample.input,
+                target="",
+                files=sample.files,
+                metadata={"case_id": task["id"]},
+                sandbox=sandboxes[task.get("execution_mode", "agent")],
+            )
         )
-        for task in tasks
-    ]
+    require_runtime_identity(
+        context.identity["presentation"], presentation_identity(context.presentation)
+    )
     task = runtime.Task(
-        name="file_tool_benchmark",
+        name=context.presentation.task_name,
         version=HARNESS_VERSION,
         dataset=dataset,
         solver=agent_execution(),
@@ -477,6 +493,9 @@ def _run(tasks: list[dict], *, context: RunContext, runtime: InspectRuntime) -> 
                     key = key_for(row["case_id"], row["trial"])
                     records[key] = row
                     save_json(context.output / "trials" / f"{key}.json", row)
+    require_runtime_identity(
+        context.identity["presentation"], presentation_identity(context.presentation)
+    )
     expected = [
         key_for(task["id"], trial)
         for task in tasks

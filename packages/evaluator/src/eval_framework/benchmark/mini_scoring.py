@@ -14,6 +14,7 @@ from ..capabilities import CapabilityRegistry
 from ..native_scoring import deterministic_values
 from ..provider import AdapterOutput
 from ..scoring import score_assertions
+from .domains.presentation import ProviderPresentation
 from .provider_tasks import (
     as_eval_case,
     provider_dataset_identity,
@@ -68,6 +69,8 @@ class ProviderAssertionMetric(BaseMetric):
 
 
 class MiniAgentDomain:
+    presentation = ProviderPresentation(task_name="mini_agent_benchmark")
+
     def __init__(self, dataset: Path):
         from ..providers.mini_agent.capability_adapter import (
             load_mini_agent_capability_bundle,

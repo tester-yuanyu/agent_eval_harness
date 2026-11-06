@@ -9,6 +9,7 @@ from types import ModuleType
 from typing import Any
 
 from ..agent_adapter import AgentAdapter
+from .domains.presentation import DomainPresentation
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -25,6 +26,7 @@ class RunContext:
     execution_task: Callable[[dict], dict]
     score_task: Callable[[dict, dict], dict]
     source: dict
+    presentation: DomainPresentation
 
 
 @dataclass(frozen=True, kw_only=True)
