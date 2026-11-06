@@ -27,17 +27,17 @@
 **Files:** 新增 harness/core、harness/adapters、harness/trace、harness/prompts、environments/sandbox_files.py；新增 contracts/trace.py；新增 tests/benchmark/test_native_harness.py。
 **Interfaces:** `BaseAgent.step(SessionState) -> AgentAction` 为 async；Environment 提供 tool_schemas/reset/step/snapshot/teardown；`run_agent_loop` 接受 Agent、router、simulator 和停止策略；`execute_native_task` 返回兼容 observation。
 
-- [ ] 写离线测试：多步、多工具、后续轮次、schema 错误、工具预算、模型截断、取消和并发隔离；运行并确认缺失能力失败。
-- [ ] 实现异步核心、Inspect 工具执行和业务信息注入、共享 Trace 与投影。
-- [ ] 运行新测试和相关已有分层测试，预期全部通过。
-- [ ] 记录验证并提交完整执行路径。
+- [x] 写离线测试：多步、多工具、后续轮次、schema 错误、工具预算、模型截断、取消和并发隔离；运行并确认缺失能力失败。
+- [x] 实现异步核心、Inspect 工具执行和业务信息注入、共享 Trace 与投影。
+- [x] 运行新测试和相关已有分层测试，预期全部通过。
+- [x] 记录验证并提交完整执行路径。
 
 ### Task 2: CLI 接入、身份与验收
 
 **Files:** composition.py、orchestration/specs.py、benchmark/layer_sources.py；新增 raw_model runtime adapter、示例和文档。
 **Interfaces:** 现有 AgentAdapter 整任务接口接入 `provider=raw_model`；旧 provider 未改变；新 harness 配置包含 prompt_version 和 max_tool_calls。
 
-- [ ] 写 registry/RunRequest/runner 集成测试：显式新 provider 可运行、旧默认保留、拒绝 module/decision、模板版本 hash、状态改变不能恢复旧 run。
-- [ ] 新增 adapter、配置、身份闭包；为 Python 直接调用提供标准 Custom Solver。
-- [ ] 执行 CLI 离线演示、evaluator 全量回归、contracts/相关集成和全新克隆安装验收。
-- [ ] 更新中文文档和 docs/migration 验收记录，提交后进行一次独立审查，修复重要问题并验证。
+- [x] 写 registry/RunRequest/runner 集成测试：显式新 provider 可运行、旧默认保留、拒绝 module/decision、模板版本 hash、状态改变不能恢复旧 run。
+- [x] 新增 adapter、配置、身份闭包；为 Python 直接调用提供标准 Custom Solver。
+- [x] 执行 CLI 离线演示、evaluator 全量回归、contracts/相关集成和全新克隆安装验收。
+- [x] 更新中文文档和 docs/migration 验收记录，提交后进行一次独立审查，修复重要问题并验证。

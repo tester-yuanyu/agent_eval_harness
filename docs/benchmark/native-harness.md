@@ -66,7 +66,7 @@ python3.11 scripts/setup.py --only core
 - Inspect 的 token/message/time 限额仍生效。停止原因与正式评分分离，预算用尽不会标记完成。
 - 一个业务 Turn 从用户消息开始，到 Agent 最终回答结束，内部可以多次生成和调用工具。固定 followups 只在上一轮最终回答后加入。
 - 截断、未知结束原因、非法 tool-call ID 不当作最终回答；基础设施失败记为 environment/provider/harness，保留部分证据与原异常。
-- 工具从 Environment 动态提供。Router 没有四工具硬编码；本阶段的文件环境提供 read/write/edit/list。参数不做字符串到数字等隐式转换。顶层 schema 支持 object/properties/required/additionalProperties/description，不能传给 Inspect 的其他顶层约束明确拒绝，不静默丢弃。
+- 工具从 Environment 动态提供。Router 没有四工具硬编码；本阶段的文件环境提供 read/write/edit/list。参数不做字符串到数字等隐式转换。顶层 schema 支持 object/properties/required/additionalProperties/description，不能传给 Inspect 的顶层或嵌套约束明确拒绝，不静默丢弃；省略 additionalProperties 时保留 JSON Schema 默认允许的语义。
 
 ## 隔离、证据和兼容
 
@@ -74,6 +74,6 @@ python3.11 scripts/setup.py --only core
 
 文件工具是框架自有语义，不伪装成 nanobot 原生工具；运行身份明确区分。冻结 task/manifest、参考答案和历史结果均不改写。新源码会形成新运行身份，不能用新版本继续写入旧身份的 run 目录。
 
-Scorer 不改：提取器把标准 Trace 投影为既有 observation，包括工具前后文件、每轮快照、最终状态、错误和完整性标志。相同 tool_call_id 在不同调用中出现时使用独立路由关联，保留各自证据。Oracle 只在可信评分侧；TaskInput 和 Agent 消息不包含私有答案。缺失或中断证据不能因为执行返回而成为 PASS。
+Scorer 不改：提取器把标准 Trace 投影为既有 observation，包括工具前后文件、每轮快照、最终状态、错误和完整性标志。相同 tool_call_id 在不同调用中出现时使用独立路由关联，保留各自证据。Oracle 只在可信评分侧；TaskInput 和 Agent 消息不包含私有答案。完整性检查还将停止记录中的模型步骤数、工具尝试数与原生事件逐项核对；缺失或中断证据不能因为执行返回而成为 PASS。
 
 离线读取原生日志再提取时，先使用 `read_eval_log(path, resolve_attachments=True)` 解析 Inspect 的 attachment 引用。结果的 Trace 是业务投影，模型/工具原始事实仍以原生日志为准；已有 Langfuse 导出继续消费兼容 observation，只有显式调用才上传。
