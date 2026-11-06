@@ -10,18 +10,20 @@ from capability_snapshot_kit.hashing import sha256_json
 from eval_contracts import benchmark_analysis
 from eval_contracts.benchmark_analysis import AnalysisPolicy
 
+from .efficiency import efficiency
 from .failures import classify_failure, summarize_failures
 from .populations import build_population
+from .reliability import reliability
 
 
 def analysis_sources_identity() -> dict:
     root = Path(__file__).parents[1]
     paths = sorted(
         {
-                *Path(__file__).parent.glob("*.py"),
-                *root.glob("benchmark/analysis*.py"),
-                *root.glob("benchmark/datasets/*.py"),
-            }
+            *Path(__file__).parent.glob("*.py"),
+            *root.glob("benchmark/analysis*.py"),
+            *root.glob("benchmark/datasets/*.py"),
+        }
     )
     hashes = {
         p.relative_to(root).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
@@ -40,7 +42,12 @@ def analyze_run(
     population = build_population(source, dataset=dataset, annotations=annotations)
     identity = {
         "version": policy.analysis_version,
-        "policy": asdict(policy),
+        "policy": {
+            **asdict(policy),
+            "repeat_protocol": sha256_json(policy.repeat_protocol)
+            if policy.repeat_protocol
+            else None,
+        },
         "source_hashes": source["verified_source_hashes"],
         "selected_sha256": source["selected_sha256"],
         "dataset_identity_hash": sha256_json(dataset["legacy_identity"]),
@@ -57,13 +64,17 @@ def analyze_run(
         else "saved_execution_analysis",
         "layers": population["layers"],
         "failures": summarize_failures(population),
+        "reliability": reliability(
+            population, ks=policy.ks, repeat_protocol=policy.repeat_protocol
+        ),
+        "efficiency": efficiency(population),
         "judge_coverage": {
             "scored_trials": len(source["judge_trials"]),
             "planned_trials": len(population["trials"]),
         },
         "availability": {
-            "reliability": "pending",
-            "efficiency": "pending",
+            "reliability": "available",
+            "efficiency": "available",
             "annotations": "not_provided",
         },
         "trials": [

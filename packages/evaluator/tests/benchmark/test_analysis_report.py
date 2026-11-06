@@ -7,6 +7,7 @@ from .test_regrade import DATASET, saved_run  # noqa: F401
 
 def test_report_is_stable_private_and_does_not_overwrite_evidence(saved_run, tmp_path):  # noqa: F811
     from eval_contracts.benchmark_analysis import AnalysisPolicy
+
     from eval_framework.benchmark.analysis_report import write_analysis
 
     source, run = saved_run

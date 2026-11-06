@@ -90,6 +90,7 @@ def build_population(source: dict, *, dataset: dict, annotations=None) -> dict:
     )
     return {
         "trials": trials,
+        "judge_trials": deepcopy(source.get("judge_trials", [])),
         "cases": deepcopy([tasks[c] for c in cases]),
         "trials_per_case": execution["trials_per_case"],
         "framework_only": framework,

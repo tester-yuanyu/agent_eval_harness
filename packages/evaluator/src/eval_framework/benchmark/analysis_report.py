@@ -25,7 +25,9 @@ def render_markdown(analysis: dict) -> str:
     ]
     for layer, values in analysis.get("layers", {}).items():
         lines.append(
-            f"| {layer} | {values['planned_trials']} | {values['completed_trials']} | {values['valid_trials']} | {values['missing_trials']} | {values['pass_rate_planned']} |"
+            f"| {layer} | {values['planned_trials']} | "
+            f"{values['completed_trials']} | {values['valid_trials']} | "
+            f"{values['missing_trials']} | {values['pass_rate_planned']} |"
         )
     lines += [
         "",
@@ -66,12 +68,16 @@ def render_html(analysis: dict) -> str:
         for layer, data in analysis.get("layers", {}).items()
     )
     return (
-        "<!doctype html><html lang='zh-CN'><meta charset='utf-8'><title>Benchmark 本地分析</title>"
-        "<style>body{font:16px system-ui;max-width:1100px;margin:40px auto;padding:0 20px;color:#192b36}td,th{padding:10px;border-bottom:1px solid #ccd}table{border-collapse:collapse;width:100%}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f3f6f8;padding:20px}</style>"
+        "<!doctype html><html lang='zh-CN'><meta charset='utf-8'><title>Be"
+        "nchmark 本地分析</title>"
+        "<style>body{font:16px system-ui;max-width:1100px;margin:40px auto"
+        ";padding:0 20px;color:#192b36}td,th{padding:10px;border-bottom:1p"
+        "x solid #ccd}table{border-collapse:collapse;width:100%}pre{white-"
+        "space:pre-wrap;overflow-wrap:anywhere;background:#f3f6f8;padding:"
+        "20px}</style>"
         "<h1>Benchmark 本地分析</h1><p>四层独立统计；保存证据分析，不运行模型。</p>"
-        "<table><tr><th>执行层</th><th>计划</th><th>完成</th><th>有效</th><th>缺失</th><th>PASS / 计划</th></tr>"
-        + rows
-        + "</table>"
+        "<table><tr><th>执行层</th><th>计划</th><th>完成</th><th>有效</th><th>缺失</t"
+        "h><th>PASS / 计划</th></tr>" + rows + "</table>"
         "<h2>统计与逐项证据引用</h2><pre>"
         + html.escape(json.dumps(analysis, ensure_ascii=False, indent=2))
         + "</pre></html>"
