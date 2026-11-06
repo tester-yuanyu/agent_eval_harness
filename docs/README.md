@@ -6,7 +6,7 @@
 | --- | --- |
 | 查看框架分工、原生能力与必要自研边界 | [框架复用说明](benchmark/framework-reuse.md) |
 | 查看四层代码边界、配置拆分与兼容范围 | [四层框架说明](benchmark/layered-framework.md) · [本轮验收](migration/layered-harness-acceptance-2026-11-06.md) |
-| 核对 Benchmark 领域、运行集成和兼容入口的整理 | [职责边界验收](migration/benchmark-boundaries-acceptance-2026-11-06.md) |
+| 核对 Benchmark 领域、运行集成和兼容入口的整理 | [职责边界验收](migration/benchmark-boundaries-acceptance-2026-11-06.md) · [M1 最小闭环](migration/benchmark-m1-acceptance-2026-11-06.md) |
 | 使用 Inspect 内自研循环、原生模型基线与离线验收 | [自研 Harness](benchmark/native-harness.md) · [验收记录](migration/native-harness-acceptance-2026-11-06.md) |
 | 接入新 Agent、复用 Provider、按需安装 Langfuse | [Agent 接入](benchmark/agent-adapters.md) · [验收与 mini_agent 可行性](migration/provider-reuse-acceptance-2026-11-04.md) |
 | 核对框架复用的回归、Docker 与全新安装验收 | [框架复用验收](migration/framework-reuse-acceptance-2026-11-02.md) |

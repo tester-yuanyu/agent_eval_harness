@@ -1,16 +1,18 @@
 # Benchmark 完整改造设计
 
-状态：待实施的完整方案；不代表下列新增功能已经交付。基线为 `04a1cc3`（包含结构整理 `979d84a` 和 Harness P1）。用户本次要求完整方案，本次只编写方案。
+状态：完整路线图，按用户评审分批实施。基线为 `04a1cc3`（包含结构整理 `979d84a` 和 Harness P1）。当前批次仅执行 [M1 最小闭环](../plans/2026-11-06-benchmark-m1.md)，不代表后续功能已经交付。
 
 ## 1. 目标、现状和方案选择
 
 目标是让 Benchmark 独立定义“测什么、如何判定、如何比较”，让新领域和新 Agent 接入时无需改核心编排，并使每个报告结论可追溯到任务、执行、评分和分析版本。
 
-采用渐进迁移：新实现进入明确的职责模块，旧 Python API、CLI、provider 名称和 worker 启动方式保留兼容门面。替换一条路径后验证等价，再迁下一条。整体重写会扩大历史身份和执行语义风险；只增加看板无法解决领域硬编码和分母问题。这是本方案的技术建议，不宣称用户已批准所有新增细节。
+采用渐进迁移：新实现进入明确的职责模块，旧 Python API、CLI、provider 名称和 worker 启动方式保留兼容门面。替换一条路径后验证等价，再迁下一条。整体重写会扩大历史身份和执行语义风险；只增加看板无法解决领域硬编码和分母问题。用户已批准按阶段推进；真实评测、人工验证与托管交付仍以 M4 的独立条件为准。
 
 已完成：RunContext/InspectRuntime、比较移至 aggregator、file-tools 任务域、共享 JSONL/Hash 基础能力、reference 迁移、通用文件操作与 nanobot SDK 分离、新源码闭包。详见 [已有验收](../../migration/benchmark-boundaries-acceptance-2026-11-06.md)。
 
-尚未完成：runner 的 file-tools 默认装配解耦、mode adapter 拆分、tau/mini/core 归位、scorer 实现进一步收敛、版本化标签、通用可靠性/效率分析、失败归因、分析报告、校准闭环、可视化交付和覆盖缺口数据集。
+本轮最小闭环已实现公开 Sample 装配、mode adapter 拆分和 scorer 实现归位，详见 [M1 验收](../../migration/benchmark-m1-acceptance-2026-11-06.md)。
+
+尚未完成：通用 loader/descriptor、tau/mini/core 全量归位、版本化标签、通用可靠性/效率分析、失败归因、分析报告、校准闭环、可视化交付和覆盖缺口数据集。
 
 现有能力继续复用：DeepEval 正式确定性评分，三个 GEval 诊断维度及原生 Agent 指标，all_trials_pass_rate、token/费用与延迟汇总，mini-agent SQLite 领域，τ 集成，人工盲标页面与比较工具。
 
@@ -43,11 +45,11 @@
 
 ### 3.1 领域与编排
 
-保留 BenchmarkDomain 的 identity/execution_task/score_task 契约。新增独立 DomainPresentation（可信注册实现）提供 task_name、prepare_sample(public_task)，返回 SampleSpec(input, files, metadata)。输入必须先经过 execution_task，禁止把完整私有 task 交给 Sample 构建层。
+保留 BenchmarkDomain 的 identity/execution_task/score_task 契约。从已有 file-tools 和 mini-agent SQLite 两个实际接入点提炼包内 DomainPresentation（可信实现），提供 task_name、prepare_sample(public_task)，返回 SampleSpec(input, files)。暂不发布到共享 contracts；Sample metadata 由 runner 统一设置公开 case_id。输入必须先经过 execution_task，禁止把完整私有 task 交给 Sample 构建层。
 
 FileToolsPresentation 承担现有 fixtures 转换和 file_tool_benchmark 名称；普通 ProviderPresentation 不要求 fixtures。runner 使用 SampleSpec 创建 Inspect Sample，sandbox 仍来自 adapter。旧 domain 对象继续通过兼容 presentation 使用；新领域显式注册，不从任务数据 import Python。默认 file-tools CLI 行为保持。
 
-离线 reference 仅作为显式 reference_smoke_only 路径，名称和结果中保留声明。自定义领域 demo 通过注册的离线 adapter 执行，不让 Domain 接管 runtime。HARNESS_VERSION 是执行实现身份，不能简单从 dataset manifest 读取。
+独立参考执行实现位于 `benchmark/scorers/reference_runner.py`，`benchmark/oracle.py` 保留兼容转发；runner 的 offline 分支直接调用新位置的 reference_observation。离线 reference 仅作为显式 reference_smoke_only 路径，名称和结果中保留声明。自定义领域 demo 通过注册的离线 adapter 执行，不让 Domain 接管 runtime。HARNESS_VERSION 是执行实现身份，不能简单从 dataset manifest 读取。
 
 统一 load_dataset 分发只选择已注册的严格合同 loader，返回原始 tasks、legacy_identity 与 DatasetDescriptor，不把不同任务格式强行转成宽松结构。DatasetDescriptor 提供 domain_id、contract_version、task_name、supported_modes、公开工具与类别列表；旧合同从可信代码生成兼容描述，新资产可从受校验的外置描述读取并绑定 Hash。
 
@@ -59,7 +61,7 @@ FileToolsPresentation 承担现有 fixtures 转换和 file_tool_benchmark 名称
 
 core 属于 nanobot 的组件域与组件 worker，不作为独立外部 benchmark：core_tasks/core_scoring 归 domains/nanobot_core 与 scorers，core_worker 归 integrations/nanobot。mini 的数据构造归 domains/provider，SDK/worker 归 integrations/mini_agent；τ 的领域规则、官方依赖与 worker 归 integrations/tau。旧入口留转发；worker shim 要能作为脚本和扁平 Docker bundle 导入，不能依赖先安装 Evaluator。
 
-每套集成独立迁移并验证 pin、stdin/events/observation、错误/超时/清理和源码身份。没有等价证据的 worker 不删除，也不批量放入 deprecated。harness.loop 的兼容调用只有在全部调用方和恢复/取消行为有替代测试后才弃用；完整 nanobot 不强制走 harness_solver。
+每套集成独立迁移并验证 pin、stdin/events/observation、错误/超时/清理和源码身份。没有等价证据的 worker 不删除，也不批量放入 deprecated。M1 最小闭环将原生 worker Inspect bridge 实现移至 `integrations/nanobot/inspect_bridge.py`，`inspect_runtime._execute` 直接调用新位置；`harness.loop` 仅保留同对象兼容入口及既有恢复/取消测试。兼容入口没有删除期限，待调用方迁移证据齐备后另行弃用；完整 nanobot 不强制走 harness_solver。
 
 身份检查先测量耗时。可缓存一次解析后的文件清单和不可变声明，动态源码/配置仍校验；真正采用不可变运行快照才可另行优化重复 Git 查询，不作为本轮必须上线的性能功能。
 
@@ -100,7 +102,7 @@ analysis 默认处理一份真实执行结果；不自动拼接不同 run，不�
 3. `--run` 为 judge_saved_evidence 时拒绝并提示使用原始/正式 regrade 源；可用独立 `--judge-source` 附加诊断。Judge 的 limit 子集只决定诊断覆盖率，不改变执行计划分母。附加 Judge 来源也须验证 Hash 链与 canonical trial key。
 4. 来源文件缺失、Hash/identity/observation 不一致或 lineage 无法验证时，正式 analyze 拒绝并给出缺失来源清单；不静默回退为新执行。比较同一 execution 的不同 regrade 必须标 scoring_only，禁止将其汇总为多次独立运行或模型能力变化。
 
-reference/demo 只输出明确标记的框架验收视图，不进入 Agent 成绩。旧 compare_runs 严格条件保留；横向分析若允许 model/runtime 为变量，必须有预先指定的 ExperimentSpec：control_fields、variable_fields、计划 case/trial、环境重置与随机性策略。未声明的身份差异拒绝，合法变量也必须显示；不同系统控制项无法统一时分栏陈列，不给受控差值。
+reference/demo 只输出明确标记的框架验收视图，不进入 Agent 成绩。旧 compare_runs 严格条件保留。受控实验需要预先指定 ExperimentSpec：control_fields、variable_fields、计划 case/trial、环境重置与随机性策略；未声明的身份差异拒绝，合法变量也必须显示。探索性对比不要求 ExperimentSpec，只列出控制项差异与各自成绩，标记 exploratory/descriptive_only，不给受控差值、因果结论或显著性声明；控制项无法统一时分栏陈列。
 
 ### 5.1 成功率与 pass^k
 
@@ -117,6 +119,8 @@ reference/demo 只输出明确标记的框架验收视图，不进入 Agent 成�
 分别输出全体有效/已保存样本描述、成功样本条件均值和总尝试成本/成功数。后者只有计划执行完整且相应字段全已知时才给主值；否则为空并报告 known_subtotal、known_count、planned_count。零成功、空总体返回 null，附原因。
 
 统计 input/output/total/cached token、cost_usd、latency_seconds、tool_calls、generation_calls；定义从已保存事件提取的方法和覆盖率，不推断不存在的 usage。布尔值、NaN、无穷、负数不是合法费用/计数。Agent、Judge、用户模拟器分栏；同一调用的别名不重复相加。延迟沿用记录的 scope，旧口径不混算。
+
+覆盖率按字段展示：例如 total token 覆盖率为 X/Y 个计划 trial 有完整、有效的该字段数据，同时显示 A/B 个计划任务的全部 trial 均有该字段数据。出现 usage 对象但字段缺失不计作已覆盖；input/output/cached token 和费用各有独立覆盖率。零调用的 0 必须由完整事件证据确认，不能用缺失值填零；分层及 Agent/Judge/模拟器的分母分别列出。
 
 三轴展示采用结果质量、可观察输出长度、成本；verbosity 为描述性字段，不默认越短越好，不合成任意加权总分。
 
@@ -165,8 +169,8 @@ Benchmark 任务负责 domain/dataset/scorer/aggregator/report/analysis/export�
 当前另有 Environment 任务使用 workspaces/environment-refactor / codex/environment-refactor，负责 environments/**、harness/core/tool_router.py 契约及相关 Harness 导入、integrations/nanobot/environments/**、integrations/nanobot/sources.py。本轮方案不修改这些产品文件；实施 T1/T2/T3 时先吸收其完成的公共契约，sources.py/bundle 清单由协商后的单一所有者修改，不回迁或覆盖新的 Environment 实现。
 
 - M0：已完成基础结构整理；不会重复计为本方案新增交付。
-- M1：领域编排、模式适配和评分职责收敛；集成逐一迁移；兼容和隔离验证通过。
-- M2：注释、指标、失败归因、本地报告完整离线可用，历史字节不变。
+- M1：先完成领域 Sample 装配、nanobot 模式拆分、scorer 搬迁最小闭环；通用 loader/descriptor 和 tau/mini/core 全量归位分后续批次，不以最小闭环代替整个 M1。
+- M2：先落地最小分析来源/计划总体校验，再做失败归因与本地报告；随后补 pass^k/成本和注释分桶。各批独立验收，历史字节不变。
 - M3：校准工具、SQLite 泛化验收、新鲁棒性 dev 集、Langfuse 本地导出和看板配置交付。
 - M4：按授权完成真实重复运行、人工独立验证和托管看板验收；未具备数据/人力/预算时明确 pending，不影响报告工具工程验收，但不能说完整业务闭环完成。
 

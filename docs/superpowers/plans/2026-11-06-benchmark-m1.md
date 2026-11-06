@@ -22,24 +22,26 @@
 
 Files: benchmark/domains/presentation.py、runner.py、run_context.py、mini_scoring.py；tests/benchmark/test_domain_presentation.py。
 
-- [ ] 先写不带 fixtures 的公开 Provider/SQLite 执行测试，验证正式评分、Inspect Sample 无私有内容；运行红灯。
-- [ ] 提炼包内 SampleSpec/DomainPresentation；保留默认 file-tools；MiniAgentDomain 选 ProviderPresentation；旧 custom domain 有兼容默认。run_benchmark 新增可选 presentation 参数，身份绑定实现源码与配置。
-- [ ] 跑新增测试、runner/provider_domain/mini_domain/mini_worker/原生 Harness 回归；提交。
+- [x] 先写不带 fixtures 的公开 Provider/SQLite 执行测试，验证正式评分、Inspect Sample 无私有内容；运行红灯。
+- [x] 提炼包内 SampleSpec/DomainPresentation；保留默认 file-tools；MiniAgentDomain 选 ProviderPresentation；旧 custom domain 有兼容默认。run_benchmark 新增可选 presentation 参数，身份绑定实现源码与配置。
+- [x] 跑新增测试、runner/provider_domain/mini_domain/mini_worker/原生 Harness 回归；提交。
 
 ### Task 2: nanobot 模式与原生 Inspect bridge
 
 Files: integrations/nanobot/adapters.py、inspect_bridge.py；benchmark/adapters.py、inspect_runtime.py、composition.py；harness/loop.py 薄兼容；tests/benchmark/test_nanobot_mode_adapters.py。
 
-- [ ] 先写新 provider 注册、错误模式拒绝、模式分母/模型需求与桥兼容测试；运行红灯。
-- [ ] 三模式适配共用 SDK 帮助能力；nanobot facade/历史别名保持；bridge 实现从 harness/loop.py 原样归 integrations/nanobot，旧函数同对象导出。
-- [ ] 不改 Environment/sources.py；新实现自动进入 layer_source_paths，adapter 显式声明其依赖闭包。
-- [ ] 跑 mode/identity/module/decision/bridge/取消测试；提交。
+- [x] 先写新 provider 注册、错误模式拒绝、模式分母/模型需求与桥兼容测试；运行红灯。
+- [x] 三模式适配共用 SDK 帮助能力；nanobot facade/历史别名保持；bridge 实现从 harness/loop.py 原样归 integrations/nanobot，旧函数同对象导出。
+- [x] 不改 Environment/sources.py；新实现自动进入 layer_source_paths，adapter 显式声明其依赖闭包。
+- [x] 跑 mode/identity/module/decision/bridge/取消测试；提交。
 
 ### Task 3: scorer 文件搬迁与联合验收
 
 Files: benchmark/scorers/{deterministic,trajectory_judge,rubrics,judge_client,response,agentic_metrics,agentic_metrics_worker}.py；旧模块兼容门面、身份闭包和必要导入；tests/benchmark/test_scoring_compatibility.py。
 
-- [ ] 在迁移前保存固定输入的正式评分结果、rubric Hash 和请求预算测试；新 scorer 导入应先红灯。
-- [ ] 原样迁移后保持旧 API、monkeypatch 边界和独立 -m worker，确保无双份算法。
-- [ ] 运行定向及完整 Evaluator、root/contracts、Ruff、verify_assets；全新 clone 独立 core 安装及离线 demo。独立审查后按所有权整合 Environment 提交。
-- [ ] 验收文档明确仅 M1 最小闭环完成；完整集成目录迁移、通用 loader/descriptor、M2 以后仍待实施。
+- [x] 在迁移前保存固定输入的正式评分结果、rubric Hash 和请求预算测试；新 scorer 导入应先红灯。
+- [x] 原样迁移后保持旧 API、monkeypatch 边界和独立 -m worker，确保无双份算法。
+- [x] 运行定向及完整 Evaluator、root/contracts、Ruff、verify_assets；全新 clone 独立 core 安装及离线 demo。独立审查后按所有权整合 Environment 提交。
+- [x] 验收文档明确仅 M1 最小闭环完成；完整集成目录迁移、通用 loader/descriptor、M2 以后仍待实施。
+
+验收结果：完整回归 1,316 passed / 14 skipped，新克隆定向 163 passed / 1 skipped，根 CLI/contracts 61 passed；细节与后续边界见 [验收记录](../../migration/benchmark-m1-acceptance-2026-11-06.md)。

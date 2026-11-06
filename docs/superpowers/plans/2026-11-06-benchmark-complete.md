@@ -8,7 +8,7 @@
 
 **Tech Stack:** Python 3.11+、Inspect、DeepEval、既有 contracts/Pydantic、pytest、Ruff；Langfuse 可选。
 
-**Spec:** [完整设计](../specs/2026-11-06-benchmark-complete-design.md)。本文件是待执行计划，不表示新功能已完成。
+**Spec:** [完整设计](../specs/2026-11-06-benchmark-complete-design.md)。本文件是分批执行路线图；本轮具体完成与限制见 [M1 验收](../../migration/benchmark-m1-acceptance-2026-11-06.md)。
 
 ## Global Constraints
 
@@ -20,7 +20,7 @@
 - 测试/demo 禁止真实模型和托管上传；真实交付单独按当次授权执行。
 - 新资产不可变；v3 agent.json 及 bundle 内清单结构不改。
 - Benchmark 不自行修改 Harness loop。跨任务共享文件先约定单一所有者。Environment 任务目前拥有 environments/**、其 Harness 契约导入和 integrations/nanobot/sources.py；T1/T2/T3 不覆盖这些并行改动。
-- 本次方案不直接实施产品代码，不启动真实实验或人工标注。
+- 逐批实施范围以最小闭环计划和验收记录为准；本路线图不启动真实实验或人工标注。
 
 ## Review Focus
 
@@ -35,8 +35,8 @@
 下文路径均相对仓库根；`E=packages/evaluator/src/eval_framework`，`T=packages/evaluator/tests`，`C=packages/contracts/src/eval_contracts`，`CT=packages/contracts/tests`，`B=packages/dataset-builder/src/dataset_builder`。通用结构放 C，执行依赖放 E，Builder 只消费 C。
 
 - 已完成 M0：旧职责整理，见 `docs/migration/benchmark-boundaries-acceptance-2026-11-06.md`，不重复执行。
-- M1：T1 → T2 → T3a/3b/3c → T4，各小步独立提交。
-- M2：T5 → T6 → T7 → T8。T6 先定义公共分析结构，T7/T8 使用该接口。
+- M1 首批：T1 的公开 Sample 装配 → T2 → T4，详见 [最小闭环计划](2026-11-06-benchmark-m1.md)。T1 的通用 loader/descriptor、T3a/3b/3c 另批实施；不将本批标成整个 M1 完成。
+- M2 首批：T6 的最小来源链/计划总体校验 → T7 失败归因 → T8 基础本地报告；此批不依赖标签或 pass^k。后续完成 T6 可靠性/成本与 T5 注释，再接 T8 对应栏目，未实现栏目明确标 pending。
 - M3：T9、T10、T11 在所需接口完成后逐项交付；T12 做整体验收。
 - M4：T13 人工/真实评测/托管验收，前置条件未满足则记录 pending。
 
@@ -44,12 +44,14 @@
 
 ### T1：领域装配与通用 Sample 边界（M1）
 
-**Files:** 新增 `C/benchmark_presentation.py`、`E/benchmark/datasets/loader.py`、`E/benchmark/domains/presentation.py`、`T/benchmark/test_domain_presentation.py`；修改 `E/benchmark/{domain,runner,run_context,identity,layer_sources}.py`、`E/composition.py`、`T/benchmark/test_provider_domain.py`。
+本轮完成包内 Sample 装配与 file-tools/SQLite 验证；通用 loader/descriptor 仍待实施，以下完整 T1 保留未完成状态。
+
+**Files:** 新增 `E/benchmark/datasets/loader.py`、`E/benchmark/domains/presentation.py`、`T/benchmark/test_domain_presentation.py`；修改 `E/benchmark/{domain,runner,run_context,identity,layer_sources}.py`、`E/composition.py`、`T/benchmark/test_provider_domain.py`。
 
 **Interfaces:**
 - `DatasetDescriptor`：domain_id、contract_version、task_name、supported_modes、public_tool_names、categories；旧合同由可信代码生成，新外置 JSON 必须严格校验并纳入新资产 Hash。
 - `load_dataset(path: Path, *, contract_version: str|None = None) -> dict` 返回 tasks、legacy_identity、descriptor；只分发现有 file-tools/model-decisions/core/provider 严格 loader，未知/矛盾版本拒绝；不改 tasks 内部结构。
-- `SampleSpec`：input: str、files: dict[str,str]、metadata: dict[str,Any]，不可包含私有 task。
+- 包内 `SampleSpec`：input: str、files: dict[str,str]，不可包含私有 task；公开 case_id metadata 由 runner 设置。不提前发布共享 presentation 协议。
 - `DomainPresentation.task_name: str`；`prepare_sample(public_task: dict) -> SampleSpec`。
 - `run_benchmark` 新增可选 keyword-only `presentation: DomainPresentation | None = None`，旧签名调用保持有效。
 - 旧 BenchmarkDomain 的三个方法不变；FileToolsPresentation/ProviderPresentation 只消费 execution_task 的结果。
@@ -67,10 +69,10 @@
 
 **Interfaces:** `NanobotModuleAdapter`、`NanobotDecisionAdapter`、`NanobotAgentAdapter` 完整实现现有 AgentAdapter；provider IDs 为 nanobot_module/nanobot_decision/nanobot_agent。旧 provider nanobot 和 NanobotAdapter/NanobotRuntimeAdapter 继续作为同一兼容 facade，保存旧 provider_id。
 
-- [ ] 新增参数化测试：module 不调模型，decision 不执行工具，agent 保留完整 loop；错误模式在 preflight 拒绝；旧配置仍分派到相同执行语义。
-- [ ] 确认新注册测试红灯；提取共享配置/身份帮助函数，分别实现模式边界，不复制三份 SDK 逻辑。
-- [ ] 验证每个新实现变更均改变 adapter/source 身份；运行现有取消、进程树清理与 runtime drift 测试。
-- [ ] 跑上述 5 个测试文件及新文件，全通过后提交 `refactor(benchmark): split nanobot execution modes`。composition.py 的注册变更由双方约定的单一所有者执行。
+- [x] 新增参数化测试：module 不调模型，decision 不执行工具，agent 保留完整 loop；错误模式在 preflight 拒绝；旧配置仍分派到相同执行语义。
+- [x] 确认新注册测试红灯；提取共享配置/身份帮助函数，分别实现模式边界，不复制三份 SDK 逻辑。
+- [x] 验证每个新实现变更均改变 adapter/source 身份；运行现有取消、进程树清理与 runtime drift 测试。
+- [x] 跑上述 5 个测试文件及新文件，全通过后提交 `refactor(benchmark): split nanobot execution modes`。composition.py 的注册变更由双方约定的单一所有者执行。
 
 ### T3：集成归位，逐套迁移（M1）
 
@@ -89,10 +91,10 @@
 
 **Interfaces:** 公共 `score_task(task, observation)`、`score_response(...)`、`judge_observation(...)`、`score_saved_agentic_metrics(...)` 的原签名与返回结构保持；搬迁使用现有版本/rubric 内容，新源码身份必须改变。正式与诊断角色沿用已有字段。
 
-- [ ] 记录固定保存证据上的正式 verdict、check、reason、evidence_refs、三个 GEval rubric Hash；新旧导入得到等价结果；诊断高分不能覆盖正式 FAIL/INVALID。
-- [ ] 先确认新入口不存在的红灯，再只移动实现及调整导入，保留 worker 的独立入口和请求预算。
-- [ ] 运行 `test_scoring_compatibility.py`、既有 metrics/oracle/layered_scorers/agentic_metrics/judge 测试；mock Judge 计数验证没有增加请求。不得调用真实模型。
-- [ ] 搜索生产引用，保证无双份评分算法，旧门面可导入；提交 `refactor(scoring): centralize implementations with compatible facades`。
+- [x] 记录固定保存证据上的正式 verdict、check、reason、evidence_refs、三个 GEval rubric Hash；新旧导入得到等价结果；诊断高分不能覆盖正式 FAIL/INVALID。
+- [x] 先确认新入口不存在的红灯，再只移动实现及调整导入，保留 worker 的独立入口和请求预算。
+- [x] 运行 `test_scoring_compatibility.py`、既有 metrics/oracle/layered_scorers/agentic_metrics/judge 测试；mock Judge 计数验证没有增加请求。不得调用真实模型。
+- [x] 搜索生产引用，保证无双份评分算法，旧门面可导入；提交 `refactor(scoring): centralize implementations with compatible facades`。
 
 ### T5：不可变注释、难度与覆盖协议（M2）
 
@@ -125,6 +127,7 @@
 - [ ] 明确算例：两题各 n=3，c=3 和 c=2，pass_hat_1=5/6，pass_hat_2=2/3，pass_hat_3=1/2；k=4 为 insufficient_trials；k=0/-1/bool 拒绝。
 - [ ] 新增来源测试：缺上游文件、链有环、source_trial_sha256 错误、observation 被改、regrade 增减计划拒绝；Judge limit 不缩小执行总体；同执行不同 regrade 的 canonical_keys 相同，comparison_kind=scoring_only；读取路径仅来自显式参数。
 - [ ] 缺一条计划 trial 或任一 INVALID 时主要 pass_hat_k 值为 null，状态 unavailable_incomplete_population；有效 INCONCLUSIVE 是非成功；未声明独立重复协议不能标为已验证可靠性。Judge repeat 和 reference demo 不进入 Agent 总体。
+- [ ] 按各 token/费用字段分别显示 X/Y 计划 trial 完整覆盖、A/B 计划任务全部 trial 覆盖；usage 对象缺字段不计覆盖，零调用须有完整事件证据才计 0。
 - [ ] 用三次消耗 10/20/30、其中前两次 PASS 验证成功条件均值=15、总尝试/成功=30；缺一费用时总体成本=null 且 known_count=2；零成功=null；bool/NaN/inf/负数拒绝，空总体不除零。
 - [ ] 新测试红灯后实现上述接口，保留旧 all_trials_pass_rate。多标签从计划 case 构造独立桶，跨层禁合并；micro 与 family macro 并列。
 - [ ] 运行新增四文件、contracts 测试和既有 runner/report/quality_audit 回归，全通过提交 `feat(analysis): add explicit reliability and efficiency populations`。
@@ -146,8 +149,9 @@
 **Interfaces:**
 - `write_analysis(run_dir: Path, *, dataset_path: Path|None, annotations_path: Path|None, output: Path, policy: AnalysisPolicy, source_artifacts: tuple[Path,...] = (), judge_dir: Path|None = None) -> dict[str,Path]` 产出 analysis.json/md/html、provenance.json；来源校验消费 T6.load_analysis_source，CLI 暴露可重复 --source-artifact 与可选 --judge-source。
 - `validate_experiment(baseline: dict, candidate: dict, spec: dict) -> dict` 输出 compatible/descriptive_only/mismatches；不放宽 compare_runs。
-- ExperimentSpec 声明 control_fields、variable_fields；数据、合同、评分、选择、重复协议及执行层必须固定。受控差值只允许模型/运行身份这一组已声明变量；Harness、提示词、工具或环境改变时分栏描述，不生成受控差值。
+- 受控实验的 ExperimentSpec 声明 control_fields、variable_fields；数据、合同、评分、选择、重复协议及执行层必须固定。受控差值只允许模型/运行身份这一组已声明变量；Harness、提示词、工具或环境改变时分栏描述，不生成受控差值。
 
+- [ ] 探索性比较允许无 ExperimentSpec，展示各项控制差异并标 exploratory/descriptive_only；不产生受控差值或因果结论。受控实验仍要求预先指定 spec。
 - [ ] CLI 在断网、无模型凭据、无 Langfuse 下读取冻结证据出报告；多标签桶不加总，未审标签显示 unlabeled；报告各层独立显示计划/有效/缺失。
 - [ ] 测试源 Hash、注释 Hash、分析源码/策略变化会改变分析身份；相同输入字节稳定。既有 results.json、run.json、summary 和默认 report 文件逐字节不变。
 - [ ] 新测试红灯后实现分析 JSON 为单一渲染数据源；旧报告保持，新增失败链接只引用可审查证据。命令显示使用安全参数序列，无凭据或未经转义的任务文本，不自动执行。
