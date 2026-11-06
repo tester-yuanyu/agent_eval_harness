@@ -98,6 +98,8 @@
 
 ### T5：不可变注释、难度与覆盖协议（M2）
 
+**M2 交付记录：** 本批按 [独立实施计划](2026-11-06-benchmark-m2.md) 执行 T5–T8；具体接口、增补的版本登记与验收边界见 [M2 验收](../../migration/benchmark-m2-acceptance-2026-11-06.md)。HTML 浏览器视觉抽查仍未验证，未改为已完成。
+
 **Files:** 新增 `C/benchmark_annotations.py`、`E/benchmark/datasets/binding.py`、`CT/test_benchmark_annotations.py`、`E/benchmark/datasets/annotations.py`、`E/benchmark/domains/file_tools_annotations.py`、`T/benchmark/test_annotations.py`、`data/benchmark-annotations/README.md`；在新目录生成版本化 proposed 注释；修改 `E/benchmark/cli.py` 和 T1 的 datasets/loader.py 描述绑定。
 
 **Interfaces:**

@@ -14,7 +14,7 @@
 | 核对 nanobot 能力覆盖并运行离线核心组件 | [覆盖指南](benchmark/nanobot-coverage.md) · [覆盖矩阵与运行报告](../reports/nanobot-coverage-v1/README.md) |
 | 核对本轮结果与尚未完成的工作 | [七项问题清单](benchmark/status-v2.md) · [v2 作品集](../reports/file-tools-v2/index.html) |
 | 查阅当前指标公式、分母与轨迹诊断 | [当前指标规格](benchmark/metric-specification.md) · [质量检查报告](../reports/evaluation-quality-v1/README.md) |
-| 离线分析保存结果、pass^k、费用覆盖与独立注释 | [M2 本地分析指南](benchmark/local-analysis.md) |
+| 离线分析保存结果、pass^k、费用覆盖与独立注释 | [M2 本地分析指南](benchmark/local-analysis.md) · [验收记录](migration/benchmark-m2-acceptance-2026-11-06.md) |
 | 独立人工标注与 Judge 校准 | [标注指南](benchmark/judge-annotation-guide.md) · [36 条离线盲标页](../reports/evaluation-quality-v1/annotation.html) |
 | 核对质量补齐的回归与安装验收 | [验收记录](migration/evaluation-quality-acceptance-2026-11-01.md) |
 | 理解一次真实失败及正式判定 | [失败案例](benchmark/failure-case-v2.md) |
