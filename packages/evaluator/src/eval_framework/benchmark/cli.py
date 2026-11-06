@@ -18,6 +18,9 @@ def main(argv=None):
         help="Explicit dotenv path; secrets stay in process environment",
     )
     sub = parser.add_subparsers(dest="command", required=True)
+    from .analysis_cli import add_commands
+
+    add_commands(sub)
     for name in ("core-validate", "core-run"):
         child = sub.add_parser(name, help="离线 nanobot 核心组件基准（不调用模型）")
         child.add_argument(
@@ -134,6 +137,11 @@ def main(argv=None):
             help="Explicit dotenv path; may follow the command",
         )
     args = parser.parse_args(argv)
+    if args.command == "analyze":
+        from .analysis_cli import execute
+
+        print(json.dumps(execute(args), ensure_ascii=False, indent=2))
+        return 0
     # Disable optional library telemetry; never disable benchmark evidence.
     os.environ.setdefault("DEEPEVAL_TELEMETRY_OPT_OUT", "YES")
     os.environ.setdefault("CONFIDENT_REGION", "US")

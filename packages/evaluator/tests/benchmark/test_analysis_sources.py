@@ -56,13 +56,13 @@ def test_judge_subset_attaches_without_becoming_new_execution(tmp_path):
     judge["identity_hash"] = sha256_json(judge["identity"])
     judge["planned_case_ids"] = ["a"]
     judge["trials"] = [r for r in judge["trials"] if r["case_id"] == "a"]
-    judge["provenance"] = dict(
-        operation="judge_saved_evidence",
-        source_results_sha256=h,
-        source_identity_hash=original["identity_hash"],
-        source_run_id=original["run_id"],
-    )
-    for row, before in zip(judge["trials"], original["trials"]):
+    judge["provenance"] = {
+        "operation": "judge_saved_evidence",
+        "source_results_sha256": h,
+        "source_identity_hash": original["identity_hash"],
+        "source_run_id": original["run_id"],
+    }
+    for row, before in zip(judge["trials"], original["trials"], strict=False):
         row.update(
             identity_hash=judge["identity_hash"],
             source_trial_sha256=sha256_json(before),
@@ -80,11 +80,11 @@ def test_missing_upstream_never_follows_recorded_source_dir(tmp_path):
     from eval_framework.benchmark.analysis_sources import load_analysis_source
 
     value = run()
-    value["regrade"] = dict(
-        operation="regrade_saved_evidence",
-        source_results_sha256="0" * 64,
-        source_identity_hash=value["identity_hash"],
-        source_dir="https://example.invalid",
-    )
+    value["regrade"] = {
+        "operation": "regrade_saved_evidence",
+        "source_results_sha256": "0" * 64,
+        "source_identity_hash": value["identity_hash"],
+        "source_dir": "https://example.invalid",
+    }
     with pytest.raises(ValueError, match="source"):
         load_analysis_source(save(tmp_path / "run", value))
