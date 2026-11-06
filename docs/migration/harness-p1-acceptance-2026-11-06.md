@@ -25,4 +25,6 @@
 - 冻结参考资产：1,172 项通过；冻结任务、历史报告和 fixture 相对起点无 diff。
 - 组件 CLI 示例：单任务正常结束，固定假回复的正式 verdict 为预期 FAIL；组件/原始模型脚本动作的 DeepEval 集成测试均为 PASS，Oracle 不进入执行消息。
 
-全新克隆验收记录在交付前补齐。
+全新克隆 `.migration/harness-p1-clean-20261106/` 在实现提交 `188977f` 上验收：独立 core 安装与 pip check 通过，未安装 nanobot / mini_agent；定向回归 **101 passed / 5 skipped**（五项可选组件测试已在独立组件环境通过），原生 Harness 离线合成演示 **PASS**。
+
+最终验证日志汇总至 `artifacts/verification/harness-p1/`。代码、冻结数据与评分边界均按上述范围验收；未将离线框架验收表述为 nanobot 性能成绩。
