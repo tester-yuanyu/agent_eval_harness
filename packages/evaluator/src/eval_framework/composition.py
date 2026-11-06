@@ -81,11 +81,15 @@ def default_provider_registry() -> ProviderRegistry:
 def default_benchmark_registry() -> ProviderRegistry:
     """Explicit built-ins using the same registry as historical Suite Providers."""
     from .benchmark.adapters import NanobotAdapterFactory
-    from .harness.adapters.runtime import RawModelAdapterFactory
+    from .harness.adapters.runtime import (
+        NanobotComponentAdapterFactory,
+        RawModelAdapterFactory,
+    )
 
     registry = default_provider_registry()
     registry.register("nanobot", NanobotAdapterFactory())
     registry.register("raw_model", RawModelAdapterFactory())
+    registry.register("nanobot_component", NanobotComponentAdapterFactory())
     return registry
 
 

@@ -9,7 +9,12 @@ from inspect_ai.model import ChatMessageAssistant, ModelOutput, get_model
 from inspect_ai.tool import ToolCall
 
 
-def test_raw_model_request_registry_scoring_and_resume(tmp_path, monkeypatch):
+@pytest.mark.parametrize("provider", ["raw_model", "nanobot_component"])
+def test_raw_model_request_registry_scoring_and_resume(tmp_path, monkeypatch, provider):
+    import importlib.util
+
+    if provider == "nanobot_component" and importlib.util.find_spec("nanobot") is None:
+        pytest.skip("optional nanobot components")
     from eval_framework.benchmark.runner import run_benchmark
     from eval_framework.composition import resolve_benchmark_adapter
     from eval_framework.harness.adapters.runtime import RawModelRuntimeAdapter
@@ -26,14 +31,14 @@ def test_raw_model_request_registry_scoring_and_resume(tmp_path, monkeypatch):
                     "max_tool_calls": 2,
                     "prompt_version": "harness-v1",
                 },
-                "environment": {"provider": "raw_model", "sandbox": "local"},
+                "environment": {"provider": provider, "sandbox": "local"},
                 "benchmark": {},
                 "execution": {},
             }
         )
     )
     config = load_run_request(config_path).runtime_config()
-    assert resolve_benchmark_adapter(config).provider_id == "raw_model"
+    assert resolve_benchmark_adapter(config).provider_id == provider
     secret = "PRIVATE_ORACLE_SENTINEL"
     task = {
         "id": "native-bridge",
@@ -83,7 +88,7 @@ def test_raw_model_request_registry_scoring_and_resume(tmp_path, monkeypatch):
     )
     row = run["trials"][0]
     assert row["assessment"]["verdict"] == "PASS", row
-    assert row["observation"]["execution_kind"] == "harness_raw_model"
+    assert row["observation"]["execution_kind"] == "harness_" + provider
     assert row["observation"]["prompt_identity"]["version"] == "harness-v1"
     assert secret not in json.dumps(row["observation"])
     assert (

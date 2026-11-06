@@ -1,6 +1,8 @@
 """Composable, deterministic limits checked before costly operations."""
 
 from dataclasses import dataclass
+from math import isfinite
+from time import monotonic
 from typing import Literal, Protocol
 
 from .session_state import SessionState
@@ -41,3 +43,38 @@ def first_stop(
         if reason := condition(state, phase):
             return reason
     return None
+
+
+@dataclass(frozen=True)
+class TimeoutStop:
+    """Sample-local wall deadline; the loop also cancels in-flight awaits."""
+
+    seconds: float
+
+    def __post_init__(self) -> None:
+        if (
+            isinstance(self.seconds, bool)
+            or not isfinite(self.seconds)
+            or self.seconds <= 0
+        ):
+            raise ValueError("timeout_seconds must be finite and positive")
+
+    def remaining(self, state: SessionState) -> float:
+        return max(0.0, state.started_at + self.seconds - monotonic())
+
+    def __call__(self, state: SessionState, phase: Phase) -> str | None:
+        return "time_limit" if self.remaining(state) == 0 else None
+
+
+@dataclass(frozen=True)
+class ErrorStop:
+    """Bound consecutive recoverable tool errors; infrastructure still raises."""
+
+    maximum: int
+
+    def __post_init__(self) -> None:
+        if type(self.maximum) is not int or self.maximum < 1:
+            raise ValueError("max_consecutive_errors must be a positive integer")
+
+    def __call__(self, state: SessionState, phase: Phase) -> str | None:
+        return "error_limit" if state.consecutive_errors >= self.maximum else None

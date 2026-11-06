@@ -33,6 +33,8 @@ def run_native(
     tools=None,
     samples=1,
     token_limit=None,
+    timeout_seconds=None,
+    max_consecutive_errors=None,
 ):
     from eval_contracts.benchmark import TaskInput
 
@@ -51,7 +53,12 @@ def run_native(
     }
     task = Task(
         dataset=[Sample(id=i, input=t.prompt, target="") for i, t in tasks.items()],
-        solver=harness_solver(tasks, max_tool_calls=max_tool_calls),
+        solver=harness_solver(
+            tasks,
+            max_tool_calls=max_tool_calls,
+            timeout_seconds=timeout_seconds,
+            max_consecutive_errors=max_consecutive_errors,
+        ),
         sandbox="local",
         token_limit=token_limit,
     )
@@ -566,3 +573,15 @@ def test_nested_object_schema_keeps_default_additional_properties():
     assert router.validate(call("a", "echo", nested={"x": 2, "extra": "yes"})) is None
     schema = router.tool_infos()[0].parameters.model_dump(exclude_none=True)
     assert schema["properties"]["nested"].get("additionalProperties", True) is True
+
+
+def test_error_stop_is_projected_as_agent_failure_with_partial_evidence(tmp_path):
+    row = observation(
+        run_native(
+            tmp_path, [output(calls=[call("bad", "missing")])], max_consecutive_errors=1
+        )
+    )
+    assert row["stop_reason"] == "error_limit"
+    assert row["errors"][0]["kind"] == "agent"
+    assert row["trace"]["stop_reason"] == "error_limit"
+    assert row["evidence_complete"] is False

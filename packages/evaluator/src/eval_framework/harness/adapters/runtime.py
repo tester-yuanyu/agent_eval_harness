@@ -11,6 +11,8 @@ from inspect_ai.solver import TaskState
 
 from ...benchmark.layer_sources import layer_source_paths
 from ..prompts import render_prompt
+from .agent.base import BaseAgent
+from .agent.raw_model_adapter import RawModelAgentAdapter
 from .inspect_solver import execute_native_task
 
 
@@ -73,6 +75,9 @@ class RawModelRuntimeAdapter:
             raise ValueError("sandbox must be local or docker")
         return kind
 
+    def _new_agent(self) -> BaseAgent:
+        return RawModelAgentAdapter()
+
     async def execute(
         self,
         task: dict[str, Any],
@@ -102,8 +107,12 @@ class RawModelRuntimeAdapter:
         try:
             observation = await execute_native_task(
                 public,
+                agent=self._new_agent(),
+                execution_kind=self.execution_kind(mode),
                 max_steps=config.get("max_steps", 12),
                 max_tool_calls=config.get("max_tool_calls", 40),
+                timeout_seconds=config.get("timeout_seconds", 180),
+                max_consecutive_errors=config.get("max_consecutive_errors"),
                 prompt_version=config.get("prompt_version", "harness-v1"),
                 instructions=config.get("instructions", ""),
                 task_state=state,
@@ -119,3 +128,40 @@ class RawModelRuntimeAdapter:
 class RawModelAdapterFactory:
     def create_adapter(self, *, config: dict[str, Any]) -> RawModelRuntimeAdapter:
         return RawModelRuntimeAdapter(config)
+
+
+class NanobotComponentRuntimeAdapter(RawModelRuntimeAdapter):
+    """Provider boundary for the in-process BaseAgent component profile."""
+
+    provider_id = "nanobot_component"
+
+    def _new_agent(self) -> BaseAgent:
+        from .agent.nanobot_adapter import NanobotComponentAdapter
+
+        return NanobotComponentAdapter(self.config)
+
+    def fingerprint_sources(self) -> list[Path]:
+        from .agent.nanobot_adapter import component_sources
+
+        return super().fingerprint_sources() + list(
+            component_sources(self.config).values()
+        )
+
+    def runtime_identity(self, mode: str | None = None) -> dict[str, Any]:
+        from .agent.nanobot_adapter import component_identity
+
+        return {
+            **super().runtime_identity(mode),
+            "nanobot": component_identity(self.config),
+        }
+
+    def execution_kind(self, mode: str) -> str:
+        self._check_mode(mode)
+        return "harness_nanobot_component"
+
+
+class NanobotComponentAdapterFactory:
+    def create_adapter(
+        self, *, config: dict[str, Any]
+    ) -> NanobotComponentRuntimeAdapter:
+        return NanobotComponentRuntimeAdapter(config)

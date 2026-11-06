@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "model": {
+    "model": "mockllm/model"
+  },
+  "harness": {
+    "max_steps": 4,
+    "max_tool_calls": 8,
+    "prompt_version": "harness-v1",
+    "timeout_seconds": 60,
+    "max_consecutive_errors": 3
+  },
+  "environment": {
+    "provider": "nanobot_component",
+    "sandbox": "local"
+  },
+  "benchmark": {
+    "dataset": "../data/benchmarks/file-tools-v2",
+    "level": "e2e",
+    "limit": 1
+  },
+  "execution": {
+    "repeats": 1,
+    "concurrency": 1
+  }
+}

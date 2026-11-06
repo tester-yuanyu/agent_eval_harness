@@ -30,9 +30,12 @@ async def execute_native_task(
     environment: Environment | None = None,
     max_steps: int | None = None,
     max_tool_calls: int = 40,
+    timeout_seconds: float | None = None,
+    max_consecutive_errors: int | None = None,
     prompt_version: str = "harness-v1",
     instructions: str = "",
     task_state: TaskState | None = None,
+    execution_kind: str = "harness_raw_model",
 ) -> dict[str, Any]:
     # Re-validate public-only fields; TaskSpec subclasses cannot sneak in Oracle.
     task = TaskInput.model_validate(
@@ -69,6 +72,12 @@ async def execute_native_task(
             business_info("stop", reason=session.stop_reason)
 
     try:
+        phase = "provider"
+        if prepare := getattr(active_agent, "prepare_prompt", None):
+            prompt, identity = prepare(prompt)
+            prompt_identity.update(identity)
+            session.messages[0] = ChatMessageSystem(content=prompt)
+        phase = "environment"
         await environment.reset(task.initial_state)
         business_info("initial_state", snapshot=await environment.snapshot())
         business_info("prompt", **prompt_identity)
@@ -84,6 +93,8 @@ async def execute_native_task(
             simulator=simulator,
             max_steps=min(task.max_steps, max_steps or task.max_steps),
             max_tool_calls=max_tool_calls,
+            timeout_seconds=timeout_seconds,
+            max_consecutive_errors=max_consecutive_errors,
         )
     except BaseException as exc:
         error = exc
@@ -109,7 +120,7 @@ async def execute_native_task(
             task.task_id, list(transcript().events[start:])
         )
     observation["prompt_identity"] = prompt_identity
-    observation["execution_kind"] = "harness_raw_model"
+    observation["execution_kind"] = execution_kind
     if task_state is not None:
         task_state.messages = session.messages
         if session.last_output is not None:
@@ -128,6 +139,8 @@ def harness_solver(
     *,
     max_steps: int | None = None,
     max_tool_calls: int = 40,
+    timeout_seconds: float | None = None,
+    max_consecutive_errors: int | None = None,
     prompt_version: str = "harness-v1",
     instructions: str = "",
 ) -> Solver:
@@ -136,6 +149,8 @@ def harness_solver(
             tasks[str(state.sample_id)],
             max_steps=max_steps,
             max_tool_calls=max_tool_calls,
+            timeout_seconds=timeout_seconds,
+            max_consecutive_errors=max_consecutive_errors,
             prompt_version=prompt_version,
             instructions=instructions,
             task_state=state,

@@ -8,7 +8,7 @@ from typing import Any
 from ..agent_adapter import SandboxSpec
 
 
-class NanobotAdapter:
+class NanobotRuntimeAdapter:
     provider_id = "nanobot"
 
     def __init__(self, config: dict[str, Any]) -> None:
@@ -76,6 +76,10 @@ class NanobotAdapter:
             "agent": execute_task,
         }[mode]
         return await execute(task, config=config, workspace=None)
+
+
+# Historical import remains the exact same runtime class.
+NanobotAdapter = NanobotRuntimeAdapter
 
 
 class NanobotAdapterFactory:

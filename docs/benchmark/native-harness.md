@@ -1,6 +1,8 @@
 # Inspect Custom Solver 内的自研 Harness
 
-本阶段只改造框架自身。新增 `raw_model` 执行入口；默认仍是 `nanobot`，其原生 AgentLoop、worker 和独立依赖环境保持原状。新入口是“自研编排 + 原生模型接口”的基线，不代表原生 nanobot 的能力。此次验收不调用付费模型、不上传 Langfuse，也不全量重评 nanobot。
+第一阶段只改造框架自身。新增 `raw_model` 执行入口；默认仍是 `nanobot`，其原生 AgentLoop、worker 和独立依赖环境保持原状。新入口是“自研编排 + 原生模型接口”的基线，不代表原生 nanobot 的能力。此次验收不调用付费模型、不上传 Langfuse，也不全量重评 nanobot。
+
+P1 后续新增 nanobot 组件接入及显式 TimeoutStop/ErrorStop，详见 [Nanobot 双接入](nanobot-components.md)。下文保留第一阶段设计背景。
 
 ## 职责与调用链
 
