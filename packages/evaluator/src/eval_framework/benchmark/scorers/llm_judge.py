@@ -26,7 +26,7 @@ class LLMJudgeScorer:
         final_state: dict[str, Any],
         task: dict[str, Any],
     ) -> dict[str, Any]:
-        from ..judging import _judge_observation
+        from .trajectory_judge import _judge_observation
 
         return {
             "formal": False,
