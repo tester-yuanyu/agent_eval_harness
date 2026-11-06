@@ -1,0 +1,30 @@
+{
+  "allowed_module_ids": [
+    "module.agent_orchestrator"
+  ],
+  "boundary_id": "context",
+  "contract_version": "mini-agent-capability-contract-v3",
+  "description": "Structural context execution boundary.",
+  "entry_node": "context_input",
+  "evidence_ids": [
+    "evidence.context_state"
+  ],
+  "no_overrun_rule": "No node after context_state_observed may execute in this range.",
+  "prohibited_module_ids": [
+    "module.execution_guard",
+    "module.intent_router",
+    "module.model_gateway",
+    "module.observability",
+    "module.tool_loop",
+    "module.tool_registry"
+  ],
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "boundary.context",
+  "snapshot_sha256": "7c036abeafe0f8f046f09d43505cb8e1d3fac6264237aed006e969550a44e1e5",
+  "snapshot_type": "boundary",
+  "source_hashes": {
+    "catalog_definition_sha256": "6ec6fde65e18a12528237b5bf254f576b834cf4f29f760f1a9eeaf12edd8fb93"
+  },
+  "stop_node": "context_state_observed",
+  "terminal_condition": "The context_state_observed node is reached."
+}

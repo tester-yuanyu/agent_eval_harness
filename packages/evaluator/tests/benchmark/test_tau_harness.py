@@ -178,6 +178,7 @@ def test_inspect_orchestrates_official_batch_and_logs_deepeval_results(
 def test_normalized_evidence_builds_langfuse_child_observations(
     config, official_transport, tmp_path
 ):
+    pytest.importorskip("langfuse", reason="requires agent-evaluator[langfuse]")
     from eval_framework.benchmark.langfuse_export import build_payload
 
     result = harness().run_tau_harness(config, tmp_path / "run")
@@ -399,6 +400,7 @@ class SavedLangfuse:
 def test_tau_export_and_readback_use_official_descriptors_and_provenance(
     config, official_transport, tmp_path, monkeypatch
 ):
+    pytest.importorskip("langfuse", reason="requires agent-evaluator[langfuse]")
     from eval_framework.benchmark import langfuse_export
 
     output = tmp_path / "export"
@@ -431,6 +433,7 @@ def test_tau_export_and_readback_use_official_descriptors_and_provenance(
 def test_native_whole_trace_scores_and_missing_records_export_and_read_back(
     config, official_transport, tmp_path, monkeypatch
 ):
+    pytest.importorskip("langfuse", reason="requires agent-evaluator[langfuse]")
     from eval_framework.benchmark import langfuse_export
     from eval_framework.benchmark.agentic_metrics import (
         _record_specs,
@@ -502,6 +505,7 @@ def test_native_whole_trace_scores_and_missing_records_export_and_read_back(
 def test_tau_export_rejects_changed_authoritative_summary(
     config, official_transport, tmp_path
 ):
+    pytest.importorskip("langfuse", reason="requires agent-evaluator[langfuse]")
     from eval_framework.benchmark.langfuse_export import _source
 
     output = tmp_path / "export"
@@ -515,6 +519,7 @@ def test_tau_export_rejects_changed_authoritative_summary(
 def test_tau_export_rejects_descriptors_outside_official_selection(
     config, official_transport, tmp_path
 ):
+    pytest.importorskip("langfuse", reason="requires agent-evaluator[langfuse]")
     from eval_framework.benchmark.langfuse_export import _source
 
     output = tmp_path / "export"
@@ -530,6 +535,7 @@ def test_tau_export_rejects_descriptors_outside_official_selection(
 def test_verify_expands_flat_metadata_and_still_rejects_unexpected_file(
     config, official_transport, tmp_path, monkeypatch
 ):
+    pytest.importorskip("langfuse", reason="requires agent-evaluator[langfuse]")
     from eval_framework.benchmark import langfuse_export
 
     config["task_ids"] = ["0"]
@@ -589,6 +595,7 @@ def test_verify_expands_flat_metadata_and_still_rejects_unexpected_file(
 def test_lossless_supplement_requires_exact_proof_and_original_values(
     config, official_transport, tmp_path, monkeypatch, corruption
 ):
+    pytest.importorskip("langfuse", reason="requires agent-evaluator[langfuse]")
     from eval_framework.benchmark import langfuse_export
 
     config["task_ids"] = ["0"]

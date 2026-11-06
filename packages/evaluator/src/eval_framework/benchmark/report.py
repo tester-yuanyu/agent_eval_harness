@@ -140,6 +140,12 @@ def _mode(run: dict) -> tuple[str, str]:
         return "real", "程序模块 · 真实模块调用，不计作模型决策成绩"
     if run.get("mode") == "real_model_decision":
         return "real", "模型决策 · 真实单次模型决策，未执行工具"
+    if run.get("mode") == "real_model_intent":
+        return "real", "意图模块 · 真实模型调用，未执行工具"
+    if run.get("mode") == "real_agent_test_environment":
+        return "real", "真实 Agent · 真实模型与隔离测试工具，非线上业务环境"
+    if run.get("mode") == "mixed_execution":
+        return "real", "分层执行 · 各适配器声明执行类型，模块与工具链分别统计"
     if run.get("mode") == "mixed_real_execution":
         return "real", "分层执行 · 模块与 Agent 分层统计，不混作模型成功率"
     if run.get("mode") == "real_agent" and not run.get("identity", {}).get("offline"):

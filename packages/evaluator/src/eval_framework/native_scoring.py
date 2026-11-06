@@ -15,6 +15,17 @@ from inspect_ai.solver import TaskState
 _scores: ContextVar[list[dict[str, Any]] | None] = ContextVar(
     "native_scores", default=None
 )
+_deterministic: ContextVar[bool] = ContextVar("deterministic_values", default=False)
+
+
+@contextmanager
+def deterministic_values():
+    """Reuse domain predicates inside DeepEval without invoking legacy Scorers."""
+    token = _deterministic.set(True)
+    try:
+        yield
+    finally:
+        _deterministic.reset(token)
 
 
 @contextmanager
@@ -59,6 +70,8 @@ def _measure(metric: Any, actual: str, expected: str, name: str) -> bool:
 
 def exact_value(actual: Any, expected: Any) -> bool:
     """Use native pattern scoring; Inspect exact/match normalize punctuation."""
+    if _deterministic.get():
+        return canonical_value(actual) == canonical_value(expected)
     return _measure(
         pattern(r"\A([\s\S]*)\Z", ignore_case=False),
         canonical_value(actual),
@@ -69,6 +82,8 @@ def exact_value(actual: Any, expected: Any) -> bool:
 
 def contains_text(actual: str, expected: str) -> bool:
     """Check literal, case-sensitive containment with the native scorer."""
+    if _deterministic.get():
+        return expected in actual
     return _measure(
         includes(ignore_case=False), actual, expected, "inspect_ai/includes"
     )

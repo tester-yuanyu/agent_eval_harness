@@ -9,12 +9,17 @@ import statistics
 import time
 import uuid
 from collections import Counter, defaultdict
+from copy import deepcopy
 from datetime import UTC, datetime
 from importlib.metadata import version
 from pathlib import Path
 from typing import Any
 
-HARNESS_VERSION = "file-harness-inspect-v3"
+from ..agent_adapter import adapter_identity
+from ..provider_registry import ProviderRegistry
+from .domain import BenchmarkDomain
+
+HARNESS_VERSION = "file-harness-inspect-v4"
 
 
 class RuntimeIdentityChanged(RuntimeError):
@@ -273,6 +278,8 @@ def run_benchmark(
     repeats: int = 1,
     concurrency: int = 4,
     offline: bool = False,
+    provider_registry: ProviderRegistry | None = None,
+    domain: BenchmarkDomain | None = None,
 ) -> dict:
     import anyio
     from inspect_ai import Task
@@ -282,18 +289,30 @@ def run_benchmark(
     from inspect_ai.scorer import Score, scorer
     from inspect_ai.solver import solver
 
+    from ..composition import resolve_benchmark_adapter
     from .metrics import score_task
-    from .nanobot_runtime import execute_task, runtime_identity
     from .oracle import reference_observation
     from .tasks import execution_task
+
+    if domain is not None:
+        if offline:
+            raise ValueError(
+                "custom domains require a registered offline adapter for demos"
+            )
+        execution_task = domain.execution_task
+        score_task = domain.score_task
 
     validate_config(config)
     if not tasks or not 1 <= repeats <= 5 or not 1 <= concurrency <= 12:
         raise ValueError("nonempty tasks, 1–5 repeats and 1–12 concurrency required")
     output = output.resolve()
     output.mkdir(parents=True, exist_ok=True)
-    source = {"mode": "reference_smoke_only"} if offline else runtime_identity(config)
-    scoring = scoring_identity()
+    adapter = None if offline else resolve_benchmark_adapter(config, provider_registry)
+    source = deepcopy(
+        {"mode": "reference_smoke_only"} if offline else adapter.runtime_identity()
+    )
+    modes = sorted({task.get("execution_mode", "agent") for task in tasks})
+    scoring = domain.identity() if domain is not None else scoring_identity()
     identity = {
         "dataset": dataset,
         "scoring_version": scoring["version"],
@@ -301,12 +320,9 @@ def run_benchmark(
         "harness_source": code_identity(
             [
                 "runner.py",
-                "nanobot_runtime.py",
-                "nanobot_worker.py",
-                "module_runtime.py",
-                "module_worker.py",
-                "decision_runtime.py",
-                "decision_worker.py",
+                "../agent_adapter.py",
+                "../provider_registry.py",
+                "../composition.py",
                 "inspect_runtime.py",
                 "inspect_docker.py",
             ]
@@ -315,6 +331,10 @@ def run_benchmark(
         "harness_version": HARNESS_VERSION,
         "config": config,
         "runtime": source,
+        "runtime_modes": {
+            mode: deepcopy(adapter.runtime_identity(mode)) for mode in modes
+        } if not offline else {},
+        "adapter": adapter_identity(adapter) if adapter is not None else None,
         "case_ids": [t["id"] for t in tasks],
         "repeats": repeats,
         "offline": offline,
@@ -340,7 +360,7 @@ def run_benchmark(
             offline,
             identity,
             identity_hash,
-            execute_task,
+            adapter,
             reference_observation,
             execution_task,
             score_task,
@@ -367,7 +387,7 @@ def _run(
     offline,
     identity,
     identity_hash,
-    execute_task,
+    adapter,
     reference_observation,
     execution_task,
     score_task,
@@ -387,11 +407,8 @@ def _run(
     from .inspect_docker import SandboxEnvironmentChanged
     from .inspect_runtime import (
         apply_native_limits,
-        inspect_model,
         sample_files,
-        sandbox_spec,
     )
-    from .nanobot_runtime import runtime_identity
 
     meta_path = output / "run.json"
     if meta_path.exists():
@@ -408,6 +425,9 @@ def _run(
             return existing
     else:
         modes = {task.get("execution_mode", "agent") for task in tasks}
+        kinds = (
+            {adapter.execution_kind(mode) for mode in modes} if not offline else set()
+        )
         meta = {
             "run_id": output.name + "-" + uuid.uuid4().hex[:16],
             "identity_hash": identity_hash,
@@ -421,15 +441,7 @@ def _run(
             "inspect_log_dir": "inspect",
             "mode": "offline_reference_smoke"
             if offline
-            else (
-                "real_module"
-                if modes == {"module"}
-                else "real_model_decision"
-                if modes == {"decision"}
-                else "real_agent"
-                if modes == {"agent"}
-                else "mixed_real_execution"
-            ),
+            else next(iter(kinds)) if len(kinds) == 1 else "mixed_execution",
         }
         save_json(meta_path, meta)
     by_id = {task["id"]: task for task in tasks}
@@ -438,20 +450,23 @@ def _run(
     indices = {task["id"]: index + 1 for index, task in enumerate(tasks)}
     pending = {}
     records = {}
-    needs_model = not offline and any(
-        task.get("execution_mode") != "module" for task in tasks
-    )
-    model = inspect_model(config) if needs_model else "mockllm/model"
-    shared_sandbox = (
-        sandbox_spec(config, output / "sandbox-build", needs_model=True)
-        if needs_model
-        else "local"
-    )
-    module_sandbox = (
-        sandbox_spec(config, output / "sandbox-build", needs_model=False)
-        if not offline and any(task.get("execution_mode") == "module" for task in tasks)
-        else "local"
-    )
+    modes = {task.get("execution_mode", "agent") for task in tasks}
+    needs_model = not offline and any(adapter.needs_model(mode) for mode in modes)
+    model = adapter.inspect_model() if needs_model else "mockllm/model"
+    sandboxes = {
+        mode: "local" if offline else adapter.sandbox_spec(
+            output / "sandbox-build", needs_model=adapter.needs_model(mode)
+        )
+        for mode in sorted(modes)
+    }
+    if not offline and config.get("sandbox"):
+        for selected in sandboxes.values():
+            actual = selected[0] if isinstance(selected, tuple) else selected
+            if config["sandbox"] != actual:
+                raise ValueError(
+                    f"adapter sandbox {actual!r} cannot satisfy requested "
+                    f"sandbox {config['sandbox']!r}"
+                )
 
     def key_for(case_id, epoch):
         return f"{indices[case_id]:04d}-t{epoch}"
@@ -470,44 +485,36 @@ def _run(
                     observation = reference_observation(task)
                     observation["runtime_identity"] = source
                 else:
-                    require_runtime_identity(source, runtime_identity(config))
-                    executor = execute_task
-                    expected_source = source
-                    if mode == "module":
-                        from .module_runtime import execute_module_task, module_identity
-
-                        executor, expected_source = (
-                            execute_module_task,
-                            module_identity(config),
-                        )
-                    elif mode == "decision":
-                        from .decision_runtime import (
-                            decision_identity,
-                            execute_decision_task,
-                        )
-
-                        executor, expected_source = (
-                            execute_decision_task,
-                            decision_identity(config),
-                        )
-                    selected_sandbox = (
-                        module_sandbox if mode == "module" else shared_sandbox
+                    require_runtime_identity(source, adapter.runtime_identity())
+                    require_runtime_identity(
+                        identity["adapter"], adapter_identity(adapter)
                     )
+                    expected_source = identity["runtime_modes"][mode]
+                    require_runtime_identity(
+                        expected_source, adapter.runtime_identity(mode)
+                    )
+                    selected_sandbox = sandboxes[mode]
                     effective = {
                         **config,
-                        "sandbox": "docker"
+                        "sandbox": selected_sandbox[0]
                         if isinstance(selected_sandbox, tuple)
                         else selected_sandbox,
                     }
                     if isinstance(selected_sandbox, tuple):
                         effective["_inspect_docker_compose"] = selected_sandbox[1]
-                    observation = await executor(
-                        execution_task(task), config=effective, workspace=None
+                    observation = await adapter.execute(
+                        execution_task(task), mode=mode, config=effective
                     )
                     require_runtime_identity(
                         expected_source, observation["runtime_identity"]
                     )
-                    require_runtime_identity(source, runtime_identity(config))
+                    require_runtime_identity(source, adapter.runtime_identity())
+                    require_runtime_identity(
+                        expected_source, adapter.runtime_identity(mode)
+                    )
+                    require_runtime_identity(
+                        identity["adapter"], adapter_identity(adapter)
+                    )
             except BaseException as exc:
                 observation = getattr(exc, "benchmark_observation", None) or {
                     "status": "error",
@@ -540,9 +547,7 @@ def _run(
             observation["execution_kind"] = (
                 "deterministic_reference_not_agent"
                 if offline
-                else {"module": "real_module", "decision": "real_model_decision"}.get(
-                    mode, "real_agent"
-                )
+                else adapter.execution_kind(mode)
             )
             row = {
                 "identity_hash": identity_hash,
@@ -615,11 +620,7 @@ def _run(
             target="",
             files=sample_files(task["fixtures"]),
             metadata={"case_id": task["id"]},
-            sandbox="local"
-            if offline
-            else module_sandbox
-            if task.get("execution_mode") == "module"
-            else shared_sandbox,
+            sandbox=sandboxes[task.get("execution_mode", "agent")],
         )
         for task in tasks
     ]

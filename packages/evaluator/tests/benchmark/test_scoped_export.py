@@ -1,6 +1,9 @@
+# ruff: noqa: E402 -- optional SDK availability is checked before integration imports.
 import json
 
 import pytest
+
+pytest.importorskip("langfuse", reason="requires agent-evaluator[langfuse]")
 
 from eval_framework.benchmark.agentic_metrics import _record_specs
 from eval_framework.benchmark.langfuse_export import build_payload

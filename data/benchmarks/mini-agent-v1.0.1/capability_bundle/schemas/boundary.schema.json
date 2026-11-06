@@ -1,0 +1,108 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "allowed_module_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Allowed Module Ids",
+      "type": "array"
+    },
+    "boundary_id": {
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "title": "Boundary Id",
+      "type": "string"
+    },
+    "contract_version": {
+      "minLength": 1,
+      "title": "Contract Version",
+      "type": "string"
+    },
+    "description": {
+      "minLength": 1,
+      "title": "Description",
+      "type": "string"
+    },
+    "entry_node": {
+      "minLength": 1,
+      "title": "Entry Node",
+      "type": "string"
+    },
+    "evidence_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Evidence Ids",
+      "type": "array"
+    },
+    "no_overrun_rule": {
+      "minLength": 1,
+      "title": "No Overrun Rule",
+      "type": "string"
+    },
+    "prohibited_module_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Prohibited Module Ids",
+      "type": "array"
+    },
+    "snapshot_format_version": {
+      "const": "3.0",
+      "title": "Snapshot Format Version",
+      "type": "string"
+    },
+    "snapshot_id": {
+      "pattern": "^(agent|module|intent|tool|scope|chain|evidence|boundary)\\.[a-z][a-z0-9_]*$",
+      "title": "Snapshot Id",
+      "type": "string"
+    },
+    "snapshot_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Snapshot Sha256",
+      "type": "string"
+    },
+    "snapshot_type": {
+      "const": "boundary",
+      "title": "Snapshot Type",
+      "type": "string"
+    },
+    "source_hashes": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "minProperties": 1,
+      "title": "Source Hashes",
+      "type": "object"
+    },
+    "stop_node": {
+      "minLength": 1,
+      "title": "Stop Node",
+      "type": "string"
+    },
+    "terminal_condition": {
+      "minLength": 1,
+      "title": "Terminal Condition",
+      "type": "string"
+    }
+  },
+  "required": [
+    "snapshot_id",
+    "snapshot_type",
+    "snapshot_format_version",
+    "contract_version",
+    "source_hashes",
+    "snapshot_sha256",
+    "boundary_id",
+    "description",
+    "entry_node",
+    "stop_node",
+    "allowed_module_ids",
+    "prohibited_module_ids",
+    "terminal_condition",
+    "evidence_ids",
+    "no_overrun_rule"
+  ],
+  "title": "BoundarySnapshotV3",
+  "type": "object"
+}

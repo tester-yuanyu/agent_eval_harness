@@ -5,16 +5,19 @@ from __future__ import annotations
 import hashlib
 import json
 from pathlib import Path
-from typing import Any, Literal
+from typing import TYPE_CHECKING, Any, Literal
 
-from langfuse.api.client import LangfuseAPI
 from pydantic import Field
 
 from .observability import RECEIPT, client_from_env, destination_fingerprint
+from .optional_dependencies import require_langfuse
 from .result_loader import load_run_result
 from .schema_base import StrictModel
 from .schemas import ManualConclusion
 from .taxonomy import BUILTIN_LABELS, TAXONOMY_VERSION
+
+if TYPE_CHECKING:
+    from langfuse.api.client import LangfuseAPI
 
 REVIEW_SCORE_NAME = "review.decision.v1"
 
@@ -53,6 +56,7 @@ def import_reviews(
     client: LangfuseAPI | None = None,
 ) -> dict[str, Any]:
     """Validate the complete fetch before appending revisions. No verdict override."""
+    require_langfuse()
     root = Path(run_dir).expanduser().resolve()
     loaded = load_run_result(root)
     receipt = json.loads((root / RECEIPT).read_text())

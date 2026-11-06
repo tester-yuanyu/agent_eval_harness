@@ -1,0 +1,32 @@
+{
+  "allowed_module_ids": [
+    "module.agent_orchestrator",
+    "module.execution_guard",
+    "module.intent_router",
+    "module.model_gateway",
+    "module.observability",
+    "module.tool_loop",
+    "module.tool_registry"
+  ],
+  "boundary_id": "end_to_end",
+  "contract_version": "mini-agent-capability-contract-v3",
+  "description": "Structural end_to_end execution boundary.",
+  "entry_node": "run_started",
+  "evidence_ids": [
+    "evidence.intent_result",
+    "evidence.tool_trace",
+    "evidence.safety_recovery_event",
+    "evidence.final_response"
+  ],
+  "no_overrun_rule": "No node after run_finished may execute in this range.",
+  "prohibited_module_ids": [],
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "boundary.end_to_end",
+  "snapshot_sha256": "9689b790829942df4e51bb37eebe656450fc153bc899becd53093f158d3b5cce",
+  "snapshot_type": "boundary",
+  "source_hashes": {
+    "catalog_definition_sha256": "ff32c7ee491a0c8c7a90f3c3e0df6a7eebc531e227feadf01d2589650684637e"
+  },
+  "stop_node": "run_finished",
+  "terminal_condition": "The run_finished node is reached."
+}

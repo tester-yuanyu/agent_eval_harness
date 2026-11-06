@@ -56,6 +56,7 @@ def test_scoring_implementation_exists():
 
 def test_private_oracle_controls_deepeval_verdict():
     from deepeval.metrics import BaseMetric
+
     from eval_framework.benchmark.core_scoring import (
         CoreAssertionsMetric,
         score_core_task,

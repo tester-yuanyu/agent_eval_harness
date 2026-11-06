@@ -1,3 +1,4 @@
+# ruff: noqa: E402 -- optional SDK availability is checked before integration imports.
 """Receipt-version coverage for lossless Langfuse metadata evidence."""
 
 import copy
@@ -6,6 +7,8 @@ from datetime import UTC, datetime
 from types import SimpleNamespace
 
 import pytest
+
+pytest.importorskip("langfuse", reason="requires agent-evaluator[langfuse]")
 
 from eval_framework.benchmark import langfuse_export
 from eval_framework.observability import _span

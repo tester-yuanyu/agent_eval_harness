@@ -67,7 +67,7 @@ def _parser() -> argparse.ArgumentParser:
     run.add_argument("--judge-config")
     run.add_argument(
         "--conversation-completeness", action="store_true",
-        help="opt-in diagnostic; requires the conversation extra and Judge env",
+        help="opt-in DeepEval diagnostic; requires explicit Judge configuration",
     )
     run.add_argument("--local-langfuse-config")
     run.add_argument(

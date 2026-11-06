@@ -1,7 +1,10 @@
+# ruff: noqa: E402 -- optional SDK availability is checked before integration imports.
 import json
 from types import SimpleNamespace
 
 import pytest
+
+pytest.importorskip("langfuse", reason="requires agent-evaluator[langfuse]")
 
 from eval_framework.benchmark import langfuse_export
 

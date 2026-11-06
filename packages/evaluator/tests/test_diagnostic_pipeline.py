@@ -9,7 +9,6 @@ from inspect_ai.log import read_eval_log
 from test_comparison import loaded
 from test_execution_scoring import scripts
 from test_gating import policy
-from test_langfuse_export import sdk
 
 from eval_framework import RunConfig, load_dataset, run_evaluation
 from eval_framework.comparison import check_comparability
@@ -123,6 +122,8 @@ def test_inspect_persists_diagnostic_once_and_reports_snapshot(
 def test_export_consumes_snapshot_and_omits_unknown_score(
     case_result_factory, tmp_path
 ):
+    from test_langfuse_export import sdk
+
     from eval_framework.diagnostic_metrics import DiagnosticMetricSummary
     from eval_framework.observability import export_run
 

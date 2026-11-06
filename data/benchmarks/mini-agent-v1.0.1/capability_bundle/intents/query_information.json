@@ -1,0 +1,86 @@
+{
+  "capabilities": [
+    {
+      "capability_key": "intent.contract_validation",
+      "evidence_ids": [
+        "evidence.intent_result"
+      ],
+      "reason": null,
+      "support_status": "supported"
+    }
+  ],
+  "capability_id": "query_information",
+  "contract_version": "intent-contract-v1",
+  "decision_rules": {
+    "complete": {
+      "next_action": "CALL_TOOL",
+      "status": "READY"
+    },
+    "execution_mode": "read",
+    "incomplete": {
+      "next_action": "ASK_USER",
+      "status": "NEED_CLARIFICATION"
+    }
+  },
+  "module_id": "module.intent_router",
+  "parameter_semantics": {
+    "missing_parameters": [
+      "environment",
+      "resource_type"
+    ],
+    "normalizers": [
+      "TrimStringNormalizer"
+    ]
+  },
+  "parameters_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "environment": {
+        "anyOf": [
+          {
+            "minLength": 1,
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Environment"
+      },
+      "resource_type": {
+        "anyOf": [
+          {
+            "minLength": 1,
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Resource Type"
+      }
+    },
+    "title": "_QueryInformationParameters",
+    "type": "object"
+  },
+  "required_tool_name": "query_information",
+  "semantic_rules": {
+    "required_fields": [
+      "resource_type",
+      "environment"
+    ],
+    "string_normalization": "TRIM_SURROUNDING_WHITESPACE"
+  },
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "intent.query_information",
+  "snapshot_sha256": "0024a6a215330331a9beef34a26f5d6c970585ebe659f9e97a95594487c8234c",
+  "snapshot_type": "intent",
+  "source_hashes": {
+    "intent_rules_sha256": "ec76e27344311dc46c05609dc6b0674af5f8932f2bd9c061e87c809a558c6859",
+    "parameters_schema_sha256": "912718a302884802123177f6f2d6d953cbecf66fb4952118bb2ad3230cdc8773",
+    "tool_refs_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "tool_refs": []
+}

@@ -7,6 +7,8 @@ import httpx
 import pytest
 from test_comparison import loaded
 
+pytest.importorskip("langfuse", reason="requires agent-evaluator[langfuse]")
+
 
 @pytest.fixture
 def config(tmp_path):

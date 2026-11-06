@@ -28,6 +28,8 @@ flowchart LR
 
 旧 Builder 路径仍按“能力快照 → 共享契约校验 → 内部 IR → 候选生成或导入 → 校验与人工审核 → 冻结 → Suite / Provider 评测”工作，命令见[数据集工作流](dataset-workflow.md)。新旧路径的数据与评分结果分别维护。
 
+当前文件 benchmark 使用 `AgentAdapter`，由现有 `ProviderRegistry` 注册工厂，nanobot 的启动、执行模式与身份集中在适配器。旧 `EvaluationProvider` 通过可信 worker 复用生命周期。Langfuse 为可选 `langfuse` extra，Inspect 与 DeepEval 仍为核心依赖。接口与隔离边界见 [Agent 接入](benchmark/agent-adapters.md)。
+
 ## 三种身份
 
 | 身份 | 绑定对象 | 更新规则 |

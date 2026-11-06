@@ -52,6 +52,14 @@ def test_runner_does_not_import_dataset_loader_plugins() -> None:
     assert not any("dataset_loaders" in item for item in imports)
 
 
+def test_benchmark_runner_does_not_import_concrete_agents() -> None:
+    imports = _imports(PACKAGE / "benchmark" / "runner.py")
+    for concrete in (
+        "nanobot_runtime", "module_runtime", "decision_runtime", "minimal_agent",
+    ):
+        assert not any(concrete in item for item in imports)
+
+
 def test_suite_schema_has_no_executable_property_names() -> None:
     schema = json.loads(
         (ROOT / "schemas" / "suite_definition.schema.json").read_text()

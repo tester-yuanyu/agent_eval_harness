@@ -1,0 +1,223 @@
+{
+  "batch_behavior": {
+    "reason": "No generic batch behavior is declared by ToolContract.",
+    "support_status": "unknown"
+  },
+  "capabilities": [
+    {
+      "capability_key": "tool.registered_execution",
+      "evidence_ids": [
+        "evidence.tool_trace"
+      ],
+      "reason": null,
+      "support_status": "supported"
+    },
+    {
+      "capability_key": "tool.runtime_retry",
+      "evidence_ids": [],
+      "reason": "The runtime does not retry failed Tool handlers.",
+      "support_status": "unsupported"
+    },
+    {
+      "capability_key": "tool.rate_limit_protocol",
+      "evidence_ids": [
+        "evidence.tool_trace"
+      ],
+      "reason": null,
+      "support_status": "supported"
+    }
+  ],
+  "combination_rules": {
+    "source": "parameter_schema",
+    "undeclared_combinations": "unknown"
+  },
+  "contract_version": "query-user-evaluation-adapter-v1",
+  "description": "Query user information through an evaluator-injected deterministic handler.",
+  "function_schema": {
+    "description": "Query user information through an evaluator-injected deterministic handler.",
+    "name": "query_user_info",
+    "parameters": {
+      "additionalProperties": false,
+      "description": "Lookup a mock user using one or more combined conditions.",
+      "properties": {
+        "email": {
+          "anyOf": [
+            {
+              "minLength": 3,
+              "pattern": "^[^@]+@[^@]+$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Email"
+        },
+        "phone": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9]{11}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Phone"
+        },
+        "room_id": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Room Id"
+        },
+        "user_id": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "User Id"
+        }
+      },
+      "required": [
+        "user_id",
+        "room_id",
+        "email",
+        "phone"
+      ],
+      "title": "QueryUserInfoArguments",
+      "type": "object"
+    },
+    "strict": true,
+    "type": "function"
+  },
+  "idempotency_rules": {
+    "mode": "READ_ONLY",
+    "same_fixture_and_arguments": "DETERMINISTIC"
+  },
+  "implementation_profile": "evaluation_adapter",
+  "observation_interfaces": [
+    "agent_result.tool_calls",
+    "agent_result.events"
+  ],
+  "parameter_semantics": {
+    "rules": {
+      "accepted_fields": [
+        "user_id",
+        "room_id",
+        "email",
+        "phone"
+      ],
+      "batch_queries": "UNSUPPORTED",
+      "condition_cardinality": "AT_LEAST_ONE",
+      "multiple_conditions": "AND"
+    },
+    "validation": "STRICT_ARGUMENT_MODEL"
+  },
+  "permission_requirements": [
+    "REGISTERED_TOOL_AND_RUN_ALLOW_LIST"
+  ],
+  "preconditions": [
+    "REGISTERED_TOOL_AND_RUN_ALLOW_LIST"
+  ],
+  "registered": true,
+  "requires_confirmation": false,
+  "result_protocols": {
+    "async": {
+      "reason": "The runtime invokes handlers synchronously.",
+      "support_status": "unsupported"
+    },
+    "declared_results": {
+      "BUSINESS_FAILURE": {
+        "data_schema": {
+          "type": "object"
+        },
+        "terminal_status": "business_failure"
+      },
+      "EMPTY": {
+        "data_schema": {
+          "type": "object"
+        },
+        "terminal_status": "success"
+      },
+      "OK": {
+        "data_schema": {
+          "type": "object"
+        },
+        "terminal_status": "success"
+      },
+      "RATE_LIMITED": {
+        "data_schema": {
+          "type": "object"
+        },
+        "terminal_status": "business_failure"
+      }
+    },
+    "empty_result": {
+      "behavior": "HANDLER_RETURNS_EMPTY_RESULT_PROTOCOL",
+      "source": "tool_contract"
+    },
+    "execution_failure": {
+      "runtime_event": "tool_failed",
+      "terminal_status": "failure"
+    },
+    "partial_success": {
+      "behavior": "UNSUPPORTED",
+      "source": "tool_contract"
+    },
+    "rate_limit": {
+      "result_code": "RATE_LIMITED",
+      "source": "tool_contract",
+      "support_status": "supported"
+    },
+    "timeout": {
+      "runtime_event": "tool_timeout",
+      "terminal_status": "failure"
+    }
+  },
+  "retry_policy": {
+    "eligible": false,
+    "maximum_attempts": 1,
+    "reason": "The runtime performs one handler invocation per call.",
+    "stop_conditions": [
+      "success",
+      "failure",
+      "timeout"
+    ]
+  },
+  "risk_level": "low",
+  "side_effects": [],
+  "simulation_capabilities": [
+    "success",
+    "empty_result",
+    "business_failure",
+    "timeout",
+    "rate_limit",
+    "execution_failure"
+  ],
+  "simulation_protocol": {
+    "name": "deterministic_injected_handler",
+    "version": "query-user-evaluation-adapter-v1"
+  },
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "tool.query_user_info",
+  "snapshot_sha256": "2c3856a2d1343ec931cb86ea31698513c6f6aa6cd35483b520fbe97a10554b83",
+  "snapshot_type": "tool",
+  "source_hashes": {
+    "execution_contract_sha256": "366bab8f331c5efb4ac41948614dbca5fce7e603698b9ea5536e66edeff5e82c",
+    "function_schema_sha256": "b49a21f2729a6c364d99587db863727b0763d92997cd0a82d83b35c058e193fa"
+  },
+  "tool_name": "query_user_info",
+  "tool_version": "query-user-evaluation-adapter-v1"
+}

@@ -31,7 +31,7 @@ def _load_metric():
         installed = version("deepeval")
     except PackageNotFoundError as exc:
         raise ValueError(
-            "Install agent-evaluator[conversation] to enable this metric"
+            "DeepEval is required; reinstall agent-evaluator to enable this metric"
         ) from exc
     if installed != DEEPEVAL_VERSION:
         raise ValueError(f"Conversation metric requires deepeval=={DEEPEVAL_VERSION}")

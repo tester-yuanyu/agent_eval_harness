@@ -1,0 +1,60 @@
+{
+  "capabilities": [
+    {
+      "capability_key": "execution.registered_tool_invocation",
+      "evidence_ids": [
+        "evidence.tool_trace"
+      ],
+      "reason": null,
+      "support_status": "supported"
+    }
+  ],
+  "component_versions": {
+    "tool_registry": "v3"
+  },
+  "contract_version": "tool-registry-module-v3",
+  "execution_boundary_ids": [
+    "boundary.planning_execution"
+  ],
+  "input_schema": {
+    "type": "object"
+  },
+  "intent_refs": [],
+  "module_id": "tool_registry",
+  "module_refs": [],
+  "output_schema": {
+    "type": "object"
+  },
+  "responsibility": "Validate and invoke explicitly registered Tools.",
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "module.tool_registry",
+  "snapshot_sha256": "9b01986feaa19729c040051866fe85c76721183e8f78f07917e98e994ecc68af",
+  "snapshot_type": "module",
+  "source_hashes": {
+    "capabilities_sha256": "a472452c799bf668d50272b55953756247bae875d0ed232e0e447ab708f7407e",
+    "children_sha256": "9cb469e36d1b68568d9ccd9cf50d5e853ce221abb3b496ec7d39c6a048e5ea68"
+  },
+  "tool_refs": [
+    {
+      "contract_version": "gift-sqlite-v1",
+      "path": "tools/add_gift_to_backpack.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "tool.add_gift_to_backpack",
+      "snapshot_sha256": "147a0a5856c158aa21e03ef7c81912e4215554db8b33082f9672a38624cec343",
+      "snapshot_type": "tool"
+    },
+    {
+      "contract_version": "query-user-evaluation-adapter-v1",
+      "path": "tools/query_user_info.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "tool.query_user_info",
+      "snapshot_sha256": "2c3856a2d1343ec931cb86ea31698513c6f6aa6cd35483b520fbe97a10554b83",
+      "snapshot_type": "tool"
+    }
+  ],
+  "trace_event_types": [
+    "tool_started",
+    "tool_succeeded",
+    "tool_failed"
+  ]
+}

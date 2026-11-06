@@ -343,6 +343,11 @@ class MiniAgentProvider:
 class MiniAgentProviderFactory:
     provider_id = "mini_agent"
 
+    def create_adapter(self, *, config):
+        from ...benchmark.mini_adapter import MiniAgentBenchmarkAdapter
+
+        return MiniAgentBenchmarkAdapter(config)
+
     def fingerprint_sources(self) -> list[Path]:
         return [
             Path(__file__).resolve().parents[2],

@@ -1,0 +1,88 @@
+{
+  "capabilities": [
+    {
+      "capability_key": "intent.contract_validation",
+      "evidence_ids": [
+        "evidence.intent_result"
+      ],
+      "reason": null,
+      "support_status": "supported"
+    }
+  ],
+  "capability_id": "query_pool",
+  "contract_version": "intent-contract-v1",
+  "decision_rules": {
+    "complete": {
+      "next_action": "CALL_TOOL",
+      "status": "READY"
+    },
+    "execution_mode": "read",
+    "incomplete": {
+      "next_action": "ASK_USER",
+      "status": "NEED_CLARIFICATION"
+    }
+  },
+  "module_id": "module.intent_router",
+  "parameter_semantics": {
+    "missing_parameters": [
+      "gift_id",
+      "pool_id",
+      "single_pool_query_mode"
+    ],
+    "normalizers": [
+      "TrimStringNormalizer",
+      "IntegerStringNormalizer"
+    ]
+  },
+  "parameters_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "gift_id": {
+        "anyOf": [
+          {
+            "exclusiveMinimum": 0,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Gift Id"
+      },
+      "pool_id": {
+        "anyOf": [
+          {
+            "exclusiveMinimum": 0,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Pool Id"
+      }
+    },
+    "title": "_QueryPoolParameters",
+    "type": "object"
+  },
+  "required_tool_name": "query_pool_config",
+  "semantic_rules": {
+    "query_mode_cardinality": "EXACTLY_ONE",
+    "query_modes": [
+      "pool_id",
+      "gift_id"
+    ]
+  },
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "intent.query_pool",
+  "snapshot_sha256": "5d5676a3cf1d21e2c2100c3e0a73b81d648f65c2e614c2c6ca1ef1337cc19ee3",
+  "snapshot_type": "intent",
+  "source_hashes": {
+    "intent_rules_sha256": "04296bc6dc622b7f0a18f73ae233a6293165719e5f961b50ce076f17a6ead4fe",
+    "parameters_schema_sha256": "4c2209afcc1f464524719ad0da3db5c2e8d6f679218aba08fe9924e2552903d3",
+    "tool_refs_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "tool_refs": []
+}

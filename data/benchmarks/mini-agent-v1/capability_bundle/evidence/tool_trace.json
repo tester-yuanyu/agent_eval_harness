@@ -1,0 +1,195 @@
+{
+  "applicable_result_paths": [
+    "success",
+    "failure",
+    "timeout"
+  ],
+  "availability": {
+    "capability_key": "evidence.tool_trace_available",
+    "evidence_ids": [
+      "evidence.tool_trace"
+    ],
+    "reason": null,
+    "support_status": "supported"
+  },
+  "consumer_roles": [
+    "builder",
+    "evaluator"
+  ],
+  "contract_version": "mini-agent-capability-contract-v3",
+  "description": "Tool request and terminal ToolCallRecord observations.",
+  "event_types": [
+    "tool_requested",
+    "tool_started",
+    "tool_succeeded",
+    "tool_failed",
+    "tool_timeout"
+  ],
+  "evidence_id": "tool_trace",
+  "observation_interface": "agent_result.tool_calls_and_events",
+  "payload_schema": {
+    "additionalProperties": false,
+    "description": "Observable terminal record for one tool call.",
+    "properties": {
+      "arguments": {
+        "additionalProperties": true,
+        "title": "Arguments",
+        "type": "object"
+      },
+      "call_id": {
+        "title": "Call Id",
+        "type": "string"
+      },
+      "duration_ms": {
+        "minimum": 0,
+        "title": "Duration Ms",
+        "type": "integer"
+      },
+      "error": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Error"
+      },
+      "name": {
+        "title": "Name",
+        "type": "string"
+      },
+      "output": {
+        "anyOf": [
+          {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Output"
+      },
+      "status": {
+        "enum": [
+          "SUCCESS",
+          "FAILED",
+          "TIMEOUT"
+        ],
+        "title": "Status",
+        "type": "string"
+      }
+    },
+    "required": [
+      "call_id",
+      "name",
+      "arguments",
+      "status",
+      "output",
+      "error",
+      "duration_ms"
+    ],
+    "title": "ToolCallRecord",
+    "type": "object",
+    "x-evidence-delivery": {
+      "correlation": [
+        "trace_id",
+        "run_id",
+        "turn_index"
+      ],
+      "coverage": "declared events only; not a full copy of AgentResult",
+      "enabled_when": "LocalEvidenceSink is injected by the caller",
+      "event_rules_version": "mini-agent-events-v1",
+      "events": {
+        "tool_failed": {
+          "allowed_fields": [
+            "call_id",
+            "name",
+            "error"
+          ],
+          "capability_layer": "safety_recovery",
+          "required_fields": [
+            "call_id",
+            "name",
+            "error"
+          ]
+        },
+        "tool_requested": {
+          "allowed_fields": [
+            "call_id",
+            "name",
+            "arguments"
+          ],
+          "capability_layer": "planning_execution",
+          "required_fields": [
+            "call_id",
+            "name",
+            "arguments"
+          ]
+        },
+        "tool_started": {
+          "allowed_fields": [
+            "call_id",
+            "name"
+          ],
+          "capability_layer": "planning_execution",
+          "required_fields": [
+            "call_id",
+            "name"
+          ]
+        },
+        "tool_succeeded": {
+          "allowed_fields": [
+            "call_id",
+            "name",
+            "output"
+          ],
+          "capability_layer": "planning_execution",
+          "required_fields": [
+            "call_id",
+            "name",
+            "output"
+          ]
+        },
+        "tool_timeout": {
+          "allowed_fields": [
+            "call_id",
+            "name",
+            "error"
+          ],
+          "capability_layer": "safety_recovery",
+          "required_fields": [
+            "call_id",
+            "name",
+            "error"
+          ]
+        }
+      },
+      "independent_interface": "agent_trace_sdk.EvidenceReader.read",
+      "legacy_interface": "agent_result.tool_calls_and_events",
+      "protocol_version": "1.0",
+      "unavailable_when": [
+        "sink not configured",
+        "execution interrupted before emission",
+        "export failed",
+        "required fields redacted or truncated"
+      ],
+      "version": "1.0"
+    }
+  },
+  "producer_module_ids": [
+    "module.tool_loop",
+    "module.tool_registry"
+  ],
+  "production_timing": "before, during, and after a Tool invocation",
+  "required": true,
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "evidence.tool_trace",
+  "snapshot_sha256": "285f5a8619994f631a4b6063dbc5cdb3d0ea45c5e9ba08b7729395b4c31040c3",
+  "snapshot_type": "evidence",
+  "source_hashes": {
+    "catalog_definition_sha256": "5bfffcc8abf02e3d7dc90afb58ba05b26391c3037376fe68636c8cf387432687"
+  }
+}

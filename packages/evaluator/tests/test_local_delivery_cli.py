@@ -13,6 +13,8 @@ from test_suite_cli import _catalog
 
 import eval_framework.cli as cli
 
+pytest.importorskip("langfuse", reason="requires agent-evaluator[langfuse]")
+
 
 @pytest.fixture(autouse=True)
 def isolated_local_configuration(tmp_path, monkeypatch):

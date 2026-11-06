@@ -1,9 +1,12 @@
+# ruff: noqa: E402 -- optional SDK availability is checked before integration imports.
 """Contract tests through the real Langfuse SDK and an HTTP boundary."""
 
 import json
 
 import httpx
 import pytest
+
+pytest.importorskip("langfuse", reason="requires agent-evaluator[langfuse]")
 from langfuse.api.client import LangfuseAPI
 from test_comparison import loaded
 

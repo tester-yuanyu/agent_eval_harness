@@ -1,8 +1,11 @@
+# ruff: noqa: E402 -- optional SDK availability is checked before integration imports.
 import json
 from pathlib import Path
 
 import httpx
 import pytest
+
+pytest.importorskip("langfuse", reason="requires agent-evaluator[langfuse]")
 from langfuse.api.client import LangfuseAPI
 from langfuse.api.core.api_error import ApiError
 

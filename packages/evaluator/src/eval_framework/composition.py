@@ -78,6 +78,24 @@ def default_provider_registry() -> ProviderRegistry:
     return registry
 
 
+def default_benchmark_registry() -> ProviderRegistry:
+    """Explicit built-ins using the same registry as historical Suite Providers."""
+    from .benchmark.adapters import NanobotAdapterFactory
+
+    registry = default_provider_registry()
+    registry.register("nanobot", NanobotAdapterFactory())
+    return registry
+
+
+def resolve_benchmark_adapter(config: dict, registry: ProviderRegistry | None = None):
+    provider_id = config.get("provider", "nanobot")
+    if not isinstance(provider_id, str) or not provider_id:
+        raise ValueError("provider must be a nonempty registered identifier")
+    return (registry or default_benchmark_registry()).create_adapter(
+        provider_id, config=config
+    )
+
+
 class _LazyMiniAgentFactory:
     """Describe the optional integration without importing its runtime."""
 
@@ -94,6 +112,9 @@ class _LazyMiniAgentFactory:
         from .providers.mini_agent import MiniAgentProviderFactory
 
         return MiniAgentProviderFactory()
+
+    def create_adapter(self, *, config: dict[str, Any]):
+        return self._factory().create_adapter(config=config)
 
     def validate_dataset(
         self, dataset: DatasetBundle, **config: Any

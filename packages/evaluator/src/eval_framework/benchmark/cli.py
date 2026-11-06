@@ -169,6 +169,7 @@ def main(argv=None):
         print(json.dumps(result, ensure_ascii=False, indent=2))
     elif args.command == "coverage":
         import hashlib
+
         from .capability_coverage import build_coverage_report, snapshot_nanobot
         from .core_tasks import core_dataset_identity
         from .runner import digest
@@ -355,6 +356,16 @@ def main(argv=None):
         "export-langfuse-evidence",
         "verify-langfuse",
     ):
+        from ..optional_dependencies import (
+            MissingOptionalDependencyError,
+            require_langfuse,
+        )
+
+        try:
+            require_langfuse()
+        except MissingOptionalDependencyError as exc:
+            print(json.dumps({"error_type": type(exc).__name__, "message": str(exc)}))
+            return 2
         from .langfuse_export import export_metadata_evidence, export_run, verify_run
 
         operation = {

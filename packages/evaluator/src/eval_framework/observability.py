@@ -7,22 +7,17 @@ import json
 import os
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import httpx
-from langfuse.api import (
-    CreateScoreRequest,
-    OtelAttribute,
-    OtelAttributeValue,
-    OtelResourceSpan,
-    OtelScope,
-    OtelScopeSpan,
-    OtelSpan,
-)
-from langfuse.api.client import LangfuseAPI
 
 from .evidence import atomic_json
+from .optional_dependencies import require_langfuse
 from .result_loader import load_run_result
+
+if TYPE_CHECKING:
+    from langfuse.api import OtelSpan
+    from langfuse.api.client import LangfuseAPI
 
 EXPORT_VERSION = "langfuse-export-v1"
 RECEIPT = "langfuse_export.json"
@@ -41,6 +36,9 @@ def stable_id(*parts: str, length: int = 32) -> str:
 
 
 def client_from_env() -> LangfuseAPI:
+    require_langfuse()
+    from langfuse.api.client import LangfuseAPI
+
     values = {
         key: os.getenv(key, "").strip()
         for key in ("LANGFUSE_BASE_URL", "LANGFUSE_PUBLIC_KEY", "LANGFUSE_SECRET_KEY")
@@ -75,6 +73,9 @@ def _span(
     attributes: dict[str, Any],
     parent: str | None = None,
 ) -> OtelSpan:
+    require_langfuse()
+    from langfuse.api import OtelAttribute, OtelAttributeValue, OtelSpan
+
     return OtelSpan(
         trace_id=trace_id,
         span_id=span_id,
@@ -106,6 +107,14 @@ def export_run(
     refresh_scores: bool = True,
 ) -> dict[str, Any]:
     """Explicit, replayable export. ACCEPTED means ingestion, not UI verification."""
+    require_langfuse()
+    from langfuse.api import (
+        CreateScoreRequest,
+        OtelResourceSpan,
+        OtelScope,
+        OtelScopeSpan,
+    )
+
     root = Path(run_dir).expanduser().resolve()
     loaded = load_run_result(root)
     if expected_results_sha256 is not None and loaded.sha256 != expected_results_sha256:

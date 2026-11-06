@@ -5,8 +5,6 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Any
 
-from langfuse.api import CreateScoreRequest
-
 from .observability import stable_id
 
 
@@ -23,6 +21,8 @@ def main_partition(snapshot: dict[str, Any]) -> dict[str, Any] | None:
 
 
 def presentation_scores(snapshot: dict[str, Any], exports: dict) -> list:
+    from langfuse.api import CreateScoreRequest
+
     """Copy display labels/counts; never derive a quality metric or create a Trial."""
     main = main_partition(snapshot)
     if main is None:

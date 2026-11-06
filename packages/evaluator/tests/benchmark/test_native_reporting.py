@@ -31,12 +31,14 @@ def native_run(tmp_path, monkeypatch):
     return make_native_run(tmp_path)
 
 
-def make_native_run(tmp_path, reply="hi", count=1):
+def make_native_run(
+    tmp_path, reply="hi", count=1, harness_version="file-harness-inspect-v3"
+):
     tmp_path.mkdir(parents=True, exist_ok=True)
     run = saved_run()
     run["run_id"] = "run-" + tmp_path.name
     run["identity"]["scoring_version"] = "native-report-test-v1"
-    run["identity"]["harness_version"] = "file-harness-inspect-v3"
+    run["identity"]["harness_version"] = harness_version
     run["identity_hash"] = digest(run["identity"])
     run["planned_case_ids"] = ["case-one"]
     run.pop("summary")
@@ -205,7 +207,11 @@ def test_native_report_rejects_foreign_run_identity(tmp_path):
     assert not (source / "inspect-view").exists()
 
 
-def test_native_report_rejects_changed_saved_assessment(native_run):
+@pytest.mark.parametrize(
+    "version", ["file-harness-inspect-v3", "file-harness-inspect-v4"]
+)
+def test_native_report_rejects_changed_saved_assessment(tmp_path, version):
+    native_run = make_native_run(tmp_path, harness_version=version)
     path = native_run / "results.json"
     run = json.loads(path.read_text())
     run["trials"][0]["assessment"]["verdict"] = "FAIL"

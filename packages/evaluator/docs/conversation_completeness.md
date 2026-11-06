@@ -12,7 +12,7 @@
 ../../.venvs/evaluator/bin/python -m pip install 'deepeval==4.2.9'
 ```
 
-标准安装可选 extra 为 `agent-evaluator[conversation]`。依赖版本必须为 4.2.9；不支持静默升级。项目 pytest 配置禁用 DeepEval 自动插件，避免引入第二套测试运行流程。
+DeepEval 已是 `agent-evaluator` 的必装评分依赖，重复的 `conversation` extra 已移除；启用本诊断仍需显式配置 Judge。依赖版本必须为 4.2.9；不支持静默升级。项目 pytest 配置禁用 DeepEval 自动插件，避免引入第二套测试运行流程。
 
 当前 Inspect 的模型接口要求 `openai>=3.4,<4`；本轮在 SDK 3.40.0 上验证。mini_agent 的兼容范围扩展为 `>=2,<4`，其独立测试通过。Judge 使用 Inspect 的 `openai-api/deepseek/<model>` 服务前缀，已增加不发请求的真实 transport 构建测试，防止仅 mock 注册表掩盖配置错误。
 

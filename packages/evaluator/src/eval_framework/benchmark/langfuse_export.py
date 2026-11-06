@@ -379,11 +379,16 @@ def _source(run_dir: Path, dataset_path: Path):
         ):
             raise ValueError("Official trial task ID does not match descriptor")
         return run, tasks, hashlib.sha256(raw).hexdigest()
-    if run["identity"]["dataset"] != dataset_identity(dataset_path):
+    identify, load = dataset_identity, load_tasks
+    if run["identity"]["dataset"].get("task_contract") == "provider-tasks-v1":
+        from .provider_tasks import load_provider_tasks, provider_dataset_identity
+
+        identify, load = provider_dataset_identity, load_provider_tasks
+    if run["identity"]["dataset"] != identify(dataset_path):
         raise ValueError("export dataset does not match run identity")
     return (
         run,
-        {t["id"]: t for t in load_tasks(dataset_path)},
+        {t["id"]: t for t in load(dataset_path)},
         hashlib.sha256(raw).hexdigest(),
     )
 
@@ -430,8 +435,11 @@ def export_run(run_dir: Path, dataset_path: Path, *, client=None) -> dict:
                 "Selected official τ retail tasks; official reward preserved by "
                 "DeepEval; Inspect orchestration; not an official leaderboard result."
                 if run["mode"] == "real_agent_official_tau"
-                else "Frozen file-tool benchmark; AI-assisted synthetic fixtures; "
-                "DeepEval scoring."
+                else run["identity"]["dataset"].get(
+                    "description",
+                    "Frozen benchmark; AI-assisted synthetic fixtures; "
+                    "DeepEval scoring.",
+                )
             ),
             metadata=run["identity"]["dataset"],
             request_options={"max_retries": 0},

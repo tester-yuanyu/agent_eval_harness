@@ -1,5 +1,6 @@
 # Third-party constraints frozen from evaluator, Python 3.11 / macOS, 2026-11-01.
 # DeepEval is required; local workspace packages are installed separately by setup.py.
+# Langfuse is optional: its constraint only applies when --with-langfuse is selected.
 # No editable paths, Agent source paths, credentials, or platform-independent lock claim.
 agent-client-protocol==0.12.1
 aiobotocore==3.10.0

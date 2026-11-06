@@ -27,7 +27,7 @@ def test_optional_evaluator_uses_its_own_resolved_constraints(tmp_path):
     assert command[command.index("-c") + 1] == str(
         constraints / "evaluator-optional.txt"
     )
-    assert "packages/evaluator[dev,conversation]" in command
+    assert "packages/evaluator[dev]" in command
     environment.assert_called_once_with("evaluator-optional")
 
 
@@ -46,3 +46,17 @@ def test_default_evaluator_keeps_default_constraints(tmp_path):
     command = run.call_args_list[0].args[0]
     assert command[command.index("-c") + 1] == str(constraints / "evaluator.txt")
     assert "packages/evaluator[dev]" in command
+
+
+def test_langfuse_installation_requires_explicit_choice(tmp_path):
+    python = tmp_path / "python"
+    python.touch()
+    with (
+        patch.object(setup, "ROOT", tmp_path),
+        patch.object(setup, "environment_python", return_value=python),
+        patch.object(setup.subprocess, "run") as run,
+    ):
+        setup.install(
+            "core", optional_metrics=False, use_locks=False, with_langfuse=True
+        )
+    assert "packages/evaluator[dev,langfuse]" in run.call_args_list[0].args[0]

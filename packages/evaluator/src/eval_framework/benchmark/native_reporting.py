@@ -45,7 +45,9 @@ def _validated_logs(run_dir: Path, run: dict) -> tuple[list[Path], list[dict]]:
     expected = {(row["case_id"], row["trial"]): row for row in run["trials"]}
     if len(expected) != len(run["trials"]):
         raise ValueError("Native report contains duplicate result records")
-    strict = run["identity"].get("harness_version") == "file-harness-inspect-v3"
+    strict = run["identity"].get("harness_version") in {
+        "file-harness-inspect-v3", "file-harness-inspect-v4",
+    }
     selected, superseded, candidates, covered = [], [], [], set()
     for path in reversed(native_logs(run_dir)):
         log = read_eval_log(str(path))
@@ -140,7 +142,9 @@ def write_native_report(run_dir: Path, *, summary: dict) -> Path:
         "logs": [_log_source(path, run_dir) for path in logs],
         "superseded_logs": superseded,
         "evidence_binding": "identity-and-records"
-        if run["identity"].get("harness_version") == "file-harness-inspect-v3"
+        if run["identity"].get("harness_version") in {
+            "file-harness-inspect-v3", "file-harness-inspect-v4",
+        }
         else "legacy-identity-only",
         "domain_summary": summary,
         "note": "分层与缺失值统计来自保存结果；Inspect 负责通用轨迹和分数展示。",

@@ -57,6 +57,8 @@ make demo
 
 ## 兼容入口
 
+Langfuse 为可选 `langfuse` extra，可用 `scripts/setup.py --only evaluator --with-langfuse` 安装；核心执行和本地报告无需它。新 Agent 接入复用现有 Provider 注册、生命周期与输出协议，详见 [AgentAdapter 接入](../../docs/benchmark/agent-adapters.md)。
+
 `eval_framework.cli`、历史 Suite / Provider、mini_agent 示例及旧 Inspect Scorer 仍用于兼容和回归；主基准入口为 `eval_framework.benchmark.cli`。旧结果不得改标为 DeepEval 结果，也不与新基准进行直接分数对比。
 
 旧 Suite 的架构、指标字典、状态型礼物示例和证据 SDK 文档保留为兼容实现说明；已完成或被取代的设计、实施计划和阶段报告已合并清理。其“Inspect 正式评分”不适用于新基准。阅读入口见[兼容架构](docs/architecture.md)与[兼容说明](../../docs/benchmark/legacy.md)。

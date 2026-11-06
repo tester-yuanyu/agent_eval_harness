@@ -4,6 +4,7 @@ from importlib import import_module
 from typing import Any
 
 from .adjudication import import_reviews
+from .agent_adapter import AgentAdapter, EvaluationProviderAdapter
 from .comparison import check_comparability, compare_runs, write_comparison
 from .compiled_execution import execute_compiled_suite
 from .contracts.compiler import compile_suite, load_suite_definition
@@ -40,6 +41,8 @@ __all__ = [
     "EvaluationRunResult",
     "EvaluationPreflightError",
     "EvaluationProvider",
+    "AgentAdapter",
+    "EvaluationProviderAdapter",
     "PluginCatalog",
     "ProviderRegistry",
     "SuiteDefinition",

@@ -21,18 +21,12 @@ from typing import Any
 from urllib.parse import quote, urlsplit, urlunsplit
 
 import httpx
-from langfuse.api.client import LangfuseAPI
-from langfuse.api.unstable.dashboards.types.dashboard_definition import (
-    DashboardDefinition,
-)
-from langfuse.api.unstable.dashboards.types.dashboard_placement import (
-    DashboardPlacement_Widget,
-)
 
 from .dashboard_style import presentation_scores
 from .dashboard_style import widgets as _widgets
 from .evidence import atomic_json
 from .observability import export_run, stable_id
+from .optional_dependencies import MissingOptionalDependencyError, require_langfuse
 from .result_loader import load_run_result
 
 REQUEST_OPTIONS = {"max_retries": 0}
@@ -344,6 +338,14 @@ def _deliver(
     expected_hash: str | None = None,
     time_budget: float = DELIVERY_SECONDS,
 ) -> dict[str, Any]:
+    from langfuse.api.client import LangfuseAPI
+    from langfuse.api.unstable.dashboards.types.dashboard_definition import (
+        DashboardDefinition,
+    )
+    from langfuse.api.unstable.dashboards.types.dashboard_placement import (
+        DashboardPlacement_Widget,
+    )
+
     snapshot = _source(source)
     path = snapshot["path"]
     target = config["target"]
@@ -624,6 +626,10 @@ def finalize_delivery(
         }
     if config is None:
         return {"status": "DISABLED"}
+    try:
+        require_langfuse()
+    except MissingOptionalDependencyError as exc:
+        return {"status": "DEPENDENCY_MISSING", "message": str(exc)}
     try:
         result = _deliver(source, config)
         # A down service need not be contacted again for each queued delivery.

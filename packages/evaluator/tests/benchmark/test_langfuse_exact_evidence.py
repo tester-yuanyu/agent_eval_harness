@@ -1,3 +1,4 @@
+# ruff: noqa: E402 -- optional SDK availability is checked before integration imports.
 """Exact saved metadata must survive the API's JSON-string normalization."""
 
 import base64
@@ -6,6 +7,8 @@ import hashlib
 import json
 
 import pytest
+
+pytest.importorskip("langfuse", reason="requires agent-evaluator[langfuse]")
 
 from eval_framework.benchmark import langfuse_export
 from eval_framework.observability import _span
