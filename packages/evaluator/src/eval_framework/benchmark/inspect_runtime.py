@@ -193,8 +193,8 @@ async def _standalone(
 
 
 async def _execute(task: dict, *, config: dict, mode: str, identity: dict) -> dict:
-    """Historical execution entrypoint; the Harness owns the implementation."""
-    from ..harness.loop import execute_inspect_task
+    """Historical entrypoint; the nanobot integration owns its worker bridge."""
+    from ..integrations.nanobot.inspect_bridge import execute_inspect_task
 
     return await execute_inspect_task(
         task,

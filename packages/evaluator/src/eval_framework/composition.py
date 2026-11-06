@@ -87,7 +87,19 @@ def default_benchmark_registry() -> ProviderRegistry:
     )
 
     registry = default_provider_registry()
+    from .integrations.nanobot.adapters import (
+        NanobotAgentAdapter,
+        NanobotDecisionAdapter,
+        NanobotModuleAdapter,
+    )
+
     registry.register("nanobot", NanobotAdapterFactory())
+    for adapter_type in (
+        NanobotModuleAdapter,
+        NanobotDecisionAdapter,
+        NanobotAgentAdapter,
+    ):
+        registry.register(adapter_type.provider_id, NanobotAdapterFactory(adapter_type))
     registry.register("raw_model", RawModelAdapterFactory())
     registry.register("nanobot_component", NanobotComponentAdapterFactory())
     return registry
