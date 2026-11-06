@@ -7,9 +7,10 @@ from dataclasses import asdict
 from pathlib import Path
 
 from capability_snapshot_kit.hashing import sha256_json
-from eval_contracts import benchmark_analysis
+from eval_contracts import benchmark_analysis, benchmark_annotations
 from eval_contracts.benchmark_analysis import AnalysisPolicy
 
+from .buckets import bucket_report
 from .efficiency import efficiency
 from .failures import classify_failure, summarize_failures
 from .populations import build_population
@@ -23,6 +24,11 @@ def analysis_sources_identity() -> dict:
             *Path(__file__).parent.glob("*.py"),
             *root.glob("benchmark/analysis*.py"),
             *root.glob("benchmark/datasets/*.py"),
+            *root.glob("benchmark/domains/*.py"),
+            *(
+                root / "benchmark" / n
+                for n in ("tasks.py", "core_tasks.py", "provider_tasks.py", "schema.py")
+            ),
         }
     )
     hashes = {
@@ -32,6 +38,10 @@ def analysis_sources_identity() -> dict:
     path = Path(benchmark_analysis.__file__)
     hashes["eval_contracts/benchmark_analysis.py"] = hashlib.sha256(
         path.read_bytes()
+    ).hexdigest()
+    annotation_path = Path(benchmark_annotations.__file__)
+    hashes["eval_contracts/benchmark_annotations.py"] = hashlib.sha256(
+        annotation_path.read_bytes()
     ).hexdigest()
     return hashes
 
@@ -53,6 +63,8 @@ def analyze_run(
         "dataset_identity_hash": sha256_json(dataset["legacy_identity"]),
         "analysis_sources": analysis_sources_identity(),
     }
+    identity["dataset_binding_sha256"] = dataset.get("dataset_sha256")
+    identity["annotations_sha256"] = annotations.content_sha256 if annotations else None
     execution = source["execution_result"]
     return {
         "identity": identity,
@@ -64,6 +76,14 @@ def analyze_run(
         else "saved_execution_analysis",
         "layers": population["layers"],
         "failures": summarize_failures(population),
+        "buckets": bucket_report(
+            population, annotations.records if annotations else []
+        ),
+        "historical_manifest_bytes_verified": execution["identity"]["dataset"].get(
+            "manifest_sha256"
+        )
+        == dataset.get("binding", {}).get("manifest_sha256")
+        and "manifest_sha256" in execution["identity"]["dataset"],
         "reliability": reliability(
             population, ks=policy.ks, repeat_protocol=policy.repeat_protocol
         ),
@@ -75,7 +95,7 @@ def analyze_run(
         "availability": {
             "reliability": "available",
             "efficiency": "available",
-            "annotations": "not_provided",
+            "annotations": "available" if annotations else "not_provided",
         },
         "trials": [
             {

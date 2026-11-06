@@ -34,7 +34,7 @@ EVAL_COMMANDS = (
     "import-reviews",
 )
 BENCHMARK_COMMANDS = (
-    "analyze",
+    "analyze", "annotations-build", "annotations-validate",
     "core-validate", "core-run", "coverage",
     "validate", "demo", "run", "compare", "report", "regrade", "judge",
     "calibration-sheet", "calibration-page", "calibration-check", "quality-audit",

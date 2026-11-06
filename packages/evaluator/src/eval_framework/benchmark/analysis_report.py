@@ -11,6 +11,8 @@ from eval_contracts.benchmark_analysis import AnalysisPolicy
 
 from ..aggregator.analysis import analyze_run
 from .analysis_sources import load_analysis_source
+from .datasets.annotations import load_annotations
+from .datasets.binding import build_dataset_binding
 from .datasets.loader import load_dataset
 
 
@@ -106,13 +108,24 @@ def write_analysis(
         )
     if dataset_path is None:
         raise ValueError("explicit dataset path required to verify planned population")
-    if annotations_path is not None:
-        raise ValueError("annotation loading not available yet")
     source = load_analysis_source(
         run_dir, source_artifacts=source_artifacts, judge_dir=judge_dir
     )
     dataset = load_dataset(dataset_path)
-    analysis = analyze_run(source, dataset=dataset, policy=policy)
+    binding = build_dataset_binding(dataset_path)
+    dataset.update(binding)
+    annotations = (
+        load_annotations(
+            annotations_path,
+            dataset_binding=binding,
+            case_ids={t["id"] for t in dataset["tasks"]},
+        )
+        if annotations_path is not None
+        else None
+    )
+    analysis = analyze_run(
+        source, dataset=dataset, annotations=annotations, policy=policy
+    )
     encoded = (
         json.dumps(
             analysis, ensure_ascii=False, sort_keys=True, indent=2, allow_nan=False

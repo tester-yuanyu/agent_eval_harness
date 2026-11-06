@@ -1,0 +1,33 @@
+{
+  "capabilities": [
+    "single_tool",
+    "multi_tool_selection",
+    "tool_sequence",
+    "parallel_calls",
+    "irrelevance_rejection",
+    "schema_robustness",
+    "multi_turn_state",
+    "error_recovery",
+    "policy_compliance"
+  ],
+  "difficulty": [
+    "easy",
+    "medium",
+    "hard",
+    "unknown"
+  ],
+  "difficulty_rule_version": "structural-complexity-v1",
+  "easy_max": {
+    "dependency_depth": 1,
+    "interaction_turns": 1,
+    "recovery_branches": 0,
+    "reference_tool_calls": 2
+  },
+  "hard_min": {
+    "dependency_depth": 4,
+    "interaction_turns": 3,
+    "recovery_branches": 2,
+    "reference_tool_calls": 7
+  },
+  "taxonomy_version": "capability-taxonomy-v1"
+}

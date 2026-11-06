@@ -1,0 +1,66 @@
+{
+  "annotation_version": "1.0.0",
+  "dataset_binding": {
+    "binding_version": "dataset-binding-v1",
+    "contract_version": "file-tools-task-v2",
+    "files": {
+      "tasks.jsonl": "fbaa09dbfc4d820dc1fea379f24bca6d50e518213c109ef3721777d3ad5d4edb"
+    },
+    "legacy_identity": {
+      "case_count": 420,
+      "category_counts": {
+        "create_edit": 125,
+        "missing_error": 45,
+        "multi_file": 100,
+        "multi_turn": 75,
+        "read_search": 75
+      },
+      "contract_version": "file-tools-task-v2",
+      "dataset_id": "file-tools-v2",
+      "family_count": 104,
+      "grader_version": "file-tools-oracle-v1",
+      "level_counts": {
+        "chain": 60,
+        "e2e": 300,
+        "module": 60
+      },
+      "limitations": [
+        "300 E2E instances reuse 80 v1 families; three Markdown prompts clarified without oracle changes.",
+        "60 module and 60 chain instances are five parameter variants in each of 12 families.",
+        "Module population measures program boundaries, not LLM tool selection/planning/session management.",
+        "Chains use fixed follow-ups; no dynamic user simulator. Filesystem only.",
+        "Checkpoint presence is not completed execution; result evidence is produced separately."
+      ],
+      "provenance": {
+        "human_reviewed": false,
+        "module_execution": "Real nanobot ToolRegistry and filesystem implementations, no model provider",
+        "source": "AI-assisted authored synthetic fixtures and private checkpoint contracts"
+      },
+      "source_v1_sha256": "5b3a4feb3f82ba9a6b2c2eeebc9904f0fbb19069cdf46087bfbaa4fb35fe666f",
+      "split_counts": {
+        "dev": 340,
+        "holdout": 80
+      },
+      "split_strategy": "Family-disjoint; inherited v1 splits; last two of twelve new families per layer held out.",
+      "tasks_file": "tasks.jsonl",
+      "tasks_sha256": "fbaa09dbfc4d820dc1fea379f24bca6d50e518213c109ef3721777d3ad5d4edb",
+      "version": "2.0.0"
+    },
+    "manifest_sha256": "b96aa678fae622195f89d4ea0e3fddaef67d6a2a4833345d8726dcae788125d6"
+  },
+  "dataset_id": "file-tools-v2",
+  "dataset_sha256": "2c025f77737aec03f512988b550b7dd7fd7c6dff562055efc7d9925d36e048c6",
+  "files": {
+    "annotations.jsonl": "d48d9645a7726fab820cbda57569279e7784c4a9d1cf0e85f6e1823a1f47f5aa",
+    "taxonomy.json": "759dc376e79991b4e9c68e498998accc68d3d4b7d17107c4a5b16d9e5e7a4a83"
+  },
+  "format_version": "benchmark-annotations-v1",
+  "record_count": 420,
+  "review_status": "proposed",
+  "rules_sources": {
+    "contract": "46963d017e7cd4b372beedd4f362931567a139251078bb85d80960df6cca18f2",
+    "suggestions": "170ad862e7a9148127bda7701aa5923395426e1406ab1470c794bd092051ad79"
+  },
+  "source": "deterministic_suggestions_pending_human_review",
+  "taxonomy_version": "capability-taxonomy-v1"
+}

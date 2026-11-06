@@ -137,7 +137,7 @@ def main(argv=None):
             help="Explicit dotenv path; may follow the command",
         )
     args = parser.parse_args(argv)
-    if args.command == "analyze":
+    if args.command in {"analyze", "annotations-build", "annotations-validate"}:
         from .analysis_cli import execute
 
         print(json.dumps(execute(args), ensure_ascii=False, indent=2))

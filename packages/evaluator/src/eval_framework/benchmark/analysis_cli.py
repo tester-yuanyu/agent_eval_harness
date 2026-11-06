@@ -4,6 +4,17 @@ from pathlib import Path
 
 
 def add_commands(sub):
+    for name in ("annotations-build", "annotations-validate"):
+        child = sub.add_parser(name, help="构建 proposed 或只读校验独立注释资产")
+        child.add_argument("--dataset", type=Path, required=True)
+        child.add_argument(
+            "--output" if name == "annotations-build" else "--annotations",
+            type=Path,
+            required=True,
+        )
+        if name == "annotations-build":
+            child.add_argument("--version", default="1.0.0")
+
     parser = sub.add_parser("analyze", help="只读保存结果，生成独立本地分析")
     parser.add_argument("--run", type=Path, required=True)
     parser.add_argument("--dataset", type=Path, required=True)
@@ -16,6 +27,26 @@ def add_commands(sub):
 
 
 def execute(args):
+    if args.command in {"annotations-build", "annotations-validate"}:
+        from .datasets.annotations import build_annotations, load_annotations
+        from .datasets.binding import build_dataset_binding
+        from .datasets.loader import load_dataset
+
+        if args.command == "annotations-build":
+            result = build_annotations(args.dataset, args.output, version=args.version)
+        else:
+            result = load_annotations(
+                args.annotations,
+                dataset_binding=build_dataset_binding(args.dataset),
+                case_ids={t["id"] for t in load_dataset(args.dataset)["tasks"]},
+            )
+        return {
+            "records": len(result.records),
+            "missing_case_ids": result.missing_case_ids,
+            "content_sha256": result.content_sha256,
+            "review_status": result.manifest["review_status"],
+        }
+
     from eval_contracts.benchmark_analysis import AnalysisPolicy
 
     from .analysis_report import write_analysis
