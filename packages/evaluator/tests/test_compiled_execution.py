@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from importlib.util import find_spec
 from pathlib import Path
 
 import pytest
@@ -12,7 +13,7 @@ from eval_framework.contracts.compiler import compile_suite, load_suite_definiti
 from eval_framework.contracts.store import ContractStore, sha256_bytes
 from eval_framework.diagnostics import DiagnosticRegistry
 from eval_framework.plugins.builtin.dataset_loaders import LegacyJsonlDatasetLoader
-from eval_framework.plugins.catalog import PluginCatalog
+from eval_framework.plugins.catalog import PluginCatalog, PluginCatalogError
 from eval_framework.plugins.models import PluginDescriptor, PluginReference
 from eval_framework.provider import AdapterOutput, EvaluationPreflightError
 from eval_framework.reporting import write_report
@@ -212,6 +213,24 @@ def test_execute_compiled_suite_rejects_catalog_fingerprint_drift(
     assert captured.value.code == "PLUGIN_FINGERPRINT_MISMATCH"
 
 
+def test_legacy_provider_bridge_does_not_silently_ignore_layered_plugins(
+    dataset_path: Path,
+) -> None:
+    _, catalog, factory = _compiled(dataset_path)
+    path = dataset_path.parent / "suite.json"
+    value = json.loads(path.read_text())
+    value["environment"] = {"plugin_id": "test_environment", "version": "1.0.0"}
+    path.write_text(json.dumps(value))
+    catalog.register(_descriptor("test_environment", "environment"), object())
+    compiled = compile_suite(
+        load_suite_definition(path), catalog, ContractStore(path.parent)
+    )
+    with pytest.raises(EvaluationPreflightError) as captured:
+        execute_compiled_suite(compiled, catalog)
+    assert captured.value.code == "LAYERED_HARNESS_REQUIRED"
+    assert factory.calls == []
+
+
 def test_old_results_without_compiled_fields_still_load(
     dataset_path: Path,
     tmp_path: Path,
@@ -239,11 +258,22 @@ def test_old_results_without_compiled_fields_still_load(
 def test_default_plugin_catalog_registers_stable_builtin_ids() -> None:
     catalog = default_plugin_catalog()
 
-    for plugin_id, kind in (
+    identities = [
         ("legacy_jsonl_eval_case_v1", "dataset_loader"),
         ("fixture_json_document_v1", "dataset_loader"),
-        ("mini_agent_provider_v1", "provider"),
-    ):
+    ]
+    if find_spec("minimal_agent") is not None:
+        identities.append(("mini_agent_provider_v1", "provider"))
+    else:
+        with pytest.raises(PluginCatalogError) as captured:
+            catalog.resolve(
+                PluginReference(plugin_id="mini_agent_provider_v1", version="1.0.0"),
+                expected_kind="provider",
+                contract_version="1.0",
+                field_path="$.provider",
+            )
+        assert captured.value.code == "PLUGIN_NOT_FOUND"
+    for plugin_id, kind in identities:
         registration = catalog.resolve(
             PluginReference(plugin_id=plugin_id, version="1.0.0"),
             expected_kind=kind,

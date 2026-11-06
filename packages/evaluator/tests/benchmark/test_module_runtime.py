@@ -39,8 +39,7 @@ def test_all_real_module_cases_have_independent_state_and_expected_error_evidenc
         for t in load_tasks(ROOT / "data/benchmarks/file-tools-v2")
         if t["evaluation_level"] == "module"
     ]
-    representatives = list({t["family"]: t for t in tasks}.values())
-    for index, task in enumerate(representatives):
+    for index, task in enumerate(tasks):
         workspace = tmp_path / str(index)
         workspace.mkdir()
         for path, content in task["fixtures"].items():

@@ -18,7 +18,8 @@ from deepeval.metrics import BaseMetric, GEval, ToolCorrectnessMetric
 from deepeval.models import DeepEvalBaseLLM
 from deepeval.test_case import LLMTestCase, SingleTurnParams, ToolCall
 
-from .oracle import evaluate_oracle
+from .oracle import evaluate_oracle as evaluate_oracle
+from .scorers.executable import ExecutableScorer
 
 METRICS_VERSION = "file-tools-deepeval-v2.3"
 RESPONSE_RUBRIC_VERSION = "file-tools-response-diagnostic-v1"
@@ -81,7 +82,7 @@ class TaskSuccessMetric(_BenchmarkMetric):
     def evaluate(
         self, task: dict[str, Any], observation: dict[str, Any]
     ) -> tuple[float, str]:
-        result = evaluate_oracle(task, observation)
+        result = ExecutableScorer().score_observation(task, observation)
         failed = [check["reason"] for check in result["checks"] if not check["passed"]]
         completed = observation.get("status") == "completed"
         if not completed:
@@ -104,7 +105,7 @@ class DecisionMetric(_BenchmarkMetric):
     def evaluate(self, task, observation) -> tuple[float, str]:
         checks = [
             c
-            for c in evaluate_oracle(task, observation)["checks"]
+            for c in ExecutableScorer().score_observation(task, observation)["checks"]
             if c["name"].startswith(self.prefix)
         ]
         return float(bool(checks) and all(c["passed"] for c in checks)), "; ".join(
@@ -122,7 +123,7 @@ class WorkspacePolicyMetric(_BenchmarkMetric):
     def evaluate(
         self, task: dict[str, Any], observation: dict[str, Any]
     ) -> tuple[float, str]:
-        result = evaluate_oracle(task, observation)
+        result = ExecutableScorer().score_observation(task, observation)
         violations = list(result["violations"])
         allowed = set(task["allowed_tools"])
         forbidden = sorted(

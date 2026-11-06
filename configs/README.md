@@ -2,6 +2,42 @@
 
 当前 nanobot 基准的配置示例位于 [`benchmark/`](benchmark/)：文件与模型决策运行使用 `nanobot.example.json`，事后 GEval 使用 `judge.example.json`，独立 τ 领域试点使用 `tau.example.json`。复制为本地配置后填写源码、解释器和服务信息；密钥由 `api_key_env` 等字段指定的环境变量读取，不写入配置或 Git。具体命令见[分层评测指南](../docs/benchmark/v2-usage.md)与 [τ 适配说明](../docs/benchmark/tau.md)。
 
+## 五份 Spec 与 RunRequest
+
+`benchmark run` 和 `benchmark demo` 的原有 `--config` 参数同时接受旧平铺 JSON 和新的 [`RunRequest`](benchmark/layered/run.json)。新配置包含 `schema_version: "1.0"` 和五个必填部分；每部分可以内嵌 JSON 对象，也可以填写独立 JSON 文件的相对路径。
+
+| 部分 | 职责与字段 |
+| --- | --- |
+| `model` | `model`、`inspect_model`、`base_url`、`api_key_env`、`temperature`、`max_tokens`、`extra_body` |
+| `harness` | `max_steps`、`timeout_seconds`、`module_timeout_seconds`、`token_limit`、`message_limit`、`variant`、`instructions` |
+| `environment` | `provider`、`nanobot_root`、`python`、`sandbox`、`docker_base_image`、`tokenizer_mode`、`tokenizer_cache_dir`；已有 mini_agent 适配器另可使用 `repository_root`、`capability_bundle` |
+| `benchmark` | `dataset`、`level`、`split`、`limit` |
+| `execution` | `repeats`、`concurrency` |
+
+Python API 从 `eval_framework.orchestration` 导入 `ModelSpec`、`HarnessSpec`、`EnvironmentSpec`、`BenchmarkSpec`、`ExecutionSpec`、`RunRequest` 与 `load_run_request`。`runtime_config()` 只向现有 runner 投影显式配置的运行字段；任务筛选、重复次数与并发由 CLI 分别传入。默认值不会额外写入旧 config，从而保留原有配置身份语义。这里的 `ExecutionSpec` 是运行调度配置，与 Provider 的执行输入契约分属不同命名空间。
+
+优先级为**显式 CLI flag > 对应 Spec 字段 > 历史 CLI 默认值**。即使 flag 值等于默认值，也会覆盖 Spec。可覆盖项为 `--dataset`、`--level`、`--split`、`--limit`、`--repeats`、`--concurrency`；`--output` 仍必须显式传入。配置内 `repeats` 为 1–5、`concurrency` 为 1–12，筛选上限必须为正整数。`demo` 保持离线参考烟测语义，`run` 保持原有实际执行语义。
+
+独立 Spec 的引用相对于 `run.json` 所在目录；Spec 内本地路径相对于该 Spec 文件，内嵌部分的路径相对于 `run.json`。省略 dataset 时仍使用历史默认的当前工作目录相对路径。旧平铺配置中的相对路径继续相对于调用命令的当前工作目录；迁移时会将这些已有目标写成绝对路径，避免移动配置后改变含义。解释器路径保留符号链接，不会将虚拟环境的 Python 解析成系统 Python。
+
+所有层级拒绝重复 JSON 键、未知字段、错误类型和跨部分错放字段。`extra_body` 是保留的模型供应商 JSON 扩展区，其内容原样传入，仍接受递归密钥检查；原始 `api_key`、`Authorization`、`password`、`token` 等字段（包括嵌套对象、列表及 URL 凭据）被拒绝，`*_env` 只能包含合法环境变量名。当前实际凭据入口是 `model.api_key_env`；不要向 `extra_body` 填入认证信息。配置不能引用远程 URL，也不能执行代码。
+
+从仓库根目录执行离线示例：
+
+```bash
+.venvs/evaluator/bin/python -m eval_framework.benchmark.cli demo \
+  --config configs/benchmark/layered/run.json --output /tmp/layered-demo
+```
+
+显式迁移旧 nanobot 平铺配置，不读取环境变量值、不运行 Agent、不调用模型，也不修改原配置；输出目录必须不存在：
+
+```bash
+.venvs/evaluator/bin/python scripts/migrate_benchmark_config.py \
+  --input configs/benchmark/nanobot.example.json --output /tmp/nanobot-layered
+```
+
+迁移输出五份 Spec 和 `run.json`；源配置的全部已知选项保留，不认识的键会报错。迁移时请保持与旧命令相同的工作目录。`core-run`、`coverage`、`judge` 与独立 τ 命令仍使用各自旧格式，不适用本次 RunRequest 组合；前面三个入口会明确拒绝误传组合格式。
+
 以下内容适用于保留的 `eval`、`bundle` 和 `agent` 兼容入口。
 
 ## 外部 Agent 绑定

@@ -2,6 +2,8 @@
 
 当前主线是固定任务数据集与 Harness。Inspect 负责执行和日志，DeepEval 负责正式确定性评分，GEval 负责尚未完成人工校准的事后诊断，Langfuse 展示保存结果。分层执行、检查点与轨迹指标见[分层评测指南](benchmark/v2-usage.md)；下文同时说明保留的通用 Builder 与历史 Suite 路径，避免混用职责。
 
+框架自身已抽出 `harness/`、`environments/`、`benchmark/scorers/`、`aggregator/` 和 `orchestration/`；旧入口兼容及具体实现边界见[四层框架说明](benchmark/layered-framework.md)。被测 Agent 接入保持原状，固定 followups 不等于动态用户模拟。
+
 ```mermaid
 flowchart LR
     A[专用任务生成器] --> B[冻结任务与清单]

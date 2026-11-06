@@ -1,0 +1,9 @@
+{
+  "max_steps": 12,
+  "timeout_seconds": 180,
+  "module_timeout_seconds": 30,
+  "token_limit": 32768,
+  "message_limit": 100,
+  "variant": "baseline",
+  "instructions": ""
+}

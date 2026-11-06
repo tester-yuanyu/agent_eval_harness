@@ -45,15 +45,18 @@ def main(argv=None):
         child.add_argument(
             "--dataset",
             type=Path,
-            default=Path("data/benchmarks/file-tools-v1/tasks.jsonl"),
+            default=(
+                Path("data/benchmarks/file-tools-v1/tasks.jsonl")
+                if name == "validate" else None
+            ),
         )
         child.add_argument("--level", choices=["module", "chain", "e2e"])
         if name != "validate":
             child.add_argument("--output", type=Path, required=True)
             child.add_argument("--limit", type=int)
             child.add_argument("--split", choices=["dev", "holdout"])
-            child.add_argument("--repeats", type=int, default=1)
-            child.add_argument("--concurrency", type=int, default=4)
+            child.add_argument("--repeats", type=int)
+            child.add_argument("--concurrency", type=int)
             child.add_argument("--config", type=Path)
     judge = sub.add_parser(
         "judge", help="DeepEval native metrics and GEval on saved execution evidence"
@@ -144,6 +147,14 @@ def main(argv=None):
     from .runner import compare_runs, run_benchmark, save_json
     from .tasks import dataset_identity, load_tasks, select_tasks
 
+    def legacy_command_config(path: Path) -> dict:
+        from ..orchestration.config import is_run_request, read_config_json
+
+        value = read_config_json(path)
+        if is_run_request(value):
+            parser.error("composed RunRequest configuration supports run/demo only")
+        return value
+
     if args.command in ("core-validate", "core-run"):
         from .core_tasks import core_dataset_identity, load_core_tasks
 
@@ -161,7 +172,7 @@ def main(argv=None):
 
             result = run_core_benchmark(
                 args.dataset,
-                json.loads(args.config.read_text()),
+                legacy_command_config(args.config),
                 args.output,
                 repeats=args.repeats,
                 concurrency=args.concurrency,
@@ -203,7 +214,7 @@ def main(argv=None):
                         "sha256": hashlib.sha256(source.read_bytes()).hexdigest(),
                     }
                 )
-        snapshot = snapshot_nanobot(json.loads(args.config.read_text()))
+        snapshot = snapshot_nanobot(legacy_command_config(args.config))
         result = build_coverage_report(
             snapshot, json.loads(args.catalog.read_text()), datasets, runs
         )
@@ -219,6 +230,37 @@ def main(argv=None):
             )
         )
     elif args.command in ("validate", "demo", "run"):
+        config = {}
+        if args.command != "validate":
+            from ..orchestration import BenchmarkSpec, ExecutionSpec, load_run_request
+            from ..orchestration.config import legacy_run_request
+
+            if args.command == "run" and args.config is None:
+                parser.error(
+                    "run requires --config; demo is the offline reference smoke"
+                )
+            try:
+                request = (
+                    load_run_request(args.config)
+                    if args.config else legacy_run_request({})
+                )
+                # Explicit flags override configured values, then historical defaults.
+                selection = request.benchmark.model_dump()
+                execution = request.execution.model_dump()
+                for key in selection:
+                    value = getattr(args, key)
+                    if value is not None:
+                        selection[key] = str(value) if key == "dataset" else value
+                for key in execution:
+                    if getattr(args, key) is not None:
+                        execution[key] = getattr(args, key)
+                selection = BenchmarkSpec.model_validate(selection).model_dump()
+                execution = ExecutionSpec.model_validate(execution).model_dump()
+            except (OSError, ValueError) as exc:
+                parser.error(str(exc))
+            for key, value in {**selection, **execution}.items():
+                setattr(args, key, Path(value) if key == "dataset" else value)
+            config = request.runtime_config()
         tasks = load_tasks(args.dataset)
         if args.level:
             tasks = [t for t in tasks if t.get("evaluation_level", "e2e") == args.level]
@@ -243,9 +285,6 @@ def main(argv=None):
             }
             print(json.dumps(result, ensure_ascii=False, indent=2))
             return bool(bad)
-        if args.command == "run" and args.config is None:
-            parser.error("run requires --config; demo is the offline reference smoke")
-        config = json.loads(args.config.read_text()) if args.config else {}
         if args.command == "demo" and any(
             t.get("execution_mode", "agent") != "agent" for t in tasks
         ):
@@ -278,7 +317,7 @@ def main(argv=None):
             args.source,
             args.dataset,
             args.output,
-            json.loads(args.config.read_text()),
+            legacy_command_config(args.config),
             repeats=args.repeats,
             concurrency=args.concurrency,
             limit=args.limit,

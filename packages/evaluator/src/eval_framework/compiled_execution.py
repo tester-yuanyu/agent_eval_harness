@@ -38,6 +38,17 @@ def execute_compiled_suite(
             "COMPILED_SUITE_INTEGRITY_ERROR",
             "compiled Suite contents changed after compilation",
         )
+    layered = {
+        item.kind for item in compiled.plugins
+        if item.kind in {"environment", "tool_router", "user_simulator", "scorer"}
+    }
+    if layered:
+        raise EvaluationPreflightError(
+            "LAYERED_HARNESS_REQUIRED",
+            "The legacy Provider bridge cannot consume layered plugins: "
+            f"{', '.join(sorted(layered))}. Use eval_framework.harness with "
+            "explicit environment, router, simulator and trusted scoring instead.",
+        )
     provider_snapshot = next(
         (item for item in compiled.plugins if item.kind == "provider"),
         None,

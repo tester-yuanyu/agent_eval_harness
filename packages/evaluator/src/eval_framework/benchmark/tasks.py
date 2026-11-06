@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import copy
 import hashlib
 import json
 from collections import Counter, defaultdict, deque
@@ -372,23 +371,6 @@ def select_tasks(
 def execution_task(task: dict[str, Any]) -> dict[str, Any]:
     """The only permitted input to an untrusted Agent runtime; no oracle metadata."""
     validate_task(task)
-    return copy.deepcopy(
-        {
-            "id": task["id"],
-            "prompt": task["prompt"],
-            "followups": task["followups"],
-            "fixtures": task["fixtures"],
-            "allowed_tools": task.get("allowed_tools", list(TOOLS)),
-            "max_steps": task["max_steps"],
-            **(
-                {"module_calls": task["module_calls"]}
-                if task.get("execution_mode") == "module"
-                else {}
-            ),
-            **(
-                {"decision_context": task["decision_context"]}
-                if task.get("execution_mode") == "decision"
-                else {}
-            ),
-        }
-    )
+    from .schema import legacy_execution_input
+
+    return legacy_execution_input(task)

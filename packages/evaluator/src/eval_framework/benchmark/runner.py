@@ -5,10 +5,8 @@ from __future__ import annotations
 import hashlib
 import json
 import os
-import statistics
 import time
 import uuid
-from collections import Counter, defaultdict
 from copy import deepcopy
 from datetime import UTC, datetime
 from importlib.metadata import version
@@ -27,10 +25,15 @@ class RuntimeIdentityChanged(RuntimeError):
 
 
 def code_identity(names: list[str]) -> str:
+    from .layer_sources import layer_source_paths
+
     root = Path(__file__).parent
-    return digest(
-        {name: hashlib.sha256((root / name).read_bytes()).hexdigest() for name in names}
-    )
+    sources = {name: root / name for name in names}
+    sources.update(layer_source_paths())
+    return digest({
+        name: hashlib.sha256(path.read_bytes()).hexdigest()
+        for name, path in sources.items()
+    })
 
 
 def scoring_identity() -> dict:
@@ -106,74 +109,10 @@ def validate_config(config: dict) -> None:
 
 
 def summarize(records: list[dict], case_ids: list[str], repeats: int) -> dict:
-    counts = Counter(r["assessment"]["verdict"] for r in records)
-    valid = sum(r["assessment"]["validity"] == "VALID" for r in records)
-    planned = len(case_ids) * repeats
-    by_case = defaultdict(list)
-    for record in records:
-        by_case[record["case_id"]].append(record)
-    all_pass = sum(
-        len(by_case[c]) == repeats
-        and all(r["assessment"]["verdict"] == "PASS" for r in by_case[c])
-        for c in case_ids
-    )
-    latencies = sorted(r["latency_seconds"] for r in records)
-    usage_records = [r["observation"].get("usage", {}) for r in records]
-    usage = {}
-    for key in ("input_tokens", "output_tokens", "total_tokens", "cost_usd"):
-        alias = {
-            "input_tokens": "prompt_tokens",
-            "output_tokens": "completion_tokens",
-        }.get(key, key)
-        values = [u.get(key, u.get(alias)) for u in usage_records]
-        known = [v for v in values if isinstance(v, (int, float))]
-        usage[key] = sum(known) if known and len(known) == len(values) else None
-        usage[key + "_known_subtotal"] = sum(known) if known else None
-        usage[key + "_known_trials"] = len(known)
-    result = {
-        "unique_tasks": len(case_ids),
-        "trials_per_case": repeats,
-        "planned_trials": planned,
-        "completed_trials": len(records),
-        "missing_trials": planned - len(records),
-        "valid_trials": valid,
-        "verdicts": dict(counts),
-        "pass_rate_planned": counts["PASS"] / planned if planned else None,
-        "pass_rate_valid": counts["PASS"] / valid if valid else None,
-        "all_trials_pass_rate": all_pass / len(case_ids) if case_ids else None,
-        "all_trials_pass_definition": (
-            "All k planned real trials passed; missing and invalid trials "
-            "cannot prove success."
-        ),
-        "latency_seconds_median": statistics.median(latencies) if latencies else None,
-        "latency_seconds_p95": latencies[
-            min(len(latencies) - 1, int(0.95 * len(latencies)))
-        ]
-        if latencies
-        else None,
-        "usage": usage,
-    }
-    result["mixed_execution_populations"] = (
-        len({r.get("execution_mode", "agent") for r in records}) > 1
-    )
-    for dimension in ("split", "category", "evaluation_level", "execution_mode"):
-        groups = defaultdict(list)
-        for record in records:
-            fallback = "e2e" if dimension == "evaluation_level" else "agent"
-            groups[record.get(dimension, fallback)].append(record)
-        result["by_" + dimension] = {
-            name: {
-                "trials": len(rows),
-                "unique_tasks": len({r["case_id"] for r in rows}),
-                "verdicts": dict(Counter(r["assessment"]["verdict"] for r in rows)),
-                "pass_rate_observed": sum(
-                    r["assessment"]["verdict"] == "PASS" for r in rows
-                )
-                / len(rows),
-            }
-            for name, rows in sorted(groups.items())
-        }
-    return result
+    """保持历史汇总 API；统计实现归 Aggregator 所有。"""
+    from ..aggregator import summarize as aggregate
+
+    return aggregate(records, case_ids, repeats)
 
 
 def compare_runs(baseline: dict, candidate: dict) -> dict:

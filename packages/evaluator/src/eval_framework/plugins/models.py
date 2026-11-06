@@ -17,6 +17,10 @@ PluginKind = Literal[
     "pipeline_stage",
     "report_renderer",
     "gate_check",
+    "environment",
+    "tool_router",
+    "user_simulator",
+    "scorer",
 ]
 
 

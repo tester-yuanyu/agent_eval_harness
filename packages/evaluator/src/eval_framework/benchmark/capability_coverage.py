@@ -117,6 +117,8 @@ def _sha(raw: bytes) -> str:
 
 
 def _profiles() -> dict:
+    from .layer_sources import layer_source_paths
+
     profiles = {}
     for name, groups in _PROFILE_FILES.items():
         hashes = {}
@@ -126,6 +128,18 @@ def _profiles() -> dict:
             selected = {}
             for filename in files:
                 relative = _BASE + filename
+                path = _REPO_ROOT / relative
+                if not path.is_file():
+                    missing.append(relative)
+                    continue
+                selected[relative] = _sha(path.read_bytes())
+            # The compatibility modules no longer contain the implementations.
+            # Bind the extracted closure as well as the historical entry files.
+            for label in layer_source_paths():
+                package = (
+                    "contracts" if label.startswith("eval_contracts/") else "evaluator"
+                )
+                relative = f"packages/{package}/src/{label}"
                 path = _REPO_ROOT / relative
                 if not path.is_file():
                     missing.append(relative)

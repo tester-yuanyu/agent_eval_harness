@@ -1,0 +1,78 @@
+"""Parse and validate public tool calls before an environment observes them."""
+
+from __future__ import annotations
+
+import json
+from copy import deepcopy
+from typing import Any
+
+
+class InvalidToolCall(ValueError):
+    """A supplied tool name, arguments or domain operation is invalid."""
+
+
+class ToolRouter:
+    """Router for the framework's deterministic file environment, not Agent SDKs."""
+
+    _FIELDS = {
+        "read_file": ({"path"}, set()),
+        "write_file": ({"path", "content"}, set()),
+        "edit_file": ({"path", "old_text", "new_text"}, set()),
+        "list_dir": (set(), {"path"}),
+    }
+
+    def __init__(
+        self, environment: Any = None, *, allowed_tools: list[str] | None = None
+    ) -> None:
+        self.environment = environment
+        self.allowed_tools = frozenset(
+            self._FIELDS if allowed_tools is None else allowed_tools
+        )
+        if not self.allowed_tools or not self.allowed_tools <= self._FIELDS.keys():
+            raise ValueError("unsupported allowed tools")
+
+    def parse(self, raw: str | dict[str, Any]) -> dict[str, Any]:
+        try:
+            action = json.loads(raw) if isinstance(raw, str) else deepcopy(raw)
+        except ValueError as exc:
+            raise InvalidToolCall("tool call must contain valid JSON") from exc
+        if not isinstance(action, dict) or set(action) != {"name", "arguments"}:
+            raise InvalidToolCall("tool call requires name and arguments")
+        if (
+            not isinstance(action["name"], str)
+            or action["name"] not in self.allowed_tools
+        ):
+            raise InvalidToolCall("tool is not allowed")
+        errors = self.validate_args(action)
+        if errors:
+            raise InvalidToolCall("; ".join(errors))
+        return action
+
+    def validate_args(self, call: dict[str, Any]) -> list[str]:
+        if not isinstance(call, dict) or set(call) != {"name", "arguments"}:
+            return ["tool call requires name and arguments"]
+        tool_name, arguments = call["name"], call["arguments"]
+        if not isinstance(tool_name, str) or tool_name not in self.allowed_tools:
+            return ["tool is not allowed"]
+        required, optional = self._FIELDS[tool_name]
+        if (
+            not isinstance(arguments, dict)
+            or not required <= arguments.keys()
+            or not arguments.keys() <= required | optional
+            or any(not isinstance(value, str) for value in arguments.values())
+        ):
+            return ["invalid tool arguments"]
+        return []
+
+    def dispatch(self, call: dict[str, Any], env: Any = None) -> Any:
+        environment = self.environment if env is None else env
+        if environment is None:
+            raise ValueError("tool dispatch requires an environment")
+        action = self.parse(call)
+        try:
+            return environment.step(action)
+        except ValueError as exc:
+            # The deterministic file environment reports invalid paths and edit
+            # preconditions as ValueError. Unexpected router failures retain
+            # their original exception and are classified as Harness faults.
+            raise InvalidToolCall(str(exc)) from exc

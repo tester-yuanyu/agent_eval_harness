@@ -387,6 +387,50 @@
     },
     "run_config": {
       "$ref": "#/$defs/RunConfig"
+    },
+    "environment": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/PluginReference"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "tool_router": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/PluginReference"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "user_simulator": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/PluginReference"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "scorer": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/PluginReference"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
     }
   },
   "required": [

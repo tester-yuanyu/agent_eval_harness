@@ -1,0 +1,8 @@
+{
+  "provider": "nanobot",
+  "nanobot_root": "../../../.sources/nanobot",
+  "python": "../../../.sources/nanobot/.venv/bin/python",
+  "sandbox": "docker",
+  "docker_base_image": "python:3.11-slim",
+  "tokenizer_mode": "cl100k_base"
+}

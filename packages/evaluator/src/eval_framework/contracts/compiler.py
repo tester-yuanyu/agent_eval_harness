@@ -211,10 +211,16 @@ def compile_suite(
             )
         )
     registrations: dict[str, PluginRegistration[Any]] = {}
-    for name, reference, kind in (
+    references = [
         ("dataset_loader", suite.dataset_loader, "dataset_loader"),
         ("provider", suite.provider, "provider"),
-    ):
+    ]
+    references.extend(
+        (name, reference, name)
+        for name in ("environment", "tool_router", "user_simulator", "scorer")
+        if (reference := getattr(suite, name)) is not None
+    )
+    for name, reference, kind in references:
         try:
             registrations[name] = catalog.resolve(
                 reference,

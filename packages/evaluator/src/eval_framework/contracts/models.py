@@ -6,7 +6,7 @@ from pathlib import Path, PurePosixPath
 from typing import Any, Literal
 
 from eval_contracts.sources import ResolvedSource as ResolvedSource
-from pydantic import ConfigDict, Field, field_validator
+from pydantic import ConfigDict, Field, field_validator, model_serializer
 
 from ..plugins.models import PluginKind, PluginReference
 from ..schema_base import StrictModel
@@ -61,6 +61,20 @@ class SuiteDefinition(StrictModel):
     report_profile: ContractReference | None = None
     gate_policy: ContractReference | None = None
     run_config: RunConfig = Field(default_factory=RunConfig)
+    environment: PluginReference | None = None
+    tool_router: PluginReference | None = None
+    user_simulator: PluginReference | None = None
+    scorer: PluginReference | None = None
+
+    @model_serializer(mode="wrap")
+    def serialize_compatible(self, handler: Any) -> dict[str, Any]:
+        result = handler(self)
+        # Existing 1.0 Suite snapshots predate these slots. Adding nulls would
+        # silently change their canonical hash, even with no new behavior.
+        for name in ("environment", "tool_router", "user_simulator", "scorer"):
+            if result.get(name) is None:
+                result.pop(name, None)
+        return result
 
 
 class SourceFingerprint(StrictModel):

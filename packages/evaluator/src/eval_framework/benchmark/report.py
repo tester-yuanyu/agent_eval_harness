@@ -9,8 +9,6 @@ import difflib
 import hashlib
 import html
 import json
-import statistics
-from collections import Counter, defaultdict
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -34,105 +32,11 @@ def _percent(numerator: int, denominator: int) -> str:
     return f"{100 * numerator / denominator:.1f}%" if denominator else "—"
 
 
-def _usage_total(rows: list[dict], aliases: tuple[str, ...]) -> dict:
-    values = []
-    for row in rows:
-        usage = row.get("observation", {}).get("usage", {})
-        value = next(
-            (usage[key] for key in aliases if isinstance(usage.get(key), (int, float))),
-            None,
-        )
-        values.append(value)
-    known = [value for value in values if value is not None]
-    return {
-        "total": sum(known) if known and len(known) == len(rows) else None,
-        "known_subtotal": sum(known) if known else None,
-        "known_trials": len(known),
-    }
-
-
 def evidence_summary(run: dict) -> dict:
-    """Aggregate saved verdicts, without rerunning a metric or an Agent."""
-    rows = run["trials"]
-    planned_ids = run["planned_case_ids"]
-    repeats = run["trials_per_case"]
-    if len(planned_ids) != len(set(planned_ids)) or repeats < 1:
-        raise ValueError("invalid planned case selection")
-    observed_keys = [(row["case_id"], row["trial"]) for row in rows]
-    if len(observed_keys) != len(set(observed_keys)):
-        raise ValueError("duplicate saved case/trial evidence")
-    expected_keys = {
-        (case_id, trial) for case_id in planned_ids for trial in range(1, repeats + 1)
-    }
-    if not set(observed_keys) <= expected_keys:
-        raise ValueError("saved trial is outside the planned selection")
-    counts = Counter(row["assessment"]["verdict"] for row in rows)
-    valid = sum(row["assessment"].get("validity") == "VALID" for row in rows)
-    planned = len(expected_keys)
-    cases: dict[str, list[dict]] = defaultdict(list)
-    for row in rows:
-        cases[row["case_id"]].append(row)
-    all_pass = sum(
-        len(cases[case_id]) == repeats
-        and all(row["assessment"]["verdict"] == "PASS" for row in cases[case_id])
-        for case_id in planned_ids
-    )
-    latency = sorted(
-        row["latency_seconds"]
-        for row in rows
-        if isinstance(row.get("latency_seconds"), (float, int))
-    )
-    summary = {
-        "unique_tasks": len(planned_ids),
-        "observed_unique_tasks": len(cases),
-        "trials_per_case": repeats,
-        "planned_trials": planned,
-        "completed_trials": len(rows),
-        "missing_trials": planned - len(rows),
-        "valid_trials": valid,
-        "verdicts": dict(counts),
-        "all_trials_pass_tasks": all_pass,
-        "latency_median": statistics.median(latency) if latency else None,
-        "latency_p95": (
-            latency[min(len(latency) - 1, int(0.95 * len(latency)))]
-            if latency
-            else None
-        ),
-        "usage": {
-            "input_tokens": _usage_total(rows, ("input_tokens", "prompt_tokens")),
-            "output_tokens": _usage_total(rows, ("output_tokens", "completion_tokens")),
-            "total_tokens": _usage_total(rows, ("total_tokens",)),
-            "cached_tokens": _usage_total(rows, ("cached_tokens",)),
-            "cost_usd": _usage_total(rows, ("cost_usd",)),
-        },
-    }
-    recorded_summary = run.get("summary", {})
-    for field in (
-        "unique_tasks",
-        "trials_per_case",
-        "planned_trials",
-        "completed_trials",
-        "missing_trials",
-        "valid_trials",
-        "verdicts",
-    ):
-        if field in recorded_summary and recorded_summary[field] != summary[field]:
-            raise ValueError(f"saved summary disagrees with trial evidence: {field}")
-    for dimension in ("split", "category", "evaluation_level", "execution_mode"):
-        groups: dict[str, list[dict]] = defaultdict(list)
-        for row in rows:
-            groups[str(row.get(dimension, "unknown"))].append(row)
-        summary["by_" + dimension] = {
-            name: {
-                "unique_tasks": len({row["case_id"] for row in group}),
-                "trials": len(group),
-                "verdicts": dict(
-                    Counter(row["assessment"]["verdict"] for row in group)
-                ),
-            }
-            for name, group in sorted(groups.items())
-        }
-    return summary
+    """保持历史报表汇总格式，只读取保存的证据。"""
+    from ..aggregator import evidence_summary as aggregate
+
+    return aggregate(run)
 
 
 def _mode(run: dict) -> tuple[str, str]:

@@ -141,6 +141,53 @@ def _catalog(loader=None, provider=None) -> tuple[PluginCatalog, object, object]
     return catalog, loader, provider
 
 
+def test_layered_slots_preserve_historical_default_suite_hash(tmp_path):
+    path = _write_suite(tmp_path)
+    catalog, _, _ = _catalog()
+    loaded = load_suite_definition(path)
+    compiled = compile_suite(loaded, catalog, ContractStore(tmp_path))
+    assert compiled.compiled_suite_sha256 == (
+        "82de01a86acb3d44e987e760007637c991e6c7463108665c101349aa53e82b01"
+    )
+    for field in ("environment", "tool_router", "user_simulator", "scorer"):
+        assert getattr(loaded.definition, field) is None
+        assert field not in compiled.definition
+
+
+@pytest.mark.parametrize("kind", [
+    "environment", "tool_router", "user_simulator", "scorer"
+])
+def test_layered_slots_resolve_and_bind_exact_plugin_identity(tmp_path, kind):
+    path = _write_suite(tmp_path)
+    value = json.loads(path.read_text())
+    value[kind] = {"plugin_id": "fixture_stage", "version": "1.0.0"}
+    path.write_text(json.dumps(value))
+    catalog, loader, provider = _catalog()
+    catalog.register(_descriptor("fixture_stage", kind), object())
+    compiled = compile_suite(
+        load_suite_definition(path), catalog, ContractStore(tmp_path)
+    )
+    snapshot = next(item for item in compiled.plugins if item.kind == kind)
+    assert snapshot.implementation_fingerprint == SHA256
+    assert compiled.definition[kind]["plugin_id"] == "fixture_stage"
+    assert loader.calls == 1
+    assert provider.create_calls == 0
+
+
+def test_missing_layered_plugin_fails_before_loading_or_execution(tmp_path):
+    path = _write_suite(tmp_path)
+    value = json.loads(path.read_text())
+    value["environment"] = {"plugin_id": "unregistered", "version": "1.0.0"}
+    path.write_text(json.dumps(value))
+    catalog, loader, provider = _catalog()
+    with pytest.raises(SuiteCompilationError) as error:
+        compile_suite(load_suite_definition(path), catalog, ContractStore(tmp_path))
+    assert error.value.issues[0].code == "PLUGIN_NOT_FOUND"
+    assert error.value.issues[0].field_path == "$.environment"
+    assert loader.calls == 0
+    assert provider.create_calls == 0
+
+
 def test_compile_suite_resolves_loader_provider_contracts_and_sources(
     tmp_path: Path,
 ) -> None:

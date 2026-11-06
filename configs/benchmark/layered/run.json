@@ -1,0 +1,8 @@
+{
+  "schema_version": "1.0",
+  "model": "model.json",
+  "harness": "harness.json",
+  "environment": "environment.json",
+  "benchmark": "benchmark.json",
+  "execution": "execution.json"
+}
