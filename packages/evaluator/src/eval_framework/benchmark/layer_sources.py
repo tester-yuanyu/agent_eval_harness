@@ -9,6 +9,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from eval_contracts import benchmark as task_contract
+from eval_contracts import trace as trace_contract
 
 
 def layer_source_paths() -> dict[str, Path]:
@@ -28,4 +29,5 @@ def layer_source_paths() -> dict[str, Path]:
         for path in paths
     }
     result["eval_contracts/benchmark.py"] = Path(task_contract.__file__)
+    result["eval_contracts/trace.py"] = Path(trace_contract.__file__)
     return result

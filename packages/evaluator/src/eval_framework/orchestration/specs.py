@@ -102,6 +102,8 @@ class ModelSpec(StrictSpec):
 
 
 class HarnessSpec(StrictSpec):
+    max_tool_calls: Annotated[int, Field(ge=1, le=300)] = 40
+    prompt_version: Literal["harness-v1"] = "harness-v1"
     max_steps: Annotated[int, Field(ge=1, le=30)] = 12
     timeout_seconds: Annotated[float, Field(ge=1, le=600)] = 180
     module_timeout_seconds: Annotated[float, Field(gt=0, le=600)] = 30
@@ -112,7 +114,7 @@ class HarnessSpec(StrictSpec):
 
 
 class EnvironmentSpec(StrictSpec):
-    provider: Literal["nanobot", "mini_agent"] = "nanobot"
+    provider: Literal["nanobot", "mini_agent", "raw_model"] = "nanobot"
     nanobot_root: LocalPath | None = None
     python: LocalPath | None = None
     sandbox: Literal["local", "docker"] = "docker"

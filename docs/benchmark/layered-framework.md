@@ -16,6 +16,8 @@ flowchart TD
     R --> P[报告 / 显式 Langfuse 导出]
 ```
 
+后续第一阶段新增了显式 `raw_model` 入口，将自研异步循环接入 Inspect Custom Solver；原 nanobot 路径仍保留。新路径及其验收范围见[自研 Harness](native-harness.md)。下文的同步循环和旧入口继续兼容。
+
 ## 实际代码边界
 
 以下路径相对于 `packages/evaluator/src/eval_framework/`。

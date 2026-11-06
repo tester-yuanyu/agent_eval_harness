@@ -95,6 +95,8 @@ GEval 输出 0～1 评价尺度，不是正确概率。报告区分适用、已�
 
 ## Langfuse 与作品集
 
+新增 `raw_model` 基线可在 Inspect Custom Solver 内运行自研循环，默认 nanobot 路径不变。无需真实模型的安装和演示见[自研 Harness](docs/benchmark/native-harness.md)。
+
 Langfuse 已改为可选依赖。需要导出时运行 `python3.11 scripts/setup.py --only evaluator --with-langfuse`；默认安装保留 Inspect、DeepEval，核心执行和本地报告无需展示 SDK。重复的 `conversation` extra 已删除。Agent 接入复用现有 Provider 注册机制，详见 [AgentAdapter 与 Provider 复用](docs/benchmark/agent-adapters.md)。
 
 导出、服务端回读和界面检查分别验收；API 接收成功不等于全链路展示验证完成。每次导出显式指定对应数据集：

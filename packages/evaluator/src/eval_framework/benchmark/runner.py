@@ -441,9 +441,16 @@ def _run(
                     }
                     if isinstance(selected_sandbox, tuple):
                         effective["_inspect_docker_compose"] = selected_sandbox[1]
-                    observation = await adapter.execute(
-                        execution_task(task), mode=mode, config=effective
-                    )
+                    native_execute = getattr(adapter, "execute_in_inspect", None)
+                    if callable(native_execute):
+                        observation = await native_execute(
+                            execution_task(task), mode=mode,
+                            config=effective, state=state
+                        )
+                    else:
+                        observation = await adapter.execute(
+                            execution_task(task), mode=mode, config=effective
+                        )
                     require_runtime_identity(
                         expected_source, observation["runtime_identity"]
                     )

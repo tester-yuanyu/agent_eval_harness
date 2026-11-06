@@ -20,6 +20,12 @@ def apply_native_limits(observation: dict, events: Sequence[Any]) -> None:
             observation["status"] = "timeout" if event.type == "time" else "error"
             observation["stop_reason"] = f"{event.type}_limit"
             observation["evidence_complete"] = False
+            if isinstance(observation.get("trace"), dict):
+                observation["trace"].update(
+                    status=observation["status"],
+                    stop_reason=observation["stop_reason"],
+                    evidence_complete=False,
+                )
             errors = observation.setdefault("errors", [])
             errors[:] = [
                 error for error in errors if error.get("code") != "CancelledError"
