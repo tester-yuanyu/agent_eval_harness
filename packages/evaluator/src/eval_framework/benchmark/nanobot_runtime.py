@@ -1,158 +1,74 @@
-"""Isolated-process adapter for the real nanobot SDK.
+"""nanobot 历史入口；SDK 实现与通用文件操作分别归 integration/Environment。
 
-Only execution inputs cross the process boundary. Filesystem containment is an
-application policy, not an operating-system sandbox.
+独立 worker 不安装 Evaluator：直接运行时加载标准库模块，Docker 使用同一
+来源清单复制这些模块。包内调用保留旧签名和公开名称。
 """
 
 from __future__ import annotations
 
-import hashlib
-import json
-import subprocess
 import sys
-import tempfile
-from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-FILE_TOOLS = frozenset({"read_file", "write_file", "edit_file", "list_dir"})
-TOKENIZER_URL = (
-    "https://openaipublic.blob.core.windows.net/encodings/cl100k_base.tiktoken"
-)
-TOKENIZER_SHA256 = "223921b76ee99bde995b7ff738513eef100fb51d18c93597a113bcffe865b2a7"
-EXECUTION_KEYS = frozenset(
-    {"id", "prompt", "followups", "fixtures", "allowed_tools", "max_steps"}
-)
-
-
-def utc_now() -> str:
-    return datetime.now(UTC).isoformat()
-
-
-def prepare_tokenizer(config: dict[str, Any]) -> dict[str, str]:
-    """Explicit one-time setup; normal Agent runs never download tokenizers."""
-    mode = config.get("tokenizer_mode", "cl100k_base")
-    if mode == "byte_fallback":
-        return {"mode": mode, "source": "nanobot conservative UTF-8 byte fallback"}
-    if mode != "cl100k_base":
-        raise ValueError("unsupported tokenizer mode")
-    cache = Path(
-        config.get("tokenizer_cache_dir")
-        or Path(tempfile.gettempdir()) / "data-gym-cache"
+if __package__:
+    from ..environments.local_files import safe_path as safe_path
+    from ..environments.local_files import snapshot_files as snapshot_files
+    from ..integrations.nanobot.nanobot_sdk import (
+        EXECUTION_KEYS as EXECUTION_KEYS,
     )
-    path = cache / hashlib.sha1(TOKENIZER_URL.encode()).hexdigest()
-    if (
-        not path.exists()
-        or hashlib.sha256(path.read_bytes()).hexdigest() != TOKENIZER_SHA256
-    ):
-        # A socket timeout alone resets between reads; a child process gives
-        # the complete download a hard wall-clock deadline.
-        download = (
-            "import sys,urllib.request; "
-            "r=urllib.request.urlopen(sys.argv[1],timeout=10); "
-            "sys.stdout.buffer.write(r.read(2000001))"
-        )
-        data = subprocess.check_output(
-            [sys.executable, "-c", download, TOKENIZER_URL],
-            timeout=25,
-        )
-        if (
-            len(data) > 2_000_000
-            or hashlib.sha256(data).hexdigest() != TOKENIZER_SHA256
-        ):
-            raise ValueError("tokenizer download checksum mismatch")
-        cache.mkdir(parents=True, exist_ok=True)
-        temporary = cache / (path.name + ".download")
-        temporary.write_bytes(data)
-        temporary.replace(path)
-    return {"mode": mode, "cache_dir": str(cache), "sha256": TOKENIZER_SHA256}
-
-
-def safe_path(workspace: Path, value: str) -> Path:
-    """Reject traversal and every symlink component before touching a file."""
-    root = workspace.resolve(strict=True)
-    requested = Path(value)
-    if ".." in requested.parts:
-        raise ValueError("parent traversal is forbidden")
-    candidate = requested if requested.is_absolute() else root / requested
-    try:
-        relative = candidate.relative_to(root)
-    except ValueError as exc:
-        raise ValueError("path is outside the task workspace") from exc
-    current = root
-    for part in relative.parts:
-        current /= part
-        if current.is_symlink():
-            raise ValueError("symbolic links are forbidden in task workspaces")
-    if not candidate.resolve(strict=False).is_relative_to(root):
-        raise ValueError("resolved path is outside the task workspace")
-    return candidate
-
-
-def snapshot_files(workspace: Path) -> dict[str, str]:
-    """Read the task state independently of the Agent's reported answer."""
-    result: dict[str, str] = {}
-    for path in sorted(workspace.rglob("*")):
-        safe_path(workspace, str(path))
-        if path.is_file():
-            if path.stat().st_size > 2_000_000:
-                raise ValueError("task file exceeds the 2 MB evidence limit")
-            with path.open(encoding="utf-8", newline="") as stream:
-                result[path.relative_to(workspace).as_posix()] = stream.read()
-    return result
-
-
-def execution_projection(task: dict[str, Any]) -> dict[str, Any]:
-    """Fail closed: callers must remove all oracle/reference material first."""
-    unexpected = set(task) - EXECUTION_KEYS
-    if unexpected:
-        raise ValueError(f"non-execution task fields: {', '.join(sorted(unexpected))}")
-    allowed = set(task.get("allowed_tools", FILE_TOOLS))
-    if not allowed or not allowed <= FILE_TOOLS:
-        raise ValueError("only the four benchmark filesystem tools are permitted")
-    if not isinstance(task.get("prompt"), str) or not task["prompt"].strip():
-        raise ValueError("task prompt must be non-empty text")
-    return json.loads(json.dumps(task, ensure_ascii=False))
-
-
-def runtime_identity(config: dict[str, Any]) -> dict[str, Any]:
-    root = Path(config["nanobot_root"]).expanduser().resolve(strict=True)
-    commit = subprocess.check_output(
-        ["git", "-C", str(root), "rev-parse", "HEAD"],
-        text=True,
-    ).strip()
-    if __package__:
-        from .inspect_docker import source_digest, source_files
-    else:  # Optional workers import this module under their own interpreter.
-        from inspect_docker import source_digest, source_files
-
-    source_hash = source_digest(source_files(root))
-    return {
-        "agent": "nanobot",
-        "source_commit": commit,
-        "working_tree_sha256": source_hash,
-        "source_dirty": bool(
-            subprocess.check_output(
-                ["git", "-C", str(root), "status", "--porcelain"],
-                text=True,
-            ).strip()
-        ),
-        "model": config["model"],
-        "base_url": config.get("base_url"),
-        "temperature": config.get("temperature", 0),
-        "max_tokens": config.get("max_tokens", 2048),
-        "max_steps": config.get("max_steps", 12),
-        "variant": config.get("variant", "baseline"),
-        "adapter_version": "nanobot-inspect-bridge-v2",
-        "isolation": "docker"
-        if config.get("sandbox", "docker") == "docker"
-        else "local-no-os-isolation",
-        "tokenizer_mode": config.get("tokenizer_mode", "cl100k_base"),
-        "tokenizer_sha256": TOKENIZER_SHA256
-        if config.get("tokenizer_mode", "cl100k_base") == "cl100k_base"
-        else None,
-        "extra_body": config.get("extra_body", {}),
-    }
+    from ..integrations.nanobot.nanobot_sdk import (
+        FILE_TOOLS as FILE_TOOLS,
+    )
+    from ..integrations.nanobot.nanobot_sdk import (
+        TOKENIZER_SHA256 as TOKENIZER_SHA256,
+    )
+    from ..integrations.nanobot.nanobot_sdk import (
+        TOKENIZER_URL as TOKENIZER_URL,
+    )
+    from ..integrations.nanobot.nanobot_sdk import (
+        execution_projection as execution_projection,
+    )
+    from ..integrations.nanobot.nanobot_sdk import (
+        prepare_tokenizer as prepare_tokenizer,
+    )
+    from ..integrations.nanobot.nanobot_sdk import (
+        runtime_identity as runtime_identity,
+    )
+    from ..integrations.nanobot.nanobot_sdk import (
+        utc_now as utc_now,
+    )
+else:
+    # 源码树下的独立解释器与扁平 Docker bundle 使用同一组标准库模块。
+    framework = Path(__file__).resolve().parent.parent
+    for directory in (framework / "environments", framework / "integrations/nanobot"):
+        if directory.is_dir():
+            sys.path.insert(0, str(directory))
+    from local_files import safe_path as safe_path
+    from local_files import snapshot_files as snapshot_files
+    from nanobot_sdk import (
+        EXECUTION_KEYS as EXECUTION_KEYS,
+    )
+    from nanobot_sdk import (
+        FILE_TOOLS as FILE_TOOLS,
+    )
+    from nanobot_sdk import (
+        TOKENIZER_SHA256 as TOKENIZER_SHA256,
+    )
+    from nanobot_sdk import (
+        TOKENIZER_URL as TOKENIZER_URL,
+    )
+    from nanobot_sdk import (
+        execution_projection as execution_projection,
+    )
+    from nanobot_sdk import (
+        prepare_tokenizer as prepare_tokenizer,
+    )
+    from nanobot_sdk import (
+        runtime_identity as runtime_identity,
+    )
+    from nanobot_sdk import (
+        utc_now as utc_now,
+    )
 
 
 async def execute_task(

@@ -91,6 +91,7 @@ class MiniAgentDomain:
             "observation_assertions.py",
             "benchmark/mini_scoring.py",
             "benchmark/provider_tasks.py",
+            "benchmark/datasets/io.py",
             "benchmark/domain.py",
         )
         return {

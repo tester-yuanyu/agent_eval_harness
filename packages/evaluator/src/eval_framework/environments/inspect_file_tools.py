@@ -42,7 +42,11 @@ class InspectFileToolsEnvironment:
         if self.docker:
             self.process_env["PATH"] = "/usr/local/bin:/usr/bin:/bin"
         self.process_env.update(
-            PYTHONPATH=os.pathsep.join([self.root, self.harness]), PYTHONUNBUFFERED="1"
+            PYTHONPATH=os.pathsep.join(
+                [self.root, self.harness]
+                + ([] if self.docker else [str(Path(__file__).parent)])
+            ),
+            PYTHONUNBUFFERED="1",
         )
         self.workspace: str | None = None
         self.runtime_dir: str | None = None
@@ -116,7 +120,7 @@ class InspectFileToolsEnvironment:
                 "command": [
                     self.python,
                     "-c",
-                    "import json,sys; from nanobot_runtime import snapshot_files; "
+                    "import json,sys; from local_files import snapshot_files; "
                     "from pathlib import Path; "
                     "print(json.dumps(snapshot_files(Path(sys.argv[1])),ensure_ascii=False))",
                     self.workspace,
@@ -138,7 +142,7 @@ class InspectFileToolsEnvironment:
 
 _RESET_SCRIPT = """import json,sys,shutil
 from pathlib import Path
-from nanobot_runtime import safe_path
+from local_files import safe_path
 root = Path(sys.argv[1])
 fixtures = json.load(sys.stdin)
 for name in fixtures:

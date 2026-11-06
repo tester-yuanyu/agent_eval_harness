@@ -6,7 +6,7 @@ import tempfile
 from pathlib import Path, PurePosixPath
 from typing import Any
 
-from ..benchmark.nanobot_runtime import safe_path, snapshot_files
+from .local_files import safe_path, snapshot_files
 
 
 def validate_fixtures(initial_state: dict[str, str]) -> dict[str, str]:

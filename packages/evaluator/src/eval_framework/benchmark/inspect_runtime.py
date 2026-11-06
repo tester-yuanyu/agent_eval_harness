@@ -87,7 +87,7 @@ async def execute_boundary(
         and not model_name.startswith("mockllm/")
         and not os.environ.get(key_name)
     ):
-        from .nanobot_runtime import snapshot_files
+        from ..environments.local_files import snapshot_files
 
         before = snapshot_files(workspace) if workspace else None
         return {
@@ -127,7 +127,7 @@ async def _standalone(
     from inspect_ai.dataset import Sample
     from inspect_ai.solver import solver
 
-    from .nanobot_runtime import safe_path, snapshot_files
+    from ..environments.local_files import safe_path, snapshot_files
 
     workspace = workspace.resolve(strict=True)
     captured = {}

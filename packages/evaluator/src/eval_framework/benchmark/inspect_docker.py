@@ -111,16 +111,9 @@ def prepare_docker_sandbox(config: dict, output: Path) -> tuple[str, str]:
     root = Path(config["nanobot_root"]).expanduser().resolve(strict=True)
     files = source_files(root)
     source_hash = source_digest(files)
-    harness = Path(__file__).parent
-    workers = {
-        name: (harness / name).read_bytes()
-        for name in [
-            "nanobot_runtime.py",
-            "nanobot_worker.py",
-            "module_worker.py",
-            "decision_worker.py",
-        ]
-    }
+    from ..integrations.nanobot.sources import worker_source_paths
+
+    workers = {name: path.read_bytes() for name, path in worker_source_paths().items()}
     worker_hash = source_digest(workers)
     recipe_hash = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
     build_hash = hashlib.sha256(

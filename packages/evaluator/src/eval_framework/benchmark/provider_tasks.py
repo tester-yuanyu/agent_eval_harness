@@ -3,17 +3,14 @@
 from __future__ import annotations
 
 import copy
-import hashlib
 import json
 from pathlib import Path
 
 from ..schemas import EvalCase
+from .datasets.io import file_sha256 as sha256
+from .datasets.io import read_jsonl_bytes
 
 CONTRACT = "provider-tasks-v1"
-
-
-def sha256(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
 def provider_dataset_identity(root: Path) -> dict:
@@ -60,11 +57,7 @@ def public_execution(task: dict) -> dict:
 
 def load_provider_tasks(root: Path) -> list[dict]:
     identity = provider_dataset_identity(root)
-    tasks = [
-        json.loads(line)
-        for line in (Path(root) / "tasks.jsonl").read_text().splitlines()
-        if line.strip()
-    ]
+    tasks = read_jsonl_bytes((Path(root) / "tasks.jsonl").read_bytes())
     if len(tasks) != identity["task_count"] or len({t["id"] for t in tasks}) != len(
         tasks
     ):

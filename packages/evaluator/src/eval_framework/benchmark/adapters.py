@@ -15,6 +15,8 @@ class NanobotRuntimeAdapter:
         self.config = dict(config)
 
     def fingerprint_sources(self) -> list[Path]:
+        from ..integrations.nanobot.sources import integration_source_paths
+
         root = Path(__file__).parent
         return [
             root / name
@@ -29,7 +31,7 @@ class NanobotRuntimeAdapter:
                 "inspect_runtime.py",
                 "inspect_docker.py",
             )
-        ]
+        ] + list(integration_source_paths().values())
 
     def runtime_identity(self, mode: str | None = None) -> dict[str, Any]:
         from .decision_runtime import decision_identity

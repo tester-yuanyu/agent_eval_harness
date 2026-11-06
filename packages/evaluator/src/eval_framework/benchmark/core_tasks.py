@@ -266,6 +266,8 @@ def core_execution_task(task: dict[str, Any]) -> dict[str, Any]:
 
 
 def _read_dataset(path: Path) -> tuple[list[dict], dict, str]:
+    from .datasets.io import read_jsonl_bytes
+
     path = Path(path)
     if path.is_dir():
         path = path / "tasks.jsonl"
@@ -279,9 +281,7 @@ def _read_dataset(path: Path) -> tuple[list[dict], dict, str]:
         or manifest.get("contract_version") != CONTRACT_VERSION
     ):
         _fail("Dataset identity/version mismatch")
-    tasks = [
-        json.loads(line) for line in raw.decode("utf-8").splitlines() if line.strip()
-    ]
+    tasks = read_jsonl_bytes(raw)
     ids, families = set(), {}
     for task in tasks:
         validate_core_task(task)

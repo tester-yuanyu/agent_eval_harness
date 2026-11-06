@@ -18,7 +18,7 @@ class ReferenceScorer:
         final_state: dict[str, Any],
         task: dict[str, Any],
     ) -> dict[str, Any]:
-        from ..oracle import reference_observation
+        from .reference_runner import reference_observation
 
         observation = observation_from_evidence(trace, final_state)
         result: dict[str, Any] = {

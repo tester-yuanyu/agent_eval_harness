@@ -137,7 +137,9 @@ def _profiles() -> dict:
             # Bind the extracted closure as well as the historical entry files.
             for label in layer_source_paths():
                 package = (
-                    "contracts" if label.startswith("eval_contracts/") else "evaluator"
+                    "contracts"
+                    if label.startswith(("eval_contracts/", "capability_snapshot_kit/"))
+                    else "evaluator"
                 )
                 relative = f"packages/{package}/src/{label}"
                 path = _REPO_ROOT / relative
