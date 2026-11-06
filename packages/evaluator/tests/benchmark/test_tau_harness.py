@@ -340,7 +340,18 @@ class SavedLangfuse:
             except (TypeError, ValueError):
                 return value
 
-        return {a.key: decode(a.value.string_value) for a in span.attributes}
+        structured = {
+            "langfuse.observation.input",
+            "langfuse.observation.output",
+            "langfuse.observation.metadata",
+            "langfuse.observation.usage_details",
+        }
+        return {
+            a.key: decode(a.value.string_value)
+            if a.key in structured
+            else a.value.string_value
+            for a in span.attributes
+        }
 
     def observation_page(self, **kwargs):
         from datetime import UTC, datetime
@@ -695,3 +706,33 @@ def test_tau_source_hash_dependency_drift_aborts_export(
         module.run_tau_harness(config, output)
     assert not (output / "results.json").exists()
     assert (output / "official/summary.json").exists()
+
+
+@pytest.mark.parametrize("span_id", ["1234567890123456", "5347207e68077799"])
+def test_saved_langfuse_keeps_numeric_looking_identifiers_as_strings(span_id):
+    client = SavedLangfuse()
+    client.spans = [
+        SimpleNamespace(
+            span_id=span_id,
+            attributes=[
+                SimpleNamespace(
+                    key="langfuse.experiment.id",
+                    value=SimpleNamespace(string_value="experiment"),
+                ),
+                SimpleNamespace(
+                    key="langfuse.experiment.item.root_observation_id",
+                    value=SimpleNamespace(string_value=span_id),
+                ),
+                SimpleNamespace(
+                    key="langfuse.observation.input",
+                    value=SimpleNamespace(string_value='{"tool":"read_file"}'),
+                ),
+            ],
+        )
+    ]
+    assert client.experiment_page("experiment").model_dump()["data"] == [
+        {"id": span_id}
+    ]
+    assert client.attrs(client.spans[0])["langfuse.observation.input"] == {
+        "tool": "read_file"
+    }
