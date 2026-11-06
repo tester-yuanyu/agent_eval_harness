@@ -43,3 +43,27 @@ def test_old_and_new_native_metric_worker_share_entrypoint():
     from eval_framework.benchmark.scorers import agentic_metrics_worker as current
 
     assert legacy.main is current.main
+
+
+def test_legacy_response_judge_override_remains_effective(monkeypatch):
+    from eval_framework.benchmark import metrics
+
+    calls = []
+
+    class OfflineJudge:
+        def __init__(self, config):
+            calls.append(config)
+            raise RuntimeError("offline override reached")
+
+    monkeypatch.setattr(metrics, "OpenAICompatibleJudge", OfflineJudge)
+    result = metrics.score_response({}, {}, {})
+    assert calls == [{}]
+    assert result["score"] is None
+    assert result["formal"] is False
+    assert result["errors"] == [
+        {
+            "kind": "scoring",
+            "code": "JUDGE_ERROR",
+            "message": "Optional judge failed: RuntimeError",
+        }
+    ]

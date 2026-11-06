@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from collections.abc import Callable
 from importlib.metadata import version
 from typing import Any
 
@@ -16,7 +17,11 @@ RESPONSE_RUBRIC_VERSION = "file-tools-response-diagnostic-v1"
 
 
 def score_response(
-    task: dict[str, Any], observation: dict[str, Any], model_config: dict[str, Any]
+    task: dict[str, Any],
+    observation: dict[str, Any],
+    model_config: dict[str, Any],
+    *,
+    _judge_factory: Callable[[dict[str, Any]], Any] | None = None,
 ) -> dict[str, Any]:
     """Run optional, uncalibrated G-Eval; never change the formal task verdict.
 
@@ -40,7 +45,7 @@ def score_response(
     }
     judge = None
     try:
-        judge = OpenAICompatibleJudge(model_config)
+        judge = (_judge_factory or OpenAICompatibleJudge)(model_config)
         metric = GEval(
             name="Response Groundedness",
             model=judge,

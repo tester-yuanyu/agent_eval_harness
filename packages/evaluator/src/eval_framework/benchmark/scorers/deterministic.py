@@ -19,7 +19,7 @@ from .diagnostics import diagnostic as _diagnostic
 from .executable import ExecutableScorer
 from .judge_client import OpenAICompatibleJudge as OpenAICompatibleJudge
 from .response import RESPONSE_RUBRIC_VERSION as RESPONSE_RUBRIC_VERSION
-from .response import score_response as score_response
+from .response import score_response as _score_response
 
 METRICS_VERSION = "file-tools-deepeval-v2.3"
 
@@ -411,3 +411,12 @@ def score_task(task: dict[str, Any], observation: dict[str, Any]) -> dict[str, A
     else:
         result["verdict"] = "PASS"
     return result
+
+
+def score_response(
+    task: dict[str, Any], observation: dict[str, Any], model_config: dict[str, Any]
+) -> dict[str, Any]:
+    """保留旧 metrics 客户端替换边界，评分算法只在 response 中实现。"""
+    return _score_response(
+        task, observation, model_config, _judge_factory=OpenAICompatibleJudge
+    )
