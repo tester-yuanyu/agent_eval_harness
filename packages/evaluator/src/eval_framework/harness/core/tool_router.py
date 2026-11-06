@@ -2,7 +2,7 @@
 
 from copy import deepcopy
 from dataclasses import dataclass
-from typing import Any, Protocol
+from typing import Any
 from uuid import uuid4
 
 from inspect_ai.log import transcript
@@ -10,21 +10,15 @@ from inspect_ai.model import ChatMessageAssistant, ChatMessageTool, execute_tool
 from inspect_ai.tool import ToolCall, ToolDef, ToolError, ToolInfo, ToolParams
 from jsonschema.validators import validator_for
 
-
-class Environment(Protocol):
-    def tool_schemas(self) -> list[dict[str, Any]]: ...
-    async def reset(self, initial_state: dict[str, Any]) -> None: ...
-    async def step(self, name: str, arguments: dict[str, Any]) -> str: ...
-    async def snapshot(self) -> dict[str, Any]: ...
-    async def teardown(self) -> None: ...
-
-
-class EnvironmentFailure(RuntimeError):
-    """Infrastructure failures must not be presented as model argument errors."""
-
-
-class ToolExecutionError(ValueError):
-    """Expected domain error, safe to feed back to the agent for recovery."""
+from ...environments.base.protocol import (
+    Environment as Environment,
+)
+from ...environments.base.protocol import (
+    EnvironmentFailure as EnvironmentFailure,
+)
+from ...environments.base.protocol import (
+    ToolExecutionError as ToolExecutionError,
+)
 
 
 @dataclass(frozen=True)

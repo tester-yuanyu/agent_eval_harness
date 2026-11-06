@@ -5,6 +5,7 @@ from copy import deepcopy
 import anyio
 from inspect_ai.model import ChatMessageUser
 
+from ...environments.base.protocol import Environment
 from ..adapters.agent.base import BaseAgent
 from ..user_simulator import FixedFollowupUserSimulator
 from .session_state import SessionState
@@ -16,7 +17,7 @@ from .stop_conditions import (
     ToolCallLimit,
     first_stop,
 )
-from .tool_router import Environment, ToolRouter, business_info
+from .tool_router import ToolRouter, business_info
 
 
 async def run_agent_loop(

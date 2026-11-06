@@ -12,10 +12,11 @@ from inspect_ai.log import transcript
 from inspect_ai.model import ChatMessageSystem
 from inspect_ai.solver import Generate, Solver, TaskState, solver
 
-from ...environments.sandbox_files import SandboxFilesEnvironment
+from ...environments import SandboxFilesEnvironment
+from ...environments.base.protocol import Environment
 from ..core.agent_loop import run_agent_loop
 from ..core.session_state import SessionState
-from ..core.tool_router import Environment, ToolRouter, business_info
+from ..core.tool_router import ToolRouter, business_info
 from ..prompts import render_prompt
 from ..trace.timeline_extractor import extract_timeline
 from ..user_simulator import FixedFollowupUserSimulator
