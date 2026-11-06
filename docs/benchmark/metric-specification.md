@@ -157,7 +157,7 @@ Judge 汇总公式如下。设总记录数为 `N`，`NA` 为 `NOT_APPLICABLE` �
 
 ## 8. 版本、身份与可追溯证据
 
-每次运行应保存数据集 Hash、任务契约与 Oracle 版本、Harness 版本及源码 Hash、评分版本、DeepEval 库版本、配置和来源结果 Hash。评分源码身份当前覆盖 `metrics.py`、`oracle.py`、`tasks.py`、`trajectory.py`、`module_oracle.py`、`recovery_scoring.py`、`repetition.py`。v2.2 增加重复候选诊断，正式规则沿用 v2.1；新执行或复评使用新身份，不改写旧结果。
+每次运行应保存数据集 Hash、任务契约与 Oracle 版本、Harness 版本及源码 Hash、评分版本、DeepEval 库版本、配置和来源结果 Hash。评分源码身份保留原有文件标签，并通过 `layer_sources.layer_source_paths()` 纳入领域、数据读取、scorers、Environment、Harness、集成模块及共享摘要实现的源码闭包。2026-11-06 职责迁移只生成新的运行/评分源码身份，不改写历史身份或冻结数据。v2.2 增加重复候选诊断，正式规则沿用 v2.1；新执行或复评使用新身份，不改写旧结果。
 
 常规 `report` 命令读取保存的 `results.json` 与 Inspect 日志，默认用官方 bundle API 生成原生查看器；没有日志的历史/事后评分目录保持 domain 报告兼容，不重新执行 Agent 或指标。`quality-audit` 会对保存轨迹计算重复候选诊断，输出到新目录，不执行 Agent、不调用模型、不改写原始评分。分数必须能通过 `event_id`/`evidence_ids` 回到原事件；Judge 还保存 `metric_id`、rubric Hash、Judge 版本、模型调用事件和来源运行 Hash。可变别名必须在正式使用前解析为固定资产身份。
 
