@@ -17,10 +17,12 @@ def worker_source_paths() -> dict[str, Path]:
     }
     paths["nanobot_sdk.py"] = Path(__file__).with_name("nanobot_sdk.py")
     paths["local_files.py"] = root / "environments/local_files.py"
+    paths["_fs_utils.py"] = root / "environments/_fs_utils.py"
     return paths
 
 
 def integration_source_paths() -> dict[str, Path]:
     root = Path(__file__).resolve().parents[2]
     paths = [*worker_source_paths().values(), Path(__file__)]
+    paths.extend(sorted(Path(__file__).with_name("environments").rglob("*.py")))
     return {"eval_framework/" + p.relative_to(root).as_posix(): p for p in paths}

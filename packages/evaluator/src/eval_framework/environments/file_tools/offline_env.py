@@ -6,7 +6,7 @@ import tempfile
 from pathlib import Path, PurePosixPath
 from typing import Any
 
-from .local_files import safe_path, snapshot_files
+from .._fs_utils import safe_path, snapshot_files
 
 
 def validate_fixtures(initial_state: dict[str, str]) -> dict[str, str]:
@@ -26,8 +26,8 @@ class FileToolsEnvironment:
 
     ``reset`` accepts a bare ``{relative_path: text}`` map. TaskSpec callers
     explicitly pass ``task.initial_state["files"]`` at this domain boundary.
-    These deterministic operations are for the public framework loop. Existing
-    nanobot module tests continue to execute nanobot's own tools in its worker.
+    This synchronous API is retained for offline tests and legacy callers.
+    The production Harness uses SandboxFilesEnvironment.
     """
 
     def __init__(self, *, parent: Path | None = None) -> None:
