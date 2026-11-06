@@ -46,6 +46,31 @@ def analysis_sources_identity() -> dict:
     return hashes
 
 
+def _judge_coverage(source):
+    rows = source["judge_trials"]
+    statuses = [
+        {
+            m.get("status", "MISSING")
+            for m in r["assessment"].get("metrics", [])
+            if m.get("formal") is False and "judge_repeat" in m
+        }
+        for r in rows
+    ]
+    planned = len(source.get("judge_plan", []))
+    return {
+        "planned_trials": planned,
+        "observed_trials": len(rows),
+        "missing_trials": planned - len(rows),
+        "scored_trials": sum("SCORED" in group for group in statuses),
+        "error_trials": sum("ERROR" in group for group in statuses),
+        "not_applicable_only_trials": sum(
+            group == {"NOT_APPLICABLE"} for group in statuses
+        ),
+        "without_metrics_trials": sum(not group for group in statuses),
+        "metric_status_counts_overlap": True,
+    }
+
+
 def analyze_run(
     source: dict, *, dataset: dict, annotations=None, policy: AnalysisPolicy
 ) -> dict:
@@ -88,10 +113,7 @@ def analyze_run(
             population, ks=policy.ks, repeat_protocol=policy.repeat_protocol
         ),
         "efficiency": efficiency(population),
-        "judge_coverage": {
-            "scored_trials": len(source["judge_trials"]),
-            "planned_trials": len(population["trials"]),
-        },
+        "judge_coverage": _judge_coverage(source),
         "availability": {
             "reliability": "available",
             "efficiency": "available",

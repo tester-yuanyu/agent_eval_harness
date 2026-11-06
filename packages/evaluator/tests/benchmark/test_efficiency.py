@@ -100,3 +100,40 @@ def test_missing_usage_in_a_recorded_call_is_not_zero(tmp_path):
     assert result["total_tokens"]["known_subtotal"] is None
     assert result["generation_calls"]["known_subtotal"] == 1
     assert result["tool_calls"]["known_subtotal"] == 0
+
+
+def test_judge_error_with_unknown_requests_does_not_report_zero_cost(tmp_path):
+    from eval_framework.aggregator.efficiency import efficiency
+
+    pop = cost_population(tmp_path)
+    pop["trials"] = pop["trials"][:1]
+    judge = deepcopy(pop["trials"][0]["record"])
+    judge["assessment"]["metrics"] = [
+        {
+            "formal": False,
+            "judge_repeat": 1,
+            "status": "ERROR",
+            "model_requests_unknown": True,
+            "events": [],
+        }
+    ]
+    pop["judge_trials"] = [judge]
+    result = efficiency(pop)["by_layer"]["e2e"]["judge"]
+    assert result["cost_usd"]["known_count"] == 0
+    assert result["generation_calls"]["known_subtotal"] is None
+
+
+def test_judge_missing_planned_trials_remain_in_coverage(tmp_path):
+    from eval_framework.aggregator.efficiency import efficiency
+
+    pop = cost_population(tmp_path)
+    pop["judge_plan"] = [["a", 1], ["a", 2], ["a", 3]]
+    judge = deepcopy(pop["trials"][0]["record"])
+    judge["observation"]["events"] = [
+        {"type": "generation", "is_judge": True, "usage": {"cost_usd": 2}}
+    ]
+    pop["judge_trials"] = [judge]
+    value = efficiency(pop)["by_layer"]["e2e"]["judge"]["cost_usd"]
+    assert value["coverage"]["known_trials"] == 1
+    assert value["coverage"]["planned_trials"] == 3
+    assert value["total"] is None

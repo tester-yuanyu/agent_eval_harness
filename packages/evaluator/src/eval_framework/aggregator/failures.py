@@ -101,9 +101,7 @@ def classify_failure(trial: dict | None) -> dict:
                     continue
                 name = check.get("name", "")
                 for prefix, label in CHECK_RULES:
-                    if (
-                        name == prefix or name.startswith((prefix + ":", prefix + "_"))
-                    ):
+                    if name == prefix or name.startswith((prefix + ":", prefix + "_")):
                         decisive.append(("agent", label, f"/assessment/{field}/{i}"))
                         break
         candidates = decisive + candidates

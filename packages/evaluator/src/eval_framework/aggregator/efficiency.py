@@ -70,6 +70,19 @@ def _measure(row: dict, owner: str) -> dict:
                 raise ValueError("duplicate event identity in usage evidence")
             seen.add(event["id"])
     calls = [e for e in events if e.get("type") == "generation" and _owner(e) == owner]
+    if owner == "judge":
+        metrics = [
+            m
+            for m in record["assessment"].get("metrics", [])
+            if m.get("formal") is False and "judge_repeat" in m
+        ]
+        complete = complete and not any(
+            m.get("model_requests_unknown") is True for m in metrics
+        )
+        if not calls and not (
+            metrics and all(m.get("status") == "NOT_APPLICABLE" for m in metrics)
+        ):
+            complete = False
     usage = observation.get("usage") or {}
     if not isinstance(usage, dict):
         raise ValueError("usage must be an object")
@@ -151,14 +164,15 @@ def _summary(rows, values):
 def efficiency(population: dict) -> dict:
     by_layer = {}
     judge = {(r["case_id"], r["trial"]): r for r in population.get("judge_trials", [])}
+    judge_plan = set(map(tuple, population.get("judge_plan") or judge.keys()))
     for layer in sorted({r["layer"] for r in population["trials"]}):
         rows = [r for r in population["trials"] if r["layer"] == layer]
         owners = {
             "agent": rows,
             "judge": [
-                {**r, "record": judge[r["case_id"], r["trial"]]}
+                {**r, "record": judge.get((r["case_id"], r["trial"]))}
                 for r in rows
-                if (r["case_id"], r["trial"]) in judge
+                if (r["case_id"], r["trial"]) in judge_plan
             ],
             "user_simulator": [
                 r

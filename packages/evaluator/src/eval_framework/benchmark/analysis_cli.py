@@ -24,6 +24,9 @@ def add_commands(sub):
     parser.add_argument("--annotations", type=Path)
     parser.add_argument("--k", type=int, nargs="+", default=[1, 3, 5])
     parser.add_argument("--repeat-protocol", type=Path)
+    parser.add_argument("--compare-with", type=Path)
+    parser.add_argument("--comparison-dataset", type=Path)
+    parser.add_argument("--experiment-spec", type=Path)
 
 
 def execute(args):
@@ -68,5 +71,10 @@ def execute(args):
             policy=policy,
             source_artifacts=tuple(args.source_artifact),
             judge_dir=args.judge_source,
+            compare_with=args.compare_with,
+            comparison_dataset_path=args.comparison_dataset,
+            experiment_spec=read_json(args.experiment_spec)[0]
+            if args.experiment_spec
+            else None,
         ).items()
     }

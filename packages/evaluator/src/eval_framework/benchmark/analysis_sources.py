@@ -60,6 +60,8 @@ def _rows(result: dict) -> dict[tuple[str, int], dict]:
         raise ValueError("missing source trials")
     rows = {}
     for row in result["trials"]:
+        if not isinstance(row, dict):
+            raise ValueError("source trial must be an object")
         case, trial = row.get("case_id"), row.get("trial")
         if (
             case not in cases
@@ -89,6 +91,8 @@ def _rows(result: dict) -> dict[tuple[str, int], dict]:
 def _operation(result: dict) -> tuple[str, dict]:
     provenance = result.get("provenance", {})
     regrade = result.get("regrade", {})
+    if not isinstance(provenance, dict) or not isinstance(regrade, dict):
+        raise ValueError("source provenance must be an object")
     if provenance.get("operation") == "judge_saved_evidence":
         return "judge", provenance
     if regrade.get("operation") == "regrade_saved_evidence":
@@ -106,6 +110,16 @@ def _verify_edge(child: dict, parent: dict, kind: str, provenance: dict) -> None
         != provenance["source_results_sha256"]
     ):
         raise ValueError("source provenance identity mismatch")
+    permitted = {"source_results_sha256"}
+    permitted.update(
+        {"scoring_version", "scoring_identity"}
+        if kind == "regrade"
+        else {"case_ids", "judge_config", "judge_repeats", "judge_source"}
+    )
+    if {k: v for k, v in child["identity"].items() if k not in permitted} != {
+        k: v for k, v in parent["identity"].items() if k not in permitted
+    }:
+        raise ValueError("source execution identity changed")
     before, after = _rows(parent), _rows(child)
     if child["trials_per_case"] != parent["trials_per_case"]:
         raise ValueError("source repeat plan changed")
@@ -216,6 +230,7 @@ def load_analysis_source(
         )
     execution = resolve(selected_hash)
     judge_trials = []
+    judge_plan = []
     if judge_hash:
         if (
             _operation(pool[judge_hash])[0] != "judge"
@@ -223,6 +238,11 @@ def load_analysis_source(
         ):
             raise ValueError("judge source belongs to another execution")
         judge_trials = pool[judge_hash]["trials"]
+        judge_plan = [
+            [case, trial]
+            for case in pool[judge_hash]["planned_case_ids"]
+            for trial in range(1, pool[judge_hash]["trials_per_case"] + 1)
+        ]
     keys = [
         [execution["run_id"], execution["identity_hash"], *key]
         for key in _rows(execution)
@@ -234,4 +254,5 @@ def load_analysis_source(
         "verified_source_hashes": sorted(verified),
         "selected_sha256": selected_hash,
         "judge_trials": judge_trials,
+        "judge_plan": judge_plan,
     }
