@@ -24,6 +24,7 @@ def analysis_sources_identity() -> dict:
             *Path(__file__).parent.glob("*.py"),
             *root.glob("benchmark/analysis*.py"),
             *root.glob("benchmark/datasets/*.py"),
+            *root.glob("benchmark/datasets/*.json"),
             *root.glob("benchmark/domains/*.py"),
             *(
                 root / "benchmark" / n
@@ -90,6 +91,9 @@ def analyze_run(
     }
     identity["dataset_binding_sha256"] = dataset.get("dataset_sha256")
     identity["annotations_sha256"] = annotations.content_sha256 if annotations else None
+    identity["annotation_registry_sha256"] = (
+        annotations.registry_sha256 if annotations else None
+    )
     execution = source["execution_result"]
     return {
         "identity": identity,

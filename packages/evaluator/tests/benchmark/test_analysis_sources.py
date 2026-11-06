@@ -159,3 +159,22 @@ def test_attached_judge_error_and_missing_trial_are_not_scored(tmp_path):
     assert result["judge_coverage"]["error_trials"] == 1
     assert result["judge_coverage"]["missing_trials"] == 1
     assert result["layers"]["e2e"]["planned_trials"] == 6
+
+
+@pytest.mark.parametrize("marker", ["identity", "row"])
+def test_orphan_derived_markers_cannot_become_an_execution(tmp_path, marker):
+    from eval_framework.benchmark.analysis_sources import load_analysis_source
+
+    result = run()
+    if marker == "identity":
+        result["identity"]["source_results_sha256"] = "0" * 64
+        result["identity_hash"] = sha256_json(result["identity"])
+        for row in result["trials"]:
+            row["identity_hash"] = result["identity_hash"]
+    else:
+        result["trials"][0]["source_trial_sha256"] = "0" * 64
+        result["trials"][0]["source_assessment"] = deepcopy(
+            result["trials"][0]["assessment"]
+        )
+    with pytest.raises(ValueError, match="provenance"):
+        load_analysis_source(save(tmp_path / "orphan", result))

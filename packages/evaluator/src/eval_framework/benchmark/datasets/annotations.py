@@ -43,14 +43,66 @@ class AnnotationSet:
     records: list[dict]
     content_sha256: str
     missing_case_ids: list[str]
+    registry_sha256: str | None = None
+    registration_status: str = "unregistered"
 
 
 def public_labels(annotation: dict) -> dict:
     return {k: annotation[k] for k in ("capabilities", "difficulty", "review_status")}
 
 
+def _verify_version(
+    manifest, content_hash, registry_path=None, *, allow_unregistered=False
+):
+    registry, registry_hash = read_json(
+        registry_path or Path(__file__).with_name("annotation_versions.json")
+    )
+    if registry.get("format_version") != "benchmark-annotation-registry-v1":
+        raise ValueError("unsupported annotation version registry")
+    entry = (
+        registry.get("datasets", {})
+        .get(manifest.get("dataset_id"), {})
+        .get(manifest["annotation_version"])
+    )
+    if registry_path is not None:
+        bundled, bundled_hash = read_json(
+            Path(__file__).with_name("annotation_versions.json")
+        )
+        registered = (
+            bundled["datasets"]
+            .get(manifest.get("dataset_id"), {})
+            .get(manifest["annotation_version"])
+        )
+        if registered is not None:
+            if entry is not None and entry != registered:
+                raise ValueError(
+                    "annotation version registry cannot rebind a published version"
+                )
+            entry = registered
+        registry_hash = sha256_json(
+            {"bundled": bundled_hash, "external": registry_hash}
+        )
+    if entry is None:
+        if allow_unregistered:
+            return registry_hash, "unregistered"
+        raise ValueError(
+            "annotation version is not registered; publish an immutable registry entry"
+        )
+    if entry != {
+        "dataset_sha256": manifest["dataset_sha256"],
+        "content_sha256": content_hash,
+    }:
+        raise ValueError("annotation version content differs from registered binding")
+    return registry_hash, "registered"
+
+
 def load_annotations(
-    path: Path, *, dataset_binding: dict, case_ids: set[str]
+    path: Path,
+    *,
+    dataset_binding: dict,
+    case_ids: set[str],
+    registry_path: Path | None = None,
+    allow_unregistered: bool = False,
 ) -> AnnotationSet:
     path = Path(path)
     manifest, manifest_hash = read_json(path / "manifest.json")
@@ -98,16 +150,26 @@ def load_annotations(
         or manifest.get("review_status") != status
     ):
         raise ValueError("annotation count/review status mismatch")
+    content_hash = sha256_json({"manifest.json": manifest_hash, **hashes})
+    registry_hash, registration_status = _verify_version(
+        manifest, content_hash, registry_path, allow_unregistered=allow_unregistered
+    )
     return AnnotationSet(
         manifest,
         records,
-        sha256_json({"manifest.json": manifest_hash, **hashes}),
+        content_hash,
         sorted(case_ids - seen),
+        registry_hash,
+        registration_status,
     )
 
 
 def build_annotations(
-    dataset_path: Path, output: Path, *, version: str = "1.0.0"
+    dataset_path: Path,
+    output: Path,
+    *,
+    version: str = "1.0.0",
+    registry_path: Path | None = None,
 ) -> AnnotationSet:
     output = Path(output)
     if output.exists():
@@ -138,10 +200,8 @@ def build_annotations(
         "annotation_version": version,
         "taxonomy_version": TAXONOMY["taxonomy_version"],
         "dataset_id": dataset["legacy_identity"].get("dataset_id"),
-        
-            "dataset_sha256": binding["dataset_sha256"],
-            "dataset_binding": binding["binding"]
-        ,
+        "dataset_sha256": binding["dataset_sha256"],
+        "dataset_binding": binding["binding"],
         "record_count": len(records),
         "review_status": "proposed" if records else "empty",
         "source": "deterministic_suggestions_pending_human_review",
@@ -154,13 +214,24 @@ def build_annotations(
             "taxonomy.json": hashlib.sha256(taxonomy.encode()).hexdigest(),
         },
     }
+    manifest_text = (
+        json.dumps(manifest, ensure_ascii=False, sort_keys=True, indent=2) + "\n"
+    )
+    content_hash = sha256_json(
+        {
+            "manifest.json": hashlib.sha256(manifest_text.encode()).hexdigest(),
+            **manifest["files"],
+        }
+    )
+    _verify_version(manifest, content_hash, registry_path, allow_unregistered=True)
     output.mkdir(parents=True, exist_ok=False)
     (output / "annotations.jsonl").write_text(lines, encoding="utf-8")
     (output / "taxonomy.json").write_text(taxonomy, encoding="utf-8")
-    (output / "manifest.json").write_text(
-        json.dumps(manifest, ensure_ascii=False, sort_keys=True, indent=2) + "\n",
-        encoding="utf-8",
-    )
+    (output / "manifest.json").write_text(manifest_text, encoding="utf-8")
     return load_annotations(
-        output, dataset_binding=binding, case_ids={t["id"] for t in dataset["tasks"]}
+        output,
+        dataset_binding=binding,
+        case_ids={t["id"] for t in dataset["tasks"]},
+        registry_path=registry_path,
+        allow_unregistered=True,
     )

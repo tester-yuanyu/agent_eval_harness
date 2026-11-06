@@ -7,6 +7,7 @@ def add_commands(sub):
     for name in ("annotations-build", "annotations-validate"):
         child = sub.add_parser(name, help="构建 proposed 或只读校验独立注释资产")
         child.add_argument("--dataset", type=Path, required=True)
+        child.add_argument("--annotation-registry", type=Path)
         child.add_argument(
             "--output" if name == "annotations-build" else "--annotations",
             type=Path,
@@ -22,6 +23,7 @@ def add_commands(sub):
     parser.add_argument("--source-artifact", type=Path, action="append", default=[])
     parser.add_argument("--judge-source", type=Path)
     parser.add_argument("--annotations", type=Path)
+    parser.add_argument("--annotation-registry", type=Path)
     parser.add_argument("--k", type=int, nargs="+", default=[1, 3, 5])
     parser.add_argument("--repeat-protocol", type=Path)
     parser.add_argument("--compare-with", type=Path)
@@ -36,10 +38,16 @@ def execute(args):
         from .datasets.loader import load_dataset
 
         if args.command == "annotations-build":
-            result = build_annotations(args.dataset, args.output, version=args.version)
+            result = build_annotations(
+                args.dataset,
+                args.output,
+                version=args.version,
+                registry_path=args.annotation_registry,
+            )
         else:
             result = load_annotations(
                 args.annotations,
+                registry_path=args.annotation_registry,
                 dataset_binding=build_dataset_binding(args.dataset),
                 case_ids={t["id"] for t in load_dataset(args.dataset)["tasks"]},
             )
@@ -48,6 +56,7 @@ def execute(args):
             "missing_case_ids": result.missing_case_ids,
             "content_sha256": result.content_sha256,
             "review_status": result.manifest["review_status"],
+            "registration_status": result.registration_status,
         }
 
     from eval_contracts.benchmark_analysis import AnalysisPolicy
@@ -67,6 +76,7 @@ def execute(args):
             args.run,
             dataset_path=args.dataset,
             annotations_path=args.annotations,
+            annotation_registry_path=args.annotation_registry,
             output=args.output,
             policy=policy,
             source_artifacts=tuple(args.source_artifact),

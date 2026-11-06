@@ -46,12 +46,30 @@ def _field(usage: dict, field: str):
     return value
 
 
+def _declared_owner(value, *, usage_scope=False):
+    owners = []
+    for flag, owner in (("is_judge", "judge"), ("is_user_simulator", "user_simulator")):
+        if value.get(flag) is True:
+            owners.append(owner)
+    for field in ("owner", "participant"):
+        if value.get(field) is not None:
+            owners.append(value[field])
+    usage = value.get("usage") or {}
+    if not isinstance(usage, dict):
+        raise ValueError("usage must be an object")
+    if usage.get("owner") is not None:
+        owners.append(usage["owner"])
+    if usage_scope and value.get("usage_scope") is not None:
+        owners.append(value["usage_scope"])
+    if any(owner not in {"agent", "judge", "user_simulator"} for owner in owners):
+        raise ValueError("unknown usage owner")
+    if len(set(owners)) > 1:
+        raise ValueError("conflicting usage owner markers")
+    return owners[0] if owners else None
+
+
 def _owner(event):
-    if event.get("is_judge") is True:
-        return "judge"
-    if event.get("is_user_simulator") is True or event.get("owner") == "user_simulator":
-        return "user_simulator"
-    return "agent"
+    return _declared_owner(event) or "agent"
 
 
 def _measure(row: dict, owner: str) -> dict:
@@ -89,8 +107,9 @@ def _measure(row: dict, owner: str) -> dict:
     foreign = any(
         e.get("type") == "generation" and _owner(e) != "agent" for e in events
     )
+    aggregate_owner = _declared_owner(observation, usage_scope=True)
     aggregate = owner == "agent" and (
-        not foreign or observation.get("usage_scope") == "agent"
+        aggregate_owner == "agent" or (aggregate_owner is None and not foreign)
     )
     for field in USAGE_FIELDS:
         if aggregate and usage:

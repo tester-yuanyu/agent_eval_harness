@@ -1,6 +1,7 @@
 """受控资格与探索性差异分开，绝不放宽旧 compare_runs。"""
 
 from capability_snapshot_kit.hashing import sha256_json
+from eval_contracts.benchmark_analysis import AnalysisPolicy
 
 REQUIRED_CONTROLS = (
     "dataset",
@@ -18,6 +19,17 @@ REQUIRED_CONTROLS = (
 )
 MODEL_CONFIG = {"model", "model_name", "base_url", "api_key_env"}
 RUNTIME_CONFIG = {"provider", "nanobot_root", "python", "runtime"}
+
+
+def _repeat_protocol(identity):
+    protocol = identity.get("repeat_protocol")
+    if protocol is None:
+        return None
+    try:
+        AnalysisPolicy(repeat_protocol=protocol)
+    except (ValueError, TypeError):
+        return None
+    return protocol
 
 
 def _fields(run):
@@ -50,7 +62,7 @@ def _fields(run):
         "scoring": identity.get("scoring_identity", identity.get("scoring_version")),
         "selection": run.get("planned_case_ids"),
         "repeats": run.get("trials_per_case"),
-        "repeat_protocol": identity.get("repeat_protocol"),
+        "repeat_protocol": _repeat_protocol(identity),
         "layers": layers
         if layers and all(all(v is not None for v in layer) for layer in layers)
         else None,

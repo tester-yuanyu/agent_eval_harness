@@ -69,7 +69,13 @@ python -m agent_eval_suite benchmark annotations-build \
   --output "$NEW_ANNOTATION_DIR" --version 1.1.0
 ```
 
-build 只建议 proposed，不代替人工审核；已有目录拒绝覆盖。人工审核应发布新不可变版本，不原地编辑 1.0.0。报告不输出私有 basis_refs 或结构依据文本。
+build 只建议 proposed，不代替人工审核；已有目录拒绝覆盖。内置版本登记文件固定 file-tools-v2@1.0.0 的 dataset/content Hash，复制到另一目录也不能更换同名版本内容。新版本 build 返回 unregistered，正式 analyze/validate 会拒绝未登记版本。人工审核后维护新的受信登记文件，通过 `--annotation-registry "$REGISTRY_JSON"` 显式传入；外部登记只能增加版本，不能覆盖内置已发布版本，登记文件 Hash 进入 analysis identity。登记文件结构如下（保留历史条目，摘要使用 build 输出和新资产 manifest）：
+
+```json
+{"format_version":"benchmark-annotation-registry-v1","datasets":{"file-tools-v2":{"1.1.0":{"dataset_sha256":"<manifest.dataset_sha256>","content_sha256":"<build.content_sha256>"}}}}
+```
+
+人工审核应发布新不可变版本，不原地编辑 1.0.0。报告不输出私有 basis_refs 或结构依据文本。
 
 ## 探索性与受控对比
 

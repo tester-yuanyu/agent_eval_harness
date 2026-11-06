@@ -31,7 +31,7 @@ agent-evaluator-legacy = "eval_framework.cli:main"
 where = ["src"]
 
 [tool.setuptools.package-data]
-eval_framework = ["judge_rubrics/*.json"]
+eval_framework = ["judge_rubrics/*.json", "benchmark/datasets/annotation_versions.json"]
 
 [tool.pytest.ini_options]
 addopts = "-ra -p no:deepeval"

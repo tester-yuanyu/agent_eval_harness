@@ -12,3 +12,5 @@ python -m agent_eval_suite benchmark annotations-build --dataset data/benchmarks
 ```
 
 构建永远输出 proposed；人工审定不得就地修改已发布版本。新版本须更新记录、review_status、record_count 和文件 Hash，通过校验后再用于分析。basis_refs 属于可信端依据，公开报告只投影能力/难度及审查状态。多个能力桶有重叠，不能加总。
+
+版本登记由 Evaluator 的 annotation_versions.json 固定内置发布的 dataset/content Hash。新 proposed 版本构建后状态为 unregistered；正式使用前需追加受信版本登记，analyze/validate 通过 --annotation-registry 显式消费，详见 [本地分析指南](../../docs/benchmark/local-analysis.md)。

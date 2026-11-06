@@ -14,7 +14,11 @@ def controlled():
         tools={"v": "tools"},
         environment={"v": "local"},
         prompt={"v": "prompt"},
-        repeat_protocol={"v": "protocol"},
+        repeat_protocol={
+            "independent_trials": True,
+            "environment_reset": "fresh workspace",
+            "randomness": "independent request seeds",
+        },
     )
     return value
 
@@ -100,3 +104,27 @@ def test_missing_historical_control_is_not_assumed_equal():
     )
     assert result["status"] == "descriptive_only"
     assert "tools" in result["unknown_controls"]
+
+
+@pytest.mark.parametrize(
+    "protocol",
+    [{}, {"v": "protocol"}, {"independent_trials": True, "environment_reset": "fresh"}],
+)
+def test_incomplete_repeat_protocol_cannot_qualify_as_controlled(protocol):
+    from eval_framework.aggregator.experiment import (
+        REQUIRED_CONTROLS,
+        validate_experiment,
+    )
+
+    left = controlled()
+    left["identity"]["repeat_protocol"] = protocol
+    right = deepcopy(left)
+    right["run_id"] = "candidate"
+    right["identity"]["config"]["model"] = "candidate"
+    result = validate_experiment(
+        left,
+        right,
+        {"control_fields": list(REQUIRED_CONTROLS), "variable_fields": ["model"]},
+    )
+    assert result["status"] == "descriptive_only"
+    assert "repeat_protocol" in result["unknown_controls"]

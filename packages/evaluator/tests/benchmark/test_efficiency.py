@@ -137,3 +137,60 @@ def test_judge_missing_planned_trials_remain_in_coverage(tmp_path):
     assert value["coverage"]["known_trials"] == 1
     assert value["coverage"]["planned_trials"] == 3
     assert value["total"] is None
+
+
+@pytest.mark.parametrize(
+    "owner",
+    [
+        {"owner": "judge"},
+        {"usage": {"owner": "judge"}},
+        {"participant": "user_simulator"},
+    ],
+)
+def test_explicit_non_agent_owners_do_not_leak_into_agent_usage(tmp_path, owner):
+    from eval_framework.aggregator.efficiency import efficiency
+
+    pop = cost_population(tmp_path)
+    pop["trials"] = pop["trials"][:1]
+    record = pop["trials"][0]["record"]
+    record["observation"]["usage"] = {}
+    record["observation"]["events"] = [
+        {
+            "type": "generation",
+            **owner,
+            "usage": {"cost_usd": 3, **owner.get("usage", {})},
+        }
+    ]
+    result = efficiency(pop)["by_layer"]["e2e"]
+    assert result["agent"]["cost_usd"]["known_subtotal"] == 0
+    if owner.get("participant") == "user_simulator":
+        assert result["user_simulator"]["cost_usd"]["known_subtotal"] == 3
+
+
+def test_conflicting_usage_owner_markers_are_rejected(tmp_path):
+    from eval_framework.aggregator.efficiency import efficiency
+
+    pop = cost_population(tmp_path)
+    pop["trials"][0]["record"]["observation"]["events"] = [
+        {
+            "type": "generation",
+            "is_judge": True,
+            "owner": "agent",
+            "usage": {"cost_usd": 3},
+        }
+    ]
+    with pytest.raises(ValueError, match="owner"):
+        efficiency(pop)
+
+
+def test_foreign_aggregate_usage_is_not_attributed_to_agent(tmp_path):
+    from eval_framework.aggregator.efficiency import efficiency
+
+    pop = cost_population(tmp_path)
+    pop["trials"] = pop["trials"][:1]
+    record = pop["trials"][0]["record"]
+    record["observation"]["usage"] = {"owner": "judge", "cost_usd": 9}
+    record["observation"]["events"] = [{"type": "generation", "usage": {"cost_usd": 2}}]
+    assert (
+        efficiency(pop)["by_layer"]["e2e"]["agent"]["cost_usd"]["known_subtotal"] == 2
+    )

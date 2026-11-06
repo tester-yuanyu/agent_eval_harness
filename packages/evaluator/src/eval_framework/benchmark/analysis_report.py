@@ -320,6 +320,7 @@ def write_analysis(
     *,
     dataset_path: Path | None = None,
     annotations_path: Path | None = None,
+    annotation_registry_path: Path | None = None,
     output: Path,
     policy: AnalysisPolicy,
     source_artifacts: tuple[Path, ...] = (),
@@ -360,6 +361,7 @@ def write_analysis(
     annotations = (
         load_annotations(
             annotations_path,
+            registry_path=annotation_registry_path,
             dataset_binding=binding,
             case_ids={t["id"] for t in dataset["tasks"]},
         )
@@ -376,6 +378,7 @@ def write_analysis(
     )
     for flag, present in (
         ("annotations", annotations_path),
+        ("annotation-registry", annotation_registry_path),
         ("judge-source", judge_dir),
         ("repeat-protocol", policy.repeat_protocol),
         ("compare-with", compare_with),

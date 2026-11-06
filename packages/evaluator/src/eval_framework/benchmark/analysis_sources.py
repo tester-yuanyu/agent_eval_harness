@@ -203,7 +203,29 @@ def load_analysis_source(
         kind, provenance = _operation(value)
         verified.add(digest)
         if kind == "execution":
-            if value.get("execution_identity") or value.get("execution_run_id"):
+            if (
+                any(k in value for k in ("execution_identity", "execution_run_id"))
+                or any(
+                    k in value["identity"]
+                    for k in (
+                        "source_results_sha256",
+                        "judge_config",
+                        "judge_repeats",
+                        "judge_source",
+                    )
+                )
+                or any(
+                    any(
+                        k in row
+                        for k in (
+                            "execution_identity_hash",
+                            "source_trial_sha256",
+                            "source_assessment",
+                        )
+                    )
+                    for row in value["trials"]
+                )
+            ):
                 raise ValueError("derived source is missing provenance")
             return value
         parent_hash = provenance.get("source_results_sha256")

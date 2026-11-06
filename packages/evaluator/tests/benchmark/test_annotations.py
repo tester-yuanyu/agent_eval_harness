@@ -117,3 +117,102 @@ def test_only_reviewed_labels_enter_overlapping_buckets(tmp_path):
     assert result["capabilities"]["single_tool"]["planned_trials"] == 3
     assert result["capabilities"]["multi_turn_state"]["planned_trials"] == 3
     assert "hard" not in result["difficulty"]
+
+
+def test_published_version_rejects_different_content_in_another_directory(tmp_path):
+    from eval_framework.benchmark.datasets.annotations import load_annotations
+    from eval_framework.benchmark.datasets.binding import build_dataset_binding
+    from eval_framework.benchmark.tasks import load_tasks
+
+    altered = tmp_path / "altered"
+    shutil.copytree(ROOT / "data/benchmark-annotations/file-tools-v2/1.0.0", altered)
+    rewrite_records(altered, lambda rows: rows[0].update(basis_refs=["different"]))
+    with pytest.raises(ValueError, match="version"):
+        load_annotations(
+            altered,
+            dataset_binding=build_dataset_binding(DATASET),
+            case_ids={t["id"] for t in load_tasks(DATASET)},
+        )
+
+
+def test_unregistered_proposal_requires_explicit_version_registry_for_analysis(
+    tmp_path,
+):
+    from eval_framework.benchmark.datasets.annotations import (
+        build_annotations,
+        load_annotations,
+    )
+    from eval_framework.benchmark.datasets.binding import build_dataset_binding
+    from eval_framework.benchmark.tasks import load_tasks
+
+    output = tmp_path / "proposal"
+    proposal = build_annotations(DATASET, output, version="1.1.0")
+    assert proposal.registration_status == "unregistered"
+    kwargs = {
+        "dataset_binding": build_dataset_binding(DATASET),
+        "case_ids": {t["id"] for t in load_tasks(DATASET)},
+    }
+    with pytest.raises(ValueError, match="not registered"):
+        load_annotations(output, **kwargs)
+    registry = tmp_path / "registry.json"
+    registry.write_text(
+        json.dumps(
+            {
+                "format_version": "benchmark-annotation-registry-v1",
+                "datasets": {
+                    "file-tools-v2": {
+                        "1.1.0": {
+                            "dataset_sha256": proposal.manifest["dataset_sha256"],
+                            "content_sha256": proposal.content_sha256,
+                        }
+                    }
+                },
+            }
+        )
+    )
+    assert (
+        load_annotations(output, registry_path=registry, **kwargs).registration_status
+        == "registered"
+    )
+
+
+def test_external_registry_cannot_rebind_a_bundled_published_version(tmp_path):
+    from capability_snapshot_kit.hashing import sha256_json
+
+    from eval_framework.benchmark.datasets.annotations import load_annotations
+    from eval_framework.benchmark.datasets.binding import build_dataset_binding
+    from eval_framework.benchmark.tasks import load_tasks
+
+    altered = tmp_path / "altered"
+    shutil.copytree(ROOT / "data/benchmark-annotations/file-tools-v2/1.0.0", altered)
+    rewrite_records(altered, lambda rows: rows[0].update(basis_refs=["different"]))
+    content_hash = sha256_json(
+        {
+            name: hashlib.sha256((altered / name).read_bytes()).hexdigest()
+            for name in ("manifest.json", "annotations.jsonl", "taxonomy.json")
+        }
+    )
+    binding = build_dataset_binding(DATASET)
+    registry = tmp_path / "registry.json"
+    registry.write_text(
+        json.dumps(
+            {
+                "format_version": "benchmark-annotation-registry-v1",
+                "datasets": {
+                    "file-tools-v2": {
+                        "1.0.0": {
+                            "dataset_sha256": binding["dataset_sha256"],
+                            "content_sha256": content_hash,
+                        }
+                    }
+                },
+            }
+        )
+    )
+    with pytest.raises(ValueError, match="version"):
+        load_annotations(
+            altered,
+            dataset_binding=binding,
+            case_ids={t["id"] for t in load_tasks(DATASET)},
+            registry_path=registry,
+        )

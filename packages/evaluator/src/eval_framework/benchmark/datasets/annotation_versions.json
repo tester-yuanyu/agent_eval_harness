@@ -1,0 +1,11 @@
+{
+  "datasets": {
+    "file-tools-v2": {
+      "1.0.0": {
+        "content_sha256": "ae9081ebd82a25bdc13540b64b1d084469464e880fed13ba02074d71b45a9fed",
+        "dataset_sha256": "2c025f77737aec03f512988b550b7dd7fd7c6dff562055efc7d9925d36e048c6"
+      }
+    }
+  },
+  "format_version": "benchmark-annotation-registry-v1"
+}
