@@ -102,6 +102,7 @@ def test_dashboard_uses_formal_verdict_and_scoped_diagnostic_annotations():
     widgets = dashboard_widgets(run, analysis, receipt)
     assert len(widgets) == 3
     assert widgets[0]["view"] == "scores-categorical"
+    assert "show_value_labels" not in widgets[0]["chart_config"]
     assert any(f["value"] == "verdict" for f in widgets[0]["filters"])
     for i, w in enumerate(widgets):
         assert any(
@@ -244,13 +245,29 @@ def test_dashboard_sdk_definition_and_resume_do_not_duplicate_widgets(tmp_path):
         return row
 
     def create_widget(**kwargs):
-        row = SimpleNamespace(id="w" + str(len(widgets)), name=kwargs["name"])
+        row = SimpleNamespace(
+            id="w" + str(len(widgets)), name=kwargs["name"], spec=kwargs
+        )
         widgets.append(row)
         return row
 
+    def get_widget(wid):
+        from langfuse.api.unstable.dashboard_widgets.types.dashboard_widget import (
+            DashboardWidget,
+        )
+
+        row = next(w for w in widgets if w.id == wid)
+        return DashboardWidget.model_validate(
+            {
+                **row.spec,
+                "id": wid,
+                "created_at": "2026-11-07T00:00:00Z",
+                "updated_at": "2026-11-07T00:00:00Z",
+            }
+        )
+
     def update(did, definition, **kwargs):
-        assert len(definition.widgets) == 3
-        assert [w.widget_id for w in definition.widgets] == ["w0", "w1", "w2"]
+        assert [w.widget_id for w in definition.widgets] == [w.id for w in widgets]
         definitions[did] = definition
 
     client = SimpleNamespace(
@@ -262,7 +279,12 @@ def test_dashboard_sdk_definition_and_resume_do_not_duplicate_widgets(tmp_path):
                 get=lambda did: SimpleNamespace(definition=definitions[did]),
             ),
             dashboard_widgets=SimpleNamespace(
-                list=lambda **k: SimpleNamespace(data=widgets), create=create_widget
+                list=lambda **k: SimpleNamespace(data=widgets),
+                create=create_widget,
+                get=get_widget,
+                update=lambda wid, **kw: setattr(
+                    next(w for w in widgets if w.id == wid), "spec", kw
+                ),
             ),
         )
     )
@@ -279,3 +301,53 @@ def test_dashboard_sdk_definition_and_resume_do_not_duplicate_widgets(tmp_path):
         == "VERIFIED"
     )
     assert len(dashboards) == 1 and len(widgets) == 3
+    analysis["analysis_id"] = "b" * 64
+    (tmp_path / "diagnostics.json").write_text(json.dumps(analysis))
+    annotation = json.loads((tmp_path / "langfuse_diagnostics_export.json").read_text())
+    annotation["analysis_id"] = analysis["analysis_id"]
+    (tmp_path / "langfuse_diagnostics_export.json").write_text(json.dumps(annotation))
+    with pytest.raises(ValueError, match="explicit refresh"):
+        create_dashboard(tmp_path, base_url="https://example.test", client=client)
+    from eval_framework.benchmark.report_trends import build_trend
+
+    from .test_report_trends import source
+
+    trend = build_trend([source()])
+    (tmp_path / "langfuse_trends_export.json").write_text(
+        json.dumps(
+            {
+                "status": "VERIFIED",
+                "cohort_id": trend["cohort_id"],
+                "run_ids": ["r1"],
+                "destination": destination_fingerprint(),
+            }
+        )
+    )
+    refreshed = create_dashboard(
+        tmp_path,
+        base_url="https://example.test",
+        client=client,
+        refresh=True,
+        trend=trend,
+    )
+    assert refreshed["dashboard_id"] == "d" and len(widgets) == 4
+    assert widgets[0].spec["description"].startswith("0 PASS / 1 FAIL")
+    assert widgets[3].spec["chart_type"] == "LINE_TIME_SERIES"
+    assert len(list((tmp_path / "langfuse-dashboard-history").glob("*.json"))) == 1
+    create_dashboard(
+        tmp_path, base_url="https://example.test", client=client, trend=trend
+    )
+    assert len(dashboards) == 1 and len(widgets) == 4
+
+
+def test_dashboard_explicit_verdict_counts_and_fourth_diagnosis_label():
+    from eval_framework.benchmark.langfuse_presentation import dashboard_widgets
+
+    run, analysis, receipt = example()
+    analysis["trials"][0]["findings"].append(
+        {"kind": "restricted_response", "description": "InvalidModelOutputError"}
+    )
+    widgets = dashboard_widgets(run, analysis, receipt)
+    assert "0 PASS / 1 FAIL / 0 INVALID" in widgets[0]["description"]
+    assert "restricted_response" in widgets[2]["description"]
+    assert "InvalidModelOutputError" in widgets[2]["description"]

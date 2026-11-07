@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 from collections import Counter
 from datetime import datetime
+from hashlib import sha256
 from pathlib import Path
 
 from langfuse.api import CreateScoreRequest, OtelAttribute, OtelAttributeValue
@@ -136,6 +137,16 @@ def dashboard_widgets(run, analysis, receipt):
     }
     counts = Counter(t["verdict"] for t in analysis["trials"])
     total = len(analysis["trials"])
+    output_error_note = (
+        " 本轮受限回复证据包含 InvalidModelOutputError。"
+        if any(
+            f["kind"] == "restricted_response"
+            and "InvalidModelOutputError" in f.get("description", "")
+            for t in analysis["trials"]
+            for f in t["findings"]
+        )
+        else ""
+    )
     groups = []
     for mode in ("read", "write", "mixed", "unknown"):
         rows = [t for t in analysis["trials"] if t["operation"] == mode]
@@ -147,9 +158,12 @@ def dashboard_widgets(run, analysis, receipt):
     specs = [
         (
             f"总通过率 {100 * counts['PASS'] / total if total else 0:.1f}%"
-            f" · {counts['PASS']}/{total}",
+            f" · {counts['PASS']} PASS / {counts['FAIL']} FAIL"
+            f" / {counts['INVALID']} INVALID",
             "verdict",
             "PIE",
+            f"{counts['PASS']} PASS / {counts['FAIL']} FAIL"
+            f" / {counts['INVALID']} INVALID。"
             "保存的正式 verdict；分母含本次所有 trial，不合并补跑。",
         ),
         (
@@ -162,7 +176,9 @@ def dashboard_widgets(run, analysis, receipt):
             "失败诊断分布 · 可重叠，不是正式评分",
             f"diagnostic.issue.{analysis['analysis_id'][:12]}",
             "HORIZONTAL_BAR",
-            "按问题种类统计受影响 trial；一个 trial 可命中多类，未命中不代表能力通过。",
+            "schema_mismatch：字段契约偏差；missing_confirmation_context：确认上下文缺口；"
+            "business_failure_status：业务失败状态不一致；restricted_response：工具受限时回复不符合预期"
+            "。类别可重叠，未命中不代表能力通过。" + output_error_note,
         ),
     ]
     return [
@@ -180,7 +196,10 @@ def dashboard_widgets(run, analysis, receipt):
                 {"column": "name", "operator": "=", "type": "string", "value": score},
             ],
             chart_type=chart,
-            chart_config={"type": chart, "show_value_labels": True},
+            chart_config={
+                "type": chart,
+                **({"show_value_labels": True} if chart == "HORIZONTAL_BAR" else {}),
+            },
         )
         for name, score, chart, desc in specs
     ]
@@ -301,7 +320,7 @@ def sync_diagnostics(run_dir, *, base_url, client=None):
     return state
 
 
-def create_dashboard(run_dir, *, base_url, client=None):
+def create_dashboard(run_dir, *, base_url, client=None, refresh=False, trend=None):
     root = Path(run_dir)
     client = client or client_from_env()
     analysis = json.loads((root / "diagnostics.json").read_text())
@@ -324,12 +343,30 @@ def create_dashboard(run_dir, *, base_url, client=None):
             "widgets": [],
         }
     )
-    if (
-        state["analysis_id"] != analysis["analysis_id"]
-        or state["destination"] != destination_fingerprint()
-    ):
-        raise ValueError("dashboard identity changed; archive receipt first")
+    if state["destination"] != destination_fingerprint():
+        raise ValueError("dashboard destination changed")
+    if state["analysis_id"] != analysis["analysis_id"] and not refresh:
+        raise ValueError("dashboard identity changed; explicit refresh required")
     definitions = dashboard_widgets(run, analysis, receipt)
+    if trend is not None:
+        from .langfuse_trends import trend_widget
+
+        synced = json.loads((root / "langfuse_trends_export.json").read_text())
+        if (
+            synced.get("status") != "VERIFIED"
+            or synced.get("cohort_id") != trend["cohort_id"]
+            or synced.get("destination") != destination_fingerprint()
+            or synced.get("run_ids") != [r["run_id"] for r in trend["runs"]]
+        ):
+            raise ValueError("dashboard requires verified current trend")
+        definitions.append(trend_widget(trend))
+    elif len(state["widgets"]) > len(definitions):
+        raise ValueError("existing trend must be supplied when refreshing dashboard")
+    if refresh and out.exists():
+        digest = sha256(out.read_bytes()).hexdigest()
+        _save(root / "langfuse-dashboard-history" / f"{digest}.json", state)
+    state["analysis_id"] = analysis["analysis_id"]
+    state["status"] = "UPDATING"
     # Names contain the immutable run, allowing reconciliation after uncertain creates.
     name = f"{run['run_id']} · 评测与诊断"
     listed = client.unstable.dashboards.list(limit=100).data
@@ -344,7 +381,7 @@ def create_dashboard(run_dir, *, base_url, client=None):
                 name=name,
                 description=(
                     "固定主集；正式判定来自 DeepEval，诊断为非正式注释。"
-                    "当前只有一组可比运行，不展示跨版本趋势。"
+                    "趋势按固定控制项分组；仅一组运行时显示基线。"
                 ),
                 request_options={"max_retries": 0},
             )
@@ -353,9 +390,15 @@ def create_dashboard(run_dir, *, base_url, client=None):
         _save(out, state)
     available = client.unstable.dashboard_widgets.list(limit=100).data
     for i, definition in enumerate(definitions):
-        if len(state["widgets"]) > i:
-            continue
         definition = {**definition, "name": definition["name"] + " · " + run["run_id"]}
+        if len(state["widgets"]) > i:
+            if refresh:
+                client.unstable.dashboard_widgets.update(
+                    state["widgets"][i],
+                    **definition,
+                    request_options={"max_retries": 0},
+                )
+            continue
         matches = [w for w in available if w.name == definition["name"]]
         if len(matches) > 1:
             raise ValueError("duplicate widgets require reconciliation")
@@ -368,15 +411,21 @@ def create_dashboard(run_dir, *, base_url, client=None):
         )
         state["widgets"].append(widget.id)
         _save(out, state)
+    for wid, spec in zip(state["widgets"], definitions, strict=True):
+        actual = client.unstable.dashboard_widgets.get(wid)
+        desired = {**spec, "name": spec["name"] + " · " + run["run_id"]}
+        normalized = type(actual).model_validate({**actual.model_dump(), **desired})
+        if any(actual.model_dump()[k] != normalized.model_dump()[k] for k in desired):
+            raise ValueError("widget readback mismatch; explicit refresh required")
     definition = {
         "widgets": [
             {
                 "type": "widget",
                 "id": stable_id(VERSION, state["dashboard_id"], wid),
                 "widget_id": wid,
-                "x": 0 if i == 0 else (i - 1) * 6,
-                "y": 0 if i == 0 else 6,
-                "width": 12 if i == 0 else 6,
+                "x": (i - 1) * 6 if i in (1, 2) else 0,
+                "y": 0 if i == 0 else (6 if i in (1, 2) else 12 + (i - 3) * 6),
+                "width": 6 if i in (1, 2) else 12,
                 "height": 6,
             }
             for i, wid in enumerate(state["widgets"])
@@ -389,6 +438,10 @@ def create_dashboard(run_dir, *, base_url, client=None):
     client.unstable.dashboards.update(
         state["dashboard_id"],
         definition=DashboardDefinition.model_validate(definition),
+        description=(
+            "正式结果与诊断取自主集快照；"
+            "趋势按固定控制项跨运行汇总，仅一个 run 时为基线。"
+        ),
         request_options={"max_retries": 0},
     )
     remote = client.unstable.dashboards.get(state["dashboard_id"])
@@ -401,6 +454,11 @@ def create_dashboard(run_dir, *, base_url, client=None):
         for key in ("started_at", "finished_at")
         if t.get(key)
     ]
+    if trend is not None:
+        times.extend(
+            datetime.fromisoformat(r["finished_at"].replace("Z", "+00:00")).timestamp()
+            for r in trend["runs"]
+        )
     date_query = (
         f"?dateRange={int(min(times) * 1000) - 1000}-{int(max(times) * 1000) + 1000}"
         if times

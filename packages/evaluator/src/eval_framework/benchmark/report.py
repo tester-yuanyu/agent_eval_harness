@@ -108,7 +108,7 @@ def _overview_html(rows: list[dict], contracts: dict, warnings: list[str]) -> st
             diagnosis += " ".join(f"{a} → {c}：{len(cases)} 条失败执行。" for (a, c), cases in patterns.items())
             gaps = {(r["case_id"], r["trial"]) for r, f in entries if f.get("prompt_contract_gap")}
             if gaps:
-                diagnosis += f"其中 {len(gaps)} 条执行的可见意图请求提供通用 Schema，parameters 允许任意字段，未列出上述标准字段；证据指向模型请求与执行契约的传递缺口，不能直接归因为模型无视明确 Schema。"
+                diagnosis += f"其中 {len(gaps)} 条执行呈现两层问题：①可见意图请求只提供通用 Schema，parameters 允许任意字段，未列出上述标准字段；②模型在该请求下输出了参考契约未声明的字段，随后被执行校验拒绝。优先修复 Schema 传递，使模型看到标准字段；验证后再按需增加别名映射兜底。当前证据不支持‘模型已看到标准字段但拒不遵守’的归因，也尚未通过对照重跑证明哪项修复足以消除失败。"
             else:
                 diagnosis += "是否已向模型传递具体字段约束，仍需核对请求；字段偏差本身不能证明模型无视 Schema。"
             diagnosis += "这些候选映射只用于诊断和修复建议，未修改参数或评分；修复后仍需验证类型、范围和多轮确认。"

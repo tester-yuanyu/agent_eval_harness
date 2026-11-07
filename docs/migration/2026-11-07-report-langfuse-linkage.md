@@ -37,3 +37,13 @@ HTML 浏览器检查包含 30 条 trial、30 个远端链接、问题编号跳�
 重新运行包回归时，既有 `test_provider_cleans_nested_processes_on_inspect_termination[False]` 在 `started.exists()` 失败，单独复测同样失败（5.24 秒）。测试要求在 2 秒运行预算内完成 Provider 启动并到达嵌套进程；本次 `started`、`completed`、`cleaned` 均未出现。与先前全新安装环境中已记录的启动时限限制一致，并非观察到后代进程逃逸，但也不能据此证明该次清理链路通过。该测试及对应 Provider 执行代码本次未修改，未通过放宽断言或修改冻结数据绕过。本次推送前检查不宣称全绿；前文 1,448 passed 是此前交付检查的真实结果，予以保留。完整新日志位于本地交付目录的 `pre-push-regression.log` 与 `pre-push-termination-retest.log`。
 
 推送前完整回归结果：`1 failed, 1447 passed, 9 skipped, 142 warnings in 342.75s (0:05:42)`。唯一失败项为上述已记录的启动时限检查。
+
+## 2026-11-08 审查跟进
+
+- 问题 #1 明确两层证据和修复优先级：实际意图请求仅含通用 Schema，未列出标准参数；模型随后输出非契约字段。第一步补齐 Schema 注入并检查实际请求，第二步才按需添加别名兜底。没有新对照评测，不宣称修复足以解决所有失败。
+- 总览标题明示 19 PASS / 11 FAIL / 0 INVALID。第四类 `restricted_response=1` 原已存在，补充 InvalidModelOutputError 的对应说明，不重复添加失败计数。四类为 9/3/1/1，存在交叠，覆盖 11 个失败 trial。
+- 新增纯离线 `report_trends.py` 和可选 `langfuse_trends.py`。比较组固定数据、契约、选集、评分、Harness 与执行控制；允许模型/运行源码变化并保存身份。INVALID 保留在分母，不完整、重复和不可比运行被拒绝。
+- 通过 experiment 级、formal=false 的 2 项汇总展示读 90%、写 10%。仅主集进入比较组，两次不同配置补跑排除。Langfuse 时间桶可能合并多个 run，桶内为比率等权平均；空桶 n/a/0 是无数据。逐 run 分子、分母和身份另存 JSON/CSV，不伪造改善趋势。
+- 复用现有 Dashboard ID 和前三个 Widget ID，新增第四个趋势面板；显式刷新时归档旧收据。API 回读与实际浏览器确认 19/11、读写 18/20 与 1/10、四类诊断及趋势 90/10。API 会忽略 PIE/LINE_TIME_SERIES 的 show_value_labels，移除不支持的配置并添加回归覆盖；数值置于总览标题。
+- 85 项相关离线测试通过（1 项依赖弃用警告），Ruff 与 git diff --check 通过。独立 core 环境未安装 mini_agent/Langfuse SDK，当前报告与趋势模块仍可导入并生成趋势。本轮未重复全包回归；前节已记录的子进程启动时限失败仍保留，不改执行层掩盖失败。
+- 3 个运行的新解释注释共 50 项回读 VERIFIED，原解释版本保留；原始 Trace 和正式分数不重发、不重新评分。冻结原始文件逐字 Hash 核验、HTML 的 30 条用例及 30 个 Trace 链接检查随交付验收记录保存。本次新增模型请求 0，累计仍为 53/60。

@@ -133,13 +133,19 @@ def _text(content: object) -> str:
 
 def schema_advice(mapping: dict, gap: bool) -> str:
     advice = (
-        "在被测 Agent 的意图请求中补齐与执行校验同源的具体参数契约。"
+        "第一步：补齐被测 Agent 意图请求中的具体参数 Schema，"
+        "与执行校验使用同源契约；检查实际请求确实包含标准字段，再验证输出。"
         if gap
         else "先核对被测 Agent 实际收到的参数 Schema 与校验契约是否一致。"
     )
     if mapping:
         advice += (
-            "配置声明的候选别名为 "
+            (
+                "第二步：仅在需要兼容旧表达时考虑别名兜底；它不能替代 Schema 注入。"
+                if gap
+                else "确认 Schema 传递无缺口后，再考虑别名兼容。"
+            )
+            + "配置声明的候选别名为 "
             + "、".join(f"{a}→{b}" for a, b in sorted(mapping.items()))
             + "；如决定兼容，应在 Agent 校验前显式映射，冲突时拒绝并追问，"
             "继续校验类型和范围。"

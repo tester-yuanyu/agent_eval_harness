@@ -10,7 +10,7 @@ HTML 负责当前运行的整体结论、模式摘要、条件建议及完整离
 
 领域别名在可选配置 `configs/benchmark/mini-agent-diagnostics-v1.json` 中按意图声明。配置有版本与 SHA256 校验；只有参考契约确实要求对应标准字段时，才提示候选映射。通用报告模块不内置 mini_agent 的 count/num 等字段。别名仅用于解释，不进入执行输入或正式评分。
 
-建议按证据触发：实际请求缺少标准参数定义时提示补齐契约；存在重复字段偏差时提示被测 Agent 评估别名兼容、冲突和类型校验；确认轮请求缺少前轮信息时提示上下文续接。不能仅凭输出不匹配断言“模型忽略了已明确提供的 Schema”，也不能保证增加别名后所有链路都会通过。
+建议按证据触发：实际请求缺少标准参数定义时，第一步补齐意图请求的具体 Schema、与执行校验使用同源契约，并检查实际模型请求；第二步才按需评估别名兜底、冲突和类型校验。别名不能替代 Schema 注入；确认轮请求缺少前轮信息时提示上下文续接。不能仅凭输出不匹配断言“模型忽略了已明确提供的 Schema”，也不能保证增加别名后所有链路都会通过。
 
 ## 命令与产物
 
@@ -40,8 +40,26 @@ HTML 负责当前运行的整体结论、模式摘要、条件建议及完整离
 
 ## Dashboard 口径
 
-三个面板分别展示：保存的正式 verdict 分布；按任务目标分组后的 verdict；可重叠的诊断类别影响数。按源结果 Hash 筛选，诊断另按 analysis_id 区分，不混入其他运行或新旧解释版本。面板中的分组注释复用原 verdict，不进行重新评分。
+前三个面板分别展示：保存的正式 verdict 分布；按任务目标分组后的 verdict；可重叠的诊断类别影响数。按源结果 Hash 筛选，诊断另按 analysis_id 区分，不混入其他运行或新旧解释版本。面板中的分组注释复用原 verdict，不进行重新评分。
 
-总通过率分母含该次全部 trial；INVALID 不算通过。写场景中的保护路径 PASS 不等于成功写入。诊断类别可能重叠，不能将影响数相加当作失败总数。不同数据集、控制项或运行身份的补跑单独展示；当前只有一组可比主集，不生成虚假的跨版本趋势。Dashboard 受页面日期筛选影响，查看历史运行需要覆盖其执行日期；生成的 Dashboard 链接已携带执行时间范围，避免沿用浏览器中旧的日期筛选。
+总通过率分母含该次全部 trial；INVALID 不算通过。写场景中的保护路径 PASS 不等于成功写入。诊断类别可能重叠，不能将影响数相加当作失败总数。不同数据集或控制项的补跑单独展示。当前仅一组可比主集，趋势面板显示基线，不能声称改善。Dashboard 受页面日期筛选影响，查看历史运行需要覆盖其执行日期；生成的 Dashboard 链接已携带执行时间范围，避免沿用浏览器中旧的日期筛选。
 
 核心报告模块不导入 mini_agent 或 Langfuse SDK；远端模块只在显式同步/导出时导入。Oracle 仅供离线诊断与评分使用，不进入模型请求。
+
+## 跨运行趋势
+
+追加 `--trend` 可离线生成 `trend.json`；重复 `--trend-run /path/to/saved/run` 加入后续运行。同步并更新已有 Dashboard 的示例：
+
+```bash
+.venvs/evaluator/bin/python scripts/benchmark_presentation.py \
+  --run artifacts/mini-agent/coverage-20261107/run \
+  --sync-langfuse --dashboard --trend --refresh-dashboard
+```
+
+趋势固定数据集与参考契约、选集、重复次数、正式评分身份、Harness、Inspect、执行模式、超时/预算与生成配置。模型及运行实现源码身份可以变化，并记录在逐 run 明细中；这是描述性对比，不证明某项改动导致改善。重复、不完整、分组不一致和控制项不一致的数据拒绝加入。目前要求每个 run 对应一个 Langfuse experiment，不支持把多 experiment 的重复试验误当成一组。
+
+第四个面板按 `cohort_id` 筛选，不固定单 run。每次运行将原 verdict 聚合为读/写通过率，保存为 experiment 级 `summary.pass_rate.*`，metadata 为 `formal=false`；不新增 trial 正式判定。INVALID 保留在分母。后续同口径结果也需要显式同步；面板不会自行执行评测或上传。
+
+Langfuse 的时间折线自动分桶，同桶内多个 run 的比率等权平均，不能保证每个图点恰好是一个 run；精确分子、分母、时间和运行身份保存在 `trend.json`。Langfuse 可能将空时间桶显示为 n/a/0，它表示无运行数据，不是通过率 0%。只有一轮时显示“仅基线”。当前读 90%、写 10%，写保护路径通过不等于成功写入。
+
+`--refresh-dashboard` 只更新已登记的 Dashboard/Widget ID，并归档旧收据到 `langfuse-dashboard-history/`。诊断解释更新仍保留旧版注释；不会重复计算失败。`restricted_response` 已涵盖当前工具受限回复的解析错误，说明中标注 InvalidModelOutputError，不再另计一次 `invalid_model_output`。总览标题直接显示 PASS/FAIL/INVALID 数量。

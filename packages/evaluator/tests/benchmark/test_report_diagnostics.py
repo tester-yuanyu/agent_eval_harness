@@ -99,3 +99,12 @@ def test_links_reject_unsafe_destination(tmp_path):
         write_links(
             tmp_path, base_url="javascript:alert(1)", project_id="p", destination="d"
         )
+
+
+def test_schema_gap_advice_orders_primary_fix_before_optional_alias():
+    from eval_framework.benchmark.report_insights import schema_advice
+
+    advice = schema_advice({"count": "num"}, True)
+    assert advice.index("第一步") < advice.index("第二步")
+    assert "兜底" in advice and "不能替代" in advice
+    assert "count→num" in advice
