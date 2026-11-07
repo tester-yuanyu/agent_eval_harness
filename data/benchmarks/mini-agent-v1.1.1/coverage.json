@@ -1,0 +1,657 @@
+{
+  "version": "1.1.1",
+  "scope": [
+    "query_user",
+    "query_gift",
+    "add_backpack_gift"
+  ],
+  "scenarios": {
+    "normal": {
+      "case_ids": [
+        "MINI-QUSER-001",
+        "MINI-QUSER-002",
+        "MINI-QUSER-003",
+        "MINI-QUSER-004",
+        "MINI-QGIFT-001",
+        "MINI-QGIFT-002",
+        "MINI-QGIFT-003",
+        "MINI-QGIFT-004",
+        "MINI-QGIFT-005",
+        "MINI-QGIFT-006",
+        "MINI-ABGIFT-001",
+        "MINI-ABGIFT-002",
+        "MINI-ABGIFT-003",
+        "MINI-ABGIFT-004",
+        "MINI-ABGIFT-005",
+        "MINI-ABGIFT-006",
+        "MINI-CHAIN-001",
+        "MINI-CHAIN-002",
+        "MINI-CHAIN-003",
+        "MINI-CHAIN-004",
+        "MINI-CHAIN-005",
+        "MINI-CHAIN-006",
+        "MINI-GIFT-CHAIN-001",
+        "MINI-GIFT-CHAIN-002"
+      ],
+      "smoke_case_ids": [
+        "MINI-QUSER-001",
+        "MINI-QGIFT-001",
+        "MINI-ABGIFT-001",
+        "MINI-CHAIN-001",
+        "MINI-CHAIN-006",
+        "MINI-GIFT-CHAIN-001"
+      ]
+    },
+    "intent_recognition": {
+      "case_ids": [
+        "MINI-QUSER-001",
+        "MINI-QUSER-002",
+        "MINI-QUSER-003",
+        "MINI-QUSER-004",
+        "MINI-QUSER-005",
+        "MINI-QUSER-006",
+        "MINI-QUSER-007",
+        "MINI-QUSER-008",
+        "MINI-QUSER-009",
+        "MINI-QUSER-010",
+        "MINI-QUSER-011",
+        "MINI-QUSER-012",
+        "MINI-QUSER-013",
+        "MINI-QUSER-014",
+        "MINI-QUSER-015",
+        "MINI-QUSER-016",
+        "MINI-QUSER-017",
+        "MINI-QUSER-018",
+        "MINI-QUSER-019",
+        "MINI-QUSER-020",
+        "MINI-QUSER-021",
+        "MINI-QUSER-022",
+        "MINI-QUSER-023",
+        "MINI-QUSER-024",
+        "MINI-QUSER-025",
+        "MINI-QUSER-026",
+        "MINI-QUSER-027",
+        "MINI-QUSER-028",
+        "MINI-QUSER-029",
+        "MINI-QUSER-030",
+        "MINI-QUSER-031",
+        "MINI-QUSER-032",
+        "MINI-QUSER-033",
+        "MINI-QUSER-034",
+        "MINI-QUSER-035",
+        "MINI-QUSER-036",
+        "MINI-QUSER-037",
+        "MINI-QUSER-038",
+        "MINI-QUSER-039",
+        "MINI-QUSER-040",
+        "MINI-QUSER-041",
+        "MINI-QUSER-042",
+        "MINI-QGIFT-001",
+        "MINI-QGIFT-002",
+        "MINI-QGIFT-003",
+        "MINI-QGIFT-004",
+        "MINI-QGIFT-005",
+        "MINI-QGIFT-006",
+        "MINI-QGIFT-007",
+        "MINI-QGIFT-008",
+        "MINI-QGIFT-009",
+        "MINI-QGIFT-010",
+        "MINI-QGIFT-011",
+        "MINI-QGIFT-012",
+        "MINI-QGIFT-013",
+        "MINI-QGIFT-014",
+        "MINI-QGIFT-015",
+        "MINI-QGIFT-016",
+        "MINI-QGIFT-017",
+        "MINI-QGIFT-018",
+        "MINI-QGIFT-019",
+        "MINI-QGIFT-020",
+        "MINI-QGIFT-021",
+        "MINI-QGIFT-022",
+        "MINI-QGIFT-023",
+        "MINI-ABGIFT-001",
+        "MINI-ABGIFT-002",
+        "MINI-ABGIFT-003",
+        "MINI-ABGIFT-004",
+        "MINI-ABGIFT-005",
+        "MINI-ABGIFT-006",
+        "MINI-ABGIFT-007",
+        "MINI-ABGIFT-008",
+        "MINI-ABGIFT-009",
+        "MINI-ABGIFT-010",
+        "MINI-ABGIFT-011",
+        "MINI-ABGIFT-012",
+        "MINI-ABGIFT-013",
+        "MINI-ABGIFT-014",
+        "MINI-ABGIFT-015",
+        "MINI-ABGIFT-016",
+        "MINI-ABGIFT-017",
+        "MINI-ABGIFT-018",
+        "MINI-ABGIFT-019",
+        "MINI-ABGIFT-020",
+        "MINI-ABGIFT-021",
+        "MINI-ABGIFT-022",
+        "MINI-ABGIFT-023",
+        "MINI-ABGIFT-024",
+        "MINI-ABGIFT-025",
+        "MINI-ABGIFT-026",
+        "MINI-ABGIFT-027",
+        "MINI-ABGIFT-028"
+      ],
+      "smoke_case_ids": [
+        "MINI-QUSER-001",
+        "MINI-QUSER-013",
+        "MINI-QUSER-017",
+        "MINI-QUSER-023",
+        "MINI-QUSER-026",
+        "MINI-QUSER-027",
+        "MINI-QUSER-028",
+        "MINI-QUSER-032",
+        "MINI-QUSER-035",
+        "MINI-QGIFT-001",
+        "MINI-QGIFT-007",
+        "MINI-QGIFT-019",
+        "MINI-ABGIFT-001",
+        "MINI-ABGIFT-009",
+        "MINI-ABGIFT-027"
+      ]
+    },
+    "parameter_extraction": {
+      "case_ids": [
+        "MINI-QUSER-001",
+        "MINI-QUSER-002",
+        "MINI-QUSER-003",
+        "MINI-QUSER-004",
+        "MINI-QUSER-005",
+        "MINI-QUSER-006",
+        "MINI-QUSER-007",
+        "MINI-QUSER-008",
+        "MINI-QUSER-009",
+        "MINI-QUSER-010",
+        "MINI-QUSER-011",
+        "MINI-QUSER-012",
+        "MINI-QUSER-013",
+        "MINI-QUSER-014",
+        "MINI-QUSER-015",
+        "MINI-QUSER-016",
+        "MINI-QUSER-017",
+        "MINI-QUSER-018",
+        "MINI-QUSER-019",
+        "MINI-QUSER-020",
+        "MINI-QUSER-021",
+        "MINI-QUSER-022",
+        "MINI-QUSER-023",
+        "MINI-QUSER-024",
+        "MINI-QUSER-025",
+        "MINI-QUSER-026",
+        "MINI-QUSER-027",
+        "MINI-QUSER-028",
+        "MINI-QUSER-029",
+        "MINI-QUSER-030",
+        "MINI-QUSER-031",
+        "MINI-QUSER-032",
+        "MINI-QUSER-033",
+        "MINI-QUSER-034",
+        "MINI-QUSER-035",
+        "MINI-QUSER-036",
+        "MINI-QUSER-037",
+        "MINI-QUSER-038",
+        "MINI-QUSER-039",
+        "MINI-QUSER-040",
+        "MINI-QUSER-041",
+        "MINI-QUSER-042",
+        "MINI-QGIFT-001",
+        "MINI-QGIFT-002",
+        "MINI-QGIFT-003",
+        "MINI-QGIFT-004",
+        "MINI-QGIFT-005",
+        "MINI-QGIFT-006",
+        "MINI-QGIFT-007",
+        "MINI-QGIFT-008",
+        "MINI-QGIFT-009",
+        "MINI-QGIFT-010",
+        "MINI-QGIFT-011",
+        "MINI-QGIFT-012",
+        "MINI-QGIFT-013",
+        "MINI-QGIFT-014",
+        "MINI-QGIFT-015",
+        "MINI-QGIFT-016",
+        "MINI-QGIFT-017",
+        "MINI-QGIFT-018",
+        "MINI-QGIFT-019",
+        "MINI-QGIFT-020",
+        "MINI-QGIFT-021",
+        "MINI-QGIFT-022",
+        "MINI-QGIFT-023",
+        "MINI-ABGIFT-001",
+        "MINI-ABGIFT-002",
+        "MINI-ABGIFT-003",
+        "MINI-ABGIFT-004",
+        "MINI-ABGIFT-005",
+        "MINI-ABGIFT-006",
+        "MINI-ABGIFT-007",
+        "MINI-ABGIFT-008",
+        "MINI-ABGIFT-009",
+        "MINI-ABGIFT-010",
+        "MINI-ABGIFT-011",
+        "MINI-ABGIFT-012",
+        "MINI-ABGIFT-013",
+        "MINI-ABGIFT-014",
+        "MINI-ABGIFT-015",
+        "MINI-ABGIFT-016",
+        "MINI-ABGIFT-017",
+        "MINI-ABGIFT-018",
+        "MINI-ABGIFT-019",
+        "MINI-ABGIFT-020",
+        "MINI-ABGIFT-021",
+        "MINI-ABGIFT-022",
+        "MINI-ABGIFT-023",
+        "MINI-ABGIFT-024",
+        "MINI-ABGIFT-025",
+        "MINI-ABGIFT-026",
+        "MINI-ABGIFT-027",
+        "MINI-ABGIFT-028"
+      ],
+      "smoke_case_ids": [
+        "MINI-QUSER-001",
+        "MINI-QUSER-013",
+        "MINI-QUSER-017",
+        "MINI-QUSER-023",
+        "MINI-QUSER-026",
+        "MINI-QUSER-027",
+        "MINI-QUSER-028",
+        "MINI-QUSER-032",
+        "MINI-QUSER-035",
+        "MINI-QGIFT-001",
+        "MINI-QGIFT-007",
+        "MINI-QGIFT-019",
+        "MINI-ABGIFT-001",
+        "MINI-ABGIFT-009",
+        "MINI-ABGIFT-027"
+      ]
+    },
+    "expression_variant": {
+      "case_ids": [
+        "MINI-QUSER-005",
+        "MINI-QUSER-006",
+        "MINI-QUSER-007",
+        "MINI-QUSER-008",
+        "MINI-QUSER-009",
+        "MINI-QUSER-010",
+        "MINI-QUSER-011",
+        "MINI-QUSER-012",
+        "MINI-QUSER-031",
+        "MINI-QUSER-032",
+        "MINI-QUSER-033",
+        "MINI-QUSER-034",
+        "MINI-QGIFT-007",
+        "MINI-QGIFT-008",
+        "MINI-QGIFT-009",
+        "MINI-ABGIFT-007",
+        "MINI-ABGIFT-008"
+      ],
+      "smoke_case_ids": [
+        "MINI-QUSER-032",
+        "MINI-QGIFT-007"
+      ]
+    },
+    "valid_boundary": {
+      "case_ids": [
+        "MINI-QUSER-013",
+        "MINI-QUSER-014",
+        "MINI-QUSER-015",
+        "MINI-QUSER-016",
+        "MINI-QGIFT-010",
+        "MINI-QGIFT-011",
+        "MINI-QGIFT-012",
+        "MINI-QGIFT-013",
+        "MINI-ABGIFT-009",
+        "MINI-ABGIFT-010",
+        "MINI-ABGIFT-011",
+        "MINI-ABGIFT-012"
+      ],
+      "smoke_case_ids": [
+        "MINI-QUSER-013",
+        "MINI-ABGIFT-009"
+      ]
+    },
+    "invalid_parameter": {
+      "case_ids": [
+        "MINI-QUSER-017",
+        "MINI-QUSER-018",
+        "MINI-QUSER-019",
+        "MINI-QUSER-020",
+        "MINI-QUSER-021",
+        "MINI-QUSER-022",
+        "MINI-QGIFT-014",
+        "MINI-QGIFT-015",
+        "MINI-QGIFT-016",
+        "MINI-QGIFT-017",
+        "MINI-QGIFT-018",
+        "MINI-ABGIFT-021",
+        "MINI-ABGIFT-022",
+        "MINI-ABGIFT-023",
+        "MINI-ABGIFT-024",
+        "MINI-ABGIFT-025",
+        "MINI-ABGIFT-026",
+        "MINI-ABGIFT-027",
+        "MINI-ABGIFT-028",
+        "MINI-E2E-006"
+      ],
+      "smoke_case_ids": [
+        "MINI-QUSER-017",
+        "MINI-ABGIFT-027",
+        "MINI-E2E-006"
+      ]
+    },
+    "multi_condition": {
+      "case_ids": [
+        "MINI-QUSER-023",
+        "MINI-QUSER-024",
+        "MINI-QUSER-025",
+        "MINI-QGIFT-021",
+        "MINI-QGIFT-022",
+        "MINI-QGIFT-023",
+        "MINI-ABGIFT-017",
+        "MINI-ABGIFT-018",
+        "MINI-ABGIFT-019",
+        "MINI-ABGIFT-020"
+      ],
+      "smoke_case_ids": [
+        "MINI-QUSER-023"
+      ]
+    },
+    "unsupported_batch": {
+      "case_ids": [
+        "MINI-QUSER-026",
+        "MINI-QUSER-039",
+        "MINI-QUSER-040",
+        "MINI-QUSER-041",
+        "MINI-QUSER-042"
+      ],
+      "smoke_case_ids": [
+        "MINI-QUSER-026"
+      ]
+    },
+    "missing_parameter": {
+      "case_ids": [
+        "MINI-QUSER-027",
+        "MINI-QUSER-029",
+        "MINI-QGIFT-019",
+        "MINI-QGIFT-020",
+        "MINI-ABGIFT-013",
+        "MINI-ABGIFT-014",
+        "MINI-ABGIFT-015",
+        "MINI-ABGIFT-016",
+        "MINI-E2E-004"
+      ],
+      "smoke_case_ids": [
+        "MINI-QUSER-027",
+        "MINI-QGIFT-019",
+        "MINI-E2E-004"
+      ]
+    },
+    "ambiguous_expression": {
+      "case_ids": [
+        "MINI-QUSER-028",
+        "MINI-QUSER-030",
+        "MINI-QUSER-038"
+      ],
+      "smoke_case_ids": [
+        "MINI-QUSER-028"
+      ]
+    },
+    "correction_conflict": {
+      "case_ids": [
+        "MINI-QUSER-035",
+        "MINI-QUSER-036",
+        "MINI-QUSER-037"
+      ],
+      "smoke_case_ids": [
+        "MINI-QUSER-035"
+      ]
+    },
+    "tool_call": {
+      "case_ids": [
+        "MINI-CHAIN-001",
+        "MINI-CHAIN-002",
+        "MINI-CHAIN-003",
+        "MINI-CHAIN-004",
+        "MINI-CHAIN-005",
+        "MINI-CHAIN-006",
+        "MINI-GIFT-CHAIN-001",
+        "MINI-GIFT-CHAIN-002",
+        "MINI-GIFT-CHAIN-003"
+      ],
+      "smoke_case_ids": [
+        "MINI-CHAIN-001",
+        "MINI-CHAIN-006",
+        "MINI-GIFT-CHAIN-001"
+      ]
+    },
+    "response_consistency": {
+      "case_ids": [
+        "MINI-CHAIN-001",
+        "MINI-CHAIN-002",
+        "MINI-CHAIN-003",
+        "MINI-CHAIN-004",
+        "MINI-CHAIN-005",
+        "MINI-CHAIN-006",
+        "MINI-GIFT-CHAIN-001",
+        "MINI-GIFT-CHAIN-002",
+        "MINI-GIFT-CHAIN-003",
+        "MINI-FAULT-001",
+        "MINI-FAULT-002",
+        "MINI-FAULT-003",
+        "MINI-FAULT-004",
+        "MINI-DENY-001"
+      ],
+      "smoke_case_ids": [
+        "MINI-CHAIN-001",
+        "MINI-CHAIN-006",
+        "MINI-GIFT-CHAIN-001",
+        "MINI-FAULT-001",
+        "MINI-FAULT-002",
+        "MINI-FAULT-003",
+        "MINI-DENY-001"
+      ]
+    },
+    "empty_result": {
+      "case_ids": [
+        "MINI-CHAIN-006",
+        "MINI-GIFT-CHAIN-003"
+      ],
+      "smoke_case_ids": [
+        "MINI-CHAIN-006"
+      ]
+    },
+    "confirmation": {
+      "case_ids": [
+        "MINI-E2E-001",
+        "MINI-E2E-002",
+        "MINI-E2E-004",
+        "MINI-E2E-007"
+      ],
+      "smoke_case_ids": [
+        "MINI-E2E-001",
+        "MINI-E2E-002",
+        "MINI-E2E-004",
+        "MINI-E2E-007"
+      ]
+    },
+    "state_effect": {
+      "case_ids": [
+        "MINI-E2E-001",
+        "MINI-E2E-002",
+        "MINI-E2E-003",
+        "MINI-E2E-004",
+        "MINI-E2E-005",
+        "MINI-E2E-006",
+        "MINI-E2E-007"
+      ],
+      "smoke_case_ids": [
+        "MINI-E2E-001",
+        "MINI-E2E-002",
+        "MINI-E2E-003",
+        "MINI-E2E-004",
+        "MINI-E2E-005",
+        "MINI-E2E-006",
+        "MINI-E2E-007"
+      ]
+    },
+    "context_continuation": {
+      "case_ids": [
+        "MINI-E2E-002",
+        "MINI-E2E-004"
+      ],
+      "smoke_case_ids": [
+        "MINI-E2E-002",
+        "MINI-E2E-004"
+      ]
+    },
+    "cancellation": {
+      "case_ids": [
+        "MINI-E2E-003"
+      ],
+      "smoke_case_ids": [
+        "MINI-E2E-003"
+      ]
+    },
+    "confirmation_bypass": {
+      "case_ids": [
+        "MINI-E2E-005"
+      ],
+      "smoke_case_ids": [
+        "MINI-E2E-005"
+      ]
+    },
+    "safety": {
+      "case_ids": [
+        "MINI-E2E-005",
+        "MINI-DENY-001",
+        "MINI-SAFETY-001",
+        "MINI-E2E-007"
+      ],
+      "smoke_case_ids": [
+        "MINI-E2E-005",
+        "MINI-DENY-001",
+        "MINI-SAFETY-001",
+        "MINI-E2E-007"
+      ]
+    },
+    "tool_timeout": {
+      "case_ids": [
+        "MINI-FAULT-001"
+      ],
+      "smoke_case_ids": [
+        "MINI-FAULT-001"
+      ]
+    },
+    "tool_failure": {
+      "case_ids": [
+        "MINI-FAULT-002"
+      ],
+      "smoke_case_ids": [
+        "MINI-FAULT-002"
+      ]
+    },
+    "business_failure": {
+      "case_ids": [
+        "MINI-FAULT-003"
+      ],
+      "smoke_case_ids": [
+        "MINI-FAULT-003"
+      ]
+    },
+    "rate_limit": {
+      "case_ids": [
+        "MINI-FAULT-004"
+      ],
+      "smoke_case_ids": []
+    },
+    "tool_restriction": {
+      "case_ids": [
+        "MINI-DENY-001"
+      ],
+      "smoke_case_ids": [
+        "MINI-DENY-001"
+      ]
+    },
+    "prompt_injection": {
+      "case_ids": [
+        "MINI-SAFETY-001"
+      ],
+      "smoke_case_ids": [
+        "MINI-SAFETY-001"
+      ]
+    },
+    "duplicate_confirmation": {
+      "case_ids": [
+        "MINI-E2E-007"
+      ],
+      "smoke_case_ids": [
+        "MINI-E2E-007"
+      ]
+    }
+  },
+  "smoke_case_ids": [
+    "MINI-QUSER-001",
+    "MINI-QUSER-032",
+    "MINI-QUSER-013",
+    "MINI-QUSER-017",
+    "MINI-QUSER-027",
+    "MINI-QUSER-023",
+    "MINI-QUSER-026",
+    "MINI-QUSER-028",
+    "MINI-QUSER-035",
+    "MINI-QGIFT-001",
+    "MINI-QGIFT-007",
+    "MINI-QGIFT-019",
+    "MINI-ABGIFT-001",
+    "MINI-ABGIFT-009",
+    "MINI-ABGIFT-027",
+    "MINI-SAFETY-001",
+    "MINI-CHAIN-001",
+    "MINI-CHAIN-006",
+    "MINI-GIFT-CHAIN-001",
+    "MINI-FAULT-001",
+    "MINI-FAULT-002",
+    "MINI-FAULT-003",
+    "MINI-DENY-001",
+    "MINI-E2E-001",
+    "MINI-E2E-002",
+    "MINI-E2E-003",
+    "MINI-E2E-004",
+    "MINI-E2E-005",
+    "MINI-E2E-006",
+    "MINI-E2E-007"
+  ],
+  "unsupported": [
+    {
+      "id": "rbac",
+      "reason": "无角色、租户、资源所有权授权契约；工具白名单不等于 RBAC。"
+    },
+    {
+      "id": "production_services",
+      "reason": "工具均为隔离 fixture，未验证生产服务或真实网络超时。"
+    },
+    {
+      "id": "dynamic_user",
+      "reason": "使用固定后续回复，未支持动态用户模拟。"
+    },
+    {
+      "id": "open_response_semantics",
+      "reason": "回复只进行事实及必要/禁止内容检查；开放式语义质量未评分。"
+    },
+    {
+      "id": "other_intents",
+      "reason": "本轮范围为 query_user/query_gift/add_backpack_gift；query_pool/prepare_resource/query_information 未纳入。"
+    },
+    {
+      "id": "recovery_policy",
+      "reason": "验证错误暴露和回复，不将未声明的重试/回滚/跨工具恢复策略视为已覆盖。"
+    }
+  ],
+  "execution": "not_run",
+  "human_reviewed": false
+}

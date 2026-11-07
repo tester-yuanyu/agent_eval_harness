@@ -1,0 +1,165 @@
+{
+  "boundary_refs": [
+    {
+      "contract_version": "mini-agent-capability-contract-v3",
+      "path": "boundaries/critical_chain.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "boundary.critical_chain",
+      "snapshot_sha256": "ea1d16df80371d085d0b5863dbaabc78955798d3cfb86c54daa5e89346a3cce4",
+      "snapshot_type": "boundary"
+    }
+  ],
+  "branches": [
+    {
+      "branch_type": "normal",
+      "terminal_condition": "result_emission completes"
+    },
+    {
+      "branch_type": "error",
+      "terminal_condition": "a model or Tool failure is emitted"
+    },
+    {
+      "branch_type": "early_stop",
+      "terminal_condition": "clarification, confirmation, rejection, or policy stop is emitted"
+    }
+  ],
+  "chain_id": "understanding_to_planning",
+  "completion_condition": "The entry node is reached, ordered mandatory nodes are traversed, a declared terminal branch stops at the boundary, and required Evidence is observable.",
+  "contract_version": "mini-agent-capability-contract-v3",
+  "description": "Reusable understanding_to_planning capability chain.",
+  "evidence_refs": [
+    {
+      "contract_version": "mini-agent-capability-contract-v3",
+      "path": "evidence/intent_result.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "evidence.intent_result",
+      "snapshot_sha256": "3f4fd12d035f48aaddad7bd7bfc922a8e8d312ea91c9ba2760818fca1775bef5",
+      "snapshot_type": "evidence"
+    },
+    {
+      "contract_version": "mini-agent-capability-contract-v3",
+      "path": "evidence/tool_trace.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "evidence.tool_trace",
+      "snapshot_sha256": "285f5a8619994f631a4b6063dbc5cdb3d0ea45c5e9ba08b7729395b4c31040c3",
+      "snapshot_type": "evidence"
+    }
+  ],
+  "module_refs": [
+    {
+      "contract_version": "intent-router-module-v3",
+      "path": "modules/intent_router.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "module.intent_router",
+      "snapshot_sha256": "af892dd636ecb9ffe4fdb4b4789f200efdad04fabd354654e5efa1855c711d73",
+      "snapshot_type": "module"
+    },
+    {
+      "contract_version": "tool-loop-module-v3",
+      "path": "modules/tool_loop.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "module.tool_loop",
+      "snapshot_sha256": "f25cb6794ef0ebf6720d0b9a61031e4f8ffd5026b4f51088dab2c63600e9191f",
+      "snapshot_type": "module"
+    }
+  ],
+  "nodes": [
+    {
+      "capability_key": "intent.contract_validation",
+      "depends_on": [],
+      "inputs": [
+        "intent_validation_input"
+      ],
+      "node_id": "intent_validation",
+      "outputs": [
+        "intent_validation_output"
+      ],
+      "provider": {
+        "role": "selected_intent",
+        "snapshot_id": null
+      },
+      "state_reads": [],
+      "state_writes": [],
+      "stop_conditions": [
+        "intent_validation_terminal"
+      ]
+    },
+    {
+      "capability_key": "tool.registered_execution",
+      "depends_on": [
+        "intent_validation"
+      ],
+      "inputs": [
+        "tool_execution_input"
+      ],
+      "node_id": "tool_execution",
+      "outputs": [
+        "tool_execution_output"
+      ],
+      "provider": {
+        "role": "selected_tool",
+        "snapshot_id": null
+      },
+      "state_reads": [],
+      "state_writes": [],
+      "stop_conditions": [
+        "tool_execution_terminal"
+      ]
+    },
+    {
+      "capability_key": "execution.bounded_tool_loop",
+      "depends_on": [
+        "tool_execution"
+      ],
+      "inputs": [
+        "bounded_execution_input"
+      ],
+      "node_id": "bounded_execution",
+      "outputs": [
+        "bounded_execution_output"
+      ],
+      "provider": {
+        "role": "snapshot",
+        "snapshot_id": "module.tool_loop"
+      },
+      "state_reads": [],
+      "state_writes": [],
+      "stop_conditions": [
+        "bounded_execution_terminal"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "capability_key": "intent.contract_validation",
+      "evidence_ids": [
+        "evidence.intent_result"
+      ],
+      "mandatory": true,
+      "provider": {
+        "role": "selected_intent",
+        "snapshot_id": null
+      },
+      "requirement_id": "selected_intent_contract"
+    },
+    {
+      "capability_key": "tool.registered_execution",
+      "evidence_ids": [
+        "evidence.tool_trace"
+      ],
+      "mandatory": true,
+      "provider": {
+        "role": "selected_tool",
+        "snapshot_id": null
+      },
+      "requirement_id": "selected_tool_execution"
+    }
+  ],
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "chain.understanding_to_planning",
+  "snapshot_sha256": "47eae416cbf95a47bd18cd12e362549e1a11b6cce9993ab6ae8c942f603c09f7",
+  "snapshot_type": "chain",
+  "source_hashes": {
+    "catalog_definition_sha256": "e8aa8a9b2e22c6b6711e7a78a93cf9077969033b8b9ae2c1793407d67a285411"
+  }
+}

@@ -10,6 +10,8 @@
 | 使用 Inspect 内自研循环、原生模型基线与离线验收 | [自研 Harness](benchmark/native-harness.md) · [验收记录](migration/native-harness-acceptance-2026-11-06.md) |
 | 接入新 Agent、复用 Provider、按需安装 Langfuse | [Agent 接入](benchmark/agent-adapters.md) · [验收与 mini_agent 可行性](migration/provider-reuse-acceptance-2026-11-04.md) |
 | 核对框架复用的回归、Docker 与全新安装验收 | [框架复用验收](migration/framework-reuse-acceptance-2026-11-02.md) |
+| 核对 mini_agent 场景、代表集与解耦验收 | [mini_agent 覆盖指南](benchmark/mini-agent-coverage.md) · [报告模式归纳修订](migration/2026-11-07-report-pattern-summary.md) |
+| 联动离线报告、结构化诊断与 Langfuse | [使用与边界](benchmark/report-diagnostics.md) |
 | 运行模块、模型决策、关键链路或端到端评测 | [分层评测指南](benchmark/v2-usage.md) |
 | 核对 nanobot 能力覆盖并运行离线核心组件 | [覆盖指南](benchmark/nanobot-coverage.md) · [覆盖矩阵与运行报告](../reports/nanobot-coverage-v1/README.md) |
 | 核对本轮结果与尚未完成的工作 | [七项问题清单](benchmark/status-v2.md) · [v2 作品集](../reports/file-tools-v2/index.html) |

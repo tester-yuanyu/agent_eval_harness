@@ -13,8 +13,7 @@ from eval_framework.benchmark.langfuse_export import build_payload
 from eval_framework.benchmark.tasks import dataset_identity, load_tasks
 
 DATASET = (
-    Path(__file__).resolve().parents[4]
-    / "data/benchmarks/file-tools-v1/tasks.jsonl"
+    Path(__file__).resolve().parents[4] / "data/benchmarks/file-tools-v1/tasks.jsonl"
 )
 
 
@@ -77,7 +76,11 @@ def test_real_children_keep_timing_io_and_experiment_identity():
                     "output": "ok",
                     "model": "requested-alias",
                     "response_model": "resolved-model-version",
-                    "usage": {"input_tokens": 10, "output_tokens": 1},
+                    "usage": {
+                        "input_tokens": 10,
+                        "output_tokens": 1,
+                        "input_tokens_cache_read": 5,
+                    },
                 },
                 {
                     "id": "denied-tool",
@@ -127,6 +130,12 @@ def test_real_children_keep_timing_io_and_experiment_identity():
         attrs[0]["langfuse.experiment.item.id"]
         == attrs[1]["langfuse.experiment.item.id"]
     )
+    assert (
+        json.loads(attrs[1]["langfuse.observation.usage_details"])[
+            "cache_read_input_tokens"
+        ]
+        == 5
+    )
     assert spans[1].parent_span_id == spans[0].span_id
     assert spans[1].end_time_unix_nano != spans[1].start_time_unix_nano
     assert attrs[1]["langfuse.observation.output"] == "ok"
@@ -141,6 +150,54 @@ def test_real_children_keep_timing_io_and_experiment_identity():
     assert denied_tool["complete"] is True
     assert spans[2].parent_span_id == spans[0].span_id
 
+    # First-export presentation preserves formal scores, IDs, IO and timestamps.
+    presentation = {
+        "source_hash": "sourcehash",
+        "analysis_id": "analysis",
+        "trials": [
+            {
+                "case_id": "c1",
+                "trial": 2,
+                "category": "read_search",
+                "operation": "read",
+                "findings": [],
+            }
+        ],
+    }
+    enriched, same_scores, same_traces = build_payload(
+        run, tasks, "dataset1", "sourcehash", presentation=presentation
+    )
+    assert [s.model_dump() for s in scores] == [s.model_dump() for s in same_scores]
+    assert same_traces == traces
+    assert enriched[0].name == "benchmark / read_search / c1"
+    from langfuse.api import OtelResourceSpan, OtelScopeSpan
+
+    wire = []
+
+    def accepted(request):
+        wire.append(json.loads(request.content))
+        return httpx.Response(200, json={})
+
+    _sdk(accepted).opentelemetry.export_traces(
+        resource_spans=[OtelResourceSpan(scope_spans=[OtelScopeSpan(spans=enriched)])]
+    )
+    serialized = wire[0]["resourceSpans"][0]["scopeSpans"][0]["spans"][0]
+    tags = next(
+        a["value"]
+        for a in serialized["attributes"]
+        if a["key"] == "langfuse.trace.tags"
+    )
+    assert tags["arrayValue"]["values"] == [
+        {"stringValue": "operation:read"},
+        {"stringValue": "task_group:read_search"},
+    ]
+    for before, after in zip(spans, enriched, strict=True):
+        assert (
+            before.span_id,
+            before.start_time_unix_nano,
+            before.end_time_unix_nano,
+        ) == (after.span_id, after.start_time_unix_nano, after.end_time_unix_nano)
+
 
 def test_dataset_creation_never_retries_an_ambiguous_http_failure(tmp_path):
     from eval_framework.benchmark.langfuse_export import export_run
@@ -152,9 +209,7 @@ def test_dataset_creation_never_retries_an_ambiguous_http_failure(tmp_path):
         return httpx.Response(503, json={"message": "unavailable"})
 
     with pytest.raises(ApiError):
-        export_run(
-            _saved_export_source(tmp_path), DATASET, client=_sdk(unavailable)
-        )
+        export_run(_saved_export_source(tmp_path), DATASET, client=_sdk(unavailable))
     assert len(requests) == 1
 
 

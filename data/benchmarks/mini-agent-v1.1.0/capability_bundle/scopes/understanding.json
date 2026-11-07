@@ -1,0 +1,97 @@
+{
+  "allowed_module_ids": [
+    "module.model_gateway",
+    "module.intent_router"
+  ],
+  "boundary_refs": [
+    {
+      "contract_version": "mini-agent-capability-contract-v3",
+      "path": "boundaries/understanding.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "boundary.understanding",
+      "snapshot_sha256": "05c8b2c2fa209a1bbbda48bf3e10010868b4ee9aa5f3d2985e7134ecdc476f3e",
+      "snapshot_type": "boundary"
+    }
+  ],
+  "completion_condition": "The entrypoint is reached, every mandatory requirement is resolved, the stop boundary is reached, and required Evidence is observable.",
+  "contract_version": "mini-agent-capability-contract-v3",
+  "description": "Reusable understanding evaluation range.",
+  "entrypoint": "MinimalAgent.run_intent_only",
+  "evidence_refs": [
+    {
+      "contract_version": "mini-agent-capability-contract-v3",
+      "path": "evidence/intent_result.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "evidence.intent_result",
+      "snapshot_sha256": "3f4fd12d035f48aaddad7bd7bfc922a8e8d312ea91c9ba2760818fca1775bef5",
+      "snapshot_type": "evidence"
+    }
+  ],
+  "inputs": [
+    "user_input"
+  ],
+  "module_refs": [
+    {
+      "contract_version": "model-gateway-module-v3",
+      "path": "modules/model_gateway.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "module.model_gateway",
+      "snapshot_sha256": "78f74ab0def8cb0e96c99463b4aa3060b77dd5ce0a9e4cf3818df83c2cca7852",
+      "snapshot_type": "module"
+    },
+    {
+      "contract_version": "intent-router-module-v3",
+      "path": "modules/intent_router.json",
+      "snapshot_format_version": "3.0",
+      "snapshot_id": "module.intent_router",
+      "snapshot_sha256": "af892dd636ecb9ffe4fdb4b4789f200efdad04fabd354654e5efa1855c711d73",
+      "snapshot_type": "module"
+    }
+  ],
+  "outputs": [
+    "intent_result"
+  ],
+  "prohibited_module_ids": [
+    "module.agent_orchestrator",
+    "module.execution_guard",
+    "module.observability",
+    "module.tool_loop",
+    "module.tool_registry"
+  ],
+  "requirements": [
+    {
+      "capability_key": "intent.formal_validation",
+      "evidence_ids": [
+        "evidence.intent_result"
+      ],
+      "mandatory": true,
+      "provider": {
+        "role": "snapshot",
+        "snapshot_id": "module.intent_router"
+      },
+      "requirement_id": "formal_intent_validation"
+    },
+    {
+      "capability_key": "intent.contract_validation",
+      "evidence_ids": [
+        "evidence.intent_result"
+      ],
+      "mandatory": true,
+      "provider": {
+        "role": "selected_intent",
+        "snapshot_id": null
+      },
+      "requirement_id": "selected_intent_contract"
+    }
+  ],
+  "scope_id": "understanding",
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "scope.understanding",
+  "snapshot_sha256": "c14cbd66bfeaf63f29d52c4d04ed58d03d0532199999db0f3a767c1733fd75b5",
+  "snapshot_type": "scope",
+  "source_hashes": {
+    "catalog_definition_sha256": "c1d1b0cde5353addc5e5ad536126a92550376a53eace1f6256fd37e5040b0844"
+  },
+  "stop_boundary": "intent_decided",
+  "unresolved_behavior": "A missing or undeclared capability remains unknown; the Scope does not infer support."
+}

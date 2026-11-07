@@ -70,6 +70,10 @@ Agent 仅收到 `id`、`prompt`、`followups`、`fixtures`、`allowed_tools`、`
 
 `results.json` 汇总已保存的 trial；每条包含公开输入/输出、真实模型和工具事件、Token 用量、独立文件证据、正式指标及理由。报告区分唯一任务数、实际 trial 数和计划 trial 数，分别展示 dev / holdout 与任务类别。请求的模型名与 Provider 实际响应的模型名分别记录，未知字段保留未知。
 
+`benchmark report --format domain` 生成可离线打开的 HTML 和 Markdown。概览下方显示问题摘要与下一步建议；失败项先显示期望/实际的中文说明，再显示由事件支持的诊断，原始评分 JSON 保留在折叠区。参数契约解释只使用运行身份中 Hash 绑定的参考契约；参考能力与当前实现不能混同。确认轮没有携带前轮参数时，只归因为可见请求的上下文缺口，不推断模型遗忘或内部状态丢失。诊断链接直接定位并展开原始 Trace，不改变任何正式 verdict。
+
+已有运行可重新渲染报告，不重新调用模型或评分。缓存 Token 补充及可选价格估算的边界见[用量规范](metric-specification.md#agent--模块用量)。分享不超过 100 条执行的 HTML 时，逐条 Trace 和评分均已内嵌；原始结果和 Markdown 链接为可选旁证。超过 100 条执行须同时分享 `report-trials/` 目录。
+
 `all_trials_pass_rate` 表示一个任务的全部计划重复试验都通过的比例。它不能写成“至少一次通过”的 pass@k；缺失或无效 trial 不证明稳定通过。费用没有可靠价格证据时显示未知，不按零费用展示。Token 从模型响应读取；`byte_fallback` 仅影响 nanobot 上下文预算估算，不冒充 Provider 的计费 Token。
 
 Langfuse 接收保存结果，不承担第二套正式评分。导出接口接受数据、服务端读回验证和浏览器界面验收是三个不同层次；作品集只能写已验证的层次。展示完整轨迹也不等于收集私有思维链：记录范围是模型公开请求/响应、工具调用与可观察状态。

@@ -1,0 +1,13 @@
+{
+  "schema_version": "report-diagnostics-v1",
+  "profile_id": "mini-agent-parameter-aliases",
+  "profile_version": "1.0.0",
+  "aliases": {
+    "add_backpack_gift": {
+      "count": "num",
+      "valid_days": "duration_days",
+      "validity_days": "duration_days"
+    }
+  },
+  "sha256": "0185093eb6a10682a03638bc334d9d7089b1ac56be9cb6b6b968052549abf688"
+}

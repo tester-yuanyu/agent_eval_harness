@@ -55,3 +55,25 @@ python3.11 scripts/setup.py --only evaluator --with-langfuse
 缺少 Langfuse 时核心导入、CLI、离线执行与本地报告可用；显式导出/回读/审核导入给出安装提示。未配置自动交付时为 `DISABLED`；已启用但缺 SDK 时为 `DEPENDENCY_MISSING`。
 
 替换性通过独立离线适配器和旧 `ExternalProvider` 进程桥两组测试验证，不调用模型、不读取 Oracle，不作为真实 Agent 成绩。详见[验收与 mini_agent 评估](../migration/provider-reuse-acceptance-2026-11-04.md)。
+
+## mini_agent 接入 OpenCode
+
+mini_agent 的 Inspect bridge 对 `opencode.ai` 请求补充自己的客户端标识
+`agent-eval-suite/0.1.0`，并为每个 trial 生成独立的 `x-opencode-session`。
+同一 trial 的多轮和工具续接复用该 session；不会把不同用例合并成同一会话。
+实现使用 Inspect 公开的 generation filter，只修改传输请求头，保留原有输入、
+工具、预算、日志与判分。其他 API 域名不添加这些请求头。
+接入要求见 [OpenCode Go 文档](https://opencode.ai/docs/console/go/#where-can-i-use-it)。
+
+`.env` 保存凭据；运行时显式指定 `--env-file .env` 与模型 JSON 配置。
+JSON 中的 `model`、`base_url` 必须与本次选择一致，`api_key_env` 使用
+`OPENCODE_API_KEY`。修改 `.env` 的模型或地址不会自动改写 JSON。
+DeepSeek 的执行配置显式设置
+`inspect_model: "openai-api/opencode/deepseek-v4.1-flash"`，选择 Chat Completions，
+并以 `extra_body: {"thinking": {"type": "disabled"}}` 关闭 thinking。
+原因是 mini_agent 严格解析 JSON，而 Inspect 的 Responses 桥接会将推理与
+内部元数据编码进 `output_text`。更换模型时也需同步检查 `inspect_model`
+和供应商参数；不得通过放宽 Agent 输出校验或修改 Oracle 来掩盖协议错误。
+本适配仅覆盖 mini_agent 执行 bridge，不表示其他 Agent 或独立模型 Judge
+已完成 OpenCode Go 验收。接口返回 402、403 等错误时记录 `INVALID`，
+不能据此判断被测 Agent 的能力，也不能宣称真实评测成功链路通过。

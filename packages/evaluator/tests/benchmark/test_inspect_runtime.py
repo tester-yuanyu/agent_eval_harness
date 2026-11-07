@@ -212,3 +212,29 @@ def test_native_model_error_is_a_string_and_keeps_missing_usage_unknown():
     projected = asyncio.run(model_evidence([event], []))[0]
     assert projected["error"] == "Provider rejected credentials"
     assert projected["usage"] == {}
+
+
+def test_cache_usage_survives_native_projection_and_aggregation():
+    import asyncio
+
+    from inspect_ai.event import ModelEvent
+    from inspect_ai.model import GenerateConfig, ModelOutput, ModelUsage
+
+    from eval_framework.benchmark.inspect_runtime import aggregate_usage, model_evidence
+
+    output = ModelOutput.from_content("mockllm/model", "ok")
+    output.usage = ModelUsage(
+        input_tokens=10, output_tokens=2, total_tokens=17, input_tokens_cache_read=5
+    )
+    event = ModelEvent(
+        model="mockllm/model",
+        input=[],
+        tools=[],
+        tool_choice="auto",
+        config=GenerateConfig(),
+        output=output,
+    )
+    projected = asyncio.run(model_evidence([event], []))
+    assert projected[0]["usage"]["input_tokens_cache_read"] == 5
+    assert aggregate_usage(projected)["input_tokens_cache_read"] == 5
+    assert aggregate_usage(projected).get("input_tokens_cache_write") is None

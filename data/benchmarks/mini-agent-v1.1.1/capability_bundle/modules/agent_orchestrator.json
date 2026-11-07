@@ -1,0 +1,78 @@
+{
+  "capabilities": [
+    {
+      "capability_key": "orchestration.single_run",
+      "evidence_ids": [
+        "evidence.final_response"
+      ],
+      "reason": null,
+      "support_status": "supported"
+    },
+    {
+      "capability_key": "context.inheritance",
+      "evidence_ids": [],
+      "reason": "MinimalAgent.run accepts one user input and no inherited conversation state.",
+      "support_status": "unsupported"
+    },
+    {
+      "capability_key": "context.override",
+      "evidence_ids": [],
+      "reason": "MinimalAgent.run accepts one user input and no inherited conversation state.",
+      "support_status": "unsupported"
+    },
+    {
+      "capability_key": "context.cancellation",
+      "evidence_ids": [],
+      "reason": "MinimalAgent.run accepts one user input and no inherited conversation state.",
+      "support_status": "unsupported"
+    },
+    {
+      "capability_key": "context.session_isolation",
+      "evidence_ids": [],
+      "reason": "MinimalAgent.run accepts one user input and no inherited conversation state.",
+      "support_status": "unsupported"
+    },
+    {
+      "capability_key": "context.residual_state_handling",
+      "evidence_ids": [],
+      "reason": "MinimalAgent.run accepts one user input and no inherited conversation state.",
+      "support_status": "unsupported"
+    },
+    {
+      "capability_key": "context.cleanup",
+      "evidence_ids": [],
+      "reason": "MinimalAgent.run accepts one user input and no inherited conversation state.",
+      "support_status": "unsupported"
+    }
+  ],
+  "component_versions": {
+    "agent_orchestrator": "v3"
+  },
+  "contract_version": "agent-orchestrator-module-v3",
+  "execution_boundary_ids": [
+    "boundary.end_to_end"
+  ],
+  "input_schema": {
+    "type": "object"
+  },
+  "intent_refs": [],
+  "module_id": "agent_orchestrator",
+  "module_refs": [],
+  "output_schema": {
+    "type": "object"
+  },
+  "responsibility": "Coordinate one run from intent routing to result.",
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "module.agent_orchestrator",
+  "snapshot_sha256": "9144e0227f084b538e9c9d375d73c094b8bb947fd87b43e69f2d3d2946cdcd6d",
+  "snapshot_type": "module",
+  "source_hashes": {
+    "capabilities_sha256": "a4b6d157e9d5fd8d3654fa84932b5ad9787d67ba537f9e3d668c46762c54cfd7",
+    "children_sha256": "b78ee59b8a819b12aaee9953ee472c98c34893d48db562e951cb5033d096ae54"
+  },
+  "tool_refs": [],
+  "trace_event_types": [
+    "run_started",
+    "run_finished"
+  ]
+}

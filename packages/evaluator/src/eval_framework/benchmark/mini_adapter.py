@@ -6,10 +6,61 @@ import hashlib
 import json
 import uuid
 from pathlib import Path
+from typing import TYPE_CHECKING
+from urllib.parse import urlsplit
+
+if TYPE_CHECKING:
+    from inspect_ai.model import (
+        ChatMessage,
+        GenerateConfig,
+        GenerateFilter,
+        GenerateInput,
+        Model,
+    )
+    from inspect_ai.tool import ToolChoice, ToolInfo
 
 from .inspect_docker import bind_docker_environment, source_digest
 from .inspect_runtime import aggregate_usage, inspect_model, model_evidence
 from .package_sandbox import package_inputs, prepare_package_sandbox
+from .request_budget import RequestBudget
+
+
+def opencode_bridge_filter(
+    config: dict, *, budget: RequestBudget | None = None
+) -> GenerateFilter | None:
+    """Attach truthful client identity and one session per trial conversation."""
+    is_opencode = urlsplit(config.get("base_url") or "").hostname == "opencode.ai"
+    if not is_opencode and budget is None:
+        return None
+
+    from inspect_ai.model import GenerateInput
+
+    session_id = str(uuid.uuid4())
+
+    async def apply_headers(
+        model: Model,
+        messages: list[ChatMessage],
+        tools: list[ToolInfo],
+        tool_choice: ToolChoice | None,
+        generation: GenerateConfig,
+    ) -> GenerateInput:
+        if budget is not None:
+            budget.reserve()
+        if not is_opencode:
+            return GenerateInput(messages, tools, tool_choice, generation)
+        headers = {
+            **(generation.extra_headers or {}),
+            "User-Agent": "agent-eval-suite/0.1.0",
+            "x-opencode-session": session_id,
+        }
+        return GenerateInput(
+            messages,
+            tools,
+            tool_choice,
+            generation.model_copy(update={"extra_headers": headers}),
+        )
+
+    return apply_headers
 
 
 def project_events(output: dict) -> list[dict]:
@@ -22,6 +73,18 @@ def project_events(output: dict) -> list[dict]:
         complete = "run_finished" in kinds or (
             "run_started" not in kinds and "intent_decided" in kinds
         )
+        turn_record = next(
+            (
+                t
+                for t in output.get("turns", [])
+                if t.get("run_id") == group[0]["run_id"]
+            ),
+            {},
+        )
+        user_input = next(
+            (e["payload"]["user_input"] for e in group if "user_input" in e["payload"]),
+            None,
+        )
         result.append(
             dict(
                 id=parent,
@@ -30,8 +93,12 @@ def project_events(output: dict) -> list[dict]:
                 turn=index + 1,
                 start_time=group[0]["timestamp"],
                 end_time=group[-1]["timestamp"] if complete else None,
-                input={},
-                output={},
+                input={"user_input": user_input},
+                output={
+                    k: turn_record[k]
+                    for k in ("status", "final_response")
+                    if k in turn_record
+                },
                 incomplete=not complete,
             )
         )
@@ -68,6 +135,7 @@ def project_events(output: dict) -> list[dict]:
                     id="tool-" + request["event_id"],
                     type="tool",
                     name=call["name"],
+                    tool_call_id=call["call_id"],
                     start_time=request["timestamp"],
                     end_time=terminal["timestamp"] if terminal else None,
                     input=call["arguments"],
@@ -75,6 +143,7 @@ def project_events(output: dict) -> list[dict]:
                     parent_id=parent,
                     turn=index + 1,
                     incomplete=terminal is None,
+                    error=terminal["payload"].get("error") if terminal else None,
                 )
             )
     # SQLite observations are independent reads, attached to their completed turns.
@@ -83,7 +152,7 @@ def project_events(output: dict) -> list[dict]:
             (e for e in result if e["type"] == "turn" and e["turn"] == index + 1), None
         )
         if turn:
-            turn["output"] = {"state": snapshot}
+            turn["output"]["state"] = snapshot
     return result
 
 
@@ -92,6 +161,7 @@ class MiniAgentBenchmarkAdapter:
 
     def __init__(self, config: dict):
         self.config = dict(config)
+        self.request_budget = RequestBudget(config.get("max_model_requests"))
         root = Path(config["repository_root"]).resolve(strict=True)
         self.packages = {
             name: root / path
@@ -189,7 +259,10 @@ class MiniAgentBenchmarkAdapter:
         }
         pending = None
         try:
-            async with sandbox_agent_bridge(forward_generation_config=True) as bridge:
+            async with sandbox_agent_bridge(
+                forward_generation_config=True,
+                filter=opencode_bridge_filter(config, budget=self.request_budget),
+            ) as bridge:
                 finished = await env.exec(
                     prefix + ["python", "-m", "eval_framework.benchmark.mini_worker"],
                     input=json.dumps(

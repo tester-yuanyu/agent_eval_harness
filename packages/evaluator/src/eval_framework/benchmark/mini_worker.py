@@ -34,6 +34,16 @@ def execute_public(
     options = {}
     if kind == "gift_sqlite_v1":
         options["environment"] = kind
+    elif kind == "read_fixture_v2":
+        from ..providers.mini_agent.benchmark_environment import read_fixture_registry
+
+        def binding(allowed):
+            registry = read_fixture_registry(task["environment"], allowed)
+            MiniAgentRuntimeBindingFactory(capabilities).verify_registry(registry)
+            return registry
+
+        binding(frozenset(execution.allowed_tools or []))
+        options.update(tool_registry_factory=binding, current_capabilities=capabilities)
     elif kind == "query_user_fixture_v1":
         from minimal_agent.contracts.tools import ToolResult
 
@@ -103,6 +113,7 @@ def execute_public(
     output = replace(
         output,
         observations={
+            "completed_turns": sum(e["event_type"] == "run_finished" for e in events),
             "tool_results": [
                 event["payload"].get("output")
                 for event in events

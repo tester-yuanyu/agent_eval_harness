@@ -71,15 +71,14 @@ def test_v2_numeric_source_hash_survives_json_value_parsing():
     numeric_source_hash = "2" * 64
     original = saved_span("2" * 16, {"snapshot": {"config.json": "{}"}})
 
-    evidence = langfuse_export.build_evidence_payload(
-        [original], numeric_source_hash
-    )
+    evidence = langfuse_export.build_evidence_payload([original], numeric_source_hash)
 
     metadata = metadata_of(evidence[0])
     assert metadata["evidence_source_sha256"] == "sha256:" + numeric_source_hash
-    assert langfuse_export._metadata_with_json_values(metadata)[
-        "evidence_source_sha256"
-    ] == metadata["evidence_source_sha256"]
+    assert (
+        langfuse_export._metadata_with_json_values(metadata)["evidence_source_sha256"]
+        == metadata["evidence_source_sha256"]
+    )
 
 
 @pytest.mark.parametrize(
@@ -291,3 +290,28 @@ def test_semantically_equal_json_strings_need_distinct_exact_evidence():
         metadata_first["exact_metadata_base64"]
         != metadata_second["exact_metadata_base64"]
     )
+
+
+def test_empty_objects_need_lossless_proof_and_legacy_payload_stays_stable():
+    original = saved_span(
+        "2" * 16, {"before_files": {}, "snapshot": {"empty": {}, "count": 0}}
+    )
+    evidence = langfuse_export.build_evidence_payload([original], SOURCE_HASH)
+    assert len(evidence) == 1
+    decoded, _ = decode_evidence(evidence[0])
+    assert decoded == {"before_files": {}, "snapshot": {"empty": {}, "count": 0}}
+    assert (
+        langfuse_export.build_evidence_payload(
+            [original], SOURCE_HASH, version="langfuse-exact-metadata-v2"
+        )
+        == []
+    )
+    assert not langfuse_export._metadata_matches(
+        {"before_files": {}}, {}, "before_files"
+    )
+    matches = langfuse_export._empty_object_projection_matches
+    assert matches(
+        {"snapshot": {"empty": {}, "count": 0}}, {"snapshot.count": 0}, "snapshot"
+    )
+    assert not matches({"snapshot": {"empty": {}, "count": 0}}, {}, "snapshot")
+    assert not matches({"snapshot": {}}, {"snapshot.extra": 1}, "snapshot")

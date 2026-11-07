@@ -13,6 +13,19 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
+from .report_diagnostics import write_diagnostics
+from .report_insights import (
+    comparisons,
+    estimate_cost,
+    intent_mode,
+    latency_details,
+    load_contracts,
+    report_usage,
+    schema_advice,
+    token_parts,
+)
+from .report_links import load_links
+
 
 def _escape(value: Any) -> str:
     return html.escape(str(value), quote=True)
@@ -30,6 +43,138 @@ def _number(value: Any) -> str:
 
 def _percent(numerator: int, denominator: int) -> str:
     return f"{100 * numerator / denominator:.1f}%" if denominator else "—"
+
+
+def _event_anchor(event_id: str, row: dict) -> str:
+    key = f"{row['case_id']}\0{row['trial']}\0{event_id}"
+    return "event-" + hashlib.sha256(key.encode()).hexdigest()[:24]
+
+
+def _findings_html(row: dict, detail_url: str | None = None) -> str:
+    findings = row.get("_report_findings", [])
+    result = []
+    for finding in findings:
+        links = " · ".join(
+            f'<a href="{_escape((detail_url or "") + "#" + _event_anchor(ref, row))}">证据 {index + 1}</a>'
+            for index, ref in enumerate(finding["evidence"]) if ref
+        )
+        contract = finding.get("contract")
+        source = (
+            "<details><summary>参考契约来源（已核对 Hash）</summary>"
+            f"<pre>{_escape(_pretty(contract))}</pre></details>" if contract else ""
+        )
+        result.append(
+            '<div class="finding">'
+            f'<a href="{_escape(row.get("_report_overview_url", "") + "#issue-" + str(finding["number"]))}">同问题 #{finding["number"]}</a>：'
+            f"{_escape(finding.get('short', finding['title']))}"
+            f"<details><summary>诊断详情与证据</summary><p>{_escape(finding['description'])}</p><p>{links}</p>{source}</details></div>"
+        )
+    if not findings and row["assessment"]["verdict"] != "PASS":
+        result.append('<p class="muted">根因待核实：当前证据未触发可确认的诊断规则，不能仅凭评分差异归责模型或执行层。</p>')
+    url = row.get("_report_langfuse_url")
+    result.append(f'<p><a href="{_escape(url)}" target="_blank" rel="noopener noreferrer">在 Langfuse 中查看完整 Trace →</a>（保存结果已回读核验）</p>' if url else '<p class="muted">Langfuse：未导出或未核验；本页保留完整离线证据。</p>')
+    return "".join(result)
+
+
+def _overview_html(rows: list[dict], contracts: dict, warnings: list[str]) -> str:
+    labels = {"read": "读操作", "write": "写操作", "mixed": "混合目标", "unknown": "目标待确认"}
+    groups = {mode: [r for r in rows if intent_mode(r, contracts) == mode] for mode in labels}
+    lines, rates = [], []
+    for mode, label in labels.items():
+        group = groups[mode]
+        if group:
+            passed = sum(r["assessment"]["verdict"] == "PASS" for r in group)
+            failed = sum(r["assessment"]["verdict"] == "FAIL" for r in group)
+            lines.append(f"{label}：{passed}/{len(group)} 通过，{failed} 条 FAIL。")
+            rates.append(f"{label}通过率 {_percent(passed, len(group))}（{passed}/{len(group)}）")
+    issues, actions = {}, {}
+    for row in rows:
+        for finding in row.get("_report_findings", []):
+            issues.setdefault(finding["kind"], []).append((row, finding))
+            actions[finding["kind"]] = finding["action"]
+    details = []
+    for kind, entries in issues.items():
+        finding = entries[0][1]
+        cases = {(r["case_id"], r["trial"]) for r, _ in entries}
+        diagnosis = finding["description"] if kind != "schema_mismatch" else "模型候选参数使用参考契约未声明的字段，随后执行校验拒绝。以下按不同失败执行去重统计，同一执行可出现多个字段变体。"
+        if kind == "missing_confirmation_context":
+            diagnosis = "确认轮可见请求只携带确认语句与通用指令，没有前轮参数或消息；模型随后返回空参数并要求澄清。证据指向上下文传递缺口，不能归为模型遗忘。具体轮次见各条证据，内部状态保存仍需核对。"
+        if kind == "schema_mismatch":
+            patterns = {}
+            for row, item in entries:
+                for alias, canonical in item.get("aliases", {}).items():
+                    patterns.setdefault((alias, canonical), set()).add((row["case_id"], row["trial"]))
+            actions[kind] = schema_advice({a:c for a,c in patterns}, any(f.get("prompt_contract_gap") for _,f in entries))
+            diagnosis += " ".join(f"{a} → {c}：{len(cases)} 条失败执行。" for (a, c), cases in patterns.items())
+            gaps = {(r["case_id"], r["trial"]) for r, f in entries if f.get("prompt_contract_gap")}
+            if gaps:
+                diagnosis += f"其中 {len(gaps)} 条执行的可见意图请求提供通用 Schema，parameters 允许任意字段，未列出上述标准字段；证据指向模型请求与执行契约的传递缺口，不能直接归因为模型无视明确 Schema。"
+            else:
+                diagnosis += "是否已向模型传递具体字段约束，仍需核对请求；字段偏差本身不能证明模型无视 Schema。"
+            diagnosis += "这些候选映射只用于诊断和修复建议，未修改参数或评分；修复后仍需验证类型、范围和多轮确认。"
+        details.append(f'<li id="issue-{finding["number"]}"><strong>问题 #{finding["number"]}：{_escape(finding["title"])} · {len(cases)} 条</strong><p>{_escape(diagnosis)}</p><details><summary>受影响执行</summary>{_escape("、".join(f"{c} / 第 {t} 次" for c, t in sorted(cases)))}</details></li>')
+    failures = [r for r in rows if r["assessment"]["verdict"] == "FAIL"]
+    diagnosed = sum(bool(r.get("_report_findings")) for r in failures)
+    coverage = f"失败归因覆盖：{diagnosed}/{len(failures)} 条；问题计数可重叠，不能相加。"
+    if diagnosed < len(failures):
+        coverage += " 待核实：" + "、".join(r["case_id"] for r in failures if not r.get("_report_findings")) + "。"
+    notes = []
+    if all("_report_task" in r for r in rows) and rows:
+        notes.append("按冻结任务目标分组；多轮中的意图偏移不改变所属场景。")
+    else:
+        notes.append("有冻结任务证据时按目标分组；缺失时回退到观察意图，无法确定则标记目标待确认，不猜测。")
+    write_passes = [r for r in groups["write"] if r["assessment"]["verdict"] == "PASS"]
+    guarded = [r for r in write_passes if any(m.get("name") == "tool_not_called" and m.get("success") is True for m in r["assessment"].get("metrics", []))]
+    if guarded:
+        notes.append(f"写场景中 {len(guarded)} 条 PASS 属于要求不调用工具的保护路径（" + "、".join(r["case_id"] for r in guarded) + "）；不能解释为成功写入。")
+    if groups["write"] and (not write_passes or len(guarded) == len(write_passes)):
+        notes.append("本批没有通过的成功写入路径；不能将场景通过率视为实际发放成功率。")
+        actions["write_coverage"] = "修复 Agent 后优先复测一条请求→确认→实际写入的成功路径，再验证重复确认无额外副作用；保持原始结果不变，新运行单独比较。"
+    write_failures = sum(r["assessment"]["verdict"] == "FAIL" for r in groups["write"])
+    if write_failures > len(failures) / 2:
+        notes.insert(0, f"本批写场景是主要失败区：占全部失败的 {write_failures}/{len(failures)}；这是 Agent 在当前任务集上的表现，不是模型通用能力结论。")
+    chain_lines = []
+    for category in sorted({r.get("category", "") for r in failures}):
+        category_rows = [r for r in rows if r.get("category", "") == category]
+        if any(r.get("evaluation_level") in {"chain", "link"} for r in category_rows):
+            passed = sum(r["assessment"]["verdict"] == "PASS" for r in category_rows)
+            failed_ids = "、".join(r["case_id"] for r in category_rows if r["assessment"]["verdict"] == "FAIL")
+            chain_lines.append(f"{category}：{passed}/{len(category_rows)} 通过（{_percent(passed, len(category_rows))}）；失败：{failed_ids}。")
+    if not actions:
+        actions["coverage"] = "依据本批覆盖范围补充未验证路径；失败项先核对期望与实际，再沿 Trace 排查。"
+    latency = _latency_html(rows)
+    return (
+        '<section class="overview"><h2>问题摘要</h2><p class="headline"><strong>' + _escape("；".join(rates)) + "</strong></p>"
+        + "<p>" + _escape(" ".join(lines)) + "</p>"
+        + "".join("<p>" + _escape(note) + "</p>" for note in notes + chain_lines)
+        + '<ol class="issues">' + ("".join(details) or "<li>未触发可确认的诊断；通过仅覆盖本次实际执行范围。</li>") + "</ol>"
+        + '<p class="muted">' + _escape(coverage) + " 诊断是证据解释，不改变正式评分，也不代表模型通用能力。</p>"
+        + "<h2>下一步建议</h2><ol>" + "".join(f"<li>{_escape(a)}</li>" for a in actions.values()) + "</ol>"
+        + latency
+        + ("<details><summary>解释与用量的证据限制</summary><ul>" + "".join(f"<li>{_escape(w)}</li>" for w in warnings) + "</ul></details>" if warnings else "")
+        + "</section>"
+    )
+
+
+def _latency_html(rows: list[dict]) -> str:
+    from math import ceil
+    from statistics import median
+
+    values = sorted(r["latency_seconds"] for r in rows if isinstance(r.get("latency_seconds"), (int, float)))
+    overall = ""
+    if values and median(values) > 0:
+        p50, p95 = median(values), values[min(len(values) - 1, int(.95 * len(values)))]
+        overall = f"<p>总体 P50 {p50:.2f} 秒，P95 {p95:.2f} 秒，约 {p95 / p50:.1f} 倍。该统计混合不同执行层级，需结合以下轮数及模型调用耗时理解。</p>"
+    table = []
+    for level in sorted({r.get("evaluation_level", r.get("execution_mode", "未知")) for r in rows}):
+        values = sorted(r["latency_seconds"] for r in rows if r.get("evaluation_level", r.get("execution_mode", "未知")) == level and isinstance(r.get("latency_seconds"), (int, float)))
+        if values:
+            table.append(f"<tr><td>{_escape(level)}</td><td>{len(values)}</td><td>{median(values):.2f}</td><td>{values[max(0, ceil(.95 * len(values)) - 1)]:.2f}</td></tr>")
+    slow = []
+    for item in latency_details(rows):
+        model = f"{item['model_seconds']:.2f} 秒" if item["model_seconds"] is not None else "未知（时间证据不全）"
+        slow.append(f"<li>{_escape(item['case'])} / 第 {item['trial']} 次：总耗时 {_number(item['latency'])} 秒，{item['turns']} 轮、{item['calls']} 次模型调用；模型调用耗时累计 {model}。</li>")
+    return ('<h2>耗时解释</h2>' + overall + '<p>不同执行层级的模型调用次数和轮数不同，总体尾延迟不能直接归因于写意图。以下列出最慢执行；不能仅凭调用次数判定重试或超时。模型耗时为事件时长之和，并行时不可作为总耗时占比；剩余时间可能包含运行环境、工具或调度开销，未细分部分不猜测。</p><ul>' + "".join(slow) + '</ul><details><summary>按执行层级统计延迟（秒）</summary><table><thead><tr><th>层级</th><th>执行数</th><th>P50</th><th>P95</th></tr></thead><tbody>' + "".join(table) + '</tbody></table><p>各层级独立计算，P95 使用最近秩法；小样本仅作本批描述。</p></details>')
 
 
 def evidence_summary(run: dict) -> dict:
@@ -102,7 +247,7 @@ def _file_diff(observation: dict) -> str:
     return "".join(chunks) or "无文件变更。"
 
 
-def _event_html(event: dict, metrics: list[dict] | None = None) -> str:
+def _event_html(event: dict, metrics: list[dict] | None = None, *, row: dict | None = None) -> str:
     duration = "未知时长"
     if event.get("start_time") and event.get("end_time"):
         try:
@@ -130,7 +275,7 @@ def _event_html(event: dict, metrics: list[dict] | None = None) -> str:
         for m in (metrics or []) if m.get("event_id") == event.get("id")
     )
     return (
-        '<details class="event">'
+        f'<details class="event" id="{_event_anchor(event.get("id", ""), row or {"case_id": "", "trial": 0})}">'
         f"<summary>{_escape(event.get('type', 'event'))} · "
         f"{_escape(event.get('name', ''))} <small>{duration} "
         f"{_escape(state)}{model}</small></summary>"
@@ -173,7 +318,7 @@ def _trial_html(row: dict, *, detail_url: str | None = None) -> str:
             f"<h4>输出</h4><pre>{_escape(turn.get('output', ''))}</pre></details>"
             for index, turn in enumerate(observation.get("turns", []))
         )
-        trace = "".join(_event_html(event, assessment.get("metrics", [])) for event in observation.get("events", []))
+        trace = "".join(_event_html(event, assessment.get("metrics", []), row=row) for event in observation.get("events", []))
         details = (
             turns
             + "<details><summary>独立文件证据：初态 → 终态</summary>"
@@ -197,11 +342,12 @@ def _trial_html(row: dict, *, detail_url: str | None = None) -> str:
         f"状态={_escape(observation.get('status', '未知'))} · "
         f"停止原因={_escape(observation.get('stop_reason', '未知'))} · "
         f"{_number(row.get('latency_seconds'))}s</p>"
-        + (
-            f'<p class="failure-reason">{_escape("; ".join(reasons))}</p>'
-            if reasons
-            else ""
-        )
+        + ("<div class=\"failure-reason\"><strong>结果差异</strong><ul>"
+           + "".join(f"<li>{_escape(item['metric'])}：期望 {_escape(item['expected'])}；实际 {_escape(item['actual'])}。</li>" for item in comparisons(row))
+           + (f"<li>执行或评分发生错误：{len(errors)} 条，详见原始评分证据。</li>" if errors else "")
+           + "</ul></div>" if reasons else "")
+        + _findings_html(row, detail_url)
+        + ("<details><summary>原始评分证据</summary><pre>" + _escape("\n".join(reasons)) + "</pre></details>" if reasons else "")
         + "<details><summary>DeepEval 指标与评分理由</summary>"
         '<div class="table-wrap"><table><thead><tr><th>指标</th><th>分数</th>'
         "<th>阈值</th><th>理由</th><th>用途</th><th>版本</th></tr></thead><tbody>"
@@ -238,6 +384,9 @@ flex-wrap:wrap;border-radius:8px;margin:16px 0} input,select {font:inherit;paddi
 input {min-width:280px;flex:1}.trial {margin:14px 0}.trial-heading {display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .trial-heading h3 {font-size:15px;margin:0;flex:1;word-break:break-word}.trial p {margin:9px 0}
 .failure-reason {color:var(--red);background:#fff7f7;padding:10px;border-left:3px solid #d2707d}
+.headline {font-size:23px;line-height:1.5;padding:16px;background:#fff5e8;border-left:4px solid #cc7722}.issues>li {margin:16px 0}.overview {margin:18px 0}.overview h2:first-child {margin-top:0}
+.finding {padding:14px 16px;margin:12px 0;background:#f2f8fb;border-left:3px solid #388291;border-radius:4px}
+.finding a {color:#086d69}details:target {outline:2px solid #388291}
 .event {padding:9px 12px;border-left:3px solid #c9d8e6;background:#fafcfe}.event small {font-weight:400}
 a {color:#075e9c} footer {padding:28px 0;color:var(--muted);font-size:12px}[hidden] {display:none!important}
 @media(max-width:800px){.cards,.grid {grid-template-columns:1fr 1fr}main {padding:16px}.card strong {font-size:23px}}
@@ -255,6 +404,10 @@ function filter(){let shown=0;document.querySelectorAll('.trial').forEach(row=>{
  row.hidden=!match;if(match)shown++;
 });document.getElementById('visible').textContent=shown+' 条执行结果';}
 [search,verdict,category].forEach(el=>el.addEventListener('input',filter));filter();
+function revealEvidence(){const el=document.getElementById(location.hash.slice(1));
+ if(!el)return;let p=el;while(p){if(p.tagName==='DETAILS')p.open=true;p=p.parentElement;}
+ el.scrollIntoView({block:'center'});}
+window.addEventListener('hashchange',revealEvidence);revealEvidence();
 """
 
 
@@ -280,10 +433,13 @@ def _write_trial_page(run_dir: Path, run: dict, row: dict) -> str:
         f'<span class="badge {mode}">{_escape(label)}</span>'
         f"<p>{_escape(run.get('run_id', ''))}<br>"
         f"运行身份 Hash：{_escape(run.get('identity_hash', '未知'))}</p></header><main>"
-        + _trial_html(row)
+        + _trial_html({**row, "_report_overview_url": "../report.html"})
         + "<footer>此页包含保存的完整公开轨迹，不调用网络或重新评分。"
         '<a href="../results.json">原始 results.json</a> · '
-        '<a href="../report.html">返回主报告</a></footer></main></body></html>'
+        '<a href="../report.html">返回主报告</a></footer></main>'
+        '<script>function reveal(){const e=document.getElementById(location.hash.slice(1));if(!e)return;'
+        "let p=e;while(p){if(p.tagName==='DETAILS')p.open=true;p=p.parentElement;}e.scrollIntoView();}"
+        "window.addEventListener('hashchange',reveal);reveal();</script></body></html>"
     )
     destination.write_text(page, encoding="utf-8")
     return relative
@@ -314,6 +470,45 @@ def write_domain_report(run_dir: Path | str) -> Path:
     runtime = identity.get("runtime", {})
     dataset = identity.get("dataset", {})
     rows = run["trials"]
+    contracts, warnings = load_contracts(run)
+    analysis = json.loads(write_diagnostics(run_dir).read_text())
+    warnings.extend(analysis["warnings"])
+    by_trial = {(t["case_id"], t["trial"]): t for t in analysis["trials"]}
+    links = load_links(run_dir)
+    for row in rows:
+        diagnostic = by_trial[(row["case_id"], row["trial"])]
+        row["_report_operation"] = diagnostic["operation"]
+        if diagnostic["goal_bound"]:
+            row["_report_task"] = {}
+        row["_report_findings"] = diagnostic["findings"]
+        row["_report_langfuse_url"] = links.get((row["case_id"], row["trial"]))
+    # Enrichment validates the original rows, never the presentation fields.
+    original_run = json.loads((run_dir / "results.json").read_text(encoding="utf-8"))
+    native_usage, usage_sources, usage_warnings = report_usage(run_dir, original_run)
+    warnings.extend(usage_warnings)
+    cache_values = [u.get("cached_tokens") for u in native_usage]
+    cached = sum(cache_values) if cache_values and all(v is not None for v in cache_values) else None
+    pricing_path = run_dir / "report-pricing.json"
+    pricing = json.loads(pricing_path.read_text(encoding="utf-8")) if pricing_path.is_file() else None
+    estimate = estimate_cost(run, native_usage, pricing)
+    estimate_label = (
+        f"{'额度价值估算' if pricing['kind'] == 'subscription_allowance' else '目录价格估算'} USD："
+        f"${estimate['low']:.8f}–${estimate['high']:.8f}（非实际扣费）"
+        if estimate else "成本估算不可用：缺少适用价格或完整、可核对的用量。"
+    )
+    parts = [token_parts(u) for u in native_usage]
+    if parts and all(p is not None for p in parts):
+        token_note = f"非缓存输入 {_number(sum(p[0] for p in parts))} + 缓存读取 {_number(cached)} + 输出 {_number(sum(p[2] for p in parts))} = 总 Token {_number(usage['total_tokens']['total'])}。"
+    else:
+        token_note = "缓存是否包含在输入 Token 内需按提供方口径核对；未知值不补零。"
+    cost_html = "<p>" + _escape(estimate_label) + "</p>"
+    if estimate:
+        cost_html += (
+            f'<p>价格核对日期：{_escape(pricing["checked_at"])} · <a href="{_escape(pricing["source"])}">价格来源</a>。'
+            "按下列价格情景估算；没有恢复运行时峰谷档位，不代表历史账单或订阅现金支出。</p>"
+            "<details><summary>计算口径与价格快照</summary><pre>"
+            + _escape(_pretty(estimate)) + "</pre></details>"
+        )
     models = sorted(
         {
             str(event["response_model"])
@@ -343,7 +538,7 @@ def write_domain_report(run_dir: Path | str) -> Path:
         (
             "延迟 P50 / P95",
             f"{_number(summary['latency_median'])} / {_number(summary['latency_p95'])} s",
-            f"费用 USD：{_number(usage['cost_usd']['total'])}；未知不按 0 计算",
+            f"费用 USD：{_number(usage['cost_usd']['total'])}；{estimate_label}",
         ),
     ]
     cards_html = "".join(
@@ -352,6 +547,7 @@ def write_domain_report(run_dir: Path | str) -> Path:
         for label, value, note in cards
     )
     identity_display = {
+        "report_diagnostics": {"analysis_id": analysis["analysis_id"], "rules_version": analysis["rules_version"], "rules_sha256": analysis["rules_sha256"], "source_hash": analysis["source_hash"], "profile": analysis["profile"]},
         "run_id": run.get("run_id"),
         "identity_hash": run.get("identity_hash"),
         "mode": run.get("mode"),
@@ -411,6 +607,8 @@ def write_domain_report(run_dir: Path | str) -> Path:
         f"数据集：{_escape(dataset.get('dataset_id', '未知'))} · "
         f"Inspect 执行 → DeepEval 评分 → 本地证据报告</p></header><main>"
         f'<div class="cards">{cards_html}</div>'
+        + _overview_html(rows, contracts, warnings)
+        +
         '<p class="muted">报告只展示已保存结果，不调用模型、不重新评分。'
         "PASS 同时要求任务结果与正式约束通过；INVALID / INCONCLUSIVE 与 FAIL 分开统计。</p>"
         f"<p>有效执行通过率：{_percent(pass_count, summary['valid_trials'])}；"
@@ -432,14 +630,17 @@ def write_domain_report(run_dir: Path | str) -> Path:
         "<h2>用量与身份</h2><section>"
         f"<p>输入 Token：{_number(usage['input_tokens']['total'])} · "
         f"输出 Token：{_number(usage['output_tokens']['total'])} · "
-        f"缓存命中 Token：{_number(usage['cached_tokens']['total'])}。"
+        f"缓存命中 Token：{_number(cached)}。"
         "prompt_tokens / completion_tokens 仅按字段别名展示，不重复累加。</p>"
+        f"<p>{_escape(token_note)}</p>"
+        + cost_html
+        +
         f"<p>响应实际模型：{_escape(', '.join(models) or '未知')}。"
         "字节估算 tokenizer 仅用于 Agent 上下文预算，以上用量来自模型响应。</p>"
         "<details><summary>数据集、Agent、评分与运行配置</summary>"
         f"<pre>{_escape(_pretty(identity_display))}</pre></details>"
         "<details><summary>用量完整性及已知部分</summary>"
-        f"<pre>{_escape(_pretty(usage))}</pre></details>"
+        f"<pre>{_escape(_pretty({'saved_summary': usage, 'report_usage': native_usage, 'native_sources': usage_sources}))}</pre></details>"
         f"<details><summary>数据集限制与来源</summary><ul>{limitations}</ul>"
         f"<pre>{_escape(_pretty(dataset.get('provenance', {})))}</pre></details></section>"
         "<h2>逐条结果与完整 Trace</h2>" + detail_notice + '<div class="controls">'
@@ -468,6 +669,11 @@ def write_domain_report(run_dir: Path | str) -> Path:
         f"输入/输出/总 Token：{_number(usage['input_tokens']['total'])} / "
         f"{_number(usage['output_tokens']['total'])} / {_number(usage['total_tokens']['total'])}。",
         f"费用 USD：{_number(usage['cost_usd']['total'])}。未知成本不按 0 计算。",
+        token_note,
+        estimate_label,
+        "",
+        _overview_html(rows, contracts, warnings),
+        cost_html,
         "",
         "## 分组",
         "",
@@ -493,6 +699,8 @@ def write_domain_report(run_dir: Path | str) -> Path:
                     "",
                     f"{_escape(assessment['verdict'])} / {_escape(assessment.get('validity', '未知'))}",
                     "",
+                    *[f"- {_escape(item['metric'])}：期望 {_escape(item['expected'])}；实际 {_escape(item['actual'])}。" for item in comparisons(row)],
+                    *[f"- 同问题 #{finding['number']}：{_escape(finding.get('short', finding['title']))}" for finding in row.get('_report_findings', [])],
                     "<pre>" + _escape(_pretty(assessment)) + "</pre>",
                     "",
                 ]

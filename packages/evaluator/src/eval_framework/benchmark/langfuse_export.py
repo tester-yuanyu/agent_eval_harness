@@ -21,8 +21,11 @@ from .tasks import dataset_identity, load_tasks
 
 VERSION = "file-benchmark-langfuse-v1"
 EVIDENCE_VERSION_V1 = "langfuse-exact-metadata-v1"
-EVIDENCE_VERSION = "langfuse-exact-metadata-v2"
-EVIDENCE_VERSIONS = frozenset((EVIDENCE_VERSION_V1, EVIDENCE_VERSION))
+EVIDENCE_VERSION_V2 = "langfuse-exact-metadata-v2"
+EVIDENCE_VERSION = "langfuse-exact-metadata-v3"
+EVIDENCE_VERSIONS = frozenset(
+    (EVIDENCE_VERSION_V1, EVIDENCE_VERSION_V2, EVIDENCE_VERSION)
+)
 EVIDENCE_RECEIPT = "langfuse_exact_metadata_export.json"
 EVIDENCE_TARGET_PREFIX = "observation:"
 EVIDENCE_FIELDS = (
@@ -68,12 +71,16 @@ _ROOT_CHAIN_METRIC_IDENTITIES = {
 
 
 def _is_root_chain_metric(metric: dict) -> bool:
-    return metric.get("scope") == "chain" and (
-        metric.get("backend"),
-        metric.get("implementation"),
-        metric.get("name"),
-        metric.get("version"),
-    ) in _ROOT_CHAIN_METRIC_IDENTITIES
+    return (
+        metric.get("scope") == "chain"
+        and (
+            metric.get("backend"),
+            metric.get("implementation"),
+            metric.get("name"),
+            metric.get("version"),
+        )
+        in _ROOT_CHAIN_METRIC_IDENTITIES
+    )
 
 
 def _connect_retry(method, **kwargs):
@@ -91,7 +98,9 @@ def item_id(dataset_id: str, case_id: str) -> str:
     return stable_id(VERSION, dataset_id, case_id)
 
 
-def build_payload(run: dict, tasks: dict, dataset_id: str, source_hash: str):
+def build_payload(
+    run: dict, tasks: dict, dataset_id: str, source_hash: str, *, presentation=None
+):
     spans, scores, traces = [], [], []
     for row in run["trials"]:
         task = tasks[row["case_id"]]
@@ -245,6 +254,10 @@ def build_payload(run: dict, tasks: dict, dataset_id: str, source_hash: str):
                             "output_tokens", usage.get("completion_tokens")
                         ),
                         "total": usage.get("total_tokens"),
+                        "cache_read_input_tokens": usage.get("input_tokens_cache_read"),
+                        "cache_creation_input_tokens": usage.get(
+                            "input_tokens_cache_write"
+                        ),
                     }.items()
                     if v is not None
                 }
@@ -331,6 +344,12 @@ def build_payload(run: dict, tasks: dict, dataset_id: str, source_hash: str):
                 "score_ids": [s.id for s in scores if s.trace_id == trace],
             }
         )
+    if presentation is not None:
+        if presentation.get("source_hash") != source_hash:
+            raise ValueError("presentation source mismatch")
+        from .langfuse_presentation import enrich_spans
+
+        spans = enrich_spans(spans, run, presentation, traces)
     return spans, scores, traces
 
 
@@ -398,6 +417,7 @@ def export_run(run_dir: Path, dataset_path: Path, *, client=None) -> dict:
     run, tasks, source_hash = _source(run_dir, dataset_path)
     client = client or client_from_env()
     receipt_path = run_dir / "langfuse_export.json"
+    first_export = not receipt_path.exists()
     destination = destination_fingerprint()
     receipt = (
         json.loads(receipt_path.read_text())
@@ -412,6 +432,11 @@ def export_run(run_dir: Path, dataset_path: Path, *, client=None) -> dict:
             "inflight": [],
         }
     )
+    if first_export:
+        from .report_diagnostics import write_diagnostics
+
+        receipt["presentation"] = json.loads(write_diagnostics(run_dir).read_text())
+        save_json(receipt_path, receipt)
     if receipt["source_hash"] != source_hash or receipt["destination"] != destination:
         raise ValueError("immutable export source/destination changed")
     if receipt["inflight"]:
@@ -494,7 +519,9 @@ def export_run(run_dir: Path, dataset_path: Path, *, client=None) -> dict:
             case = future.result()
             receipt["registered_cases"].append(case)
             save_json(receipt_path, receipt)
-    spans, scores, traces = build_payload(run, tasks, dataset_id, source_hash)
+    spans, scores, traces = build_payload(
+        run, tasks, dataset_id, source_hash, presentation=receipt.get("presentation")
+    )
     receipt["traces"] = traces
     accepted = set(receipt["accepted_observation_ids"])
     remaining = [s for s in spans if s.span_id not in accepted]
@@ -635,10 +662,33 @@ def _contains_json_string(value):
     return False
 
 
+def _contains_empty_object(value):
+    if isinstance(value, dict):
+        return not value or any(_contains_empty_object(v) for v in value.values())
+    if isinstance(value, list):
+        return any(_contains_empty_object(v) for v in value)
+    return False
+
+
+def _empty_object_projection_matches(expected: dict, actual: dict, field: str) -> bool:
+    """API omits empty object leaves; call ONLY with separately verified exact proof."""
+    wanted = {
+        k: v
+        for k, v in _flatten_metadata({field: expected[field]}).items()
+        if not (isinstance(v, dict) and not v)
+    }
+    observed = {
+        k: v
+        for k, v in _flatten_metadata(actual).items()
+        if k == field or k.startswith(field + ".")
+    }
+    return _json_equal(wanted, observed)
+
+
 def _evidence_target_id(span_id: str, version: str) -> str:
     if version == EVIDENCE_VERSION_V1:
         return span_id
-    if version == EVIDENCE_VERSION:
+    if version in {EVIDENCE_VERSION_V2, EVIDENCE_VERSION}:
         return EVIDENCE_TARGET_PREFIX + span_id
     raise ValueError(f"Unsupported supplemental evidence version: {version!r}")
 
@@ -646,7 +696,7 @@ def _evidence_target_id(span_id: str, version: str) -> str:
 def _evidence_source_id(source_hash: str, version: str) -> str:
     if version == EVIDENCE_VERSION_V1:
         return source_hash
-    if version == EVIDENCE_VERSION:
+    if version in {EVIDENCE_VERSION_V2, EVIDENCE_VERSION}:
         return "sha256:" + source_hash
     raise ValueError(f"Unsupported supplemental evidence version: {version!r}")
 
@@ -666,7 +716,14 @@ def build_evidence_payload(spans, source_hash, *, version=EVIDENCE_VERSION):
         affected = {
             key: metadata[key]
             for key in VERIFIED_METADATA_FIELDS
-            if key in metadata and _contains_json_string(metadata[key])
+            if key in metadata
+            and (
+                _contains_json_string(metadata[key])
+                or (
+                    version == EVIDENCE_VERSION
+                    and _contains_empty_object(metadata[key])
+                )
+            )
         }
         if not affected:
             continue
@@ -685,9 +742,7 @@ def build_evidence_payload(spans, source_hash, *, version=EVIDENCE_VERSION):
                 "langfuse.observation.type": "span",
                 "langfuse.observation.metadata": {
                     "evidence_export_version": version,
-                    "evidence_source_sha256": _evidence_source_id(
-                        source_hash, version
-                    ),
+                    "evidence_source_sha256": _evidence_source_id(source_hash, version),
                     "evidence_for_observation_id": target_id,
                     "is_export_evidence": True,
                     "exact_metadata_base64": "base64:"
@@ -728,7 +783,13 @@ def export_metadata_evidence(run_dir: Path, dataset_path: Path, *, client=None):
         raise ValueError(
             f"Unsupported supplemental evidence version: {evidence_version!r}"
         )
-    spans, _, _ = build_payload(run, tasks, original["dataset_id"], source_hash)
+    spans, _, _ = build_payload(
+        run,
+        tasks,
+        original["dataset_id"],
+        source_hash,
+        presentation=original.get("presentation"),
+    )
     evidence = build_evidence_payload(spans, source_hash, version=evidence_version)
     identity = {
         "version": evidence_version,
@@ -966,7 +1027,11 @@ def verify_run(run_dir: Path, dataset_path: Path, *, client=None) -> dict:
         raise ValueError("verification identity changed")
     client = client or client_from_env()
     spans, scores, traces = build_payload(
-        run, tasks, receipt["dataset_id"], source_hash
+        run,
+        tasks,
+        receipt["dataset_id"],
+        source_hash,
+        presentation=receipt.get("presentation"),
     )
     evidence_path = run_dir / EVIDENCE_RECEIPT
     evidence_receipt = None
@@ -1057,13 +1122,23 @@ def verify_run(run_dir: Path, dataset_path: Path, *, client=None) -> dict:
                     # The original flattened value and the separately saved
                     # lossless bytes must BOTH agree. A missing or altered proof
                     # never authorizes semantic-only comparison.
-                    restored = (
-                        proof_valid
-                        and _contains_json_string(expected_metadata[field])
-                        and _metadata_matches(
-                            _metadata_with_json_values(expected_metadata),
-                            actual.get("metadata") or {},
-                            field,
+                    restored = proof_valid and (
+                        (
+                            _contains_json_string(expected_metadata[field])
+                            and _metadata_matches(
+                                _metadata_with_json_values(expected_metadata),
+                                actual.get("metadata") or {},
+                                field,
+                            )
+                        )
+                        or (
+                            evidence_version == EVIDENCE_VERSION
+                            and _contains_empty_object(expected_metadata[field])
+                            and _empty_object_projection_matches(
+                                expected_metadata,
+                                actual.get("metadata") or {},
+                                field,
+                            )
                         )
                     )
                     if not restored:

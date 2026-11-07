@@ -107,6 +107,14 @@ async def model_evidence(events: Sequence[Any], file_events: list[dict]) -> list
                     "prompt_tokens": usage.input_tokens,
                     "completion_tokens": usage.output_tokens,
                     "total_tokens": usage.total_tokens,
+                    **{
+                        key: value
+                        for key, value in {
+                            "input_tokens_cache_read": usage.input_tokens_cache_read,
+                            "input_tokens_cache_write": usage.input_tokens_cache_write,
+                        }.items()
+                        if value is not None
+                    },
                 }
                 if usage
                 else {},
@@ -124,7 +132,15 @@ def aggregate_usage(generations: list[dict]) -> dict:
         key: sum(item["usage"][key] for item in generations)
         if all(isinstance(item["usage"].get(key), (int, float)) for item in generations)
         else None
-        for key in ("prompt_tokens", "completion_tokens", "total_tokens")
+        for key in (
+            "prompt_tokens",
+            "completion_tokens",
+            "total_tokens",
+            "input_tokens_cache_read",
+            "input_tokens_cache_write",
+        )
+        if key in {"prompt_tokens", "completion_tokens", "total_tokens"}
+        or any(key in item["usage"] for item in generations)
     }
 
 

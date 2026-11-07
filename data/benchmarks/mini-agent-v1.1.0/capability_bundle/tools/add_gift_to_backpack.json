@@ -1,0 +1,264 @@
+{
+  "batch_behavior": {
+    "reason": "No generic batch behavior is declared by ToolContract.",
+    "support_status": "unknown"
+  },
+  "capabilities": [
+    {
+      "capability_key": "tool.registered_execution",
+      "evidence_ids": [
+        "evidence.tool_trace"
+      ],
+      "reason": null,
+      "support_status": "supported"
+    },
+    {
+      "capability_key": "tool.runtime_retry",
+      "evidence_ids": [],
+      "reason": "The runtime does not retry failed Tool handlers.",
+      "support_status": "unsupported"
+    },
+    {
+      "capability_key": "tool.rate_limit_protocol",
+      "evidence_ids": [],
+      "reason": "Rate-limit semantics are owned by the injected handler.",
+      "support_status": "unknown"
+    }
+  ],
+  "combination_rules": {
+    "source": "parameter_schema",
+    "undeclared_combinations": "unknown"
+  },
+  "contract_version": "gift-sqlite-v1",
+  "description": "Record gift grants in an isolated evaluator SQLite ledger.",
+  "function_schema": {
+    "description": "Record gift grants in an isolated evaluator SQLite ledger.",
+    "name": "add_gift_to_backpack",
+    "parameters": {
+      "$defs": {
+        "GiftQuantity": {
+          "additionalProperties": false,
+          "description": "One gift and its quantity in a strict batch payload.",
+          "properties": {
+            "gift_id": {
+              "exclusiveMinimum": 0,
+              "title": "Gift Id",
+              "type": "integer"
+            },
+            "num": {
+              "maximum": 1000,
+              "minimum": 1,
+              "title": "Num",
+              "type": "integer"
+            }
+          },
+          "required": [
+            "gift_id",
+            "num"
+          ],
+          "title": "GiftQuantity",
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Business parameters for a confirmed mock backpack grant.",
+      "properties": {
+        "duration_days": {
+          "anyOf": [
+            {
+              "maximum": 1000,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Duration Days"
+        },
+        "gift_id": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Gift Id"
+        },
+        "gift_ids": {
+          "anyOf": [
+            {
+              "items": {
+                "exclusiveMinimum": 0,
+                "type": "integer"
+              },
+              "minItems": 1,
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Gift Ids"
+        },
+        "gift_nums": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/GiftQuantity"
+              },
+              "minItems": 1,
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Gift Nums"
+        },
+        "num": {
+          "anyOf": [
+            {
+              "maximum": 1000,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Num"
+        },
+        "user_id": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "User Id"
+        },
+        "user_ids": {
+          "anyOf": [
+            {
+              "items": {
+                "exclusiveMinimum": 0,
+                "type": "integer"
+              },
+              "minItems": 1,
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "User Ids"
+        }
+      },
+      "required": [
+        "gift_id",
+        "gift_ids",
+        "gift_nums",
+        "user_id",
+        "user_ids",
+        "num",
+        "duration_days"
+      ],
+      "title": "AddGiftToBackpackArguments",
+      "type": "object"
+    },
+    "strict": true,
+    "type": "function"
+  },
+  "idempotency_rules": {
+    "duplicate_calls": "RECORDED",
+    "mode": "NONE"
+  },
+  "implementation_profile": "test_fixture",
+  "observation_interfaces": [
+    "evaluator.sqlite.snapshot"
+  ],
+  "parameter_semantics": {
+    "rules": {
+      "fixture": "empty-backpack-v1"
+    },
+    "validation": "STRICT_ARGUMENT_MODEL"
+  },
+  "permission_requirements": [
+    "REGISTERED_TOOL_AND_RUN_ALLOW_LIST"
+  ],
+  "preconditions": [
+    "REGISTERED_TOOL_AND_RUN_ALLOW_LIST"
+  ],
+  "registered": true,
+  "requires_confirmation": true,
+  "result_protocols": {
+    "async": {
+      "reason": "The runtime invokes handlers synchronously.",
+      "support_status": "unsupported"
+    },
+    "declared_results": {
+      "OK": {
+        "data_schema": {
+          "type": "object"
+        },
+        "terminal_status": "success"
+      }
+    },
+    "empty_result": {
+      "behavior": "UNSUPPORTED",
+      "source": "tool_contract"
+    },
+    "execution_failure": {
+      "runtime_event": "tool_failed",
+      "terminal_status": "failure"
+    },
+    "partial_success": {
+      "behavior": "ATOMIC_TRANSACTION",
+      "source": "tool_contract"
+    },
+    "rate_limit": {
+      "reason": "No runtime-specific rate-limit protocol is declared.",
+      "support_status": "unknown"
+    },
+    "timeout": {
+      "runtime_event": "tool_timeout",
+      "terminal_status": "failure"
+    }
+  },
+  "retry_policy": {
+    "eligible": false,
+    "maximum_attempts": 1,
+    "reason": "The runtime performs one handler invocation per call.",
+    "stop_conditions": [
+      "success",
+      "failure",
+      "timeout"
+    ]
+  },
+  "risk_level": "high",
+  "side_effects": [
+    "insert rows into Trial-local grants ledger"
+  ],
+  "simulation_capabilities": [],
+  "simulation_protocol": {
+    "name": "deterministic_injected_handler",
+    "version": "gift-sqlite-v1"
+  },
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "tool.add_gift_to_backpack",
+  "snapshot_sha256": "147a0a5856c158aa21e03ef7c81912e4215554db8b33082f9672a38624cec343",
+  "snapshot_type": "tool",
+  "source_hashes": {
+    "execution_contract_sha256": "bff053968627852ca4905f63c11b192ca0a6c8060315de4b1ba91ef0a28e57e3",
+    "function_schema_sha256": "ecabf3790044b73c96a7c80dac7c91429c855b6af38de25ea102634c2a32a3b1"
+  },
+  "tool_name": "add_gift_to_backpack",
+  "tool_version": "gift-sqlite-v1"
+}

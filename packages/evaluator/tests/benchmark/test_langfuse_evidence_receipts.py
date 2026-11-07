@@ -117,7 +117,7 @@ def configure_run(tmp_path, monkeypatch, original):
     monkeypatch.setattr(
         langfuse_export,
         "build_payload",
-        lambda run, tasks, dataset_id, source_hash: (
+        lambda run, tasks, dataset_id, source_hash, *, presentation=None: (
             [original],
             [],
             [copy.deepcopy(trace)],

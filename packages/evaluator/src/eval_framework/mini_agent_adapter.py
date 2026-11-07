@@ -39,6 +39,11 @@ class MiniAgentAdapter:
             raise ValueError(
                 "the current mini_agent native runtime does not support fault injection"
             )
+        continue_all = (execution.adapter_input or {}).get(
+            "continue_after_terminal", False
+        )
+        if type(continue_all) is not bool:
+            raise ValueError("continue_after_terminal must be a boolean")
         allowed = (
             frozenset(execution.allowed_tools)
             if execution.allowed_tools is not None
@@ -49,10 +54,15 @@ class MiniAgentAdapter:
         after = before
         try:
             for text in [execution.user_input, *execution.user_responses]:
-                if raw_turns and raw_turns[-1].status not in {
-                    "NEED_CLARIFICATION",
-                    "NEED_CONFIRMATION",
-                }:
+                if (
+                    not continue_all
+                    and raw_turns
+                    and raw_turns[-1].status
+                    not in {
+                        "NEED_CLARIFICATION",
+                        "NEED_CONFIRMATION",
+                    }
+                ):
                     break
                 result = self._run_turn(raw_turns, text, allowed)
                 raw_turns.append(result)

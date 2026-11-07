@@ -149,7 +149,11 @@ Judge 汇总公式如下。设总记录数为 `N`，`NA` 为 `NOT_APPLICABLE` �
 
 每个 Trial 从 `observation.usage` 读取 `input_tokens`、`output_tokens`、`total_tokens`、`cost_usd`；输入与输出分别兼容 `prompt_tokens`、`completion_tokens` 别名。报告层另按相同规则读取 `cached_tokens`。别名只取首个可用值，不重复累加；`total_tokens` 不由输入输出自动推导。
 
-对任一字段：只有全部已保存 Trial 都有数值时，`total=sum(values)`；只要有一条未知，总数为 `None`。同时保留 `known_subtotal` 和 `known_trials`。未知费用不能按 0，也不能用公开价表猜算。
+对任一字段：只有全部已保存 Trial 都有数值时，`total=sum(values)`；只要有一条未知，总数为 `None`。同时保留 `known_subtotal` 和 `known_trials`。未知费用不能按 0，也不能用公开价表覆盖原始 `cost_usd`。
+
+领域 HTML 报告可从同一运行的 Inspect 日志补充缓存读取 Token。补充前校验运行身份、完整 trial 记录及输入/输出/总 Token；不匹配时保留未知并展示限制。补充内容仅进入报告，不改写 `results.json` 或历史汇总。输入包含缓存与输入不包含缓存两种口径分别核对，总 Token 始终取保存值。
+
+运行目录可显式放置 `report-pricing.json`，提供端点、模型、价格来源、核对日期与每百万 Token 价格情景。示例见 `configs/benchmark/opencode-go.report-pricing.json`。只有端点/模型匹配、用量完整且能核对总数时，报告才单列**价格估算**，不写回 `cost_usd`。Go 订阅显示的是额度价值估算，不是现金扣款；峰谷档位未恢复时展示情景区间，不能当作历史账单。报告渲染不联网查询价格，价格快照须显式更新。
 
 ### Judge 用量
 

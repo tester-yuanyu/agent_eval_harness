@@ -1,0 +1,99 @@
+{
+  "applicable_result_paths": [
+    "success",
+    "need_clarification",
+    "need_confirmation",
+    "rejected",
+    "failure"
+  ],
+  "availability": {
+    "capability_key": "evidence.final_response_available",
+    "evidence_ids": [
+      "evidence.final_response"
+    ],
+    "reason": null,
+    "support_status": "supported"
+  },
+  "consumer_roles": [
+    "builder",
+    "evaluator"
+  ],
+  "contract_version": "mini-agent-capability-contract-v3",
+  "description": "Terminal status and user-facing response.",
+  "event_types": [
+    "final_response_generated",
+    "run_finished"
+  ],
+  "evidence_id": "final_response",
+  "observation_interface": "agent_result",
+  "payload_schema": {
+    "properties": {
+      "final_response": {
+        "type": "string"
+      },
+      "status": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "status",
+      "final_response"
+    ],
+    "type": "object",
+    "x-evidence-delivery": {
+      "correlation": [
+        "trace_id",
+        "run_id",
+        "turn_index"
+      ],
+      "coverage": "declared events only; not a full copy of AgentResult",
+      "enabled_when": "LocalEvidenceSink is injected by the caller",
+      "event_rules_version": "mini-agent-events-v1",
+      "events": {
+        "final_response_generated": {
+          "allowed_fields": [
+            "response",
+            "step"
+          ],
+          "capability_layer": "result",
+          "required_fields": [
+            "response",
+            "step"
+          ]
+        },
+        "run_finished": {
+          "allowed_fields": [
+            "status"
+          ],
+          "capability_layer": "result",
+          "required_fields": [
+            "status"
+          ]
+        }
+      },
+      "independent_interface": "agent_trace_sdk.EvidenceReader.read",
+      "legacy_interface": "agent_result",
+      "protocol_version": "1.0",
+      "unavailable_when": [
+        "sink not configured",
+        "execution interrupted before emission",
+        "export failed",
+        "required fields redacted or truncated"
+      ],
+      "version": "1.0"
+    }
+  },
+  "producer_module_ids": [
+    "module.agent_orchestrator",
+    "module.observability"
+  ],
+  "production_timing": "at terminal run completion",
+  "required": true,
+  "snapshot_format_version": "3.0",
+  "snapshot_id": "evidence.final_response",
+  "snapshot_sha256": "c57f1de42cd98df70904ee0da3229c42c7a85430191d52c649fa519c1463e7af",
+  "snapshot_type": "evidence",
+  "source_hashes": {
+    "catalog_definition_sha256": "eb8484943ccf8c516c9b8f68426a22e83466ccfd7106e7975d21d25743692977"
+  }
+}

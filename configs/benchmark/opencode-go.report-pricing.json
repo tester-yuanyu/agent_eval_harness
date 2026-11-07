@@ -1,0 +1,12 @@
+{
+  "model": "deepseek-v4.1-flash",
+  "base_url": "https://opencode.ai/zen/go/v1",
+  "source": "https://opencode.ai/docs/console/go/",
+  "checked_at": "2026-11-07",
+  "kind": "subscription_allowance",
+  "cache_write_pricing": "not_applicable",
+  "rates_per_million": [
+    {"label": "Off-Peak", "input": 0.15, "output": 0.60, "cache_read": 0.003},
+    {"label": "Peak", "input": 0.30, "output": 1.20, "cache_read": 0.006}
+  ]
+}
