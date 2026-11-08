@@ -84,3 +84,41 @@ class OpenAICompatibleJudge(DeepEvalBaseLLM):
 
     async def a_generate(self, prompt: str, schema: Any = None, **kwargs: Any) -> Any:
         return await asyncio.to_thread(self.generate, prompt, schema=schema, **kwargs)
+
+
+class AuditedJudge(OpenAICompatibleJudge):
+    """Retain failed requests without duplicating responses that failed parsing."""
+
+    failure_event_name = "deepeval_response_judge"
+
+    def generate(self, prompt: str, schema: Any = None, **kwargs: Any) -> Any:
+        started = datetime.now(UTC).isoformat()
+        previous_count = len(self.calls)
+        try:
+            return super().generate(prompt, schema=schema, **kwargs)
+        except Exception as exc:
+            if len(self.calls) == previous_count:
+                content = prompt
+                if schema is not None:
+                    content += (
+                        "\nReturn only a JSON object matching this schema:\n"
+                        + json.dumps(schema.model_json_schema())
+                    )
+                self.calls.append(
+                    {
+                        "type": "generation",
+                        "name": self.failure_event_name,
+                        "model": self.model_name,
+                        "start_time": started,
+                        "end_time": datetime.now(UTC).isoformat(),
+                        "input": content,
+                        "output": None,
+                        "error": type(exc).__name__,
+                        "usage": {
+                            "input_tokens": None,
+                            "output_tokens": None,
+                            "cost_usd": None,
+                        },
+                    }
+                )
+            raise

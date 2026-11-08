@@ -14,6 +14,9 @@ def main():
     parser.add_argument("--profile", type=Path)
     parser.add_argument("--sync-langfuse", action="store_true")
     parser.add_argument("--dashboard", action="store_true")
+    parser.add_argument(
+        "--explore", action="store_true", help="生成调试入口和健康度扩展"
+    )
     parser.add_argument("--trend", action="store_true", help="生成同口径运行趋势")
     parser.add_argument("--trend-run", action="append", default=[], type=Path)
     parser.add_argument("--refresh-dashboard", action="store_true")
@@ -22,6 +25,8 @@ def main():
         parser.error("--trend-run requires --trend")
     if args.refresh_dashboard and not args.dashboard:
         parser.error("--refresh-dashboard requires --dashboard")
+    if args.explore and args.sync_langfuse and not (args.dashboard and args.trend):
+        parser.error("synced --explore requires --dashboard --trend")
     trend = None
     if args.trend:
         from eval_framework.benchmark.report_trends import load_trend
@@ -76,6 +81,28 @@ def main():
             )
     elif args.dashboard:
         parser.error("--dashboard requires --sync-langfuse")
+    if args.explore:
+        from eval_framework.benchmark.report_explorer import write_explorer
+
+        print(write_explorer(args.run))
+        if args.sync_langfuse and status["status"] == "VERIFIED" and trend_verified:
+            from eval_framework.benchmark.langfuse_explorer import sync_explorer
+
+            health = sync_explorer(args.run, [args.run, *args.trend_run])
+            print(
+                json.dumps(
+                    {
+                        k: health[k]
+                        for k in (
+                            "status",
+                            "summary_count",
+                            "dashboard_status",
+                            "dashboard_url",
+                        )
+                        if k in health
+                    }
+                )
+            )
     print(write_domain_report(args.run))
 
 

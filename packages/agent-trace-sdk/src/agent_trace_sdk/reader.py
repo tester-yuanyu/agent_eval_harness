@@ -9,7 +9,7 @@ from inspect_ai.log import read_eval_log
 
 from .legacy import LegacyEvidenceReader
 from .native import TRACE_FILE
-from .validation import validate_evidence
+from .validation import valid_event_envelope, valid_manifest, validate_evidence
 
 
 class EvidenceReader:
@@ -41,21 +41,7 @@ class EvidenceReader:
             sample = log.samples[0]
             state = deepcopy(sample.metadata["evidence"])
             if (
-                not isinstance(state, dict)
-                or not isinstance(state.get("issues"), list)
-                or not all(
-                    type(state.get(key)) is int and state[key] >= 0
-                    for key in ("attempted_count", "written_count", "last_sequence")
-                )
-                or not all(
-                    type(state.get(key)) is bool
-                    for key in ("execution_completed", "collection_closed")
-                )
-                or not all(
-                    isinstance(issue, dict)
-                    and issue.get("kind") in {"partial", "export"}
-                    for issue in state["issues"]
-                )
+                not valid_manifest(state)
                 or sample.id != state.get("trace_id")
                 or log.eval.eval_id != state.get("trace_id")
                 or state.get("storage_backend") != "inspect-eval-log"
@@ -65,21 +51,7 @@ class EvidenceReader:
                 if not isinstance(item, InfoEvent) or item.source != "agent_evidence":
                     raise ValueError("unexpected evidence event")
                 event = deepcopy(item.data)
-                if (
-                    not isinstance(event, dict)
-                    or type(event.get("sequence")) is not int
-                ):
-                    raise ValueError("invalid evidence envelope")
-                if not all(
-                    isinstance(event.get(key), str)
-                    for key in (
-                        "event_id",
-                        "event_type",
-                        "trace_id",
-                        "run_id",
-                        "timestamp",
-                    )
-                ) or not isinstance(event.get("payload"), dict):
+                if not valid_event_envelope(event):
                     event["validation_status"] = "INVALID"
                     issues.append(dict(kind="partial", code="INVALID_ENVELOPE"))
                 events.append(event)

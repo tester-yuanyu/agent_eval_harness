@@ -1,0 +1,10 @@
+{
+  "task_group_order": [
+    "query-user-chain",
+    "intent-query-user",
+    "intent-query-gift",
+    "read-tool-chain",
+    "gift-confirmation-e2e",
+    "intent-add-backpack-gift"
+  ]
+}

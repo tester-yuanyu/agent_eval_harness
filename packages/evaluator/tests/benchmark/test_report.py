@@ -188,3 +188,35 @@ def test_900_trials_have_small_index_and_complete_offline_detail_pages(tmp_path)
     # set of pages for the same case/trial identities.
     write_report(tmp_path)
     assert len(list((tmp_path / "report-trials").glob("*.html"))) == 900
+
+
+def test_supporting_evidence_collapses_without_hiding_trial_results(tmp_path):
+    class Sections(HTMLParser):
+        def __init__(self):
+            super().__init__()
+            self.groups = {}
+            self.details = []
+            self.trials_inside = []
+
+        def handle_starttag(self, tag, attrs):
+            attrs = dict(attrs)
+            if tag == "details":
+                self.details.append(attrs)
+                if "data-evidence" in attrs:
+                    self.groups[attrs["data-evidence"]] = attrs
+            if "trial" in attrs.get("class", "").split():
+                self.trials_inside.append(list(self.details))
+
+        def handle_endtag(self, tag):
+            if tag == "details":
+                self.details.pop()
+
+    (tmp_path / "results.json").write_text(json.dumps(saved_run()))
+    document = write_report(tmp_path).read_text()
+    parsed = Sections()
+    parsed.feed(document)
+    assert set(parsed.groups) == {"basis", "category", "split", "level", "identity"}
+    assert all("open" not in attrs for attrs in parsed.groups.values())
+    assert parsed.trials_inside == [[]]
+    assert "用量完整性及已知部分" in document
+    assert "问题摘要" in document and "下一步建议" in document

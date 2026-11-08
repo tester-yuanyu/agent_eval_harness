@@ -166,6 +166,10 @@ def diagnose(row: dict, contracts: dict, *, aliases: dict | None = None) -> list
     generations = [e for e in events if e.get("type") == "generation"]
     findings = []
     for event in generations:
+        request = event.get("input", {})
+        if not isinstance(request, dict):
+            # Saved Judge prompts are plain text, not Agent conversation evidence.
+            continue
         candidate = _candidate(event)
         params = candidate.get("parameters", {})
         if not isinstance(params, dict):
@@ -240,7 +244,7 @@ def diagnose(row: dict, contracts: dict, *, aliases: dict | None = None) -> list
                     "action": schema_advice(mapping, gap),
                 }
             )
-        messages = event.get("input", {}).get("messages", [])
+        messages = request.get("messages", [])
         non_system = [
             m for m in messages if m.get("role") not in {"system", "developer"}
         ]
@@ -268,7 +272,7 @@ def diagnose(row: dict, contracts: dict, *, aliases: dict | None = None) -> list
         ]
         if (
             len(non_system) == 1
-            and not event.get("input", {}).get("tools")
+            and not request.get("tools")
             and non_system[0].get("role") == "user"
             and _text(non_system[0].get("content")).strip()
             in {"确认", "确认发放", "确认执行"}

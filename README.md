@@ -125,7 +125,7 @@ packages/evaluator/src/eval_framework/benchmark/
                                   Inspect 编排、执行适配、DeepEval/GEval、报告
 packages/contracts/               共用契约与能力快照校验
 packages/dataset-builder/         保留的通用生成、审核和冻结工具
-packages/agent-trace-sdk/          历史独立取证 SDK
+packages/agent-trace-sdk/          Provider 业务取证、Inspect 存储适配与历史回读
 examples/mini_agent/               可选参考 Agent 与历史回归
 configs/benchmark/                无凭据配置示例
 reports/                          可公开的结果摘要

@@ -1,6 +1,29 @@
 from eval_framework.benchmark.runner import code_identity
 
 
+def test_shared_value_rules_change_both_runtime_and_provider_scoring_identity(
+    tmp_path, monkeypatch
+):
+    from types import SimpleNamespace
+
+    from eval_contracts import observation_assertions
+    from eval_framework.benchmark.mini_scoring import MiniAgentDomain
+
+    dependency = tmp_path / "observation_assertions.py"
+    dependency.write_text("first value encoding")
+    monkeypatch.setattr(observation_assertions, "__file__", str(dependency))
+    domain = MiniAgentDomain.__new__(MiniAgentDomain)
+    domain.capabilities = SimpleNamespace(bundle=SimpleNamespace(
+        capability_bundle_sha256="unchanged-reference"
+    ))
+    runtime_before = code_identity(["oracle.py"])
+    scoring_before = domain.identity()
+    dependency.write_text("changed value encoding")
+    assert code_identity(["oracle.py"]) != runtime_before
+    assert domain.identity() != scoring_before
+    assert domain.identity()["reference_bundle"] == "unchanged-reference"
+
+
 def test_current_identity_binds_extracted_source_dependencies(tmp_path, monkeypatch):
     from eval_framework.benchmark import layer_sources
 

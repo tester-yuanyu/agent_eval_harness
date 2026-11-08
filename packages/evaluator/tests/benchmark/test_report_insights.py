@@ -354,8 +354,7 @@ def test_repeated_diagnosis_has_one_summary_and_compact_trial_references(tmp_pat
     run["planned_case_ids"].append("case-two")
     run["trials"].append(row)
     soup = BeautifulSoup(render(tmp_path, run), "html.parser")
-    overview = soup.select_one(".overview").get_text()
-    assert "count → num：2 条失败执行" in overview
+    assert [td.get_text() for td in soup.select_one("#issue-1 tbody tr").select("td")] == ["count → num", "2"]
     for trial in soup.select(".trial"):
         finding = trial.select_one(".finding")
         assert "同问题 #1" in finding.get_text()
@@ -463,7 +462,7 @@ def test_alias_counts_deduplicate_turns_and_split_pages_link_to_summary(tmp_path
         event["id"] += "-second"
     row["observation"]["events"].extend(extra)
     soup = BeautifulSoup(render(tmp_path, run), "html.parser")
-    assert "count → num：1 条失败执行" in soup.select_one(".overview").get_text()
+    assert [td.get_text() for td in soup.select_one("#issue-1 tbody tr").select("td")] == ["count → num", "1"]
     contracts, _ = load_contracts(run)
     row["_report_findings"] = diagnose(row, contracts)
     for f in row["_report_findings"]:
@@ -491,3 +490,19 @@ def test_unknown_trial_latency_does_not_break_report(tmp_path):
     run["trials"].append(row)
     run["trials"][0]["latency_seconds"] = None
     assert "总耗时 未知 秒" in render(tmp_path, run)
+
+
+def test_issue_links_resolve_to_unique_trial_anchors(tmp_path):
+    from bs4 import BeautifulSoup
+    run = failure_run(tmp_path)
+    duplicate = copy.deepcopy(run['trials'][0])
+    duplicate['trial'] = 2
+    run['trials_per_case'] = 2
+    run['trials'].append(duplicate)
+    soup = BeautifulSoup(render(tmp_path, run), 'html.parser')
+    trial_ids = {row['id'] for row in soup.select('.trial')}
+    assert len(trial_ids) == 2
+    targets = {a['href'][1:] for a in soup.select('#issue-1 a[href^="#trial-"]') if a['href'] != '#trial-results'}
+    assert targets == trial_ids
+    assert all(row['data-issues'] == '1' for row in soup.select('.trial'))
+    assert soup.select_one('#issue option[value="1"]')

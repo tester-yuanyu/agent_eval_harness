@@ -10,6 +10,7 @@ from pathlib import Path
 
 from capability_snapshot_kit import hashing
 from eval_contracts import benchmark as task_contract
+from eval_contracts import observation_assertions
 from eval_contracts import trace as trace_contract
 
 
@@ -39,5 +40,8 @@ def layer_source_paths() -> dict[str, Path]:
     }
     result["eval_contracts/benchmark.py"] = Path(task_contract.__file__)
     result["eval_contracts/trace.py"] = Path(trace_contract.__file__)
+    result["eval_contracts/observation_assertions.py"] = Path(
+        observation_assertions.__file__
+    )
     result["capability_snapshot_kit/hashing.py"] = Path(hashing.__file__)
     return result

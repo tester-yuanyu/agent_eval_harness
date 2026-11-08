@@ -3,6 +3,19 @@
 import pytest
 
 
+def test_canonical_values_preserve_historical_json_bytes():
+    from eval_contracts.observation_assertions import canonical_value as contract_value
+    from eval_framework.native_scoring import canonical_value
+
+    for encode in (contract_value, canonical_value):
+        assert encode({"z": True, "a": [1, " 中文 ", None]}) == (
+            '{"a":[1," 中文 ",null],"z":true}'
+        )
+        for value in (float("nan"), float("inf"), -float("inf")):
+            with pytest.raises(ValueError):
+                encode(value)
+
+
 @pytest.mark.parametrize(
     "actual,expected,passed",
     [
@@ -47,7 +60,6 @@ def test_projection_preserves_missing_keys_and_nested_values():
 
 def test_assertions_report_native_identity_without_precomputed_boolean():
     from conftest import assertion, intent, module_case
-
     from eval_framework.assertions import run_assertions
     from eval_framework.provider import AdapterOutput
     from eval_framework.schemas import EvalCase
@@ -67,7 +79,6 @@ def test_assertions_report_native_identity_without_precomputed_boolean():
 @pytest.mark.parametrize("name", ["params_match", "tool_args_match"])
 def test_expected_subset_preserves_strict_nested_values(name):
     from conftest import assertion, intent, module_case
-
     from eval_framework.assertions import run_assertions
     from eval_framework.provider import AdapterOutput
     from eval_framework.schemas import EvalCase

@@ -8,6 +8,7 @@ from pathlib import Path
 
 from deepeval.metrics import BaseMetric
 from deepeval.test_case import LLMTestCase
+from eval_contracts import observation_assertions
 
 from ..assertions import run_assertions
 from ..capabilities import CapabilityRegistry
@@ -100,7 +101,12 @@ class MiniAgentDomain:
         return {
             "version": VERSION,
             "deepeval": version("deepeval"),
-            "sources": {name: sha256(root / name) for name in names},
+            "sources": {
+                **{name: sha256(root / name) for name in names},
+                "eval_contracts/observation_assertions.py": sha256(
+                    Path(observation_assertions.__file__)
+                ),
+            },
             "reference_bundle": self.capabilities.bundle.capability_bundle_sha256,
         }
 

@@ -229,7 +229,7 @@ def _remote_scores(client, ids):
                     raise ValueError("duplicate remote score ID")
                 found[data["id"]] = data
             meta = response.meta.model_dump() if response.meta is not None else {}
-            cursor = meta.get("next_cursor")
+            cursor = meta.get("cursor") or meta.get("next_cursor")
             if not cursor:
                 break
     return found
@@ -435,6 +435,17 @@ def create_dashboard(run_dir, *, base_url, client=None, refresh=False, trend=Non
         DashboardDefinition,
     )
 
+    # A later base refresh must not remove the verified explorer extension.
+    extension = root / "langfuse_explorer_dashboard.json"
+    if extension.exists():
+        saved_extension = json.loads(extension.read_text())
+        if saved_extension.get("dashboard_id") != state["dashboard_id"]:
+            raise ValueError("explorer dashboard identity mismatch")
+        current = client.unstable.dashboards.get(state["dashboard_id"]).definition
+        existing_ids = {w.widget_id for w in current.widgets if w.type == "widget"}
+        if not set(state["widgets"]).issubset(existing_ids):
+            raise ValueError("base widgets missing from extended dashboard")
+        definition = current.model_dump()
     client.unstable.dashboards.update(
         state["dashboard_id"],
         definition=DashboardDefinition.model_validate(definition),

@@ -9,7 +9,6 @@ from __future__ import annotations
 import hashlib
 import json
 import math
-from datetime import UTC, datetime
 from importlib.metadata import version
 from typing import Any
 
@@ -22,7 +21,7 @@ from .agentic_metrics import (
     run_agentic_metrics_worker,
     unscored_agentic_metric_records,
 )
-from .judge_client import OpenAICompatibleJudge
+from .judge_client import AuditedJudge as _AuditedJudge
 from .rubrics import GEVAL_DIMENSIONS as GEVAL_DIMENSIONS
 from .rubrics import JUDGE_VERSION as JUDGE_VERSION
 from .rubrics import RUBRICS as RUBRICS
@@ -34,42 +33,6 @@ IMPLEMENTATIONS = {
     "argument_correctness": "ArgumentCorrectnessMetric",
     **{name: "GEval" for name in GEVAL_DIMENSIONS},
 }
-
-
-class _AuditedJudge(OpenAICompatibleJudge):
-    """Retain unsuccessful HTTP attempts too; unknown usage remains unknown."""
-
-    def generate(self, prompt: str, schema: Any = None, **kwargs: Any) -> Any:
-        started = datetime.now(UTC).isoformat()
-        previous_count = len(self.calls)
-        try:
-            return super().generate(prompt, schema=schema, **kwargs)
-        except Exception as exc:
-            if len(self.calls) == previous_count:
-                content = prompt
-                if schema is not None:
-                    content += (
-                        "\nReturn only a JSON object matching this schema:\n"
-                        + json.dumps(schema.model_json_schema())
-                    )
-                self.calls.append(
-                    {
-                        "type": "generation",
-                        "name": "deepeval_response_judge",
-                        "model": self.model_name,
-                        "start_time": started,
-                        "end_time": datetime.now(UTC).isoformat(),
-                        "input": content,
-                        "output": None,
-                        "error": type(exc).__name__,
-                        "usage": {
-                            "input_tokens": None,
-                            "output_tokens": None,
-                            "cost_usd": None,
-                        },
-                    }
-                )
-            raise
 
 
 def _json(value: Any) -> str:

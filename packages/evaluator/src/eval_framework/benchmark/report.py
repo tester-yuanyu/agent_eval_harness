@@ -14,12 +14,14 @@ from pathlib import Path
 from typing import Any
 
 from .report_diagnostics import write_diagnostics
+from .report_context import METHODOLOGY_HTML, scope_html
 from .report_insights import (
     comparisons,
     estimate_cost,
     intent_mode,
     latency_details,
     load_contracts,
+    load_report_tasks,
     report_usage,
     schema_advice,
     token_parts,
@@ -48,6 +50,10 @@ def _percent(numerator: int, denominator: int) -> str:
 def _event_anchor(event_id: str, row: dict) -> str:
     key = f"{row['case_id']}\0{row['trial']}\0{event_id}"
     return "event-" + hashlib.sha256(key.encode()).hexdigest()[:24]
+
+
+def _trial_anchor(case_id: str, trial: int) -> str:
+    return "trial-" + hashlib.sha256(f"{case_id}\0{trial}".encode()).hexdigest()[:24]
 
 
 def _findings_html(row: dict, detail_url: str | None = None) -> str:
@@ -94,6 +100,7 @@ def _overview_html(rows: list[dict], contracts: dict, warnings: list[str]) -> st
             actions[finding["kind"]] = finding["action"]
     details = []
     for kind, entries in issues.items():
+        pattern_table = ""
         finding = entries[0][1]
         cases = {(r["case_id"], r["trial"]) for r, _ in entries}
         diagnosis = finding["description"] if kind != "schema_mismatch" else "模型候选参数使用参考契约未声明的字段，随后执行校验拒绝。以下按不同失败执行去重统计，同一执行可出现多个字段变体。"
@@ -105,14 +112,18 @@ def _overview_html(rows: list[dict], contracts: dict, warnings: list[str]) -> st
                 for alias, canonical in item.get("aliases", {}).items():
                     patterns.setdefault((alias, canonical), set()).add((row["case_id"], row["trial"]))
             actions[kind] = schema_advice({a:c for a,c in patterns}, any(f.get("prompt_contract_gap") for _,f in entries))
-            diagnosis += " ".join(f"{a} → {c}：{len(cases)} 条失败执行。" for (a, c), cases in patterns.items())
+            pattern_table = '<div class="table-wrap"><table><thead><tr><th>候选字段 → 契约字段</th><th>受影响执行数</th></tr></thead><tbody>' + "".join(
+                f"<tr><td>{_escape(a)} → {_escape(c)}</td><td>{len(affected)}</td></tr>"
+                for (a, c), affected in sorted(patterns.items())
+            ) + '</tbody></table></div><p class="muted">同一执行可出现多个映射，以上数量不能相加。</p>'
             gaps = {(r["case_id"], r["trial"]) for r, f in entries if f.get("prompt_contract_gap")}
             if gaps:
                 diagnosis += f"其中 {len(gaps)} 条执行呈现两层问题：①可见意图请求只提供通用 Schema，parameters 允许任意字段，未列出上述标准字段；②模型在该请求下输出了参考契约未声明的字段，随后被执行校验拒绝。优先修复 Schema 传递，使模型看到标准字段；验证后再按需增加别名映射兜底。当前证据不支持‘模型已看到标准字段但拒不遵守’的归因，也尚未通过对照重跑证明哪项修复足以消除失败。"
             else:
                 diagnosis += "是否已向模型传递具体字段约束，仍需核对请求；字段偏差本身不能证明模型无视 Schema。"
             diagnosis += "这些候选映射只用于诊断和修复建议，未修改参数或评分；修复后仍需验证类型、范围和多轮确认。"
-        details.append(f'<li id="issue-{finding["number"]}"><strong>问题 #{finding["number"]}：{_escape(finding["title"])} · {len(cases)} 条</strong><p>{_escape(diagnosis)}</p><details><summary>受影响执行</summary>{_escape("、".join(f"{c} / 第 {t} 次" for c, t in sorted(cases)))}</details></li>')
+        affected_links = "、".join(f'<a href="#{_trial_anchor(c, t)}">{_escape(c)} / 第 {t} 次</a>' for c, t in sorted(cases))
+        details.append(f'<li id="issue-{finding["number"]}"><strong>问题 #{finding["number"]}：{_escape(finding["title"])} · {len(cases)} 条</strong><p>{_escape(diagnosis)}</p>{pattern_table}<a href="#trial-results" class="issue-filter" data-issue="{_escape(finding["number"])}">筛选本问题全部 {len(cases)} 条执行 →</a><details><summary>受影响执行 · 点击定位</summary>{affected_links}</details></li>')
     failures = [r for r in rows if r["assessment"]["verdict"] == "FAIL"]
     diagnosed = sum(bool(r.get("_report_findings")) for r in failures)
     coverage = f"失败归因覆盖：{diagnosed}/{len(failures)} 条；问题计数可重叠，不能相加。"
@@ -142,15 +153,24 @@ def _overview_html(rows: list[dict], contracts: dict, warnings: list[str]) -> st
             chain_lines.append(f"{category}：{passed}/{len(category_rows)} 通过（{_percent(passed, len(category_rows))}）；失败：{failed_ids}。")
     if not actions:
         actions["coverage"] = "依据本批覆盖范围补充未验证路径；失败项先核对期望与实际，再沿 Trace 排查。"
+    read_failures = [r for r in groups["read"] if r["assessment"]["verdict"] == "FAIL"]
+    read_summary = ""
+    if read_failures:
+        read_summary = '<details class="read-failures" open><summary>读场景失败摘要</summary><ul>' + "".join(
+            f'<li><a href="#{_trial_anchor(r["case_id"], r["trial"])}">{_escape(r["case_id"])} / 第 {r["trial"]} 次</a>：'
+            + _escape("；".join(dict.fromkeys(f.get("short", f["title"]) for f in r.get("_report_findings", []))) or "根因待核实")
+            + "</li>" for r in read_failures
+        ) + "</ul></details>"
     latency = _latency_html(rows)
     return (
-        '<section class="overview"><h2>问题摘要</h2><p class="headline"><strong>' + _escape("；".join(rates)) + "</strong></p>"
+        '<section class="overview" id="findings"><h2>问题摘要</h2><p class="headline"><strong>' + _escape("；".join(rates)) + "</strong></p>"
         + "<p>" + _escape(" ".join(lines)) + "</p>"
         + "".join("<p>" + _escape(note) + "</p>" for note in notes + chain_lines)
+        + read_summary
         + '<ol class="issues">' + ("".join(details) or "<li>未触发可确认的诊断；通过仅覆盖本次实际执行范围。</li>") + "</ol>"
         + '<p class="muted">' + _escape(coverage) + " 诊断是证据解释，不改变正式评分，也不代表模型通用能力。</p>"
-        + "<h2>下一步建议</h2><ol>" + "".join(f"<li>{_escape(a)}</li>" for a in actions.values()) + "</ol>"
-        + latency
+        + '<h2 id="actions">下一步建议</h2><ol>' + "".join(f"<li>{_escape(a)}</li>" for a in actions.values()) + "</ol>"
+        + '<details class="supporting-evidence"><summary>耗时解释与最慢执行</summary>' + latency + "</details>"
         + ("<details><summary>解释与用量的证据限制</summary><ul>" + "".join(f"<li>{_escape(w)}</li>" for w in warnings) + "</ul></details>" if warnings else "")
         + "</section>"
     )
@@ -331,7 +351,8 @@ def _trial_html(row: dict, *, detail_url: str | None = None) -> str:
             + "</details>"
         )
     return (
-        f'<article class="trial" data-verdict="{_escape(verdict)}" '
+        f'<article class="trial" id="{_trial_anchor(row["case_id"], row["trial"])}" data-verdict="{_escape(verdict)}" '
+        f'data-issues="{_escape(" ".join(str(f["number"]) for f in row.get("_report_findings", [])))}" '
         f'data-category="{_escape(row.get("category", "unknown"))}" '
         f'data-search="{_escape(row["case_id"].lower())}">'
         f'<div class="trial-heading"><span class="badge {_escape(verdict.lower())}">'
@@ -363,8 +384,8 @@ _STYLE = """
 --teal:#086d69; --red:#a32636; --paper:#f4f7fa; }
 * {box-sizing:border-box} body {margin:0;background:var(--paper);color:var(--ink);
 font:15px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-header {background:#142b43;color:white;padding:36px max(24px,calc((100% - 1180px)/2))}
-header p {color:#d0deec;max-width:900px} h1 {font-size:32px;line-height:1.2;margin:16px 0}
+header {background:#142b43;color:white;padding:20px max(24px,calc((100% - 1180px)/2))}
+header p {color:#d0deec;max-width:900px} h1 {font-size:26px;line-height:1.2;margin:10px 0}
 header a {color:#d0eaff}
 main {max-width:1228px;margin:auto;padding:24px} h2 {margin-top:30px;font-size:21px}
 .eyebrow {font-size:12px;letter-spacing:.12em} .badge {display:inline-block;border-radius:5px;
@@ -373,6 +394,13 @@ padding:3px 9px;font-weight:700;font-size:12px;background:#e9eef5;color:var(--in
 .fail,.invalid {background:#fde1e4;color:#922737}.cards {display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
 .card,section,.trial {background:white;border:1px solid var(--line);border-radius:10px;padding:20px}
 .card strong {display:block;font-size:29px;line-height:1.3;margin:8px 0}.muted,small {color:var(--muted)}
+.summary-strip {display:flex;flex-wrap:wrap;gap:8px 22px;font-size:13px;padding:10px 0;border-bottom:1px solid var(--line)}
+.summary-stat strong {margin-left:6px}.evidence-group {background:white;border:1px solid var(--line);border-radius:8px;padding:12px 16px}
+.summary-notes {font-size:13px;color:var(--muted)}
+.report-nav {display:flex;flex-wrap:wrap;gap:8px 18px;padding:12px 0;font-size:13px}
+.report-scope {padding:14px 20px}.report-scope h2 {margin:0;font-size:17px}.report-scope p {margin:8px 0;font-size:13px}
+.methodology dt {font-weight:600}.methodology dd {margin:4px 0 14px}.read-failures {font-size:14px}
+[id] {scroll-margin-top:90px}
 .card small {font-size:12px}.grid {display:grid;grid-template-columns:1fr 1fr;gap:18px}
 .table-wrap {overflow:auto}table {border-collapse:collapse;width:100%;font-size:13px}
 th,td {padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
@@ -382,6 +410,7 @@ white-space:pre-wrap;word-break:break-word;max-height:540px;overflow:auto;font:1
 .controls {position:sticky;top:0;z-index:2;padding:12px;background:#edf2f7;display:flex;gap:10px;
 flex-wrap:wrap;border-radius:8px;margin:16px 0} input,select {font:inherit;padding:8px 12px;border:1px solid #c4d0dd;border-radius:5px}
 input {min-width:280px;flex:1}.trial {margin:14px 0}.trial-heading {display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+select {min-width:0;max-width:100%}
 .trial-heading h3 {font-size:15px;margin:0;flex:1;word-break:break-word}.trial p {margin:9px 0}
 .failure-reason {color:var(--red);background:#fff7f7;padding:10px;border-left:3px solid #d2707d}
 .headline {font-size:23px;line-height:1.5;padding:16px;background:#fff5e8;border-left:4px solid #cc7722}.issues>li {margin:16px 0}.overview {margin:18px 0}.overview h2:first-child {margin-top:0}
@@ -397,15 +426,26 @@ _SCRIPT = """
 const search=document.getElementById('search');
 const verdict=document.getElementById('verdict');
 const category=document.getElementById('category');
+const issue=document.getElementById('issue');
 function filter(){let shown=0;document.querySelectorAll('.trial').forEach(row=>{
  const match=row.dataset.search.includes(search.value.toLowerCase())&&
  (!verdict.value||row.dataset.verdict===verdict.value)&&
- (!category.value||row.dataset.category===category.value);
+ (!category.value||row.dataset.category===category.value)&&
+ (!issue.value||row.dataset.issues.split(' ').includes(issue.value));
  row.hidden=!match;if(match)shown++;
 });document.getElementById('visible').textContent=shown+' 条执行结果';}
-[search,verdict,category].forEach(el=>el.addEventListener('input',filter));filter();
+[search,verdict,category,issue].forEach(el=>el.addEventListener('input',filter));filter();
+function clearFilters(){[search,verdict,category,issue].forEach(el=>el.value='');}
+document.querySelectorAll('.issue-filter').forEach(link=>link.addEventListener('click',()=>{
+ clearFilters();issue.value=link.dataset.issue;filter();
+}));
+document.querySelectorAll('a[href^="#trial-"],a[href^="#event-"]').forEach(link=>link.addEventListener('click',()=>{
+ const target=document.getElementById(link.hash.slice(1));
+ if(target?.closest('.trial')?.hidden){clearFilters();filter();}
+}));
 function revealEvidence(){const el=document.getElementById(location.hash.slice(1));
- if(!el)return;let p=el;while(p){if(p.tagName==='DETAILS')p.open=true;p=p.parentElement;}
+ if(!el)return;const trial=el.closest('.trial');if(trial&&trial.hidden){clearFilters();filter();}
+ let p=el;while(p){if(p.tagName==='DETAILS')p.open=true;p=p.parentElement;}
  el.scrollIntoView({block:'center'});}
 window.addEventListener('hashchange',revealEvidence);revealEvidence();
 """
@@ -471,6 +511,8 @@ def write_domain_report(run_dir: Path | str) -> Path:
     dataset = identity.get("dataset", {})
     rows = run["trials"]
     contracts, warnings = load_contracts(run)
+    tasks, task_warnings = load_report_tasks(run)
+    warnings.extend(task_warnings)
     analysis = json.loads(write_diagnostics(run_dir).read_text())
     warnings.extend(analysis["warnings"])
     by_trial = {(t["case_id"], t["trial"]): t for t in analysis["trials"]}
@@ -501,6 +543,13 @@ def write_domain_report(run_dir: Path | str) -> Path:
         token_note = f"非缓存输入 {_number(sum(p[0] for p in parts))} + 缓存读取 {_number(cached)} + 输出 {_number(sum(p[2] for p in parts))} = 总 Token {_number(usage['total_tokens']['total'])}。"
     else:
         token_note = "缓存是否包含在输入 Token 内需按提供方口径核对；未知值不补零。"
+    performance_notes = []
+    if summary["latency_median"] and summary["latency_p95"] is not None:
+        performance_notes.append(f"本批 P95 约为 P50 的 {summary['latency_p95'] / summary['latency_median']:.1f} 倍；混合执行层级，不能据此判定模型慢或发生重试。")
+    if parts and all(p is not None for p in parts):
+        total = sum(sum(p) for p in parts)
+        if total:
+            performance_notes.append(f"可核对 Token 中，输入（含缓存读取）占 {100 * sum(p[0] + p[1] for p in parts) / total:.1f}%，输出占 {100 * sum(p[2] for p in parts) / total:.1f}%；这是用量结构，不代表冗余率或效率达标。")
     cost_html = "<p>" + _escape(estimate_label) + "</p>"
     if estimate:
         cost_html += (
@@ -526,7 +575,7 @@ def write_domain_report(run_dir: Path | str) -> Path:
             f"{summary['observed_unique_tasks']} 个已执行任务 · {summary['missing_trials']} 次执行缺失",
         ),
         (
-            "按计划执行次数计算的通过率",
+            "计划通过率",
             _percent(pass_count, planned),
             f"{pass_count} PASS · {counts.get('FAIL', 0)} FAIL · {counts.get('INVALID', 0)} INVALID",
         ),
@@ -542,8 +591,8 @@ def write_domain_report(run_dir: Path | str) -> Path:
         ),
     ]
     cards_html = "".join(
-        f'<div class="card"><span class="muted">{_escape(label)}</span>'
-        f"<strong>{_escape(value)}</strong><small>{_escape(note)}</small></div>"
+        f'<span class="summary-stat" title="{_escape(note)}"><span class="muted">{_escape(label)}</span>'
+        f"<strong>{_escape(value)}</strong></span>"
         for label, value, note in cards
     )
     identity_display = {
@@ -571,6 +620,10 @@ def write_domain_report(run_dir: Path | str) -> Path:
     verdict_options = "".join(
         f'<option value="{_escape(verdict)}">{_escape(verdict)}</option>'
         for verdict in counts
+    )
+    issue_options = "".join(
+        f'<option value="{_escape(n)}">问题 #{_escape(n)} · {_escape(title)}</option>'
+        for n, title in sorted({f["number"]: f["title"] for row in rows for f in row.get("_report_findings", [])}.items())
     )
     limitations = "".join(
         f"<li>{_escape(item)}</li>" for item in dataset.get("limitations", [])
@@ -606,28 +659,33 @@ def write_domain_report(run_dir: Path | str) -> Path:
         f"请求模型：{_escape(runtime.get('model', '未知'))}<br>"
         f"数据集：{_escape(dataset.get('dataset_id', '未知'))} · "
         f"Inspect 执行 → DeepEval 评分 → 本地证据报告</p></header><main>"
-        f'<div class="cards">{cards_html}</div>'
+        f'<div class="summary-strip" aria-label="本轮概览">{cards_html}</div>'
+        + '<nav class="report-nav" aria-label="报告目录"><a href="#scope">范围与比较</a><a href="#findings">问题摘要</a><a href="#actions">修复建议</a><a href="#methodology">统计口径</a><a href="#category-summary">任务类别</a><a href="#identity-audit">用量与身份</a><a href="#trial-results">逐条结果</a></nav>'
+        + scope_html(run, tasks)
+        + '<p class="muted performance-note">' + _escape(" ".join(performance_notes)) + ' 未应用性能验收阈值；<a href="#methodology">查看口径</a>。</p>'
         + _overview_html(rows, contracts, warnings)
         +
-        '<p class="muted">报告只展示已保存结果，不调用模型、不重新评分。'
+        '<details class="evidence-group" data-evidence="basis" id="methodology"><summary>统计口径与冻结证据</summary>'
+        + METHODOLOGY_HTML
+        + '<ul class="summary-notes">' + ''.join(f'<li>{_escape(note)}</li>' for _, _, note in cards) + '</ul>'
+        + '<p class="muted">报告只展示已保存结果，不调用模型、不重新评分。'
         "PASS 同时要求任务结果与正式约束通过；INVALID / INCONCLUSIVE 与 FAIL 分开统计。</p>"
         f"<p>有效执行通过率：{_percent(pass_count, summary['valid_trials'])}；"
         f"每个任务全部 {summary['trials_per_case']} 次计划执行通过："
         f"{summary['all_trials_pass_tasks']}/{summary['unique_tasks']}。"
-        "缺失或无效执行不能证明全部通过。</p>"
-        '<div class="grid"><section><h2>按任务类别</h2>'
+        "缺失或无效执行不能证明全部通过。</p></details>"
+        '<details class="evidence-group" data-evidence="category" id="category-summary"><summary>按任务类别</summary>'
         + _group_table(summary["by_category"])
-        + "</section><section><h2>按数据划分</h2>"
+        + '</details><details class="evidence-group" data-evidence="split"><summary>按数据划分</summary>'
         + _group_table(summary["by_split"])
-        + "</section></div>"
-        "<section><h2>评测层次</h2>"
+        + '</details><details class="evidence-group" data-evidence="level"><summary>评测层次</summary>'
         + _group_table(summary["by_evaluation_level"])
-        + "<p>模块直接执行与真实模型任务分开统计；总体数量不代表单一模型成功率。</p></section>"
+        + "<p>模块直接执行与真实模型任务分开统计；总体数量不代表单一模型成功率。</p></details>"
         + ("<section><h2>LLM Judge 量化（未完成人工校准）</h2><pre>"
            + _escape(_pretty({"summary": run["judge_summary"], "stability": run.get("judge_stability"),
                              "judge_usage": run.get("judge_usage")})) + "</pre></section>" if "judge_summary" in run else "")
         +
-        "<h2>用量与身份</h2><section>"
+        '<details class="evidence-group" data-evidence="identity" id="identity-audit"><summary>用量与身份 · 配置、模型与价格来源</summary>'
         f"<p>输入 Token：{_number(usage['input_tokens']['total'])} · "
         f"输出 Token：{_number(usage['output_tokens']['total'])} · "
         f"缓存命中 Token：{_number(cached)}。"
@@ -642,11 +700,12 @@ def write_domain_report(run_dir: Path | str) -> Path:
         "<details><summary>用量完整性及已知部分</summary>"
         f"<pre>{_escape(_pretty({'saved_summary': usage, 'report_usage': native_usage, 'native_sources': usage_sources}))}</pre></details>"
         f"<details><summary>数据集限制与来源</summary><ul>{limitations}</ul>"
-        f"<pre>{_escape(_pretty(dataset.get('provenance', {})))}</pre></details></section>"
-        "<h2>逐条结果与完整 Trace</h2>" + detail_notice + '<div class="controls">'
+        f"<pre>{_escape(_pretty(dataset.get('provenance', {})))}</pre></details></details>"
+        '<h2 id="trial-results">逐条结果与完整 Trace</h2>' + detail_notice + '<div class="controls">'
         '<input id="search" aria-label="搜索任务" placeholder="搜索任务 ID">'
         f'<select id="verdict" aria-label="结果筛选"><option value="">全部结果</option>{verdict_options}</select>'
         f'<select id="category" aria-label="类别筛选"><option value="">全部类别</option>{categories}</select>'
+        f'<select id="issue" aria-label="问题筛选"><option value="">全部问题</option>{issue_options}</select>'
         '<span id="visible"></span></div>'
         + trials_html
         + '<footer>来源：<a href="results.json">results.json</a> · '

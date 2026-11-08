@@ -3,11 +3,11 @@
 from __future__ import annotations
 
 import asyncio
-import json
 from contextlib import contextmanager
 from contextvars import ContextVar
 from typing import Any
 
+from eval_contracts.observation_assertions import canonical_value as canonical_value
 from inspect_ai.model import ModelName, ModelOutput
 from inspect_ai.scorer import CORRECT, Target, includes, pattern
 from inspect_ai.solver import TaskState
@@ -37,17 +37,6 @@ def capture_scores():
         yield values
     finally:
         _scores.reset(token)
-
-
-def canonical_value(value: Any) -> str:
-    """Encode structured values without losing types or string whitespace."""
-    return json.dumps(
-        value,
-        ensure_ascii=False,
-        sort_keys=True,
-        separators=(",", ":"),
-        allow_nan=False,
-    )
 
 
 def _measure(metric: Any, actual: str, expected: str, name: str) -> bool:

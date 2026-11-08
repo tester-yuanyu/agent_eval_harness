@@ -3,6 +3,36 @@
 from .protocol import status_for
 
 
+def valid_manifest(state) -> bool:
+    """Check shared counters and flags without imposing a storage backend."""
+    return (
+        isinstance(state, dict)
+        and isinstance(state.get("issues"), list)
+        and all(
+            type(state.get(key)) is int and state[key] >= 0
+            for key in ("attempted_count", "written_count", "last_sequence")
+        )
+        and all(
+            type(state.get(key)) is bool
+            for key in ("execution_completed", "collection_closed")
+        )
+        and all(
+            isinstance(issue, dict) and issue.get("kind") in {"partial", "export"}
+            for issue in state["issues"]
+        )
+    )
+
+
+def valid_event_envelope(event) -> bool:
+    """Raise for unreadable records; return False for diagnosable field damage."""
+    if not isinstance(event, dict) or type(event.get("sequence")) is not int:
+        raise ValueError("invalid evidence envelope")
+    return all(
+        isinstance(event.get(key), str)
+        for key in ("event_id", "event_type", "trace_id", "run_id", "timestamp")
+    ) and isinstance(event.get("payload"), dict)
+
+
 def validate_evidence(events, state, issues):
     events.sort(key=lambda e: e["sequence"])
     sequences = [e["sequence"] for e in events]

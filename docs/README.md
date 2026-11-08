@@ -29,3 +29,5 @@
 当前数据集为 [File Tools v2](../data/benchmarks/file-tools-v2/README.md)、[Model Decisions v1](../data/benchmarks/model-decisions-v1/README.md) 和独立 [nanobot Core v1](../data/benchmarks/nanobot-core-v1/README.md)。原中文逐条阅读页跨三个历史版本收录 744 条记录，包含 v1/v2 继承任务，不代表 744 个唯一任务，也未包含新增 Core v1。历史 [File Tools v1](../data/benchmarks/file-tools-v1/README.md)、Suite / Provider、mini_agent 与 Inspect Scorer 保留各自原有语义；[v1 架构](benchmark/architecture.md)不能作为 v2 能力清单。不同任务、运行方式或评分版本的结果分开报告。
 
 说明文档使用中文，保留专业术语、命令、字段名和代码标识符。冻结任务、能力协议资源、第三方官方任务、原始模型或工具输出、审核证据及历史结果按原文保存；英语原文不因文档整理而改写。若要翻译影响执行或评分的内容，必须创建新版本并重新验证，不能覆盖旧数据及 Hash。完成的实施方案和重复阶段报告已收敛，详细演变可查 Git 历史。
+
+已完成且由验收记录替代的过程计划不再常驻文档目录；未完成或仍被引用的计划继续保留。历史验收记录中的临时 clone 路径表示当时的验证位置：其重复源码和虚拟环境已清理，验收日志与 `artifacts/` 演示证据保留。真实评测原始结果、公开报告及 `.migration/` 的迁移基线不属于临时产物。
