@@ -4,7 +4,13 @@ from __future__ import annotations
 
 from typing import Any
 
-from eval_contracts.trace import StepTrace, TaskTrace, TurnTrace
+from eval_contracts.trace import (
+    StepTrace,
+    TaskTrace,
+    TurnTrace,
+    associations_match,
+    duplicate_event_ids,
+)
 from inspect_ai.event import InfoEvent, ModelEvent, ToolEvent
 
 from ..tracer import aggregate_usage, model_evidence
@@ -14,14 +20,66 @@ def business_events(events: list[Any]) -> list[InfoEvent]:
     return [e for e in events if isinstance(e, InfoEvent) and e.source == "harness.v1"]
 
 
+def _association_errors(events: list[Any], info: list[InfoEvent]) -> list[dict]:
+    """验证投影所需身份；快照和执行模式要求仍由转换器负责。"""
+    codes = []
+    ids = [e.uuid for e in events]
+    if any(not isinstance(value, str) or not value for value in ids):
+        codes.append("MISSING_EVENT_ID")
+    elif duplicate_event_ids(ids):
+        codes.append("DUPLICATE_EVENT_ID")
+    for kind, key in (
+        ("turn_start", "turn"),
+        ("turn_end", "turn"),
+        ("route_start", "route_id"),
+        ("route_end", "route_id"),
+    ):
+        if duplicate_event_ids(e.data[key] for e in info if e.data["kind"] == kind):
+            codes.append("DUPLICATE_" + kind.upper())
+    turns = {e.data["turn"]: e for e in info if e.data["kind"] == "turn_start"}
+    ends = {e.data["turn"]: e for e in info if e.data["kind"] == "turn_end"}
+    routes = {e.data["route_id"]: e for e in info if e.data["kind"] == "route_start"}
+    for event in info:
+        data = event.data
+        if data["kind"] == "turn_end":
+            start = turns.get(data["turn"])
+            if start is None or event.timestamp < start.timestamp:
+                codes.append("TURN_ASSOCIATION_MISMATCH")
+        if data["kind"] in {"route_start", "route_end"}:
+            turn_start, turn_end = turns.get(data["turn"]), ends.get(data["turn"])
+            if (
+                turn_start is None
+                or event.timestamp < turn_start.timestamp
+                or (turn_end is not None and event.timestamp > turn_end.timestamp)
+            ):
+                codes.append("TURN_ASSOCIATION_MISMATCH")
+        if data["kind"] == "route_end":
+            start = routes.get(data["route_id"])
+            if (
+                start is None
+                or event.timestamp < start.timestamp
+                or not associations_match(
+                    [(data["call_id"], data["turn"])],
+                    (start.data["call_id"], start.data["turn"]),
+                )
+            ):
+                codes.append("ROUTE_ASSOCIATION_MISMATCH")
+    return [
+        {"kind": "evidence", "code": code, "message": code}
+        for code in dict.fromkeys(codes)
+    ]
+
+
 async def extract_timeline(task_id: str, events: list[Any]) -> dict[str, Any]:
     info = business_events(events)
+    association_errors = _association_errors(events, info)
     starts = [e for e in info if e.data["kind"] == "turn_start"]
     ends = {e.data["turn"]: e for e in info if e.data["kind"] == "turn_end"}
     route_starts = [e for e in info if e.data["kind"] == "route_start"]
-    route_ends = {
-        e.data["route_id"]: e.data for e in info if e.data["kind"] == "route_end"
+    route_end_events = {
+        e.data["route_id"]: e for e in info if e.data["kind"] == "route_end"
     }
+    route_ends = {key: event.data for key, event in route_end_events.items()}
     stop = next(
         (e.data["reason"] for e in reversed(info) if e.data["kind"] == "stop"),
         "incomplete",
@@ -36,6 +94,7 @@ async def extract_timeline(task_id: str, events: list[Any]) -> dict[str, Any]:
     turn_events = [
         {
             "id": e.uuid,
+            "native_event_id": e.uuid,
             "type": "turn",
             "name": f"turn-{e.data['turn']}",
             "turn": e.data["turn"],
@@ -53,6 +112,7 @@ async def extract_timeline(task_id: str, events: list[Any]) -> dict[str, Any]:
     ]
     generations = await model_evidence(events, turn_events)
     tools = []
+    used_routes = []
     for event in events:
         if not isinstance(event, ToolEvent):
             continue
@@ -64,7 +124,26 @@ async def extract_timeline(task_id: str, events: list[Any]) -> dict[str, Any]:
             ),
             {},
         )
+        used_routes.append(start.get("route_id"))
         end = route_ends.get(start.get("route_id"), {})
+        end_event = route_end_events.get(start.get("route_id"))
+        if end_event is not None and (
+            event.timestamp > end_event.timestamp
+            or (
+                event.completed is not None
+                and (
+                    event.completed > end_event.timestamp
+                    or event.completed < event.timestamp
+                )
+            )
+        ):
+            association_errors.append(
+                {
+                    "kind": "evidence",
+                    "code": "TOOL_ASSOCIATION_MISMATCH",
+                    "message": "Native tool event lies outside its route",
+                }
+            )
         turn = next((t for t in turn_events if t["turn"] == start.get("turn")), {})
         tools.append(
             {
@@ -72,6 +151,15 @@ async def extract_timeline(task_id: str, events: list[Any]) -> dict[str, Any]:
                 "type": "tool",
                 "name": event.function,
                 "native_event_id": event.uuid,
+                "source_event_ids": [
+                    event.uuid,
+                    *[
+                        e.uuid
+                        for e in info
+                        if e.data["kind"] in {"route_start", "route_end"}
+                        and e.data["route_id"] == start.get("route_id")
+                    ],
+                ],
                 "tool_call_id": event.id,
                 "source": "inspect_ai.ToolEvent",
                 "parent_id": turn.get("id"),
@@ -127,6 +215,19 @@ async def extract_timeline(task_id: str, events: list[Any]) -> dict[str, Any]:
         for e in info
         if e.data["kind"] == "execution_error"
     ]
+    errors.extend(association_errors)
+    if (
+        None in used_routes
+        or duplicate_event_ids(used_routes)
+        or set(used_routes) != {e.data["route_id"] for e in route_starts}
+    ):
+        errors.append(
+            {
+                "kind": "evidence",
+                "code": "TOOL_ASSOCIATION_MISMATCH",
+                "message": "Each native tool must have its own route",
+            }
+        )
     if stop != "completed" and not errors:
         errors.append({"kind": "agent", "code": stop, "message": stop})
     stop_data = next((e.data for e in reversed(info) if e.data["kind"] == "stop"), {})

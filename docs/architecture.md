@@ -24,7 +24,7 @@ flowchart LR
 | `agent-eval-contracts` | 提供 `capability_snapshot_kit` 与 `eval_contracts`，不依赖 Builder、Evaluator、mini_agent 或 Inspect。 |
 | `agent-dataset-builder` | 读取完整能力包，使用共享校验和数据模型；生成 IR、Policy、候选及生命周期留在内部。当前固定 benchmark 不要求先走该入口。 |
 | `agent-evaluator` | 当前 benchmark 由 Inspect 执行、DeepEval 评分；自研扩展负责适配、采证、检查点、报告与比较。历史 Suite 路径保留 Inspect Scorer 和 `eval_framework` 兼容导入。 |
-| `agent-trace-sdk` | 独立分发轨迹接入协议，保留已有 Inspect 依赖。 |
+| `agent-trace-sdk` | 独立的基于 Inspect 的业务证据适配 SDK；Inspect 持久化原生日志，SDK 处理接入、脱敏、采集状态与读回，不是另一套日志系统。 |
 | `minimal-agent` | 可选参考实现，使用共享快照协议；核心 Evaluator 可在未安装它时通过外部适配器运行。当前主要实测对象为 nanobot。 |
 | `agent-eval-suite` | 标准库 CLI，负责独立环境选择、子进程命令转发、快照登记和显式源码同步。 |
 
@@ -53,3 +53,5 @@ Agent 接收公开请求、初始状态和允许的工具；Oracle、期望结�
 ## 历史资产与兼容
 
 历史 Suite、快照及冻结交付物保持原字节；兼容层处理旧同级目录锚点。为避免改写冻结引用与 Hash，部分历史资产继续留在原包路径，新快照使用根登记目录。保留的协议与使用文档记录旧结果语义；已完成方案和重复阶段报告可查 Git 历史。来源及历史验收集中于[迁移记录](migration/provenance.md)，实现保留范围见[兼容说明](benchmark/legacy.md)。
+
+渐进收敛的模块职责、直接/间接入口、同步语义差异和删除依据见[2026-11-11 收敛记录](migration/convergence-2026-11-11.md)。

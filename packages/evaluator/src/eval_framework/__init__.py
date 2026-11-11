@@ -1,37 +1,7 @@
-"""Public Agent evaluation API with deterministic and phase-two analysis."""
+"""公开兼容 API；仅在使用时加载历史执行、报告和可选集成。"""
 
 from importlib import import_module
 from typing import Any
-
-from .adjudication import import_reviews
-from .agent_adapter import AgentAdapter, EvaluationProviderAdapter
-from .comparison import check_comparability, compare_runs, write_comparison
-from .compiled_execution import execute_compiled_suite
-from .contracts.compiler import compile_suite, load_suite_definition
-from .contracts.models import CompiledSuite, SuiteDefinition
-from .contracts.store import ContractStore
-from .dataset_loader import DatasetLoadError, load_dataset
-from .dataset_validator import validate_dataset
-from .gating import evaluate_gate, load_gate_policy, write_gate_result
-from .judge import JudgeClient
-from .plugins.catalog import PluginCatalog
-from .provider import EvaluationPreflightError, EvaluationProvider
-from .provider_registry import ProviderRegistry
-from .reporting import write_report
-from .result_loader import LoadedRunResult, load_run_result
-from .runner import run_evaluation, run_provider_evaluation
-from .schemas import (
-    DatasetBundle,
-    DatasetFilters,
-    EvalCase,
-    EvaluationRunResult,
-    ExecutionSpec,
-    OracleSpec,
-    ReportPaths,
-    RunConfig,
-    ValidationReport,
-)
-from .trace_analysis import analyze_case_trace, analyze_run, write_run_analysis
 
 __all__ = [
     "DatasetBundle",
@@ -77,14 +47,60 @@ __all__ = [
     "write_run_analysis",
 ]
 
+_EXPORTS = {
+    "import_reviews": ("adjudication", "import_reviews"),
+    "AgentAdapter": ("agent_adapter", "AgentAdapter"),
+    "EvaluationProviderAdapter": ("agent_adapter", "EvaluationProviderAdapter"),
+    "check_comparability": ("comparison", "check_comparability"),
+    "compare_runs": ("comparison", "compare_runs"),
+    "write_comparison": ("comparison", "write_comparison"),
+    "execute_compiled_suite": ("compiled_execution", "execute_compiled_suite"),
+    "compile_suite": ("contracts.compiler", "compile_suite"),
+    "load_suite_definition": ("contracts.compiler", "load_suite_definition"),
+    "CompiledSuite": ("contracts.models", "CompiledSuite"),
+    "SuiteDefinition": ("contracts.models", "SuiteDefinition"),
+    "ContractStore": ("contracts.store", "ContractStore"),
+    "DatasetLoadError": ("dataset_loader", "DatasetLoadError"),
+    "load_dataset": ("dataset_loader", "load_dataset"),
+    "validate_dataset": ("dataset_validator", "validate_dataset"),
+    "evaluate_gate": ("gating", "evaluate_gate"),
+    "load_gate_policy": ("gating", "load_gate_policy"),
+    "write_gate_result": ("gating", "write_gate_result"),
+    "JudgeClient": ("judge", "JudgeClient"),
+    "PluginCatalog": ("plugins.catalog", "PluginCatalog"),
+    "EvaluationPreflightError": ("provider", "EvaluationPreflightError"),
+    "EvaluationProvider": ("provider", "EvaluationProvider"),
+    "ProviderRegistry": ("provider_registry", "ProviderRegistry"),
+    "write_report": ("reporting", "write_report"),
+    "LoadedRunResult": ("result_loader", "LoadedRunResult"),
+    "load_run_result": ("result_loader", "load_run_result"),
+    "run_evaluation": ("runner", "run_evaluation"),
+    "run_provider_evaluation": ("runner", "run_provider_evaluation"),
+    "DatasetBundle": ("schemas", "DatasetBundle"),
+    "DatasetFilters": ("schemas", "DatasetFilters"),
+    "EvalCase": ("schemas", "EvalCase"),
+    "EvaluationRunResult": ("schemas", "EvaluationRunResult"),
+    "ExecutionSpec": ("schemas", "ExecutionSpec"),
+    "OracleSpec": ("schemas", "OracleSpec"),
+    "ReportPaths": ("schemas", "ReportPaths"),
+    "RunConfig": ("schemas", "RunConfig"),
+    "ValidationReport": ("schemas", "ValidationReport"),
+    "analyze_case_trace": ("trace_analysis", "analyze_case_trace"),
+    "analyze_run": ("trace_analysis", "analyze_run"),
+    "write_run_analysis": ("trace_analysis", "write_run_analysis"),
+    "MiniAgentProvider": ("providers.mini_agent", "MiniAgentProvider"),
+}
+
 
 def __getattr__(name: str) -> Any:
-    """Load provider integrations only when callers request them."""
-
-    if name != "MiniAgentProvider":
-        raise AttributeError(name)
-    value = import_module(
-        "eval_framework.providers.mini_agent"
-    ).MiniAgentProvider
+    try:
+        module, attribute = _EXPORTS[name]
+    except KeyError:
+        raise AttributeError(name) from None
+    value = getattr(import_module(f".{module}", __name__), attribute)
     globals()[name] = value
     return value
+
+
+def __dir__() -> list[str]:
+    return sorted(set(globals()) | set(__all__))

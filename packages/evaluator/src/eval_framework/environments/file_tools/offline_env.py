@@ -7,6 +7,7 @@ from pathlib import Path, PurePosixPath
 from typing import Any
 
 from .._fs_utils import safe_path, snapshot_files
+from .schemas import TOOLS, file_tool_schemas
 
 
 def validate_fixtures(initial_state: dict[str, str]) -> dict[str, str]:
@@ -33,6 +34,9 @@ class FileToolsEnvironment:
     def __init__(self, *, parent: Path | None = None) -> None:
         self.parent = parent
         self._temporary: tempfile.TemporaryDirectory | None = None
+
+    def tool_schemas(self) -> list[dict[str, Any]]:
+        return file_tool_schemas([tool[0] for tool in TOOLS])
 
     @property
     def workspace(self) -> Path:

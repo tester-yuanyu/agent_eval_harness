@@ -1,5 +1,7 @@
 """Shared business completeness rules for current and historical evidence."""
 
+from eval_contracts.trace import associations_match, duplicate_event_ids
+
 from .protocol import status_for
 
 
@@ -38,7 +40,7 @@ def validate_evidence(events, state, issues):
     sequences = [e["sequence"] for e in events]
     attempts = state.get("attempted_count", len(events))
     ids = [e["event_id"] for e in events if isinstance(e.get("event_id"), str)]
-    if len(ids) != len(set(ids)):
+    if duplicate_event_ids(ids):
         issues.append(dict(kind="partial", code="DUPLICATE_EVENT_ID"))
     if (
         len(events) != attempts
@@ -47,7 +49,9 @@ def validate_evidence(events, state, issues):
         or state.get("last_sequence", attempts) != attempts
     ):
         issues.append(dict(kind="partial", code="SEQUENCE_OR_COUNT_MISMATCH"))
-    if any(e.get("trace_id") != state.get("trace_id") for e in events):
+    if not associations_match(
+        (e.get("trace_id") for e in events), state.get("trace_id")
+    ):
         issues.append(dict(kind="export", code="TRACE_ASSOCIATION_MISMATCH"))
     state.setdefault("issues", []).extend(issues)
     state["status"] = status_for(

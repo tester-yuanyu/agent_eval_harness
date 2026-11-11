@@ -22,7 +22,7 @@
 | `packages/contracts` 与根 CLI 的 `bundle` / `agent` | 能力协议、固定版本登记、显式源码同步和历史契约校验。运行不会自动拉取“最新”代码。 |
 | `eval_framework.cli`、Suite 编译器、旧 Provider / Scorer | 读取旧 Suite、验证旧指标、回归历史数据；保留 Inspect 评分语义，独立于新 benchmark。 |
 | `examples/mini_agent` | 可选参考 Agent 和原项目回归。Core 安装不依赖它，当前主作品集使用 nanobot。 |
-| `packages/agent-trace-sdk` | 历史独立证据通道及 Inspect 日志读取；没有为了本次改造破坏既有 SDK 消费者。 |
+| `packages/agent-trace-sdk` | 基于 Inspect 的独立业务证据适配 SDK；当前 Provider 仍使用，历史格式仅只读兼容。 |
 | 包内兼容使用文档 | 保留协议、接入方法、历史限制与旧结果口径；已完成方案和重复阶段报告由 Git 历史保留。旧阶段的“默认评分后端”不覆盖新主入口。 |
 
 这些模块有现有使用者、测试或冻结资产依赖；删除会改变已交付行为。下一步若正式废弃，需先迁移调用者和测试、标明结果格式支持期限，再删除实现。当前的整理是收敛对外主入口及重复约束，不能宣称所有历史冗余都已物理移除。

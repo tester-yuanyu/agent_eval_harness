@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
-from collections import Counter
 from collections.abc import Sequence
 from datetime import datetime
 from pathlib import Path
+
+from eval_contracts.trace import duplicate_event_ids
 
 from .phase2_schemas import (
     AnalysisPaths,
@@ -89,16 +90,15 @@ def _structural_issues(
     case: CaseResult, timeline: Sequence[NormalizedTraceEvent]
 ) -> list[TraceIssue]:
     issues: list[TraceIssue] = []
-    counts = Counter(event.event_id for event in timeline)
+    counts = duplicate_event_ids(event.event_id for event in timeline)
     for event_id, count in sorted(counts.items()):
-        if count > 1:
-            issues.append(
-                TraceIssue(
-                    code="OBSERVED_DUPLICATE_EVENT_ID",
-                    message=f"Observed event ID {event_id!r} {count} times.",
-                    evidence_refs=[f"event:{event_id}"],
-                )
+        issues.append(
+            TraceIssue(
+                code="OBSERVED_DUPLICATE_EVENT_ID",
+                message=f"Observed event ID {event_id!r} {count} times.",
+                evidence_refs=[f"event:{event_id}"],
             )
+        )
 
     previous: tuple[datetime, NormalizedTraceEvent] | None = None
     for event in timeline:

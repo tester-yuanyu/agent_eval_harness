@@ -1,5 +1,7 @@
 """Runtime-neutral business trace, derived from authoritative runtime events."""
 
+from collections import Counter
+from collections.abc import Iterable
 from typing import Any, Literal
 
 from pydantic import Field
@@ -32,3 +34,13 @@ class TaskTrace(StrictModel):
     final_state: dict[str, Any] | None = None
     turns: list[TurnTrace] = Field(default_factory=list)
     evidence_complete: bool = False
+
+
+def duplicate_event_ids(identifiers: Iterable[str]) -> dict[str, int]:
+    """返回重复身份及次数；调用者决定诊断码与证据状态。"""
+    return {value: count for value, count in Counter(identifiers).items() if count > 1}
+
+
+def associations_match(values: Iterable[object], expected: object) -> bool:
+    """检查同属关联，不强制业务字段或补齐缺失身份。"""
+    return all(value == expected for value in values)

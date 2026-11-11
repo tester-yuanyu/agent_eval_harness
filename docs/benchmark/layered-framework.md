@@ -27,8 +27,8 @@ flowchart TD
 | 通用任务 | `eval_contracts.benchmark`（共享包）、`benchmark/schema.py` | 严格 TaskSpec、公开输入 allowlist、旧 file-tools 任务视图；不重写 JSONL |
 | 插件契约 | `plugins/protocols.py`、`plugins/models.py` | Environment、ToolRouter、UserSimulator、Scorer 接口和精确版本类型 |
 | Environment | `environments/file_tools.py`、`environments/inspect_file_tools.py` | 初态装载、隔离 workspace、独立 snapshot/final_state、清理；Inspect 版本实际服务现有 worker |
-| Harness | `harness/loop.py`、`harness/tracer.py` | Inspect 执行边界、公开模型事件、用量和证据完整性采集 |
-| 可组合循环 | `harness/conversation.py`、`router.py`、`user_simulator.py` | 同步外部 callback、工具解析与校验、固定 followups、轮次调度和资源释放 |
+| Harness | `harness/adapters/inspect_solver.py`、`harness/core/`、`harness/tracer.py` | Inspect 执行边界、公开模型事件、用量和证据完整性采集 |
+| 可组合循环 | `harness/conversation.py`、`router.py`、`user_simulator.py` | 兼容同步外部 callback；公共 Schema 路由、固定 followups、轮次调度和资源释放 |
 | Benchmark 评分 | `benchmark/scorers/` | ExecutableScorer、exact ReferenceScorer、显式 LLMJudgeScorer |
 | 指标汇总 | `aggregator/summaries.py`、`judgments.py`、`levels.py` | 既有汇总算法、Judge 重复评价和五层保存证据视图 |
 | 配置组合 | `orchestration/specs.py`、`config.py` | Model/Harness/Environment/Benchmark/Execution 五份 Spec、本地引用、迁移及 CLI 优先级 |
@@ -66,3 +66,5 @@ Suite 新增四个可选插件引用，并在编译时解析精确版本、校�
 本轮没有新增领域、任务或能力桶，也没有统一/改写被测 Agent。新五份配置服务现有 `run/demo`；core、coverage、judge 和独立 τ 入口继续使用各自配置。未来将 Suite 插件实例化接入新的组合入口、增加动态 simulator 或并行调用时，应另行明确运行协议和验收数据，不把类型槽位当成已支持的执行功能。
 
 验收证据见[本轮验收记录](../migration/layered-harness-acceptance-2026-11-06.md)。
+
+同步 callback 与异步 Inspect 循环的错误恢复、预算、输出与清理语义不同；本轮公共逻辑收敛及保留依据见[渐进收敛记录](../migration/convergence-2026-11-11.md)。`harness/loop.py` 是 nanobot bridge 的旧导入转发，不是额外循环实现。

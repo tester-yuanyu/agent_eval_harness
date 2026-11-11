@@ -6,30 +6,35 @@ import json
 from copy import deepcopy
 from typing import Any
 
+from ..environments.file_tools.schemas import TOOLS, file_tool_schemas
+from .tool_validation import ToolSchemaValidator
+
 
 class InvalidToolCall(ValueError):
     """A supplied tool name, arguments or domain operation is invalid."""
 
 
 class ToolRouter:
-    """Router for the framework's deterministic file environment, not Agent SDKs."""
-
-    _FIELDS = {
-        "read_file": ({"path"}, set()),
-        "write_file": ({"path", "content"}, set()),
-        "edit_file": ({"path", "old_text", "new_text"}, set()),
-        "list_dir": (set(), {"path"}),
-    }
+    """同步兼容入口；校验环境 Schema，保留 InvalidToolCall 错误语义。"""
 
     def __init__(
         self, environment: Any = None, *, allowed_tools: list[str] | None = None
     ) -> None:
         self.environment = environment
-        self.allowed_tools = frozenset(
-            self._FIELDS if allowed_tools is None else allowed_tools
+        schemas = (
+            environment.tool_schemas()
+            if callable(getattr(environment, "tool_schemas", None))
+            else file_tool_schemas([tool[0] for tool in TOOLS])
         )
-        if not self.allowed_tools or not self.allowed_tools <= self._FIELDS.keys():
+        available = {schema["name"] for schema in schemas}
+        self.allowed_tools = frozenset(
+            available if allowed_tools is None else allowed_tools
+        )
+        if not self.allowed_tools or not self.allowed_tools <= available:
             raise ValueError("unsupported allowed tools")
+        self._validation = ToolSchemaValidator(
+            [schema for schema in schemas if schema["name"] in self.allowed_tools]
+        )
 
     def parse(self, raw: str | dict[str, Any]) -> dict[str, Any]:
         try:
@@ -54,13 +59,7 @@ class ToolRouter:
         tool_name, arguments = call["name"], call["arguments"]
         if not isinstance(tool_name, str) or tool_name not in self.allowed_tools:
             return ["tool is not allowed"]
-        required, optional = self._FIELDS[tool_name]
-        if (
-            not isinstance(arguments, dict)
-            or not required <= arguments.keys()
-            or not arguments.keys() <= required | optional
-            or any(not isinstance(value, str) for value in arguments.values())
-        ):
+        if self._validation.validate(tool_name, arguments):
             return ["invalid tool arguments"]
         return []
 

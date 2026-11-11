@@ -7,7 +7,7 @@ name = "agent-trace-sdk"
 version = "0.1.0"
 description = "Business evidence protocol adapters backed by Inspect native logs"
 requires-python = ">=3.11"
-dependencies = ["inspect_ai==0.3.280"]
+dependencies = ["inspect_ai==0.3.280", "agent-eval-contracts>=0.1.0,<0.2"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

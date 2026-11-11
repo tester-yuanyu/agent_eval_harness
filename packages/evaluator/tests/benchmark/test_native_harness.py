@@ -8,7 +8,7 @@ import pytest
 from inspect_ai import Task
 from inspect_ai import eval as inspect_eval
 from inspect_ai.dataset import Sample
-from inspect_ai.model import ChatMessageAssistant, ModelOutput, get_model
+from inspect_ai.model import ChatMessageAssistant, ModelOutput, ModelUsage, get_model
 from inspect_ai.tool import ToolCall
 
 
@@ -16,6 +16,7 @@ def output(text="", calls=None, stop_reason="stop"):
     value = ModelOutput.from_content("mockllm/model", text)
     value.choices[0].message = ChatMessageAssistant(content=text, tool_calls=calls)
     value.choices[0].stop_reason = stop_reason
+    value.usage = ModelUsage(input_tokens=10, output_tokens=5, total_tokens=15)
     return value
 
 
@@ -37,7 +38,6 @@ def run_native(
     max_consecutive_errors=None,
 ):
     from eval_contracts.benchmark import TaskInput
-
     from eval_framework.harness.adapters.inspect_solver import harness_solver
 
     tasks = {
@@ -393,7 +393,6 @@ def test_environment_failures_preserve_partial_evidence_and_cleanup(failure):
     import errno
 
     from eval_contracts.benchmark import TaskInput
-
     from eval_framework.harness.adapters.agent.base import AgentAction
     from eval_framework.harness.adapters.inspect_solver import execute_native_task
 
@@ -501,9 +500,8 @@ def test_schema_default_allows_extra_arguments_in_advertised_tools():
 
 
 def test_missing_native_generation_is_not_complete_evidence(tmp_path):
-    from inspect_ai.log import read_eval_log
-
     from eval_framework.harness.trace.timeline_extractor import extract_timeline
+    from inspect_ai.log import read_eval_log
 
     log = run_native(tmp_path, [output("done")])
     log = read_eval_log(log.location, resolve_attachments=True)
@@ -515,9 +513,8 @@ def test_missing_native_generation_is_not_complete_evidence(tmp_path):
 
 @pytest.mark.parametrize("remove", ["one_model", "all_tools"])
 def test_deleted_native_event_groups_fail_evidence_gate(tmp_path, remove):
-    from inspect_ai.log import read_eval_log
-
     from eval_framework.harness.trace.timeline_extractor import extract_timeline
+    from inspect_ai.log import read_eval_log
 
     log = run_native(
         tmp_path,
@@ -585,3 +582,102 @@ def test_error_stop_is_projected_as_agent_failure_with_partial_evidence(tmp_path
     assert row["errors"][0]["kind"] == "agent"
     assert row["trace"]["stop_reason"] == "error_limit"
     assert row["evidence_complete"] is False
+
+
+@pytest.mark.parametrize(
+    "damage",
+    ["duplicate_uuid", "duplicate_end", "wrong_call", "wrong_turn", "orphan_end"],
+)
+def test_corrupt_native_associations_never_become_complete(tmp_path, damage):
+    from eval_framework.benchmark.metrics import score_task
+    from eval_framework.harness.trace.timeline_extractor import extract_timeline
+    from inspect_ai.log import read_eval_log
+
+    log = run_native(
+        tmp_path,
+        [
+            output(calls=[call("a", "write_file", path="result.txt", content="ok")]),
+            output("done"),
+        ],
+    )
+    log = read_eval_log(log.location, resolve_attachments=True)
+    events = list(log.samples[0].events)
+    end = next(
+        e
+        for e in events
+        if e.event == "info"
+        and isinstance(e.data, dict)
+        and e.data.get("kind") == "route_end"
+    )
+    if damage == "duplicate_uuid":
+        models = [e for e in events if e.event == "model"]
+        models[1].uuid = models[0].uuid
+    elif damage == "duplicate_end":
+        events.append(end.model_copy(deep=True, update={"uuid": "duplicate-end"}))
+    elif damage == "wrong_call":
+        end.data["call_id"] = "other"
+    elif damage == "wrong_turn":
+        end.data["turn"] = 99
+    else:
+        events.append(
+            end.model_copy(
+                deep=True,
+                update={"uuid": "orphan", "data": {**end.data, "route_id": "missing"}},
+            )
+        )
+    row = asyncio.run(extract_timeline("0", events))
+    assert row["final_files"]["result.txt"] == "ok"
+    assert row["evidence_complete"] is False
+    assert row["trace"]["evidence_complete"] is False
+    assert any(e["kind"] == "evidence" for e in row["errors"])
+    task = {
+        "id": "0",
+        "prompt": "Create result.txt",
+        "fixtures": {},
+        "followups": [],
+        "allowed_tools": ["write_file"],
+        "oracle": {"expected_files": {"result.txt": "ok"}},
+    }
+    assert score_task(task, row)["verdict"] == "INCONCLUSIVE"
+
+
+def test_converted_turns_and_steps_reference_persisted_native_events(tmp_path):
+    from eval_framework.harness.trace.timeline_extractor import extract_timeline
+    from inspect_ai.log import read_eval_log
+
+    log = read_eval_log(
+        run_native(tmp_path, [output("done")]).location, resolve_attachments=True
+    )
+    native = log.samples[0].events
+    row = asyncio.run(extract_timeline("0", native))
+    ids = {e.uuid for e in native}
+    assert row["evidence_complete"]
+    assert all(e["native_event_id"] in ids for e in row["events"])
+
+
+def test_route_endpoints_cannot_agree_on_wrong_existing_turn(tmp_path):
+    from eval_framework.harness.trace.timeline_extractor import extract_timeline
+    from inspect_ai.log import read_eval_log
+
+    log = run_native(
+        tmp_path,
+        [
+            output(calls=[call("a", "write_file", path="result.txt", content="first")]),
+            output("first answer"),
+            output("second answer"),
+        ],
+        followups=["continue"],
+    )
+    native = read_eval_log(log.location, resolve_attachments=True).samples[0].events
+    assert asyncio.run(extract_timeline("0", native))["evidence_complete"]
+    for event in native:
+        if (
+            event.event == "info"
+            and isinstance(event.data, dict)
+            and event.data.get("kind") in {"route_start", "route_end"}
+        ):
+            event.data["turn"] = 2
+    row = asyncio.run(extract_timeline("0", native))
+    assert row["final_files"]["result.txt"] == "first"
+    assert row["evidence_complete"] is False
+    assert any(e["code"] == "TURN_ASSOCIATION_MISMATCH" for e in row["errors"])

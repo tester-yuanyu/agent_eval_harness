@@ -24,6 +24,7 @@
 | 了解包边界、参考身份与运行身份 | [仓库架构](architecture.md) · [显式配置](../configs/README.md) |
 | 阅读中文任务、构建任务或使用通用 Builder | [逐条阅读页](dataset-reading.html) · [数据集工作流](dataset-workflow.md) · [语言与冻结边界](dataset-language.md) |
 | 查阅历史实验 | [v1 作品集](benchmark/portfolio.md) · [失败分析](benchmark/failure-analysis.md) · [数据集勘误](benchmark/dataset-errata.md) · [Langfuse 证据](benchmark/langfuse.md) |
+| 核对 Trace、工具路由与历史 API 的渐进收敛 | [模块职责与验收](migration/convergence-2026-11-11.md) · [实施计划](migration/convergence-plan-2026-11-11.md) |
 | 维护历史兼容入口与导入资产 | [兼容范围](benchmark/legacy.md) · [迁移来源与验收](migration/provenance.md) |
 
 当前数据集为 [File Tools v2](../data/benchmarks/file-tools-v2/README.md)、[Model Decisions v1](../data/benchmarks/model-decisions-v1/README.md) 和独立 [nanobot Core v1](../data/benchmarks/nanobot-core-v1/README.md)。原中文逐条阅读页跨三个历史版本收录 744 条记录，包含 v1/v2 继承任务，不代表 744 个唯一任务，也未包含新增 Core v1。历史 [File Tools v1](../data/benchmarks/file-tools-v1/README.md)、Suite / Provider、mini_agent 与 Inspect Scorer 保留各自原有语义；[v1 架构](benchmark/architecture.md)不能作为 v2 能力清单。不同任务、运行方式或评分版本的结果分开报告。
