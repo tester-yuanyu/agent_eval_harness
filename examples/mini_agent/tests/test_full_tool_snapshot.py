@@ -1,7 +1,6 @@
 import json
 
 import pytest
-
 from capability_snapshot_kit import (
     CapabilitySelection,
     load_capability_bundle,
@@ -93,6 +92,25 @@ def test_export_delivery_includes_hash_bound_inventory_gaps_and_validation(tmp_p
         "PREPARE_RESOURCE_POLICY_MISMATCH",
     } <= codes
     assert manifest["production_ready"] is False
+    assert {"collected_facts.json", "source_audit.json"} <= manifest[
+        "files_sha256"
+    ].keys()
+    audit = json.loads((output / "source_audit.json").read_text())
+    assert audit["missing_sources"]["runtime"] == []
+    original = tmp_path / "original"
+    export_capability_bundle(
+        original, build_default_intent_registry(), create_registry()
+    )
+    assert {
+        p.relative_to(original): p.read_bytes()
+        for p in original.rglob("*")
+        if p.is_file()
+    } == {
+        p.relative_to(output / "bundle"): p.read_bytes()
+        for p in (output / "bundle").rglob("*")
+        if p.is_file()
+    }
+
     with pytest.raises(FileExistsError):
         export_delivery(output)
 

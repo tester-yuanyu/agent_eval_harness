@@ -35,6 +35,21 @@ def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="capability-snapshot")
     commands = parser.add_subparsers(dest="command", required=True)
     commands.add_parser("schema", help="Print the versioned FactDocument input schema")
+    audit = commands.add_parser(
+        "audit", help="Inspect declarations and source bindings without reconciliation"
+    )
+    audit.add_argument("--runtime", type=Path)
+    audit.add_argument("--candidate", type=Path)
+    audit.add_argument("--source-root", type=Path, required=True)
+    audit.add_argument("--output", type=Path, required=True)
+    collection = commands.add_parser(
+        "audit-collection",
+        help="Audit declared collection scope and per-fact source changes",
+    )
+    collection.add_argument("--document", type=Path, required=True)
+    collection.add_argument("--source-root", type=Path, required=True)
+    collection.add_argument("--scope", type=Path)
+    collection.add_argument("--output", type=Path, required=True)
     prepare = commands.add_parser("prepare", help="Prepare an offline LLM request")
     prepare.add_argument("--source-root", type=Path, default=Path.cwd())
     prepare.add_argument("--include", action="append", required=True)
@@ -82,6 +97,33 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         if parsed.command == "schema":
             result = FactDocument.model_json_schema()
+        elif parsed.command == "audit-collection":
+            import hashlib
+
+            from .collection_audit import audit_collection
+
+            raw = parsed.document.read_bytes()
+            document = FactDocument.model_validate_json(raw)
+            result = audit_collection(
+                document,
+                parsed.source_root,
+                scope=json.loads(parsed.scope.read_text()) if parsed.scope else None,
+            )
+            result["document_sha256"] = hashlib.sha256(raw).hexdigest()
+            _exclusive_json(parsed.output, result)
+        elif parsed.command == "audit":
+            from .audit import audit_documents
+            from .sources import check_sources
+
+            documents = [
+                FactDocument.model_validate_json(path.read_text()) if path else None
+                for path in (parsed.runtime, parsed.candidate)
+            ]
+            for document in documents:
+                if document is not None:
+                    check_sources(document, parsed.source_root)
+            result = audit_documents(*documents)
+            _exclusive_json(parsed.output, result)
         elif parsed.command == "prepare":
             request = prepare_request(
                 parsed.source_root,
@@ -144,7 +186,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 "output": str(parsed.output),
                 "capability_bundle_sha256": result["capability_bundle_sha256"],
             }
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001 - trusted plugins expose arbitrary errors
         # Plugin exceptions become machine-readable failures, never a partial success.
         print(
             json.dumps(
@@ -160,3 +202,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 1
     print(json.dumps(result, ensure_ascii=False, sort_keys=True))
     return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

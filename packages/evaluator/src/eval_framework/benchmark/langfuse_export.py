@@ -399,6 +399,9 @@ def _source(run_dir: Path, dataset_path: Path):
             raise ValueError("Official trial task ID does not match descriptor")
         return run, tasks, hashlib.sha256(raw).hexdigest()
     identify, load = dataset_identity, load_tasks
+    if run["identity"]["dataset"].get("task_contract") == "builder-full-benchmark-v1":
+        from .full_benchmark import dataset_identity as identify
+        from .full_benchmark import load_tasks as load
     if run["identity"]["dataset"].get("task_contract") == "provider-tasks-v1":
         from .provider_tasks import load_provider_tasks, provider_dataset_identity
 
@@ -412,13 +415,34 @@ def _source(run_dir: Path, dataset_path: Path):
     )
 
 
+def _destination(client) -> str:
+    explicit = getattr(client, "destination", None)
+    return explicit if isinstance(explicit, str) else destination_fingerprint()
+
+
+def _resume_inflight(client, receipt: dict, path: Path) -> None:
+    if not receipt.get("inflight"):
+        return
+    reconcile = getattr(client, "reconcile_inflight", None)
+    if not callable(reconcile):
+        raise ValueError(
+            "uncertain observation batch: reconcile remote IDs before retry"
+        )
+    reconcile(receipt["inflight"])
+    receipt["accepted_observation_ids"] = list(
+        dict.fromkeys(receipt["accepted_observation_ids"] + receipt["inflight"])
+    )
+    receipt["inflight"] = []
+    save_json(path, receipt)
+
+
 def export_run(run_dir: Path, dataset_path: Path, *, client=None) -> dict:
     run_dir = Path(run_dir)
     run, tasks, source_hash = _source(run_dir, dataset_path)
     client = client or client_from_env()
     receipt_path = run_dir / "langfuse_export.json"
     first_export = not receipt_path.exists()
-    destination = destination_fingerprint()
+    destination = _destination(client)
     receipt = (
         json.loads(receipt_path.read_text())
         if receipt_path.exists()
@@ -439,11 +463,7 @@ def export_run(run_dir: Path, dataset_path: Path, *, client=None) -> dict:
         save_json(receipt_path, receipt)
     if receipt["source_hash"] != source_hash or receipt["destination"] != destination:
         raise ValueError("immutable export source/destination changed")
-    if receipt["inflight"]:
-        raise ValueError(
-            "uncertain observation batch: reconcile remote IDs before retry; "
-            "do not duplicate observations"
-        )
+    _resume_inflight(client, receipt, receipt_path)
     if receipt["status"] in ("ACCEPTED", "VERIFIED"):
         return receipt
     name = (
@@ -767,7 +787,7 @@ def export_metadata_evidence(run_dir: Path, dataset_path: Path, *, client=None):
     run_dir = Path(run_dir)
     run, tasks, source_hash = _source(run_dir, dataset_path)
     original = json.loads((run_dir / "langfuse_export.json").read_text())
-    destination = destination_fingerprint()
+    destination = _destination(client)
     if (
         original["source_hash"] != source_hash
         or original["destination"] != destination
@@ -812,8 +832,7 @@ def export_metadata_evidence(run_dir: Path, dataset_path: Path, *, client=None):
     )
     if any(receipt.get(key) != value for key, value in identity.items()):
         raise ValueError("Immutable supplemental evidence identity changed")
-    if receipt["inflight"]:
-        raise ValueError("Uncertain evidence batch: reconcile IDs before retry")
+    _resume_inflight(client, receipt, path)
     if receipt["status"] in ("ACCEPTED", "VERIFIED"):
         return receipt
     client = client or client_from_env()
@@ -1020,9 +1039,8 @@ def verify_run(run_dir: Path, dataset_path: Path, *, client=None) -> dict:
     run, tasks, source_hash = _source(run_dir, dataset_path)
     receipt_path = run_dir / "langfuse_export.json"
     receipt = json.loads(receipt_path.read_text())
-    if (
-        receipt["source_hash"] != source_hash
-        or receipt["destination"] != destination_fingerprint()
+    if receipt["source_hash"] != source_hash or receipt["destination"] != _destination(
+        client
     ):
         raise ValueError("verification identity changed")
     client = client or client_from_env()
@@ -1047,7 +1065,7 @@ def verify_run(run_dir: Path, dataset_path: Path, *, client=None) -> dict:
         ids = [span.span_id for span in evidence]
         if (
             evidence_receipt.get("source_hash") != source_hash
-            or evidence_receipt.get("destination") != destination_fingerprint()
+            or evidence_receipt.get("destination") != _destination(client)
             or evidence_receipt.get("dataset_id") != receipt["dataset_id"]
             or evidence_receipt.get("status") not in ("ACCEPTED", "VERIFIED")
             or evidence_receipt.get("inflight")
@@ -1133,11 +1151,15 @@ def verify_run(run_dir: Path, dataset_path: Path, *, client=None) -> dict:
                         )
                         or (
                             evidence_version == EVIDENCE_VERSION
-                            and _contains_empty_object(expected_metadata[field])
-                            and _empty_object_projection_matches(
-                                expected_metadata,
-                                actual.get("metadata") or {},
-                                field,
+                            and any(
+                                _contains_empty_object(projected[field])
+                                and _empty_object_projection_matches(
+                                    projected, actual.get("metadata") or {}, field
+                                )
+                                for projected in (
+                                    expected_metadata,
+                                    _metadata_with_json_values(expected_metadata),
+                                )
                             )
                         )
                     )

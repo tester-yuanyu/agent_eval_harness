@@ -7,6 +7,7 @@ from capability_snapshot_kit.facts import (
     ModuleFactV3,
     ToolFactV3,
 )
+
 from minimal_agent.capability_facts import (
     build_evidence_facts_v3,
     build_intent_facts_v3,
@@ -23,7 +24,7 @@ from minimal_agent.versions import (
     agent_package_version,
 )
 
-MINI_AGENT_CONTRACT_VERSION_V3 = "mini-agent-capability-contract-v3"
+MINI_AGENT_CONTRACT_VERSION_V3 = "mini-agent-capability-contract-v4"
 
 
 class MiniAgentCapabilityAdapter:
@@ -77,14 +78,12 @@ class MiniAgentCapabilityAdapter:
     def module_facts(self) -> tuple[ModuleFactV3, ...]:
         intent_ids = tuple(
             sorted(
-                f"intent.{item.intent}"
-                for item in self._intent_registry.definitions
+                f"intent.{item.intent}" for item in self._intent_registry.definitions
             )
         )
         tool_ids = tuple(
             sorted(
-                f"tool.{item.contract.name}"
-                for item in self._tool_registry.definitions
+                f"tool.{item.contract.name}" for item in self._tool_registry.definitions
             )
         )
         return build_module_facts_v3(intent_ids, tool_ids)
@@ -97,3 +96,22 @@ class MiniAgentCapabilityAdapter:
 
     def evidence_facts(self) -> tuple[EvidenceFactV3, ...]:
         return build_evidence_facts_v3()
+
+    def fact_implementations(self) -> dict[str, tuple[object, ...]]:
+        """Configured objects for the Agent-owned collector to bind sources."""
+        result = {
+            f"intent.{item.intent}": (
+                item.parameters_model,
+                *(type(rule) for rule in item.normalizers),
+                *(type(rule) for rule in item.semantic_constraints),
+                type(item.completion_policy),
+            )
+            for item in self._intent_registry.definitions
+        }
+        result.update(
+            {
+                f"tool.{item.name}": (item.handler, item.arguments_model)
+                for item in self._tool_registry.definitions
+            }
+        )
+        return result

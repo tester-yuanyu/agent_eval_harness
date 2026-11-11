@@ -327,12 +327,18 @@ def judge_observation(
     *,
     dimensions: list[str] | None = None,
     max_evaluations: int | None = None,
+    metric_ids: set[str] | None = None,
+    request_policy: Any = None,
 ) -> list[dict[str, Any]]:
     """兼容 API；通过显式 LLMJudgeScorer 评审已保存证据。"""
     from .llm_judge import LLMJudgeScorer
 
     return LLMJudgeScorer(
-        model_config, dimensions=dimensions, max_evaluations=max_evaluations
+        model_config,
+        dimensions=dimensions,
+        max_evaluations=max_evaluations,
+        metric_ids=metric_ids,
+        request_policy=request_policy,
     ).score(observation.get("events", []), observation, task)["metrics"]
 
 
@@ -343,6 +349,8 @@ def _judge_observation(
     *,
     dimensions: list[str] | None = None,
     max_evaluations: int | None = None,
+    metric_ids: set[str] | None = None,
+    request_policy: Any = None,
 ) -> list[dict[str, Any]]:
     """Opt-in diagnostics over saved evidence, bounded by actual model requests."""
     config = dict(model_config)
@@ -367,6 +375,8 @@ def _judge_observation(
     native_records: list[dict[str, Any]] = []
     native_calls = 0
     native_call_count_unknown = False
+    if native_dimensions and metric_ids is not None:
+        raise ValueError("Metric selection currently applies to GEval dimensions only")
     if native_dimensions:
         if observation.get("execution_kind") in {
             "real_module",
@@ -424,6 +434,15 @@ def _judge_observation(
                 )
 
     candidates = _candidates(task, observation, geval_dimensions)
+    if metric_ids is not None:
+        known = {record["metric_id"] for record, _ in candidates}
+        if not metric_ids <= known:
+            raise ValueError("Unknown metric selection")
+        candidates = [
+            (record, evidence)
+            for record, evidence in candidates
+            if record["metric_id"] in metric_ids
+        ]
     judge = None
     try:
         for record, evidence in candidates:
@@ -443,6 +462,8 @@ def _judge_observation(
             try:
                 if judge is None:
                     judge = _AuditedJudge(config)
+                    if request_policy is not None:
+                        judge.request_policy = request_policy
                 rubric = RUBRICS[record["name"]]
                 metric = GEval(
                     name=record["name"],

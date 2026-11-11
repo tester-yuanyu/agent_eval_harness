@@ -10,6 +10,8 @@ from datetime import datetime
 from pathlib import Path
 from urllib.parse import urlsplit
 
+from .report_evaluation import is_judge_event
+
 LABELS = {
     "NEED_CONFIRMATION": "需要确认（写操作）",
     "NEED_CLARIFICATION": "要求补充参数",
@@ -163,7 +165,10 @@ def diagnose(row: dict, contracts: dict, *, aliases: dict | None = None) -> list
     if row["assessment"]["verdict"] == "PASS":
         return []
     events = row.get("observation", {}).get("events", [])
-    generations = [e for e in events if e.get("type") == "generation"]
+    generations = [
+            e for e in events
+            if e.get("type") == "generation" and not is_judge_event(e)
+        ]
     findings = []
     for event in generations:
         request = event.get("input", {})
@@ -376,6 +381,16 @@ def diagnose(row: dict, contracts: dict, *, aliases: dict | None = None) -> list
 
 def load_report_tasks(run: dict) -> tuple[dict, list[str]]:
     """只在离线报告中读取 Hash 绑定的任务目标，绝不交付执行器。"""
+    if (
+        run.get("identity", {}).get("dataset", {}).get("task_contract")
+        == "builder-full-benchmark-v1"
+    ):
+        from .full_benchmark import dataset_identity, load_tasks
+
+        root = Path(run["config"]["dataset_path"])
+        if dataset_identity(root) != run["identity"]["dataset"]:
+            return {}, ["v4 来源身份不一致"]
+        return {t["id"]: t for t in load_tasks(root)}, []
     bundle = run.get("config", {}).get("capability_bundle")
     expected = (
         run.get("identity", {}).get("dataset", {}).get("files", {}).get("tasks.jsonl")
@@ -407,6 +422,9 @@ def task_mode(task: dict, contracts: dict) -> str:
     )
     if not tools - {None}:
         tools.update(task.get("execution", {}).get("allowed_tools", []))
+        tools.update(task.get("plan", {}).get("allowed_tools", []))
+        if task.get("plan", {}).get("tool_name"):
+            tools.add(task["plan"]["tool_name"])
     modes = {
         c.get("decision_rules", {}).get("execution_mode")
         for c in contracts.values()
@@ -433,7 +451,7 @@ def intent_mode(row: dict, contracts: dict) -> str:
         return task_mode(row["_report_task"], contracts)
     modes = set()
     for event in row.get("observation", {}).get("events", []):
-        if event.get("type") == "generation":
+        if event.get("type") == "generation" and not is_judge_event(event):
             intent = _candidate(event).get("intent")
             mode = (
                 contracts.get(intent, {})
@@ -484,7 +502,10 @@ def latency_details(rows: list[dict]) -> list[dict]:
         reverse=True,
     )[:3]:
         events = row.get("observation", {}).get("events", [])
-        generations = [e for e in events if e.get("type") == "generation"]
+        generations = [
+            e for e in events
+            if e.get("type") == "generation" and not is_judge_event(e)
+        ]
         durations = []
         for event in generations:
             try:

@@ -4,8 +4,6 @@ from __future__ import annotations
 
 import hashlib
 import json
-import os
-import shutil
 import tempfile
 from pathlib import Path
 from typing import Any
@@ -15,7 +13,9 @@ from capability_snapshot_kit.hashing import sha256_json
 from capability_snapshot_kit.spec_loader import load_capability_spec_pack_v3
 from capability_snapshot_kit.validation import validate_capability_bundle_v3
 
+from .audit import audit_documents
 from .models import FactDocument
+from .publication import publish_delivery
 from .reconcile import reconcile
 from .sources import check_sources
 
@@ -48,6 +48,7 @@ def export_delivery(
         staging = Path(temp)
         export_capability_bundle_v3(staging / "bundle", specs, effective)
         validation = validate_capability_bundle_v3(staging / "bundle")
+        write_json(staging / "source_audit.json", audit_documents(runtime, candidate))
         write_json(staging / "facts.json", effective.model_dump(mode="json"))
         write_json(staging / "provenance.json", provenance)
         write_json(staging / "gaps.json", {"gaps": gaps})
@@ -86,15 +87,8 @@ def export_delivery(
             },
         }
         write_json(staging / "manifest.json", manifest)
-        # Exclusive reservation prevents replacing another writer's directory.
-        # The manifest is moved last: its presence signals a complete delivery.
-        output.mkdir()
-        try:
-            for path in sorted(
-                staging.iterdir(), key=lambda p: p.name == "manifest.json"
-            ):
-                os.replace(path, output / path.name)
-        except Exception:
-            shutil.rmtree(output)
-            raise
+        for document in (runtime, candidate):
+            if document is not None:
+                check_sources(document, source_root)
+        publish_delivery(staging, output)
     return manifest

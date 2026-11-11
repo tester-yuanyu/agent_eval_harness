@@ -57,6 +57,7 @@ def write_links(run_dir, *, base_url, project_id, destination):
             for t in receipt["traces"]
         ],
     }
+    result.update(_run_entries(receipt, verification, base, project_id))
     (root / "report-links.json").write_text(
         json.dumps(result, ensure_ascii=False, indent=2) + "\n"
     )
@@ -98,3 +99,105 @@ def load_links(run_dir):
         return result if set(result) == set(expected) else {}
     except (OSError, ValueError, KeyError, TypeError):
         return {}
+
+
+def _run_entries(receipt, verification, base, project_id):
+    """Build run-level entries only when experiment cardinality was read back."""
+    prefix = f"{base}/project/{quote(project_id, safe='')}"
+    experiments = {}
+    for trace in receipt["traces"]:
+        identity = trace.get("experiment_id")
+        if identity:
+            entry = experiments.setdefault(
+                identity, {"trial": trace["trial"], "items": 0}
+            )
+            if entry["trial"] != trace["trial"]:
+                return {}
+            entry["items"] += 1
+    checked = {
+        item["experiment_id"]: item for item in verification.get("experiments", [])
+    }
+    if (
+        not receipt.get("dataset_id")
+        or not experiments
+        or any(
+            checked.get(identity, {}).get("items") != entry["items"]
+            or checked.get(identity, {}).get("expected") != entry["items"]
+            for identity, entry in experiments.items()
+        )
+    ):
+        return {}
+    return {
+        "dataset": {
+            "dataset_id": receipt["dataset_id"],
+            "name": receipt.get("dataset_name", receipt["dataset_id"]),
+            "url": f"{prefix}/datasets/{quote(receipt['dataset_id'], safe='')}",
+        },
+        "experiments": [
+            {
+                "experiment_id": identity,
+                **entry,
+                "url": (
+                    f"{prefix}/experiments/results?baseline={quote(identity, safe='')}"
+                ),
+            }
+            for identity, entry in sorted(experiments.items())
+        ],
+    }
+
+
+def load_run_links(run_dir):
+    """Keep the historical trace mapping API; expose verified dataset/run entries."""
+    root = Path(run_dir)
+    if not load_links(root):
+        return {}
+    try:
+        links = json.loads((root / "report-links.json").read_text())
+        receipt = json.loads((root / "langfuse_export.json").read_text())
+        verification = json.loads((root / "langfuse_verification.json").read_text())
+        expected = _run_entries(
+            receipt, verification, safe_base(links["base_url"]), links["project_id"]
+        )
+        legacy = "dataset" not in links and "experiments" not in links
+        return (
+            expected
+            if expected
+            and (legacy or all(links.get(k) == v for k, v in expected.items()))
+            else {}
+        )
+    except (OSError, ValueError, KeyError, TypeError):
+        return {}
+
+
+def load_dashboard_link(run_dir) -> str | None:
+    """Only publish a dashboard whose layout and real numeric aggregates passed."""
+    root = Path(run_dir)
+    try:
+        if not load_links(root):
+            return None
+        state = json.loads((root / "dashboard_delivery.json").read_text())
+        layout = json.loads((root / "langfuse_explorer_dashboard.json").read_text())
+        metrics = json.loads((root / "langfuse_dashboard_metrics.json").read_text())
+        links = json.loads((root / "report-links.json").read_text())
+        digest = hashlib.sha256((root / "results.json").read_bytes()).hexdigest()
+        url = state.get("dashboard_url")
+        expected = (
+            f"{safe_base(links['base_url'])}/project/"
+            f"{quote(links['project_id'], safe='')}"
+            f"/dashboards/{quote(layout['dashboard_id'], safe='')}"
+        )
+        if (
+            state["delivery_status"] == "COMPLETE"
+            and state["source_hash"] == digest
+            and state["destination"] == links["destination"]
+            and metrics["status"] == "VERIFIED"
+            and metrics["source_hash"] == digest
+            and layout["status"] == "VERIFIED"
+            and url == layout["url"]
+            and isinstance(url, str)
+            and url.split("?", 1)[0] == expected
+        ):
+            return url
+    except (OSError, ValueError, KeyError, TypeError):
+        pass
+    return None

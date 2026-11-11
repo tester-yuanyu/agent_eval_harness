@@ -13,8 +13,9 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-from .report_diagnostics import write_diagnostics
 from .report_context import METHODOLOGY_HTML, scope_html
+from .report_diagnostics import write_diagnostics
+from .report_evaluation import evaluation_html, evaluation_summary
 from .report_insights import (
     comparisons,
     estimate_cost,
@@ -513,6 +514,18 @@ def write_domain_report(run_dir: Path | str) -> Path:
     contracts, warnings = load_contracts(run)
     tasks, task_warnings = load_report_tasks(run)
     warnings.extend(task_warnings)
+    partitions = evaluation_summary(run, tasks)
+    from .report_links import load_dashboard_link, load_run_links
+    run_links = load_run_links(run_dir)
+    dashboard_url = load_dashboard_link(run_dir)
+    experiment_links = " · ".join(
+        f'<a href="{_escape(item["url"])}" target="_blank" rel="noopener">Langfuse 完整实验 · 第{item["trial"]}轮</a>'
+        for item in run_links.get("experiments", [])
+    )
+    if dashboard_url:
+        experiment_links = f'<a href="{_escape(dashboard_url)}" target="_blank" rel="noopener">Langfuse 统计看板</a> · ' + experiment_links
+    run_links_html = f'<nav class="run-links">{experiment_links}</nav>' if experiment_links else ""
+
     analysis = json.loads(write_diagnostics(run_dir).read_text())
     warnings.extend(analysis["warnings"])
     by_trial = {(t["case_id"], t["trial"]): t for t in analysis["trials"]}
@@ -590,6 +603,11 @@ def write_domain_report(run_dir: Path | str) -> Path:
             f"费用 USD：{_number(usage['cost_usd']['total'])}；{estimate_label}",
         ),
     ]
+    if "agent" in partitions["groups"] and "deterministic" in partitions["groups"]:
+        cards[1] = ("真实模型执行通过率", _percent(partitions["groups"]["agent"]["passed"], partitions["groups"]["agent"]["trials"]), "仅已执行真实模型案例；确定性检查另列")
+    agent_usage = partitions["usage"]["agent"]
+    if agent_usage["calls"]:
+        cards[2] = ("Agent 已知 Token", str(agent_usage["known_total_tokens"]), f"{agent_usage['unknown_calls']}次请求用量未知；Judge用量另列")
     cards_html = "".join(
         f'<span class="summary-stat" title="{_escape(note)}"><span class="muted">{_escape(label)}</span>'
         f"<strong>{_escape(value)}</strong></span>"
@@ -655,12 +673,13 @@ def write_domain_report(run_dir: Path | str) -> Path:
         f"<title>{_escape(title)} · Agent Benchmark</title><style>{_STYLE}</style></head><body>"
         '<header><div class="eyebrow">AGENT EVAL SUITE / SAVED EVIDENCE REPORT</div>'
         f'<h1>工具型 Agent 评测</h1><span class="badge {mode}">{_escape(mode_label)}</span>'
-        f"<p>{_escape(title)} · {_escape(runtime.get('agent', 'reference'))} · "
+        f"<p>{_escape(title)} · {_escape(runtime.get('agent', runtime.get('provider_id', run.get('config', {}).get('provider', '未标注运行主体'))))} · "
         f"请求模型：{_escape(runtime.get('model', '未知'))}<br>"
         f"数据集：{_escape(dataset.get('dataset_id', '未知'))} · "
         f"Inspect 执行 → DeepEval 评分 → 本地证据报告</p></header><main>"
         f'<div class="summary-strip" aria-label="本轮概览">{cards_html}</div>'
         + '<nav class="report-nav" aria-label="报告目录"><a href="#scope">范围与比较</a><a href="#findings">问题摘要</a><a href="#actions">修复建议</a><a href="#methodology">统计口径</a><a href="#category-summary">任务类别</a><a href="#identity-audit">用量与身份</a><a href="#trial-results">逐条结果</a></nav>'
+        + run_links_html + evaluation_html(partitions)
         + scope_html(run, tasks)
         + '<p class="muted performance-note">' + _escape(" ".join(performance_notes)) + ' 未应用性能验收阈值；<a href="#methodology">查看口径</a>。</p>'
         + _overview_html(rows, contracts, warnings)

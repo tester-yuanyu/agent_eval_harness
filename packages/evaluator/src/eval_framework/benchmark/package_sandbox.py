@@ -7,7 +7,11 @@ import re
 import tomllib
 from pathlib import Path
 
-from .inspect_docker import bind_docker_environment, source_digest
+from .inspect_docker import (
+    bind_docker_environment,
+    pin_docker_environment,
+    source_digest,
+)
 
 
 def package_inputs(packages: dict[str, Path], bundle: Path) -> dict[str, bytes]:
@@ -61,12 +65,21 @@ def prepare_package_sandbox(
     output: Path,
     *,
     base_image: str = "python:3.11-slim",
+    extra_files: dict[str, bytes] | None = None,
+    build_isolation: bool = True,
 ) -> tuple[str, str]:
     files = package_inputs(packages, bundle)
+    if extra_files:
+        for name in extra_files:
+            path = Path(name)
+            if path.is_absolute() or ".." in path.parts or name in files:
+                raise ValueError("invalid or duplicate trusted sandbox extra file")
+        files.update(extra_files)
     recipe = (
         f"FROM {base_image}\nWORKDIR /opt/runtime\n"
         "COPY requirements.txt .\nRUN pip install --no-cache-dir -r requirements.txt\n"
         "COPY packages packages\nRUN pip install --no-deps "
+        + ("" if build_isolation else "--no-build-isolation ")
         + " ".join("./packages/" + n for n in packages)
         + "\n"
         "COPY reference /opt/reference\nWORKDIR /sample\n"
@@ -95,5 +108,30 @@ def prepare_package_sandbox(
             }
         )
     )
-    bind_docker_environment(str(compose))
+    pin_docker_environment(str(compose))
     return ("docker", str(compose))
+
+
+class RuntimeEnvironmentCache:
+    """Cache immutable package metadata only; never retain a sandbox or its state."""
+
+    def __init__(self):
+        import asyncio
+
+        self._lock = asyncio.Lock()
+        self._values = {}
+
+    async def get(self, compose, *, probe, bind=bind_docker_environment):
+        from copy import deepcopy
+
+        async with self._lock:
+            binding = bind(compose)
+            key = (str(compose), (binding or {}).get("image_id"))
+            if binding and key in self._values:
+                return deepcopy(self._values[key])
+            runtime = await probe()
+            binding = bind(compose, runtime)
+            value = {**runtime, "docker_binding": binding}
+            if binding and binding.get("image_id"):
+                self._values[(str(compose), binding["image_id"])] = deepcopy(value)
+            return deepcopy(value)

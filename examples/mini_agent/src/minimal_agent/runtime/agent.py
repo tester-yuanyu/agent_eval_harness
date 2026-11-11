@@ -17,6 +17,7 @@ from minimal_agent.contracts.agent import (
     ToolCallRecord,
     ToolLoopRequest,
 )
+from minimal_agent.contracts.intents import IntentRegistry
 from minimal_agent.runtime.intent_router import IntentRouter
 from minimal_agent.runtime.model_client import ModelClient
 from minimal_agent.runtime.tool_registry import ToolRegistry
@@ -41,11 +42,12 @@ class MinimalAgent:
         max_steps: int = 4,
         run_id_factory: Callable[[], str] = _new_run_id,
         evidence_sink=None,
+        intent_registry: IntentRegistry | None = None,
     ) -> None:
         if max_steps < 1:
             raise ValueError("max_steps must be at least 1")
         self._model_client = model_client
-        self._intent_router = IntentRouter(model_client)
+        self._intent_router = IntentRouter(model_client, intent_registry)
         self._tool_registry = tool_registry
         self._max_steps = max_steps
         self._run_id_factory = run_id_factory

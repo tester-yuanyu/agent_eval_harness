@@ -7,8 +7,12 @@ import json
 import os
 from datetime import UTC, datetime
 from typing import Any
+from urllib.parse import urlsplit
+from uuid import uuid4
 
 from deepeval.models import DeepEvalBaseLLM
+
+from ..request_policy import classify_error
 
 
 class OpenAICompatibleJudge(DeepEvalBaseLLM):
@@ -25,11 +29,18 @@ class OpenAICompatibleJudge(DeepEvalBaseLLM):
         )
         if not key:
             raise ValueError("Judge API key is not configured")
+        client_options: dict[str, Any] = {}
+        if urlsplit(config.get("base_url") or "").hostname == "opencode.ai":
+            client_options["default_headers"] = {
+                "User-Agent": "agent-eval-suite/0.1.0",
+                "x-opencode-session": str(uuid4()),
+            }
         self.client = OpenAI(
             api_key=key,
             base_url=config.get("base_url"),
             timeout=float(config.get("timeout", 45)),
             max_retries=0,
+            **client_options,
         )
         self.calls: list[dict[str, Any]] = []
         super().__init__(model=self.model_name)
@@ -92,6 +103,12 @@ class AuditedJudge(OpenAICompatibleJudge):
     failure_event_name = "deepeval_response_judge"
 
     def generate(self, prompt: str, schema: Any = None, **kwargs: Any) -> Any:
+        policy = getattr(self, "request_policy", None)
+        if policy is not None:
+            return policy.call(lambda: self._generate_once(prompt, schema, **kwargs))
+        return self._generate_once(prompt, schema, **kwargs)
+
+    def _generate_once(self, prompt: str, schema: Any = None, **kwargs: Any) -> Any:
         started = datetime.now(UTC).isoformat()
         previous_count = len(self.calls)
         try:
@@ -114,6 +131,7 @@ class AuditedJudge(OpenAICompatibleJudge):
                         "input": content,
                         "output": None,
                         "error": type(exc).__name__,
+                        "failure_kind": classify_error(exc),
                         "usage": {
                             "input_tokens": None,
                             "output_tokens": None,

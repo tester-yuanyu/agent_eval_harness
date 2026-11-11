@@ -235,17 +235,22 @@ def _remote_scores(client, ids):
     return found
 
 
-def sync_diagnostics(run_dir, *, base_url, client=None):
+def sync_diagnostics(
+    run_dir, *, base_url, client=None, destination=None, project_id=None
+):
     root = Path(run_dir)
     client = client or client_from_env()
     analysis = json.loads(write_diagnostics(root).read_text())
     run = json.loads((root / "results.json").read_text())
     receipt = json.loads((root / "langfuse_export.json").read_text())
-    destination = destination_fingerprint()
+    destination = destination or destination_fingerprint()
+    expected_project = project_id
     projects = client.projects.get().data
     if len(projects) != 1:
         raise ValueError("ambiguous Langfuse project")
     project_id = projects[0].id
+    if expected_project is not None and project_id != expected_project:
+        raise ValueError("Dashboard project differs from explicit profile")
     # Link creation also checks original export/read-back source and destination.
     links = write_links(
         root, base_url=base_url, project_id=project_id, destination=destination
@@ -278,18 +283,22 @@ def sync_diagnostics(run_dir, *, base_url, client=None):
         state["status"] = "AWAITING_READBACK"
         _save(out, state)
         return state
-    if missing:
-        state["submitted"] = ids
+    for start in range(0, len(missing), 100):
+        batch = missing[start : start + 100]
+        state["submitted"] = sorted(
+            set(state["submitted"]) | {item.id for item in batch}
+        )
         _save(out, state)
         response = client.scores.create(
-            request=missing, request_options={"max_retries": 0}
+            request=batch, request_options={"max_retries": 0}
         )
         if (
             getattr(response, "errors", None)
             or getattr(response, "rejected", 0)
-            or getattr(response, "accepted", len(missing)) != len(missing)
+            or getattr(response, "accepted", len(batch)) != len(batch)
         ):
             raise ValueError("diagnostic annotation rejected")
+    if missing:
         found = _remote_scores(client, ids)
     errors = []
     for score in payload:
@@ -320,7 +329,10 @@ def sync_diagnostics(run_dir, *, base_url, client=None):
     return state
 
 
-def create_dashboard(run_dir, *, base_url, client=None, refresh=False, trend=None):
+def create_dashboard(
+    run_dir, *, base_url, client=None, refresh=False, trend=None, destination=None
+):
+    destination = destination or destination_fingerprint()
     root = Path(run_dir)
     client = client or client_from_env()
     analysis = json.loads((root / "diagnostics.json").read_text())
@@ -330,7 +342,7 @@ def create_dashboard(run_dir, *, base_url, client=None, refresh=False, trend=Non
     if (
         annotations.get("status") != "VERIFIED"
         or annotations.get("analysis_id") != analysis["analysis_id"]
-        or annotations.get("destination") != destination_fingerprint()
+        or annotations.get("destination") != destination
     ):
         raise ValueError("dashboard requires verified current annotations")
     out = root / "langfuse_dashboard.json"
@@ -339,11 +351,11 @@ def create_dashboard(run_dir, *, base_url, client=None, refresh=False, trend=Non
         if out.exists()
         else {
             "analysis_id": analysis["analysis_id"],
-            "destination": destination_fingerprint(),
+            "destination": destination,
             "widgets": [],
         }
     )
-    if state["destination"] != destination_fingerprint():
+    if state["destination"] != destination:
         raise ValueError("dashboard destination changed")
     if state["analysis_id"] != analysis["analysis_id"] and not refresh:
         raise ValueError("dashboard identity changed; explicit refresh required")
@@ -355,7 +367,7 @@ def create_dashboard(run_dir, *, base_url, client=None, refresh=False, trend=Non
         if (
             synced.get("status") != "VERIFIED"
             or synced.get("cohort_id") != trend["cohort_id"]
-            or synced.get("destination") != destination_fingerprint()
+            or synced.get("destination") != destination
             or synced.get("run_ids") != [r["run_id"] for r in trend["runs"]]
         ):
             raise ValueError("dashboard requires verified current trend")
@@ -443,7 +455,10 @@ def create_dashboard(run_dir, *, base_url, client=None, refresh=False, trend=Non
             raise ValueError("explorer dashboard identity mismatch")
         current = client.unstable.dashboards.get(state["dashboard_id"]).definition
         existing_ids = {w.widget_id for w in current.widgets if w.type == "widget"}
-        if not set(state["widgets"]).issubset(existing_ids):
+        if not (
+            set(state["widgets"])
+            & set(saved_extension.get("visible_widget_ids", state["widgets"]))
+        ).issubset(existing_ids):
             raise ValueError("base widgets missing from extended dashboard")
         definition = current.model_dump()
     client.unstable.dashboards.update(

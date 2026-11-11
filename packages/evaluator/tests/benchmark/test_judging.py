@@ -7,7 +7,6 @@ from copy import deepcopy
 import httpx
 import openai
 import pytest
-
 from eval_framework.benchmark import judging
 
 
@@ -448,3 +447,78 @@ def test_unproven_or_incomplete_critical_evidence_cannot_make_recovery_na(
         task, observation, config, dimensions=["recovery_appropriateness"]
     )
     assert records[0]["status"] == "MISSING"
+
+
+def test_metric_checkpoint_resume_and_repeat_isolation(
+    tmp_path, evidence, judge_transport
+):
+    from eval_framework.benchmark.judge_checkpoints import judge_with_checkpoints
+
+    task, observation = evidence
+    requests, config = judge_transport
+    config = {**config, "dimensions": list(judging.GEVAL_DIMENSIONS)}
+    first = judge_with_checkpoints(
+        task, observation, config, tmp_path, repeat_identity="repeat-1", concurrency=2
+    )
+    assert len(requests) == 6
+    second = judge_with_checkpoints(
+        task, observation, config, tmp_path, repeat_identity="repeat-1", concurrency=2
+    )
+    assert first == second and len(requests) == 6
+    recovered = judge_with_checkpoints(
+        task,
+        observation,
+        config,
+        tmp_path / "new-output",
+        repeat_identity="repeat-1",
+        concurrency=2,
+        reuse_directory=tmp_path,
+    )
+    assert recovered == first and len(requests) == 6
+    judge_with_checkpoints(
+        task, observation, config, tmp_path, repeat_identity="repeat-2", concurrency=2
+    )
+    assert len(requests) == 12
+    assert "SECRET_KEY" not in "".join(p.read_text() for p in tmp_path.rglob("*.json"))
+
+
+def test_select_one_metric_keeps_full_prior_context(evidence, judge_transport):
+    task, observation = evidence
+    requests, config = judge_transport
+    candidates = judging._candidates(task, observation, ["action_appropriateness"])
+    selected = candidates[-1][0]["metric_id"]
+    metrics = judging.judge_observation(
+        task,
+        observation,
+        config,
+        dimensions=["action_appropriateness"],
+        metric_ids={selected},
+    )
+    assert len(requests) == 1 and [m["metric_id"] for m in metrics] == [selected]
+    assert "Cannot read a." in metrics[0]["events"][0]["input"]
+
+
+def test_recovery_only_reissues_failed_metric(tmp_path, evidence, judge_transport):
+    from eval_framework.benchmark.judge_checkpoints import judge_with_checkpoints
+
+    task, observation = evidence
+    requests, config = judge_transport
+    config = {**config, "dimensions": list(judging.GEVAL_DIMENSIONS)}
+    saved = judging.judge_observation(task, observation, config)
+    saved[0].update(status="ERROR", score=None, reason="connection failed")
+    saved[0]["events"] = [{"error": "APIConnectionError", "failure_kind": "transient"}]
+    original = deepcopy(saved)
+    result = judge_with_checkpoints(
+        task,
+        observation,
+        config,
+        tmp_path,
+        repeat_identity="recovery",
+        retry_failed=True,
+        seed_metrics=saved,
+    )
+    assert len(requests) == 7
+    assert result[0]["status"] == "SCORED"
+    assert result[1:] == original[1:]
+    assert saved == original
+    assert result[0]["events"][0]["error"] == "APIConnectionError"

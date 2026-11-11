@@ -3,7 +3,6 @@
 import argparse
 import hashlib
 import json
-import os
 import tempfile
 from pathlib import Path
 
@@ -13,10 +12,18 @@ from capability_snapshot_kit import (
     resolve_capability_graph,
     validate_capability_bundle,
 )
-from minimal_agent import build_default_intent_registry, export_capability_bundle
+from capability_snapshot_kit.exporting import export_capability_bundle_v3
+from capability_snapshot_kit.ingestion.audit import audit_documents
+from capability_snapshot_kit.ingestion.publication import publish_delivery
+from capability_snapshot_kit.ingestion.sources import check_sources
+from capability_snapshot_kit.spec_loader import load_capability_spec_pack_v3
+from minimal_agent import build_default_intent_registry
+from minimal_agent.capabilities.v3.bundle import DEFAULT_CAPABILITY_SPEC_ROOT
+from minimal_agent.capability_adapter import MiniAgentCapabilityAdapter
 from minimal_agent.runtime.tool_binding import require_complete_tools
 
 from . import create_registry
+from .collector import MiniAgentCollector
 
 
 def _write(path, payload):
@@ -116,6 +123,10 @@ def export_delivery(output: str | Path) -> Path:
         raise FileExistsError(f"delivery already exists: {output}")
     intents, registry = build_default_intent_registry(), create_registry()
     require_complete_tools(intents, registry)
+    source_root = Path(__file__).resolve().parents[2]
+    document = MiniAgentCollector(
+        MiniAgentCapabilityAdapter(intents, registry)
+    ).collect(source_root)
     output.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(
         prefix=".tool-delivery-", dir=output.parent
@@ -123,7 +134,9 @@ def export_delivery(output: str | Path) -> Path:
         staging = Path(temp) / "delivery"
         staging.mkdir()
         root = staging / "bundle"
-        export_capability_bundle(root, intents, registry)
+        export_capability_bundle_v3(
+            root, load_capability_spec_pack_v3(DEFAULT_CAPABILITY_SPEC_ROOT), document
+        )
         validation = validate_capability_bundle(root).model_dump(mode="json")
         bundle = load_capability_bundle(root)
         digest = bundle.agent.capability_bundle_sha256
@@ -209,9 +222,13 @@ def export_delivery(output: str | Path) -> Path:
             "validation_report.json 验证制品；\n"
             "capability_inventory.json 列出能力和组合解析；\n"
             "capability_contract_gaps.json 列出尚未实现的业务和评测交付。\n"
+            "collected_facts.json 保存逐事实来源，source_audit.json 报告来源完整性。\n"
             "生产接入、上下文、确认恢复、JSONL 数据集和人工审核未在本包中完成。\n",
             encoding="utf-8",
         )
+        _write(staging / "collected_facts.json", document.model_dump(mode="json"))
+        _write(staging / "source_audit.json", audit_documents(document, None))
+        check_sources(document, source_root)
         files = {
             path.relative_to(staging).as_posix(): hashlib.sha256(
                 path.read_bytes()
@@ -233,14 +250,7 @@ def export_delivery(output: str | Path) -> Path:
                 "files_sha256": files,
             },
         )
-        # Refuse even an empty directory that appeared while we were generating.
-        output.mkdir(exist_ok=False)
-        try:
-            for path in staging.iterdir():
-                os.replace(path, output / path.name)
-        except BaseException:
-            # Preserve partial files for diagnosis instead of claiming completion.
-            raise
+        publish_delivery(staging, output)
     return output
 
 

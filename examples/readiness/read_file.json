@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "cases": [
+    {
+      "case_id": "read-file-text",
+      "prompt": "请读取 input.txt，逐字返回完整内容。",
+      "fixtures": {"input.txt": "hello\n", "keep.txt": "unchanged"},
+      "reference_path": "input.txt",
+      "expected_output": "hello\n"
+    },
+    {
+      "case_id": "read-file-empty",
+      "prompt": "请读取 empty.txt，逐字返回完整内容。",
+      "fixtures": {"empty.txt": "", "keep.txt": "unchanged"},
+      "reference_path": "empty.txt",
+      "expected_output": ""
+    }
+  ]
+}

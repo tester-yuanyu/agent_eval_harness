@@ -10,6 +10,8 @@
 | 使用 Inspect 内自研循环、原生模型基线与离线验收 | [自研 Harness](benchmark/native-harness.md) · [验收记录](migration/native-harness-acceptance-2026-11-06.md) |
 | 接入新 Agent、复用 Provider、按需安装 Langfuse | [Agent 接入](benchmark/agent-adapters.md) · [验收与 mini_agent 可行性](migration/provider-reuse-acceptance-2026-11-04.md) |
 | 核对框架复用的回归、Docker 与全新安装验收 | [框架复用验收](migration/framework-reuse-acceptance-2026-11-02.md) |
+| 运行 v4 正式 Harness、DeepSeek G-Eval 与 Langfuse | [v4 正式评测](migration/v4-formal-benchmark-2026-11-11.md) |
+| 从保存结果补齐统计看板、核对完整交付状态 | [v4 看板交付与验收](migration/v4-dashboard-delivery-2026-11-11.md) |
 | 核对 mini_agent 场景、代表集与解耦验收 | [mini_agent 覆盖指南](benchmark/mini-agent-coverage.md) · [报告模式归纳修订](migration/2026-11-07-report-pattern-summary.md) |
 | 联动离线报告、结构化诊断与 Langfuse | [使用与边界](benchmark/report-diagnostics.md) |
 | 运行模块、模型决策、关键链路或端到端评测 | [分层评测指南](benchmark/v2-usage.md) |
@@ -25,6 +27,10 @@
 | 阅读中文任务、构建任务或使用通用 Builder | [逐条阅读页](dataset-reading.html) · [数据集工作流](dataset-workflow.md) · [语言与冻结边界](dataset-language.md) |
 | 查阅历史实验 | [v1 作品集](benchmark/portfolio.md) · [失败分析](benchmark/failure-analysis.md) · [数据集勘误](benchmark/dataset-errata.md) · [Langfuse 证据](benchmark/langfuse.md) |
 | 核对 Trace、工具路由与历史 API 的渐进收敛 | [模块职责与验收](migration/convergence-2026-11-11.md) · [实施计划](migration/convergence-plan-2026-11-11.md) |
+| 接入其他 Agent、理解快照语义身份与来源绑定 | [能力快照改造与复用](migration/snapshot-hardening-2026-11-11.md) |
+| 执行 mini_agent 意图、模块、链路并查看真实失败 | [97 条 Agent 接入与验收](migration/agent-readiness-2026-11-11.md) |
+| 执行 mini_agent 全集中的 Schema 与六工具离线验证 | [执行范围与验收](migration/schema-tools-readiness-2026-11-11.md) |
+| 验证 Builder 产物能否发布、审计采集来源与声明差异 | [P0 产物接入与 P1 来源审计](migration/builder-integration-2026-11-11.md) |
 | 维护历史兼容入口与导入资产 | [兼容范围](benchmark/legacy.md) · [迁移来源与验收](migration/provenance.md) |
 
 当前数据集为 [File Tools v2](../data/benchmarks/file-tools-v2/README.md)、[Model Decisions v1](../data/benchmarks/model-decisions-v1/README.md) 和独立 [nanobot Core v1](../data/benchmarks/nanobot-core-v1/README.md)。原中文逐条阅读页跨三个历史版本收录 744 条记录，包含 v1/v2 继承任务，不代表 744 个唯一任务，也未包含新增 Core v1。历史 [File Tools v1](../data/benchmarks/file-tools-v1/README.md)、Suite / Provider、mini_agent 与 Inspect Scorer 保留各自原有语义；[v1 架构](benchmark/architecture.md)不能作为 v2 能力清单。不同任务、运行方式或评分版本的结果分开报告。

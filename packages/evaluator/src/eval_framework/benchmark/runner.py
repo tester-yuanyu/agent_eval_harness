@@ -52,6 +52,9 @@ def save_json(path: Path, value: Any) -> None:
 
 
 def validate_config(config: dict) -> None:
+    from ..orchestration.specs import validate_runtime_config
+
+    validate_runtime_config(config, strict=False)
     for key in config:
         if any(
             word in key.lower()
@@ -246,11 +249,28 @@ def _run(tasks: list[dict], *, context: RunContext, runtime: InspectRuntime) -> 
     indices = {task["id"]: index + 1 for index, task in enumerate(tasks)}
     pending = {}
     records = {}
+    # Trial journals are authoritative evidence; even valid FAIL must not execute again.
+    for path in sorted((context.output / "trials").glob("*.json")):
+        row = json.loads(path.read_text())
+        case_id, trial = row["case_id"], row["trial"]
+        if (
+            case_id not in indices
+            or type(trial) is not int
+            or not 1 <= trial <= context.repeats
+            or row.get("identity_hash") != context.identity_hash
+            or path.stem != f"{indices[case_id]:04d}-t{trial}"
+        ):
+            raise ValueError("Trial journal identity mismatch")
+        retained = meta.get("provenance", {}).get("retained_trials", {})
+        if path.name in retained and digest(row) != retained[path.name]:
+            raise ValueError("Retained trial Hash mismatch")
+        records[path.stem] = row
     modes = {task.get("execution_mode", "agent") for task in tasks}
     needs_model = not context.offline and any(
         context.adapter.needs_model(mode) for mode in modes
     )
     model = context.adapter.inspect_model() if needs_model else "mockllm/model"
+    environment_started = time.monotonic()
     sandboxes = {
         mode: "local"
         if context.offline
@@ -260,6 +280,7 @@ def _run(tasks: list[dict], *, context: RunContext, runtime: InspectRuntime) -> 
         )
         for mode in sorted(modes)
     }
+    environment_seconds = time.monotonic() - environment_started
     if not context.offline and context.config.get("sandbox"):
         for selected in sandboxes.values():
             actual = selected[0] if isinstance(selected, tuple) else selected
@@ -278,6 +299,10 @@ def _run(tasks: list[dict], *, context: RunContext, runtime: InspectRuntime) -> 
             task = by_id[str(state.sample_id)]
             trial = state.epoch
             key = key_for(task["id"], trial)
+            if key in records:
+                state.completed = True
+                state.output.completion = "Saved execution evidence reused"
+                return state
             started, monotonic = now(), time.monotonic()
             pending_error = None
             mode = task.get("execution_mode", "agent")
@@ -403,9 +428,17 @@ def _run(tasks: list[dict], *, context: RunContext, runtime: InspectRuntime) -> 
     def deepeval_bridge():
         async def score(state, target):
             key = key_for(str(state.sample_id), state.epoch)
+            if key in records:
+                row = records[key]
+                return runtime.Score(
+                    value=row["assessment"]["verdict"],
+                    explanation="Saved trial reused without execution or rescoring",
+                    metadata={"benchmark_record": row, "execution_reused": True},
+                )
             row = pending.pop(key)
             apply_native_limits(row["observation"], runtime.transcript().events)
             task = by_id[str(state.sample_id)]
+            scoring_started = time.monotonic()
             try:
                 assessment = await runtime.anyio.to_thread.run_sync(
                     lambda: context.score_task(task, row["observation"])
@@ -418,6 +451,10 @@ def _run(tasks: list[dict], *, context: RunContext, runtime: InspectRuntime) -> 
                     "errors": ["scorer_exception:" + type(exc).__name__],
                     "scoring_backend": "deepeval",
                 }
+            row["phase_seconds"] = {
+                "agent_or_environment_execution": row["latency_seconds"],
+                "rules": time.monotonic() - scoring_started,
+            }
             row["assessment"] = assessment
             save_json(context.output / "trials" / f"{key}.json", row)
             records[key] = row
@@ -431,6 +468,11 @@ def _run(tasks: list[dict], *, context: RunContext, runtime: InspectRuntime) -> 
 
     dataset = []
     for task in tasks:
+        if all(
+            key_for(task["id"], trial) in records
+            for trial in range(1, context.repeats + 1)
+        ):
+            continue
         public = context.execution_task(deepcopy(task))
         sample = context.presentation.prepare_sample(public)
         dataset.append(
@@ -463,21 +505,75 @@ def _run(tasks: list[dict], *, context: RunContext, runtime: InspectRuntime) -> 
             "model_owner": "inspect_ai",
         },
     )
-    success, logs = runtime.inspect_eval(
-        task,
-        model=model,
-        display="none",
-        ctl_server=False,
-        notification=False,
-        log_dir=str(context.output / "inspect"),
-        max_samples=context.concurrency,
-        retry_attempts=1,
-        retry_on_error=0,
-        fail_on_error=False,
-        score_on_error=True,
-        log_realtime=False,
-        log_samples=True,
-    )
+    from .execution_recovery import observation_failure_kind
+    from .phase_timing import timed_phase
+
+    batches = [dataset] if dataset else []
+    if context.config.get("preflight") and dataset:
+        first = next(
+            (
+                sample
+                for sample in dataset
+                if not context.offline
+                and context.adapter.needs_model(
+                    by_id[str(sample.id)].get("execution_mode", "agent")
+                )
+            ),
+            None,
+        )
+        if first is not None:
+            batches = [[first], [sample for sample in dataset if sample is not first]]
+    success, logs = True, []
+    for index, batch in enumerate(batches):
+        if not batch:
+            continue
+        from inspect_ai.dataset import MemoryDataset
+
+        prior_keys = set(records)
+        task.dataset = MemoryDataset(batch)
+        batch_identity = digest(
+            [
+                [
+                    str(sample.id),
+                    [
+                        epoch
+                        for epoch in range(1, context.repeats + 1)
+                        if key_for(str(sample.id), epoch) not in prior_keys
+                    ],
+                ]
+                for sample in batch
+            ]
+        )[:16]
+        log_directory = context.output / "inspect"
+        if context.config.get("preflight") or prior_keys:
+            log_directory = log_directory / ("batch-" + batch_identity)
+        with timed_phase(context.output, "inspect_execution", batch=index):
+            ok, current_logs = runtime.inspect_eval(
+                task,
+                model=model,
+                display="none",
+                ctl_server=False,
+                notification=False,
+                log_dir=str(log_directory),
+                max_samples=context.concurrency,
+                retry_attempts=1,
+                retry_on_error=0,
+                fail_on_error=False,
+                score_on_error=True,
+                log_realtime=context.config.get("log_realtime", False),
+                log_samples=True,
+            )
+        success = success and ok
+        logs.extend(current_logs)
+        if context.config.get("preflight") and any(
+            observation_failure_kind(row["observation"]) == "configuration"
+            for key, row in records.items()
+            if key not in prior_keys
+        ):
+            raise RuntimeError(
+                "Agent preflight configuration failure; "
+                "evidence preserved, remaining batch stopped"
+            )
     # Reconstruct exports from authoritative native logs, including eval_set reuse.
     for log in logs:
         if log.samples is None and log.location:
@@ -518,6 +614,11 @@ def _run(tasks: list[dict], *, context: RunContext, runtime: InspectRuntime) -> 
     result = {
         **meta,
         "finished_at": now(),
+        "phase_seconds": {
+            "environment_setup": environment_seconds,
+            "queue": None,
+            "note": "行级执行含环境调用；排队未独立采集，不补零",
+        },
         "trials": [records[key] for key in expected],
         "summary": summarize(
             list(records.values()), meta["planned_case_ids"], context.repeats

@@ -209,3 +209,16 @@ unknown 状态；不会套用 mini_agent 的业务意图、错误码或 fixture�
 安装、运行、适用范围及追溯信息见 [DeepEval 接入说明](docs/DEEPEVAL_SYNTHESIZER.md)。
 
 架构与扩展边界见[项目概览](PROJECT_OVERVIEW.md)，硬约束见[生成约束](AGENT_DATASET_CONSTRAINTS.md)，历史双后端实验见[实测记录](docs/GENERATOR_COMPARISON.md)。
+
+## 发布就绪验证与来源审计
+
+`readiness --delivery` 已接入现有 `generate-full` 产物，以完整行为案例为分母，
+分开报告静态有效、运行绑定、reference 验证和发布状态。当前离线路径覆盖
+233 条 JSON Schema、六工具的 35 条行为，以及 97 条 Agent/模块/链路案例。
+各类统计分开报告，真实失败和 blocked 义务完整保留。模型边界使用独立确定性
+输入脚本，不代表真实模型理解能力或生产后端通过。
+最新运行与验收见 [97 条 Agent 接入](../../docs/migration/agent-readiness-2026-11-11.md)；
+上一阶段见 [Schema 与六工具执行](../../docs/migration/schema-tools-readiness-2026-11-11.md)。
+P1 增加逐事实来源与 bundle 外差异审计，旧 bundle 与冻结字节保持兼容。
+见 [产物接入与 P1 使用说明](../../docs/migration/builder-integration-2026-11-11.md)。
+已有独立 read_file 切片见 [初始 P0 使用说明](../../docs/migration/builder-readiness-2026-11-11.md)。

@@ -167,16 +167,70 @@ def docker_binary() -> str:
     raise RuntimeError("Install and start Docker Desktop first")
 
 
+def reuse(
+    output: Path,
+    *,
+    base_url: str,
+    project_id: str,
+    public_key_env: str = "LOCAL_LANGFUSE_PUBLIC_KEY",
+    secret_key_env: str = "LOCAL_LANGFUSE_SECRET_KEY",
+) -> None:
+    """Create a profile for an existing local instance without starting Docker."""
+    from eval_framework.benchmark.langfuse_delivery import load_profile
+
+    output = Path(output)
+    if output.exists():
+        raise ValueError("Refusing to overwrite existing profile")
+    values = {
+        "profile": "local",
+        "base_url": base_url,
+        "project_id": project_id,
+        "public_key_env": public_key_env,
+        "secret_key_env": secret_key_env,
+        "intervals": {"dataset": 0.25, "tracing": 0.2, "read": 0.2},
+    }
+    output.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        with output.open("x") as file:
+            json.dump(values, file, indent=2)
+            file.write("\n")
+        load_profile(output)
+    except Exception:
+        output.unlink(missing_ok=True)
+        raise
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("action", choices=("init", "up", "status", "stop", "lock"))
+    parser.add_argument(
+        "action", choices=("init", "up", "status", "stop", "lock", "reuse")
+    )
     parser.add_argument(
         "--state-dir", type=Path, default=Path("artifacts/local_langfuse")
     )
     parser.add_argument("--config", type=Path, default=Path(".env.langfuse.local.json"))
     parser.add_argument("--port", type=int, default=3000)
     parser.add_argument("--media-port", type=int, default=9090)
+    parser.add_argument("--base-url")
+    parser.add_argument("--project-id")
+    parser.add_argument("--profile-output", type=Path)
+    parser.add_argument("--public-key-env", default="LOCAL_LANGFUSE_PUBLIC_KEY")
+    parser.add_argument("--secret-key-env", default="LOCAL_LANGFUSE_SECRET_KEY")
     args = parser.parse_args()
+    if args.action == "reuse":
+        if not args.base_url or not args.project_id or not args.profile_output:
+            parser.error("reuse requires --base-url, --project-id and --profile-output")
+        reuse(
+            args.profile_output,
+            base_url=args.base_url,
+            project_id=args.project_id,
+            public_key_env=args.public_key_env,
+            secret_key_env=args.secret_key_env,
+        )
+        print(
+            json.dumps({"profile": str(args.profile_output), "service_started": False})
+        )
+        return 0
     state = args.state_dir.resolve()
     if args.action == "init":
         initialize(state, args.config, args.port, args.media_port)

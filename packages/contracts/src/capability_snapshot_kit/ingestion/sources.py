@@ -43,3 +43,28 @@ def check_sources(document: FactDocument, root: Path) -> None:
             raise ValueError("total source size exceeds limit")
         if hashlib.sha256(content).hexdigest() != source.sha256:
             raise ValueError(f"source hash mismatch: {source.path}")
+
+
+def bound_module_sources(root: Path, modules: dict) -> dict[str, SourceReference]:
+    """Bind explicit Agent-owned module objects to their actual source paths.
+
+    Callers choose the modules. The shared Kit never imports an Agent or scans
+    arbitrary code. Source hashes identify files, not a cryptographic attestation
+    of already-loaded Python bytecode.
+    """
+    from types import ModuleType
+
+    resolved_root = root.resolve(strict=True)
+    sources = {}
+    for relative, module in modules.items():
+        SourceReference(path=relative, sha256="0" * 64, kind="code")
+        origin = getattr(module, "__file__", None)
+        if (
+            not isinstance(module, ModuleType)
+            or not origin
+            or Path(origin).resolve(strict=True)
+            != (resolved_root / relative).resolve(strict=True)
+        ):
+            raise ValueError(f"loaded module does not match source root: {relative}")
+        sources[relative] = source_reference(resolved_root, relative)
+    return sources

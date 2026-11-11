@@ -23,6 +23,15 @@ JUDGE_SOURCE_FILES = [
     "judge_run.py",
 ]
 
+JUDGE_EXECUTION_SOURCE_FILES = [
+    "judge_checkpoints.py",
+    "judge_recovery.py",
+    "request_policy.py",
+    "scorers/trajectory_judge.py",
+    "scorers/judge_client.py",
+    "scorers/llm_judge.py",
+]
+
 
 def _judge_run_locked(
     source_dir: Path,
@@ -33,6 +42,7 @@ def _judge_run_locked(
     repeats: int = 1,
     concurrency: int = 2,
     limit: int | None = None,
+    options: dict | None = None,
 ) -> dict[str, Any]:
     """Add diagnostic scores in a new run; never rerun an Agent or alter verdicts."""
     from .judging import (
@@ -54,21 +64,68 @@ def _judge_run_locked(
     if limit is not None and (type(limit) is not int or limit < 1):
         raise ValueError("Judge task limit must be positive")
     validate_config(config)
+    options = dict(options or {})
+    allowed = {
+        "metric_checkpoints",
+        "metric_concurrency",
+        "request_retries",
+        "reuse_from",
+        "retry_failed",
+        "preflight",
+    }
+    if set(options) - allowed:
+        raise ValueError("Unknown Judge execution options")
+    for key in ("metric_checkpoints", "retry_failed", "preflight"):
+        if key in options and type(options[key]) is not bool:
+            raise ValueError(key + " must be boolean")
+    metric_concurrency = options.get("metric_concurrency", 1)
+    if type(metric_concurrency) is not int or not 1 <= metric_concurrency <= 8:
+        raise ValueError("metric_concurrency must be 1–8")
+    if concurrency * metric_concurrency > 16:
+        raise ValueError("Combined Judge concurrency must be <=16")
+    use_checkpoints = options.get("metric_checkpoints", False) or bool(
+        options.get("reuse_from")
+    )
+    controls = (
+        options.get("preflight")
+        or options.get("request_retries", 0)
+        or metric_concurrency > 1
+        or options.get("retry_failed")
+    )
+    if controls and not use_checkpoints:
+        raise ValueError("Judge execution controls require metric_checkpoints=True")
+    if use_checkpoints:
+        from .scorers.trajectory_judge import DIMENSIONS, GEVAL_DIMENSIONS
+
+        if set(config.get("dimensions", DIMENSIONS)) - set(GEVAL_DIMENSIONS):
+            raise ValueError(
+                "Metric checkpoints require explicit GEval-only dimensions"
+            )
+    from .request_policy import RequestPolicy
+
+    policy = RequestPolicy(retries=options.get("request_retries", 0))
     raw = (source_dir / "results.json").read_bytes()
     source = json.loads(raw)
-    dataset = dataset_identity(dataset_path)
+    identify, load = dataset_identity, load_tasks
+    full = (
+        source["identity"]["dataset"].get("task_contract")
+        == "builder-full-benchmark-v1"
+    )
+    if full:
+        from .full_benchmark import dataset_identity as identify
+        from .full_benchmark import load_tasks as load
+    dataset = identify(dataset_path)
     if source["identity"]["dataset"] != dataset:
         raise ValueError("Judge dataset differs from the execution dataset")
-    tasks = {t["id"]: t for t in load_tasks(dataset_path)}
+    tasks = {t["id"]: t for t in load(dataset_path)}
     _validate_source(source, tasks)
     if (
-        source.get("mode") not in {"real_agent", "real_model_decision"}
-        or source["identity"].get("offline") is True
-    ):
+        not full and source.get("mode") not in {"real_agent", "real_model_decision"}
+    ) or source["identity"].get("offline") is True:
         raise ValueError("Judge requires saved real execution, not reference smoke")
     selected = source["planned_case_ids"][:limit]
     rows = [r for r in source["trials"] if r["case_id"] in selected]
-    if any(
+    if not full and any(
         r.get("execution_mode") == "module"
         or r["observation"].get("execution_kind")
         in ("real_module", "deterministic_reference_not_agent")
@@ -98,6 +155,36 @@ def _judge_run_locked(
         source_results_sha256=provenance["source_results_sha256"],
         case_ids=selected,
     )
+    seeds = {}
+    if options:
+        identity["judge_execution_sources"] = code_identity(
+            JUDGE_EXECUTION_SOURCE_FILES
+        )
+    if options:
+        identity["judge_execution_options"] = {
+            k: v for k, v in options.items() if k != "reuse_from"
+        }
+    if options.get("reuse_from"):
+        from .judge_recovery import load_judge_seeds
+
+        seeds, binding = load_judge_seeds(
+            Path(options["reuse_from"]),
+            source,
+            provenance["source_results_sha256"],
+            config,
+            repeats,
+        )
+        if binding.get("checkpoint_hashes"):
+            saved_meta = json.loads(Path(binding["source"]).read_text())
+            if saved_meta["identity"].get("judge_execution_sources") != identity.get(
+                "judge_execution_sources"
+            ):
+                raise ValueError(
+                    "Partial metric recovery implementation changed; "
+                    "cannot safely reuse checkpoints"
+                )
+        identity["judge_recovery"] = binding
+        provenance["judge_recovery"] = binding
     identity_hash = digest(identity)
     output_dir.mkdir(parents=True, exist_ok=True)
     meta_path = output_dir / "judge-run.json"
@@ -148,9 +235,37 @@ def _judge_run_locked(
                 metrics = saved["metrics"]
             else:
                 # Always grade original public evidence, never previous Judge output.
-                metrics = judge_observation(
-                    tasks[row["case_id"]], original["observation"], config
-                )
+                judge_input = copy.deepcopy(original["observation"])
+                if full and not tasks[row["case_id"]]["live"]:
+                    judge_input["execution_kind"] = "deterministic_reference_not_agent"
+                if use_checkpoints:
+                    from .judge_checkpoints import judge_with_checkpoints
+
+                    metrics = judge_with_checkpoints(
+                        tasks[row["case_id"]],
+                        judge_input,
+                        config,
+                        output_dir / "metric-checkpoints",
+                        repeat_identity=[
+                            source["identity_hash"],
+                            row["case_id"],
+                            row["trial"],
+                            repeat,
+                        ],
+                        concurrency=metric_concurrency,
+                        retry_failed=options.get("retry_failed", False),
+                        request_policy=policy,
+                        seed_metrics=seeds.get((row["case_id"], row["trial"], repeat)),
+                        reuse_directory=(
+                            Path(options["reuse_from"]) / "metric-checkpoints"
+                            if options.get("reuse_from")
+                            else None
+                        ),
+                    )
+                else:
+                    metrics = judge_observation(
+                        tasks[row["case_id"]], judge_input, config
+                    )
                 save_json(
                     journal,
                     {
@@ -196,8 +311,39 @@ def _judge_run_locked(
         )
         return row
 
-    with ThreadPoolExecutor(max_workers=concurrency) as executor:
-        annotated = list(executor.map(annotate, rows))
+    canary = (
+        next((r for r in rows if tasks[r["case_id"]].get("live", True)), None)
+        if options.get("preflight")
+        else None
+    )
+    import time
+
+    judge_started = time.monotonic()
+    try:
+        first = annotate(canary) if canary is not None else None
+        if policy.stopped.is_set():
+            raise RuntimeError(
+                "Judge preflight stopped the batch after a configuration error; "
+                "inspect request-audit.json"
+            )
+        with ThreadPoolExecutor(max_workers=concurrency) as executor:
+            completed = list(
+                executor.map(annotate, [r for r in rows if r is not canary])
+            )
+        by_key = {(r["case_id"], r["trial"]): r for r in completed}
+        if first is not None:
+            by_key[(first["case_id"], first["trial"])] = first
+        annotated = [by_key[(r["case_id"], r["trial"])] for r in rows]
+    finally:
+        if options:
+            save_json(
+                output_dir / "request-audit.json",
+                {
+                    "stopped": policy.stopped.is_set(),
+                    "model_requests": policy.model_requests,
+                    "failures": policy.attempts,
+                },
+            )
     result = copy.deepcopy(source)
     result.update(
         run_id=output_dir.name + "-judge-" + identity_hash[:8],
@@ -207,6 +353,7 @@ def _judge_run_locked(
         trials=annotated,
         provenance=provenance,
         finished_at=now(),
+        judge_phase_seconds=time.monotonic() - judge_started,
         execution_identity=copy.deepcopy(
             source.get("execution_identity", source["identity"])
         ),
@@ -254,9 +401,9 @@ def _judge_run_locked(
     result["provenance"]["new_judge_model_requests"] = (
         None if requests_unknown else known_judge_requests
     )
-    result["provenance"][
-        "new_judge_model_requests_known_subtotal"
-    ] = known_judge_requests
+    result["provenance"]["new_judge_model_requests_known_subtotal"] = (
+        known_judge_requests
+    )
     result["provenance"]["new_judge_model_requests_unknown"] = requests_unknown
     result["provenance"]["graded_at"] = now()
     if (source_dir / "results.json").read_bytes() != raw or code_identity(
@@ -265,6 +412,17 @@ def _judge_run_locked(
         raise ValueError(
             "Source evidence or Judge implementation changed while judging"
         )
+    if use_checkpoints:
+        result["provenance"]["new_judge_model_requests"] = policy.model_requests
+        result["provenance"]["new_judge_model_requests_known_subtotal"] = (
+            policy.model_requests
+        )
+        result["provenance"]["new_judge_model_requests_unknown"] = False
+        result["provenance"]["saved_scoring_requests"] = len(calls)
+    if options and identity["judge_execution_sources"] != code_identity(
+        JUDGE_EXECUTION_SOURCE_FILES
+    ):
+        raise ValueError("Judge execution implementation changed while judging")
     save_json(output_dir / "results.json", result)
     return result
 
@@ -278,6 +436,7 @@ def judge_run(
     repeats: int = 1,
     concurrency: int = 2,
     limit: int | None = None,
+    options: dict | None = None,
 ) -> dict[str, Any]:
     """Exclusively annotate one immutable source; checkpoints enable safe resume.
 
@@ -307,6 +466,7 @@ def judge_run(
             repeats=repeats,
             concurrency=concurrency,
             limit=limit,
+            options=options,
         )
     finally:
         if lock.exists() and lock.read_text() == token:

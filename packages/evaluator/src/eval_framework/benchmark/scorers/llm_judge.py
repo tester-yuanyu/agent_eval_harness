@@ -15,10 +15,14 @@ class LLMJudgeScorer:
         *,
         dimensions: list[str] | None = None,
         max_evaluations: int | None = None,
+        metric_ids: set[str] | None = None,
+        request_policy: Any = None,
     ) -> None:
         self.model_config = deepcopy(model_config)
         self.dimensions = deepcopy(dimensions)
         self.max_evaluations = max_evaluations
+        self.metric_ids = metric_ids
+        self.request_policy = request_policy
 
     def score(
         self,
@@ -41,5 +45,7 @@ class LLMJudgeScorer:
                 self.model_config,
                 dimensions=self.dimensions,
                 max_evaluations=self.max_evaluations,
+                metric_ids=self.metric_ids,
+                request_policy=self.request_policy,
             ),
         }

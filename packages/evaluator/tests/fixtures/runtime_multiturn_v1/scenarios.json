@@ -1,0 +1,8 @@
+{
+  "asset_version": "runtime-multiturn-offline-v1",
+  "scenarios": [
+    {"id": "clarification-state", "fault": "none", "user_input": "查询用户", "user_responses": ["用户 ID 10001"], "initial_status": "NEED_CLARIFICATION", "expected_turns": 2},
+    {"id": "clarification-tool-error", "fault": "tool_error", "user_input": "查询用户", "user_responses": ["用户 ID 10001"], "initial_status": "NEED_CLARIFICATION", "expected_turns": 2},
+    {"id": "confirmation-no-write", "fault": "none", "user_input": "给用户赠礼", "user_responses": ["确认"], "initial_status": "NEED_CONFIRMATION", "expected_turns": 2}
+  ]
+}

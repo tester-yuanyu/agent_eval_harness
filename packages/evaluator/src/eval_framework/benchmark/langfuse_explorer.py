@@ -151,7 +151,33 @@ def explorer_widgets(x, cohort_id, view_id=None):
     def add(key, spec, width=6, height=5):
         result.append({"key": key, "spec": spec, "width": width, "height": height})
 
+    if "evaluation" in x:
+        from .dashboard_evaluation import cards
+
+        for key, label, desc in cards(x["evaluation"]):
+            if x["stats"].get("evaluation." + key) is None:
+                continue
+            add(
+                "evaluation:" + key,
+                _spec(
+                    label,
+                    desc,
+                    "scores-numeric",
+                    "NUMBER",
+                    [
+                        source,
+                        cohort,
+                        version,
+                        snapshot,
+                        score_filter([PREFIX + "evaluation." + key]),
+                    ],
+                ),
+                4,
+                3,
+            )
     for key, label in LABELS.items():
+        if "evaluation" in x and key != "trial_count":
+            continue
         value = _pass_rate(x) if key == "pass_rate_percent" else x["stats"].get(key)
         if value is None:
             continue
@@ -222,7 +248,7 @@ def explorer_widgets(x, cohort_id, view_id=None):
                 ["estimate_low_usd", "estimate_high_usd"],
             )
         )
-    for key, label, names in trends:
+    for key, label, names in [] if "evaluation" in x else trends:
         add(
             "trend:" + key,
             _spec(
@@ -261,12 +287,14 @@ def explorer_widgets(x, cohort_id, view_id=None):
         add(
             d["kind"] + ":" + d["name"],
             _spec(
-                label + " · 下钻",
+                ("用例数 · " if "evaluation" in x else "") + label + " · 下钻",
                 "View as table → 对应用例 Trace；数字为用例数，问题类别可重叠。",
                 "observations",
                 "NUMBER",
                 [
-                    {
+                    _scope("category", d["name"])
+                    if d["kind"] == "category"
+                    else {
                         "column": "name",
                         "type": "stringOptions",
                         "operator": "any of",
@@ -350,6 +378,23 @@ def arrange_widgets(dashboard_id, original, extras, ids, category_order=()):
                 height,
             )
 
+    if any(k.startswith("evaluation:") for k in active):
+        # Reuse the same widget definitions and grid; one-run v4 has no fake trend.
+        keys = (["health:trial_count"] if "health:trial_count" in active else []) + [
+            e["key"] for e in extras if e["key"].startswith("evaluation:")
+        ]
+        row(keys, 0, 4, 3)
+        y = ((len(keys) + 2) // 3) * 3
+        if len(original) > 2:
+            put(original[2], 0, y, 12, 5)
+            y += 5
+        details = [
+            e["key"] for e in extras if e["key"].startswith(("issue:", "category:"))
+        ]
+        row(details, y, 4, 3)
+        y += ((len(details) + 2) // 3) * 3
+        row([e["key"] for e in extras if e["key"].startswith("scores:")], y, 4, 5)
+        return items
     health_order = [
         "trial_count",
         "pass_rate_percent",
@@ -427,22 +472,20 @@ def preserve_unmanaged(current, items, managed):
     return {**current, "widgets": items + others}
 
 
-def sync_summaries(root, explorers, cohort_id, client):
+def sync_summaries(root, explorers, cohort_id, client, *, destination=None):
+    destination = destination or destination_fingerprint()
     path = root / "langfuse_explorer_export.json"
     state = (
         json.loads(path.read_text())
         if path.exists()
         else {
             "version": VERSION,
-            "destination": destination_fingerprint(),
+            "destination": destination,
             "cohort_id": cohort_id,
             "submitted": [],
         }
     )
-    if (
-        state["destination"] != destination_fingerprint()
-        or state["cohort_id"] != cohort_id
-    ):
+    if state["destination"] != destination or state["cohort_id"] != cohort_id:
         raise ValueError("explorer destination/cohort changed")
     view_id = stable_id(VERSION, *sorted(x["explorer_id"] for x in explorers))
     if state.get("view_id") != view_id and path.exists():
@@ -500,14 +543,36 @@ def sync_summaries(root, explorers, cohort_id, client):
     return state
 
 
-def sync_explorer(run_dir, run_dirs, *, client=None):
+def observation_ids(client, filters):
+    """Verify whole populations, including the 233-case Schema group."""
+    result, cursor, cursors = set(), None, set()
+    while True:
+        response = client.observations.get_many(
+            limit=100,
+            fields="core,basic",
+            filter=json.dumps(filters),
+            **({"cursor": cursor} if cursor else {}),
+        )
+        result.update(row.id for row in response.data)
+        cursor = response.meta.cursor if response.meta else None
+        if not cursor:
+            return result
+        if cursor in cursors:
+            raise ValueError("Repeated observation cursor")
+        cursors.add(cursor)
+
+
+def sync_explorer(run_dir, run_dirs, *, client=None, destination=None):
+    destination = destination or destination_fingerprint()
     root = Path(run_dir)
     trend = load_trend(run_dirs)
     explorers = [build_explorer(p) for p in run_dirs]
-    if any(x["destination"] != destination_fingerprint() for x in explorers):
+    if any(x["destination"] != destination for x in explorers):
         raise ValueError("explorer destination mismatch")
     client = client if client is not None else _PacedClient(client_from_env())
-    state = sync_summaries(root, explorers, trend["cohort_id"], client)
+    state = sync_summaries(
+        root, explorers, trend["cohort_id"], client, destination=destination
+    )
     if state["status"] != "VERIFIED":
         return state
     x = next(
@@ -516,10 +581,7 @@ def sync_explorer(run_dir, run_dirs, *, client=None):
         if x["run_id"] == json.loads((root / "results.json").read_text())["run_id"]
     )
     dashboard = json.loads((root / "langfuse_dashboard.json").read_text())
-    if (
-        dashboard["status"] != "VERIFIED"
-        or dashboard["destination"] != destination_fingerprint()
-    ):
+    if dashboard["status"] != "VERIFIED" or dashboard["destination"] != destination:
         raise ValueError("verified dashboard required")
     did = dashboard["dashboard_id"]
     path = root / "langfuse_explorer_dashboard.json"
@@ -528,11 +590,11 @@ def sync_explorer(run_dir, run_dirs, *, client=None):
         if path.exists()
         else {
             "dashboard_id": did,
-            "destination": destination_fingerprint(),
+            "destination": destination,
             "widgets": {},
         }
     )
-    if ui["dashboard_id"] != did or ui["destination"] != destination_fingerprint():
+    if ui["dashboard_id"] != did or ui["destination"] != destination:
         raise ValueError("dashboard destination changed")
     if path.exists():
         _save(
@@ -574,10 +636,7 @@ def sync_explorer(run_dir, run_dirs, *, client=None):
                 for d in x["drilldowns"]
                 if d["kind"] + ":" + d["name"] == entry["key"]
             )
-            response = client.observations.get_many(
-                limit=100, fields="core,basic", filter=json.dumps(spec["filters"])
-            )
-            if {r.id for r in response.data} != set(expected_ids):
+            if observation_ids(client, spec["filters"]) != set(expected_ids):
                 raise ValueError("widget filters do not resolve exact roots")
         if entry["key"].startswith("scores:"):
             name = entry["key"].split(":", 1)[1]
@@ -690,3 +749,69 @@ def sync_explorer(run_dir, run_dirs, *, client=None):
     )
     _save(path, ui)
     return {**state, "dashboard_status": ui["status"], "dashboard_url": ui["url"]}
+
+
+def verify_display_metrics(run_dir, *, client):
+    """Read the actual chart aggregates; correct widget JSON alone is insufficient."""
+    import math
+    from datetime import UTC
+
+    root = Path(run_dir)
+    x = build_explorer(root)
+    state = json.loads((root / "langfuse_explorer_export.json").read_text())
+    if state["status"] != "VERIFIED":
+        raise ValueError("Verified display summaries required")
+    payload = summary_payload(x, state["cohort_id"], state["view_id"])
+    expected = {s.name: s.value for s in payload}
+    query = {
+        "view": "scores-numeric",
+        "dimensions": [{"field": "name"}],
+        "metrics": [
+            {"measure": "value", "aggregation": "avg"},
+            {"measure": "count", "aggregation": "count"},
+        ],
+        "filters": [
+            _scope("source_hash", x["source_hash"]),
+            _scope("cohort_id", state["cohort_id"]),
+            _scope("view_id", state["view_id"]),
+            {
+                "column": "name",
+                "type": "stringOptions",
+                "operator": "any of",
+                "value": list(expected),
+            },
+        ],
+        "fromTimestamp": datetime.fromtimestamp(
+            x["date_range"][0] / 1000, UTC
+        ).isoformat(),
+        "toTimestamp": datetime.fromtimestamp(
+            x["date_range"][1] / 1000, UTC
+        ).isoformat(),
+        "config": {"row_limit": 1000},
+    }
+    rows = client.metrics.metrics(
+        query=json.dumps(query), request_options={"max_retries": 0}
+    ).data
+    actual = {r.get("name"): r for r in rows}
+    errors = []
+    for name, value in expected.items():
+        row = actual.get(name, {})
+        mean = row.get("avg_value")
+        if (
+            row.get("count_count") != 1
+            or type(mean) not in (int, float)
+            or not math.isclose(mean, value, rel_tol=1e-9, abs_tol=1e-9)
+        ):
+            errors.append(name)
+    if len(actual) != len(rows) or set(actual) != set(expected):
+        errors.append("population_mismatch")
+    result = {
+        "status": "VERIFIED" if not errors else "MISMATCH",
+        "source_hash": x["source_hash"],
+        "view_id": state["view_id"],
+        "expected": expected,
+        "actual": rows,
+        "errors": errors,
+    }
+    _save(root / "langfuse_dashboard_metrics.json", result)
+    return result

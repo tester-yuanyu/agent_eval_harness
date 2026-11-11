@@ -24,8 +24,10 @@ Nonempty = Annotated[str, Field(min_length=1)]
 
 def validate_local_path(value: str) -> str:
     if (
-        not isinstance(value, str) or not value.strip()
-        or "://" in value or "\0" in value
+        not isinstance(value, str)
+        or not value.strip()
+        or "://" in value
+        or "\0" in value
     ):
         raise ValueError("configuration paths must be nonempty local paths")
     return value
@@ -36,13 +38,30 @@ LocalPath = Annotated[str, AfterValidator(validate_local_path)]
 
 def _secret_key(key: str) -> bool:
     compact = re.sub(r"[^a-z0-9]", "", key.lower())
-    return compact in {
-        "token", "auth", "credential", "credentials", "cookie", "cookies", "bearer",
-    } or compact.endswith("token") or any(
-        marker in compact
-        for marker in (
-            "apikey", "secret", "password", "accesstoken", "authtoken",
-            "authorization", "privatekey", "clientkey",
+    return (
+        compact
+        in {
+            "token",
+            "auth",
+            "credential",
+            "credentials",
+            "cookie",
+            "cookies",
+            "bearer",
+        }
+        or compact.endswith("token")
+        or any(
+            marker in compact
+            for marker in (
+                "apikey",
+                "secret",
+                "password",
+                "accesstoken",
+                "authtoken",
+                "authorization",
+                "privatekey",
+                "clientkey",
+            )
         )
     )
 
@@ -69,8 +88,10 @@ def validate_public_config(value: Any) -> None:
     elif isinstance(value, str) and "://" in value:
         try:
             url = urlsplit(value)
-            has_secret = url.username is not None or url.password is not None or any(
-                _secret_key(key) for key, _ in parse_qsl(url.query)
+            has_secret = (
+                url.username is not None
+                or url.password is not None
+                or any(_secret_key(key) for key, _ in parse_qsl(url.query))
             )
         except ValueError as exc:
             raise ValueError("invalid configuration URL") from exc
@@ -80,7 +101,10 @@ def validate_public_config(value: Any) -> None:
 
 class StrictSpec(BaseModel):
     model_config = ConfigDict(
-        extra="forbid", strict=True, hide_input_in_errors=True, allow_inf_nan=False,
+        extra="forbid",
+        strict=True,
+        hide_input_in_errors=True,
+        allow_inf_nan=False,
     )
 
     @model_validator(mode="before")
@@ -115,9 +139,9 @@ class HarnessSpec(StrictSpec):
 
 
 class EnvironmentSpec(StrictSpec):
-    provider: Literal[
-        "nanobot", "mini_agent", "raw_model", "nanobot_component"
-    ] = "nanobot"
+    provider: Literal["nanobot", "mini_agent", "raw_model", "nanobot_component"] = (
+        "nanobot"
+    )
     nanobot_root: LocalPath | None = None
     python: LocalPath | None = None
     sandbox: Literal["local", "docker"] = "docker"
@@ -150,7 +174,8 @@ class RunRequest(StrictSpec):
 
     @model_serializer(mode="wrap")
     def serialize_explicit_specs(
-        self, handler: SerializerFunctionWrapHandler,
+        self,
+        handler: SerializerFunctionWrapHandler,
     ) -> dict[str, Any]:
         """Keep omitted options omitted, including in nested model serialization.
 
@@ -164,7 +189,8 @@ class RunRequest(StrictSpec):
             if section in serialized:
                 explicit = getattr(self, section).model_fields_set
                 serialized[section] = {
-                    key: value for key, value in serialized[section].items()
+                    key: value
+                    for key, value in serialized[section].items()
                     if key in explicit
                 }
         return serialized
@@ -178,3 +204,38 @@ class RunRequest(StrictSpec):
                 raise ValueError("conflicting runtime configuration keys")
             config.update(values)
         return config
+
+
+class RuntimeControlSpec(StrictSpec):
+    log_realtime: bool = False
+    preflight: bool = False
+    max_model_requests: Annotated[int, Field(ge=1)] | None = None
+
+
+def validate_runtime_config(
+    config: dict[str, Any],
+    *,
+    strict: bool = False,
+) -> dict[str, Any]:
+    """Validate shared Spec keys without adding defaults to legacy Provider configs.
+
+    Strict mode rejects extension keys; legacy mode leaves external Provider keys
+    untouched. Provider IDs remain open in legacy mode (registration owns them).
+    Credentials are rejected before any validation error can echo their values.
+    """
+    validate_public_config(config)
+    result = dict(config)
+    known = set()
+    for spec in (ModelSpec, HarnessSpec, EnvironmentSpec, RuntimeControlSpec):
+        fields = set(spec.model_fields)
+        if spec is EnvironmentSpec and not strict:
+            fields.remove("provider")
+            known.add("provider")
+        known.update(fields)
+        supplied = {key: value for key, value in config.items() if key in fields}
+        spec.model_validate(supplied)
+    if strict and (unknown := config.keys() - known):
+        raise ValueError(
+            "unknown runtime configuration fields: " + ", ".join(sorted(unknown))
+        )
+    return result

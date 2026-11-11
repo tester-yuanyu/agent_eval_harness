@@ -1,5 +1,6 @@
 """An Agent-owned plugin: the Kit never imports this module itself."""
 
+import sys
 from pathlib import Path
 
 from capability_snapshot_kit import (
@@ -10,8 +11,9 @@ from capability_snapshot_kit import (
     ModuleFact,
 )
 from capability_snapshot_kit.ingestion import FactDocument
-from capability_snapshot_kit.ingestion.sources import source_reference
+from capability_snapshot_kit.ingestion.sources import bound_module_sources
 
+from . import agent as agent_module
 from .agent import AGENT_VERSION, POLICY_VERSION, CustomerInput, CustomerResult
 
 
@@ -121,9 +123,15 @@ class CustomerCollector:
             "examples/customer_service/collector.py",
         ]
         payload = document.model_dump(mode="json")
+        sources = bound_module_sources(
+            source_root,
+            {
+                paths[0]: agent_module,
+                paths[1]: sys.modules[__name__],
+            },
+        )
         payload["sources"] = {
-            path: source_reference(source_root, path).model_dump(mode="json")
-            for path in paths
+            key: value.model_dump(mode="json") for key, value in sources.items()
         }
         payload["origins"] = {key: paths for key in document.fact_index()}
         return FactDocument.model_validate(payload)

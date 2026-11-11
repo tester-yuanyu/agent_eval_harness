@@ -1,0 +1,8 @@
+{
+  "profile": "cloud",
+  "base_url": "https://cloud.langfuse.com",
+  "project_id": "cmvgd40xe02ecad0en362z7wd",
+  "public_key_env": "LANGFUSE_PUBLIC_KEY",
+  "secret_key_env": "LANGFUSE_SECRET_KEY",
+  "intervals": {"dataset": 1.0, "tracing": 0.5, "read": 0.5}
+}

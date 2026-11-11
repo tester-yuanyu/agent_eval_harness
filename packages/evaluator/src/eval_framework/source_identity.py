@@ -7,6 +7,11 @@ from importlib.metadata import version
 from pathlib import Path
 from typing import Any
 
+from capability_snapshot_kit import hashing
+from eval_contracts import benchmark as task_contract
+from eval_contracts import observation_assertions
+from eval_contracts import trace as trace_contract
+
 _RUNTIME_SUFFIXES = {
     ".py",
     ".json",
@@ -60,4 +65,79 @@ def runtime_identity() -> dict[str, Any]:
         "evidence_sdk_sha256": content_identity(
             Path(agent_trace_sdk.__file__).resolve().parent
         ),
+    }
+
+
+def layer_source_paths() -> dict[str, Path]:
+    root = Path(__file__).resolve().parent
+    paths = [
+        root / "benchmark" / "layer_sources.py",
+        root / "benchmark" / "schema.py",
+        root / "benchmark" / "identity.py",
+        root / "benchmark" / "run_context.py",
+        root / "plugins" / "protocols.py",
+        root / "plugins" / "models.py",
+    ]
+    for directory in (
+        "environments",
+        "harness",
+        "aggregator",
+        "orchestration",
+        "benchmark/scorers",
+        "benchmark/domains",
+        "benchmark/datasets",
+        "integrations",
+    ):
+        paths.extend(sorted((root / directory).rglob("*.py")))
+    result = {
+        "eval_framework/" + path.relative_to(root).as_posix(): path for path in paths
+    }
+    result["eval_contracts/benchmark.py"] = Path(task_contract.__file__)
+    result["eval_contracts/trace.py"] = Path(trace_contract.__file__)
+    result["eval_contracts/observation_assertions.py"] = Path(
+        observation_assertions.__file__
+    )
+    result["capability_snapshot_kit/hashing.py"] = Path(hashing.__file__)
+    return result
+
+
+def runtime_layer_source_paths() -> dict[str, dict[str, Path]]:
+    """Versioned execution-only source closure, separate from historical closure."""
+    root = Path(__file__).resolve().parent
+    groups = {
+        "harness": [root / "harness"],
+        "environment": [root / "environments", root / "integrations"],
+        "model": [root / "runtime_model.py", root / "source_identity.py"],
+        "contracts": [Path(task_contract.__file__), Path(trace_contract.__file__)],
+    }
+    result = {}
+    for group, locations in groups.items():
+        paths = [
+            path
+            for location in locations
+            for path in (
+                sorted(location.rglob("*.py")) if location.is_dir() else [location]
+            )
+        ]
+        result[group] = {
+            (
+                ("eval_framework/" + path.relative_to(root).as_posix())
+                if path.is_relative_to(root)
+                else "eval_contracts/" + path.name
+            ): path
+            for path in paths
+        }
+    return result
+
+
+def runtime_layer_identity() -> dict[str, Any]:
+    return {
+        "version": "execution-layers-v1",
+        "layers": {
+            group: {
+                name: hashlib.sha256(path.read_bytes()).hexdigest()
+                for name, path in paths.items()
+            }
+            for group, paths in runtime_layer_source_paths().items()
+        },
     }

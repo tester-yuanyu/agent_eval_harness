@@ -1,0 +1,8 @@
+{
+  "profile": "local",
+  "base_url": "http://127.0.0.1:3000",
+  "project_id": "agent-evaluator",
+  "public_key_env": "LOCAL_LANGFUSE_PUBLIC_KEY",
+  "secret_key_env": "LOCAL_LANGFUSE_SECRET_KEY",
+  "intervals": {"dataset": 0.25, "tracing": 0.2, "read": 0.2}
+}

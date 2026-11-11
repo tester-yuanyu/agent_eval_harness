@@ -9,7 +9,7 @@ from typing import Any
 from eval_contracts.benchmark import TaskInput
 from inspect_ai.solver import TaskState
 
-from ...benchmark.layer_sources import layer_source_paths
+from ...source_identity import layer_source_paths, runtime_layer_identity
 from ..prompts import render_prompt
 from .agent.base import BaseAgent
 from .agent.raw_model_adapter import RawModelAgentAdapter
@@ -50,6 +50,7 @@ class RawModelRuntimeAdapter:
             "orchestrator": "inspect-custom-harness-v1",
             "isolation": self.config.get("sandbox", "docker"),
             "prompt": prompt,
+            "execution_layers": runtime_layer_identity(),
             "sources": {
                 name: hashlib.sha256(path.read_bytes()).hexdigest()
                 for name, path in layer_source_paths().items()
@@ -65,7 +66,7 @@ class RawModelRuntimeAdapter:
         return "harness_raw_model"
 
     def inspect_model(self) -> Any:
-        from ...benchmark.inspect_runtime import inspect_model
+        from ...runtime_model import inspect_model
 
         return inspect_model(self.config)
 

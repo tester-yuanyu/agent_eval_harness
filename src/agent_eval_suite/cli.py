@@ -34,11 +34,26 @@ EVAL_COMMANDS = (
     "import-reviews",
 )
 BENCHMARK_COMMANDS = (
-    "analyze", "annotations-build", "annotations-validate",
-    "core-validate", "core-run", "coverage",
-    "validate", "demo", "run", "compare", "report", "regrade", "judge",
-    "calibration-sheet", "calibration-page", "calibration-check", "quality-audit",
-    "export-langfuse", "export-langfuse-evidence", "verify-langfuse",
+    "analyze",
+    "annotations-build",
+    "annotations-validate",
+    "core-validate",
+    "core-run",
+    "coverage",
+    "validate",
+    "demo",
+    "run",
+    "compare",
+    "report",
+    "regrade",
+    "judge",
+    "calibration-sheet",
+    "calibration-page",
+    "calibration-check",
+    "quality-audit",
+    "export-langfuse",
+    "export-langfuse-evidence",
+    "verify-langfuse",
 )
 
 
@@ -101,9 +116,23 @@ def parser() -> argparse.ArgumentParser:
         help="installed evaluator interpreter; default .venvs/evaluator/bin/python",
     )
     groups = root.add_subparsers(dest="group", required=True)
+    readiness = groups.add_parser(
+        "readiness", help="Offline Builder release readiness gate"
+    )
+    actions = readiness.add_subparsers(dest="action", required=True)
+    for action in ("run", "check", "freeze"):
+        child = actions.add_parser(action)
+        source = child.add_mutually_exclusive_group(required=True)
+        source.add_argument("--dataset", type=Path)
+        source.add_argument("--delivery", type=Path)
+        child.add_argument("--mini-agent-root", type=Path)
+        child.add_argument("--workspace", type=Path, required=True)
+        child.add_argument("--review", type=Path, required=action == "freeze")
+        child.add_argument("--output", type=Path, required=action == "freeze")
     for name, aliases, commands, description in (
         (
-            "benchmark", [],
+            "benchmark",
+            [],
             BENCHMARK_COMMANDS,
             "Fixed task datasets + Inspect Harness + DeepEval scoring. Live calls and Langfuse exports are explicit.",
         ),
@@ -218,6 +247,16 @@ def main(argv: list[str] | None = None) -> int:
             return invoke(python, module, [command, *forward])
         if unknown:
             root_parser.error("unrecognized arguments: " + " ".join(unknown))
+        if args.group == "readiness":
+            from .readiness import execute
+
+            args.mini_agent_root = args.mini_agent_root or root / "examples/mini_agent"
+            return execute(
+                args,
+                interpreter(root, args.builder_python, "builder"),
+                interpreter(root, args.evaluator_python, "evaluator"),
+                invoke,
+            )
         if args.group in ("bundle", "cap"):
 
             def validate(path):

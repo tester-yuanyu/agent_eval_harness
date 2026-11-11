@@ -41,6 +41,11 @@ def bind_docker_environment(
             )
         return None
     image = json.loads(path.read_text())["services"]["default"]["image"]
+    bound = json.loads(binding.read_text()) if binding.exists() else None
+    # A pinned Compose image is the previously bound immutable ID. Continue
+    # checking the original tag too: a rebuilt tag cannot silently resume.
+    if bound and image == bound.get("image_id"):
+        image = bound["image"]
     identity = {"image": image, "image_id": docker_image_id(image)}
     if environment is not None:
         identity["runtime_environment_sha256"] = hashlib.sha256(
@@ -58,7 +63,26 @@ def bind_docker_environment(
     with binding.open("x") as stream:
         json.dump(identity, stream, sort_keys=True, indent=2)
         stream.write("\n")
+    _pin_compose_image(path, identity)
     return identity
+
+
+def _pin_compose_image(path: Path, binding: dict) -> None:
+    config = json.loads(path.read_text())
+    service = config["services"]["default"]
+    if service.get("image") == binding["image_id"] and "build" not in service:
+        return
+    service["image"] = binding["image_id"]
+    service.pop("build", None)
+    path.write_text(json.dumps(config, indent=2) + "\n")
+
+
+def pin_docker_environment(compose: str) -> dict | None:
+    """Pin an already-built run to its verified ID; retain original binding bytes."""
+    binding = bind_docker_environment(compose)
+    if binding is not None:
+        _pin_compose_image(Path(compose), binding)
+    return binding
 
 
 def source_files(root: Path) -> dict[str, bytes]:

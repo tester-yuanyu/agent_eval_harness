@@ -218,3 +218,55 @@ def test_export_and_verify_reject_unknown_evidence_receipt_version(
     with pytest.raises(ValueError, match="Unsupported supplemental evidence version"):
         langfuse_export.verify_run(tmp_path, dataset_path, client=client)
     assert client.export_calls == 0
+
+
+@pytest.mark.parametrize("damage", [None, "proof", "value", "missing", "extra"])
+def test_combined_json_coercion_and_empty_objects_require_exact_proof(
+    tmp_path, monkeypatch, damage
+):
+    original = saved_span("2" * 16)
+    attributes = list(original.attributes)
+    for index, attribute in enumerate(attributes):
+        if attribute.key == "langfuse.observation.metadata":
+            value = attribute.value.model_copy(
+                update={
+                    "string_value": json.dumps(
+                        {
+                            "snapshot": {
+                                "users": {"1": {"phone": "15000000200"}},
+                                "pools": {},
+                            }
+                        }
+                    )
+                }
+            )
+            attributes[index] = attribute.model_copy(update={"value": value})
+    original = original.model_copy(update={"attributes": attributes})
+    dataset_path = configure_run(tmp_path, monkeypatch, original)
+
+    class FlattenedLangfuse(SavedLangfuse):
+        def observation_page(self, **kwargs):
+            page = super().observation_page(**kwargs).model_dump()
+            for row in page["data"]:
+                row["metadata"] = {
+                    key: value
+                    for key, value in langfuse_export._flatten_metadata(
+                        row["metadata"]
+                    ).items()
+                    if value != {}
+                }
+                if row["id"] == original.span_id:
+                    if damage == "value":
+                        row["metadata"]["snapshot.users.1.phone"] += 1
+                    elif damage == "missing":
+                        row["metadata"].pop("snapshot.users.1.phone")
+                    elif damage == "extra":
+                        row["metadata"]["snapshot.unexpected"] = 1
+                elif damage == "proof":
+                    row["metadata"]["exact_metadata_base64"] = "base64:tampered"
+            return self.page(page["data"])
+
+    client = FlattenedLangfuse([original])
+    langfuse_export.export_metadata_evidence(tmp_path, dataset_path, client=client)
+    result = langfuse_export.verify_run(tmp_path, dataset_path, client=client)
+    assert result["status"] == ("VERIFIED" if damage is None else "MISMATCH")

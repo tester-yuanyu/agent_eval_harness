@@ -29,6 +29,21 @@ def _request(path: Path) -> GenerationRequest:
 def parser() -> argparse.ArgumentParser:
     root = argparse.ArgumentParser(prog="dataset-builder")
     commands = root.add_subparsers(dest="command", required=True)
+    for suffix, source in (("readiness", "dataset"), ("full-readiness", "delivery")):
+        child = commands.add_parser("prepare-" + suffix)
+        child.add_argument("--" + source, type=Path, required=True)
+        child.add_argument("--output", type=Path, required=True)
+        for action in ("assess", "freeze"):
+            child = commands.add_parser(action + "-" + suffix)
+            child.add_argument("--" + source, type=Path, required=True)
+            child.add_argument("--evidence", type=Path, required=True)
+            child.add_argument("--identity", type=Path, required=True)
+            child.add_argument("--review", type=Path, required=action == "freeze")
+            child.add_argument(
+                "--output" if action == "freeze" else "--report",
+                type=Path,
+                required=action == "freeze",
+            )
     prepare = commands.add_parser("prepare")
     prepare.add_argument("--suite", required=True)
     prepare.add_argument("--workspace", type=Path, required=True)
@@ -53,6 +68,14 @@ def parser() -> argparse.ArgumentParser:
     freeze.add_argument("--reviewer", required=True)
     freeze.add_argument("--review-file", type=Path, required=True)
     freeze.add_argument("--output", type=Path, required=True)
+    selection = commands.add_parser("select-cases")
+    selection.add_argument("--generation", type=Path, required=True)
+    selection.add_argument("--output", type=Path, required=True)
+    selection.add_argument("--mode", choices=("quick", "full"), default="quick")
+    selection.add_argument("--max-cases", type=int)
+    selection.add_argument("--max-model-cases", type=int)
+    selection.add_argument("--constraints", type=Path)
+    selection.add_argument("--evidence", type=Path)
     full = commands.add_parser("generate-full")
     full.add_argument("--bundle", type=Path, required=True)
     full.add_argument("--delivery-root", type=Path, required=True)
@@ -73,7 +96,36 @@ def parser() -> argparse.ArgumentParser:
 def main(argv: list[str] | None = None) -> int:
     args = parser().parse_args(argv)
     try:
-        if args.command == "generate-nanobot":
+        if args.command.endswith("readiness"):
+            if "full-readiness" in args.command:
+                from .full_generation.readiness import assess, freeze_release, prepare
+
+                source = args.delivery
+            else:
+                from .readiness import assess, freeze_release, prepare
+
+                source = args.dataset
+            if args.command.startswith("prepare-"):
+                print(json.dumps(prepare(source, args.output), indent=2))
+                return 0
+            identity = json.loads(args.identity.read_text())
+            review = json.loads(args.review.read_text()) if args.review else None
+            if args.command.startswith("freeze-"):
+                result = freeze_release(
+                    source, args.evidence, identity, review, args.output
+                )
+            else:
+                result = assess(source, args.evidence, identity, review)
+                if args.report:
+                    args.report.write_text(
+                        json.dumps(result, ensure_ascii=False, indent=2) + "\n"
+                    )
+            print(json.dumps(result, ensure_ascii=False, indent=2))
+            accepted = result.get("state") == "FROZEN" or result.get(
+                "release_ready" if review is not None else "ready_for_review"
+            )
+            return 0 if accepted else 1
+        elif args.command == "generate-nanobot":
             from .nanobot_generation.delivery import generate
 
             result = generate(
@@ -89,6 +141,30 @@ def main(argv: list[str] | None = None) -> int:
             result = verify(args.workspace)
             print(json.dumps(result, ensure_ascii=False, indent=2))
             return 0 if result["valid"] else 1
+        elif args.command == "select-cases":
+            from .selection import write_selection
+
+            result = write_selection(
+                args.generation,
+                args.output,
+                mode=args.mode,
+                max_cases=args.max_cases,
+                max_model_cases=args.max_model_cases,
+                forbidden=json.loads(args.constraints.read_text())
+                if args.constraints
+                else None,
+                evidence=json.loads(args.evidence.read_text())
+                if args.evidence
+                else None,
+            )
+            print(
+                json.dumps(
+                    {
+                        "output": str(args.output),
+                        "selected_case_ids": result["selected_case_ids"],
+                    }
+                )
+            )
         elif args.command == "generate-full":
             from .full_generation.delivery import generate_full_dataset
 

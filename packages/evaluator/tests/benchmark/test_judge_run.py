@@ -5,7 +5,6 @@ from copy import deepcopy
 from pathlib import Path
 
 import pytest
-
 from eval_framework.benchmark.judge_calibration import create_calibration_worksheet
 from eval_framework.benchmark.judge_run import judge_run
 from eval_framework.benchmark.runner import digest, save_json
@@ -332,3 +331,26 @@ def test_completed_result_identity_corruption_is_not_silently_reused(
     with pytest.raises(ValueError, match="identity"):
         judge_run(saved_run[0], DATASET, output, CONFIG)
     assert len(stub_judge) == 1
+
+
+def test_disabled_checkpoints_keep_legacy_scoring(saved_run, tmp_path, stub_judge):
+    result = judge_run(
+        saved_run[0],
+        DATASET,
+        tmp_path / "legacy",
+        CONFIG,
+        options={"metric_checkpoints": False},
+    )
+    assert len(stub_judge) == 1
+    assert result["judge_summary"]["scored"] == 1
+
+
+def test_controls_never_silently_drop_default_dimensions(saved_run, tmp_path):
+    with pytest.raises(ValueError, match="GEval-only"):
+        judge_run(
+            saved_run[0],
+            DATASET,
+            tmp_path / "invalid",
+            CONFIG,
+            options={"metric_checkpoints": True, "preflight": True},
+        )

@@ -165,6 +165,16 @@ def build_explorer(run_dir):
     )
     result = summarize(run, analysis, usages, estimate_cost(run, usages, pricing))
     result.update(usage_sources=sources, warnings=warnings)
+    if run.get("identity", {}).get("dataset", {}).get("task_contract") == "builder-full-benchmark-v1":
+        from .dashboard_evaluation import display_statistics
+        from .report_evaluation import evaluation_summary
+        from .report_insights import load_report_tasks
+        tasks, task_warnings = load_report_tasks(run)
+        if task_warnings or len(tasks) < len(run["planned_case_ids"]):
+            raise ValueError("v4 dashboard requires verified complete task definitions")
+        result["evaluation"] = evaluation_summary(run, tasks)
+        result["stats"].update({"evaluation." + k: v for k, v in display_statistics(result["evaluation"]).items()})
+
     links = load_links(root)
     if len(links) != len(run["trials"]):
         raise ValueError("explorer requires verified complete Trace links")

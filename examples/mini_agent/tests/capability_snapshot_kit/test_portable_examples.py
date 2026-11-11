@@ -83,3 +83,25 @@ def test_mini_agent_collector_preserves_existing_full_tool_bundle(tmp_path):
     bundle = load_capability_bundle(output / "bundle")
     assert bundle.agent == original.agent
     assert len(bundle.tools) == 6
+    from capability_snapshot_kit.exporting import export_capability_bundle_v3
+
+    original_dir = tmp_path / "original"
+    export_capability_bundle_v3(
+        original_dir,
+        specs,
+        MiniAgentCapabilityAdapter(build_default_intent_registry(), create_registry()),
+    )
+    assert {
+        p.relative_to(original_dir): p.read_bytes()
+        for p in original_dir.rglob("*")
+        if p.is_file()
+    } == {
+        p.relative_to(output / "bundle"): p.read_bytes()
+        for p in (output / "bundle").rglob("*")
+        if p.is_file()
+    }
+    manifest = json.loads((output / "manifest.json").read_text())
+    assert "source_audit.json" in manifest["files_sha256"]
+    audit = json.loads((output / "source_audit.json").read_text())
+    assert audit["missing_sources"]["runtime"] == []
+    assert audit["inputs"]["candidate"] == "not_provided"

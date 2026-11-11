@@ -76,3 +76,31 @@ def test_audited_judge_records_one_attempt_with_original_usage(kind, outcome):
             "cost_usd": None,
         }
         assert event["name"] == "deepeval_response_judge"
+
+
+def test_opencode_judge_has_stable_truthful_session_headers(monkeypatch):
+    import openai
+    from eval_framework.benchmark.scorers.judge_client import OpenAICompatibleJudge
+
+    clients = []
+
+    def client(**kwargs):
+        clients.append(kwargs)
+        return object()
+
+    monkeypatch.setattr(openai, "OpenAI", client)
+    monkeypatch.setenv("TEST_JUDGE_KEY", "test-only")
+    config = {
+        "model": "deepseek-test",
+        "api_key_env": "TEST_JUDGE_KEY",
+        "base_url": "https://opencode.ai/zen/go/v1",
+    }
+    first = OpenAICompatibleJudge(config)
+    second = OpenAICompatibleJudge(config)
+    assert first.client is not second.client
+    headers = [c["default_headers"] for c in clients]
+    assert all(h["User-Agent"] == "agent-eval-suite/0.1.0" for h in headers)
+    assert headers[0]["x-opencode-session"] != headers[1]["x-opencode-session"]
+    assert clients[0]["max_retries"] == 0
+    OpenAICompatibleJudge({**config, "base_url": "https://api.example.test/v1"})
+    assert "default_headers" not in clients[-1]

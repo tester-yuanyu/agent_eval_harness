@@ -54,3 +54,34 @@ def test_repeat_initialization_preserves_credentials_and_refuses_new_port(tmp_pa
     assert all(file.read_bytes() == content for file, content in before.items())
     with pytest.raises(ValueError, match="existing"):
         deployment.initialize(state, config, 3001, 9090)
+
+
+def test_reuse_writes_profile_without_docker_start_or_credentials(
+    tmp_path, monkeypatch
+):
+    deployment = _module()
+    monkeypatch.setattr(
+        deployment,
+        "docker_binary",
+        lambda: (_ for _ in ()).throw(AssertionError("Docker must not run")),
+    )
+    profile = tmp_path / "profile.json"
+    monkeypatch.setattr(
+        "sys.argv",
+        [
+            "local_langfuse.py",
+            "reuse",
+            "--base-url",
+            "http://127.0.0.1:3100",
+            "--project-id",
+            "existing",
+            "--profile-output",
+            str(profile),
+        ],
+    )
+    assert deployment.main() == 0
+    values = json.loads(profile.read_text())
+    assert values["profile"] == "local"
+    assert values["project_id"] == "existing"
+    assert values["base_url"] == "http://127.0.0.1:3100"
+    assert "secret_key" not in values and "public_key" not in values
