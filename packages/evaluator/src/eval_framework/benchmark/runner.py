@@ -16,6 +16,7 @@ from capability_snapshot_kit.hashing import sha256_json as digest
 
 from ..agent_adapter import adapter_identity
 from ..provider_registry import ProviderRegistry
+from ..source_identity import identity_checkpoint
 from .domain import BenchmarkDomain
 from .domains.presentation import (
     DomainPresentation,
@@ -129,40 +130,41 @@ def run_benchmark(
     output = output.resolve()
     output.mkdir(parents=True, exist_ok=True)
     adapter = None if offline else resolve_benchmark_adapter(config, provider_registry)
-    source = deepcopy(
-        {"mode": "reference_smoke_only"} if offline else adapter.runtime_identity()
-    )
-    modes = sorted({task.get("execution_mode", "agent") for task in tasks})
-    scoring = selected_domain.identity()
-    identity = {
-        "dataset": dataset,
-        "presentation": deepcopy(presentation_identity(selected_presentation)),
-        "scoring_version": scoring["version"],
-        "scoring_identity": scoring,
-        "harness_source": code_identity(
-            [
-                "runner.py",
-                "../agent_adapter.py",
-                "../provider_registry.py",
-                "../composition.py",
-                "inspect_runtime.py",
-                "inspect_docker.py",
-            ]
-        ),
-        "inspect_ai": version("inspect_ai"),
-        "harness_version": HARNESS_VERSION,
-        "config": config,
-        "runtime": source,
-        "runtime_modes": {
-            mode: deepcopy(adapter.runtime_identity(mode)) for mode in modes
+    with identity_checkpoint():
+        source = deepcopy(
+            {"mode": "reference_smoke_only"} if offline else adapter.runtime_identity()
+        )
+        modes = sorted({task.get("execution_mode", "agent") for task in tasks})
+        scoring = selected_domain.identity()
+        identity = {
+            "dataset": dataset,
+            "presentation": deepcopy(presentation_identity(selected_presentation)),
+            "scoring_version": scoring["version"],
+            "scoring_identity": scoring,
+            "harness_source": code_identity(
+                [
+                    "runner.py",
+                    "../agent_adapter.py",
+                    "../provider_registry.py",
+                    "../composition.py",
+                    "inspect_runtime.py",
+                    "inspect_docker.py",
+                ]
+            ),
+            "inspect_ai": version("inspect_ai"),
+            "harness_version": HARNESS_VERSION,
+            "config": config,
+            "runtime": source,
+            "runtime_modes": {
+                mode: deepcopy(adapter.runtime_identity(mode)) for mode in modes
+            }
+            if not offline
+            else {},
+            "adapter": adapter_identity(adapter) if adapter is not None else None,
+            "case_ids": [t["id"] for t in tasks],
+            "repeats": repeats,
+            "offline": offline,
         }
-        if not offline
-        else {},
-        "adapter": adapter_identity(adapter) if adapter is not None else None,
-        "case_ids": [t["id"] for t in tasks],
-        "repeats": repeats,
-        "offline": offline,
-    }
     identity_hash = digest(identity)
     lock_path = output / ".running"
     try:
@@ -311,16 +313,18 @@ def _run(tasks: list[dict], *, context: RunContext, runtime: InspectRuntime) -> 
                     observation = context.reference_observation(task)
                     observation["runtime_identity"] = context.source
                 else:
-                    require_runtime_identity(
-                        context.source, context.adapter.runtime_identity()
-                    )
-                    require_runtime_identity(
-                        context.identity["adapter"], adapter_identity(context.adapter)
-                    )
-                    expected_source = context.identity["runtime_modes"][mode]
-                    require_runtime_identity(
-                        expected_source, context.adapter.runtime_identity(mode)
-                    )
+                    with identity_checkpoint():
+                        require_runtime_identity(
+                            context.source, context.adapter.runtime_identity()
+                        )
+                        require_runtime_identity(
+                            context.identity["adapter"],
+                            adapter_identity(context.adapter),
+                        )
+                        expected_source = context.identity["runtime_modes"][mode]
+                        require_runtime_identity(
+                            expected_source, context.adapter.runtime_identity(mode)
+                        )
                     selected_sandbox = sandboxes[mode]
                     effective = {
                         **context.config,
@@ -344,18 +348,20 @@ def _run(tasks: list[dict], *, context: RunContext, runtime: InspectRuntime) -> 
                         observation = await context.adapter.execute(
                             context.execution_task(task), mode=mode, config=effective
                         )
-                    require_runtime_identity(
-                        expected_source, observation["runtime_identity"]
-                    )
-                    require_runtime_identity(
-                        context.source, context.adapter.runtime_identity()
-                    )
-                    require_runtime_identity(
-                        expected_source, context.adapter.runtime_identity(mode)
-                    )
-                    require_runtime_identity(
-                        context.identity["adapter"], adapter_identity(context.adapter)
-                    )
+                    with identity_checkpoint():
+                        require_runtime_identity(
+                            expected_source, observation["runtime_identity"]
+                        )
+                        require_runtime_identity(
+                            context.source, context.adapter.runtime_identity()
+                        )
+                        require_runtime_identity(
+                            expected_source, context.adapter.runtime_identity(mode)
+                        )
+                        require_runtime_identity(
+                            context.identity["adapter"],
+                            adapter_identity(context.adapter),
+                        )
             except BaseException as exc:
                 observation = getattr(exc, "benchmark_observation", None) or {
                     "status": "error",

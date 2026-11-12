@@ -7,6 +7,7 @@ import re
 import tomllib
 from pathlib import Path
 
+from ..source_identity import source_bytes
 from .inspect_docker import (
     bind_docker_environment,
     pin_docker_environment,
@@ -17,7 +18,7 @@ from .inspect_docker import (
 def package_inputs(packages: dict[str, Path], bundle: Path) -> dict[str, bytes]:
     files = {}
     projects = [
-        tomllib.loads((root / "pyproject.toml").read_text())["project"]
+        tomllib.loads(source_bytes(root / "pyproject.toml").decode("utf-8"))["project"]
         for root in packages.values()
     ]
     local = {p["name"].lower().replace("_", "-") for p in projects}
@@ -50,11 +51,11 @@ def package_inputs(packages: dict[str, Path], bundle: Path) -> dict[str, bytes]:
                 "mini_worker.py",
             }:
                 continue
-            files[f"packages/{name}/{rel.as_posix()}"] = path.read_bytes()
+            files[f"packages/{name}/{rel.as_posix()}"] = source_bytes(path)
     for path in sorted(bundle.rglob("*")):
         if path.is_file() and not path.is_symlink():
-            files["reference/" + path.relative_to(bundle).as_posix()] = (
-                path.read_bytes()
+            files["reference/" + path.relative_to(bundle).as_posix()] = source_bytes(
+                path
             )
     return files
 

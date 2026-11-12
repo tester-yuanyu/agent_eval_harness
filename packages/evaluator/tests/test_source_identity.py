@@ -33,3 +33,64 @@ def test_engine_identity_includes_running_source_and_extension():
     assert len(identity["extension_sha256"]) == 64
     assert len(identity["contracts_sha256"]) == 64
     assert len(identity["capability_protocol_sha256"]) == 64
+
+
+def test_checkpoint_reuses_bytes_but_rechecks_same_size_mtime_edits(
+    tmp_path, monkeypatch
+):
+    import os
+    from pathlib import Path
+
+    from eval_framework.source_identity import content_identity, identity_checkpoint
+
+    source = tmp_path / "rule.py"
+    source.write_text("answer=1")
+    stat = source.stat()
+    reads = []
+    original = Path.read_bytes
+
+    def read(path):
+        reads.append(path)
+        return original(path)
+
+    monkeypatch.setattr(Path, "read_bytes", read)
+    with identity_checkpoint():
+        before = content_identity(tmp_path)
+        assert content_identity(tmp_path) == before
+    assert reads.count(source) == 1
+    source.write_text("answer=2")
+    os.utime(source, ns=(stat.st_atime_ns, stat.st_mtime_ns))
+    with identity_checkpoint():
+        after = content_identity(tmp_path)
+    assert before != after
+    source.unlink()
+    with identity_checkpoint():
+        assert content_identity(tmp_path) != after
+
+
+def test_checkpoint_exception_resets_and_child_task_does_not_share_snapshot(tmp_path):
+    import asyncio
+
+    import pytest
+
+    from eval_framework.source_identity import content_identity, identity_checkpoint
+
+    source = tmp_path / "rule.py"
+    source.write_text("first")
+    with pytest.raises(RuntimeError), identity_checkpoint():
+        original = content_identity(tmp_path)
+        raise RuntimeError("leave checkpoint")
+    source.write_text("second")
+    assert content_identity(tmp_path) != original
+
+    async def child():
+        source.write_text("third")
+        return content_identity(tmp_path)
+
+    async def parent():
+        with identity_checkpoint():
+            before = content_identity(tmp_path)
+            after = await asyncio.create_task(child())
+            assert after != before
+
+    asyncio.run(parent())

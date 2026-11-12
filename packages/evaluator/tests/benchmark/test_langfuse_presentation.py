@@ -237,6 +237,18 @@ def test_dashboard_sdk_definition_and_resume_do_not_duplicate_widgets(tmp_path):
     ):
         (tmp_path / name).write_text(json.dumps(value))
     dashboards, widgets = [], []
+
+    def listed(rows):
+        return SimpleNamespace(
+            data=rows,
+            meta=SimpleNamespace(
+                page=1,
+                limit=100,
+                total_items=len(rows),
+                total_pages=(len(rows) + 99) // 100,
+            ),
+        )
+
     definitions = {}
 
     def create_dash(**kwargs):
@@ -273,13 +285,13 @@ def test_dashboard_sdk_definition_and_resume_do_not_duplicate_widgets(tmp_path):
     client = SimpleNamespace(
         unstable=SimpleNamespace(
             dashboards=SimpleNamespace(
-                list=lambda **k: SimpleNamespace(data=dashboards),
+                list=lambda **k: listed(dashboards),
                 create=create_dash,
                 update=update,
                 get=lambda did: SimpleNamespace(definition=definitions[did]),
             ),
             dashboard_widgets=SimpleNamespace(
-                list=lambda **k: SimpleNamespace(data=widgets),
+                list=lambda **k: listed(widgets),
                 create=create_widget,
                 get=get_widget,
                 update=lambda wid, **kw: setattr(
@@ -338,6 +350,15 @@ def test_dashboard_sdk_definition_and_resume_do_not_duplicate_widgets(tmp_path):
         tmp_path, base_url="https://example.test", client=client, trend=trend
     )
     assert len(dashboards) == 1 and len(widgets) == 4
+    client.unstable.dashboards.list = lambda **kwargs: SimpleNamespace(data=[])
+    with pytest.raises(ValueError, match="incompatible"):
+        create_dashboard(
+            tmp_path, base_url="https://example.test", client=client, trend=trend
+        )
+    assert (
+        json.loads((tmp_path / "langfuse_dashboard.json").read_text())["status"]
+        == "UPDATING"
+    )
 
 
 def test_dashboard_explicit_verdict_counts_and_fourth_diagnosis_label():

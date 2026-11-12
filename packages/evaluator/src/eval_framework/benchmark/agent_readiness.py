@@ -170,8 +170,18 @@ class AgentReferenceExecutor:
         )
         from agent_trace_sdk import EvidenceReader, InspectEvidenceSink, TraceContext
 
-        temporary = TemporaryDirectory(prefix="agent-reference-evidence-")
-        evidence_path = Path(temporary.name) / "trace"
+        temporary = None
+        if self.evidence_root is None:
+            temporary = TemporaryDirectory(prefix="agent-reference-evidence-")
+            evidence_path = Path(temporary.name) / "trace"
+        else:
+            import hashlib
+
+            # Persist at the discoverable destination before any Agent work.
+            # The sink rejects an existing directory, so attempts never overwrite.
+            evidence_path = (
+                self.evidence_root / hashlib.sha256(case_id.encode()).hexdigest()[:24]
+            )
         sink = InspectEvidenceSink(
             evidence_path, TraceContext(), event_rules_version="mini-agent-events-v1"
         )
@@ -284,15 +294,6 @@ class AgentReferenceExecutor:
         finally:
             if runtime is not None:
                 provider.cleanup(runtime)
-            if self.evidence_root is not None:
-                import hashlib
-                import shutil
-
-                target = (
-                    self.evidence_root
-                    / hashlib.sha256(case_id.encode()).hexdigest()[:24]
-                )
-                target.parent.mkdir(parents=True, exist_ok=True)
-                shutil.copytree(evidence_path, target)
-            temporary.cleanup()
+            if temporary is not None:
+                temporary.cleanup()
         return row

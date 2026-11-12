@@ -20,6 +20,7 @@ def test_v4_projection_and_oracle_isolation():
 
 def test_real_model_is_injected_not_replaced_with_reference_candidate():
     from eval_contracts.agent_readiness import agent_plan_for, reference_context
+
     from eval_framework.benchmark.agent_readiness import (
         AgentReferenceExecutor,
         ReferenceModel,
@@ -54,6 +55,7 @@ def test_real_model_is_injected_not_replaced_with_reference_candidate():
 
 def test_live_rules_reuse_frozen_oracle_and_detect_bad_intent():
     from eval_contracts.agent_readiness import agent_plan_for
+
     from eval_framework.benchmark.agent_readiness import ReferenceModel
     from eval_framework.benchmark.full_benchmark import (
         live_checks,
@@ -116,6 +118,7 @@ def test_deterministic_worker_never_calls_model():
 
 def test_mixed_formal_rules_execute_all_original_definitions_without_network():
     from eval_contracts.agent_readiness import binding_for
+
     from eval_framework.benchmark.agent_readiness import ReferenceModel
     from eval_framework.benchmark.full_benchmark import (
         FullBenchmarkDomain,
@@ -231,8 +234,9 @@ def test_cancellation_retains_model_evidence_and_usage(monkeypatch, tmp_path):
     import asyncio
     from types import SimpleNamespace
 
-    from eval_framework.benchmark import full_adapter
     from inspect_ai import log, util
+
+    from eval_framework.benchmark import full_adapter
 
     class Env:
         count = 0
@@ -266,7 +270,7 @@ def test_cancellation_retains_model_evidence_and_usage(monkeypatch, tmp_path):
     with __import__("pytest").raises(asyncio.CancelledError) as caught:
         asyncio.run(
             adapter.execute(
-                {"live": False},
+                {"case_id": "cancel-case", "live": False},
                 mode="module",
                 config={"_inspect_docker_compose": "test"},
             )

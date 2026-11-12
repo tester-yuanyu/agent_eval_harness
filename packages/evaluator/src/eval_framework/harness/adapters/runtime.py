@@ -5,11 +5,17 @@ from __future__ import annotations
 import hashlib
 from pathlib import Path
 from typing import Any
+from uuid import uuid4
 
 from eval_contracts.benchmark import TaskInput
 from inspect_ai.solver import TaskState
 
-from ...source_identity import layer_source_paths, runtime_layer_identity
+from ...source_identity import (
+    capture_identity,
+    layer_source_paths,
+    runtime_layer_identity,
+    source_bytes,
+)
 from ..prompts import render_prompt
 from .agent.base import BaseAgent
 from .agent.raw_model_adapter import RawModelAgentAdapter
@@ -39,6 +45,7 @@ class RawModelRuntimeAdapter:
     def fingerprint_sources(self) -> list[Path]:
         return list(layer_source_paths().values())
 
+    @capture_identity
     def runtime_identity(self, mode: str | None = None) -> dict[str, Any]:
         self._check_mode(mode)
         _, prompt = render_prompt(
@@ -52,7 +59,7 @@ class RawModelRuntimeAdapter:
             "prompt": prompt,
             "execution_layers": runtime_layer_identity(),
             "sources": {
-                name: hashlib.sha256(path.read_bytes()).hexdigest()
+                name: hashlib.sha256(source_bytes(path)).hexdigest()
                 for name, path in layer_source_paths().items()
             },
         }
@@ -74,6 +81,7 @@ class RawModelRuntimeAdapter:
         kind = self.config.get("sandbox", "docker")
         if kind not in {"local", "docker"}:
             raise ValueError("sandbox must be local or docker")
+        self.output = output.parent
         return kind
 
     def _new_agent(self) -> BaseAgent:
@@ -117,6 +125,9 @@ class RawModelRuntimeAdapter:
                 prompt_version=config.get("prompt_version", "harness-v1"),
                 instructions=config.get("instructions", ""),
                 task_state=state,
+                evidence_directory=(self.output / "evidence" / uuid4().hex)
+                if hasattr(self, "output")
+                else None,
             )
         except BaseException as exc:
             if (observation := getattr(exc, "benchmark_observation", None)) is not None:
@@ -148,6 +159,7 @@ class NanobotComponentRuntimeAdapter(RawModelRuntimeAdapter):
             component_sources(self.config).values()
         )
 
+    @capture_identity
     def runtime_identity(self, mode: str | None = None) -> dict[str, Any]:
         from .agent.nanobot_adapter import component_identity
 

@@ -19,6 +19,7 @@ from uuid import uuid4
 
 from .provider import AdapterOutput, EvaluationProvider
 from .schemas import ExecutionSpec, TestScope
+from .source_identity import capture_identity, source_bytes
 
 SandboxSpec = str | tuple[str, str]
 
@@ -47,6 +48,7 @@ class AgentAdapterFactory(Protocol):
     def create_adapter(self, *, config: dict[str, Any]) -> AgentAdapter: ...
 
 
+@capture_identity
 def adapter_identity(adapter: AgentAdapter) -> dict[str, Any]:
     """Bind the declared implementation closure without recording host paths."""
     declared = list(adapter.fingerprint_sources())
@@ -61,7 +63,9 @@ def adapter_identity(adapter: AgentAdapter) -> dict[str, Any]:
             if not path.is_file() or "__pycache__" in path.parts:
                 continue
             relative = path.relative_to(root).as_posix() if root.is_dir() else path.name
-            files[f"{index}:{relative}"] = hashlib.sha256(path.read_bytes()).hexdigest()
+            files[f"{index}:{relative}"] = hashlib.sha256(
+                source_bytes(path)
+            ).hexdigest()
     return {"provider_id": adapter.provider_id, "sources": files}
 
 

@@ -341,28 +341,32 @@ def test_mode_identity_is_frozen_for_resume(tmp_path):
 def test_provider_cleans_nested_processes_on_inspect_termination(
     tmp_path, cancel_parent
 ):
+    import os
+
     import anyio
+    import psutil
     from inspect_ai import Task
     from inspect_ai import eval as inspect_eval
     from inspect_ai.dataset import Sample
     from inspect_ai.solver import solver
 
-    started, completed = tmp_path / "started", tmp_path / "completed"
+    startup_budget = int(os.environ.get("EVAL_TEST_STARTUP_TIMEOUT", "30"))
+    assert startup_budget >= 5
+    started = tmp_path / "started"
     cleaned = tmp_path / "cleaned"
     child = tmp_path / "stdio_child.py"
-    descendant = (
-        "import time,pathlib; time.sleep(3); "
-        f"pathlib.Path({str(completed)!r}).write_text('orphan')"
-    )
+    descendant = "import time; time.sleep(120)"
     child.write_text(
-        "import subprocess,sys,time,pathlib\n"
-        f"subprocess.Popen([sys.executable, '-c', {descendant!r}])\n"
-        f"pathlib.Path({str(started)!r}).write_text('started')\n"
-        "time.sleep(10)\n"
+        "import subprocess,sys,time,pathlib,json,os\n"
+        f"descendant = subprocess.Popen([sys.executable, '-c', {descendant!r}])\n"
+        f"pathlib.Path({str(started)!r}).write_text("
+        "json.dumps([os.getpid(), descendant.pid]))\n"
+        "time.sleep(120)\n"
     )
     worker = tmp_path / "provider_worker.py"
     worker.write_text(
-        "import json,sys,runpy,pathlib\n"
+        "import json,sys,runpy,pathlib,time\n"
+        "time.sleep(3)  # Deliberately slow startup before Provider imports.\n"
         "from eval_framework.agent_adapter import execute_provider_request\n"
         "from eval_framework.providers.external import RuntimeBinding\n"
         "from eval_framework.providers.external.binding import "
@@ -381,13 +385,26 @@ def test_provider_cleans_nested_processes_on_inspect_termination(
     @solver
     def execute():
         async def solve(state, generate):
-            with pytest.raises(TimeoutError):
-                with anyio.fail_after(2 if cancel_parent else 8):
-                    await adapter.execute(
-                        {"prompt": "public"},
-                        mode="module",
-                        config={"timeout_seconds": 10 if cancel_parent else 2},
-                    )
+            async def wait_for_started(scope):
+                with anyio.fail_after(startup_budget):
+                    while not started.exists():
+                        await anyio.sleep(0.05)
+                if cancel_parent:
+                    # Start the cancellation clock only after nested processes exist.
+                    scope.deadline = anyio.current_time() + 0.1
+
+            async with anyio.create_task_group() as group:
+                with pytest.raises(TimeoutError):
+                    with anyio.fail_after(startup_budget + 10) as scope:
+                        group.start_soon(wait_for_started, scope)
+                        await adapter.execute(
+                            {"prompt": "public"},
+                            mode="module",
+                            config={
+                                "timeout_seconds": startup_budget
+                                + (5 if cancel_parent else 2)
+                            },
+                        )
             timeouts.append(True)
             state.completed = True
             return state
@@ -399,7 +416,7 @@ def test_provider_cleans_nested_processes_on_inspect_termination(
             dataset=[Sample(input="public")],
             solver=execute(),
             sandbox="local",
-            time_limit=10,
+            time_limit=startup_budget + 20,
         ),
         model="mockllm/model",
         display="none",
@@ -409,6 +426,16 @@ def test_provider_cleans_nested_processes_on_inspect_termination(
     )
     assert timeouts == [True]
     assert started.exists(), "test must reach the nested process"
-    time.sleep(3.1)
-    assert not completed.exists(), "descendant survived worker termination"
     assert cleaned.exists(), "Provider cleanup was skipped"
+    pids = json.loads(started.read_text())
+
+    def still_running(pid):
+        try:
+            return psutil.Process(pid).status() != psutil.STATUS_ZOMBIE
+        except psutil.NoSuchProcess:
+            return False
+
+    deadline = time.monotonic() + 5
+    while any(still_running(pid) for pid in pids) and time.monotonic() < deadline:
+        time.sleep(0.05)
+    assert not any(still_running(pid) for pid in pids), "nested process survived"

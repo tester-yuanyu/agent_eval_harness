@@ -4,11 +4,11 @@ from __future__ import annotations
 
 import hashlib
 import json
-import uuid
 from contextlib import asynccontextmanager
 from copy import deepcopy
 from pathlib import Path
 
+from ..source_identity import capture_identity, source_bytes
 from .inspect_docker import bind_docker_environment, source_digest
 from .inspect_runtime import aggregate_usage, model_evidence
 from .mini_adapter import (
@@ -68,14 +68,14 @@ class FullBenchmarkAdapter(MiniAgentBenchmarkAdapter):
         )
         for name in runtime_names:
             files["packages/evaluator/src/eval_framework/benchmark/" + name] = (
-                Path(__file__).parent / name
-            ).read_bytes()
+                source_bytes(Path(__file__).parent / name)
+            )
         folder = self.packages["agent"] / "examples/full_tool_fixture"
         for name in ("__init__.py", "contracts.py", "environment.py", "results.py"):
             files[
                 "packages/agent/src/_eval_fixture_root/examples/full_tool_fixture/"
                 + name
-            ] = (folder / name).read_bytes()
+            ] = source_bytes(folder / name)
         return files
 
     def fingerprint_sources(self):
@@ -84,6 +84,7 @@ class FullBenchmarkAdapter(MiniAgentBenchmarkAdapter):
             self.packages["agent"] / "examples/full_tool_fixture",
         ]
 
+    @capture_identity
     def runtime_identity(self, mode=None):
         return dict(
             provider_id=self.provider_id,
@@ -120,6 +121,8 @@ class FullBenchmarkAdapter(MiniAgentBenchmarkAdapter):
         from inspect_ai.log import transcript
         from inspect_ai.util import sandbox
 
+        from .worker_evidence import WorkerEvidence
+
         env = sandbox()
         start = len(transcript().events)
         result = dict(
@@ -136,6 +139,8 @@ class FullBenchmarkAdapter(MiniAgentBenchmarkAdapter):
             before_files={},
             final_files={},
         )
+        evidence = WorkerEvidence(self.output, task["case_id"])
+        result["worker_evidence"] = evidence.receipt
         prefix = [
             "env",
             "-i",
@@ -182,19 +187,24 @@ class FullBenchmarkAdapter(MiniAgentBenchmarkAdapter):
         try:
             async with bridge() as url:
                 finished = await env.exec(
-                    prefix + ["python", "-m", "eval_framework.benchmark.full_worker"],
+                    prefix
+                    + [
+                        "python",
+                        "-m",
+                        "eval_framework.benchmark.full_worker",
+                        "--evidence-root",
+                        evidence.remote,
+                    ],
                     input=json.dumps(dict(task=task, bridge_url=url)),
                     timeout=config.get("timeout_seconds", 240),
                 )
                 if not finished.success:
                     raise RuntimeError("v4 worker: " + finished.stderr[-1800:])
                 row = json.loads(finished.stdout)
-                disk = await env.read_file("observation.json")
-                if json.loads(disk) != row:
+                disk = await env.read_file(evidence.remote + "/observation.json")
+                if json.loads(disk) != row or row.get("case_id") != task["case_id"]:
                     raise ValueError("worker/disk evidence mismatch")
-                directory = self.output / "evidence" / uuid.uuid4().hex
-                directory.mkdir(parents=True)
-                path = directory / "observation.json"
+                path = evidence.directory / "observation.json"
                 path.write_text(disk)
                 result["native_evidence"] = dict(
                     path=str(path.relative_to(self.output)),
@@ -261,6 +271,36 @@ class FullBenchmarkAdapter(MiniAgentBenchmarkAdapter):
             import anyio
 
             with anyio.CancelScope(shield=True):
+                complete = result["evidence_complete"]
+                result["evidence_complete"] = False
+                try:
+                    with anyio.move_on_after(15):
+                        receipt = await evidence.collect(
+                            env,
+                            complete=complete,
+                            require_business_trace="category" in task.get("plan", {}),
+                        )
+                        result["worker_evidence"] = receipt
+                        result["evidence_complete"] = bool(
+                            complete
+                            and receipt["status"] == "COMPLETE"
+                            and receipt["files"].get("observation.json")
+                            == result.get("native_evidence", {}).get("sha256")
+                        )
+                except Exception as exc:
+                    result["errors"].append(
+                        dict(
+                            code="EVIDENCE_COLLECTION_FAILED",
+                            message=type(exc).__name__,
+                        )
+                    )
+                if complete and not result["evidence_complete"]:
+                    result["errors"].append(
+                        dict(
+                            code="WORKER_EVIDENCE_INCOMPLETE",
+                            message="Attempt evidence was not fully verified",
+                        )
+                    )
                 with anyio.move_on_after(15):
                     generations = await model_evidence(
                         transcript().events[start:], result["events"]

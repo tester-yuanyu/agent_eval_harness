@@ -104,10 +104,27 @@ def execute_public(task, mini_root, evidence_root, client=None):
 
 
 def main():
+    import argparse
+
     from minimal_agent.runtime import DeepSeekModelClient
     from openai import OpenAI
 
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--evidence-root", type=Path)
+    args = parser.parse_args()
     payload = json.load(sys.stdin)
+    evidence_root = args.evidence_root or Path("evidence")
+    if args.evidence_root is not None:
+        evidence_root.mkdir(parents=True, exist_ok=False)
+        (evidence_root / "attempt.json").write_text(
+            json.dumps(
+                {
+                    "version": "worker-evidence-v1",
+                    "attempt_id": evidence_root.name,
+                    "case_id": payload["task"]["case_id"],
+                }
+            )
+        )
     client = None
     if payload["task"]["live"]:
         client = DeepSeekModelClient(
@@ -115,13 +132,35 @@ def main():
             model="inspect",
             timeout_seconds=90,
         )
-    row = execute_public(
-        payload["task"],
-        Path("/opt/runtime/packages/agent/src/_eval_fixture_root"),
-        Path("evidence"),
-        client,
+    try:
+        row = execute_public(
+            payload["task"],
+            Path("/opt/runtime/packages/agent/src/_eval_fixture_root"),
+            evidence_root,
+            client,
+        )
+    except BaseException as exc:
+        if args.evidence_root is not None:
+            try:
+                (evidence_root / "worker-error.json").write_text(
+                    json.dumps(
+                        {
+                            "status": "error",
+                            "evidence_complete": False,
+                            "error_type": type(exc).__name__,
+                        }
+                    )
+                )
+            except Exception:
+                # Error evidence is best-effort; preserve cancellation/root failure.
+                pass
+        raise
+    observation = (
+        evidence_root / "observation.json"
+        if args.evidence_root is not None
+        else Path("observation.json")
     )
-    Path("observation.json").write_text(json.dumps(row, ensure_ascii=False))
+    observation.write_text(json.dumps(row, ensure_ascii=False))
     print(json.dumps(row, ensure_ascii=False))
 
 

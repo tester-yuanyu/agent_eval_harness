@@ -23,6 +23,9 @@ from ..tool_validation import ToolSchemaValidator
 
 def business_info(kind: str, **data: Any) -> None:
     transcript().info({"kind": kind, **data}, source="harness.v1")
+    from ..trace.evidence_checkpoint import checkpoint_business_event
+
+    checkpoint_business_event()
 
 
 class ToolRouter(ToolSchemaValidator):

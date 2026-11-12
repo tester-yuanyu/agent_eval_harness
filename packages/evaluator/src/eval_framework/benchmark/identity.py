@@ -8,7 +8,10 @@ from pathlib import Path
 
 from capability_snapshot_kit.hashing import sha256_json as digest
 
+from ..source_identity import capture_identity, source_bytes
 
+
+@capture_identity
 def code_identity(names: list[str]) -> str:
     from .layer_sources import layer_source_paths
 
@@ -17,7 +20,7 @@ def code_identity(names: list[str]) -> str:
     sources.update(layer_source_paths())
     return digest(
         {
-            name: hashlib.sha256(path.read_bytes()).hexdigest()
+            name: hashlib.sha256(source_bytes(path)).hexdigest()
             for name, path in sources.items()
         }
     )

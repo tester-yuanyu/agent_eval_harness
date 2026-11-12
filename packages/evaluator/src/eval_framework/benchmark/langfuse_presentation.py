@@ -11,6 +11,7 @@ from pathlib import Path
 from langfuse.api import CreateScoreRequest, OtelAttribute, OtelAttributeValue
 
 from ..observability import client_from_env, destination_fingerprint, stable_id
+from .langfuse_dashboard_api import DashboardAPI
 from .report_diagnostics import write_diagnostics
 from .report_links import write_links
 
@@ -379,9 +380,11 @@ def create_dashboard(
         _save(root / "langfuse-dashboard-history" / f"{digest}.json", state)
     state["analysis_id"] = analysis["analysis_id"]
     state["status"] = "UPDATING"
+    _save(out, state)
+    api = DashboardAPI(client)
     # Names contain the immutable run, allowing reconciliation after uncertain creates.
     name = f"{run['run_id']} · 评测与诊断"
-    listed = client.unstable.dashboards.list(limit=100).data
+    listed = api.list_dashboards()
     matches = [d for d in listed if d.name == name]
     if len(matches) > 1:
         raise ValueError("duplicate dashboard names require reconciliation")
@@ -389,7 +392,7 @@ def create_dashboard(
         dash = (
             matches[0]
             if matches
-            else client.unstable.dashboards.create(
+            else api.create_dashboard(
                 name=name,
                 description=(
                     "固定主集；正式判定来自 DeepEval，诊断为非正式注释。"
@@ -400,12 +403,12 @@ def create_dashboard(
         )
         state["dashboard_id"] = dash.id
         _save(out, state)
-    available = client.unstable.dashboard_widgets.list(limit=100).data
+    available = api.list_widgets()
     for i, definition in enumerate(definitions):
         definition = {**definition, "name": definition["name"] + " · " + run["run_id"]}
         if len(state["widgets"]) > i:
             if refresh:
-                client.unstable.dashboard_widgets.update(
+                api.update_widget(
                     state["widgets"][i],
                     **definition,
                     request_options={"max_retries": 0},
@@ -417,14 +420,12 @@ def create_dashboard(
         widget = (
             matches[0]
             if matches
-            else client.unstable.dashboard_widgets.create(
-                **definition, request_options={"max_retries": 0}
-            )
+            else api.create_widget(**definition, request_options={"max_retries": 0})
         )
         state["widgets"].append(widget.id)
         _save(out, state)
     for wid, spec in zip(state["widgets"], definitions, strict=True):
-        actual = client.unstable.dashboard_widgets.get(wid)
+        actual = api.get_widget(wid)
         desired = {**spec, "name": spec["name"] + " · " + run["run_id"]}
         normalized = type(actual).model_validate({**actual.model_dump(), **desired})
         if any(actual.model_dump()[k] != normalized.model_dump()[k] for k in desired):
@@ -443,17 +444,13 @@ def create_dashboard(
             for i, wid in enumerate(state["widgets"])
         ]
     }
-    from langfuse.api.unstable.dashboards.types.dashboard_definition import (
-        DashboardDefinition,
-    )
-
     # A later base refresh must not remove the verified explorer extension.
     extension = root / "langfuse_explorer_dashboard.json"
     if extension.exists():
         saved_extension = json.loads(extension.read_text())
         if saved_extension.get("dashboard_id") != state["dashboard_id"]:
             raise ValueError("explorer dashboard identity mismatch")
-        current = client.unstable.dashboards.get(state["dashboard_id"]).definition
+        current = api.get_dashboard(state["dashboard_id"]).definition
         existing_ids = {w.widget_id for w in current.widgets if w.type == "widget"}
         if not (
             set(state["widgets"])
@@ -461,17 +458,17 @@ def create_dashboard(
         ).issubset(existing_ids):
             raise ValueError("base widgets missing from extended dashboard")
         definition = current.model_dump()
-    client.unstable.dashboards.update(
+    api.update_dashboard(
         state["dashboard_id"],
-        definition=DashboardDefinition.model_validate(definition),
+        definition=api.definition(definition),
         description=(
             "正式结果与诊断取自主集快照；"
             "趋势按固定控制项跨运行汇总，仅一个 run 时为基线。"
         ),
         request_options={"max_retries": 0},
     )
-    remote = client.unstable.dashboards.get(state["dashboard_id"])
-    expected = DashboardDefinition.model_validate(definition)
+    remote = api.get_dashboard(state["dashboard_id"])
+    expected = api.definition(definition)
     if remote.definition.model_dump() != expected.model_dump():
         raise ValueError("dashboard readback mismatch")
     times = [

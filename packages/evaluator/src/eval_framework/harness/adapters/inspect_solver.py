@@ -4,7 +4,9 @@ from __future__ import annotations
 
 import hashlib
 from copy import deepcopy
+from pathlib import Path
 from typing import Any
+from uuid import uuid4
 
 import anyio
 from eval_contracts.benchmark import TaskInput
@@ -25,6 +27,27 @@ from .agent.raw_model_adapter import RawModelAgentAdapter
 
 
 async def execute_native_task(
+    task: TaskInput, *, evidence_directory: Path | None = None, **kwargs: Any
+) -> dict[str, Any]:
+    if evidence_directory is None:
+        return await _execute_native_task(task, **kwargs)
+    from ..trace.evidence_checkpoint import NativeCheckpoint
+
+    with NativeCheckpoint(evidence_directory, task.task_id) as checkpoint:
+        observation = None
+        try:
+            observation = await _execute_native_task(task, **kwargs)
+            return observation
+        except BaseException as exc:
+            observation = getattr(exc, "benchmark_observation", None)
+            if observation is not None:
+                observation["evidence_complete"] = False
+            raise
+        finally:
+            checkpoint.finish(observation)
+
+
+async def _execute_native_task(
     task: TaskInput,
     *,
     agent: BaseAgent | None = None,
@@ -144,6 +167,7 @@ def harness_solver(
     max_consecutive_errors: int | None = None,
     prompt_version: str = "harness-v1",
     instructions: str = "",
+    evidence_root: Path | None = None,
 ) -> Solver:
     async def solve(state: TaskState, generate: Generate) -> TaskState:
         await execute_native_task(
@@ -155,6 +179,9 @@ def harness_solver(
             prompt_version=prompt_version,
             instructions=instructions,
             task_state=state,
+            evidence_directory=Path(evidence_root) / uuid4().hex
+            if evidence_root is not None
+            else None,
         )
         return state
 

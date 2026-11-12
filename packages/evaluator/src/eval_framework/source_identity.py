@@ -2,7 +2,12 @@
 
 from __future__ import annotations
 
+import asyncio
 import hashlib
+import threading
+from contextlib import contextmanager
+from contextvars import ContextVar
+from functools import wraps
 from importlib.metadata import version
 from pathlib import Path
 from typing import Any
@@ -25,6 +30,56 @@ _RUNTIME_SUFFIXES = {
     ".md",
 }
 
+_checkpoint: ContextVar[tuple | None] = ContextVar("identity_checkpoint", default=None)
+
+
+def _owner() -> tuple:
+    try:
+        task = asyncio.current_task()
+    except RuntimeError:
+        task = None
+    return threading.get_ident(), task
+
+
+@contextmanager
+def identity_checkpoint():
+    """Capture bytes once within ONE synchronous identity validation boundary.
+
+    Never span execution/await or reuse between pre/post checks. No path/mtime
+    cache survives this scope; each new checkpoint rereads the current bytes.
+    Child tasks/threads cannot inherit the parent's captured view.
+    """
+    token = _checkpoint.set((_owner(), {}))
+    try:
+        yield
+    finally:
+        _checkpoint.reset(token)
+
+
+def source_bytes(path: Path) -> bytes:
+    path = Path(path)
+    snapshot = _checkpoint.get()
+    if snapshot is None or snapshot[0] != _owner():
+        return path.read_bytes()
+    key = path.absolute()
+    if key not in snapshot[1]:
+        snapshot[1][key] = path.read_bytes()
+    return snapshot[1][key]
+
+
+def capture_identity(function):
+    """Share an enclosing checkpoint or make a fresh snapshot for a direct call."""
+
+    @wraps(function)
+    def capture(*args, **kwargs):
+        snapshot = _checkpoint.get()
+        if snapshot is not None and snapshot[0] == _owner():
+            return function(*args, **kwargs)
+        with identity_checkpoint():
+            return function(*args, **kwargs)
+
+    return capture
+
 
 def content_identity(root: Path) -> str:
     """Hash runtime sources and templates, including uncommitted changes."""
@@ -37,10 +92,11 @@ def content_identity(root: Path) -> str:
         ):
             digest.update(path.relative_to(root).as_posix().encode())
             digest.update(b"\0")
-            digest.update(hashlib.sha256(path.read_bytes()).digest())
+            digest.update(hashlib.sha256(source_bytes(path)).digest())
     return digest.hexdigest()
 
 
+@capture_identity
 def runtime_identity() -> dict[str, Any]:
     """Identify installed Inspect and extension sources without exposing paths."""
     import agent_trace_sdk
@@ -135,7 +191,7 @@ def runtime_layer_identity() -> dict[str, Any]:
         "version": "execution-layers-v1",
         "layers": {
             group: {
-                name: hashlib.sha256(path.read_bytes()).hexdigest()
+                name: hashlib.sha256(source_bytes(path)).hexdigest()
                 for name, path in paths.items()
             }
             for group, paths in runtime_layer_source_paths().items()

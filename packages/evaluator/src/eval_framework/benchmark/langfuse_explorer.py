@@ -11,6 +11,7 @@ from pathlib import Path
 from langfuse.api import CreateScoreRequest
 
 from ..observability import client_from_env, destination_fingerprint, stable_id
+from .langfuse_dashboard_api import DashboardAPI
 from .langfuse_presentation import _remote_scores, _save
 from .report_explorer import ISSUE_LABELS, build_explorer
 from .report_trends import load_trend
@@ -660,7 +661,10 @@ def sync_explorer(run_dir, run_dirs, *, client=None, destination=None):
                 for r in remote
             ):
                 raise ValueError("formal histogram remote population mismatch")
-    available = client.unstable.dashboard_widgets.list(limit=100).data
+    ui["status"] = "UPDATING"
+    _save(path, ui)
+    api = DashboardAPI(client)
+    available = api.list_widgets()
     for entry in specs:
         key = entry["key"]
         spec = {
@@ -676,7 +680,7 @@ def sync_explorer(run_dir, run_dirs, *, client=None, destination=None):
             ):
                 continue
         if key in ui["widgets"]:
-            widget = client.unstable.dashboard_widgets.update(
+            widget = api.update_widget(
                 ui["widgets"][key], **spec, request_options={"max_retries": 0}
             )
         else:
@@ -690,22 +694,16 @@ def sync_explorer(run_dir, run_dirs, *, client=None, destination=None):
             widget = (
                 matches[0]
                 if matches
-                else client.unstable.dashboard_widgets.create(
-                    **spec, request_options={"max_retries": 0}
-                )
+                else api.create_widget(**spec, request_options={"max_retries": 0})
             )
             ui["widgets"][key] = widget.id
             ui["status"] = "UPDATING"
             _save(path, ui)
-        actual = client.unstable.dashboard_widgets.get(widget.id)
+        actual = api.get_widget(widget.id)
         expected = type(actual).model_validate({**actual.model_dump(), **spec})
         if any(actual.model_dump()[k] != expected.model_dump()[k] for k in spec):
             raise ValueError("explorer widget readback mismatch")
-    from langfuse.api.unstable.dashboards.types.dashboard_definition import (
-        DashboardDefinition,
-    )
-
-    current = client.unstable.dashboards.get(did).definition.model_dump()
+    current = api.get_dashboard(did).definition.model_dump()
     _save(
         root
         / "langfuse-dashboard-history"
@@ -722,10 +720,8 @@ def sync_explorer(run_dir, run_dirs, *, client=None, destination=None):
         ui["widgets"],
         layout.get("task_group_order", []),
     )
-    definition = DashboardDefinition.model_validate(
-        preserve_unmanaged(current, items, managed)
-    )
-    client.unstable.dashboards.update(
+    definition = api.definition(preserve_unmanaged(current, items, managed))
+    api.update_dashboard(
         did,
         definition=definition,
         description=(
@@ -734,10 +730,7 @@ def sync_explorer(run_dir, run_dirs, *, client=None, destination=None):
         ),
         request_options={"max_retries": 0},
     )
-    if (
-        client.unstable.dashboards.get(did).definition.model_dump()
-        != definition.model_dump()
-    ):
+    if api.get_dashboard(did).definition.model_dump() != definition.model_dump():
         raise ValueError("explorer layout readback mismatch")
     ui.update(
         status="VERIFIED",

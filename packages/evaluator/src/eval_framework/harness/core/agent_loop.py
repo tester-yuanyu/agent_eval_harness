@@ -71,7 +71,9 @@ async def run_agent_loop(
                     break
                 phase = "provider"
                 state.steps += 1
+                business_info("model_start", turn=state.turn, step=state.steps)
                 action = await agent.step(deepcopy(state))
+                business_info("model_end", turn=state.turn, step=state.steps)
                 state.last_output = action.output
                 state.messages.append(action.message)
                 phase = "harness"
